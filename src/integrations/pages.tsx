@@ -378,7 +378,15 @@ export function IntegrationDetail() {
       <div className="panel">
         <div className="panel-toolbar">
           <h2>Información general</h2>
-          <Badge value={item.status} />
+          <div className="row-actions">
+            <Link
+              className="table-action"
+              to={`/delivery-requests?integrationClientId=${encodeURIComponent(item.id)}`}
+            >
+              Ver solicitudes <ArrowUpRight size={15} />
+            </Link>
+            <Badge value={item.status} />
+          </div>
         </div>
         <InfoGrid
           items={[

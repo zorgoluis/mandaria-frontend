@@ -19,6 +19,10 @@ import {
 import { ProfilePage, SettingsPage, UsersPage } from '../users/pages'
 import { DriversPage, DriverNew, DriverDetail } from '../drivers/pages'
 import { VehiclesPage, VehicleNew, VehicleDetail } from '../vehicles/pages'
+import {
+  DeliveryRequestsPage,
+  DeliveryRequestDetail,
+} from '../delivery-requests/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -76,6 +80,14 @@ export function App() {
             <Route
               path="providers/:id"
               element={<ProviderDetail key={location.pathname} />}
+            />
+            <Route
+              path="delivery-requests"
+              element={<DeliveryRequestsPage />}
+            />
+            <Route
+              path="delivery-requests/:publicId"
+              element={<DeliveryRequestDetail key={location.pathname} />}
             />
             <Route path="users" element={<UsersPage />} />
             <Route path="settings" element={<SettingsPage />} />

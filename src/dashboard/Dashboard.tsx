@@ -7,11 +7,15 @@ import {
   Layers3,
   UserRound,
   Plus,
+  PackageCheck,
+  PackageX,
 } from 'lucide-react'
 import { providers } from '../providers/service'
 import { useAuth } from '../auth/context'
 import { Badge, ErrorState, Loading, PageTitle, Table } from '../components/ui'
 import { MyProvider } from '../providers/pages'
+import { deliveryRequests } from '../delivery-requests/service'
+import { deliveryRequestKeys } from '../delivery-requests/queries'
 export function Dashboard() {
   const { user } = useAuth()
   return user?.role === 'SUPER_ADMIN' ? (
@@ -131,6 +135,7 @@ function AdminDashboard() {
           </div>
         ))}
       </div>
+      <DeliveryRequestCounts />
       <div className="dashboard-grid">
         <div className="panel">
           <div className="panel-toolbar">
@@ -214,5 +219,61 @@ function AdminDashboard() {
         sin descargar el catálogo completo.
       </p>
     </>
+  )
+}
+// pageSize=1 returns the server-side count; requests are never downloaded to be counted.
+function DeliveryRequestCounts() {
+  const created = useQuery({
+    queryKey: deliveryRequestKeys.count('CREATED'),
+    queryFn: ({ signal }) =>
+      deliveryRequests.list({ pageSize: 1, status: 'CREATED' }, signal),
+  })
+  const cancelled = useQuery({
+    queryKey: deliveryRequestKeys.count('CANCELLED'),
+    queryFn: ({ signal }) =>
+      deliveryRequests.list({ pageSize: 1, status: 'CANCELLED' }, signal),
+  })
+  return (
+    <div className="stat-grid delivery-stat-grid">
+      {[
+        {
+          title: 'Solicitudes creadas',
+          query: created,
+          icon: PackageCheck,
+          note: 'Solicitudes vigentes',
+          to: '/delivery-requests?status=CREATED',
+        },
+        {
+          title: 'Solicitudes canceladas',
+          query: cancelled,
+          icon: PackageX,
+          note: 'Canceladas por integración o administración',
+          to: '/delivery-requests?status=CANCELLED',
+        },
+      ].map(({ title, query, icon: Icon, note, to }) => (
+        <div className="stat-card" key={title}>
+          <div>
+            <span>{title}</span>
+            <Icon size={20} />
+          </div>
+          {query.isError ? (
+            <ErrorState
+              error={query.error}
+              retry={() => {
+                void query.refetch()
+              }}
+            />
+          ) : (
+            <strong>
+              {query.isPending ? '…' : query.data.total.toLocaleString('es-MX')}
+            </strong>
+          )}
+          <Link to={to}>
+            {note}
+            <ArrowUpRight size={15} />
+          </Link>
+        </div>
+      ))}
+    </div>
   )
 }
