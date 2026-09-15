@@ -2,7 +2,7 @@
 
 Base administrativa independiente para Mandaria Backend V1.0–V1.2. React + Vite + TypeScript estricto. Nombre de paquete: `mandaria-web`; se desarrolla en el repositorio existente `mandaria-frontend`, independiente de Coita Eats. No accede a PostgreSQL, Prisma ni servicios de Coita Eats.
 
-**Estado:** implementación funcional; ver [VERIFICATION.md](VERIFICATION.md). No se declara V1.3 terminada: Docker build y la validación real de PROVIDER_ADMIN/memberships requieren resolver los bloqueos documentados.
+**Estado:** implementación funcional; la [validación real PROVIDER_ADMIN](docs/PROVIDER-ADMIN-VALIDATION.md) y la regresión SUPER_ADMIN están completadas. Build, lint y 44 tests pasan. Docker build sigue pendiente de la entrega original; ver [VERIFICATION.md](VERIFICATION.md).
 
 ## Requisitos e instalación
 
@@ -62,6 +62,10 @@ Requiere backend y frontend iniciados. Configura localmente `.env.e2e`, **ignora
 Alternativa local para una instalación que conserva credenciales bootstrap: define `MANDARIA_BACKEND_ENV` como ruta a su `.env`. El script sólo lo lee para obtener la cuenta de prueba; no imprime valores. `E2E_WEB_URL` puede cambiar el origen de prueba (default `http://127.0.0.1:5173`).
 
 El script **crea registros reales de prueba** con código `WEB_...`, genera/rota/revoca credenciales y modifica sus propios proveedores. No eliminará registros: la API carece de eliminación de cliente/proveedor. Una cuenta PROVIDER_ADMIN de prueba, si se configura, se asocia al proveedor creado. No usar cuentas productivas. Las capturas y el reporte quedan en `test-results/manual/`, ignorados por Git. No se capturan pantallas con secretos; capturas de fallo enmascaran inputs y textarea. No se guardan trazas de red, HAR, videos ni estados de autenticación.
+
+### Validación específica de PROVIDER_ADMIN
+
+`npm run test:e2e:provider-admin` valida cuentas reales A/B/sin membership y la regresión SUPER_ADMIN. Sólo consulta recursos existentes y administra sus propias sesiones de autenticación; no crea fixtures de negocio. Requiere las cuatro cuentas preparadas por backend y espera el vencimiento real del access token. Configuración, alcance y resultados en [PROVIDER-ADMIN-VALIDATION.md](docs/PROVIDER-ADMIN-VALIDATION.md).
 
 ## Arquitectura y carpetas
 
@@ -148,4 +152,4 @@ docker run --rm -p 8080:80 mandaria-web:v1.3
 
 No se implementaron drivers, vehicles, entregas, mapas, wallet, créditos, pagos ni módulos posteriores. Para V1.4 se pueden agregar features `drivers/` y `vehicles/` al layout y al grupo de rutas con sus permisos, una vez conocidos sus contratos.
 
-Pendientes: ejecución Docker en un motor funcional, prueba real de PROVIDER_ADMIN/memberships con cuenta preparada, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. No se declara V1.3 terminada hasta validar los elementos críticos pendientes.
+Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.

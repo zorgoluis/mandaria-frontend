@@ -15,6 +15,22 @@ beforeEach(() => {
   sessionStorage.clear()
 })
 describe('HTTP and human session', () => {
+  it('preserves the PROVIDER_ADMIN identity returned by auth/me after human login', async () => {
+    const providerUser = { ...user, role: 'PROVIDER_ADMIN' }
+    const fetcher = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(response(tokens))
+      .mockResolvedValueOnce(response(providerUser))
+    const { authService } = await import('../services/api')
+    expect(
+      await authService.login('admin@example.test', 'test-password'),
+    ).toEqual(providerUser)
+    expect(fetcher.mock.calls.map(([url]) => String(url))).toEqual([
+      'http://localhost:3000/api/v1/auth/login',
+      'http://localhost:3000/api/v1/auth/me',
+    ])
+    expect(sessionStorage.getItem('role')).toBeNull()
+  })
   it('ignores a late retry failure after logout instead of expiring a later session', async () => {
     sessionStorage.setItem('mandaria.refresh', 'old')
     let resolveRetry: ((response: Response) => void) | undefined

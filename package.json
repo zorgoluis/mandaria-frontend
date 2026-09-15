@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck:test": "tsc --project tsconfig.test.json",
-    "test:e2e": "node scripts/verify-browser.mjs"
+    "test:e2e": "node scripts/verify-browser.mjs",
+    "test:e2e:provider-admin": "node scripts/verify-provider-admin.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",

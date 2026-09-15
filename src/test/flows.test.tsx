@@ -117,6 +117,62 @@ beforeEach(() => {
   vi.mocked(integrations.credentials).mockResolvedValue([])
 })
 describe('auth and permissions UX', () => {
+  it.each([
+    '/integrations/new',
+    '/integrations/another-client',
+    '/providers',
+    '/providers/new',
+    '/providers/another-provider',
+    '/users',
+    '/settings',
+  ])(
+    'PROVIDER_ADMIN cannot open global route %s or fetch privileged data',
+    (path) => {
+      mount(path, 'PROVIDER_ADMIN')
+      expect(
+        screen.getByRole('heading', { name: 'Sin permisos' }),
+      ).toBeInTheDocument()
+      expect(integrations.list).not.toHaveBeenCalled()
+      expect(integrations.get).not.toHaveBeenCalled()
+      expect(integrations.credentials).not.toHaveBeenCalled()
+      expect(providers.list).not.toHaveBeenCalled()
+      expect(providers.get).not.toHaveBeenCalled()
+      expect(users.list).not.toHaveBeenCalled()
+      expect(screen.queryByRole('table')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /Crear|Guardar|Activar|Revocar/ }),
+      ).not.toBeInTheDocument()
+    },
+  )
+  it('shows the associated provider and exact limited navigation on the provider dashboard', async () => {
+    const own = {
+      id: provider.id,
+      name: provider.name,
+      code: provider.code,
+      type: provider.type,
+      status: provider.status,
+      limits: { maxDrivers: 10, maxVehicles: 12 },
+      membershipRole: 'OWNER' as const,
+    }
+    vi.mocked(providers.profiles).mockResolvedValue(page([own]))
+    vi.mocked(providers.profile).mockResolvedValue(own)
+    mount('/dashboard', 'PROVIDER_ADMIN')
+    expect(
+      await screen.findByRole('heading', { name: provider.name }),
+    ).toBeInTheDocument()
+    expect(providers.profile).toHaveBeenCalledWith(
+      provider.id,
+      expect.any(AbortSignal),
+    )
+    expect(
+      within(screen.getByRole('navigation', { name: 'Navegación principal' }))
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual(['Dashboard', 'Mi proveedor', 'Mi perfil'])
+    expect(providers.list).not.toHaveBeenCalled()
+    expect(integrations.list).not.toHaveBeenCalled()
+    expect(screen.queryByText('Proveedores recientes')).not.toBeInTheDocument()
+  })
   it('redirects unauthenticated protected routes to login', async () => {
     mount('/integrations', null)
     expect(
