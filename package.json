@@ -1,7 +1,7 @@
 {
   "name": "mandaria-web",
   "private": true,
-  "version": "1.3.0",
+  "version": "1.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,8 @@
     "format:check": "prettier --check .",
     "typecheck:test": "tsc --project tsconfig.test.json",
     "test:e2e": "node scripts/verify-browser.mjs",
-    "test:e2e:provider-admin": "node scripts/verify-provider-admin.mjs"
+    "test:e2e:provider-admin": "node scripts/verify-provider-admin.mjs",
+    "test:e2e:logistics": "node scripts/verify-logistics.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",

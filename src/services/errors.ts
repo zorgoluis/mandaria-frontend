@@ -17,6 +17,34 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {
+    'User must be active with global role DRIVER':
+      'El usuario debe estar activo y tener rol de repartidor.',
+    'User already has a driver profile':
+      'Este usuario ya tiene un perfil de repartidor.',
+    'Provider driver limit reached':
+      'Límite de repartidores alcanzado. Solicita ampliar la capacidad del proveedor.',
+    'Provider vehicle limit reached':
+      'Límite de vehículos alcanzado. Solicita ampliar la capacidad del proveedor.',
+    'Vehicle identifier already exists in this provider':
+      'Ya existe un vehículo con ese identificador en el proveedor.',
+    'Driver not found': 'El repartidor no está disponible en este proveedor.',
+    'Vehicle not found': 'El vehículo no está disponible en este proveedor.',
+    'Invalid driver status transition':
+      'El estado actual del repartidor no permite ese cambio.',
+    'Suspended providers cannot assign vehicles':
+      'Activa el proveedor antes de asignar vehículos.',
+    'Suspended drivers cannot receive vehicles':
+      'Activa el repartidor antes de asignarle un vehículo.',
+    'Only ACTIVE vehicles can be assigned':
+      'El vehículo debe estar activo. No se pueden asignar vehículos inactivos, en mantenimiento o suspendidos.',
+    'Driver already has an active vehicle assignment':
+      'El repartidor ya tiene un vehículo. Desasígnalo antes de elegir otro.',
+    'Vehicle is already assigned to another driver':
+      'El vehículo está ocupado por otro repartidor. Elige uno libre.',
+    'Driver or vehicle already assigned':
+      'El repartidor o el vehículo ya tiene una asignación. Actualiza la información e inténtalo de nuevo.',
+    'Driver has no active vehicle assignment':
+      'El repartidor ya no tiene una asignación vigente.',
     'Invalid credentials': 'El correo o la contraseña son incorrectos.',
     'Invalid refresh token': 'Tu sesión expiró. Inicia sesión nuevamente.',
     'Integration code already exists':

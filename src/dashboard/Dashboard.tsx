@@ -23,7 +23,7 @@ export function Dashboard() {
         <h1>Bienvenido a tu operación.</h1>
         <p>Información actualizada de tu red de proveedores.</p>
       </div>
-      <MyProvider />
+      <MyProvider showActivity />
     </>
   ) : (
     <PageTitle

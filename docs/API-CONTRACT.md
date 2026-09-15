@@ -53,3 +53,7 @@ Todos los endpoints consumidos usan el prefijo `/api/v1`. El frontend sólo se c
 8. No se usa `/integrations/token` ni ningún endpoint de autenticación B2B desde Mandaria Web.
 
 Los schemas OpenAPI de Auth/Users no detallan completamente las respuestas; se corroboraron en `AuthService` y `publicUserSelect`. Los formatos de fecha nullable de credenciales figuran como object en OpenAPI; el servicio devuelve strings ISO o null.
+
+# Extensión V1.4
+
+El contrato logístico actual (repartidores, vehículos, asignaciones y capacidad) se documenta en [V1.4-B.md](V1.4-B.md), contrastado con OpenAPI 1.4.0 y controllers reales. El contenido siguiente conserva la inspección base V1.3; sus limitaciones históricas de conteos no sustituyen las nuevas capacidades documentadas.

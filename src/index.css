@@ -1409,3 +1409,50 @@ dialog::backdrop {
     transition: none !important;
   }
 }
+:root {
+  --logistics-muted: #64748b;
+}
+.logistics-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 16px 0;
+}
+.logistics-capacity {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+.logistics-capacity .stat-card {
+  color: inherit;
+  text-decoration: none;
+}
+.logistics-capacity small {
+  color: var(--logistics-muted);
+}
+.badge.available {
+  background: #e4f5ee;
+  color: #137553;
+}
+.badge.busy,
+.badge.maintenance {
+  background: #fff1d6;
+  color: #825400;
+}
+.badge.offline,
+.badge.inactive {
+  background: #edf1f5;
+  color: #546171;
+}
+@media (max-width: 600px) {
+  .logistics-capacity {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .panel-toolbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

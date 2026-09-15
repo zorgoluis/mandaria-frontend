@@ -17,6 +17,8 @@ import {
   MyProvider,
 } from '../providers/pages'
 import { ProfilePage, SettingsPage, UsersPage } from '../users/pages'
+import { DriversPage, DriverNew, DriverDetail } from '../drivers/pages'
+import { VehiclesPage, VehicleNew, VehicleDetail } from '../vehicles/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -46,6 +48,22 @@ export function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route
+            element={<Protected roles={['SUPER_ADMIN', 'PROVIDER_ADMIN']} />}
+          >
+            <Route path="drivers" element={<DriversPage />} />
+            <Route path="drivers/new" element={<DriverNew />} />
+            <Route
+              path="drivers/:id"
+              element={<DriverDetail key={location.pathname} />}
+            />
+            <Route path="vehicles" element={<VehiclesPage />} />
+            <Route path="vehicles/new" element={<VehicleNew />} />
+            <Route
+              path="vehicles/:id"
+              element={<VehicleDetail key={location.pathname} />}
+            />
+          </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
             <Route path="integrations" element={<IntegrationsPage />} />
             <Route path="integrations/new" element={<IntegrationNew />} />

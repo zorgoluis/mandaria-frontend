@@ -254,7 +254,13 @@ async function allowedNavigation(state) {
     state.page
       .getByRole('navigation', { name: 'Navegación principal' })
       .getByRole('link'),
-  ).toHaveText(['Dashboard', 'Mi proveedor', 'Mi perfil'])
+  ).toHaveText([
+    'Dashboard',
+    'Mi proveedor',
+    'Repartidores',
+    'Vehículos',
+    'Mi perfil',
+  ])
   for (const label of [
     'Integraciones',
     'Proveedores',
