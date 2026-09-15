@@ -19,6 +19,7 @@ import {
   Table,
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
+import { ActivityCards, CapacityCards } from '../logistics/components'
 import { date, labels } from '../utils/format'
 import type {
   Member,
@@ -27,7 +28,12 @@ import type {
   ProviderProfile,
 } from '../types/api'
 const invalidate = () =>
-  queryClient.invalidateQueries({ queryKey: ['providers'] })
+  Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['providers'] }),
+    queryClient.invalidateQueries({ queryKey: ['logistics'] }),
+    queryClient.invalidateQueries({ queryKey: ['logistics-provider'] }),
+    queryClient.invalidateQueries({ queryKey: ['logistics-provider-options'] }),
+  ])
 export function ProvidersPage() {
   const [params, setParams] = useSearchParams()
   const page = Math.max(1, Math.min(100000, Number(params.get('page')) || 1))
@@ -501,6 +507,7 @@ export function ProviderDetail() {
         </div>
       </div>
       <Memberships id={id} />
+      <CapacityCards scope={{ role: 'SUPER_ADMIN', providerId: id }} />
       {action && (
         <Confirm
           title={
@@ -551,7 +558,13 @@ function ProfileCard({ item }: { item: ProviderProfile }) {
     </div>
   )
 }
-function SelectedProfile({ id }: { id: string }) {
+function SelectedProfile({
+  id,
+  showActivity = false,
+}: {
+  id: string
+  showActivity?: boolean
+}) {
   const query = useQuery({
     queryKey: ['my-provider', id],
     queryFn: ({ signal }) => providers.profile(id, signal),
@@ -566,10 +579,20 @@ function SelectedProfile({ id }: { id: string }) {
       }}
     />
   ) : (
-    <ProfileCard item={query.data} />
+    <>
+      <ProfileCard item={query.data} />
+      <CapacityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
+      {showActivity && (
+        <ActivityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
+      )}
+    </>
   )
 }
-export function MyProvider() {
+export function MyProvider({
+  showActivity = false,
+}: {
+  showActivity?: boolean
+}) {
   const [params, setParams] = useSearchParams()
   const [page, setPage] = useState(1)
   const query = useQuery({
@@ -629,9 +652,16 @@ export function MyProvider() {
                 </div>
               )}
               {selected ? (
-                <SelectedProfile key={selected} id={selected} />
+                <SelectedProfile
+                  key={selected}
+                  id={selected}
+                  showActivity={showActivity}
+                />
               ) : query.data.total === 1 ? (
-                <SelectedProfile id={query.data.items[0].id} />
+                <SelectedProfile
+                  id={query.data.items[0].id}
+                  showActivity={showActivity}
+                />
               ) : (
                 <Empty
                   title="Selecciona un proveedor"

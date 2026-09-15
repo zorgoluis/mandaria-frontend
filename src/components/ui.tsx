@@ -3,6 +3,9 @@ import {
   useId,
   useRef,
   useState,
+  Children,
+  cloneElement,
+  isValidElement,
   type ReactNode,
   type FormEvent,
 } from 'react'
@@ -287,11 +290,25 @@ export function Field({
   children: ReactNode
   hint?: string
 }) {
+  const labelId = useId()
+  const hintId = useId()
   return (
     <label className="field">
-      <span>{label}</span>
-      {children}
-      {hint && <small>{hint}</small>}
+      <span id={labelId}>{label}</span>
+      {Children.map(children, (child) =>
+        isValidElement<{
+          'aria-labelledby'?: string
+          'aria-describedby'?: string
+        }>(child) &&
+        typeof child.type === 'string' &&
+        ['input', 'select', 'textarea'].includes(child.type)
+          ? cloneElement(child, {
+              'aria-labelledby': labelId,
+              ...(hint ? { 'aria-describedby': hintId } : {}),
+            })
+          : child,
+      )}
+      {hint && <small id={hintId}>{hint}</small>}
     </label>
   )
 }

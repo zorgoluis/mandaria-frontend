@@ -12,6 +12,8 @@ import {
   LogOut,
   ChevronDown,
   ArrowUpRight,
+  Bike,
+  Truck,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -63,6 +65,12 @@ export function AdminLayout() {
       : user?.role === 'PROVIDER_ADMIN'
         ? [{ to: '/provider/profile', label: 'Mi proveedor', icon: Building2 }]
         : []),
+    ...(admin || user?.role === 'PROVIDER_ADMIN'
+      ? [
+          { to: '/drivers', label: 'Repartidores', icon: Bike },
+          { to: '/vehicles', label: 'Vehículos', icon: Truck },
+        ]
+      : []),
     { to: '/profile', label: 'Mi perfil', icon: UserRound },
     ...(admin
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
@@ -107,7 +115,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.3</span>
+            MANDARIA WEB <span>V1.4</span>
           </div>
         </div>
       </aside>

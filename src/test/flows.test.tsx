@@ -12,6 +12,36 @@ import { providers } from '../providers/service'
 import { users } from '../users/service'
 import type { Integration, Provider, Role, User } from '../types/api'
 import { ApiError } from '../services/errors'
+import { capacity } from '../logistics/service'
+vi.mock('../logistics/service', () => ({
+  capacity: vi.fn().mockResolvedValue({
+    providerId: 'provider-1',
+    drivers: { count: 0, max: 10 },
+    vehicles: { count: 0, max: 12 },
+  }),
+}))
+vi.mock('../drivers/service', () => ({
+  drivers: {
+    list: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 1,
+    }),
+  },
+}))
+vi.mock('../vehicles/service', () => ({
+  vehicles: {
+    list: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 1,
+    }),
+  },
+}))
 vi.mock('../integrations/service', () => ({
   integrations: {
     list: vi.fn(),
@@ -168,7 +198,13 @@ describe('auth and permissions UX', () => {
       within(screen.getByRole('navigation', { name: 'Navegación principal' }))
         .getAllByRole('link')
         .map((link) => link.textContent),
-    ).toEqual(['Dashboard', 'Mi proveedor', 'Mi perfil'])
+    ).toEqual([
+      'Dashboard',
+      'Mi proveedor',
+      'Repartidores',
+      'Vehículos',
+      'Mi perfil',
+    ])
     expect(providers.list).not.toHaveBeenCalled()
     expect(integrations.list).not.toHaveBeenCalled()
     expect(screen.queryByText('Proveedores recientes')).not.toBeInTheDocument()
@@ -454,6 +490,7 @@ describe('providers', () => {
         expect.objectContaining({ maxDrivers: 25, maxVehicles: 12 }),
       ),
     )
+    await waitFor(() => expect(capacity).toHaveBeenCalledTimes(2))
   })
   it.each(['ACTIVE', 'PENDING'] as const)(
     'confirms provider transition from %s',

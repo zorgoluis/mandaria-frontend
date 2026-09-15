@@ -11,6 +11,18 @@ export function date(value?: string | null) {
 }
 export const labels: Record<string, string> = {
   ACTIVE: 'Activo',
+  INACTIVE: 'Inactivo',
+  MAINTENANCE: 'Mantenimiento',
+  OFFLINE: 'Desconectado',
+  AVAILABLE: 'Disponible',
+  BUSY: 'Ocupado',
+  BICYCLE: 'Bicicleta',
+  MOTORCYCLE: 'Motocicleta',
+  CAR: 'Automóvil',
+  PICKUP: 'Pickup',
+  VAN: 'Van',
+  TRUCK: 'Camión',
+  OTHER: 'Otro',
   PENDING: 'Pendiente',
   SUSPENDED: 'Suspendido',
   REVOKED: 'Revocado',
