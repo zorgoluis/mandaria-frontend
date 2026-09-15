@@ -1456,3 +1456,162 @@ dialog::backdrop {
     gap: 12px;
   }
 }
+/* V1.5 DeliveryRequests */
+.badge.created {
+  background: #eaf6ef;
+  color: #338969;
+}
+.badge.cancelled {
+  background: #fbeeee;
+  color: #b65e5e;
+}
+.button.secondary.destructive {
+  color: var(--danger);
+  border-color: #efcfcf;
+}
+.button.secondary.destructive:hover {
+  background: #fff4f4;
+}
+.delivery-stat-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.delivery-filters {
+  align-items: center;
+}
+.delivery-filters .search {
+  min-width: 190px;
+  flex: 1;
+}
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.date-filter input {
+  font-size: 12px;
+  padding: 9px 10px;
+}
+.delivery-stops {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 22px;
+}
+.delivery-stops .info-grid {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+.package-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px 24px;
+  display: grid;
+  gap: 14px;
+}
+.package-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.package-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px 0;
+  overflow-wrap: anywhere;
+}
+.package-card .info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  padding: 18px 20px 20px;
+  gap: 18px;
+}
+.financial-description {
+  padding-top: 0;
+  padding-bottom: 12px;
+}
+.financial-description .notice {
+  margin: 0;
+}
+.cancellation-panel {
+  border-color: #f0d1d1;
+}
+dialog textarea {
+  resize: vertical;
+}
+@media (max-width: 1024px) {
+  .delivery-stops {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 850px) {
+  .table-stacked table,
+  .table-stacked tbody,
+  .table-stacked tr,
+  .table-stacked td {
+    display: block;
+    width: 100%;
+  }
+  .table-stacked thead {
+    display: none;
+  }
+  .table-stacked tr {
+    padding: 12px 19px;
+    border-bottom: 1px solid #edf1ef;
+  }
+  .table-stacked tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .table-stacked td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    border: 0;
+    white-space: normal;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .table-stacked td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .table-stacked .entity-name,
+  .table-stacked .cell-meta {
+    align-items: flex-end;
+  }
+}
+@media (max-width: 640px) {
+  .delivery-stat-grid {
+    grid-template-columns: 1fr;
+  }
+  .delivery-filters .search,
+  .delivery-filters select {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .date-filter {
+    flex: 1 1 140px;
+  }
+  .date-filter input {
+    flex: 1;
+    min-width: 0;
+  }
+  .delivery-filters .row-actions {
+    width: 100%;
+  }
+  .delivery-filters .row-actions .button {
+    flex: 1;
+  }
+  .package-list {
+    padding: 0 16px 16px;
+  }
+  .page-heading > .button {
+    width: 100%;
+  }
+}

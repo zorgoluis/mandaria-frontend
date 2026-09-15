@@ -33,4 +33,6 @@ export const labels: Record<string, string> = {
   DRIVER: 'Repartidor',
   OWNER: 'Propietario',
   ADMIN: 'Administrador',
+  CREATED: 'Creada',
+  CANCELLED: 'Cancelada',
 }

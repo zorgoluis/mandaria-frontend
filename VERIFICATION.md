@@ -1,4 +1,19 @@
-# Estado actual — Mandaria Web V1.4-B
+# Estado actual — Mandaria Web V1.5-B
+
+Fecha: 2026-09-15. Rama `v1.5-delivery_request`. Backend local real Mandaria V1.5.0 (OpenAPI 1.5.0). No se modificó backend ni Coita Eats. No se hizo commit ni push.
+
+| Verificación                                | Resultado                                                            |
+| ------------------------------------------- | -------------------------------------------------------------------- |
+| `npm run build`                             | PASS                                                                 |
+| `npm run lint`                              | PASS                                                                 |
+| `npm run typecheck:test`                    | PASS                                                                 |
+| `npm test`                                  | PASS: **139 tests**, 6 archivos; incluye V1.3/V1.4                   |
+| `prettier --check --end-of-line auto .`     | PASS (working copy Windows con CRLF; CI Linux usa LF)                |
+| `npm run test:e2e:delivery-requests` (Edge) | PASS: 11/11 fases en dos corridas consecutivas sobre el código final |
+
+Escenarios reales creados por la API B2B V1.5 (integración local `WEB_V15_VALIDATION`, credencial temporal revocada): por corrida una solicitud FOOD/PREPAID/CREATED, una FOOD+GROCERIES/COURIER_ADVANCE/CREATED, una PARCEL/CANCELLED por la integración y una DOCUMENT cancelada desde la UI. Corridas finales: MDR-000029…032 y MDR-000033…036; corridas previas fallidas por la validación dejaron MDR-000005…028 como historial local. Bugs corregidos: sincronización de filtros con la transición de URL y selects truncados en móvil (ver [docs/V1.5-B.md](docs/V1.5-B.md)).
+
+# Histórico — Mandaria Web V1.4-B
 
 Fecha: 2026-09-15. Proyecto existente `mandaria-web`, backend local real OpenAPI 1.4.0. Implementación y validación V1.4-B completadas dentro de su alcance. No se modificaron backend ni Coita Eats y no se implementaron funcionalidades V1.5. No se hizo commit ni push. Rama observada al finalizar: `1.4-vehiculo_condcutor_asignacion`.
 

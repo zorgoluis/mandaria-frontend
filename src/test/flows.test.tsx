@@ -13,6 +13,10 @@ import { users } from '../users/service'
 import type { Integration, Provider, Role, User } from '../types/api'
 import { ApiError } from '../services/errors'
 import { capacity } from '../logistics/service'
+import { deliveryRequests } from '../delivery-requests/service'
+vi.mock('../delivery-requests/service', () => ({
+  deliveryRequests: { list: vi.fn(), get: vi.fn(), cancel: vi.fn() },
+}))
 vi.mock('../logistics/service', () => ({
   capacity: vi.fn().mockResolvedValue({
     providerId: 'provider-1',
@@ -145,6 +149,7 @@ beforeEach(() => {
   ])
   vi.mocked(integrations.get).mockResolvedValue(integration)
   vi.mocked(integrations.credentials).mockResolvedValue([])
+  vi.mocked(deliveryRequests.list).mockResolvedValue(page([]))
 })
 describe('auth and permissions UX', () => {
   it.each([
@@ -155,6 +160,9 @@ describe('auth and permissions UX', () => {
     '/providers/another-provider',
     '/users',
     '/settings',
+    '/delivery-requests',
+    '/delivery-requests?status=CREATED',
+    '/delivery-requests/MDR-000001',
   ])(
     'PROVIDER_ADMIN cannot open global route %s or fetch privileged data',
     (path) => {
@@ -168,6 +176,8 @@ describe('auth and permissions UX', () => {
       expect(providers.list).not.toHaveBeenCalled()
       expect(providers.get).not.toHaveBeenCalled()
       expect(users.list).not.toHaveBeenCalled()
+      expect(deliveryRequests.list).not.toHaveBeenCalled()
+      expect(deliveryRequests.get).not.toHaveBeenCalled()
       expect(screen.queryByRole('table')).not.toBeInTheDocument()
       expect(
         screen.queryByRole('button', { name: /Crear|Guardar|Activar|Revocar/ }),
@@ -227,6 +237,21 @@ describe('auth and permissions UX', () => {
     expect(
       screen.getByRole('link', { name: 'Proveedores' }),
     ).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Navegación principal' }))
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual([
+      'Dashboard',
+      'Integraciones',
+      'Proveedores',
+      'Administradores',
+      'Repartidores',
+      'Vehículos',
+      'Solicitudes',
+      'Mi perfil',
+      'Configuración',
+    ])
   })
   it('PROVIDER_ADMIN cannot open integrations manually', () => {
     mount('/integrations', 'PROVIDER_ADMIN')

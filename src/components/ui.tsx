@@ -170,12 +170,14 @@ export function ActionForm({
   onSubmit,
   submitLabel = 'Guardar cambios',
   onCancel,
+  cancelLabel = 'Cancelar',
   initialDirty = false,
 }: {
   children: ReactNode
   onSubmit: (data: FormData) => Promise<void>
   submitLabel?: string
   onCancel?: () => void
+  cancelLabel?: string
   initialDirty?: boolean
 }) {
   const [busy, setBusy] = useState(false)
@@ -229,7 +231,7 @@ export function ActionForm({
             disabled={busy}
             onClick={onCancel}
           >
-            Cancelar
+            {cancelLabel}
           </button>
         )}
         <button className="button" disabled={busy || !dirty} type="submit">
@@ -316,13 +318,16 @@ export function Table<T extends { id: string }>({
   rows,
   columns,
   empty,
+  stacked = false,
 }: {
   rows: T[]
   columns: { label: string; render: (row: T) => ReactNode }[]
   empty?: string
+  /** Renders rows as labelled cards on narrow screens instead of scrolling. */
+  stacked?: boolean
 }) {
   return rows.length ? (
-    <div className="table-scroll">
+    <div className={`table-scroll${stacked ? ' table-stacked' : ''}`}>
       <table>
         <thead>
           <tr>
@@ -337,7 +342,9 @@ export function Table<T extends { id: string }>({
           {rows.map((row) => (
             <tr key={row.id}>
               {columns.map((col) => (
-                <td key={col.label}>{col.render(row)}</td>
+                <td key={col.label} data-label={col.label}>
+                  {col.render(row)}
+                </td>
               ))}
             </tr>
           ))}

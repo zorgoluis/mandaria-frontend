@@ -14,6 +14,7 @@ import {
   ArrowUpRight,
   Bike,
   Truck,
+  PackageSearch,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -71,6 +72,16 @@ export function AdminLayout() {
           { to: '/vehicles', label: 'Vehículos', icon: Truck },
         ]
       : []),
+    // V1.5: DeliveryRequests are SUPER_ADMIN only; the route is guarded too.
+    ...(admin
+      ? [
+          {
+            to: '/delivery-requests',
+            label: 'Solicitudes',
+            icon: PackageSearch,
+          },
+        ]
+      : []),
     { to: '/profile', label: 'Mi perfil', icon: UserRound },
     ...(admin
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
@@ -115,7 +126,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.4</span>
+            MANDARIA WEB <span>V1.5</span>
           </div>
         </div>
       </aside>

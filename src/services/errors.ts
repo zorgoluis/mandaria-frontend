@@ -45,6 +45,10 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'El repartidor o el vehículo ya tiene una asignación. Actualiza la información e inténtalo de nuevo.',
     'Driver has no active vehicle assignment':
       'El repartidor ya no tiene una asignación vigente.',
+    'Delivery request not found':
+      'La solicitud de entrega no existe o ya no está disponible.',
+    'requestedFrom must be before or equal to requestedTo':
+      'La fecha inicial debe ser anterior o igual a la fecha final.',
     'Invalid credentials': 'El correo o la contraseña son incorrectos.',
     'Invalid refresh token': 'Tu sesión expiró. Inicia sesión nuevamente.',
     'Integration code already exists':
