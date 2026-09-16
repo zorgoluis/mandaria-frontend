@@ -1,0 +1,45 @@
+const formatter = new Intl.DateTimeFormat('es-MX', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+})
+export function date(value?: string | null) {
+  if (!value) return 'Sin registro'
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime())
+    ? 'Fecha no disponible'
+    : formatter.format(parsed)
+}
+export const labels: Record<string, string> = {
+  ACTIVE: 'Activo',
+  INACTIVE: 'Inactivo',
+  MAINTENANCE: 'Mantenimiento',
+  OFFLINE: 'Desconectado',
+  AVAILABLE: 'Disponible',
+  BUSY: 'Ocupado',
+  BICYCLE: 'Bicicleta',
+  MOTORCYCLE: 'Motocicleta',
+  CAR: 'Automóvil',
+  PICKUP: 'Pickup',
+  VAN: 'Van',
+  TRUCK: 'Camión',
+  OTHER: 'Otro',
+  PENDING: 'Pendiente',
+  SUSPENDED: 'Suspendido',
+  REVOKED: 'Revocado',
+  FLEET: 'Flotilla',
+  INDEPENDENT: 'Independiente',
+  SUPER_ADMIN: 'Superadministrador',
+  PROVIDER_ADMIN: 'Administrador de proveedor',
+  DRIVER: 'Repartidor',
+  OWNER: 'Propietario',
+  ADMIN: 'Administrador',
+  CREATED: 'Creada',
+  CANCELLED: 'Cancelada',
+  // V1.6 pricing and quoting.
+  DRAFT: 'Borrador',
+  OFFERED: 'Ofrecida',
+  ACCEPTED: 'Aceptada',
+  EXPIRED: 'Expirada',
+  LOCAL_DELIVERY: 'Entrega local',
+  DISTANCE_BANDS: 'Bandas de distancia',
+}
