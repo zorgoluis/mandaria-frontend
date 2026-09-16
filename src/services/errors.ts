@@ -25,7 +25,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
     404: 'El recurso solicitado ya no está disponible.',
     409: 'La operación entra en conflicto con el estado actual. Revisa el código, las asociaciones y el estado.',
     422: 'La configuración no es válida todavía. Revisa los datos marcados.',
-    429: 'Demasiados intentos. Espera un minuto antes de continuar.',
+    410: 'El recurso ya no está disponible.',
+    429: 'Demasiados intentos. Intenta nuevamente más tarde.',
     503: 'Un servicio necesario no está disponible en este momento. Inténtalo más tarde.',
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
@@ -58,6 +59,27 @@ export function normalizeError(status: number, body: unknown): ApiError {
     QUOTE_EXPIRED: 'La cotización expiró; debe solicitarse una nueva.',
     QUOTE_NOT_ACCEPTABLE:
       'La cotización o la solicitud ya no pueden aceptarse.',
+    // V1.6.1 invitations and account activation.
+    USER_ALREADY_ACTIVE: 'Ya existe una cuenta activa con ese correo.',
+    USER_INVITATION_PENDING:
+      'Ya existe una invitación pendiente para ese correo. Reenvíala desde la lista de invitaciones.',
+    USER_DISABLED:
+      'La cuenta con ese correo está deshabilitada y no puede reactivarse mediante una invitación.',
+    PROVIDER_DRIVER_LIMIT_REACHED:
+      'Límite de repartidores alcanzado; las invitaciones pendientes también ocupan lugar. Solicita ampliar la capacidad del proveedor.',
+    INVITATION_NOT_PENDING: 'La invitación ya fue aceptada o revocada.',
+    INVITATION_RESEND_COOLDOWN:
+      'La invitación se envió hace poco. Espera un momento antes de reenviarla.',
+    MAIL_NOT_CONFIGURED:
+      'El envío de invitaciones no está configurado en Mandaria. Contacta al equipo técnico.',
+    INVITATION_TOKEN_INVALID: 'La invitación no es válida.',
+    INVITATION_EXPIRED:
+      'Esta invitación ha expirado. Solicita una nueva invitación a tu administrador.',
+    INVITATION_REVOKED:
+      'Esta invitación fue revocada. Solicita una nueva invitación a tu administrador.',
+    INVITATION_ALREADY_ACCEPTED: 'Esta invitación ya fue utilizada.',
+    ACCOUNT_NOT_ACTIVATABLE:
+      'Esta cuenta no puede activarse con la invitación. Contacta a tu administrador.',
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {
@@ -117,6 +139,7 @@ export function normalizeError(status: number, body: unknown): ApiError {
     'Provider access denied':
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
     'Service zone not found': 'La zona de servicio ya no está disponible.',
+    'Invitation not found': 'La invitación ya no está disponible.',
     'Rate plan not found': 'La tarifa ya no está disponible.',
     'Delivery quote not found': 'La cotización ya no está disponible.',
   }

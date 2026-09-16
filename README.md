@@ -1,8 +1,8 @@
-# Mandaria Web — V1.6-B
+# Mandaria Web — V1.6.1-B
 
 Base administrativa independiente para Mandaria Backend V1.4. React + Vite + TypeScript estricto. Nombre de paquete: `mandaria-web`; se desarrolla en el repositorio existente `mandaria-frontend`, independiente de Coita Eats. No accede a PostgreSQL, Prisma ni servicios de Coita Eats.
 
-**Estado:** V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
+**Estado:** V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
 ## Requisitos e instalación
 
@@ -62,6 +62,10 @@ Requiere backend y frontend iniciados. Configura localmente `.env.e2e`, **ignora
 Alternativa local para una instalación que conserva credenciales bootstrap: define `MANDARIA_BACKEND_ENV` como ruta a su `.env`. El script sólo lo lee para obtener la cuenta de prueba; no imprime valores. `E2E_WEB_URL` puede cambiar el origen de prueba (default `http://localhost:5173`, el mismo host que publica Vite). `E2E_BROWSER_CHANNEL` permite usar un navegador ya instalado, por ejemplo `msedge`, cuando no se descargaron los de Playwright; lo aceptan todos los scripts `test:e2e*`.
 
 El script **crea registros reales de prueba** con código `WEB_...`, genera/rota/revoca credenciales y modifica sus propios proveedores. No eliminará registros: la API carece de eliminación de cliente/proveedor. Una cuenta PROVIDER_ADMIN de prueba, si se configura, se asocia al proveedor creado. No usar cuentas productivas. Las capturas y el reporte quedan en `test-results/manual/`, ignorados por Git. No se capturan pantallas con secretos; capturas de fallo enmascaran inputs y textarea. No se guardan trazas de red, HAR, videos ni estados de autenticación.
+
+### Validación real V1.6.1-B
+
+`npm run test:e2e:invitations` valida con navegador real invitación de PROVIDER_ADMIN y DRIVER, 409 de invitación duplicada, 429 de enfriamiento, reenvío con rotación de enlace, revocación, activación (inválida, revocada, contraseñas distintas, éxito, enlace reutilizado), login de las cuentas activadas, aislamiento entre proveedores, límite real de capacidad, responsive y auditoría de tokens/contraseñas. Requiere el backend con `MAIL_PROVIDER=local_outbox` y `E2E_MAIL_OUTBOX_DIR`; nunca envía correos reales. Ver [docs/V1.6.1-B.md](docs/V1.6.1-B.md).
 
 ### Validación real V1.6-B
 
@@ -126,7 +130,9 @@ Se usan formularios HTML nativos con validaciones y `ActionForm`; no se agrega l
 | /dashboard                                             | Usuario autenticado; contenido por rol                   |
 | /integrations, /integrations/new, /integrations/:id    | SUPER_ADMIN                                              |
 | /providers, /providers/new, /providers/:id             | SUPER_ADMIN                                              |
-| /users                                                 | SUPER_ADMIN, consulta de usuarios                        |
+| /users                                                 | SUPER_ADMIN; cuentas, estado e invitar administrador     |
+| /invitations                                           | SUPER_ADMIN; invitaciones, reenviar y revocar            |
+| /activate-account                                      | Público; activación de cuenta invitada                   |
 | /settings                                              | SUPER_ADMIN, información del entorno de trabajo          |
 | /provider/profile                                      | PROVIDER_ADMIN, sólo asociaciones propias                |
 | /drivers, /drivers/new, /drivers/:id                   | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |
@@ -154,6 +160,7 @@ Sidebar y rutas usan el rol de `/auth/me`; escribir una URL prohibida muestra 40
 - Sin HTML dinámico peligroso, persistencia de caché, analytics ni logs de tokens. Errores del backend pasan por mensajes seguros permitidos; no se muestran SQL, trazas ni texto arbitrario.
 - Client Secrets de integración **nunca se almacenan permanentemente en Mandaria Web**. Sólo viven en estado local del diálogo, se eliminan al cerrar/desmontar/cambiar detalle y nunca se incluyen en QueryClient. El portapapeles se usa sólo por acción explícita y pertenece al sistema del usuario.
 - Rotar conserva la credencial anterior según backend: la UI lo advierte y requiere revocación explícita. Revocación y cambios de estado tienen confirmación.
+- Invitaciones: la web nunca muestra ni persiste tokens de activación ni contraseñas. `/activate-account` retira el token de la URL al cargar, lo envía sólo en el body sin cabecera de sesión (`publicApi`) y declara `no-referrer`. Nadie define contraseñas ajenas.
 - La web nunca llama a `/integrations/token` ni utiliza clientId/clientSecret para su propio login.
 - Servir producción con HTTPS y origen CORS exacto. Nginx incluye CSP, anti-frame, no-sniff y referrer policy. `connect-src` permite HTTP/HTTPS para una imagen sin dominio fijo; restringirlo al origen real del backend al desplegar. No hay scripts ni fuentes remotos.
 
@@ -172,6 +179,6 @@ docker run --rm -p 8080:80 mandaria-web:v1.4
 
 ## Próximas versiones y deuda
 
-V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. Todavía **no** administra qué Provider, Driver o Vehicle realizará el servicio: eso corresponde a V1.7. No se implementaron dispatch, hunting, sockets, GPS, tracking, wallet, créditos, pagos, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
+V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. V1.6.1-B incorpora administradores y repartidores reales mediante invitación segura, sin acceso al servidor. Todavía **no** administra qué Provider, Driver o Vehicle realizará el servicio: eso corresponde a V1.7. No se implementaron dispatch, hunting, sockets, GPS, tracking, wallet, créditos, pagos, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
 
 Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.

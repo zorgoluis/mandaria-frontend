@@ -95,6 +95,10 @@ export function Login() {
               </span>
             </Field>
           </ActionForm>
+          <p className="muted login-invitation">
+            ¿Recibiste una invitación? Activa tu cuenta desde el enlace del
+            correo antes de iniciar sesión.
+          </p>
           <div className="login-security">
             <ShieldCheck size={18} />
             <span>Acceso exclusivo para administradores autorizados.</span>

@@ -23,6 +23,7 @@ import { date } from '../utils/format'
 import { deliveryQuotes } from './service'
 import { quoteKeys } from './queries'
 import {
+  cancellationReasonLabel,
   duration,
   quoteStatusHints,
   quoteStatusLabels,
@@ -577,10 +578,7 @@ function QuoteContent({ quote, back }: { quote: DeliveryQuote; back: string }) {
             ...(status === 'CANCELLED'
               ? ([
                   ['Cancelada', date(quote.cancelledAt)],
-                  [
-                    'Motivo',
-                    quote.cancellationReason ?? 'Sin motivo registrado',
-                  ],
+                  ['Motivo', cancellationReasonLabel(quote.cancellationReason)],
                 ] as [string, string][])
               : []),
             [

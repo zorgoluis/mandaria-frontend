@@ -30,6 +30,8 @@ import {
 } from '../pricing/zones'
 import { RatePlanDetail } from '../pricing/rate-plans'
 import { QuotesPage, QuoteDetail } from '../quotes/pages'
+import { InvitationsPage } from '../invitations/pages'
+import { ActivateAccount } from '../auth/ActivateAccount'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -54,6 +56,8 @@ export function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      {/* Public: invited people have no session yet. */}
+      <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
@@ -112,6 +116,7 @@ export function App() {
               element={<QuoteDetail key={location.pathname} />}
             />
             <Route path="users" element={<UsersPage />} />
+            <Route path="invitations" element={<InvitationsPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>

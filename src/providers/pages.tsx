@@ -20,6 +20,11 @@ import {
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ActivityCards, CapacityCards } from '../logistics/components'
+import {
+  InvitationsPanel,
+  InviteButton,
+  InviteProviderAdminDialog,
+} from '../invitations/components'
 import { date, labels } from '../utils/format'
 import type {
   Member,
@@ -301,7 +306,8 @@ export function ProviderNew() {
     </>
   )
 }
-function Memberships({ id }: { id: string }) {
+function Memberships({ id, name }: { id: string; name: string }) {
+  const [inviting, setInviting] = useState(false)
   const [page, setPage] = useState(1)
   const query = useQuery({
     queryKey: ['providers', id, 'members', page],
@@ -317,9 +323,13 @@ function Memberships({ id }: { id: string }) {
     <div className="panel">
       <div className="panel-toolbar">
         <div>
-          <h2>Administradores asociados</h2>
+          <h2>Administradores</h2>
           <p>Gestiona quién puede consultar este proveedor.</p>
         </div>
+        <InviteButton
+          label="Invitar administrador"
+          onClick={() => setInviting(true)}
+        />
       </div>
       {query.isPending ? (
         <Loading />
@@ -334,6 +344,8 @@ function Memberships({ id }: { id: string }) {
         <>
           <Table
             rows={query.data.items}
+            emptyTitle="No hay administradores"
+            empty="Invita a un administrador para este proveedor."
             columns={[
               { label: 'Usuario', render: (row) => row.user.email },
               {
@@ -419,11 +431,18 @@ function Memberships({ id }: { id: string }) {
             </Field>
           </div>
           <p className="panel-note">
-            Las sugerencias provienen de los últimos 100 usuarios. La API no
-            permite crear usuarios desde este panel.
+            Para cuentas nuevas usa Invitar administrador. Esta opción sólo
+            asocia cuentas activas existentes; las sugerencias provienen de los
+            últimos 100 usuarios.
           </p>
         </ActionForm>
       </div>
+      {inviting && (
+        <InviteProviderAdminDialog
+          provider={{ id, name }}
+          onClose={() => setInviting(false)}
+        />
+      )}
       {remove && (
         <Confirm
           title="Retirar administrador"
@@ -506,7 +525,14 @@ export function ProviderDetail() {
           />
         </div>
       </div>
-      <Memberships id={id} />
+      <Memberships id={id} name={item.name} />
+      <InvitationsPanel
+        scope={{ kind: 'admin', providerId: id }}
+        title="Invitaciones del proveedor"
+        description="Administradores y repartidores invitados a este proveedor."
+        showProvider={false}
+        roleFilter
+      />
       <CapacityCards scope={{ role: 'SUPER_ADMIN', providerId: id }} />
       {action && (
         <Confirm

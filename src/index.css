@@ -1730,3 +1730,59 @@ dialog textarea {
     flex: 1;
   }
 }
+/* V1.6.1 account activation */
+.activation-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: #eef4f1;
+}
+.activation-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.activation-card .brand {
+  margin-bottom: 28px;
+}
+.activation-card h1 {
+  font-size: 26px;
+  margin: 8px 0;
+}
+.activation-card .form-actions .button {
+  width: 100%;
+}
+.activation-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--brand);
+}
+.activation-state.error-state {
+  color: var(--danger);
+}
+.activation-state h1,
+.activation-state p {
+  color: var(--ink);
+  margin: 0;
+}
+.activation-card .form-actions small {
+  display: none;
+}
+.login-invitation {
+  margin-top: 16px;
+}
+@media (max-width: 640px) {
+  .activation-card {
+    padding: 24px 20px;
+  }
+  .activation-state .button {
+    width: 100%;
+  }
+}
