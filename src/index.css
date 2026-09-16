@@ -1615,3 +1615,118 @@ dialog textarea {
     width: 100%;
   }
 }
+
+/* V1.6 Service zones, rate plans and delivery quotes */
+.badge.draft {
+  background: #f1f4f6;
+  color: #5b6b74;
+}
+.badge.offered {
+  background: #eef3fb;
+  color: #3f6ea8;
+}
+.badge.accepted {
+  background: #eaf6ef;
+  color: #338969;
+}
+.badge.expired {
+  background: #fbf3e8;
+  color: #9a6a2e;
+}
+.geojson-input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  white-space: pre;
+}
+.geojson-view {
+  margin: 0;
+  max-height: 260px;
+  overflow: auto;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fafbfb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.band-editor {
+  padding: 0 24px 4px;
+}
+.band-editor fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.band-editor .state {
+  padding: 22px 0;
+}
+.band-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.band-head,
+.band-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 40px;
+  gap: 10px;
+  align-items: center;
+}
+.band-head span {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.band-row input {
+  width: 100%;
+  min-width: 0;
+}
+.band-issues {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  color: var(--danger);
+  font-size: 12px;
+}
+.band-editor .form-actions {
+  padding: 0;
+}
+.quote-amount {
+  font-size: 18px;
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .band-editor {
+    padding: 0 16px 4px;
+  }
+  .band-head {
+    display: none;
+  }
+  .band-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .band-row input:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+  .band-row .icon-button {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+  .band-editor .form-actions .button {
+    flex: 1;
+  }
+}

@@ -21,6 +21,7 @@ import { integrations } from '../integrations/service'
 import { queryClient } from '../services/query'
 import { ApiError } from '../services/errors'
 import { date, labels } from '../utils/format'
+import { RequestQuotes } from '../quotes/pages'
 import { deliveryRequests } from './service'
 import { deliveryRequestKeys } from './queries'
 import {
@@ -494,6 +495,7 @@ function DeliveryRequestContent({
       </div>
       <PackagesPanel packages={item.packages} />
       <FinancialPanel context={item.financialContext} />
+      <RequestQuotes publicId={item.publicId} />
       <section className="panel" aria-labelledby="request-technical">
         <div className="panel-toolbar">
           <h2 id="request-technical">Información técnica y fechas</h2>
@@ -638,7 +640,8 @@ function FinancialPanel({
             </div>
           )}
           <p className="panel-note">
-            Valor declarado por la integración únicamente para la mercancía.
+            Valor declarado por la integración únicamente para la mercancía. El
+            costo de entrega se calcula aparte y se muestra en Cotizaciones.
           </p>
         </>
       ) : (
