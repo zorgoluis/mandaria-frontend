@@ -370,7 +370,11 @@ describe('quote detail', () => {
     expect(
       await panel.findByText('Cancelada', { selector: 'dt' }),
     ).toBeInTheDocument()
+    // The backend code is translated, never rendered raw.
     expect(value(panel, 'Motivo')).toHaveTextContent(
+      'La solicitud de entrega fue cancelada.',
+    )
+    expect(screen.getByRole('main')).not.toHaveTextContent(
       'DELIVERY_REQUEST_CANCELLED',
     )
   })

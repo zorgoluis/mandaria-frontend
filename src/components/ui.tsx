@@ -181,7 +181,10 @@ export function ActionForm({
   initialDirty?: boolean
 }) {
   const [busy, setBusy] = useState(false)
-  const [dirty, setDirty] = useState(initialDirty)
+  // initialDirty only enables submitting untouched forms (login, confirmations). The
+  // unsaved-changes warning and beforeunload guard require real edits: a guard without
+  // them made the browser block (and log) a prompt when leaving the login page.
+  const [dirty, setDirty] = useState(false)
   const [error, setError] = useState<unknown>(null)
   useEffect(() => {
     if (!dirty) return
@@ -234,7 +237,11 @@ export function ActionForm({
             {cancelLabel}
           </button>
         )}
-        <button className="button" disabled={busy || !dirty} type="submit">
+        <button
+          className="button"
+          disabled={busy || !(dirty || initialDirty)}
+          type="submit"
+        >
           {busy && <LoaderCircle size={16} className="spin" />}
           {busy ? 'Guardando…' : submitLabel}
         </button>
@@ -318,11 +325,13 @@ export function Table<T extends { id: string }>({
   rows,
   columns,
   empty,
+  emptyTitle,
   stacked = false,
 }: {
   rows: T[]
   columns: { label: string; render: (row: T) => ReactNode }[]
   empty?: string
+  emptyTitle?: string
   /** Renders rows as labelled cards on narrow screens instead of scrolling. */
   stacked?: boolean
 }) {
@@ -352,7 +361,7 @@ export function Table<T extends { id: string }>({
       </table>
     </div>
   ) : (
-    <Empty description={empty} />
+    <Empty title={emptyTitle} description={empty} />
   )
 }
 export function Pagination({

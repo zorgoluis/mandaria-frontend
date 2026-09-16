@@ -142,6 +142,9 @@ export async function api<T>(
     }
   }
 }
+/** Unauthenticated endpoint (e.g. account activation): never sends or refreshes a session. */
+export const publicApi = <T>(path: string, method: string, body?: unknown) =>
+  transport<T>(path, method, body, null)
 export const authService = {
   async login(email: string, password: string) {
     clearSession()

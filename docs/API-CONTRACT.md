@@ -64,18 +64,18 @@ Fuente: backend `mandaria-backend` V1.6.1-A (OpenAPI 1.6.1, controllers `src/inv
 
 Flujo oficial: SUPER_ADMIN invita PROVIDER_ADMIN (o DRIVER) a un proveedor → PROVIDER_ADMIN invita DRIVER sólo en sus proveedores → la persona abre `{MANDARIA_WEB_URL}/activate-account?token=…` → define su contraseña → `POST /auth/login` normal. Nadie define contraseñas ajenas; el bootstrap SUPER_ADMIN no cambia y los seeds locales no son aprovisionamiento de producción.
 
-| Método y ruta | Uso / contrato |
-| --- | --- |
-| POST /admin/providers/:providerId/invitations | SUPER_ADMIN. `{email, role: PROVIDER_ADMIN\|DRIVER, membershipRole? (OWNER\|ADMIN, obligatorio con PROVIDER_ADMIN), driverName? (1–100, obligatorio con DRIVER)}` → 201 invitación + `emailDelivery: SENT\|FAILED` |
-| GET /admin/user-invitations | SUPER_ADMIN. `page,pageSize,status?,role?,providerId?,search?` → `{items,total,totalPages,page,pageSize}` |
-| GET /admin/user-invitations/:invitationId | SUPER_ADMIN. Detalle |
-| POST /admin/user-invitations/:invitationId/resend | SUPER_ADMIN. Sin body; rota token, reinicia vigencia, envía correo; 429 `INVITATION_RESEND_COOLDOWN` |
-| POST /admin/user-invitations/:invitationId/revoke | SUPER_ADMIN. Sin body; PENDING → REVOKED (idempotente) |
-| POST /provider/driver-invitations?providerId= | PROVIDER_ADMIN + membership. `{email, driverName}`; no acepta `role` ni `providerId` en body |
-| GET /provider/driver-invitations?providerId= | Sólo invitaciones DRIVER del proveedor propio; `status?,search?` y paginación |
-| GET/POST /provider/driver-invitations/:invitationId[/resend\|/revoke]?providerId= | Igual que admin; 404 fuera del proveedor |
-| POST /auth/activate-account | Pública. `{token, password (16–128)}` → 200 `{status:"ACTIVE", email, role}`; no devuelve sesión |
-| GET /users?status= | SUPER_ADMIN; cada usuario incluye `status: INVITED\|ACTIVE\|DISABLED` |
+| Método y ruta                                                                     | Uso / contrato                                                                                                                                                                                                     |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| POST /admin/providers/:providerId/invitations                                     | SUPER_ADMIN. `{email, role: PROVIDER_ADMIN\|DRIVER, membershipRole? (OWNER\|ADMIN, obligatorio con PROVIDER_ADMIN), driverName? (1–100, obligatorio con DRIVER)}` → 201 invitación + `emailDelivery: SENT\|FAILED` |
+| GET /admin/user-invitations                                                       | SUPER_ADMIN. `page,pageSize,status?,role?,providerId?,search?` → `{items,total,totalPages,page,pageSize}`                                                                                                          |
+| GET /admin/user-invitations/:invitationId                                         | SUPER_ADMIN. Detalle                                                                                                                                                                                               |
+| POST /admin/user-invitations/:invitationId/resend                                 | SUPER_ADMIN. Sin body; rota token, reinicia vigencia, envía correo; 429 `INVITATION_RESEND_COOLDOWN`                                                                                                               |
+| POST /admin/user-invitations/:invitationId/revoke                                 | SUPER_ADMIN. Sin body; PENDING → REVOKED (idempotente)                                                                                                                                                             |
+| POST /provider/driver-invitations?providerId=                                     | PROVIDER_ADMIN + membership. `{email, driverName}`; no acepta `role` ni `providerId` en body                                                                                                                       |
+| GET /provider/driver-invitations?providerId=                                      | Sólo invitaciones DRIVER del proveedor propio; `status?,search?` y paginación                                                                                                                                      |
+| GET/POST /provider/driver-invitations/:invitationId[/resend\|/revoke]?providerId= | Igual que admin; 404 fuera del proveedor                                                                                                                                                                           |
+| POST /auth/activate-account                                                       | Pública. `{token, password (16–128)}` → 200 `{status:"ACTIVE", email, role}`; no devuelve sesión                                                                                                                   |
+| GET /users?status=                                                                | SUPER_ADMIN; cada usuario incluye `status: INVITED\|ACTIVE\|DISABLED`                                                                                                                                              |
 
 Invitación: `{id,userId,email,role,providerId,provider:{id,name,code},membershipRole,driverName,status,expiresAt,tokenIssuedAt,resendCount,acceptedAt,revokedAt,revokedByUserId,createdByUserId,createdAt,updatedAt}`. `status` es efectivo: `PENDING`, `EXPIRED` (derivado, no persistido), `ACCEPTED`, `REVOKED`. Nunca incluye token ni hash.
 

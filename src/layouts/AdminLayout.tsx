@@ -5,6 +5,7 @@ import {
   PlugZap,
   Building2,
   UsersRound,
+  MailPlus,
   Settings2,
   UserRound,
   Menu,
@@ -64,6 +65,7 @@ export function AdminLayout() {
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
           { to: '/providers', label: 'Proveedores', icon: Building2 },
           { to: '/users', label: 'Administradores', icon: UsersRound },
+          { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
         ]
       : user?.role === 'PROVIDER_ADMIN'
         ? [{ to: '/provider/profile', label: 'Mi proveedor', icon: Building2 }]
@@ -138,7 +140,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.6</span>
+            MANDARIA WEB <span>V1.6.1</span>
           </div>
         </div>
       </aside>

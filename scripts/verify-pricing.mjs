@@ -169,6 +169,10 @@ try {
   begin('SUPER_ADMIN login, V1.6 navigation and V1.4/V1.5 regression')
   const admin = await session()
   await login(admin, 'admin')
+  // allTextContents does not wait: read the menu only once it has rendered.
+  await expect(
+    nav(admin).getByRole('link', { name: 'Zonas de servicio' }),
+  ).toBeVisible()
   const links = await nav(admin).getByRole('link').allTextContents()
   assert.equal(links.indexOf('Cotizaciones'), links.indexOf('Solicitudes') + 1)
   assert.equal(
@@ -480,6 +484,9 @@ try {
   begin('PROVIDER_ADMIN has no access to zones, tariffs or global quotes')
   const provider = await session()
   await login(provider, 'provider')
+  await expect(
+    nav(provider).getByRole('link', { name: 'Repartidores' }),
+  ).toBeVisible()
   const providerLinks = await nav(provider).getByRole('link').allTextContents()
   for (const name of ['Zonas de servicio', 'Cotizaciones', 'Solicitudes'])
     assert.ok(!providerLinks.includes(name), `${name} leaked into the menu`)

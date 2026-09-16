@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { users } from './service'
+import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import {
+  Empty,
   ErrorState,
   InfoGrid,
   Loading,
@@ -10,20 +12,62 @@ import {
   Pagination,
   Table,
 } from '../components/ui'
+import { accounts } from '../invitations/service'
+import {
+  InviteButton,
+  InviteProviderAdminDialog,
+  StatusBadge,
+} from '../invitations/components'
+import { accountStatusLabels } from '../invitations/format'
+import { accountStatuses } from '../invitations/types'
 import { date, labels } from '../utils/format'
 export function UsersPage() {
-  const query = useQuery({
-    queryKey: ['users'],
-    queryFn: ({ signal }) => users.list(signal),
-  })
+  const [status, setStatus] = useState('')
   const [page, setPage] = useState(1)
+  const [inviting, setInviting] = useState(false)
+  const query = useQuery({
+    queryKey: ['users', 'accounts', status],
+    queryFn: ({ signal }) => accounts.list(status || undefined, signal),
+  })
   return (
     <>
       <PageTitle
         title="Administradores y usuarios"
-        description="Consulta las cuentas registradas en Mandaria."
+        description="Consulta las cuentas de Mandaria e incorpora administradores por invitación."
+        action={
+          <InviteButton
+            label="Invitar administrador"
+            onClick={() => setInviting(true)}
+          />
+        }
       />
       <div className="panel">
+        <div className="panel-toolbar">
+          <div>
+            <h2>Cuentas</h2>
+            <p>Las cuentas nuevas se crean al aceptar una invitación.</p>
+          </div>
+          <Link className="table-action" to="/invitations">
+            Ver invitaciones <ArrowUpRight size={15} />
+          </Link>
+        </div>
+        <div className="filters">
+          <select
+            aria-label="Filtrar por estado de cuenta"
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value)
+              setPage(1)
+            }}
+          >
+            <option value="">Todos los estados</option>
+            {accountStatuses.map((value) => (
+              <option key={value} value={value}>
+                {accountStatusLabels[value]}
+              </option>
+            ))}
+          </select>
+        </div>
         {query.isPending ? (
           <Loading />
         ) : query.isError ? (
@@ -33,9 +77,10 @@ export function UsersPage() {
               void query.refetch()
             }}
           />
-        ) : (
+        ) : query.data.length ? (
           <>
             <Table
+              stacked
               rows={query.data.slice((page - 1) * 20, page * 20)}
               columns={[
                 {
@@ -53,7 +98,7 @@ export function UsersPage() {
                 },
                 {
                   label: 'Estado',
-                  render: (row) => (row.active ? 'Activo' : 'Inactivo'),
+                  render: (row) => <StatusBadge status={row.status} />,
                 },
                 { label: 'Creación', render: (row) => date(row.createdAt) },
               ]}
@@ -65,12 +110,25 @@ export function UsersPage() {
               onPage={setPage}
             />
           </>
+        ) : (
+          <Empty
+            title="No hay administradores"
+            description={
+              status
+                ? 'Ninguna cuenta coincide con el estado seleccionado.'
+                : 'Invita a un administrador para comenzar.'
+            }
+          />
         )}
         <p className="panel-note">
-          Últimos 100 usuarios. La API actual sólo permite consulta; el alta,
-          cambio de rol y desactivación se administran fuera de Mandaria Web.
+          Últimos 100 usuarios según la API. Una cuenta con invitación pendiente
+          todavía no tiene contraseña ni acceso. La API no permite cambiar roles
+          ni deshabilitar cuentas desde Mandaria Web.
         </p>
       </div>
+      {inviting && (
+        <InviteProviderAdminDialog onClose={() => setInviting(false)} />
+      )}
     </>
   )
 }

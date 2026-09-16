@@ -23,6 +23,22 @@ import {
 } from '../logistics/types'
 import type { Role } from '../types/api'
 
+vi.mock('../invitations/service', () => ({
+  invitations: {
+    list: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 20,
+    }),
+    inviteProviderAdmin: vi.fn(),
+    inviteDriver: vi.fn(),
+    resend: vi.fn(),
+    revoke: vi.fn(),
+  },
+  accounts: { list: vi.fn().mockResolvedValue([]), activate: vi.fn() },
+}))
 vi.mock('../providers/service', () => ({
   providers: {
     list: vi.fn(),

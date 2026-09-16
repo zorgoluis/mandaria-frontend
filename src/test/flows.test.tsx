@@ -14,6 +14,22 @@ import type { Integration, Provider, Role, User } from '../types/api'
 import { ApiError } from '../services/errors'
 import { capacity } from '../logistics/service'
 import { deliveryRequests } from '../delivery-requests/service'
+vi.mock('../invitations/service', () => ({
+  invitations: {
+    list: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 20,
+    }),
+    inviteProviderAdmin: vi.fn(),
+    inviteDriver: vi.fn(),
+    resend: vi.fn(),
+    revoke: vi.fn(),
+  },
+  accounts: { list: vi.fn().mockResolvedValue([]), activate: vi.fn() },
+}))
 vi.mock('../delivery-requests/service', () => ({
   deliveryRequests: { list: vi.fn(), get: vi.fn(), cancel: vi.fn() },
 }))
@@ -246,6 +262,7 @@ describe('auth and permissions UX', () => {
       'Integraciones',
       'Proveedores',
       'Administradores',
+      'Invitaciones',
       'Repartidores',
       'Vehículos',
       'Solicitudes',

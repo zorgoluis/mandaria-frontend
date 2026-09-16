@@ -23,6 +23,14 @@ export function duration(seconds: number) {
   const rest = total % 60
   return rest ? `${hours} h ${rest} min` : `${hours} h`
 }
+/** cancellationReason is a backend code (string); never render it raw. */
+export function cancellationReasonLabel(value: string | null) {
+  if (!value) return 'Sin motivo registrado'
+  const known: Record<string, string> = {
+    DELIVERY_REQUEST_CANCELLED: 'La solicitud de entrega fue cancelada.',
+  }
+  return known[value] ?? 'Cancelada por el sistema.'
+}
 export function routingProviderLabel(value: string) {
   const known: Record<string, string> = {
     google: 'Google',
