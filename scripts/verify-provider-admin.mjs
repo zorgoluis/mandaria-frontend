@@ -13,7 +13,7 @@ const values = {
   ...(existsSync('.env.e2e') ? parseEnv(readFileSync('.env.e2e', 'utf8')) : {}),
   ...process.env,
 }
-const web = values.E2E_WEB_URL || 'http://127.0.0.1:5173'
+const web = values.E2E_WEB_URL || 'http://localhost:5173'
 const api = `${values.E2E_API_URL || 'http://localhost:3000'}/api/v1`
 const accounts = {
   a: {
@@ -67,7 +67,9 @@ const report = {
 }
 const output = 'test-results/provider-admin'
 mkdirSync(output, { recursive: true })
-const browser = await chromium.launch()
+const browser = await chromium.launch(
+  values.E2E_BROWSER_CHANNEL ? { channel: values.E2E_BROWSER_CHANNEL } : {},
+)
 const sessions = []
 let phase = 'startup'
 function begin(name) {
@@ -248,6 +250,12 @@ async function storageAudit(state) {
     ),
     'Privileged mutation sent',
   )
+  // Each audit judges only its own phase: otherwise a transient 429 early in the run keeps
+  // failing every later phase. The running tally preserves the end-of-run total.
+  state.auditedConsoleErrors =
+    (state.auditedConsoleErrors ?? 0) +
+    state.console.filter((entry) => entry.type === 'error').length
+  state.console = []
 }
 async function allowedNavigation(state) {
   await expect(
@@ -589,7 +597,9 @@ try {
   assert.equal(report.failures.length, 0)
   report.expectedConsoleResponses = sessions.reduce(
     (count, state) =>
-      count + state.console.filter((entry) => entry.type === 'error').length,
+      count +
+      (state.auditedConsoleErrors ?? 0) +
+      state.console.filter((entry) => entry.type === 'error').length,
     0,
   )
   pass(

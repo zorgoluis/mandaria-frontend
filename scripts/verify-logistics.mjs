@@ -53,7 +53,9 @@ const report = {
   mutations: [],
   expectedHttpErrors: 0,
 }
-const browser = await chromium.launch()
+const browser = await chromium.launch(
+  env.E2E_BROWSER_CHANNEL ? { channel: env.E2E_BROWSER_CHANNEL } : {},
+)
 const sessions = []
 let phase = 'startup'
 function begin(name) {

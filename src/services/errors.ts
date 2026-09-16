@@ -1,8 +1,19 @@
 export class ApiError extends Error {
   status: number
-  constructor(status: number, message: string) {
+  /** Stable backend code (DomainException), e.g. OUT_OF_SERVICE_AREA. Never shown raw. */
+  code: string | null
+  /** Raw backend validation strings. Never rendered verbatim; translate before display. */
+  details: string[]
+  constructor(
+    status: number,
+    message: string,
+    code: string | null = null,
+    details: string[] = [],
+  ) {
     super(message)
     this.status = status
+    this.code = code
+    this.details = details
   }
 }
 export function normalizeError(status: number, body: unknown): ApiError {
@@ -13,7 +24,40 @@ export function normalizeError(status: number, body: unknown): ApiError {
     403: 'No tienes permisos para consultar o modificar este recurso.',
     404: 'El recurso solicitado ya no está disponible.',
     409: 'La operación entra en conflicto con el estado actual. Revisa el código, las asociaciones y el estado.',
+    422: 'La configuración no es válida todavía. Revisa los datos marcados.',
     429: 'Demasiados intentos. Espera un minuto antes de continuar.',
+    503: 'Un servicio necesario no está disponible en este momento. Inténtalo más tarde.',
+  }
+  // V1.6: DomainException codes are stable machine values; they translate exactly.
+  const codes: Record<string, string> = {
+    SERVICE_ZONE_CODE_EXISTS: 'Ya existe una zona de servicio con ese código.',
+    SERVICE_ZONE_NOT_EDITABLE:
+      'Desactiva la zona antes de reemplazar su cobertura.',
+    SERVICE_ZONE_OVERLAP:
+      'La cobertura toca o se superpone con otra zona activa. Ajusta el área antes de activarla.',
+    SERVICE_ZONE_AMBIGUOUS:
+      'El punto pertenece a más de una zona activa. Revisa las coberturas.',
+    RATE_PLAN_NOT_EDITABLE:
+      'Sólo las versiones en borrador pueden editarse. Crea una nueva versión a partir de la activa.',
+    RATE_PLAN_NOT_ACTIVATABLE: 'Sólo una versión en borrador puede activarse.',
+    RATE_PLAN_NOT_ACTIVE: 'Sólo una versión activa puede desactivarse.',
+    RATE_PLAN_INVALID:
+      'Las bandas de la tarifa no son válidas todavía. Revisa los rangos y precios.',
+    RATE_PLAN_CONFLICT:
+      'Otra persona cambió esta tarifa al mismo tiempo. Vuelve a cargar e inténtalo de nuevo.',
+    OUT_OF_SERVICE_AREA: 'Fuera de cobertura.',
+    CROSS_ZONE_NOT_SUPPORTED: 'Entrega entre zonas no disponible.',
+    ROUTE_NOT_FOUND: 'No se encontró una ruta.',
+    ROUTING_UNAVAILABLE: 'Servicio de rutas temporalmente no disponible.',
+    DISTANCE_NOT_SUPPORTED: 'Distancia fuera de las tarifas disponibles.',
+    RATE_CONFIGURATION_UNAVAILABLE: 'No existe una tarifa activa.',
+    RATE_CONFIGURATION_INVALID:
+      'La tarifa activa tiene una configuración inválida. Revisa sus bandas.',
+    DELIVERY_REQUEST_NOT_QUOTABLE:
+      'La solicitud ya no admite cotizaciones en su estado actual.',
+    QUOTE_EXPIRED: 'La cotización expiró; debe solicitarse una nueva.',
+    QUOTE_NOT_ACCEPTABLE:
+      'La cotización o la solicitud ya no pueden aceptarse.',
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {
@@ -72,16 +116,26 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'La fecha de expiración debe estar en el futuro.',
     'Provider access denied':
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
+    'Service zone not found': 'La zona de servicio ya no está disponible.',
+    'Rate plan not found': 'La tarifa ya no está disponible.',
+    'Delivery quote not found': 'La cotización ya no está disponible.',
   }
-  const raw =
-    body && typeof body === 'object' && 'message' in body
-      ? body.message
-      : undefined
+  const record = body && typeof body === 'object' ? body : undefined
+  const raw = record && 'message' in record ? record.message : undefined
+  const code = record && 'code' in record ? record.code : undefined
+  const list = record && 'errors' in record ? record.errors : undefined
+  const details =
+    Array.isArray(list) && list.every((item) => typeof item === 'string')
+      ? (list as string[])
+      : []
   return new ApiError(
     status,
-    (typeof raw === 'string' && safe[raw]) ||
+    (typeof code === 'string' && codes[code]) ||
+      (typeof raw === 'string' && safe[raw]) ||
       messages[status] ||
       'Mandaria no está disponible en este momento. Inténtalo más tarde.',
+    typeof code === 'string' ? code : null,
+    details,
   )
 }
 export const errorMessage = (error: unknown) =>

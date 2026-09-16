@@ -1,13 +1,13 @@
-# Mandaria Web — V1.5-B
+# Mandaria Web — V1.6-B
 
 Base administrativa independiente para Mandaria Backend V1.4. React + Vite + TypeScript estricto. Nombre de paquete: `mandaria-web`; se desarrolla en el repositorio existente `mandaria-frontend`, independiente de Coita Eats. No accede a PostgreSQL, Prisma ni servicios de Coita Eats.
 
-**Estado:** V1.5-B agrega la administración de Delivery Requests (sólo SUPER_ADMIN) sobre los módulos V1.4 de repartidores, vehículos y asignaciones. Contrato y decisiones en [V1.5-B](docs/V1.5-B.md). Contratos, rutas, decisiones y reproducción en [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
+**Estado:** V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
 ## Requisitos e instalación
 
 - Node.js 24 o posterior compatible, npm 11.
-- Mandaria Backend V1.4 con PostgreSQL operativo, migraciones y cuentas aprovisionadas por su procedimiento propio.
+- Mandaria Backend V1.6 con PostgreSQL operativo, migraciones y cuentas aprovisionadas por su procedimiento propio.
 - Docker Desktop/motor Docker sólo para construir o ejecutar la imagen.
 
 ```bash
@@ -59,9 +59,13 @@ npm run test:e2e
 
 Requiere backend y frontend iniciados. Configura localmente `.env.e2e`, **ignorado por Git**, con `E2E_ADMIN_EMAIL` y `E2E_ADMIN_PASSWORD`; opcionalmente `E2E_PROVIDER_EMAIL` y `E2E_PROVIDER_PASSWORD` de una cuenta PROVIDER_ADMIN existente. No agregues esas variables a Vite. El script de pruebas de Node las lee exclusivamente en memoria.
 
-Alternativa local para una instalación que conserva credenciales bootstrap: define `MANDARIA_BACKEND_ENV` como ruta a su `.env`. El script sólo lo lee para obtener la cuenta de prueba; no imprime valores. `E2E_WEB_URL` puede cambiar el origen de prueba (default `http://127.0.0.1:5173`).
+Alternativa local para una instalación que conserva credenciales bootstrap: define `MANDARIA_BACKEND_ENV` como ruta a su `.env`. El script sólo lo lee para obtener la cuenta de prueba; no imprime valores. `E2E_WEB_URL` puede cambiar el origen de prueba (default `http://localhost:5173`, el mismo host que publica Vite). `E2E_BROWSER_CHANNEL` permite usar un navegador ya instalado, por ejemplo `msedge`, cuando no se descargaron los de Playwright; lo aceptan todos los scripts `test:e2e*`.
 
 El script **crea registros reales de prueba** con código `WEB_...`, genera/rota/revoca credenciales y modifica sus propios proveedores. No eliminará registros: la API carece de eliminación de cliente/proveedor. Una cuenta PROVIDER_ADMIN de prueba, si se configura, se asocia al proveedor creado. No usar cuentas productivas. Las capturas y el reporte quedan en `test-results/manual/`, ignorados por Git. No se capturan pantallas con secretos; capturas de fallo enmascaran inputs y textarea. No se guardan trazas de red, HAR, videos ni estados de autenticación.
+
+### Validación real V1.6-B
+
+`npm run test:e2e:pricing` valida con navegador real la navegación V1.6, el detalle de zona y su cobertura, el historial de versiones, la creación de una versión nueva, la edición de bandas en kilómetros guardadas en metros, la validación traducida, la activación, el histórico de sólo lectura, la superficie de cotizaciones, el detalle de solicitud con Cotizaciones, el responsive del editor y el bloqueo de PROVIDER_ADMIN. Su única mutación es una versión de tarifa clonada de la activa cuyas bandas se restauran antes de activar, de modo que la tarifa efectiva no cambia. Ver [docs/V1.6-B.md](docs/V1.6-B.md).
 
 ### Validación específica de PROVIDER_ADMIN
 
@@ -116,26 +120,29 @@ Se usan formularios HTML nativos con validaciones y `ActionForm`; no se agrega l
 
 ## Rutas, pantallas y permisos
 
-| Ruta                                                | Acceso                                                   |
-| --------------------------------------------------- | -------------------------------------------------------- |
-| /login                                              | Público, sin registro                                    |
-| /dashboard                                          | Usuario autenticado; contenido por rol                   |
-| /integrations, /integrations/new, /integrations/:id | SUPER_ADMIN                                              |
-| /providers, /providers/new, /providers/:id          | SUPER_ADMIN                                              |
-| /users                                              | SUPER_ADMIN, consulta de usuarios                        |
-| /settings                                           | SUPER_ADMIN, información del entorno de trabajo          |
-| /provider/profile                                   | PROVIDER_ADMIN, sólo asociaciones propias                |
-| /drivers, /drivers/new, /drivers/:id                | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |
-| /vehicles, /vehicles/new, /vehicles/:id             | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |
-| /delivery-requests, /delivery-requests/:publicId    | SUPER_ADMIN; consulta y cancelación, sin edición         |
-| /profile                                            | Usuario autenticado                                      |
-| /403 y rutas desconocidas                           | Estados 403 y 404                                        |
+| Ruta                                                   | Acceso                                                   |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| /login                                                 | Público, sin registro                                    |
+| /dashboard                                             | Usuario autenticado; contenido por rol                   |
+| /integrations, /integrations/new, /integrations/:id    | SUPER_ADMIN                                              |
+| /providers, /providers/new, /providers/:id             | SUPER_ADMIN                                              |
+| /users                                                 | SUPER_ADMIN, consulta de usuarios                        |
+| /settings                                              | SUPER_ADMIN, información del entorno de trabajo          |
+| /provider/profile                                      | PROVIDER_ADMIN, sólo asociaciones propias                |
+| /drivers, /drivers/new, /drivers/:id                   | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |
+| /vehicles, /vehicles/new, /vehicles/:id                | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |
+| /delivery-requests, /delivery-requests/:publicId       | SUPER_ADMIN; consulta y cancelación, sin edición         |
+| /service-zones, /service-zones/new, /service-zones/:id | SUPER_ADMIN; cobertura y moneda de cada zona             |
+| /rate-plans/:id                                        | SUPER_ADMIN; versiones de tarifa, sólo DRAFT editable    |
+| /delivery-quotes, /delivery-quotes/:publicId           | SUPER_ADMIN; consulta, sin aceptación ni edición         |
+| /profile                                               | Usuario autenticado                                      |
+| /403 y rutas desconocidas                              | Estados 403 y 404                                        |
 
 Sidebar y rutas usan el rol de `/auth/me`; escribir una URL prohibida muestra 403. El backend sigue siendo autoridad real en cada llamada. Roles futuros tienen perfil y un dashboard sin funciones globales. Un usuario PROVIDER_ADMIN puede elegir entre varias asociaciones propias y consultar proveedores suspendidos, tal como permite V1.2.
 
 ## Componentes y diseño
 
-`AdminLayout`, `PageTitle`, `Table`, `Pagination`, `ActionForm`, `Field`, `Confirm`, `Modal`, `Badge`, `InfoGrid`, `Loading`, `Empty`, `ErrorState`, `ErrorPage`, `FeedbackProvider` y `SecretDialog`. Diseño verde mineral, superficies claras, iconos lineales y marca inicial propia. Tokens de color, radio, spacing y tipografía en `src/index.css`; sin dependencia visual de Coita Eats. Tablas con desplazamiento horizontal; sidebar pasa a drawer en móvil. Modal nativo con foco, Escape y retorno de foco. Fechas centralizadas en `src/utils/format.ts`, idioma es-MX y zona del navegador.
+`AdminLayout`, `PageTitle`, `Table`, `Pagination`, `ActionForm`, `Field`, `Confirm`, `Modal`, `Badge` (con `label` opcional para el género de cada dominio), `InfoGrid`, `Loading`, `Empty`, `ErrorState`, `ErrorPage`, `FeedbackProvider` y `SecretDialog`. Diseño verde mineral, superficies claras, iconos lineales y marca inicial propia. Tokens de color, radio, spacing y tipografía en `src/index.css`; sin dependencia visual de Coita Eats. Tablas con desplazamiento horizontal; sidebar pasa a drawer en móvil. Modal nativo con foco, Escape y retorno de foco. Fechas centralizadas en `src/utils/format.ts`, idioma es-MX y zona del navegador.
 
 ## Sesión y seguridad
 
@@ -152,7 +159,7 @@ Sidebar y rutas usan el rol de `/auth/me`; escribir una URL prohibida muestra 40
 
 ## Contrato y límites funcionales
 
-Ver [docs/API-CONTRACT.md](docs/API-CONTRACT.md) para el contrato base y [docs/V1.4-B.md](docs/V1.4-B.md) para el contrato logístico. Integraciones y usuarios están limitados a 100 elementos por la API. El dashboard global recupera 5 proveedores recientes y dos páginas de 1 elemento para totales por tipo. El dashboard de proveedor muestra capacidad real, repartidores disponibles y vehículos activos mediante conteos del servidor. No calcula ingresos ni entregas.
+Ver [docs/API-CONTRACT.md](docs/API-CONTRACT.md) para el contrato base, [docs/V1.4-B.md](docs/V1.4-B.md) para el contrato logístico y [docs/V1.6-B.md](docs/V1.6-B.md) para zonas, tarifas y cotizaciones. Las cotizaciones son de sólo lectura: la vigencia (`quoteValidityMinutes`) define hasta cuándo puede aceptarse un precio, **no** cuándo se realiza el servicio, y el valor de mercancía nunca se suma al costo de entrega. Integraciones y usuarios están limitados a 100 elementos por la API. El dashboard global recupera 5 proveedores recientes y dos páginas de 1 elemento para totales por tipo. El dashboard de proveedor muestra capacidad real, repartidores disponibles y vehículos activos mediante conteos del servidor. No calcula ingresos ni entregas.
 
 ## Docker / producción
 
@@ -165,6 +172,6 @@ docker run --rm -p 8080:80 mandaria-web:v1.4
 
 ## Próximas versiones y deuda
 
-V1.4-B administra quién puede transportar y con qué vehículo. No se implementaron solicitudes de entrega, mapas, dispatch, wallet, créditos, pagos ni aplicaciones Driver/Customer. V1.5-B administra y observa qué se solicitó transportar; todavía no calcula costos ni asigna proveedor o repartidor (V1.6 y V1.7).
+V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. Todavía **no** administra qué Provider, Driver o Vehicle realizará el servicio: eso corresponde a V1.7. No se implementaron dispatch, hunting, sockets, GPS, tracking, wallet, créditos, pagos, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
 
 Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.
