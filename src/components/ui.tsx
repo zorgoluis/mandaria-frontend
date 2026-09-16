@@ -19,11 +19,11 @@ import {
 } from 'lucide-react'
 import { ApiError, errorMessage } from '../services/errors'
 import { labels } from '../utils/format'
-export function Badge({ value }: { value: string }) {
+export function Badge({ value, label }: { value: string; label?: string }) {
   return (
     <span className={`badge ${value.toLowerCase()}`}>
       <span className="status-dot" />
-      {labels[value] ?? 'Desconocido'}
+      {label ?? labels[value] ?? 'Desconocido'}
     </span>
   )
 }

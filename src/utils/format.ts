@@ -35,4 +35,11 @@ export const labels: Record<string, string> = {
   ADMIN: 'Administrador',
   CREATED: 'Creada',
   CANCELLED: 'Cancelada',
+  // V1.6 pricing and quoting.
+  DRAFT: 'Borrador',
+  OFFERED: 'Ofrecida',
+  ACCEPTED: 'Aceptada',
+  EXPIRED: 'Expirada',
+  LOCAL_DELIVERY: 'Entrega local',
+  DISTANCE_BANDS: 'Bandas de distancia',
 }

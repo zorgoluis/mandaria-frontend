@@ -249,6 +249,8 @@ describe('auth and permissions UX', () => {
       'Repartidores',
       'Vehículos',
       'Solicitudes',
+      'Cotizaciones',
+      'Zonas de servicio',
       'Mi perfil',
       'Configuración',
     ])

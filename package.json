@@ -1,7 +1,7 @@
 {
   "name": "mandaria-web",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "test:e2e": "node scripts/verify-browser.mjs",
     "test:e2e:provider-admin": "node scripts/verify-provider-admin.mjs",
     "test:e2e:logistics": "node scripts/verify-logistics.mjs",
-    "test:e2e:delivery-requests": "node scripts/verify-delivery-requests.mjs"
+    "test:e2e:delivery-requests": "node scripts/verify-delivery-requests.mjs",
+    "test:e2e:pricing": "node scripts/verify-pricing.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",

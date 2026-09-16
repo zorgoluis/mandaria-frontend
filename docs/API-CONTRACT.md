@@ -57,3 +57,11 @@ Los schemas OpenAPI de Auth/Users no detallan completamente las respuestas; se c
 # Extensión V1.4
 
 El contrato logístico actual (repartidores, vehículos, asignaciones y capacidad) se documenta en [V1.4-B.md](V1.4-B.md), contrastado con OpenAPI 1.4.0 y controllers reales. El contenido siguiente conserva la inspección base V1.3; sus limitaciones históricas de conteos no sustituyen las nuevas capacidades documentadas.
+
+# Extensión V1.5
+
+Las solicitudes de entrega administrativas se documentan en [V1.5-B.md](V1.5-B.md), contrastadas con OpenAPI 1.5.0.
+
+# Extensión V1.6
+
+Zonas de servicio, tarifas versionadas y cotizaciones se documentan en [V1.6-B.md](V1.6-B.md), contrastadas con OpenAPI 1.6.0, DTOs, servicios y el filtro de errores reales. Ahí están las unidades (metros en la API, kilómetros en pantalla), los códigos `DomainException` traducidos y la regla `Quote TTL ≠ calendario del servicio`.

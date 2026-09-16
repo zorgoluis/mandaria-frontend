@@ -23,6 +23,13 @@ import {
   DeliveryRequestsPage,
   DeliveryRequestDetail,
 } from '../delivery-requests/pages'
+import {
+  ServiceZonesPage,
+  ServiceZoneNew,
+  ServiceZoneDetail,
+} from '../pricing/zones'
+import { RatePlanDetail } from '../pricing/rate-plans'
+import { QuotesPage, QuoteDetail } from '../quotes/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -88,6 +95,21 @@ export function App() {
             <Route
               path="delivery-requests/:publicId"
               element={<DeliveryRequestDetail key={location.pathname} />}
+            />
+            <Route path="service-zones" element={<ServiceZonesPage />} />
+            <Route path="service-zones/new" element={<ServiceZoneNew />} />
+            <Route
+              path="service-zones/:id"
+              element={<ServiceZoneDetail key={location.pathname} />}
+            />
+            <Route
+              path="rate-plans/:id"
+              element={<RatePlanDetail key={location.pathname} />}
+            />
+            <Route path="delivery-quotes" element={<QuotesPage />} />
+            <Route
+              path="delivery-quotes/:publicId"
+              element={<QuoteDetail key={location.pathname} />}
             />
             <Route path="users" element={<UsersPage />} />
             <Route path="settings" element={<SettingsPage />} />
