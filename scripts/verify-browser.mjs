@@ -17,8 +17,12 @@ if (!email || !password)
   throw new Error(
     'Configure E2E_ADMIN_EMAIL/E2E_ADMIN_PASSWORD in .env.e2e, or MANDARIA_BACKEND_ENV pointing to the local bootstrap configuration.',
   )
-const base = process.env.E2E_WEB_URL || 'http://127.0.0.1:5173'
-const browser = await chromium.launch()
+const base = credentials.E2E_WEB_URL || 'http://localhost:5173'
+const browser = await chromium.launch(
+  credentials.E2E_BROWSER_CHANNEL
+    ? { channel: credentials.E2E_BROWSER_CHANNEL }
+    : {},
+)
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
   permissions: ['clipboard-read', 'clipboard-write'],
