@@ -44,7 +44,7 @@ Todos los endpoints consumidos usan el prefijo `/api/v1`. El frontend sólo se c
 ## Capacidades faltantes / limitaciones
 
 1. No hay edición de nombre/código ni scopes a nivel de integración. Sólo estado; scopes en credenciales.
-2. No hay creación, edición, cambio de rol, desactivación ni recuperación de contraseña de User vía API administrativa. Usuarios es consulta y memberships exige cuentas previamente aprovisionadas.
+2. ~~No existe provisioning de usuarios.~~ Resuelto en backend V1.6.1: las cuentas PROVIDER_ADMIN y DRIVER se aprovisionan por invitación y activación (ver «Extensión V1.6.1»). Siguen sin existir edición, cambio de rol, desactivación ni recuperación de contraseña de User, y no existe alta con contraseña definida por un administrador.
 3. No hay paginación/búsqueda servidor en integraciones/usuarios ni paginación de credenciales. Se indica el límite de 100, sin presentar los resultados como total global.
 4. No hay agregados dashboard. Tres consultas con pageSize 5/1/1 recuperan sólo totales y cinco proveedores recientes; no se escanea todo el catálogo.
 5. No hay auditoría completa; se muestran createdAt/updatedAt y lastUsedAt/expiración de credenciales.
@@ -57,3 +57,28 @@ Los schemas OpenAPI de Auth/Users no detallan completamente las respuestas; se c
 # Extensión V1.4
 
 El contrato logístico actual (repartidores, vehículos, asignaciones y capacidad) se documenta en [V1.4-B.md](V1.4-B.md), contrastado con OpenAPI 1.4.0 y controllers reales. El contenido siguiente conserva la inspección base V1.3; sus limitaciones históricas de conteos no sustituyen las nuevas capacidades documentadas.
+
+# Extensión V1.6.1 (backend) — User provisioning por invitación
+
+Fuente: backend `mandaria-backend` V1.6.1-A (OpenAPI 1.6.1, controllers `src/invitations/`). Cambio sólo de contrato: esta web aún no implementa las pantallas.
+
+Flujo oficial: SUPER_ADMIN invita PROVIDER_ADMIN (o DRIVER) a un proveedor → PROVIDER_ADMIN invita DRIVER sólo en sus proveedores → la persona abre `{MANDARIA_WEB_URL}/activate-account?token=…` → define su contraseña → `POST /auth/login` normal. Nadie define contraseñas ajenas; el bootstrap SUPER_ADMIN no cambia y los seeds locales no son aprovisionamiento de producción.
+
+| Método y ruta | Uso / contrato |
+| --- | --- |
+| POST /admin/providers/:providerId/invitations | SUPER_ADMIN. `{email, role: PROVIDER_ADMIN\|DRIVER, membershipRole? (OWNER\|ADMIN, obligatorio con PROVIDER_ADMIN), driverName? (1–100, obligatorio con DRIVER)}` → 201 invitación + `emailDelivery: SENT\|FAILED` |
+| GET /admin/user-invitations | SUPER_ADMIN. `page,pageSize,status?,role?,providerId?,search?` → `{items,total,totalPages,page,pageSize}` |
+| GET /admin/user-invitations/:invitationId | SUPER_ADMIN. Detalle |
+| POST /admin/user-invitations/:invitationId/resend | SUPER_ADMIN. Sin body; rota token, reinicia vigencia, envía correo; 429 `INVITATION_RESEND_COOLDOWN` |
+| POST /admin/user-invitations/:invitationId/revoke | SUPER_ADMIN. Sin body; PENDING → REVOKED (idempotente) |
+| POST /provider/driver-invitations?providerId= | PROVIDER_ADMIN + membership. `{email, driverName}`; no acepta `role` ni `providerId` en body |
+| GET /provider/driver-invitations?providerId= | Sólo invitaciones DRIVER del proveedor propio; `status?,search?` y paginación |
+| GET/POST /provider/driver-invitations/:invitationId[/resend\|/revoke]?providerId= | Igual que admin; 404 fuera del proveedor |
+| POST /auth/activate-account | Pública. `{token, password (16–128)}` → 200 `{status:"ACTIVE", email, role}`; no devuelve sesión |
+| GET /users?status= | SUPER_ADMIN; cada usuario incluye `status: INVITED\|ACTIVE\|DISABLED` |
+
+Invitación: `{id,userId,email,role,providerId,provider:{id,name,code},membershipRole,driverName,status,expiresAt,tokenIssuedAt,resendCount,acceptedAt,revokedAt,revokedByUserId,createdByUserId,createdAt,updatedAt}`. `status` es efectivo: `PENDING`, `EXPIRED` (derivado, no persistido), `ACCEPTED`, `REVOKED`. Nunca incluye token ni hash.
+
+Errores `code` para mensajes permitidos: `USER_ALREADY_ACTIVE`, `USER_INVITATION_PENDING`, `USER_DISABLED`, `PROVIDER_DRIVER_LIMIT_REACHED` (409); `INVITATION_NOT_PENDING` (409); `INVITATION_RESEND_COOLDOWN` (429); `INVITATION_TOKEN_INVALID` (400); `INVITATION_EXPIRED`, `INVITATION_REVOKED` (410); `INVITATION_ALREADY_ACCEPTED`, `ACCOUNT_NOT_ACTIVATABLE` (409); `MAIL_NOT_CONFIGURED` (503).
+
+Notas para la web: la membership o el Driver se crean al activar (no antes), así que un invitado no aparece en memberships ni en `/provider/drivers` hasta aceptar; una invitación DRIVER pendiente reserva un lugar de `maxDrivers`. En `/activate-account`, leer `token`, retirarlo del historial (`history.replaceState`) y no enviarlo a terceros (`Referrer-Policy: no-referrer`). Límites: activación 10/min, creación 20/min y reenvío 10/min por IP.
