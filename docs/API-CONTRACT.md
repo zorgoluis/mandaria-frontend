@@ -82,3 +82,28 @@ Invitación: `{id,userId,email,role,providerId,provider:{id,name,code},membershi
 Errores `code` para mensajes permitidos: `USER_ALREADY_ACTIVE`, `USER_INVITATION_PENDING`, `USER_DISABLED`, `PROVIDER_DRIVER_LIMIT_REACHED` (409); `INVITATION_NOT_PENDING` (409); `INVITATION_RESEND_COOLDOWN` (429); `INVITATION_TOKEN_INVALID` (400); `INVITATION_EXPIRED`, `INVITATION_REVOKED` (410); `INVITATION_ALREADY_ACCEPTED`, `ACCOUNT_NOT_ACTIVATABLE` (409); `MAIL_NOT_CONFIGURED` (503).
 
 Notas para la web: la membership o el Driver se crean al activar (no antes), así que un invitado no aparece en memberships ni en `/provider/drivers` hasta aceptar; una invitación DRIVER pendiente reserva un lugar de `maxDrivers`. En `/activate-account`, leer `token`, retirarlo del historial (`history.replaceState`) y no enviarlo a terceros (`Referrer-Policy: no-referrer`). Límites: activación 10/min, creación 20/min y reenvío 10/min por IP.
+
+# Extensión V1.7 (backend) — Dispatch Engine & Provider Claiming
+
+Fuente: backend `mandaria-backend` V1.7-A (OpenAPI 1.7.0, `src/dispatch/`). Cambio sólo de contrato: esta web aún no implementa las pantallas.
+
+Flujo oficial: `POST /delivery-quotes/:publicId/accept` (IntegrationClient) → en la misma transacción **Quote ACCEPTED → Dispatch OPEN** con snapshot de proveedores candidatos (ACTIVE + cobertura ACTIVE de la ServiceZone y ServiceType de la Quote) → **Provider claims**: un PROVIDER_ADMIN candidato reclama y exactamente uno gana → Dispatch CLAIMED. No hay endpoint de creación de Dispatch; la respuesta de aceptación no cambia. No se asigna Driver ni Vehicle.
+
+| Método y ruta | Uso / contrato |
+| --- | --- |
+| GET /provider/dispatches?providerId=&view=&status=&page=&pageSize= | PROVIDER_ADMIN + membership. `view`: `AVAILABLE` (reclamables: OPEN, vigentes, candidatura OFFERED; por expiresAt), `CLAIMED` (tomados por mi proveedor), `ALL` (default). Sólo Dispatches donde mi proveedor fue candidato |
+| GET /provider/dispatches/:dispatchId?providerId= | Detalle aislado; ajeno → 404 |
+| POST /provider/dispatches/:dispatchId/claim?providerId= | Sin body (cualquier campo → 400). 200 con el Dispatch en `access: OWNER`; repetir por el ganador → 200 |
+| POST /provider/dispatches/:dispatchId/release?providerId= | `{reason}` 3–500. Sólo el dueño; vuelve a OPEN (o EXPIRED tras la ventana); mi proveedor no puede reclamarlo de nuevo |
+| GET /provider/service-coverages?providerId= | Coberturas propias (lectura) |
+| GET /admin/dispatches?status=&providerId=&deliveryRequestPublicId= | SUPER_ADMIN; incluye candidatos y `noProviderAvailable` |
+| GET /admin/dispatches/:dispatchId | SUPER_ADMIN |
+| POST /admin/providers/:providerId/service-coverages | SUPER_ADMIN `{serviceZoneId, serviceType}` |
+| GET /admin/providers/:providerId/service-coverages | SUPER_ADMIN |
+| PATCH /admin/providers/:providerId/service-coverages/:coverageId | SUPER_ADMIN `{status: ACTIVE\|INACTIVE}` |
+
+Dispatch para proveedor: `{id, status, access, serviceType, serviceZone:{code,name}, openedAt, expiresAt, claimedByMe, claimedAt, cancelledAt, myCandidate:{status,offeredAt,claimedAt,releasedAt,releaseReason}|null, service|null}`. `status` efectivo: `OPEN`, `CLAIMED`, `EXPIRED` (incluye OPEN vencido), `CANCELLED`. `access`: `OFFER` (tarifa `deliveryFee`, ruta, direcciones y coordenadas, paquetes sin texto libre, `goods` con `driverAdvancesGoods`), `OWNER` (además contactos, instrucciones, descripción de paquetes, `deliveryRequestPublicId`, `externalReference`), `SUMMARY` (`service: null`). Nunca incluye IntegrationClient ni otros candidatos.
+
+Errores `code`: `DISPATCH_ALREADY_CLAIMED`, `DISPATCH_EXPIRED`, `DISPATCH_CANCELLED`, `DISPATCH_RECLAIM_NOT_ALLOWED`, `DISPATCH_NOT_CLAIMED_BY_PROVIDER`, `PROVIDER_NOT_ELIGIBLE`, `SERVICE_COVERAGE_EXISTS` (todos 409). SUPER_ADMIN y DRIVER reciben 403 en rutas de proveedor; IntegrationClient 401. Con varias memberships, `providerId` es obligatorio (409 sin él).
+
+Notas para la web: sin notificaciones en V1.7 (consultar `view=AVAILABLE`; sockets en V1.8); ventana `DISPATCH_TTL_MINUTES` (10 por defecto) independiente de la vigencia de la Quote; al cancelar la DeliveryRequest el Dispatch pasa a CANCELLED y conserva quién lo había reclamado. Límites: claim 60/min y liberación 20/min por IP.
