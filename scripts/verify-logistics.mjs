@@ -221,7 +221,8 @@ async function audit(state) {
   state.console = []
 }
 async function logout(state) {
-  await state.page.getByRole('button', { name: /@/ }).click()
+  // The user menu trigger: action buttons may also mention emails in their labels.
+  await state.page.locator('button.user-trigger').click()
   await state.page.getByRole('button', { name: 'Cerrar sesión' }).click()
   await state.page.waitForURL('**/login')
   assert.equal(await state.page.evaluate(() => sessionStorage.length), 0)
@@ -288,6 +289,7 @@ try {
   ).toHaveText([
     'Dashboard',
     'Mi proveedor',
+    'Servicios',
     'Repartidores',
     'Vehículos',
     'Mi perfil',

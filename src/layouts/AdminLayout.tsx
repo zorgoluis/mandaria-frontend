@@ -6,6 +6,7 @@ import {
   Building2,
   UsersRound,
   MailPlus,
+  Send,
   Settings2,
   UserRound,
   Menu,
@@ -68,7 +69,10 @@ export function AdminLayout() {
           { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
         ]
       : user?.role === 'PROVIDER_ADMIN'
-        ? [{ to: '/provider/profile', label: 'Mi proveedor', icon: Building2 }]
+        ? [
+            { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
+            { to: '/services', label: 'Servicios', icon: Send },
+          ]
         : []),
     ...(admin || user?.role === 'PROVIDER_ADMIN'
       ? [
@@ -93,6 +97,11 @@ export function AdminLayout() {
             to: '/service-zones',
             label: 'Zonas de servicio',
             icon: MapPinned,
+          },
+          {
+            to: '/dispatches',
+            label: 'Despachos',
+            icon: Send,
           },
         ]
       : []),
@@ -140,7 +149,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.6.1</span>
+            MANDARIA WEB <span>V1.7</span>
           </div>
         </div>
       </aside>
