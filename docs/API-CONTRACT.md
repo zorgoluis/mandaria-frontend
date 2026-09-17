@@ -89,18 +89,18 @@ Fuente: backend `mandaria-backend` V1.7-A (OpenAPI 1.7.0, `src/dispatch/`). Camb
 
 Flujo oficial: `POST /delivery-quotes/:publicId/accept` (IntegrationClient) → en la misma transacción **Quote ACCEPTED → Dispatch OPEN** con snapshot de proveedores candidatos (ACTIVE + cobertura ACTIVE de la ServiceZone y ServiceType de la Quote) → **Provider claims**: un PROVIDER_ADMIN candidato reclama y exactamente uno gana → Dispatch CLAIMED. No hay endpoint de creación de Dispatch; la respuesta de aceptación no cambia. No se asigna Driver ni Vehicle.
 
-| Método y ruta | Uso / contrato |
-| --- | --- |
+| Método y ruta                                                      | Uso / contrato                                                                                                                                                                                                              |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | GET /provider/dispatches?providerId=&view=&status=&page=&pageSize= | PROVIDER_ADMIN + membership. `view`: `AVAILABLE` (reclamables: OPEN, vigentes, candidatura OFFERED; por expiresAt), `CLAIMED` (tomados por mi proveedor), `ALL` (default). Sólo Dispatches donde mi proveedor fue candidato |
-| GET /provider/dispatches/:dispatchId?providerId= | Detalle aislado; ajeno → 404 |
-| POST /provider/dispatches/:dispatchId/claim?providerId= | Sin body (cualquier campo → 400). 200 con el Dispatch en `access: OWNER`; repetir por el ganador → 200 |
-| POST /provider/dispatches/:dispatchId/release?providerId= | `{reason}` 3–500. Sólo el dueño; vuelve a OPEN (o EXPIRED tras la ventana); mi proveedor no puede reclamarlo de nuevo |
-| GET /provider/service-coverages?providerId= | Coberturas propias (lectura) |
-| GET /admin/dispatches?status=&providerId=&deliveryRequestPublicId= | SUPER_ADMIN; incluye candidatos y `noProviderAvailable` |
-| GET /admin/dispatches/:dispatchId | SUPER_ADMIN |
-| POST /admin/providers/:providerId/service-coverages | SUPER_ADMIN `{serviceZoneId, serviceType}` |
-| GET /admin/providers/:providerId/service-coverages | SUPER_ADMIN |
-| PATCH /admin/providers/:providerId/service-coverages/:coverageId | SUPER_ADMIN `{status: ACTIVE\|INACTIVE}` |
+| GET /provider/dispatches/:dispatchId?providerId=                   | Detalle aislado; ajeno → 404                                                                                                                                                                                                |
+| POST /provider/dispatches/:dispatchId/claim?providerId=            | Sin body (cualquier campo → 400). 200 con el Dispatch en `access: OWNER`; repetir por el ganador → 200                                                                                                                      |
+| POST /provider/dispatches/:dispatchId/release?providerId=          | `{reason}` 3–500. Sólo el dueño; vuelve a OPEN (o EXPIRED tras la ventana); mi proveedor no puede reclamarlo de nuevo                                                                                                       |
+| GET /provider/service-coverages?providerId=                        | Coberturas propias (lectura)                                                                                                                                                                                                |
+| GET /admin/dispatches?status=&providerId=&deliveryRequestPublicId= | SUPER_ADMIN; incluye candidatos y `noProviderAvailable`                                                                                                                                                                     |
+| GET /admin/dispatches/:dispatchId                                  | SUPER_ADMIN                                                                                                                                                                                                                 |
+| POST /admin/providers/:providerId/service-coverages                | SUPER_ADMIN `{serviceZoneId, serviceType}`                                                                                                                                                                                  |
+| GET /admin/providers/:providerId/service-coverages                 | SUPER_ADMIN                                                                                                                                                                                                                 |
+| PATCH /admin/providers/:providerId/service-coverages/:coverageId   | SUPER_ADMIN `{status: ACTIVE\|INACTIVE}`                                                                                                                                                                                    |
 
 Dispatch para proveedor: `{id, status, access, serviceType, serviceZone:{code,name}, openedAt, expiresAt, claimedByMe, claimedAt, cancelledAt, myCandidate:{status,offeredAt,claimedAt,releasedAt,releaseReason}|null, service|null}`. `status` efectivo: `OPEN`, `CLAIMED`, `EXPIRED` (incluye OPEN vencido), `CANCELLED`. `access`: `OFFER` (tarifa `deliveryFee`, ruta, direcciones y coordenadas, paquetes sin texto libre, `goods` con `driverAdvancesGoods`), `OWNER` (además contactos, instrucciones, descripción de paquetes, `deliveryRequestPublicId`, `externalReference`), `SUMMARY` (`service: null`). Nunca incluye IntegrationClient ni otros candidatos.
 

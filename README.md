@@ -1,8 +1,8 @@
-# Mandaria Web — V1.6.1-B
+# Mandaria Web — V1.7-B
 
 Base administrativa independiente para Mandaria Backend V1.4. React + Vite + TypeScript estricto. Nombre de paquete: `mandaria-web`; se desarrolla en el repositorio existente `mandaria-frontend`, independiente de Coita Eats. No accede a PostgreSQL, Prisma ni servicios de Coita Eats.
 
-**Estado:** V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
+**Estado:** V1.7-B agrega visibilidad de despachos y toma de servicios: PROVIDER_ADMIN ve los servicios ofrecidos a su proveedor, los toma (el backend decide quién gana) y puede liberarlos; SUPER_ADMIN audita los despachos en sólo lectura. No asigna repartidor ni vehículo (V1.8) y no usa sockets. Ver [V1.7-B](docs/V1.7-B.md). V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
 ## Requisitos e instalación
 
@@ -62,6 +62,10 @@ Requiere backend y frontend iniciados. Configura localmente `.env.e2e`, **ignora
 Alternativa local para una instalación que conserva credenciales bootstrap: define `MANDARIA_BACKEND_ENV` como ruta a su `.env`. El script sólo lo lee para obtener la cuenta de prueba; no imprime valores. `E2E_WEB_URL` puede cambiar el origen de prueba (default `http://localhost:5173`, el mismo host que publica Vite). `E2E_BROWSER_CHANNEL` permite usar un navegador ya instalado, por ejemplo `msedge`, cuando no se descargaron los de Playwright; lo aceptan todos los scripts `test:e2e*`.
 
 El script **crea registros reales de prueba** con código `WEB_...`, genera/rota/revoca credenciales y modifica sus propios proveedores. No eliminará registros: la API carece de eliminación de cliente/proveedor. Una cuenta PROVIDER_ADMIN de prueba, si se configura, se asocia al proveedor creado. No usar cuentas productivas. Las capturas y el reporte quedan en `test-results/manual/`, ignorados por Git. No se capturan pantallas con secretos; capturas de fallo enmascaran inputs y textarea. No se guardan trazas de red, HAR, videos ni estados de autenticación.
+
+### Validación real V1.7-B
+
+`npm run test:e2e:dispatch` crea Quotes aceptadas reales y valida en navegador: A y B ven el servicio con dinero separado, A lo toma, B recibe el 409 claro, A libera con motivo y no vuelve a verlo, B lo toma, aislamiento por proveedor, expiración real, auditoría SUPER_ADMIN, bloqueo de DRIVER, responsive y auditoría de secretos. Requiere backend con `ROUTING_PROVIDER=local_fake` y `E2E_ROUTING_LOCAL_FAKE=1` (nunca llama a rutas de pago). Ver [docs/V1.7-B.md](docs/V1.7-B.md).
 
 ### Validación real V1.6.1-B
 
@@ -133,6 +137,8 @@ Se usan formularios HTML nativos con validaciones y `ActionForm`; no se agrega l
 | /users                                                 | SUPER_ADMIN; cuentas, estado e invitar administrador     |
 | /invitations                                           | SUPER_ADMIN; invitaciones, reenviar y revocar            |
 | /activate-account                                      | Público; activación de cuenta invitada                   |
+| /services, /services/:id                               | PROVIDER_ADMIN; servicios ofrecidos, tomar y liberar     |
+| /dispatches, /dispatches/:id                           | SUPER_ADMIN; auditoría de despachos, sólo lectura        |
 | /settings                                              | SUPER_ADMIN, información del entorno de trabajo          |
 | /provider/profile                                      | PROVIDER_ADMIN, sólo asociaciones propias                |
 | /drivers, /drivers/new, /drivers/:id                   | SUPER_ADMIN o PROVIDER_ADMIN, según proveedor autorizado |

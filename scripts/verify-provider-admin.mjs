@@ -265,6 +265,7 @@ async function allowedNavigation(state) {
   ).toHaveText([
     'Dashboard',
     'Mi proveedor',
+    'Servicios',
     'Repartidores',
     'Vehículos',
     'Mi perfil',

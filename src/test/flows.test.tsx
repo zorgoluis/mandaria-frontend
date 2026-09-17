@@ -227,6 +227,7 @@ describe('auth and permissions UX', () => {
     ).toEqual([
       'Dashboard',
       'Mi proveedor',
+      'Servicios',
       'Repartidores',
       'Vehículos',
       'Mi perfil',
@@ -268,6 +269,7 @@ describe('auth and permissions UX', () => {
       'Solicitudes',
       'Cotizaciones',
       'Zonas de servicio',
+      'Despachos',
       'Mi perfil',
       'Configuración',
     ])

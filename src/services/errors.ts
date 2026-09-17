@@ -59,6 +59,17 @@ export function normalizeError(status: number, body: unknown): ApiError {
     QUOTE_EXPIRED: 'La cotización expiró; debe solicitarse una nueva.',
     QUOTE_NOT_ACCEPTABLE:
       'La cotización o la solicitud ya no pueden aceptarse.',
+    // V1.7 dispatch claiming. The backend decides every outcome.
+    DISPATCH_ALREADY_CLAIMED: 'Este servicio ya fue tomado por otro proveedor.',
+    DISPATCH_EXPIRED: 'El tiempo para tomar este servicio terminó.',
+    DISPATCH_CANCELLED:
+      'La solicitud fue cancelada; el servicio ya no está disponible.',
+    DISPATCH_RECLAIM_NOT_ALLOWED:
+      'Tu proveedor liberó este servicio y no puede volver a tomarlo.',
+    DISPATCH_NOT_CLAIMED_BY_PROVIDER:
+      'Este servicio ya no está tomado por tu proveedor.',
+    PROVIDER_NOT_ELIGIBLE:
+      'Tu proveedor ya no está habilitado para esta zona o tipo de servicio.',
     // V1.6.1 invitations and account activation.
     USER_ALREADY_ACTIVE: 'Ya existe una cuenta activa con ese correo.',
     USER_INVITATION_PENDING:
@@ -140,6 +151,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
     'Service zone not found': 'La zona de servicio ya no está disponible.',
     'Invitation not found': 'La invitación ya no está disponible.',
+    'Dispatch not found':
+      'El servicio no existe o no está disponible para tu proveedor.',
     'Rate plan not found': 'La tarifa ya no está disponible.',
     'Delivery quote not found': 'La cotización ya no está disponible.',
   }
