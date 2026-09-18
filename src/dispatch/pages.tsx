@@ -33,6 +33,8 @@ import {
   ServiceCard,
 } from './components'
 import { canClaim, canRelease } from './rules'
+import { AssignmentPanel } from '../delivery-assignments/panel'
+import { useDispatchAssignments } from '../delivery-assignments/use-assignments'
 import { useNow } from './use-now'
 import { dispatchStatuses, type ProviderDispatch } from './types'
 
@@ -266,6 +268,13 @@ function ServiceContent({
   const now = useNow(dispatch.status === 'OPEN')
   const [claiming, setClaiming] = useState(false)
   const [releasing, setReleasing] = useState(false)
+  const owner = canRelease(dispatch)
+  // V1.8: who executes the service is read back from the backend, never kept locally.
+  const { query: assignments, active } = useDispatchAssignments(
+    scope.providerId,
+    dispatch.id,
+    owner,
+  )
   const service = dispatch.service
   const title =
     service?.deliveryRequestPublicId ??
@@ -285,9 +294,15 @@ function ServiceContent({
             >
               TOMAR SERVICIO
             </button>
-          ) : canRelease(dispatch) ? (
+          ) : owner ? (
             <button
               className="button secondary destructive"
+              disabled={active !== null}
+              title={
+                active
+                  ? 'Cancela la asignación antes de liberar el servicio.'
+                  : undefined
+              }
               onClick={() => setReleasing(true)}
             >
               LIBERAR SERVICIO
@@ -336,13 +351,22 @@ function ServiceContent({
           ]}
         />
         {!service && <p className="panel-note">{summaryReason(dispatch)}</p>}
-        {canRelease(dispatch) && (
+        {owner && (
           <p className="panel-note">
-            Servicio tomado. La asignación de repartidor y vehículo llegará en
-            una próxima etapa.
+            {active
+              ? 'Para liberar el servicio, cancela primero la asignación: Mandaria no permite devolverlo con un repartidor asignado.'
+              : 'Servicio tomado y pendiente de asignación. Asigna un repartidor y un vehículo para ejecutarlo.'}
           </p>
         )}
       </section>
+      {owner && (
+        <AssignmentPanel
+          providerId={scope.providerId}
+          dispatch={dispatch}
+          assignments={assignments}
+          active={active}
+        />
+      )}
       {service && (
         <>
           <section className="panel" aria-labelledby="service-route">

@@ -70,6 +70,29 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Este servicio ya no está tomado por tu proveedor.',
     PROVIDER_NOT_ELIGIBLE:
       'Tu proveedor ya no está habilitado para esta zona o tipo de servicio.',
+    // V1.8 driver and vehicle assignment. Every conflict is a 409 the backend already resolved.
+    DRIVER_BUSY:
+      'Ese repartidor acaba de recibir otro servicio. Actualiza la lista y elige a alguien más.',
+    VEHICLE_BUSY:
+      'Ese vehículo acaba de asignarse a otro servicio. Actualiza la lista y elige otro.',
+    DRIVER_VEHICLE_MISMATCH:
+      'Ese repartidor y ese vehículo no pueden combinarse: alguno está emparejado con otro en su ficha.',
+    DRIVER_NOT_ELIGIBLE:
+      'Ese repartidor ya no puede asignarse. Actualiza la lista de disponibles.',
+    VEHICLE_NOT_ELIGIBLE:
+      'Ese vehículo ya no puede asignarse. Actualiza la lista de disponibles.',
+    DISPATCH_ALREADY_ASSIGNED:
+      'Este servicio ya tiene un repartidor asignado. Actualiza para ver quién quedó asignado.',
+    DISPATCH_HAS_ACTIVE_ASSIGNMENT:
+      'Cancela la asignación antes de liberar el servicio.',
+    NO_ACTIVE_ASSIGNMENT:
+      'Este servicio ya no tiene una asignación vigente. Actualiza para ver su estado.',
+    ASSIGNMENT_UNCHANGED:
+      'Elige un repartidor o un vehículo distinto del actual.',
+    ASSIGNMENT_CONFLICT:
+      'Otra persona cambió la asignación al mismo tiempo. Actualiza e inténtalo de nuevo.',
+    PROVIDER_NOT_ACTIVE:
+      'Tu proveedor no está activo y no puede asignar servicios.',
     // V1.6.1 invitations and account activation.
     USER_ALREADY_ACTIVE: 'Ya existe una cuenta activa con ese correo.',
     USER_INVITATION_PENDING:

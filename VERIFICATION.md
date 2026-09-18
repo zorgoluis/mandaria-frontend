@@ -1,4 +1,20 @@
-# Estado actual — Mandaria Web V1.7-B
+# Estado actual — Mandaria Web V1.8-B
+
+Fecha: 2026-09-18. Rama `v1.8-provider_driver_vehicle_assignment`. Contrato verificado contra el backend V1.8.0: la rama `QA` del checkout local y `origin/v1.8-provider_driver_vehicle_assignment` son idénticas en todos los archivos consumidos y ambas publican OpenAPI 1.8.0. No se modificó backend ni Coita Eats. No se hizo commit ni push. Detalle en [docs/V1.8-B.md](docs/V1.8-B.md).
+
+| Verificación             | Baseline antes de V1.8-B | Resultado final                  |
+| ------------------------ | ------------------------ | -------------------------------- |
+| `npm run build`          | PASS                     | PASS                             |
+| `npm run lint`           | PASS                     | PASS                             |
+| `npm run typecheck:test` | PASS                     | PASS                             |
+| `npm run format:check`   | PASS                     | PASS                             |
+| `npm test`               | PASS: 311 tests, 14      | PASS: **345 tests, 16 archivos** |
+
+34 pruebas nuevas: 22 de UI (`delivery-assignments.test.tsx`) y 12 de contrato (`delivery-assignments-api.test.ts`). La única expectativa previa que cambió es la de V1.7 que afirmaba «la asignación de repartidor y vehículo llegará en una próxima etapa»: V1.8 la sustituyó por el panel real y el test ahora verifica el estado pendiente de asignación.
+
+**Validación en navegador pendiente.** Requiere el backend V1.8 en ejecución con datos locales sembrados; no estaba levantado al cerrar esta entrega. Queda por confirmar en vivo un único punto deducido del código y no del Swagger: que `GET /provider/dispatches/:id` incluye `assignment`, `assignmentDeadline` y `assignmentOverdue`.
+
+# Histórico — Mandaria Web V1.7-B
 
 Fecha: 2026-09-16. Rama `v1.7-dispatch_engine`. Backend local real Mandaria V1.7.0 (OpenAPI 1.7.0) iniciado con `ROUTING_PROVIDER=local_fake`, `DISPATCH_TTL_MINUTES=3` y `MAIL_PROVIDER=local_outbox` por variables de proceso (`.env` intacto: no se llamó a Google Routes ni se enviaron correos). No se modificó backend ni Coita Eats. No se hizo commit ni push. Detalle en [docs/V1.7-B.md](docs/V1.7-B.md).
 

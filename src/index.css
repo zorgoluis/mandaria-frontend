@@ -1990,3 +1990,210 @@ dialog .money-block {
     width: 100%;
   }
 }
+
+/* V1.8 Driver and vehicle assignment */
+.badge.reassigned {
+  background: #f1f4f6;
+  color: #5b6b74;
+}
+.subhead {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.card-assignment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.card-assignment.pending {
+  background: #fbf7ee;
+  color: #8a6d3b;
+}
+.card-assignment.pending.overdue {
+  background: #fbeeee;
+  color: #b65e5e;
+}
+.card-assignment.assigned {
+  background: #eef5f1;
+  color: #2f6b55;
+}
+.card-assignment.assigned strong {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.payment-context {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfb;
+}
+.payment-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.payment-row span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.payment-row strong {
+  font-size: 15px;
+}
+.payment-row small {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--muted);
+}
+.payment-advance {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fbf3e8;
+}
+.payment-advance p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.payment-advance svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.advance-amount {
+  color: #8a5a1f;
+  font-weight: 600;
+}
+.payment-advance .advance-warning {
+  color: var(--danger);
+}
+.payment-note,
+.payment-separation {
+  margin: 0;
+  font-size: 11px;
+}
+.resource-picker {
+  display: grid;
+  gap: 16px;
+}
+.resource-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.resource-group legend {
+  padding: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.resource-list {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+.resource-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.resource-option:hover {
+  border-color: #cfd9d7;
+}
+.resource-option.selected {
+  border-color: var(--brand);
+  background: #f3f9f7;
+}
+.resource-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.resource-option input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.resource-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.resource-main strong {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.resource-main small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.resource-paired {
+  color: var(--brand-dark);
+}
+.assignment-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.assignment-entry {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.assignment-entry.current {
+  border-color: var(--brand);
+  background: #f6fbf9;
+}
+.assignment-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  overflow-wrap: anywhere;
+}
+.assignment-entry .info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .payment-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .resource-list {
+    max-height: none;
+  }
+  .assignment-entry .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .panel-toolbar .row-actions {
+    width: 100%;
+  }
+  .panel-toolbar .row-actions .button {
+    flex: 1;
+  }
+}

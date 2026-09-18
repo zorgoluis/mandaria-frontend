@@ -16,6 +16,9 @@ import { money, serviceTypeLabels } from '../pricing/format'
 import { paymentModes } from '../delivery-requests/format'
 import { PUBLIC_ID } from '../delivery-requests/types'
 import { date } from '../utils/format'
+import { adminAssignments } from '../delivery-assignments/service'
+import { assignmentKeys } from '../delivery-assignments/queries'
+import { AssignmentHistory } from '../delivery-assignments/components'
 import { adminDispatches } from './service'
 import { dispatchKeys } from './queries'
 import {
@@ -378,6 +381,62 @@ export function AdminDispatchDetail() {
           ]}
         />
       </section>
+      <AdminAssignments dispatchId={item.id} />
     </>
+  )
+}
+
+/**
+ * SUPER_ADMIN audit only: V1.8 assignment is a fleet operation, so no assign, reassign or
+ * cancel action is offered here even though the history is visible.
+ */
+function AdminAssignments({ dispatchId }: { dispatchId: string }) {
+  const query = useQuery({
+    queryKey: assignmentKeys.admin(dispatchId),
+    queryFn: ({ signal }) => adminAssignments.history(dispatchId, signal),
+    staleTime: 0,
+  })
+  return (
+    <section className="panel" aria-labelledby="dispatch-assignments">
+      <div className="panel-toolbar">
+        <div>
+          <h2 id="dispatch-assignments">Asignaciones</h2>
+          <p>Quién ejecuta el servicio, de la más reciente a la más antigua</p>
+        </div>
+      </div>
+      {query.isPending ? (
+        <Loading />
+      ) : query.isError ? (
+        <ErrorState
+          error={query.error}
+          retry={() => {
+            void query.refetch()
+          }}
+        />
+      ) : (
+        <>
+          {query.data.length > 0 && (
+            <InfoGrid
+              items={[
+                [
+                  'Proveedor',
+                  `${query.data[0].provider.name} · ${query.data[0].provider.code}`,
+                ],
+              ]}
+            />
+          )}
+          <div className="panel-body">
+            <AssignmentHistory
+              assignments={query.data}
+              emptyDescription="El proveedor que tomó el servicio todavía no asignó repartidor."
+            />
+          </div>
+        </>
+      )}
+      <p className="panel-note">
+        Lectura y auditoría. Asignar, reasignar y cancelar corresponden al
+        proveedor dueño del servicio.
+      </p>
+    </section>
   )
 }
