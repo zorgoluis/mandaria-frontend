@@ -11,6 +11,7 @@ import {
   paymentModes,
   weight,
 } from '../delivery-requests/format'
+import { vehicleLabel } from '../delivery-assignments/format'
 import { providerDispatches } from './service'
 import { refreshProviderDispatches } from './queries'
 import { useNow } from './use-now'
@@ -167,6 +168,7 @@ export function ServiceCard({
       ) : (
         <p className="muted service-summary">{summaryReason(dispatch)}</p>
       )}
+      {canRelease(dispatch) && <CardAssignment dispatch={dispatch} />}
       <footer className="row-actions">
         <Link
           className="button secondary small"
@@ -186,6 +188,12 @@ export function ServiceCard({
         {canRelease(dispatch) && (
           <button
             className="button secondary destructive small"
+            disabled={dispatch.assignment !== null}
+            title={
+              dispatch.assignment
+                ? 'Cancela la asignación antes de liberar el servicio.'
+                : undefined
+            }
             onClick={() => onRelease(dispatch)}
           >
             LIBERAR SERVICIO
@@ -193,6 +201,33 @@ export function ServiceCard({
         )}
       </footer>
     </article>
+  )
+}
+
+/**
+ * The Dispatch stays CLAIMED: whether it is assigned is derived from the real assignment, not
+ * from an invented DispatchStatus.
+ */
+function CardAssignment({ dispatch }: { dispatch: ProviderDispatch }) {
+  const assignment = dispatch.assignment
+  if (!assignment)
+    return (
+      <p
+        className={`card-assignment pending ${dispatch.assignmentOverdue ? 'overdue' : ''}`}
+      >
+        <AlertTriangle size={14} aria-hidden="true" />
+        {dispatch.assignmentOverdue
+          ? 'Pendiente de asignación · demorada'
+          : 'Pendiente de asignación'}
+      </p>
+    )
+  return (
+    <p className="card-assignment assigned">
+      <strong>Asignado</strong>
+      <span>
+        {assignment.driver.name} · {vehicleLabel(assignment.vehicle)}
+      </span>
+    </p>
   )
 }
 

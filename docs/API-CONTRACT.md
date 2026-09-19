@@ -106,4 +106,18 @@ Dispatch para proveedor: `{id, status, access, serviceType, serviceZone:{code,na
 
 Errores `code`: `DISPATCH_ALREADY_CLAIMED`, `DISPATCH_EXPIRED`, `DISPATCH_CANCELLED`, `DISPATCH_RECLAIM_NOT_ALLOWED`, `DISPATCH_NOT_CLAIMED_BY_PROVIDER`, `PROVIDER_NOT_ELIGIBLE`, `SERVICE_COVERAGE_EXISTS` (todos 409). SUPER_ADMIN y DRIVER reciben 403 en rutas de proveedor; IntegrationClient 401. Con varias memberships, `providerId` es obligatorio (409 sin él).
 
-Notas para la web: sin notificaciones en V1.7 (consultar `view=AVAILABLE`; sockets en V1.8); ventana `DISPATCH_TTL_MINUTES` (10 por defecto) independiente de la vigencia de la Quote; al cancelar la DeliveryRequest el Dispatch pasa a CANCELLED y conserva quién lo había reclamado. Límites: claim 60/min y liberación 20/min por IP.
+Notas para la web V1.7: sin notificaciones (consultar `view=AVAILABLE`; sockets en V1.8); ventana `DISPATCH_TTL_MINUTES` (10 por defecto) independiente de la vigencia de la Quote; al cancelar la DeliveryRequest el Dispatch pasa a CANCELLED y conserva quién lo había reclamado. Límites: claim 60/min y liberación 20/min por IP.
+
+# Extensión V1.8
+
+La asignación de repartidor y vehículo se documenta en [V1.8-B.md](V1.8-B.md), contrastada con OpenAPI 1.8.0 y con el código real de `delivery-assignments` y `dispatch.select.ts` de la rama `v1.8-provider_driver_vehicle_assignment`.
+
+Rutas: `POST /provider/dispatches/:id/assignment`, `.../assignment/reassign`, `.../assignment/cancel`, `GET .../assignments` (arreglo), `GET .../available-drivers`, `GET .../available-vehicles` y `GET /admin/dispatches/:id/assignments` (SUPER_ADMIN, sólo lectura). `providerId` viaja en query y nunca en el body: el backend deriva el proveedor del membership y del Dispatch.
+
+`DeliveryAssignment`: `{id, dispatchId, providerId, status: ACTIVE|REASSIGNED|CANCELLED, driver:{id,name}, vehicle:{id,identifier,type}, assignedAt, assignedByUserId, endedAt|null, endedByUserId|null, endReason|null, endReasonDetail|null}`. Las mutaciones añaden `paymentContext`.
+
+Errores `code` (todos 409): `DRIVER_BUSY`, `VEHICLE_BUSY`, `DRIVER_VEHICLE_MISMATCH`, `DRIVER_NOT_ELIGIBLE`, `VEHICLE_NOT_ELIGIBLE`, `DISPATCH_ALREADY_ASSIGNED`, `DISPATCH_HAS_ACTIVE_ASSIGNMENT`, `NO_ACTIVE_ASSIGNMENT`, `ASSIGNMENT_UNCHANGED`, `ASSIGNMENT_CONFLICT`, `PROVIDER_NOT_ACTIVE`, `DISPATCH_NOT_CLAIMED_BY_PROVIDER`.
+
+Dos advertencias de contrato verificadas contra el código real: `assignmentDeadline`, `assignmentOverdue` y `assignment` los devuelve `providerDispatchView` aunque **no** figuren en el `openapi.json` de esa rama; y conviven dos formas monetarias, `{amount,currency}` en `paymentContext` y decimal string con `currency` hermano en `service.goods`.
+
+Regla de concurrencia: un `200` de `reassign` no significa que la asignación enviada siga siendo la ACTIVE. Siempre refrescar el Dispatch y el historial antes de representar el estado.

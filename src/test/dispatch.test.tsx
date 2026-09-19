@@ -74,6 +74,7 @@ function service(overrides: Partial<DispatchService> = {}): DispatchService {
       value: '450.00',
       currency: 'MXN',
       driverAdvancesGoods: true,
+      driverAdvanceAmount: '450.00',
     },
     ...overrides,
   }
@@ -98,6 +99,9 @@ function dispatch(overrides: Partial<ProviderDispatch> = {}): ProviderDispatch {
       releaseReason: null,
     },
     service: service(),
+    assignment: null,
+    assignmentDeadline: null,
+    assignmentOverdue: false,
     ...overrides,
   }
 }
@@ -111,6 +115,7 @@ const prepaid = dispatch({
       value: '120.00',
       currency: 'MXN',
       driverAdvancesGoods: false,
+      driverAdvanceAmount: null,
     },
   }),
 })
@@ -654,7 +659,9 @@ describe('my services and release', () => {
 })
 
 describe('detail', () => {
-  it('OWNER sees contacts, release and no driver assignment yet', async () => {
+  // V1.8 replaced the "coming soon" note with the real assignment panel; see
+  // delivery-assignments.test.tsx for the assign, reassign and cancel flows.
+  it('OWNER sees contacts, release and the pending assignment note', async () => {
     vi.mocked(providerDispatches.get).mockResolvedValue(owned)
     mount(`/services/${owned.id}?providerId=${A}`)
     expect(
@@ -663,12 +670,11 @@ describe('detail', () => {
     expect(screen.getByText('Restaurante Centro')).toBeInTheDocument()
     expect(screen.getByText('+52 961 000 0001')).toBeInTheDocument()
     expect(
-      screen.getByText(/asignación de repartidor y vehículo llegará/),
+      screen.getByText(/pendiente de asignación\. Asigna un repartidor/i),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: 'LIBERAR SERVICIO' }),
-    ).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /Asignar/ })).toBeNull()
+    ).toBeEnabled()
     expect(providerDispatches.get).toHaveBeenCalledWith(
       A,
       owned.id,
@@ -748,6 +754,7 @@ describe('SUPER_ADMIN audit', () => {
       value: '120.00',
       currency: 'MXN',
       driverAdvancesGoods: false,
+      driverAdvanceAmount: null,
     },
   }
   it('lists and filters dispatches read-only', async () => {

@@ -149,7 +149,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.7</span>
+            MANDARIA WEB <span>V1.8</span>
           </div>
         </div>
       </aside>

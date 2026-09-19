@@ -3,6 +3,7 @@ import type {
   PackageCategory,
 } from '../delivery-requests/types'
 import type { ServiceType } from '../pricing/types'
+import type { DeliveryAssignment } from '../delivery-assignments/types'
 
 // Mandaria Backend OpenAPI 1.7.0: dispatch.dto.ts, dispatch.responses.ts, dispatch-policy.ts
 // and dispatch.select.ts (providerDispatchView / adminDispatchView).
@@ -28,9 +29,12 @@ export interface Money {
 }
 export interface DispatchGoods {
   paymentMode: GoodsPaymentMode
+  /** V1.7 contract: decimal string with the currency as a sibling field, not a Money. */
   value: string | null
   currency: string
   driverAdvancesGoods: boolean
+  /** What the driver must advance to the merchant at pickup; null unless COURIER_ADVANCE. */
+  driverAdvanceAmount: string | null
 }
 export interface DispatchStop {
   address: string
@@ -84,6 +88,11 @@ export interface ProviderDispatch {
   cancelledAt: string | null
   myCandidate: MyCandidate | null
   service: DispatchService | null
+  /** V1.8: who executes the service. Only the claim owner sees it; null while unassigned. */
+  assignment: DeliveryAssignment | null
+  /** Derived by the backend from claimedAt + TTL. Never computed here, never auto-released. */
+  assignmentDeadline: string | null
+  assignmentOverdue: boolean
 }
 export interface AdminDispatchCandidate {
   provider: { id: string; name: string; code: string }
