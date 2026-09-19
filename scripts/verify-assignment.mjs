@@ -227,8 +227,10 @@ try {
   const advance = pick('E2E-ADVANCE')
   const busy = pick('E2E-BUSY')
   const toCancel = pick('E2E-CANCEL')
-  // Reset before reading availability: a previous run may still hold resources.
-  for (const d of [main, advance, busy, toCancel])
+  // Reset before reading availability: earlier runs leave older dispatches still holding
+  // drivers and vehicles, so every claimed dispatch of this provider is released, not just
+  // the four this run will use.
+  for (const d of claimed)
     if (await clearAssignment(d.id))
       report.mutations.push(`reset: cleared assignment on ${d.id}`)
   const drivers = (
@@ -499,8 +501,10 @@ try {
   const entries = rePanel.getByRole('listitem')
   await expect(entries.first()).toContainText('Pedro')
   await expect(entries.first()).toContainText('Asignación vigente')
-  await expect(rePanel.getByText('Carlos')).toBeVisible()
-  await expect(rePanel.getByText('Reasignado')).toBeVisible()
+  // The dispatch keeps every past attempt, so these labels repeat by design.
+  await expect(rePanel.getByText('Carlos').first()).toBeVisible()
+  await expect(rePanel.getByText('Reasignado').first()).toBeVisible()
+  await expect(rePanel.getByText('Asignación vigente')).toHaveCount(1)
   pass()
 
   begin('Scenario 7 — release protection: cancel the assignment first')
@@ -589,10 +593,55 @@ try {
     `/provider/dispatches/${main.id}?providerId=${B}`,
     'GET',
   )
-  assert.ok(
-    [403, 404].includes(bOnA.status),
-    `B reading A dispatch -> ${bOnA.status}`,
+  // B was offered the same dispatch, so by contract it keeps SUMMARY visibility: status and
+  // times only. What matters is that no operational data crosses the provider boundary.
+  if (bOnA.status === 200) {
+    assert.equal(
+      bOnA.data.access,
+      'SUMMARY',
+      'a non-owner must only get SUMMARY',
+    )
+    assert.equal(bOnA.data.service, null, 'SUMMARY must not expose the service')
+    assert.equal(
+      bOnA.data.assignment,
+      null,
+      'SUMMARY must not expose the assignment',
+    )
+    assert.equal(bOnA.data.claimedByMe, false)
+    const leak = JSON.stringify(bOnA.data).match(
+      /Carlos|Pedro|Luis|MOTO-|Comercio Centro|Cliente Norte|961 000/g,
+    )
+    assert.equal(
+      leak,
+      null,
+      `operational data leaked to another provider: ${leak}`,
+    )
+  } else {
+    assert.ok(
+      [403, 404].includes(bOnA.status),
+      `B reading A dispatch -> ${bOnA.status}`,
+    )
+  }
+  // B can never read A's assignment history nor A's availability lists.
+  const bHistory = await api(
+    'providerB',
+    `/provider/dispatches/${main.id}/assignments?providerId=${B}`,
+    'GET',
   )
+  if (bHistory.status === 200)
+    assert.deepEqual(bHistory.data, [], 'B must not see the assignments of A')
+  else assert.ok([403, 404, 409].includes(bHistory.status))
+  for (const list of ['available-drivers', 'available-vehicles']) {
+    const r = await api(
+      'providerB',
+      `/provider/dispatches/${main.id}/${list}?providerId=${B}`,
+      'GET',
+    )
+    assert.ok(
+      [403, 404, 409].includes(r.status),
+      `B reading ${list} -> ${r.status}`,
+    )
+  }
   const bAssign = await api(
     'providerB',
     `/provider/dispatches/${main.id}/assignment?providerId=${B}`,
