@@ -2389,3 +2389,11 @@ dialog .money-block {
     align-items: flex-start;
   }
 }
+
+/* V1.9-C: coverage actions are touch targets on phones and tablets. */
+@media (max-width: 850px) {
+  .coverage-action.button.small {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}

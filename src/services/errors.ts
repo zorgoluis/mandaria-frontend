@@ -68,6 +68,9 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Tu proveedor liberó este servicio y no puede volver a tomarlo.',
     DISPATCH_NOT_CLAIMED_BY_PROVIDER:
       'Este servicio ya no está tomado por tu proveedor.',
+    // V1.9-C: the 409 carries no id; the web finds the row and offers to reactivate it.
+    SERVICE_COVERAGE_EXISTS:
+      'Este proveedor ya tiene cobertura para esa zona y tipo de servicio. Actívala desde la lista en lugar de crearla de nuevo.',
     PROVIDER_NOT_ELIGIBLE:
       'Tu proveedor ya no está habilitado para esta zona o tipo de servicio.',
     // V1.8 driver and vehicle assignment. Every conflict is a 409 the backend already resolved.
@@ -197,6 +200,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
     'Provider access denied':
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
     'Service zone not found': 'La zona de servicio ya no está disponible.',
+    'Coverage not found':
+      'Esa cobertura ya no existe para este proveedor. Actualiza la lista.',
     'Invitation not found': 'La invitación ya no está disponible.',
     'Dispatch not found':
       'El servicio no existe o no está disponible para tu proveedor.',
