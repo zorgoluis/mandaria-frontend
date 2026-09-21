@@ -270,6 +270,7 @@ describe('auth and permissions UX', () => {
       'Cotizaciones',
       'Zonas de servicio',
       'Despachos',
+      'Independientes',
       'Mi perfil',
       'Configuración',
     ])

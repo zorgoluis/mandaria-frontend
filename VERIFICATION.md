@@ -1,4 +1,21 @@
-# Estado actual — Mandaria Web V1.8-B y CHECK final V1.8
+# Estado actual — Mandaria Web V1.9-C (Service Coverage Administration)
+
+Fecha: 2026-09-21. Rama `v1.9-independent_driver`. Backend local real Mandaria 1.9.0 (`v1.9-independent_drivers`) con `ROUTING_PROVIDER=local_fake`. Detalle en [docs/V1.9-C.md](docs/V1.9-C.md).
+
+| Comprobación                        | Resultado                                                       |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `tsc -b`, lint, `typecheck:test`    | PASS                                                            |
+| `format:check`, build               | PASS                                                            |
+| Vitest                              | 414/414 en 20 archivos (386 de la línea base + 28 nuevas)       |
+| A–D contra backend real y navegador | Crear, desactivar, 409 → reactivar por PATCH: PASS              |
+| Regresión de Dispatch desde la Web  | D1 conserva candidatos, D2 sin el proveedor, D3 con él: PASS    |
+| Proveedor en sólo lectura           | Refleja exactamente al SUPER_ADMIN; mutaciones directas 403/404 |
+| Aislamiento de roles por API        | PROVIDER_ADMIN, DRIVER e IntegrationClient bloqueados: PASS     |
+| Responsive 375/768/escritorio       | Sin desbordamiento; acciones de 44 px en pantallas pequeñas     |
+
+La cobertura afecta a los nuevos Dispatches; los candidatos de los Dispatches existentes no se recalculan, y un proveedor con la cobertura desactivada ya no puede reclamarlos (`PROVIDER_NOT_ELIGIBLE`).
+
+# Histórico — Mandaria Web V1.8-B y CHECK final V1.8
 
 Fecha: 2026-09-19. Rama `v1.8-provider_driver_vehicle_assignment`. Backend local real Mandaria V1.8.0 (rama `QA`, idéntica a `origin/v1.8-provider_driver_vehicle_assignment` en todos los archivos consumidos) ejecutado con `ROUTING_PROVIDER=local_fake`: no se llamó a Google Routes. No se modificó backend ni Coita Eats. Detalle en [docs/V1.8-B.md](docs/V1.8-B.md).
 

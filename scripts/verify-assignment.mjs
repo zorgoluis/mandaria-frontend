@@ -736,30 +736,47 @@ try {
     )
     report.scenario.cancellationSkipped = true
   } else {
+    const candidates = (
+      await api(
+        'providerA',
+        `/provider/dispatches/${cancelTarget.id}/available-drivers?providerId=${A}&pageSize=50`,
+        'GET',
+        undefined,
+        200,
+      )
+    ).data.items
+    const fleet = (
+      await api(
+        'providerA',
+        `/provider/dispatches/${cancelTarget.id}/available-vehicles?providerId=${A}&pageSize=50`,
+        'GET',
+        undefined,
+        200,
+      )
+    ).data.items
+    // V1.4 pairing: a paired driver only drives its own vehicle and a paired vehicle only
+    // carries its own driver, so the first item of each list is not always a valid pair.
+    const pair =
+      candidates
+        .filter((d) => d.pairedVehicle)
+        .map((d) => ({
+          driverId: d.id,
+          vehicleId: fleet.find((v) => v.id === d.pairedVehicle.id)?.id,
+        }))
+        .find((p) => p.vehicleId) ??
+      (() => {
+        const driver = candidates.find((d) => !d.pairedVehicle)
+        const vehicle = fleet.find((v) => !v.pairedDriver)
+        return driver && vehicle
+          ? { driverId: driver.id, vehicleId: vehicle.id }
+          : undefined
+      })()
+    assert.ok(pair, 'No compatible driver and vehicle pair is available')
     await api(
       'providerA',
       `/provider/dispatches/${cancelTarget.id}/assignment?providerId=${A}`,
       'POST',
-      {
-        driverId: (
-          await api(
-            'providerA',
-            `/provider/dispatches/${cancelTarget.id}/available-drivers?providerId=${A}&pageSize=50`,
-            'GET',
-            undefined,
-            200,
-          )
-        ).data.items[0].id,
-        vehicleId: (
-          await api(
-            'providerA',
-            `/provider/dispatches/${cancelTarget.id}/available-vehicles?providerId=${A}&pageSize=50`,
-            'GET',
-            undefined,
-            200,
-          )
-        ).data.items[0].id,
-      },
+      pair,
       201,
     )
     report.mutations.push(`assignment created on ${cancelTarget.id}`)

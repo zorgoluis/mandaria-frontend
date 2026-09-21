@@ -32,6 +32,7 @@ import type {
   ProviderInput,
   ProviderProfile,
 } from '../types/api'
+import { MyCoverage, ProviderCoveragePanel } from '../service-coverage/pages'
 const invalidate = () =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: ['providers'] }),
@@ -526,6 +527,7 @@ export function ProviderDetail() {
         </div>
       </div>
       <Memberships id={id} name={item.name} />
+      <ProviderCoveragePanel providerId={id} />
       <InvitationsPanel
         scope={{ kind: 'admin', providerId: id }}
         title="Invitaciones del proveedor"
@@ -608,6 +610,8 @@ function SelectedProfile({
     <>
       <ProfileCard item={query.data} />
       <CapacityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
+      {/* V1.9-C: read only; the dashboard keeps its activity cards instead. */}
+      {!showActivity && <MyCoverage providerId={id} />}
       {showActivity && (
         <ActivityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
       )}

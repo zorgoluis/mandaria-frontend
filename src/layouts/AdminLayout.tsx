@@ -19,6 +19,7 @@ import {
   PackageSearch,
   MapPinned,
   ReceiptText,
+  BadgeCheck,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -105,6 +106,24 @@ export function AdminLayout() {
           },
         ]
       : []),
+    // V1.9: independent driver administration is SUPER_ADMIN only and stands apart from Providers.
+    ...(admin
+      ? [
+          {
+            to: '/independent-drivers',
+            label: 'Independientes',
+            icon: BadgeCheck,
+          },
+        ]
+      : []),
+    // V1.9: the temporary portal a DRIVER uses to take services on their own.
+    ...(user?.role === 'DRIVER'
+      ? [
+          { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
+          { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
+          { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
+        ]
+      : []),
     { to: '/profile', label: 'Mi perfil', icon: UserRound },
     ...(admin
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
@@ -149,7 +168,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.8</span>
+            MANDARIA WEB <span>V1.9</span>
           </div>
         </div>
       </aside>

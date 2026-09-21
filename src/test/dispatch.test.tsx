@@ -278,8 +278,10 @@ describe('roles and navigation', () => {
       expect(providerDispatches.list).not.toHaveBeenCalled()
       expect(providerDispatches.get).not.toHaveBeenCalled()
       expect(adminDispatches.list).not.toHaveBeenCalled()
+      // V1.9 gives DRIVER its own portal link also called "Servicios"; what must stay
+      // unreachable is the provider section itself, so the destination is what is asserted.
       if (role !== 'PROVIDER_ADMIN')
-        expect(screen.queryByRole('link', { name: 'Servicios' })).toBeNull()
+        expect(document.querySelector('a[href="/services"]')).toBeNull()
     },
   )
 })

@@ -113,7 +113,7 @@ it('translates every V1.8 conflict code into an operational message', () => {
     ['DRIVER_BUSY', /repartidor acaba de recibir otro servicio/i],
     ['VEHICLE_BUSY', /veh[íi]culo acaba de asignarse/i],
     ['DRIVER_VEHICLE_MISMATCH', /no pueden combinarse/i],
-    ['DRIVER_NOT_ELIGIBLE', /ya no puede asignarse/i],
+    ['DRIVER_NOT_ELIGIBLE', /cuenta activa con rol de repartidor/i],
     ['VEHICLE_NOT_ELIGIBLE', /ya no puede asignarse/i],
     ['DISPATCH_ALREADY_ASSIGNED', /ya tiene un repartidor asignado/i],
     ['DISPATCH_HAS_ACTIVE_ASSIGNMENT', /Cancela la asignaci[óo]n antes/i],

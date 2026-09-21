@@ -30,6 +30,16 @@ import {
 } from '../pricing/zones'
 import { RatePlanDetail } from '../pricing/rate-plans'
 import { QuotesPage, QuoteDetail } from '../quotes/pages'
+import {
+  IndependentDriversPage,
+  IndependentDriverDetail,
+} from '../independent-drivers/pages'
+import {
+  AvailableServicesPage,
+  DriverServiceDetail,
+  MyServicePage,
+  DriverVehiclesPage,
+} from '../driver-portal/pages'
 import { InvitationsPage } from '../invitations/pages'
 import { ActivateAccount } from '../auth/ActivateAccount'
 import { ProviderServicesPage, ProviderServiceDetail } from '../dispatch/pages'
@@ -122,9 +132,31 @@ export function App() {
               path="dispatches/:id"
               element={<AdminDispatchDetail key={location.pathname} />}
             />
+            <Route
+              path="independent-drivers"
+              element={<IndependentDriversPage />}
+            />
+            <Route
+              path="independent-drivers/:driverId"
+              element={<IndependentDriverDetail key={location.pathname} />}
+            />
             <Route path="users" element={<UsersPage />} />
             <Route path="invitations" element={<InvitationsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          {/* V1.9: temporary web portal for the independent driver; the backend also gates it. */}
+          <Route element={<Protected roles={['DRIVER']} />}>
+            <Route
+              path="driver"
+              element={<Navigate to="/driver/services" replace />}
+            />
+            <Route path="driver/services" element={<AvailableServicesPage />} />
+            <Route
+              path="driver/services/:id"
+              element={<DriverServiceDetail key={location.pathname} />}
+            />
+            <Route path="driver/my-service" element={<MyServicePage />} />
+            <Route path="driver/vehicles" element={<DriverVehiclesPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
             <Route path="provider/profile" element={<MyProvider />} />

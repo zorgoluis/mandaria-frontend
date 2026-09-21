@@ -121,3 +121,27 @@ Errores `code` (todos 409): `DRIVER_BUSY`, `VEHICLE_BUSY`, `DRIVER_VEHICLE_MISMA
 Dos advertencias de contrato verificadas contra el código real: `assignmentDeadline`, `assignmentOverdue` y `assignment` los devuelve `providerDispatchView` aunque **no** figuren en el `openapi.json` de esa rama; y conviven dos formas monetarias, `{amount,currency}` en `paymentContext` y decimal string con `currency` hermano en `service.goods`.
 
 Regla de concurrencia: un `200` de `reassign` no significa que la asignación enviada siga siendo la ACTIVE. Siempre refrescar el Dispatch y el historial antes de representar el estado.
+
+# Extensión V1.9
+
+Los repartidores independientes y el portal temporal se documentan en [V1.9-B.md](V1.9-B.md), contrastados con OpenAPI 1.9.0, el código de `src/independent-drivers/` y el backend en ejecución (CHECK FINAL del 2026-09-21).
+
+Rutas SUPER_ADMIN: `GET /admin/independent-drivers`, `GET|POST /admin/drivers/:driverId/independent` (el alta crea el perfil directamente en `APPROVED`; idempotente), `POST .../independent/suspend|reject` (`{reason}` 3–500), `GET|POST .../independent/vehicles`, `PATCH .../independent/vehicles/:vehicleId`. Rutas DRIVER (derivadas del token, nunca de ids en el payload): `GET /driver/me`, `GET /driver/vehicles`, `GET /driver/dispatches/available`, `GET /driver/dispatches/:id`, `POST /driver/dispatches/:id/take` (`{vehicleId}`, atómico: claim + asignación en una transacción) y `POST /driver/dispatches/:id/release` (`{reason: VEHICLE_ISSUE|PERSONAL_EMERGENCY|CANNOT_COMPLETE|OPERATIONAL_ISSUE|OTHER, reasonDetail?}`).
+
+`/driver/me`: `independent` es `null` sin habilitación y lleva `canTakeServices` **dentro** (no en la raíz); `activeDeliveryAssignment` es `{id, mode: FLEET|INDEPENDENT, dispatchId}` o `null`, sin `assignedAt` (OpenAPI declarado con esa forma desde el CHECK FINAL). La vista admin del perfil no expone `canTakeServices`: es un derivado del repartidor.
+
+Detalle `GET /driver/dispatches/:id`: `access: OFFER` (ruta, `pickup`/`dropoff` sin contactos, paquetes, `paymentContext`) u `OWNER` (además contactos e instrucciones). Un Dispatch que el repartidor ni puede tomar ni tiene tomado responde **404**, igual que un id inexistente: la web lo presenta como «Este servicio ya no está disponible». Quien libera un servicio no puede retomarlo (`DISPATCH_RETAKE_NOT_ALLOWED`) y deja de ofrecérsele; vuelve a estar disponible para otros ejecutores.
+
+Errores `code` (409): `INDEPENDENT_PROFILE_EXISTS`, `INDEPENDENT_NOT_APPROVED`, `INDEPENDENT_DRIVER_HAS_ACTIVE_ASSIGNMENT`, `DISPATCH_NOT_OPEN_TO_INDEPENDENT`, `DISPATCH_RETAKE_NOT_ALLOWED`, `DISPATCH_NOT_CLAIMED_BY_DRIVER`, `DISPATCH_ALREADY_CLAIMED`, `DISPATCH_EXPIRED`, `DISPATCH_CANCELLED`, `DRIVER_NOT_ELIGIBLE`, `DRIVER_BUSY`, `VEHICLE_BUSY`, `VEHICLE_NOT_ELIGIBLE`, `VEHICLE_HAS_ACTIVE_ASSIGNMENT`, `VEHICLE_LIMIT_REACHED` (máximo configurable `INDEPENDENT_DRIVER_MAX_VEHICLES`, cuenta también los inactivos) y `TAKE_CONFLICT` (carrera perdida detectada por la base). El identificador de vehículo repetido llega sin `code`, con el mensaje `Vehicle identifier already exists for this independent driver`.
+
+Cobertura: `ProviderServiceCoverage` sólo decide los candidatos Provider (congelados al abrir). Sin cobertura el Dispatch **sí se abre**, sigue `OPEN` con `candidates: []` y `noProviderAvailable: true` (derivado), y el repartidor independiente lo ve si el `ServiceType` admite independientes.
+
+# Extensión V1.9-C
+
+La administración de cobertura se documenta en [V1.9-C.md](V1.9-C.md). Consume sin cambios las rutas V1.7 de cobertura: `GET|POST /admin/providers/:providerId/service-coverages`, `PATCH .../service-coverages/:coverageId` (SUPER_ADMIN) y `GET /provider/service-coverages?providerId=` (PROVIDER_ADMIN, sólo lectura, con guarda de membership). No existe DELETE.
+
+Contrato asimétrico: el POST recibe `{serviceZoneId, serviceType}` plano, pero toda respuesta trae la zona anidada en `serviceZone: {id, code, name, status}` y **no** incluye `serviceZoneId`. El PATCH recibe `{status: ACTIVE|INACTIVE}` y es idempotente.
+
+Errores: `SERVICE_COVERAGE_EXISTS` (409, sin el id de la fila existente: la web la busca en la lista y ofrece reactivarla con PATCH), `Coverage not found` y `Service zone not found` (404 sin `code`). Desactivar una cobertura hace que los claims pendientes del proveedor fallen con `PROVIDER_NOT_ELIGIBLE`.
+
+Semántica: la cobertura afecta a los **nuevos** Dispatches; los candidatos de los Dispatches existentes no se recalculan.

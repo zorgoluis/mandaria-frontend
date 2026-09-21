@@ -68,6 +68,9 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Tu proveedor liberó este servicio y no puede volver a tomarlo.',
     DISPATCH_NOT_CLAIMED_BY_PROVIDER:
       'Este servicio ya no está tomado por tu proveedor.',
+    // V1.9-C: the 409 carries no id; the web finds the row and offers to reactivate it.
+    SERVICE_COVERAGE_EXISTS:
+      'Este proveedor ya tiene cobertura para esa zona y tipo de servicio. Actívala desde la lista en lugar de crearla de nuevo.',
     PROVIDER_NOT_ELIGIBLE:
       'Tu proveedor ya no está habilitado para esta zona o tipo de servicio.',
     // V1.8 driver and vehicle assignment. Every conflict is a 409 the backend already resolved.
@@ -77,8 +80,9 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Ese vehículo acaba de asignarse a otro servicio. Actualiza la lista y elige otro.',
     DRIVER_VEHICLE_MISMATCH:
       'Ese repartidor y ese vehículo no pueden combinarse: alguno está emparejado con otro en su ficha.',
+    // Shared by V1.8 assignment and V1.9 independent enabling: the driver is not operational.
     DRIVER_NOT_ELIGIBLE:
-      'Ese repartidor ya no puede asignarse. Actualiza la lista de disponibles.',
+      'Ese repartidor no cumple los requisitos: necesita una cuenta activa con rol de repartidor y estar activo.',
     VEHICLE_NOT_ELIGIBLE:
       'Ese vehículo ya no puede asignarse. Actualiza la lista de disponibles.',
     DISPATCH_ALREADY_ASSIGNED:
@@ -93,6 +97,27 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Otra persona cambió la asignación al mismo tiempo. Actualiza e inténtalo de nuevo.',
     PROVIDER_NOT_ACTIVE:
       'Tu proveedor no está activo y no puede asignar servicios.',
+    // V1.9 independent drivers. Every conflict is a 409 the backend already resolved.
+    INDEPENDENT_PROFILE_EXISTS:
+      'Ese repartidor ya tiene una habilitación independiente registrada.',
+    INDEPENDENT_NOT_APPROVED:
+      'Tu habilitación para tomar servicios por tu cuenta no está vigente.',
+    INDEPENDENT_DRIVER_HAS_ACTIVE_ASSIGNMENT:
+      'El repartidor está ejecutando un servicio. Espera a que termine o libéralo antes de cambiar su habilitación.',
+    DISPATCH_NOT_OPEN_TO_INDEPENDENT:
+      'Este servicio no admite repartidores independientes.',
+    DISPATCH_RETAKE_NOT_ALLOWED:
+      'Ya liberaste este servicio y no puedes volver a tomarlo.',
+    DISPATCH_NOT_CLAIMED_BY_DRIVER:
+      'Este servicio ya no es tuyo. Actualiza para ver su estado.',
+    VEHICLE_HAS_ACTIVE_ASSIGNMENT:
+      'Ese vehículo está ejecutando un servicio. No puede desactivarse hasta que termine.',
+    // The limit is configurable in the backend and counts inactive vehicles too.
+    VEHICLE_LIMIT_REACHED:
+      'Este repartidor ya tiene el máximo de vehículos propios permitido, incluidos los inactivos.',
+    // A race lost inside the database: another executor changed the service first.
+    TAKE_CONFLICT:
+      'El servicio cambió mientras lo tomabas o liberabas. Actualiza para ver su estado.',
     // V1.6.1 invitations and account activation.
     USER_ALREADY_ACTIVE: 'Ya existe una cuenta activa con ese correo.',
     USER_INVITATION_PENDING:
@@ -127,6 +152,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Límite de vehículos alcanzado. Solicita ampliar la capacidad del proveedor.',
     'Vehicle identifier already exists in this provider':
       'Ya existe un vehículo con ese identificador en el proveedor.',
+    'Vehicle identifier already exists for this independent driver':
+      'Este repartidor ya tiene un vehículo con ese identificador.',
     'Driver not found': 'El repartidor no está disponible en este proveedor.',
     'Vehicle not found': 'El vehículo no está disponible en este proveedor.',
     'Invalid driver status transition':
@@ -173,6 +200,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
     'Provider access denied':
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
     'Service zone not found': 'La zona de servicio ya no está disponible.',
+    'Coverage not found':
+      'Esa cobertura ya no existe para este proveedor. Actualiza la lista.',
     'Invitation not found': 'La invitación ya no está disponible.',
     'Dispatch not found':
       'El servicio no existe o no está disponible para tu proveedor.',
