@@ -2197,3 +2197,195 @@ dialog .money-block {
     flex: 1;
   }
 }
+
+/* V1.9 Independent drivers and the temporary driver portal */
+.badge.approved {
+  background: #eaf6ef;
+  color: #338969;
+}
+.badge.rejected {
+  background: #fbeeee;
+  color: #b65e5e;
+}
+.capability-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+}
+.capability-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+/* Mobile first: the portal stands in for the future Driver App. */
+.driver-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.driver-tabs a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  min-height: 56px;
+  justify-content: center;
+}
+.driver-tabs a.active {
+  background: #eef5f1;
+  color: var(--brand-dark);
+}
+.driver-service-grid {
+  display: grid;
+  gap: 14px;
+  padding: 0 24px 20px;
+}
+.driver-service-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.driver-service-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.driver-service-card header strong {
+  font-size: 20px;
+  color: var(--brand-dark);
+}
+.driver-service-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.driver-service-card dt {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.driver-service-card dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.driver-metrics {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.driver-service-card .button {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+.driver-advance-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fbf3e8;
+  color: #8a5a1f;
+  font-size: 12px;
+  font-weight: 600;
+}
+.driver-payment {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfb;
+}
+.driver-advance {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fbf3e8;
+}
+.driver-advance p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.driver-advance svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #b1671f;
+}
+.driver-advance strong {
+  color: #8a5a1f;
+}
+.driver-vehicle-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px 20px;
+  display: grid;
+  gap: 10px;
+}
+.driver-vehicle-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.driver-vehicle-list li > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.driver-vehicle-list small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.button.full {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+@media (max-width: 640px) {
+  .driver-service-grid,
+  .driver-vehicle-list {
+    padding: 0 16px 16px;
+  }
+  .driver-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .driver-service-card header strong {
+    font-size: 18px;
+  }
+  .driver-vehicle-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
