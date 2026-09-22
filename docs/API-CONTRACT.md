@@ -145,3 +145,43 @@ Contrato asimétrico: el POST recibe `{serviceZoneId, serviceType}` plano, pero 
 Errores: `SERVICE_COVERAGE_EXISTS` (409, sin el id de la fila existente: la web la busca en la lista y ofrece reactivarla con PATCH), `Coverage not found` y `Service zone not found` (404 sin `code`). Desactivar una cobertura hace que los claims pendientes del proveedor fallen con `PROVIDER_NOT_ELIGIBLE`.
 
 Semántica: la cobertura afecta a los **nuevos** Dispatches; los candidatos de los Dispatches existentes no se recalculan.
+# Extensión V1.10-B (backend) — Credit Policy Engine
+
+Fuente: backend `mandaria-backend` V1.10-B (`src/credit-policies/`, OpenAPI regenerado). Cambio sólo de contrato: la web aún no implementa estas pantallas. **V1.10-B sólo calcula: CLAIM y TAKE todavía no consumen créditos** y ningún saldo cambia.
+
+Todas las rutas son **sólo SUPER_ADMIN** (PROVIDER_ADMIN y DRIVER 403, B2B 401): el panel de proveedor y el portal del repartidor no leen las reglas; en versiones posteriores recibirán sólo el `creditCost` de cada servicio.
+
+| Método y ruta | Uso |
+| --- | --- |
+| GET /admin/credit-policies?serviceType=&actorType=&status=&page=&pageSize= | Historial (ACTIVE e INACTIVE), ordenado por serviceType, actorType y versión descendente |
+| GET /admin/credit-policies/:id | Una versión completa con `ranges` |
+| POST /admin/credit-policies | Versión 1 de una combinación sin políticas: `{serviceType, actorType, calculationType, ...campos del tipo, reason?}` → 201. Ya existe → 409 `CREDIT_POLICY_EXISTS` |
+| POST /admin/credit-policies/:id/versions | Nueva versión desde la ACTIVE `:id`: `{calculationType, ...campos del tipo, reason?}` → 201. `:id` ya reemplazada → 409 `CREDIT_POLICY_VERSION_CONFLICT` (recargar y reintentar) |
+| GET /admin/credit-policies/calculation?serviceType=&actorType=&distanceMeters= | Costo con la ACTIVE; sólo lectura |
+
+`actorType`: `PROVIDER` (paga el proveedor, también por sus Drivers de flotilla) o `INDEPENDENT_DRIVER`; nunca `DRIVER`. `calculationType` y sus únicos campos permitidos (cualquier otro → 400 `VALIDATION_ERROR`): `PER_KM` → `creditsPerKm` (1–1 000 000) y `minimumCredits` (0–1 000 000); `FLAT` → `flatCredits` (1–1 000 000); `DISTANCE_RANGE` → `ranges: [{minDistanceMeters, maxDistanceMeters|null, credits}]` (1–50, `[min, max)`, el primero desde 0, contiguos, **sólo el último** con `maxDistanceMeters: null`). El formulario debe enviar `maxDistanceMeters: null` explícito en el último rango. `version`, `status`, `effectiveFrom`, `effectiveUntil` y `createdByUserId` los decide el servidor: enviarlos → 400.
+
+Política: `{id, serviceType, actorType, version, status: ACTIVE|INACTIVE, calculationType, creditsPerKm|null, minimumCredits|null, flatCredits|null, ranges:[{id, position, minDistanceMeters, maxDistanceMeters|null, credits}], effectiveFrom, effectiveUntil|null, reason|null, createdByUserId, createdAt}`. Máximo una ACTIVE por combinación; una versión nunca se edita (no hay PATCH ni DELETE) y una INACTIVE no se reactiva. Para «volver» a condiciones anteriores se crea otra versión.
+
+Cálculo: `{policyId, policyVersion, serviceType, actorType, calculationType, distanceMeters, distanceKm: "6.240" (texto informativo), billableKm|null, calculatedCredits|null, minimumCredits|null, minimumApplied, rangePosition|null, credits}`. Créditos enteros, **sin moneda** (no son pesos: no mezclar con `deliveryFee`). Errores: 409 `CREDIT_POLICY_UNAVAILABLE` (sin ACTIVE: la web nunca debe mostrar 0), 422 `CREDIT_COST_OUT_OF_RANGE` (> 1 000 000), 400 para distancias no enteras, negativas, vacías o repetidas.
+
+Notas para la web: tras crear una versión, recargar la lista (la anterior pasa a INACTIVE con `effectiveUntil` = `effectiveFrom` de la nueva). Ante 409 de versión, mostrar que otro administrador acaba de cambiar la política y ofrecer recargar; no reintentar a ciegas.
+
+# Extensión V1.10-C (backend) — Dispatch Credit Snapshot
+
+Fuente: backend `mandaria-backend` V1.10-C (`src/credit-policies/dispatch-credit-snapshots.ts`, OpenAPI regenerado). Cambio sólo de contrato: la web aún no lo muestra. **V1.10-C no cobra: CLAIM y TAKE siguen sin consumir créditos** y ningún saldo cambia.
+
+Al abrirse un Dispatch (aceptación de la cotización) el backend congela, por actor, el costo en créditos calculado con la política ACTIVE de ese momento y la distancia de la cotización. Cambiar la política después **no cambia** el costo de Dispatches ya abiertos.
+
+| Vista | Campo nuevo |
+| --- | --- |
+| Proveedor: `GET /provider/dispatches`, `GET /provider/dispatches/:dispatchId` (y respuestas de claim/release) | `creditCost: integer \| null` — costo para el proveedor |
+| Repartidor independiente: `GET /driver/dispatches/available`, `GET /driver/dispatches/:dispatchId` (y take/release) | `creditCost: integer \| null` — costo para el repartidor |
+| SUPER_ADMIN: `GET /admin/dispatches`, `GET /admin/dispatches/:dispatchId` | `creditSnapshots: [{id, dispatchId, actorType, serviceType, creditPolicyId, policyVersion, calculationType, distanceMeters, billableKm\|null, creditsPerKm\|null, minimumCredits\|null, calculatedCredits\|null, flatCredits\|null, appliedRangeId\|null, appliedRangePosition\|null, appliedRangeMinDistanceMeters\|null, appliedRangeMaxDistanceMeters\|null, credits, createdAt}]` y `legacyWithoutCreditSnapshots: boolean` |
+
+Notas para la web:
+
+- `creditCost` son **créditos enteros, sin moneda**: no mezclar con `deliveryFee` ni formatear como pesos. Cada actor ve sólo su propio costo; nunca la política ni el costo del otro actor.
+- `creditCost: null` significa Dispatch **anterior a V1.10-C** (sin snapshot): mostrar «sin costo registrado», **nunca 0**. En admin esos Dispatches traen `creditSnapshots: []` y `legacyWithoutCreditSnapshots: true`.
+- Hoy mostrar el costo es informativo: tener saldo 0 no impide reclamar ni tomar (el cobro llega en V1.10-D).
+- La API B2B no expone créditos. La aceptación de una cotización puede responder **409 `CREDIT_POLICY_UNAVAILABLE`** si falta la política de algún actor (la cotización sigue OFFERED y puede reintentarse), o 422 `CREDIT_COST_OUT_OF_RANGE` si la política calcula 0 o más de 1 000 000 créditos.
