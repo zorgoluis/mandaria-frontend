@@ -266,6 +266,7 @@ async function allowedNavigation(state) {
     'Dashboard',
     'Mi proveedor',
     'Servicios',
+    'Créditos',
     'Repartidores',
     'Vehículos',
     'Mi perfil',

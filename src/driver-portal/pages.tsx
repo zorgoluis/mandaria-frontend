@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Bike,
   PackageSearch,
+  Coins,
   RefreshCw,
   Wallet,
 } from 'lucide-react'
@@ -28,6 +29,9 @@ import { km } from '../pricing/format'
 import { duration } from '../quotes/format'
 import { categoryLabels, weight } from '../delivery-requests/format'
 import { date, labels } from '../utils/format'
+import { creditCostLabel, formatCredits } from '../credits/format'
+import { myDriverCredits } from '../credits/service'
+import { creditKeys } from '../credits/queries'
 import { driverPortal } from './service'
 import { driverKeys, refreshDriverPortal } from './queries'
 import {
@@ -97,9 +101,10 @@ const tabs = [
   { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
   { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
   { to: '/driver/vehicles', label: 'Mis vehículos', icon: Wallet },
+  { to: '/driver/credits', label: 'Créditos', icon: Coins },
 ] as const
 
-function PortalTabs() {
+export function PortalTabs() {
   return (
     <nav className="driver-tabs" aria-label="Portal del repartidor">
       {tabs.map(({ to, label, icon: Icon }) => (
@@ -188,6 +193,9 @@ function ServiceCard({ dispatch }: { dispatch: DriverDispatch }) {
       <p className="driver-metrics">
         <span>{km(service.route.distanceMeters)}</span>
         <span>{duration(service.route.durationSeconds)}</span>
+        <span className="credit-chip">
+          Cuesta {creditCostLabel(dispatch.creditCost)}
+        </span>
       </p>
       {paymentContext.driverAdvancesGoods && (
         <p className="driver-advance-chip">
@@ -448,6 +456,22 @@ function ServiceContent({
           <PaymentBlock payment={paymentContext} beforeTaking={!mine} />
         </div>
       </section>
+      <section className="panel" aria-labelledby="driver-credits-cost">
+        <div className="panel-toolbar">
+          <h2 id="driver-credits-cost">Créditos Mandaria</h2>
+        </div>
+        <div className="panel-body">
+          <InfoGrid
+            items={[
+              ['Costo del servicio', creditCostLabel(dispatch.creditCost)],
+            ]}
+          />
+          <p className="panel-note">
+            Los créditos son una unidad interna de Mandaria: no son pesos y no
+            cambian el cobro del envío ni la mercancía.
+          </p>
+        </div>
+      </section>
       <section className="panel" aria-labelledby="driver-packages">
         <div className="panel-toolbar">
           <h2 id="driver-packages">Paquetes</h2>
@@ -483,6 +507,29 @@ function ServiceContent({
  * One backend call: take is atomic. The web never sends claim and assignment separately, and
  * the outcome is always read back because another executor may have taken it first.
  */
+/**
+ * Taking a service charges its credit cost, so the driver sees the real balance before confirming.
+ * It is only a warning: the backend decides and can still answer INSUFFICIENT_CREDITS.
+ */
+function CreditCheck({ cost }: { cost: number | null }) {
+  const account = useQuery({
+    queryKey: creditKeys.account('driver', 'me'),
+    queryFn: ({ signal }) => myDriverCredits.account(signal),
+    staleTime: 0,
+  })
+  if (cost === null || !account.isSuccess) return null
+  const short = account.data.balance < cost
+  return (
+    <p className={short ? 'warning notice' : 'panel-note'} role="note">
+      {short && <AlertTriangle size={16} aria-hidden="true" />}
+      Tu saldo es de {formatCredits(account.data.balance)}
+      {short
+        ? '. No alcanza para tomar este servicio: contacta a Mandaria para recargar créditos.'
+        : '.'}
+    </p>
+  )
+}
+
 function TakeDialog({
   dispatch,
   onClose,
@@ -526,8 +573,10 @@ function TakeDialog({
               ['Origen', dispatch.service.pickup.address],
               ['Destino', dispatch.service.dropoff.address],
               ['Envío', amount(dispatch.paymentContext.deliveryFee)],
+              ['Costo en créditos', creditCostLabel(dispatch.creditCost)],
             ]}
           />
+          <CreditCheck cost={dispatch.creditCost} />
           <PaymentBlock payment={dispatch.paymentContext} beforeTaking />
           <ActionForm
             initialDirty
@@ -656,6 +705,10 @@ function MyService({ me }: { me: DriverSelf }) {
                     : '—',
                 ],
                 ['Envío', amount(query.data.paymentContext.deliveryFee)],
+                [
+                  'Créditos del servicio',
+                  creditCostLabel(query.data.creditCost),
+                ],
                 [
                   'Tomado',
                   query.data.assignment

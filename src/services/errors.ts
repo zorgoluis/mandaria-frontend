@@ -46,6 +46,33 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Las bandas de la tarifa no son válidas todavía. Revisa los rangos y precios.',
     RATE_PLAN_CONFLICT:
       'Otra persona cambió esta tarifa al mismo tiempo. Vuelve a cargar e inténtalo de nuevo.',
+    // V1.10 credits. Credits are a Mandaria unit of consumption, never money.
+    CREDIT_ACCOUNT_NOT_FOUND:
+      'Esta cuenta de créditos no existe en Mandaria. No es un saldo en cero.',
+    CREDIT_ACCOUNT_UNAVAILABLE:
+      'La cuenta de créditos no está disponible en este momento. Inténtalo de nuevo.',
+    INSUFFICIENT_CREDITS:
+      'No hay créditos suficientes para este movimiento. Registra una recarga antes de continuar.',
+    CREDIT_BALANCE_LIMIT:
+      'El saldo superaría el máximo permitido por Mandaria. Ajusta la cantidad de créditos.',
+    CREDIT_IDEMPOTENCY_CONFLICT:
+      'Ya se registró otro movimiento con esa clave. Vuelve a cargar la cuenta antes de repetirlo.',
+    CREDIT_MOVEMENT_CONFLICT:
+      'Otro movimiento cambió la cuenta al mismo tiempo. Vuelve a intentarlo.',
+    CREDIT_SNAPSHOT_UNAVAILABLE:
+      'Este servicio no tiene costo en créditos registrado. Contacta a Mandaria.',
+    CREDIT_POLICY_UNAVAILABLE:
+      'No existe una política de créditos vigente para esa combinación. Créala antes de continuar.',
+    CREDIT_POLICY_EXISTS:
+      'Esa combinación ya tiene una política. Crea una nueva versión desde la vigente.',
+    CREDIT_POLICY_VERSION_CONFLICT:
+      'Esta versión ya fue reemplazada por otra. Vuelve a cargar la política vigente e inténtalo de nuevo.',
+    CREDIT_COST_OUT_OF_RANGE:
+      'El costo calculado queda fuera del rango permitido. Revisa la política.',
+    CREDIT_DISTANCE_INVALID:
+      'La distancia debe ser un número entero de metros dentro del rango permitido.',
+    CREDIT_REFUND_INTEGRITY_ERROR:
+      'Mandaria no puede completar la devolución de créditos de este servicio. Contacta a Mandaria: no se resuelve reintentando.',
     OUT_OF_SERVICE_AREA: 'Fuera de cobertura.',
     CROSS_ZONE_NOT_SUPPORTED: 'Entrega entre zonas no disponible.',
     ROUTE_NOT_FOUND: 'No se encontró una ruta.',

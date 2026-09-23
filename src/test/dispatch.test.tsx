@@ -102,6 +102,7 @@ function dispatch(overrides: Partial<ProviderDispatch> = {}): ProviderDispatch {
     assignment: null,
     assignmentDeadline: null,
     assignmentOverdue: false,
+    creditCost: 7,
     ...overrides,
   }
 }
@@ -758,6 +759,8 @@ describe('SUPER_ADMIN audit', () => {
       driverAdvancesGoods: false,
       driverAdvanceAmount: null,
     },
+    creditSnapshots: [],
+    legacyWithoutCreditSnapshots: true,
   }
   it('lists and filters dispatches read-only', async () => {
     vi.mocked(adminDispatches.list).mockResolvedValue(

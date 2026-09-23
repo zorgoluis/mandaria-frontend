@@ -105,5 +105,11 @@ export interface DriverDispatch {
   assignment: DriverAssignment | null
   service: DriverService
   paymentContext: DriverPaymentContext
+  /**
+   * V1.10: Mandaria credits this service costs me, frozen when the Dispatch opened. Credits are
+   * not money and never mix with paymentContext. null = opened before credit snapshots existed:
+   * no cost was recorded, which is not zero.
+   */
+  creditCost: number | null
 }
 export type DriverVehicle = IndependentVehicle

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, ArrowUpRight, Clock3 } from 'lucide-react'
 import { ActionForm, Badge, Field, InfoGrid, Modal } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
@@ -12,6 +13,9 @@ import {
   weight,
 } from '../delivery-requests/format'
 import { vehicleLabel } from '../delivery-assignments/format'
+import { creditCostLabel, formatCredits } from '../credits/format'
+import { myProviderCredits } from '../credits/service'
+import { creditKeys } from '../credits/queries'
 import { providerDispatches } from './service'
 import { refreshProviderDispatches } from './queries'
 import { useNow } from './use-now'
@@ -164,6 +168,9 @@ export function ServiceCard({
             </div>
           </dl>
           <MoneyBlock service={service} compact />
+          <p className="credit-chip">
+            Cuesta {creditCostLabel(dispatch.creditCost)}
+          </p>
         </>
       ) : (
         <p className="muted service-summary">{summaryReason(dispatch)}</p>
@@ -287,6 +294,35 @@ function FinalState({
  * No optimistic ownership: the dialog only reports success after the backend answers, and every
  * outcome (success or conflict) refetches the lists.
  */
+/**
+ * Claiming a service charges its credit cost to the provider, so the real balance is read before
+ * confirming. It is a warning, not a gate: the backend decides and may answer INSUFFICIENT_CREDITS.
+ */
+function ProviderCreditCheck({
+  providerId,
+  cost,
+}: {
+  providerId: string
+  cost: number | null
+}) {
+  const account = useQuery({
+    queryKey: creditKeys.account('my-provider', providerId),
+    queryFn: ({ signal }) => myProviderCredits.account(providerId, signal),
+    staleTime: 0,
+  })
+  if (cost === null || !account.isSuccess) return null
+  const short = account.data.balance < cost
+  return (
+    <p className={short ? 'warning notice' : 'panel-note'} role="note">
+      {short && <AlertTriangle size={16} aria-hidden="true" />}
+      El saldo de tu proveedor es de {formatCredits(account.data.balance)}
+      {short
+        ? '. No alcanza para tomar este servicio: contacta a Mandaria para recargar créditos.'
+        : '.'}
+    </p>
+  )
+}
+
 export function ClaimDialog({
   providerId,
   dispatch,
@@ -318,6 +354,15 @@ export function ClaimDialog({
               <MoneyBlock service={service} compact />
             </>
           )}
+          <InfoGrid
+            items={[
+              ['Costo en créditos', creditCostLabel(dispatch.creditCost)],
+            ]}
+          />
+          <ProviderCreditCheck
+            providerId={providerId}
+            cost={dispatch.creditCost}
+          />
           <p className="modal-description">
             <Countdown expiresAt={dispatch.expiresAt} now={now} />
           </p>
@@ -379,6 +424,13 @@ export function ReleaseDialog({
             <AlertTriangle size={16} aria-hidden="true" />
             Si liberas este servicio, no podrás volver a tomarlo.
           </p>
+          {dispatch.creditCost !== null && (
+            <p className="panel-note">
+              Mandaria devuelve los {formatCredits(dispatch.creditCost)} que
+              cobró por este servicio; el movimiento queda en tu historial de
+              créditos.
+            </p>
+          )}
           {dispatch.service && <ServiceSummary service={dispatch.service} />}
           <ActionForm
             initialDirty

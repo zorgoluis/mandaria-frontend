@@ -93,6 +93,12 @@ export interface ProviderDispatch {
   /** Derived by the backend from claimedAt + TTL. Never computed here, never auto-released. */
   assignmentDeadline: string | null
   assignmentOverdue: boolean
+  /**
+   * V1.10: Mandaria credits this service costs my provider, frozen when the Dispatch opened.
+   * Credits are not money: they never mix with deliveryFee or goods. null = opened before credit
+   * snapshots existed, so no cost was recorded — which is not zero.
+   */
+  creditCost: number | null
 }
 export interface AdminDispatchCandidate {
   provider: { id: string; name: string; code: string }
@@ -129,6 +135,30 @@ export interface AdminDispatch {
   noProviderAvailable: boolean
   candidates: AdminDispatchCandidate[]
   goods: DispatchGoods | null
+  /** V1.10: the frozen cost per actor. Empty for Dispatches opened before credit snapshots. */
+  creditSnapshots: DispatchCreditSnapshot[]
+  legacyWithoutCreditSnapshots: boolean
+}
+/** Audit detail of one frozen cost: which policy version produced it and with which numbers. */
+export interface DispatchCreditSnapshot {
+  id: string
+  actorType: 'PROVIDER' | 'INDEPENDENT_DRIVER'
+  serviceType: ServiceType
+  creditPolicyId: string
+  policyVersion: number
+  calculationType: 'PER_KM' | 'FLAT' | 'DISTANCE_RANGE'
+  distanceMeters: number
+  billableKm: number | null
+  creditsPerKm: number | null
+  minimumCredits: number | null
+  calculatedCredits: number | null
+  flatCredits: number | null
+  appliedRangeId: string | null
+  appliedRangePosition: number | null
+  appliedRangeMinDistanceMeters: number | null
+  appliedRangeMaxDistanceMeters: number | null
+  credits: number
+  createdAt: string
 }
 export interface ProviderDispatchFilters {
   page?: number

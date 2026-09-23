@@ -44,6 +44,12 @@ import { InvitationsPage } from '../invitations/pages'
 import { ActivateAccount } from '../auth/ActivateAccount'
 import { ProviderServicesPage, ProviderServiceDetail } from '../dispatch/pages'
 import { AdminDispatchesPage, AdminDispatchDetail } from '../dispatch/admin'
+import {
+  CreditPoliciesPage,
+  CreditPolicyDetail,
+  CreditPolicyNew,
+} from '../credit-policies/pages'
+import { DriverCreditsPage, MyCreditsPage } from '../credits/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -140,6 +146,12 @@ export function App() {
               path="independent-drivers/:driverId"
               element={<IndependentDriverDetail key={location.pathname} />}
             />
+            <Route path="credit-policies" element={<CreditPoliciesPage />} />
+            <Route path="credit-policies/new" element={<CreditPolicyNew />} />
+            <Route
+              path="credit-policies/:id"
+              element={<CreditPolicyDetail key={location.pathname} />}
+            />
             <Route path="users" element={<UsersPage />} />
             <Route path="invitations" element={<InvitationsPage />} />
             <Route path="settings" element={<SettingsPage />} />
@@ -157,9 +169,12 @@ export function App() {
             />
             <Route path="driver/my-service" element={<MyServicePage />} />
             <Route path="driver/vehicles" element={<DriverVehiclesPage />} />
+            <Route path="driver/credits" element={<DriverCreditsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
             <Route path="provider/profile" element={<MyProvider />} />
+            {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
+            <Route path="provider/credits" element={<MyCreditsPage />} />
             {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
             <Route path="services" element={<ProviderServicesPage />} />
             <Route

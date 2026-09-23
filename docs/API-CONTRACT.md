@@ -145,3 +145,126 @@ Contrato asimétrico: el POST recibe `{serviceZoneId, serviceType}` plano, pero 
 Errores: `SERVICE_COVERAGE_EXISTS` (409, sin el id de la fila existente: la web la busca en la lista y ofrece reactivarla con PATCH), `Coverage not found` y `Service zone not found` (404 sin `code`). Desactivar una cobertura hace que los claims pendientes del proveedor fallen con `PROVIDER_NOT_ELIGIBLE`.
 
 Semántica: la cobertura afecta a los **nuevos** Dispatches; los candidatos de los Dispatches existentes no se recalculan.
+
+# Extensión V1.10-B (backend) — Credit Policy Engine
+
+Fuente: backend `mandaria-backend` V1.10-B (`src/credit-policies/`, OpenAPI regenerado). Cambio sólo de contrato: la web aún no implementa estas pantallas. **V1.10-B sólo calcula: CLAIM y TAKE todavía no consumen créditos** y ningún saldo cambia.
+
+Todas las rutas son **sólo SUPER_ADMIN** (PROVIDER_ADMIN y DRIVER 403, B2B 401): el panel de proveedor y el portal del repartidor no leen las reglas; en versiones posteriores recibirán sólo el `creditCost` de cada servicio.
+
+| Método y ruta                                                                  | Uso                                                                                                                                                                              |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET /admin/credit-policies?serviceType=&actorType=&status=&page=&pageSize=     | Historial (ACTIVE e INACTIVE), ordenado por serviceType, actorType y versión descendente                                                                                         |
+| GET /admin/credit-policies/:id                                                 | Una versión completa con `ranges`                                                                                                                                                |
+| POST /admin/credit-policies                                                    | Versión 1 de una combinación sin políticas: `{serviceType, actorType, calculationType, ...campos del tipo, reason?}` → 201. Ya existe → 409 `CREDIT_POLICY_EXISTS`               |
+| POST /admin/credit-policies/:id/versions                                       | Nueva versión desde la ACTIVE `:id`: `{calculationType, ...campos del tipo, reason?}` → 201. `:id` ya reemplazada → 409 `CREDIT_POLICY_VERSION_CONFLICT` (recargar y reintentar) |
+| GET /admin/credit-policies/calculation?serviceType=&actorType=&distanceMeters= | Costo con la ACTIVE; sólo lectura                                                                                                                                                |
+
+`actorType`: `PROVIDER` (paga el proveedor, también por sus Drivers de flotilla) o `INDEPENDENT_DRIVER`; nunca `DRIVER`. `calculationType` y sus únicos campos permitidos (cualquier otro → 400 `VALIDATION_ERROR`): `PER_KM` → `creditsPerKm` (1–1 000 000) y `minimumCredits` (0–1 000 000); `FLAT` → `flatCredits` (1–1 000 000); `DISTANCE_RANGE` → `ranges: [{minDistanceMeters, maxDistanceMeters|null, credits}]` (1–50, `[min, max)`, el primero desde 0, contiguos, **sólo el último** con `maxDistanceMeters: null`). El formulario debe enviar `maxDistanceMeters: null` explícito en el último rango. `version`, `status`, `effectiveFrom`, `effectiveUntil` y `createdByUserId` los decide el servidor: enviarlos → 400.
+
+Política: `{id, serviceType, actorType, version, status: ACTIVE|INACTIVE, calculationType, creditsPerKm|null, minimumCredits|null, flatCredits|null, ranges:[{id, position, minDistanceMeters, maxDistanceMeters|null, credits}], effectiveFrom, effectiveUntil|null, reason|null, createdByUserId, createdAt}`. Máximo una ACTIVE por combinación; una versión nunca se edita (no hay PATCH ni DELETE) y una INACTIVE no se reactiva. Para «volver» a condiciones anteriores se crea otra versión.
+
+Cálculo: `{policyId, policyVersion, serviceType, actorType, calculationType, distanceMeters, distanceKm: "6.240" (texto informativo), billableKm|null, calculatedCredits|null, minimumCredits|null, minimumApplied, rangePosition|null, credits}`. Créditos enteros, **sin moneda** (no son pesos: no mezclar con `deliveryFee`). Errores: 409 `CREDIT_POLICY_UNAVAILABLE` (sin ACTIVE: la web nunca debe mostrar 0), 422 `CREDIT_COST_OUT_OF_RANGE` (> 1 000 000), 400 para distancias no enteras, negativas, vacías o repetidas.
+
+Notas para la web: tras crear una versión, recargar la lista (la anterior pasa a INACTIVE con `effectiveUntil` = `effectiveFrom` de la nueva). Ante 409 de versión, mostrar que otro administrador acaba de cambiar la política y ofrecer recargar; no reintentar a ciegas.
+
+# Extensión V1.10-C (backend) — Dispatch Credit Snapshot
+
+Fuente: backend `mandaria-backend` V1.10-C (`src/credit-policies/dispatch-credit-snapshots.ts`, OpenAPI regenerado). Cambio sólo de contrato: la web aún no lo muestra. **V1.10-C no cobra: CLAIM y TAKE siguen sin consumir créditos** y ningún saldo cambia.
+
+Al abrirse un Dispatch (aceptación de la cotización) el backend congela, por actor, el costo en créditos calculado con la política ACTIVE de ese momento y la distancia de la cotización. Cambiar la política después **no cambia** el costo de Dispatches ya abiertos.
+
+| Vista                                                                                                               | Campo nuevo                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Proveedor: `GET /provider/dispatches`, `GET /provider/dispatches/:dispatchId` (y respuestas de claim/release)       | `creditCost: integer \| null` — costo para el proveedor                                                                                                                                                                                                                                                                                                                                                                         |
+| Repartidor independiente: `GET /driver/dispatches/available`, `GET /driver/dispatches/:dispatchId` (y take/release) | `creditCost: integer \| null` — costo para el repartidor                                                                                                                                                                                                                                                                                                                                                                        |
+| SUPER_ADMIN: `GET /admin/dispatches`, `GET /admin/dispatches/:dispatchId`                                           | `creditSnapshots: [{id, dispatchId, actorType, serviceType, creditPolicyId, policyVersion, calculationType, distanceMeters, billableKm\|null, creditsPerKm\|null, minimumCredits\|null, calculatedCredits\|null, flatCredits\|null, appliedRangeId\|null, appliedRangePosition\|null, appliedRangeMinDistanceMeters\|null, appliedRangeMaxDistanceMeters\|null, credits, createdAt}]` y `legacyWithoutCreditSnapshots: boolean` |
+
+Notas para la web:
+
+- `creditCost` son **créditos enteros, sin moneda**: no mezclar con `deliveryFee` ni formatear como pesos. Cada actor ve sólo su propio costo; nunca la política ni el costo del otro actor.
+- `creditCost: null` significa Dispatch **anterior a V1.10-C** (sin snapshot): mostrar «sin costo registrado», **nunca 0**. En admin esos Dispatches traen `creditSnapshots: []` y `legacyWithoutCreditSnapshots: true`.
+- Hoy mostrar el costo es informativo: tener saldo 0 no impide reclamar ni tomar (el cobro llega en V1.10-D).
+- La API B2B no expone créditos. La aceptación de una cotización puede responder **409 `CREDIT_POLICY_UNAVAILABLE`** si falta la política de algún actor (la cotización sigue OFFERED y puede reintentarse), o 422 `CREDIT_COST_OUT_OF_RANGE` si la política calcula 0 o más de 1 000 000 créditos.
+
+# Extensión V1.10-D (backend) — Atomic CLAIM / TAKE Credit Consumption
+
+Fuente: backend `mandaria-backend` V1.10-D (`src/credits/service-award.ts`, OpenAPI regenerado). **Cambio de comportamiento, no sólo de contrato:** desde V1.10-D, reclamar (proveedor) o tomar (repartidor independiente) un servicio monetizado **cobra créditos**. La adjudicación y el cobro son una sola operación: o se adjudica y se cobra, o no pasa nada.
+
+Cuánto se cobra: exactamente el `creditCost` que ya se muestra desde V1.10-C, congelado al abrirse el Dispatch. Nunca se recalcula con la política vigente, así que **lo que la web muestra es lo que se cobra**.
+
+Quién paga: el proveedor paga por los servicios de su flotilla (aunque luego asigne o reasigne Drivers) y el repartidor independiente paga los suyos. Un Driver de flotilla nunca paga.
+
+| Endpoint                                                   | Novedad                                                                                                                                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST /provider/dispatches/:dispatchId/claim                | Cobra `creditCost` a la cuenta del proveedor. Nuevos 409: `INSUFFICIENT_CREDITS`, `CREDIT_ACCOUNT_UNAVAILABLE`, `CREDIT_SNAPSHOT_UNAVAILABLE`, `CREDIT_MOVEMENT_CONFLICT` |
+| POST /driver/dispatches/:dispatchId/take                   | Cobra `creditCost` a la cuenta del repartidor, junto con el claim y la asignación. Mismos códigos nuevos                                                                  |
+| GET /provider/credits, GET /driver/credits (y sus /ledger) | Aparecen movimientos `SERVICE_AWARD` con `amount` negativo y `referenceType: "DISPATCH"` + `referenceId` (el Dispatch pagado)                                             |
+
+Notas para la web:
+
+- Antes de ofrecer el botón de reclamar/tomar, comparar el saldo con `creditCost` y avisar si no alcanza; de todos modos hay que manejar el **409 `INSUFFICIENT_CREDITS`**, porque el saldo puede cambiar entre la lectura y el clic. El mensaje debe llevar a recargar créditos, no a reintentar sin más.
+- **Nada se adjudica a medias:** ante un 409 el Dispatch sigue OPEN, no hay asignación y el saldo no cambió. Basta con recargar la lista.
+- **Reintentos seguros:** repetir el mismo claim del dueño responde 200 y **no** cobra dos veces (un `SERVICE_AWARD` por servicio y cuenta).
+- **Reasignar o cancelar la asignación interna no vuelve a cobrar.** Liberar un servicio ya pagado **no devuelve créditos** todavía (las devoluciones llegan en V1.10-E): conviene advertirlo en la interfaz antes de liberar.
+- `creditCost: null` (Dispatch anterior a V1.10-C) significa **sin cobro**: mostrar «sin costo registrado», nunca 0.
+- `CREDIT_SNAPSHOT_UNAVAILABLE` y `CREDIT_ACCOUNT_UNAVAILABLE` son problemas de configuración o de datos: mostrar que el servicio no puede adjudicarse y que contacten a Mandaria; no son errores del usuario ni se resuelven reintentando.
+- Los créditos siguen siendo enteros sin moneda: no mezclarlos ni sumarlos con `deliveryFee`, `goodsValue` ni `driverAdvanceAmount` (todos en MXN).
+
+# Extensión V1.10-E (backend) — Refunds & Reversals
+
+Fuente: backend `mandaria-backend` V1.10-E (`src/credits/service-refund.ts`, OpenAPI regenerado). **Cambio de comportamiento:** desde V1.10-E, deshacer una adjudicación que ya se cobró **devuelve los créditos completos**. No hay endpoints nuevos: las devoluciones ocurren como consecuencia de operaciones que la web ya hace.
+
+| Operación existente                                                               | Consecuencia económica                                           |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| POST /provider/dispatches/:dispatchId/release                                     | Devuelve al proveedor el `creditCost` que se le cobró            |
+| POST /driver/dispatches/:dispatchId/release                                       | Devuelve al repartidor independiente lo que se le cobró          |
+| POST /delivery-requests/:publicId/cancel (y la cancelación de SUPER_ADMIN)        | Devuelve a quien tuviera el servicio adjudicado                  |
+| POST /provider/dispatches/:dispatchId/assignment/reassign y .../assignment/cancel | **No devuelven nada**: el servicio sigue adjudicado al proveedor |
+
+En el ledger (`GET /provider/credits/ledger`, `GET /driver/credits/ledger`, y las vistas de SUPER_ADMIN) aparece un movimiento nuevo:
+
+```text
+type: "SERVICE_REFUND"
+amount: +7                     // siempre el opuesto exacto del SERVICE_AWARD
+referenceType: "DISPATCH"
+referenceId: "<dispatchId>"
+reversesEntryId: "<id del SERVICE_AWARD>"
+refundReason: "PROVIDER_RELEASE" | "INDEPENDENT_RELEASE" | "DELIVERY_CANCELLED"
+```
+
+Notas para la web:
+
+- **El cargo original no cambia nunca.** El historial muestra las dos líneas (−7 y +7); el impacto neto es 0. No interpretar la devolución como una corrección del cargo ni ocultar el cargo.
+- **Sólo devoluciones completas.** No hay parciales, porcentajes ni penalizaciones en esta versión.
+- **Una devolución por cargo.** Repetir un release responde 409 (`DISPATCH_NOT_CLAIMED_BY_PROVIDER`) y repetir una cancelación responde 200 sin mover nada: en ningún caso se devuelve dos veces.
+- **Avisar antes de liberar:** conviene decir que el servicio se pierde, ya no que se pierden los créditos — ahora vuelven completos.
+- Un servicio que nunca se cobró (Dispatch anterior a V1.10-C, o adjudicado antes de que el cobro existiera) no devuelve nada: eso es correcto, no un error.
+- Nuevo 409 `CREDIT_REFUND_INTEGRITY_ERROR`: la reversión debía devolver créditos y el cargo no aparece. No es un error del usuario ni se resuelve reintentando; mostrar que el servicio no puede liberarse y que contacten a Mandaria.
+- Los créditos siguen siendo enteros sin moneda: devolverlos no cambia `deliveryFee`, `goodsValue` ni `driverAdvanceAmount`.
+
+# Extensión V1.10-A/F (backend) — Credit Accounts, Ledger y administración
+
+Fuente: backend `mandaria-backend` V1.10 (`src/credits/`: `admin-credits.controller.ts`, `owner-credits.controller.ts`, `credits.dto.ts`, `credits.responses.ts`, `credits.select.ts`, `credit-policy.ts`; OpenAPI 1.10.0), inspeccionado el 2026-09-22. La web V1.10-F consume estas rutas.
+
+Cada proveedor tiene **una** cuenta de créditos, que comparten todos sus Drivers de flotilla; un repartidor independiente tiene la suya, creada al aprobarse su habilitación. Son cuentas distintas aunque se trate de la misma persona.
+
+| Método y ruta                                                                          | Uso                                                          |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| GET /admin/providers/:providerId/credits                                               | SUPER_ADMIN: cuenta del proveedor                            |
+| GET /admin/providers/:providerId/credits/ledger?page=&pageSize=                        | Historial (más reciente primero) con actor e Idempotency-Key |
+| POST /admin/providers/:providerId/credits/recharge                                     | `{credits, method, externalReference?, reason?}`             |
+| POST /admin/providers/:providerId/credits/adjustment                                   | `{amount, reason}`                                           |
+| GET/POST /admin/drivers/:driverId/independent/credits(/ledger, /recharge, /adjustment) | Lo mismo para el repartidor independiente                    |
+| GET /provider/credits?providerId= y /provider/credits/ledger                           | PROVIDER_ADMIN, sólo lectura                                 |
+| GET /driver/credits y /driver/credits/ledger                                           | DRIVER, sólo lectura; la cuenta sale del JWT                 |
+
+Cuenta: `{id, ownerType: PROVIDER|INDEPENDENT_DRIVER, providerId|null, independentDriverProfileId|null, balance, createdAt, updatedAt}`. `balance` son **créditos enteros sin moneda** y nunca es negativo.
+
+Movimiento: `{id, sequence, type, amount, balanceBefore, balanceAfter, rechargeMethod|null, externalReference|null, reason|null, referenceType|null, referenceId|null, createdAt}`; la vista de SUPER_ADMIN añade `creditAccountId`, `createdByUserId` e `idempotencyKey`. `type`: `RECHARGE` y `SERVICE_REFUND` suman, `SERVICE_AWARD` resta, `ADMIN_ADJUSTMENT` puede hacer ambas cosas; nunca 0. `method`: `TRANSFER`, `CASH`, `OTHER` (con `reason` obligatorio). Límites: 1–1 000 000 créditos por movimiento, saldo máximo 1 000 000 000, `reason` de 3–500 caracteres, `externalReference` hasta 100.
+
+**Idempotency-Key obligatoria** en recarga y ajuste (8–255 ASCII visibles, única por cuenta): misma key y mismo cuerpo → 200 con el movimiento original y `Idempotent-Replayed: true`; misma key y cuerpo distinto → 409 `CREDIT_IDEMPOTENCY_CONFLICT`. Otros conflictos: `INSUFFICIENT_CREDITS` (el saldo quedaría negativo), `CREDIT_BALANCE_LIMIT`, `CREDIT_MOVEMENT_CONFLICT`. Sin cuenta: 404 `CREDIT_ACCOUNT_NOT_FOUND` (un Driver de flotilla o un independiente nunca aprobado) — **no es saldo cero**.
+
+Notas para la web: no existe pasarela de pago ni endpoint de devolución manual; la recarga sólo registra un pago confirmado fuera de Mandaria. El ledger es inmutable: no hay PATCH ni DELETE. Los `SERVICE_AWARD`/`SERVICE_REFUND` los escribe el backend al adjudicar y al deshacer un servicio (V1.10-D/E).
+
+**Discrepancia verificada (2026-09-22).** Las notas de V1.10-E describen `reversesEntryId` y `refundReason` en el ledger. El backend los **persiste** (`src/credits/service-refund.ts`) pero **no los expone**: ni `ownerEntryView`/`adminEntryView` (`credits.select.ts`) ni `CreditLedgerEntryResponse` los incluyen, y OpenAPI 1.10.0 tampoco. La web no inventa la relación: enlaza el cargo y su devolución sólo por el `referenceId` (el Dispatch) que ambos comparten, y muestra las dos líneas. Si el backend publica esos campos, la auditoría podrá mostrar el vínculo exacto.
