@@ -116,6 +116,10 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Este servicio ya tiene un repartidor asignado. Actualiza para ver quién quedó asignado.',
     DISPATCH_HAS_ACTIVE_ASSIGNMENT:
       'Cancela la asignación antes de liberar el servicio.',
+    // V1.11: the service was already delivered and is closed; it cannot be claimed or taken.
+    DISPATCH_DELIVERED: 'Este servicio ya fue entregado.',
+    DELIVERY_CONFLICT:
+      'El servicio cambió mientras confirmabas la entrega. Actualiza para ver su estado.',
     NO_ACTIVE_ASSIGNMENT:
       'Este servicio ya no tiene una asignación vigente. Actualiza para ver su estado.',
     ASSIGNMENT_UNCHANGED:

@@ -12,6 +12,9 @@ export const dispatchStatuses = [
   'CLAIMED',
   'EXPIRED',
   'CANCELLED',
+  // V1.11-A: terminal and irreversible. A DELIVERED service can no longer be released,
+  // reassigned, cancelled or claimed again.
+  'DELIVERED',
 ] as const
 export const candidateStatuses = ['OFFERED', 'CLAIMED', 'RELEASED'] as const
 export const dispatchViews = ['AVAILABLE', 'CLAIMED', 'ALL'] as const
@@ -99,6 +102,8 @@ export interface ProviderDispatch {
    * snapshots existed, so no cost was recorded — which is not zero.
    */
   creditCost: number | null
+  /** V1.11: when my provider confirmed the delivery. null unless DELIVERED and I own the claim. */
+  deliveredAt: string | null
 }
 export interface AdminDispatchCandidate {
   provider: { id: string; name: string; code: string }
@@ -118,6 +123,9 @@ export interface AdminDispatch {
   expiredAt: string | null
   cancelledAt: string | null
   cancellationReason: string | null
+  /** V1.11: the operational close, for auditing. Who confirmed it, not the driver. */
+  deliveredAt: string | null
+  deliveredByUserId: string | null
   createdAt: string
   updatedAt: string
   deliveryRequest: {

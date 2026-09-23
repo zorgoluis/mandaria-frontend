@@ -38,6 +38,15 @@ export const driverPortal = {
       'POST',
       { vehicleId },
     ),
+  /**
+   * V1.11: no body at all. The driver comes from the JWT and the timestamp from the server.
+   * The dispatch becomes DELIVERED and my vehicle and I are free again; there is no undo.
+   */
+  deliver: (dispatchId: string) =>
+    api<DriverDispatch>(
+      `/driver/dispatches/${encodeURIComponent(dispatchId)}/deliver`,
+      'POST',
+    ),
   /** Atomic too: the assignment is cancelled with a reason and the dispatch returns to OPEN. */
   release: (dispatchId: string, reason: string, reasonDetail?: string) =>
     api<DriverDispatch>(

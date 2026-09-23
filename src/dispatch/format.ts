@@ -5,6 +5,7 @@ export const dispatchStatusLabels: Record<DispatchStatus, string> = {
   CLAIMED: 'Tomado',
   EXPIRED: 'Expirado',
   CANCELLED: 'Cancelado',
+  DELIVERED: 'Entregado',
 }
 export const candidateStatusLabels: Record<CandidateStatus, string> = {
   OFFERED: 'Ofrecido',
@@ -47,6 +48,8 @@ export function summaryReason(dispatch: {
     return 'El tiempo para tomar este servicio terminó.'
   if (dispatch.status === 'CANCELLED')
     return 'La solicitud fue cancelada; el servicio ya no está disponible.'
+  if (dispatch.status === 'DELIVERED')
+    return 'Este servicio ya fue entregado por otro proveedor.'
   return 'El detalle de este servicio no está disponible para tu proveedor.'
 }
 

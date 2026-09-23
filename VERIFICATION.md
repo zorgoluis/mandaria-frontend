@@ -1,4 +1,25 @@
-# Estado actual — Mandaria Web V1.10-F (Credits & Monetization Administration)
+# Estado actual — Mandaria Web V1.11-B (MVP Delivery Completion)
+
+Fecha: 2026-09-23. Rama `v1.11-mvp_delivery_completion`. Backend real Mandaria 1.11.0 (`v1.11-mvp-delivery-completion`) con `ROUTING_PROVIDER=local_fake`. Detalle en [docs/V1.11-B.md](docs/V1.11-B.md).
+
+| Comprobación                            | Resultado                                                             |
+| --------------------------------------- | --------------------------------------------------------------------- |
+| `tsc -b`, lint, `typecheck:test`, build | PASS                                                                  |
+| `format:check`                          | PASS                                                                  |
+| Vitest                                  | 484/484 en 23 archivos (460/22 antes de V1.11-B; 24 pruebas nuevas)   |
+| Proveedor en navegador real             | Detalle → confirmar → `DELIVERED`, asignación `COMPLETED`: PASS       |
+| Repartidor independiente en navegador   | Mi servicio → confirmar → queda libre y puede volver a tomar: PASS    |
+| Cancelar el diálogo                     | 0 mutaciones, el servicio sigue `CLAIMED`: PASS                       |
+| Doble clic                              | Exactamente 1 petición `POST .../deliver` sin body: PASS              |
+| Estado terminal                         | Sin liberar, asignar, reasignar, cancelar, entregar ni deshacer: PASS |
+| `DISPATCH_DELIVERED`                    | Reclamar y tomar un servicio entregado lo muestran traducido: PASS    |
+| Créditos                                | Saldo y ledger idénticos antes y después; sin `SERVICE_REFUND`: PASS  |
+| Aislamiento de roles                    | DRIVER, SUPER_ADMIN y PROVIDER_ADMIN cruzados: 401/403 reales: PASS   |
+| Responsive                              | 375, 768 y escritorio sin overflow; acción del portal de 48 px: PASS  |
+
+La confirmación de entrega no genera movimientos de créditos: el `SERVICE_AWARD` cobrado al reclamar o tomar el servicio permanece como movimiento histórico.
+
+# Histórico — Mandaria Web V1.10-F (Credits & Monetization Administration)
 
 Fecha: 2026-09-23. Rama `v1.10-credit-monetization`. Backend local real Mandaria 1.10.0 (rama `v1.10-credit-monetization`, OpenAPI 1.10.0) con `ROUTING_PROVIDER=local_fake`. No se modificó backend ni Coita Eats. No se hizo commit ni push. Detalle en [docs/V1.10-F.md](docs/V1.10-F.md).
 

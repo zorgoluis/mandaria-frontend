@@ -214,6 +214,7 @@ function dispatch(overrides: Partial<ProviderDispatch> = {}): ProviderDispatch {
     claimedByMe: false,
     claimedAt: null,
     cancelledAt: null,
+    deliveredAt: null,
     myCandidate: {
       status: 'OFFERED',
       offeredAt: stamp,

@@ -2494,3 +2494,14 @@ dialog .money-block {
     font-size: 24px;
   }
 }
+
+/* V1.11: a delivered service and a completed assignment are successful closes, not failures. */
+.badge.delivered,
+.badge.completed {
+  color: #1d6b4f;
+  background: #e7f4ee;
+}
+.driver-service-actions {
+  display: grid;
+  gap: 10px;
+}

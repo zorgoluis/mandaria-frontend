@@ -43,13 +43,21 @@ export function AssignmentPanel({
   const [reassigning, setReassigning] = useState(false)
   const [cancelling, setCancelling] = useState(false)
   const history = assignments.data ?? []
+  // V1.11: DELIVERED is terminal. The history stays on screen, but nothing can be changed and
+  // the assignment that executed the service is now COMPLETED, not ACTIVE.
+  const delivered = dispatch.status === 'DELIVERED'
+  const completed = history.find((item) => item.status === 'COMPLETED') ?? null
   return (
     <section className="panel" aria-labelledby="service-assignment">
       <div className="panel-toolbar">
         <div>
           <h2 id="service-assignment">Asignación</h2>
           <p>
-            {active ? 'Quién ejecuta este servicio' : 'Pendiente de asignación'}
+            {delivered
+              ? 'Quién entregó este servicio'
+              : active
+                ? 'Quién ejecuta este servicio'
+                : 'Pendiente de asignación'}
           </p>
         </div>
         <div className="row-actions">
@@ -66,7 +74,7 @@ export function AssignmentPanel({
             />
             Actualizar
           </button>
-          {active ? (
+          {delivered ? null : active ? (
             <>
               <button
                 className="button secondary destructive small"
@@ -99,8 +107,15 @@ export function AssignmentPanel({
         />
       ) : (
         <>
-          {active ? (
-            <ActiveAssignment assignment={active} />
+          {(active ?? (delivered ? completed : null)) ? (
+            <ActiveAssignment assignment={(active ?? completed)!} />
+          ) : delivered ? (
+            <div className="panel-body">
+              <p className="panel-note">
+                Este servicio se entregó. Su historial de asignaciones se
+                conserva tal como lo devuelve Mandaria.
+              </p>
+            </div>
           ) : (
             <div className="panel-body">
               <p className="warning" role="status">
@@ -118,9 +133,9 @@ export function AssignmentPanel({
         </>
       )}
       <p className="panel-note">
-        Sin actualización en tiempo real: otro administrador de tu proveedor
-        puede reasignar al mismo tiempo. Usa Actualizar para ver quién está
-        asignado ahora.
+        {delivered
+          ? 'El repartidor y el vehículo quedaron libres al confirmar la entrega; aquí permanece quién la realizó.'
+          : 'Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.'}
       </p>
       {assigning && (
         <AssignDialog

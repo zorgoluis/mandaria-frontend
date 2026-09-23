@@ -268,3 +268,15 @@ Movimiento: `{id, sequence, type, amount, balanceBefore, balanceAfter, rechargeM
 Notas para la web: no existe pasarela de pago ni endpoint de devolución manual; la recarga sólo registra un pago confirmado fuera de Mandaria. El ledger es inmutable: no hay PATCH ni DELETE. Los `SERVICE_AWARD`/`SERVICE_REFUND` los escribe el backend al adjudicar y al deshacer un servicio (V1.10-D/E).
 
 **Discrepancia verificada (2026-09-22).** Las notas de V1.10-E describen `reversesEntryId` y `refundReason` en el ledger. El backend los **persiste** (`src/credits/service-refund.ts`) pero **no los expone**: ni `ownerEntryView`/`adminEntryView` (`credits.select.ts`) ni `CreditLedgerEntryResponse` los incluyen, y OpenAPI 1.10.0 tampoco. La web no inventa la relación: enlaza el cargo y su devolución sólo por el `referenceId` (el Dispatch) que ambos comparten, y muestra las dos líneas. Si el backend publica esos campos, la auditoría podrá mostrar el vínculo exacto.
+
+# Extensión V1.11 — MVP Delivery Completion
+
+La confirmación manual de entrega se documenta en [V1.11-B.md](V1.11-B.md), contrastada con el backend 1.11.0 en ejecución.
+
+Rutas: `POST /provider/dispatches/:dispatchId/deliver` (PROVIDER_ADMIN dueño del claim) y `POST /driver/dispatches/:dispatchId/deliver` (el DRIVER que hizo el TAKE). **Ninguna acepta body**: cualquier campo se rechaza con 400, el actor sale del JWT y la fecha la pone el servidor. Ambas devuelven la vista de Dispatch correspondiente.
+
+Estados: `DispatchStatus` incorpora `DELIVERED` (terminal e irreversible) y `DeliveryAssignmentStatus` incorpora `COMPLETED` (cierre con éxito, sin motivo de fin). Las vistas de proveedor y repartidor añaden `deliveredAt`; la vista admin añade `deliveredAt` y `deliveredByUserId`.
+
+Errores: `DISPATCH_NOT_CLAIMED_BY_PROVIDER`, `DISPATCH_NOT_CLAIMED_BY_DRIVER`, `NO_ACTIVE_ASSIGNMENT` y `DELIVERY_CONFLICT` en la confirmación; `DISPATCH_DELIVERED` al reclamar o tomar un servicio ya entregado. Repetir la confirmación del mismo actor devuelve 200 sin cambios.
+
+Créditos: la entrega cuesta 0 y no genera `SERVICE_REFUND`; el cargo hecho al reclamar o tomar el servicio es lo que la entrega paga.
