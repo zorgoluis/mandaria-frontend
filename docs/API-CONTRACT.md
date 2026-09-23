@@ -185,3 +185,59 @@ Notas para la web:
 - `creditCost: null` significa Dispatch **anterior a V1.10-C** (sin snapshot): mostrar «sin costo registrado», **nunca 0**. En admin esos Dispatches traen `creditSnapshots: []` y `legacyWithoutCreditSnapshots: true`.
 - Hoy mostrar el costo es informativo: tener saldo 0 no impide reclamar ni tomar (el cobro llega en V1.10-D).
 - La API B2B no expone créditos. La aceptación de una cotización puede responder **409 `CREDIT_POLICY_UNAVAILABLE`** si falta la política de algún actor (la cotización sigue OFFERED y puede reintentarse), o 422 `CREDIT_COST_OUT_OF_RANGE` si la política calcula 0 o más de 1 000 000 créditos.
+
+# Extensión V1.10-D (backend) — Atomic CLAIM / TAKE Credit Consumption
+
+Fuente: backend `mandaria-backend` V1.10-D (`src/credits/service-award.ts`, OpenAPI regenerado). **Cambio de comportamiento, no sólo de contrato:** desde V1.10-D, reclamar (proveedor) o tomar (repartidor independiente) un servicio monetizado **cobra créditos**. La adjudicación y el cobro son una sola operación: o se adjudica y se cobra, o no pasa nada.
+
+Cuánto se cobra: exactamente el `creditCost` que ya se muestra desde V1.10-C, congelado al abrirse el Dispatch. Nunca se recalcula con la política vigente, así que **lo que la web muestra es lo que se cobra**.
+
+Quién paga: el proveedor paga por los servicios de su flotilla (aunque luego asigne o reasigne Drivers) y el repartidor independiente paga los suyos. Un Driver de flotilla nunca paga.
+
+| Endpoint | Novedad |
+| --- | --- |
+| POST /provider/dispatches/:dispatchId/claim | Cobra `creditCost` a la cuenta del proveedor. Nuevos 409: `INSUFFICIENT_CREDITS`, `CREDIT_ACCOUNT_UNAVAILABLE`, `CREDIT_SNAPSHOT_UNAVAILABLE`, `CREDIT_MOVEMENT_CONFLICT` |
+| POST /driver/dispatches/:dispatchId/take | Cobra `creditCost` a la cuenta del repartidor, junto con el claim y la asignación. Mismos códigos nuevos |
+| GET /provider/credits, GET /driver/credits (y sus /ledger) | Aparecen movimientos `SERVICE_AWARD` con `amount` negativo y `referenceType: "DISPATCH"` + `referenceId` (el Dispatch pagado) |
+
+Notas para la web:
+
+- Antes de ofrecer el botón de reclamar/tomar, comparar el saldo con `creditCost` y avisar si no alcanza; de todos modos hay que manejar el **409 `INSUFFICIENT_CREDITS`**, porque el saldo puede cambiar entre la lectura y el clic. El mensaje debe llevar a recargar créditos, no a reintentar sin más.
+- **Nada se adjudica a medias:** ante un 409 el Dispatch sigue OPEN, no hay asignación y el saldo no cambió. Basta con recargar la lista.
+- **Reintentos seguros:** repetir el mismo claim del dueño responde 200 y **no** cobra dos veces (un `SERVICE_AWARD` por servicio y cuenta).
+- **Reasignar o cancelar la asignación interna no vuelve a cobrar.** Liberar un servicio ya pagado **no devuelve créditos** todavía (las devoluciones llegan en V1.10-E): conviene advertirlo en la interfaz antes de liberar.
+- `creditCost: null` (Dispatch anterior a V1.10-C) significa **sin cobro**: mostrar «sin costo registrado», nunca 0.
+- `CREDIT_SNAPSHOT_UNAVAILABLE` y `CREDIT_ACCOUNT_UNAVAILABLE` son problemas de configuración o de datos: mostrar que el servicio no puede adjudicarse y que contacten a Mandaria; no son errores del usuario ni se resuelven reintentando.
+- Los créditos siguen siendo enteros sin moneda: no mezclarlos ni sumarlos con `deliveryFee`, `goodsValue` ni `driverAdvanceAmount` (todos en MXN).
+
+# Extensión V1.10-E (backend) — Refunds & Reversals
+
+Fuente: backend `mandaria-backend` V1.10-E (`src/credits/service-refund.ts`, OpenAPI regenerado). **Cambio de comportamiento:** desde V1.10-E, deshacer una adjudicación que ya se cobró **devuelve los créditos completos**. No hay endpoints nuevos: las devoluciones ocurren como consecuencia de operaciones que la web ya hace.
+
+| Operación existente | Consecuencia económica |
+| --- | --- |
+| POST /provider/dispatches/:dispatchId/release | Devuelve al proveedor el `creditCost` que se le cobró |
+| POST /driver/dispatches/:dispatchId/release | Devuelve al repartidor independiente lo que se le cobró |
+| POST /delivery-requests/:publicId/cancel (y la cancelación de SUPER_ADMIN) | Devuelve a quien tuviera el servicio adjudicado |
+| POST /provider/dispatches/:dispatchId/assignment/reassign y .../assignment/cancel | **No devuelven nada**: el servicio sigue adjudicado al proveedor |
+
+En el ledger (`GET /provider/credits/ledger`, `GET /driver/credits/ledger`, y las vistas de SUPER_ADMIN) aparece un movimiento nuevo:
+
+```text
+type: "SERVICE_REFUND"
+amount: +7                     // siempre el opuesto exacto del SERVICE_AWARD
+referenceType: "DISPATCH"
+referenceId: "<dispatchId>"
+reversesEntryId: "<id del SERVICE_AWARD>"
+refundReason: "PROVIDER_RELEASE" | "INDEPENDENT_RELEASE" | "DELIVERY_CANCELLED"
+```
+
+Notas para la web:
+
+- **El cargo original no cambia nunca.** El historial muestra las dos líneas (−7 y +7); el impacto neto es 0. No interpretar la devolución como una corrección del cargo ni ocultar el cargo.
+- **Sólo devoluciones completas.** No hay parciales, porcentajes ni penalizaciones en esta versión.
+- **Una devolución por cargo.** Repetir un release responde 409 (`DISPATCH_NOT_CLAIMED_BY_PROVIDER`) y repetir una cancelación responde 200 sin mover nada: en ningún caso se devuelve dos veces.
+- **Avisar antes de liberar:** conviene decir que el servicio se pierde, ya no que se pierden los créditos — ahora vuelven completos.
+- Un servicio que nunca se cobró (Dispatch anterior a V1.10-C, o adjudicado antes de que el cobro existiera) no devuelve nada: eso es correcto, no un error.
+- Nuevo 409 `CREDIT_REFUND_INTEGRITY_ERROR`: la reversión debía devolver créditos y el cargo no aparece. No es un error del usuario ni se resuelve reintentando; mostrar que el servicio no puede liberarse y que contacten a Mandaria.
+- Los créditos siguen siendo enteros sin moneda: devolverlos no cambia `deliveryFee`, `goodsValue` ni `driverAdvanceAmount`.
