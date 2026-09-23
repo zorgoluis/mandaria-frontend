@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Plus, Search, ArrowUpRight } from 'lucide-react'
 import { providers } from './service'
+import { AdminCreditsPanel } from '../credits/components'
 import { users } from '../users/service'
 import { queryClient } from '../services/query'
 import {
@@ -526,6 +527,13 @@ export function ProviderDetail() {
           />
         </div>
       </div>
+      {/* V1.10-F: the provider's credits live in its own file, not in a parallel Providers list. */}
+      <AdminCreditsPanel
+        scope="provider"
+        ownerId={id}
+        ownerName={item.name}
+        missingDescription="Este proveedor todavía no tiene cuenta de créditos en Mandaria. No es un saldo en cero."
+      />
       <Memberships id={id} name={item.name} />
       <ProviderCoveragePanel providerId={id} />
       <InvitationsPanel

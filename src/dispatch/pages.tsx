@@ -16,6 +16,7 @@ import { km, serviceTypeLabels } from '../pricing/format'
 import { duration } from '../quotes/format'
 import { coordinates } from '../delivery-requests/format'
 import { date } from '../utils/format'
+import { creditCostLabel } from '../credits/format'
 import { providerDispatches } from './service'
 import { dispatchKeys } from './queries'
 import {
@@ -326,6 +327,7 @@ function ServiceContent({
               ),
             ],
             ['Zona', dispatch.serviceZone.name],
+            ['Costo en créditos', creditCostLabel(dispatch.creditCost)],
             ...(dispatch.claimedByMe && dispatch.claimedAt
               ? ([['Tomado', date(dispatch.claimedAt)]] as [string, string][])
               : []),

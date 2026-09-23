@@ -2397,3 +2397,100 @@ dialog .money-block {
     padding: 10px 16px;
   }
 }
+
+/* V1.10-F: Mandaria credits. Never styled as money: no currency colours, no totals. */
+.credit-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f4faf8;
+}
+.credit-balance-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.credit-amount {
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--brand-dark);
+}
+.credit-balance small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.credit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 10px;
+  border: 1px solid #cfe5df;
+  border-radius: 999px;
+  background: #f0f7f4;
+  color: #2f6a5d;
+  font-size: 12px;
+}
+.ledger-kind {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ledger-kind small {
+  color: var(--muted);
+  font-size: 12px;
+}
+/* The sign and the word carry the meaning; colour only reinforces them. */
+.ledger-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ledger-amount.positive {
+  color: var(--brand-dark);
+}
+.ledger-amount.negative {
+  color: var(--danger);
+}
+.credit-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f4faf8;
+}
+.ranges-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+.range-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+@media (max-width: 720px) {
+  .range-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  .credit-amount {
+    font-size: 24px;
+  }
+}

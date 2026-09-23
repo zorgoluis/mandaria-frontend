@@ -228,6 +228,7 @@ describe('auth and permissions UX', () => {
       'Dashboard',
       'Mi proveedor',
       'Servicios',
+      'Créditos',
       'Repartidores',
       'Vehículos',
       'Mi perfil',
@@ -271,6 +272,7 @@ describe('auth and permissions UX', () => {
       'Zonas de servicio',
       'Despachos',
       'Independientes',
+      'Políticas de créditos',
       'Mi perfil',
       'Configuración',
     ])

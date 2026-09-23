@@ -199,6 +199,7 @@ function owned(over: Partial<ProviderDispatch> = {}): ProviderDispatch {
     assignment: null,
     assignmentDeadline: new Date(Date.now() + 5 * 60_000).toISOString(),
     assignmentOverdue: false,
+    creditCost: 7,
     ...over,
   }
 }
@@ -713,6 +714,8 @@ describe('security', () => {
       noProviderAvailable: false,
       candidates: [],
       goods: null,
+      creditSnapshots: [],
+      legacyWithoutCreditSnapshots: true,
     })
     vi.mocked(adminAssignments.history).mockResolvedValue([
       { ...luisOnMoto02, provider: { id: A, name: 'Rápidos A', code: 'A' } },

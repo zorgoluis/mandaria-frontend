@@ -16,6 +16,8 @@ import { money, serviceTypeLabels } from '../pricing/format'
 import { paymentModes } from '../delivery-requests/format'
 import { PUBLIC_ID } from '../delivery-requests/types'
 import { date } from '../utils/format'
+import { formatCredits, formatDistance } from '../credits/format'
+import { actorLabel, calculationLabel } from '../credit-policies/format'
 import { adminAssignments } from '../delivery-assignments/service'
 import { assignmentKeys } from '../delivery-assignments/queries'
 import { AssignmentHistory } from '../delivery-assignments/components'
@@ -335,6 +337,66 @@ export function AdminDispatchDetail() {
               </small>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="panel" aria-labelledby="dispatch-credits">
+        <div className="panel-toolbar">
+          <div>
+            <h2 id="dispatch-credits">Costo en créditos</h2>
+            <p>Congelado al abrirse el despacho, por actor</p>
+          </div>
+        </div>
+        <div className="panel-body">
+          {item.legacyWithoutCreditSnapshots || !item.creditSnapshots.length ? (
+            <Empty
+              title="Sin costo registrado"
+              description="Este despacho se abrió antes de que Mandaria congelara costos en créditos. No es un costo de cero: nunca se calculó."
+            />
+          ) : (
+            <Table
+              stacked
+              rows={item.creditSnapshots}
+              columns={[
+                {
+                  label: 'Actor',
+                  render: (row) => actorLabel(row.actorType),
+                },
+                {
+                  label: 'Costo',
+                  render: (row) => formatCredits(row.credits),
+                },
+                {
+                  label: 'Política',
+                  render: (row) => (
+                    <Link
+                      to={`/credit-policies/${encodeURIComponent(row.creditPolicyId)}`}
+                    >
+                      v{row.policyVersion} ·{' '}
+                      {calculationLabel(row.calculationType)}
+                    </Link>
+                  ),
+                },
+                {
+                  label: 'Distancia',
+                  render: (row) => formatDistance(row.distanceMeters),
+                },
+                {
+                  label: 'Detalle',
+                  render: (row) =>
+                    row.appliedRangePosition !== null
+                      ? `Rango ${row.appliedRangePosition}`
+                      : row.billableKm !== null
+                        ? `${row.billableKm} km cobrados`
+                        : 'Tarifa fija',
+                },
+              ]}
+            />
+          )}
+          <p className="panel-note">
+            Los créditos son una unidad interna de Mandaria: no son pesos y no
+            se suman al cobro del envío. El cobro real de un servicio aparece
+            como movimiento en la cuenta de créditos de quien se lo adjudicó.
+          </p>
         </div>
       </section>
       <section className="panel" aria-labelledby="dispatch-candidates">

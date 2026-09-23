@@ -10,6 +10,8 @@ import { queryClient } from '../services/query'
 import { normalizeError } from '../services/errors'
 import { driverPortal } from '../driver-portal/service'
 import { independentDrivers } from '../independent-drivers/service'
+import { independentCreditsAdmin, myDriverCredits } from '../credits/service'
+import type { CreditAccount } from '../credits/types'
 import { providers } from '../providers/service'
 import { drivers as providerDrivers } from '../drivers/service'
 import type {
@@ -52,6 +54,35 @@ vi.mock('../providers/service', () => ({
 }))
 vi.mock('../drivers/service', () => ({
   drivers: { list: vi.fn(), get: vi.fn(), create: vi.fn(), update: vi.fn() },
+}))
+// V1.10-F: the independent driver file now shows its credit account; credits have their own suite.
+const creditAccount: CreditAccount = {
+  id: 'account-1',
+  ownerType: 'INDEPENDENT_DRIVER',
+  providerId: null,
+  independentDriverProfileId: 'profile-1',
+  balance: 40,
+  createdAt: '2026-09-20T12:00:00Z',
+  updatedAt: '2026-09-20T12:00:00Z',
+}
+const emptyLedger = {
+  items: [],
+  page: 1,
+  pageSize: 20,
+  total: 0,
+  totalPages: 0,
+}
+vi.mock('../credits/service', () => ({
+  independentCreditsAdmin: {
+    account: vi.fn(),
+    ledger: vi.fn(),
+    recharge: vi.fn(),
+    adjustment: vi.fn(),
+  },
+  providerCreditsAdmin: { account: vi.fn(), ledger: vi.fn() },
+  myProviderCredits: { account: vi.fn(), ledger: vi.fn() },
+  myDriverCredits: { account: vi.fn(), ledger: vi.fn() },
+  movementKey: () => 'test-key',
 }))
 
 const stamp = '2026-09-20T12:00:00Z'
@@ -144,6 +175,7 @@ function dispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
       driverAdvancesGoods: true,
       driverAdvanceAmount: { amount: '800.00', currency: 'MXN' },
     },
+    creditCost: 7,
     ...over,
   }
 }
@@ -246,6 +278,10 @@ const dialog = () => within(screen.getByRole('dialog'))
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(independentCreditsAdmin.account).mockResolvedValue(creditAccount)
+  vi.mocked(independentCreditsAdmin.ledger).mockResolvedValue(emptyLedger)
+  vi.mocked(myDriverCredits.account).mockResolvedValue(creditAccount)
+  vi.mocked(myDriverCredits.ledger).mockResolvedValue(emptyLedger)
   vi.mocked(driverPortal.me).mockResolvedValue(me())
   vi.mocked(driverPortal.vehicles).mockResolvedValue([
     vehicle(MOTO, 'MOTO-IND-1'),

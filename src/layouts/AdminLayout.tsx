@@ -20,6 +20,7 @@ import {
   MapPinned,
   ReceiptText,
   BadgeCheck,
+  Coins,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -73,6 +74,7 @@ export function AdminLayout() {
         ? [
             { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
             { to: '/services', label: 'Servicios', icon: Send },
+            { to: '/provider/credits', label: 'Créditos', icon: Coins },
           ]
         : []),
     ...(admin || user?.role === 'PROVIDER_ADMIN'
@@ -114,6 +116,12 @@ export function AdminLayout() {
             label: 'Independientes',
             icon: BadgeCheck,
           },
+          // V1.10-F: policies are global; each account's credits live inside its own file.
+          {
+            to: '/credit-policies',
+            label: 'Políticas de créditos',
+            icon: Coins,
+          },
         ]
       : []),
     // V1.9: the temporary portal a DRIVER uses to take services on their own.
@@ -122,6 +130,7 @@ export function AdminLayout() {
           { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
           { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
           { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
+          { to: '/driver/credits', label: 'Créditos', icon: Coins },
         ]
       : []),
     { to: '/profile', label: 'Mi perfil', icon: UserRound },
@@ -168,7 +177,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.9</span>
+            MANDARIA WEB <span>V1.10</span>
           </div>
         </div>
       </aside>

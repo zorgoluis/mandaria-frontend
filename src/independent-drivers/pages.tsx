@@ -24,6 +24,7 @@ import { providers } from '../providers/service'
 import { drivers as providerDrivers } from '../drivers/service'
 import { vehicleTypes } from '../logistics/types'
 import { independentDrivers } from './service'
+import { AdminCreditsPanel } from '../credits/components'
 import { independentKeys, refreshIndependent } from './queries'
 import {
   driverStatusLabels,
@@ -419,6 +420,13 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
           prefiere no cancelar en silencio una entrega en marcha.
         </p>
       </section>
+      {/* V1.10-F: the independent capability has its own credit account, never the provider's. */}
+      <AdminCreditsPanel
+        scope="independent"
+        ownerId={profile.driverId}
+        ownerName={profile.driver.name}
+        missingDescription="Este repartidor todavía no tiene cuenta propia de créditos: la recibe al aprobarse su habilitación independiente. No es un saldo en cero."
+      />
       <IndependentVehicles driverId={profile.driverId} />
       {closing && (
         <CloseDialog
