@@ -155,6 +155,7 @@ function dispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
     takenByMe: false,
     claimedAt: null,
     cancelledAt: null,
+    deliveredAt: null,
     assignment: null,
     service: {
       route: { distanceMeters: 4300, durationSeconds: 720 },

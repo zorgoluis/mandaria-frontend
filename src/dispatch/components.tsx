@@ -13,6 +13,8 @@ import {
   weight,
 } from '../delivery-requests/format'
 import { vehicleLabel } from '../delivery-assignments/format'
+import { refreshAfterAssignment } from '../delivery-assignments/queries'
+import type { DeliveryAssignment } from '../delivery-assignments/types'
 import { creditCostLabel, formatCredits } from '../credits/format'
 import { myProviderCredits } from '../credits/service'
 import { creditKeys } from '../credits/queries'
@@ -259,6 +261,7 @@ const FINAL_CODES = new Set([
   'DISPATCH_EXPIRED',
   'DISPATCH_CANCELLED',
   'DISPATCH_RECLAIM_NOT_ALLOWED',
+  'DISPATCH_DELIVERED',
   'DISPATCH_NOT_CLAIMED_BY_PROVIDER',
   'PROVIDER_NOT_ELIGIBLE',
 ])
@@ -390,6 +393,77 @@ export function ClaimDialog({
                 setFinal(errorMessage(error))
                 await refreshProviderDispatches(providerId)
               }
+            }}
+          >
+            {null}
+          </ActionForm>
+        </>
+      )}
+    </Modal>
+  )
+}
+
+/**
+ * V1.11: the driver delivered physically and told the provider outside Mandaria. The provider
+ * records that close here. It sends no body, costs no credits and cannot be undone.
+ */
+export function DeliverDialog({
+  providerId,
+  dispatch,
+  assignment,
+  onClose,
+}: {
+  providerId: string
+  dispatch: ProviderDispatch
+  assignment: DeliveryAssignment
+  onClose: () => void
+}) {
+  const notify = useFeedback()
+  const [final, setFinal] = useState<string | null>(null)
+  const service = dispatch.service
+  return (
+    <Modal title="¿Confirmar entrega?" onClose={onClose}>
+      {final ? (
+        <FinalState message={final} onClose={onClose} />
+      ) : (
+        <>
+          <p className="modal-description">
+            Confirma que el repartidor ya realizó la entrega al destino.
+          </p>
+          <p className="warning notice" role="note">
+            <AlertTriangle size={16} aria-hidden="true" />
+            Esta acción no se puede deshacer.
+          </p>
+          <InfoGrid
+            items={[
+              ...(service
+                ? ([
+                    ['Origen', service.pickup.address],
+                    ['Destino', service.dropoff.address],
+                  ] as [string, ReactNode][])
+                : []),
+              ['Repartidor', assignment.driver.name],
+              ['Vehículo', vehicleLabel(assignment.vehicle)],
+            ]}
+          />
+          <ActionForm
+            initialDirty
+            submitLabel="Confirmar entrega"
+            cancelLabel="Cancelar"
+            onCancel={onClose}
+            onSubmit={async () => {
+              try {
+                await providerDispatches.deliver(providerId, dispatch.id)
+              } catch (error) {
+                if (!isFinal(error)) throw error
+                // The backend already closed or moved the service: show what it says and refresh.
+                setFinal(errorMessage(error))
+                await refreshAfterAssignment(providerId, dispatch.id)
+                return
+              }
+              await refreshAfterAssignment(providerId, dispatch.id)
+              notify('Servicio marcado como entregado.')
+              onClose()
             }}
           >
             {null}

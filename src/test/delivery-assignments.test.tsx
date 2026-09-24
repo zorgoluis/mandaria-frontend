@@ -188,6 +188,7 @@ function owned(over: Partial<ProviderDispatch> = {}): ProviderDispatch {
     claimedByMe: true,
     claimedAt: stamp,
     cancelledAt: null,
+    deliveredAt: null,
     myCandidate: {
       status: 'CLAIMED',
       offeredAt: stamp,
@@ -697,6 +698,8 @@ describe('security', () => {
       expiredAt: null,
       cancelledAt: null,
       cancellationReason: null,
+      deliveredAt: null,
+      deliveredByUserId: null,
       createdAt: stamp,
       updatedAt: stamp,
       deliveryRequest: {

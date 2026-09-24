@@ -46,6 +46,15 @@ export const providerDispatches = {
       withQuery(item(id, '/claim'), { providerId }),
       'POST',
     ),
+  /**
+   * V1.11: no body at all. The backend rejects any field: who confirms comes from the JWT and
+   * the timestamp from the server. DELIVERED is terminal, so there is no undo call.
+   */
+  deliver: (providerId: string, id: string) =>
+    api<ProviderDispatch>(
+      withQuery(item(id, '/deliver'), { providerId }),
+      'POST',
+    ),
   release: (providerId: string, id: string, reason: string) =>
     api<ProviderDispatch>(
       withQuery(item(id, '/release'), { providerId }),

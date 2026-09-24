@@ -4,7 +4,13 @@ import type { VehicleType } from '../logistics/types'
 
 // Mandaria Backend OpenAPI 1.8.0: delivery-assignments.dto.ts,
 // delivery-assignments.responses.ts and assignment-policy.ts.
-export const assignmentStatuses = ['ACTIVE', 'REASSIGNED', 'CANCELLED'] as const
+// COMPLETED (V1.11-A) is a successful close, not a cancellation: the delivery was confirmed.
+export const assignmentStatuses = [
+  'ACTIVE',
+  'REASSIGNED',
+  'CANCELLED',
+  'COMPLETED',
+] as const
 export type AssignmentStatus = (typeof assignmentStatuses)[number]
 /** DELIVERY_CANCELLED is reserved for the official service cancellation, never sent by us. */
 export const providerEndReasons = [

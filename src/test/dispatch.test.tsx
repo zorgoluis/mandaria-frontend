@@ -91,6 +91,7 @@ function dispatch(overrides: Partial<ProviderDispatch> = {}): ProviderDispatch {
     claimedByMe: false,
     claimedAt: null,
     cancelledAt: null,
+    deliveredAt: null,
     myCandidate: {
       status: 'OFFERED',
       offeredAt: stamp,
@@ -719,6 +720,8 @@ describe('SUPER_ADMIN audit', () => {
     expiredAt: null,
     cancelledAt: stamp,
     cancellationReason: 'DELIVERY_REQUEST_CANCELLED',
+    deliveredAt: null,
+    deliveredByUserId: null,
     createdAt: stamp,
     updatedAt: stamp,
     deliveryRequest: {

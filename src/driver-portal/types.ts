@@ -92,7 +92,7 @@ export interface DriverAssignment {
 }
 export interface DriverDispatch {
   id: string
-  status: 'OPEN' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED'
+  status: 'OPEN' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED' | 'DELIVERED'
   /** OFFER: I can take it. OWNER: I took it, so contacts and instructions appear. */
   access: 'OWNER' | 'OFFER'
   serviceType: ServiceType
@@ -102,6 +102,8 @@ export interface DriverDispatch {
   takenByMe: boolean
   claimedAt: string | null
   cancelledAt: string | null
+  /** V1.11: when I confirmed the delivery. null unless DELIVERED and the service is mine. */
+  deliveredAt: string | null
   assignment: DriverAssignment | null
   service: DriverService
   paymentContext: DriverPaymentContext

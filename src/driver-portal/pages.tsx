@@ -659,6 +659,7 @@ function MyService({ me }: { me: DriverSelf }) {
     staleTime: 0,
   })
   const [releasing, setReleasing] = useState(false)
+  const [delivering, setDelivering] = useState(false)
   return (
     <>
       <PageTitle
@@ -736,7 +737,13 @@ function MyService({ me }: { me: DriverSelf }) {
             <div className="panel-body">
               <PaymentBlock payment={query.data.paymentContext} />
             </div>
-            <div className="panel-body">
+            <div className="panel-body driver-service-actions">
+              <button
+                className="button full"
+                onClick={() => setDelivering(true)}
+              >
+                MARCAR COMO ENTREGADO
+              </button>
               <button
                 className="button secondary destructive full"
                 onClick={() => setReleasing(true)}
@@ -755,9 +762,70 @@ function MyService({ me }: { me: DriverSelf }) {
               onClose={() => setReleasing(false)}
             />
           )}
+          {delivering && (
+            <DeliverDialog
+              dispatch={query.data}
+              onClose={() => setDelivering(false)}
+            />
+          )}
         </>
       )}
     </>
+  )
+}
+
+/**
+ * V1.11: the independent driver confirms the delivery from the portal. It sends no body, the
+ * backend derives the driver from the token, and the close frees the driver and the vehicle.
+ * It costs no credits: the charge made when taking the service is what the delivery pays.
+ */
+function DeliverDialog({
+  dispatch,
+  onClose,
+}: {
+  dispatch: DriverDispatch
+  onClose: () => void
+}) {
+  const navigate = useNavigate()
+  const notify = useFeedback()
+  return (
+    <Modal title="¿Confirmar entrega?" onClose={onClose}>
+      <p className="modal-description">
+        Confirma que realizaste la entrega al destino.
+      </p>
+      <p className="warning notice" role="note">
+        <AlertTriangle size={16} aria-hidden="true" />
+        Esta acción no se puede deshacer.
+      </p>
+      <InfoGrid
+        items={[
+          ['Origen', dispatch.service.pickup.address],
+          ['Destino', dispatch.service.dropoff.address],
+          [
+            'Vehículo',
+            dispatch.assignment
+              ? vehicleLabel(dispatch.assignment.vehicle)
+              : '—',
+          ],
+        ]}
+      />
+      <ActionForm
+        initialDirty
+        submitLabel="Confirmar entrega"
+        cancelLabel="Cancelar"
+        onCancel={onClose}
+        onSubmit={async () => {
+          await driverPortal.deliver(dispatch.id)
+          // The backend frees me and my vehicle: the portal reads that back before closing.
+          await refreshDriverPortal(dispatch.id)
+          notify('Servicio entregado.')
+          onClose()
+          navigate('/driver/services')
+        }}
+      >
+        {null}
+      </ActionForm>
+    </Modal>
   )
 }
 
