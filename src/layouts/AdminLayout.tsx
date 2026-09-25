@@ -149,9 +149,13 @@ export function AdminLayout() {
       )}
       <aside ref={sidebar} className={`sidebar ${open ? 'open' : ''}`}>
         <Link to="/dashboard" className="brand">
-          <span className="brand-mark">
-            m<span>↗</span>
-          </span>
+          <img
+            className="brand-mark"
+            src="/mandaria.svg"
+            alt=""
+            width={35}
+            height={35}
+          />
           mandaria<span className="brand-period">.</span>
         </Link>
         <button

@@ -12,9 +12,13 @@ export function Login() {
     <div className="login-page">
       <section className="login-story">
         <div className="brand">
-          <span className="brand-mark">
-            m<span>↗</span>
-          </span>
+          <img
+            className="brand-mark"
+            src="/mandaria.svg"
+            alt=""
+            width={35}
+            height={35}
+          />
           mandaria<span className="brand-period">.</span>
         </div>
         <div className="story-content">
