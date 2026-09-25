@@ -48,9 +48,13 @@ function Shell({ children }: { children: ReactNode }) {
     <div className="activation-page">
       <div className="activation-card">
         <div className="brand">
-          <span className="brand-mark">
-            m<span>↗</span>
-          </span>
+          <img
+            className="brand-mark"
+            src="/mandaria.svg"
+            alt=""
+            width={35}
+            height={35}
+          />
           mandaria<span className="brand-period">.</span>
         </div>
         {children}
