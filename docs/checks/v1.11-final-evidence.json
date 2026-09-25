@@ -1,0 +1,550 @@
+{
+  "check": "CHECK FINAL MANDARIA V1.11 — MVP Delivery Completion",
+  "executedAt": "2026-09-23T23:43:33.483Z",
+  "environment": {
+    "node": "v24.15.0",
+    "postgres": "PostgreSQL 18.6",
+    "prisma": "6.19.3",
+    "nestjs": "11.2.4",
+    "backendVersion": "1.11.0",
+    "frontendVersion": "1.10.0 (package) on branch v1.11-mvp_delivery_completion",
+    "database": "mandaria_db for the scenarios; mandaria_test for the backend E2E regression",
+    "routingProvider": "local_fake injected to the CHECK process only (port 3011)",
+    "mailProvider": "local_outbox injected to the CHECK process only",
+    "note": "The user already had a backend running on port 3000 with their own .env (ROUTING_PROVIDER=google). It was left untouched; the CHECK started its own instance on 3011 and pointed Mandaria Web at it."
+  },
+  "git": {
+    "backend": {
+      "branch": "v1.11-mvp-delivery-completion",
+      "headBefore": "fa68b3b381029278ec4b5d6a524cb624a2c02c88",
+      "statusBefore": [
+        "M .env (user change)",
+        "M docs/API_ACCESS.md",
+        "M docs/openapi.json"
+      ]
+    },
+    "frontend": {
+      "branch": "v1.11-mvp_delivery_completion",
+      "headBefore": "e5301651bd2075bf216e4ccfb0ea6cfc2149b6b4",
+      "statusBefore": "clean"
+    }
+  },
+  "fixturePrefix": "CHECK-V111",
+  "apiScenarios": [
+    {
+      "id": "P11",
+      "title": "Baseline: providers, coverage, fleet driver/vehicle, independent driver and accounts",
+      "status": "PASS",
+      "detail": "A=LOCAL_RAPIDOS_COITA driver=José vehicle=BICI-01 independent=Luis"
+    },
+    {
+      "id": "P12",
+      "title": "Credit policies and balances prepared with the normal administrative APIs",
+      "status": "PASS",
+      "detail": "provider v10, independent v2; balances 337→400 and 190→200"
+    },
+    {
+      "id": "P14-16",
+      "title": "Real flow: request → quote → accept → OPEN → CLAIM → ASSIGN",
+      "status": "PASS",
+      "detail": "MDR-000268: CLAIMED by A, 1 award, snapshot PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2, 1 ACTIVE assignment"
+    },
+    {
+      "id": "P28-29",
+      "title": "Independent flow: real TAKE with its own award and ACTIVE assignment",
+      "status": "PASS",
+      "detail": "MDR-000269: taken by Luis, 1 award, 1 ACTIVE assignment"
+    },
+    {
+      "id": "P26",
+      "title": "Another provider cannot deliver a service it does not hold",
+      "status": "PASS",
+      "detail": "B→409 DISPATCH_NOT_CLAIMED_BY_PROVIDER · B with A's providerId→403 · dispatch still CLAIMED, economy untouched"
+    },
+    {
+      "id": "P27",
+      "title": "A claim without driver and vehicle cannot be delivered",
+      "status": "PASS",
+      "detail": "409 NO_ACTIVE_ASSIGNMENT, dispatch still CLAIMED, 0 economic change"
+    },
+    {
+      "id": "P37-38",
+      "title": "Only the owning actor may confirm: SUPER_ADMIN, B2B and other roles are refused",
+      "status": "PASS",
+      "detail": "admin 403,403 · b2b 401,401 · driver on provider route 403"
+    },
+    {
+      "id": "P52",
+      "title": "The audit fields are the backend decision: a forged body is refused",
+      "status": "PASS",
+      "detail": "400 on a body carrying deliveredAt/deliveredByUserId; dispatch untouched"
+    },
+    {
+      "id": "P36",
+      "title": "Another independent driver cannot close a service that is not theirs",
+      "status": "PASS",
+      "detail": "NOT APPLICABLE: only one APPROVED independent driver in this database"
+    },
+    {
+      "id": "P45",
+      "title": "10 concurrent confirmations produce exactly one delivery",
+      "status": "PASS",
+      "detail": "responses 200 · 1 deliveredAt · 1 COMPLETED assignment · ledger unchanged (197)"
+    },
+    {
+      "id": "P39-44",
+      "title": "DELIVERED is terminal: release, cancel, assign, reassign, claim and take are refused",
+      "status": "PASS",
+      "detail": "release:409/DISPATCH_NOT_CLAIMED_BY_PROVIDER · assign:409/DISPATCH_NOT_CLAIMED_BY_PROVIDER · reassign:409/DISPATCH_NOT_CLAIMED_BY_PROVIDER · claimByB:409/DISPATCH_DELIVERED · takeByDriver:409/DISPATCH_DELIVERED"
+    },
+    {
+      "id": "P40",
+      "title": "Cancelling the request afterwards never undoes a delivered service",
+      "status": "PASS",
+      "detail": "cancel answered 200; dispatch still DELIVERED, 0 refunds, history intact"
+    },
+    {
+      "id": "P25",
+      "title": "Repeating the confirmation is idempotent and changes nothing",
+      "status": "PASS",
+      "detail": "200 · deliveredAt and deliveredBy unchanged · ledger 197"
+    },
+    {
+      "id": "P22-23",
+      "title": "The delivered driver and vehicle are free again, and the history survives",
+      "status": "PASS",
+      "detail": "José and BICI-01 reassigned to MDR-000274; history keeps COMPLETED row with endedAt and endedByUserId, endReason null"
+    },
+    {
+      "id": "P47",
+      "title": "DELIVER vs RELEASE serialises into one coherent outcome",
+      "status": "PASS",
+      "detail": "deliver 200, release 409 → DELIVERED, refunds 0 (baseline 0)"
+    },
+    {
+      "id": "P48",
+      "title": "DELIVER vs CANCEL ends in one state, never delivered and refunded",
+      "status": "PASS",
+      "detail": "deliver 200, cancel 200 → DELIVERED, refunds 0"
+    },
+    {
+      "id": "P49",
+      "title": "DELIVER vs REASSIGN serialises and never leaves an ACTIVE assignment on a delivered service",
+      "status": "PASS",
+      "detail": "deliver 200, reassign 409 → DELIVERED, ACTIVE 0, COMPLETED 1"
+    },
+    {
+      "id": "P46",
+      "title": "8 concurrent independent confirmations produce exactly one delivery",
+      "status": "PASS",
+      "detail": "responses 200 · 1 COMPLETED · ledger unchanged (51)"
+    },
+    {
+      "id": "P35",
+      "title": "Independent completion costs nothing: award, refunds and snapshot are untouched",
+      "status": "PASS",
+      "detail": "balance 195, awards 1, refunds 0, snapshot PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+    },
+    {
+      "id": "P34",
+      "title": "After delivering, the independent driver and vehicle can take another service",
+      "status": "PASS",
+      "detail": "MDR-000278 taken again with the same driver and vehicle; a new award is charged as usual"
+    },
+    {
+      "id": "P51",
+      "title": "Completion recalculates nothing: snapshot and active policies are identical",
+      "status": "PASS",
+      "detail": "snapshot INDEPENDENT_DRIVER:5:v2|PROVIDER:7:v10; policies still v10/v2"
+    }
+  ],
+  "apiEvidence": {
+    "freedBeforeStart": {
+      "independent": null,
+      "fleetAssignments": []
+    },
+    "baseline": {
+      "providerA": {
+        "id": "98a9056b-551a-4d3a-b584-3fd74bf0b409",
+        "code": "LOCAL_RAPIDOS_COITA"
+      },
+      "providerB": {
+        "id": "e296004e-bf97-43be-b2ca-493f05e49bf9",
+        "code": "LOCAL_MANDADOS_CENTRO"
+      },
+      "zone": "LOCAL_OCOZOCOAUTLA",
+      "fleetDriver": {
+        "id": "59d41999-4b6c-4554-9fbb-8f2be16d2df7",
+        "name": "José"
+      },
+      "fleetVehicle": {
+        "id": "cd549179-a9d2-4107-9391-79d6bf54fb41",
+        "identifier": "BICI-01"
+      },
+      "independent": {
+        "driverId": "58ad8d2e-7964-40dd-9f21-86a018af2225",
+        "name": "Luis"
+      },
+      "independentVehicle": {
+        "id": "0d72460f-71ca-41be-93bb-2ce258210cc0",
+        "identifier": "CHK110-MUE8FGB7"
+      },
+      "secondIndependent": null,
+      "balances": {
+        "a": 337,
+        "b": 0,
+        "independent": 190
+      }
+    },
+    "prerequisites": {
+      "policies": [
+        {
+          "actor": "PROVIDER",
+          "version": 10,
+          "type": "FLAT",
+          "flat": 7,
+          "perKm": null
+        },
+        {
+          "actor": "INDEPENDENT_DRIVER",
+          "version": 2,
+          "type": "FLAT",
+          "flat": 5,
+          "perKm": null
+        }
+      ],
+      "balancesBefore": {
+        "a": 337,
+        "i": 190
+      },
+      "balancesAfterTopUp": {
+        "a": 400,
+        "i": 200
+      }
+    },
+    "providerBaseline": {
+      "balance": 393,
+      "ledger": 193,
+      "awards": 1,
+      "refunds": 0,
+      "snapshot": "PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+    },
+    "independentBaseline": {
+      "balance": 195,
+      "ledger": 51,
+      "awards": 1,
+      "refunds": 0,
+      "snapshot": "PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+    },
+    "fixtures": {
+      "browserProvider": {
+        "id": "5904c2a6-a17d-4667-8a52-dc12167ab3dc",
+        "publicId": "MDR-000268",
+        "label": "WEB-PROVIDER",
+        "driverId": "d32ed764-98d1-4e5a-be23-a172ce6d1436",
+        "vehicleId": "0a553464-f1e1-4ebf-a0d1-618357f8a9f3",
+        "driverName": "Carlos",
+        "vehicleIdentifier": "MOTO-01",
+        "economy": {
+          "balance": 393,
+          "ledger": 193,
+          "awards": 1,
+          "refunds": 0,
+          "snapshot": "PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+        }
+      },
+      "indBase": {
+        "id": "8d5fca01-f598-4d19-ba81-664eb479bd9e",
+        "publicId": "MDR-000269",
+        "label": "IND-BASE",
+        "economy": {
+          "balance": 195,
+          "ledger": 51,
+          "awards": 1,
+          "refunds": 0,
+          "snapshot": "PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+        }
+      },
+      "delivered": {
+        "id": "6268ad50-ffaf-4756-bc66-b60eb722c104",
+        "publicId": "MDR-000273",
+        "label": "RACE-DELIVER",
+        "driverId": "59d41999-4b6c-4554-9fbb-8f2be16d2df7",
+        "vehicleId": "cd549179-a9d2-4107-9391-79d6bf54fb41",
+        "driverName": "José",
+        "vehicleIdentifier": "BICI-01"
+      },
+      "reuse": {
+        "id": "d006645f-3484-478d-8c7e-bc8757bd93c2",
+        "publicId": "MDR-000274",
+        "label": "REUSE"
+      },
+      "browserIndependent": {
+        "id": "ad9f49c6-929c-4a37-a12f-98f7e1b9ebb6",
+        "publicId": "MDR-000278",
+        "label": "WEB-INDEPENDENT",
+        "economy": {
+          "balance": 190,
+          "ledger": 52,
+          "awards": 1,
+          "refunds": 0,
+          "snapshot": "PROVIDER:7:v10|INDEPENDENT_DRIVER:5:v2"
+        }
+      }
+    }
+  },
+  "browserScenarios": [
+    {
+      "id": "B17",
+      "title": "The provider sees origin, destination, driver, vehicle, state and the action",
+      "status": "PASS",
+      "detail": "addresses · driver Carlos · vehicle MOTO-01 · state"
+    },
+    {
+      "id": "B18",
+      "title": "Cancelling the modal sends no confirmation and changes nothing",
+      "status": "PASS",
+      "detail": "0 deliver requests · dispatch CLAIMED · ACTIVE assignments 1 · ledger 201"
+    },
+    {
+      "id": "B19-20",
+      "title": "The browser completes the service through the real API and the backend records it",
+      "status": "PASS",
+      "detail": "1 POST /deliver · DELIVERED at 2026-09-23T23:25:37.714Z by provider-admin-a@mandaria.local · assignment COMPLETED, endReason null, 0 ACTIVE"
+    },
+    {
+      "id": "B21",
+      "title": "After the refetch the web shows Entregado and hides the completion action",
+      "status": "FAIL",
+      "detail": "shows «Entregado»; 0 completion buttons; 0 release buttons"
+    },
+    {
+      "id": "B57a",
+      "title": "Provider completion surface is usable at 375px and on desktop",
+      "status": "PASS",
+      "detail": "no horizontal overflow at 375 or 1440"
+    },
+    {
+      "id": "B30",
+      "title": "The independent driver sees the completion action on the service being executed",
+      "status": "PASS",
+      "detail": "service MDR-000278 visible with the action"
+    },
+    {
+      "id": "B31",
+      "title": "Cancelling the driver modal sends no confirmation and changes nothing",
+      "status": "PASS",
+      "detail": "0 deliver requests · dispatch CLAIMED · ledger 52"
+    },
+    {
+      "id": "B32",
+      "title": "The driver closes the service from the browser and the backend records it",
+      "status": "PASS",
+      "detail": "1 POST /deliver · DELIVERED by driver-luis@mandaria.local · 1 COMPLETED assignment, 0 ACTIVE"
+    },
+    {
+      "id": "B33",
+      "title": "After delivering, the portal no longer holds an active service and offers the list again",
+      "status": "PASS",
+      "detail": "0 completion buttons left; available services screen reachable (Servicios disponibles Tómalos por tu cuenta, con tus propio…)"
+    },
+    {
+      "id": "B57b",
+      "title": "Driver completion surface is usable at mobile width",
+      "status": "PASS",
+      "detail": "no horizontal overflow at 390"
+    },
+    {
+      "id": "B-AUDIT",
+      "title": "No unexpected console error and no secret beyond the session refresh token",
+      "status": "PASS",
+      "detail": "2 sessions audited"
+    }
+  ],
+  "sqlScenarios": [
+    {
+      "id": "S53A.1",
+      "title": "A DELIVERED dispatch cannot return to CLAIMED",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53A.2",
+      "title": "A DELIVERED dispatch cannot return to OPEN",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53A.3",
+      "title": "A DELIVERED dispatch cannot be cancelled in the database",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53B.1",
+      "title": "A delivery cannot coexist with an ACTIVE assignment",
+      "status": "PASS",
+      "detail": "rejected by ASSIGNMENT_IMMUTABLE"
+    },
+    {
+      "id": "S53B.2",
+      "title": "A claimed dispatch cannot be stamped as delivered while its assignment is ACTIVE",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_HAS_ACTIVE_ASSIGNMENT"
+    },
+    {
+      "id": "S53C",
+      "title": "A dispatch cannot be delivered without ending its assignment",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_INVALID"
+    },
+    {
+      "id": "S53D.1",
+      "title": "The delivery timestamp cannot be rewritten",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53D.2",
+      "title": "The delivering user cannot be swapped",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53D.3",
+      "title": "A delivery cannot be erased",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_IMMUTABLE"
+    },
+    {
+      "id": "S53D.4",
+      "title": "A dispatch cannot be created already delivered",
+      "status": "PASS",
+      "detail": "rejected by DISPATCH_INVALID"
+    },
+    {
+      "id": "S54",
+      "title": "Database integrity scan after the completions",
+      "status": "PASS",
+      "detail": "16 queries, all 0"
+    },
+    {
+      "id": "S50",
+      "title": "Completion never recalculates the route",
+      "status": "PASS",
+      "detail": "0 delivered services whose route was recalculated after the delivery"
+    },
+    {
+      "id": "S55",
+      "title": "B2B observability of the delivered state (read-only investigation)",
+      "status": "PASS",
+      "detail": "GET /delivery-requests/:publicId → 200, request status \"CREATED\"; contains DELIVERED/deliveredAt: NO"
+    },
+    {
+      "id": "S56",
+      "title": "B2B read isolation",
+      "status": "PASS",
+      "detail": "the list only returns the caller's own requests (5 items, all of client fd6b2a36)"
+    }
+  ],
+  "databaseScan": {
+    "delivered_with_active_assignment": 0,
+    "delivered_without_deliveredAt": 0,
+    "delivered_without_actor": 0,
+    "delivered_without_completed_assignment": 0,
+    "completed_assignment_with_end_reason": 0,
+    "completed_assignment_without_audit": 0,
+    "duplicate_active_assignment_per_dispatch": 0,
+    "duplicate_active_assignment_per_driver": 0,
+    "duplicate_active_assignment_per_vehicle": 0,
+    "refund_on_delivered_service": 0,
+    "delivered_with_extra_award": 0,
+    "negative_balances": 0,
+    "ledger_arithmetic_broken": 0,
+    "balance_not_last_ledger": 0,
+    "delivered_owned_by_two_models": 0,
+    "delivered_without_owner": 0
+  },
+  "creditPreservation": {
+    "provider": {
+      "publicId": "MDR-000268",
+      "status": "DELIVERED",
+      "deliveredAt": "2026-09-23T23:25:37.714Z",
+      "awardsAtClaim": 1,
+      "awardsNow": 1,
+      "refundsNow": 0,
+      "ledgerAtClaim": 193,
+      "ledgerNow": 201,
+      "snapshotAtClaim": "INDEPENDENT_DRIVER:5:v2|PROVIDER:7:v10",
+      "snapshotNow": "INDEPENDENT_DRIVER:5:v2|PROVIDER:7:v10"
+    },
+    "independent": {
+      "publicId": "MDR-000278",
+      "status": "DELIVERED",
+      "deliveredAt": "2026-09-23T23:25:46.212Z",
+      "awardsAtClaim": 1,
+      "awardsNow": 1,
+      "refundsNow": 0,
+      "ledgerAtClaim": 52,
+      "ledgerNow": 52,
+      "snapshotAtClaim": "INDEPENDENT_DRIVER:5:v2|PROVIDER:7:v10",
+      "snapshotNow": "INDEPENDENT_DRIVER:5:v2|PROVIDER:7:v10"
+    }
+  },
+  "b2b": {
+    "canObserveDelivered": false,
+    "requestStatus": "CREATED",
+    "fields": [
+      "publicId",
+      "externalReference",
+      "serviceType",
+      "status",
+      "requestedAt",
+      "cancelledAt",
+      "createdAt",
+      "updatedAt",
+      "cancellationReason",
+      "stops",
+      "packages",
+      "financialContext"
+    ],
+    "httpStatus": 200,
+    "crossClientRead": {
+      "isolation": "ENFORCED",
+      "httpStatus": 404,
+      "otherClient": "WEB_MU52NUPF"
+    }
+  },
+  "regression": {
+    "backendUnit": {
+      "files": 21,
+      "tests": 210,
+      "failed": 0
+    },
+    "backendE2E": {
+      "files": 20,
+      "tests": 317,
+      "failed": 0,
+      "scope": "test/ only; untracked .tmp/ artefacts excluded on purpose",
+      "note": "A first run failed 144 tests because mandaria_test was two migrations behind; after the non-destructive db:test:deploy it went green. A later run lost 2 workers to the known native crash; the clean verbose run passed 20/20."
+    },
+    "frontendUnit": {
+      "files": 23,
+      "tests": 484,
+      "failed": 0
+    },
+    "quality": {
+      "backend": {
+        "build": "PASS",
+        "lint": "PASS",
+        "docsCheck": "PASS"
+      },
+      "frontend": {
+        "typecheck": "PASS",
+        "lint": "PASS",
+        "build": "PASS",
+        "formatCheck": "PASS"
+      }
+    }
+  }
+}

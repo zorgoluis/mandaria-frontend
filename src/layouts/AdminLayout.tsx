@@ -5,6 +5,8 @@ import {
   PlugZap,
   Building2,
   UsersRound,
+  MailPlus,
+  Send,
   Settings2,
   UserRound,
   Menu,
@@ -17,6 +19,8 @@ import {
   PackageSearch,
   MapPinned,
   ReceiptText,
+  BadgeCheck,
+  Coins,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -64,9 +68,14 @@ export function AdminLayout() {
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
           { to: '/providers', label: 'Proveedores', icon: Building2 },
           { to: '/users', label: 'Administradores', icon: UsersRound },
+          { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
         ]
       : user?.role === 'PROVIDER_ADMIN'
-        ? [{ to: '/provider/profile', label: 'Mi proveedor', icon: Building2 }]
+        ? [
+            { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
+            { to: '/services', label: 'Servicios', icon: Send },
+            { to: '/provider/credits', label: 'Créditos', icon: Coins },
+          ]
         : []),
     ...(admin || user?.role === 'PROVIDER_ADMIN'
       ? [
@@ -92,6 +101,36 @@ export function AdminLayout() {
             label: 'Zonas de servicio',
             icon: MapPinned,
           },
+          {
+            to: '/dispatches',
+            label: 'Despachos',
+            icon: Send,
+          },
+        ]
+      : []),
+    // V1.9: independent driver administration is SUPER_ADMIN only and stands apart from Providers.
+    ...(admin
+      ? [
+          {
+            to: '/independent-drivers',
+            label: 'Independientes',
+            icon: BadgeCheck,
+          },
+          // V1.10-F: policies are global; each account's credits live inside its own file.
+          {
+            to: '/credit-policies',
+            label: 'Políticas de créditos',
+            icon: Coins,
+          },
+        ]
+      : []),
+    // V1.9: the temporary portal a DRIVER uses to take services on their own.
+    ...(user?.role === 'DRIVER'
+      ? [
+          { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
+          { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
+          { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
+          { to: '/driver/credits', label: 'Créditos', icon: Coins },
         ]
       : []),
     { to: '/profile', label: 'Mi perfil', icon: UserRound },
@@ -138,7 +177,7 @@ export function AdminLayout() {
           <strong>Una operación conectada.</strong>
           <p>La base de lo que viene.</p>
           <div className="version">
-            MANDARIA WEB <span>V1.6</span>
+            MANDARIA WEB <span>V1.10</span>
           </div>
         </div>
       </aside>

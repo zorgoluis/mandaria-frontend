@@ -30,6 +30,26 @@ import {
 } from '../pricing/zones'
 import { RatePlanDetail } from '../pricing/rate-plans'
 import { QuotesPage, QuoteDetail } from '../quotes/pages'
+import {
+  IndependentDriversPage,
+  IndependentDriverDetail,
+} from '../independent-drivers/pages'
+import {
+  AvailableServicesPage,
+  DriverServiceDetail,
+  MyServicePage,
+  DriverVehiclesPage,
+} from '../driver-portal/pages'
+import { InvitationsPage } from '../invitations/pages'
+import { ActivateAccount } from '../auth/ActivateAccount'
+import { ProviderServicesPage, ProviderServiceDetail } from '../dispatch/pages'
+import { AdminDispatchesPage, AdminDispatchDetail } from '../dispatch/admin'
+import {
+  CreditPoliciesPage,
+  CreditPolicyDetail,
+  CreditPolicyNew,
+} from '../credit-policies/pages'
+import { DriverCreditsPage, MyCreditsPage } from '../credits/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -54,6 +74,8 @@ export function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      {/* Public: invited people have no session yet. */}
+      <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
@@ -111,11 +133,54 @@ export function App() {
               path="delivery-quotes/:publicId"
               element={<QuoteDetail key={location.pathname} />}
             />
+            <Route path="dispatches" element={<AdminDispatchesPage />} />
+            <Route
+              path="dispatches/:id"
+              element={<AdminDispatchDetail key={location.pathname} />}
+            />
+            <Route
+              path="independent-drivers"
+              element={<IndependentDriversPage />}
+            />
+            <Route
+              path="independent-drivers/:driverId"
+              element={<IndependentDriverDetail key={location.pathname} />}
+            />
+            <Route path="credit-policies" element={<CreditPoliciesPage />} />
+            <Route path="credit-policies/new" element={<CreditPolicyNew />} />
+            <Route
+              path="credit-policies/:id"
+              element={<CreditPolicyDetail key={location.pathname} />}
+            />
             <Route path="users" element={<UsersPage />} />
+            <Route path="invitations" element={<InvitationsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          {/* V1.9: temporary web portal for the independent driver; the backend also gates it. */}
+          <Route element={<Protected roles={['DRIVER']} />}>
+            <Route
+              path="driver"
+              element={<Navigate to="/driver/services" replace />}
+            />
+            <Route path="driver/services" element={<AvailableServicesPage />} />
+            <Route
+              path="driver/services/:id"
+              element={<DriverServiceDetail key={location.pathname} />}
+            />
+            <Route path="driver/my-service" element={<MyServicePage />} />
+            <Route path="driver/vehicles" element={<DriverVehiclesPage />} />
+            <Route path="driver/credits" element={<DriverCreditsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
             <Route path="provider/profile" element={<MyProvider />} />
+            {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
+            <Route path="provider/credits" element={<MyCreditsPage />} />
+            {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
+            <Route path="services" element={<ProviderServicesPage />} />
+            <Route
+              path="services/:id"
+              element={<ProviderServiceDetail key={location.pathname} />}
+            />
           </Route>
           <Route path="403" element={<ErrorPage code={403} />} />
           <Route path="*" element={<ErrorPage code={404} />} />

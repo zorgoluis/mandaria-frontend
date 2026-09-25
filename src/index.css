@@ -1730,3 +1730,778 @@ dialog textarea {
     flex: 1;
   }
 }
+/* V1.6.1 account activation */
+.activation-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: #eef4f1;
+}
+.activation-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.activation-card .brand {
+  margin-bottom: 28px;
+}
+.activation-card h1 {
+  font-size: 26px;
+  margin: 8px 0;
+}
+.activation-card .form-actions .button {
+  width: 100%;
+}
+.activation-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--brand);
+}
+.activation-state.error-state {
+  color: var(--danger);
+}
+.activation-state h1,
+.activation-state p {
+  color: var(--ink);
+  margin: 0;
+}
+.activation-card .form-actions small {
+  display: none;
+}
+.login-invitation {
+  margin-top: 16px;
+}
+@media (max-width: 640px) {
+  .activation-card {
+    padding: 24px 20px;
+  }
+  .activation-state .button {
+    width: 100%;
+  }
+}
+/* V1.7 dispatch visibility and provider claiming */
+.badge.open {
+  background: #e4f5ee;
+  color: #137553;
+}
+.badge.claimed {
+  background: #edf2fb;
+  color: #4f6aa3;
+}
+.badge.released {
+  background: #edf1f5;
+  color: #546171;
+}
+.tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tab {
+  border: 1px solid #d8e1df;
+  background: white;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.tab.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: white;
+}
+.tab:focus-visible {
+  outline: 2px solid var(--brand-dark);
+  outline-offset: 2px;
+}
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  background: var(--surface);
+}
+.service-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.service-card header strong {
+  display: block;
+  font-size: 14px;
+}
+.service-card header small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.service-card-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.service-route {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.service-route dt {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.service-route dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.service-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: #5c6c6e;
+}
+.service-summary {
+  margin: 0;
+}
+.service-card footer {
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #825400;
+  font-variant-numeric: tabular-nums;
+}
+.countdown.ended {
+  color: var(--danger);
+}
+.money-block {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.money-fee,
+.money-goods {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-radius: 10px;
+  padding: 12px;
+}
+.money-fee {
+  background: #eaf6ef;
+  color: #1d5e46;
+}
+.money-goods {
+  background: #f3f5f7;
+  color: #3d4a52;
+}
+.money-goods.advance {
+  background: #fff4dd;
+  color: #6b4a00;
+}
+.money-fee > span,
+.money-goods > span {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.money-fee strong,
+.money-goods strong {
+  font-size: 16px;
+}
+.money-goods small {
+  font-size: 11px;
+}
+.money-block .muted,
+.advance-warning {
+  margin: 4px 0 0;
+  font-size: 11px;
+}
+.advance-warning {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  font-weight: 600;
+}
+.money-block.compact strong {
+  font-size: 14px;
+}
+.reason-options {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.reason-options legend {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.reason-options label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+.service-stops .info-grid {
+  padding-bottom: 0;
+}
+dialog .money-block {
+  margin: 12px 0;
+}
+@media (max-width: 640px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+    padding: 0 12px 16px;
+  }
+  .money-block {
+    grid-template-columns: 1fr;
+  }
+  .service-card footer .button {
+    flex: 1 1 100%;
+  }
+  .panel-toolbar .tab-list {
+    width: 100%;
+  }
+}
+
+/* V1.8 Driver and vehicle assignment */
+.badge.reassigned {
+  background: #f1f4f6;
+  color: #5b6b74;
+}
+.subhead {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.card-assignment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.card-assignment.pending {
+  background: #fbf7ee;
+  color: #8a6d3b;
+}
+.card-assignment.pending.overdue {
+  background: #fbeeee;
+  color: #b65e5e;
+}
+.card-assignment.assigned {
+  background: #eef5f1;
+  color: #2f6b55;
+}
+.card-assignment.assigned strong {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.payment-context {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfb;
+}
+.payment-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.payment-row span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.payment-row strong {
+  font-size: 15px;
+}
+.payment-row small {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--muted);
+}
+.payment-advance {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fbf3e8;
+}
+.payment-advance p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.payment-advance svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.advance-amount {
+  color: #8a5a1f;
+  font-weight: 600;
+}
+.payment-advance .advance-warning {
+  color: var(--danger);
+}
+.payment-note,
+.payment-separation {
+  margin: 0;
+  font-size: 11px;
+}
+.resource-picker {
+  display: grid;
+  gap: 16px;
+}
+.resource-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.resource-group legend {
+  padding: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.resource-list {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+.resource-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.resource-option:hover {
+  border-color: #cfd9d7;
+}
+.resource-option.selected {
+  border-color: var(--brand);
+  background: #f3f9f7;
+}
+.resource-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.resource-option input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.resource-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.resource-main strong {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.resource-main small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.resource-paired {
+  color: var(--brand-dark);
+}
+.assignment-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.assignment-entry {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.assignment-entry.current {
+  border-color: var(--brand);
+  background: #f6fbf9;
+}
+.assignment-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  overflow-wrap: anywhere;
+}
+.assignment-entry .info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .payment-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .resource-list {
+    max-height: none;
+  }
+  .assignment-entry .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .panel-toolbar .row-actions {
+    width: 100%;
+  }
+  .panel-toolbar .row-actions .button {
+    flex: 1;
+  }
+}
+
+/* V1.9 Independent drivers and the temporary driver portal */
+.badge.approved {
+  background: #eaf6ef;
+  color: #338969;
+}
+.badge.rejected {
+  background: #fbeeee;
+  color: #b65e5e;
+}
+.capability-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+}
+.capability-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+/* Mobile first: the portal stands in for the future Driver App. */
+.driver-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.driver-tabs a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  min-height: 56px;
+  justify-content: center;
+}
+.driver-tabs a.active {
+  background: #eef5f1;
+  color: var(--brand-dark);
+}
+.driver-service-grid {
+  display: grid;
+  gap: 14px;
+  padding: 0 24px 20px;
+}
+.driver-service-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.driver-service-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.driver-service-card header strong {
+  font-size: 20px;
+  color: var(--brand-dark);
+}
+.driver-service-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.driver-service-card dt {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.driver-service-card dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.driver-metrics {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.driver-service-card .button {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+.driver-advance-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fbf3e8;
+  color: #8a5a1f;
+  font-size: 12px;
+  font-weight: 600;
+}
+.driver-payment {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfb;
+}
+.driver-advance {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fbf3e8;
+}
+.driver-advance p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.driver-advance svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #b1671f;
+}
+.driver-advance strong {
+  color: #8a5a1f;
+}
+.driver-vehicle-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px 20px;
+  display: grid;
+  gap: 10px;
+}
+.driver-vehicle-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.driver-vehicle-list li > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.driver-vehicle-list small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.button.full {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+@media (max-width: 640px) {
+  .driver-service-grid,
+  .driver-vehicle-list {
+    padding: 0 16px 16px;
+  }
+  .driver-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .driver-service-card header strong {
+    font-size: 18px;
+  }
+  .driver-vehicle-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* V1.9-C: coverage actions are touch targets on phones and tablets. */
+@media (max-width: 850px) {
+  .coverage-action.button.small {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}
+
+/* V1.10-F: Mandaria credits. Never styled as money: no currency colours, no totals. */
+.credit-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f4faf8;
+}
+.credit-balance-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.credit-amount {
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--brand-dark);
+}
+.credit-balance small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.credit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 10px;
+  border: 1px solid #cfe5df;
+  border-radius: 999px;
+  background: #f0f7f4;
+  color: #2f6a5d;
+  font-size: 12px;
+}
+.ledger-kind {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ledger-kind small {
+  color: var(--muted);
+  font-size: 12px;
+}
+/* The sign and the word carry the meaning; colour only reinforces them. */
+.ledger-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ledger-amount.positive {
+  color: var(--brand-dark);
+}
+.ledger-amount.negative {
+  color: var(--danger);
+}
+.credit-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f4faf8;
+}
+.ranges-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+.range-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+@media (max-width: 720px) {
+  .range-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  .credit-amount {
+    font-size: 24px;
+  }
+}
+
+/* V1.11: a delivered service and a completed assignment are successful closes, not failures. */
+.badge.delivered,
+.badge.completed {
+  color: #1d6b4f;
+  background: #e7f4ee;
+}
+.driver-service-actions {
+  display: grid;
+  gap: 10px;
+}

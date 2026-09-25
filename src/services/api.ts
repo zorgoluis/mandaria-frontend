@@ -52,6 +52,8 @@ async function transport<T>(
   body?: unknown,
   token?: string | null,
   signal?: AbortSignal,
+  /** Extra request headers (V1.10 credit movements require Idempotency-Key). */
+  extra?: Record<string, string>,
 ): Promise<T> {
   let response: Response
   try {
@@ -66,6 +68,7 @@ async function transport<T>(
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...extra,
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     })
@@ -115,11 +118,19 @@ export async function api<T>(
   method = 'GET',
   body?: unknown,
   signal?: AbortSignal,
+  headers?: Record<string, string>,
 ): Promise<T> {
   const current = generation
   const usedToken = accessToken
   try {
-    const result = await transport<T>(path, method, body, usedToken, signal)
+    const result = await transport<T>(
+      path,
+      method,
+      body,
+      usedToken,
+      signal,
+      headers,
+    )
     if (generation !== current) throw normalizeError(401, null)
     return result
   } catch (error) {
@@ -128,7 +139,14 @@ export async function api<T>(
     if (usedToken === accessToken) await refresh()
     if (generation !== current) throw error
     try {
-      const result = await transport<T>(path, method, body, accessToken, signal)
+      const result = await transport<T>(
+        path,
+        method,
+        body,
+        accessToken,
+        signal,
+        headers,
+      )
       if (generation !== current) throw normalizeError(401, null)
       return result
     } catch (retryError) {
@@ -142,6 +160,9 @@ export async function api<T>(
     }
   }
 }
+/** Unauthenticated endpoint (e.g. account activation): never sends or refreshes a session. */
+export const publicApi = <T>(path: string, method: string, body?: unknown) =>
+  transport<T>(path, method, body, null)
 export const authService = {
   async login(email: string, password: string) {
     clearSession()

@@ -27,6 +27,12 @@ import {
 } from '../logistics/queries'
 import { AssignmentHistory, DriverAssignment } from '../assignments/components'
 import { drivers } from './service'
+import {
+  InvitationsPanel,
+  InviteButton,
+  InviteDriverDialog,
+} from '../invitations/components'
+import type { InvitationScope } from '../invitations/types'
 import { date, labels } from '../utils/format'
 import type { Driver, DriverStatus, ProviderContext } from '../logistics/types'
 
@@ -61,24 +67,37 @@ function DriverList({ scope }: { scope: ProviderContext }) {
     usage.isSuccess &&
     !usage.isError &&
     usage.data.drivers.count < usage.data.drivers.max
+  const [inviting, setInviting] = useState(false)
+  // PROVIDER_ADMIN never sends role or providerId in the body; the membership guard scopes it.
+  const invitationScope: InvitationScope & { providerId: string } =
+    scope.role === 'SUPER_ADMIN'
+      ? { kind: 'admin', providerId: scope.providerId, role: 'DRIVER' }
+      : { kind: 'provider', providerId: scope.providerId }
   return (
     <>
       <CapacityCards scope={scope} />
       <div className="panel">
         <div className="panel-toolbar">
           <h2>Repartidores del proveedor</h2>
-          {canCreate ? (
-            <Link
-              className="button"
-              to={resourceLink('drivers', scope.providerId, 'new')}
-            >
-              Nuevo repartidor
-            </Link>
-          ) : (
-            <button className="button" disabled>
-              Nuevo repartidor
-            </button>
-          )}
+          <div className="row-actions">
+            <InviteButton
+              label="Invitar repartidor"
+              disabled={!canCreate}
+              onClick={() => setInviting(true)}
+            />
+            {canCreate ? (
+              <Link
+                className="button"
+                to={resourceLink('drivers', scope.providerId, 'new')}
+              >
+                Nuevo repartidor
+              </Link>
+            ) : (
+              <button className="button" disabled>
+                Nuevo repartidor
+              </button>
+            )}
+          </div>
         </div>
         <ResourceFilters kind="drivers" />
         {query.isPending ? (
@@ -94,6 +113,8 @@ function DriverList({ scope }: { scope: ProviderContext }) {
           <>
             <Table
               rows={query.data.items}
+              emptyTitle="No hay repartidores"
+              empty="Invita a un repartidor o registra uno con una cuenta existente."
               columns={[
                 {
                   label: 'Repartidor',
@@ -156,6 +177,19 @@ function DriverList({ scope }: { scope: ProviderContext }) {
           </>
         )}
       </div>
+      <InvitationsPanel
+        scope={invitationScope}
+        title="Invitaciones de repartidores"
+        description="Personas invitadas que todavía no activan su cuenta."
+        showProvider={false}
+      />
+      {inviting && (
+        <InviteDriverDialog
+          scope={invitationScope}
+          providerName={scope.name}
+          onClose={() => setInviting(false)}
+        />
+      )}
     </>
   )
 }

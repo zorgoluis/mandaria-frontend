@@ -25,7 +25,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
     404: 'El recurso solicitado ya no está disponible.',
     409: 'La operación entra en conflicto con el estado actual. Revisa el código, las asociaciones y el estado.',
     422: 'La configuración no es válida todavía. Revisa los datos marcados.',
-    429: 'Demasiados intentos. Espera un minuto antes de continuar.',
+    410: 'El recurso ya no está disponible.',
+    429: 'Demasiados intentos. Intenta nuevamente más tarde.',
     503: 'Un servicio necesario no está disponible en este momento. Inténtalo más tarde.',
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
@@ -45,6 +46,33 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Las bandas de la tarifa no son válidas todavía. Revisa los rangos y precios.',
     RATE_PLAN_CONFLICT:
       'Otra persona cambió esta tarifa al mismo tiempo. Vuelve a cargar e inténtalo de nuevo.',
+    // V1.10 credits. Credits are a Mandaria unit of consumption, never money.
+    CREDIT_ACCOUNT_NOT_FOUND:
+      'Esta cuenta de créditos no existe en Mandaria. No es un saldo en cero.',
+    CREDIT_ACCOUNT_UNAVAILABLE:
+      'La cuenta de créditos no está disponible en este momento. Inténtalo de nuevo.',
+    INSUFFICIENT_CREDITS:
+      'No hay créditos suficientes para este movimiento. Registra una recarga antes de continuar.',
+    CREDIT_BALANCE_LIMIT:
+      'El saldo superaría el máximo permitido por Mandaria. Ajusta la cantidad de créditos.',
+    CREDIT_IDEMPOTENCY_CONFLICT:
+      'Ya se registró otro movimiento con esa clave. Vuelve a cargar la cuenta antes de repetirlo.',
+    CREDIT_MOVEMENT_CONFLICT:
+      'Otro movimiento cambió la cuenta al mismo tiempo. Vuelve a intentarlo.',
+    CREDIT_SNAPSHOT_UNAVAILABLE:
+      'Este servicio no tiene costo en créditos registrado. Contacta a Mandaria.',
+    CREDIT_POLICY_UNAVAILABLE:
+      'No existe una política de créditos vigente para esa combinación. Créala antes de continuar.',
+    CREDIT_POLICY_EXISTS:
+      'Esa combinación ya tiene una política. Crea una nueva versión desde la vigente.',
+    CREDIT_POLICY_VERSION_CONFLICT:
+      'Esta versión ya fue reemplazada por otra. Vuelve a cargar la política vigente e inténtalo de nuevo.',
+    CREDIT_COST_OUT_OF_RANGE:
+      'El costo calculado queda fuera del rango permitido. Revisa la política.',
+    CREDIT_DISTANCE_INVALID:
+      'La distancia debe ser un número entero de metros dentro del rango permitido.',
+    CREDIT_REFUND_INTEGRITY_ERROR:
+      'Mandaria no puede completar la devolución de créditos de este servicio. Contacta a Mandaria: no se resuelve reintentando.',
     OUT_OF_SERVICE_AREA: 'Fuera de cobertura.',
     CROSS_ZONE_NOT_SUPPORTED: 'Entrega entre zonas no disponible.',
     ROUTE_NOT_FOUND: 'No se encontró una ruta.',
@@ -58,6 +86,90 @@ export function normalizeError(status: number, body: unknown): ApiError {
     QUOTE_EXPIRED: 'La cotización expiró; debe solicitarse una nueva.',
     QUOTE_NOT_ACCEPTABLE:
       'La cotización o la solicitud ya no pueden aceptarse.',
+    // V1.7 dispatch claiming. The backend decides every outcome.
+    DISPATCH_ALREADY_CLAIMED: 'Este servicio ya fue tomado por otro proveedor.',
+    DISPATCH_EXPIRED: 'El tiempo para tomar este servicio terminó.',
+    DISPATCH_CANCELLED:
+      'La solicitud fue cancelada; el servicio ya no está disponible.',
+    DISPATCH_RECLAIM_NOT_ALLOWED:
+      'Tu proveedor liberó este servicio y no puede volver a tomarlo.',
+    DISPATCH_NOT_CLAIMED_BY_PROVIDER:
+      'Este servicio ya no está tomado por tu proveedor.',
+    // V1.9-C: the 409 carries no id; the web finds the row and offers to reactivate it.
+    SERVICE_COVERAGE_EXISTS:
+      'Este proveedor ya tiene cobertura para esa zona y tipo de servicio. Actívala desde la lista en lugar de crearla de nuevo.',
+    PROVIDER_NOT_ELIGIBLE:
+      'Tu proveedor ya no está habilitado para esta zona o tipo de servicio.',
+    // V1.8 driver and vehicle assignment. Every conflict is a 409 the backend already resolved.
+    DRIVER_BUSY:
+      'Ese repartidor acaba de recibir otro servicio. Actualiza la lista y elige a alguien más.',
+    VEHICLE_BUSY:
+      'Ese vehículo acaba de asignarse a otro servicio. Actualiza la lista y elige otro.',
+    DRIVER_VEHICLE_MISMATCH:
+      'Ese repartidor y ese vehículo no pueden combinarse: alguno está emparejado con otro en su ficha.',
+    // Shared by V1.8 assignment and V1.9 independent enabling: the driver is not operational.
+    DRIVER_NOT_ELIGIBLE:
+      'Ese repartidor no cumple los requisitos: necesita una cuenta activa con rol de repartidor y estar activo.',
+    VEHICLE_NOT_ELIGIBLE:
+      'Ese vehículo ya no puede asignarse. Actualiza la lista de disponibles.',
+    DISPATCH_ALREADY_ASSIGNED:
+      'Este servicio ya tiene un repartidor asignado. Actualiza para ver quién quedó asignado.',
+    DISPATCH_HAS_ACTIVE_ASSIGNMENT:
+      'Cancela la asignación antes de liberar el servicio.',
+    // V1.11: the service was already delivered and is closed; it cannot be claimed or taken.
+    DISPATCH_DELIVERED: 'Este servicio ya fue entregado.',
+    DELIVERY_CONFLICT:
+      'El servicio cambió mientras confirmabas la entrega. Actualiza para ver su estado.',
+    NO_ACTIVE_ASSIGNMENT:
+      'Este servicio ya no tiene una asignación vigente. Actualiza para ver su estado.',
+    ASSIGNMENT_UNCHANGED:
+      'Elige un repartidor o un vehículo distinto del actual.',
+    ASSIGNMENT_CONFLICT:
+      'Otra persona cambió la asignación al mismo tiempo. Actualiza e inténtalo de nuevo.',
+    PROVIDER_NOT_ACTIVE:
+      'Tu proveedor no está activo y no puede asignar servicios.',
+    // V1.9 independent drivers. Every conflict is a 409 the backend already resolved.
+    INDEPENDENT_PROFILE_EXISTS:
+      'Ese repartidor ya tiene una habilitación independiente registrada.',
+    INDEPENDENT_NOT_APPROVED:
+      'Tu habilitación para tomar servicios por tu cuenta no está vigente.',
+    INDEPENDENT_DRIVER_HAS_ACTIVE_ASSIGNMENT:
+      'El repartidor está ejecutando un servicio. Espera a que termine o libéralo antes de cambiar su habilitación.',
+    DISPATCH_NOT_OPEN_TO_INDEPENDENT:
+      'Este servicio no admite repartidores independientes.',
+    DISPATCH_RETAKE_NOT_ALLOWED:
+      'Ya liberaste este servicio y no puedes volver a tomarlo.',
+    DISPATCH_NOT_CLAIMED_BY_DRIVER:
+      'Este servicio ya no es tuyo. Actualiza para ver su estado.',
+    VEHICLE_HAS_ACTIVE_ASSIGNMENT:
+      'Ese vehículo está ejecutando un servicio. No puede desactivarse hasta que termine.',
+    // The limit is configurable in the backend and counts inactive vehicles too.
+    VEHICLE_LIMIT_REACHED:
+      'Este repartidor ya tiene el máximo de vehículos propios permitido, incluidos los inactivos.',
+    // A race lost inside the database: another executor changed the service first.
+    TAKE_CONFLICT:
+      'El servicio cambió mientras lo tomabas o liberabas. Actualiza para ver su estado.',
+    // V1.6.1 invitations and account activation.
+    USER_ALREADY_ACTIVE: 'Ya existe una cuenta activa con ese correo.',
+    USER_INVITATION_PENDING:
+      'Ya existe una invitación pendiente para ese correo. Reenvíala desde la lista de invitaciones.',
+    USER_DISABLED:
+      'La cuenta con ese correo está deshabilitada y no puede reactivarse mediante una invitación.',
+    PROVIDER_DRIVER_LIMIT_REACHED:
+      'Límite de repartidores alcanzado; las invitaciones pendientes también ocupan lugar. Solicita ampliar la capacidad del proveedor.',
+    INVITATION_NOT_PENDING: 'La invitación ya fue aceptada o revocada.',
+    INVITATION_RESEND_COOLDOWN:
+      'La invitación se envió hace poco. Espera un momento antes de reenviarla.',
+    MAIL_NOT_CONFIGURED:
+      'El envío de invitaciones no está configurado en Mandaria. Contacta al equipo técnico.',
+    INVITATION_TOKEN_INVALID: 'La invitación no es válida.',
+    INVITATION_EXPIRED:
+      'Esta invitación ha expirado. Solicita una nueva invitación a tu administrador.',
+    INVITATION_REVOKED:
+      'Esta invitación fue revocada. Solicita una nueva invitación a tu administrador.',
+    INVITATION_ALREADY_ACCEPTED: 'Esta invitación ya fue utilizada.',
+    ACCOUNT_NOT_ACTIVATABLE:
+      'Esta cuenta no puede activarse con la invitación. Contacta a tu administrador.',
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {
@@ -71,6 +183,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Límite de vehículos alcanzado. Solicita ampliar la capacidad del proveedor.',
     'Vehicle identifier already exists in this provider':
       'Ya existe un vehículo con ese identificador en el proveedor.',
+    'Vehicle identifier already exists for this independent driver':
+      'Este repartidor ya tiene un vehículo con ese identificador.',
     'Driver not found': 'El repartidor no está disponible en este proveedor.',
     'Vehicle not found': 'El vehículo no está disponible en este proveedor.',
     'Invalid driver status transition':
@@ -117,6 +231,11 @@ export function normalizeError(status: number, body: unknown): ApiError {
     'Provider access denied':
       'Tu cuenta no tiene una asociación vigente con este proveedor.',
     'Service zone not found': 'La zona de servicio ya no está disponible.',
+    'Coverage not found':
+      'Esa cobertura ya no existe para este proveedor. Actualiza la lista.',
+    'Invitation not found': 'La invitación ya no está disponible.',
+    'Dispatch not found':
+      'El servicio no existe o no está disponible para tu proveedor.',
     'Rate plan not found': 'La tarifa ya no está disponible.',
     'Delivery quote not found': 'La cotización ya no está disponible.',
   }

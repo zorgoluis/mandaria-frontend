@@ -4,6 +4,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { parseEnv } from 'node:util'
 
 // Local integration test: real human login, real API and existing local memberships.
+// V1.6.1: Repartidores also renders the driver invitations table; the drivers table is first.
 // No role/storage mocks, traces, HAR, storageState or sensitive response dumps.
 const env = {
   ...(process.env.MANDARIA_BACKEND_ENV
@@ -220,7 +221,8 @@ async function audit(state) {
   state.console = []
 }
 async function logout(state) {
-  await state.page.getByRole('button', { name: /@/ }).click()
+  // The user menu trigger: action buttons may also mention emails in their labels.
+  await state.page.locator('button.user-trigger').click()
   await state.page.getByRole('button', { name: 'Cerrar sesión' }).click()
   await state.page.waitForURL('**/login')
   assert.equal(await state.page.evaluate(() => sessionStorage.length), 0)
@@ -249,7 +251,7 @@ try {
   const providerB = providerPage.items.find(
     (p) => p.code === 'LOCAL_MANDADOS_CENTRO',
   )
-  const independent = providerPage.items.find(
+  let independent = providerPage.items.find(
     (p) => p.type === 'INDEPENDENT' && p.code.startsWith('WEB_'),
   )
   assert.ok(
@@ -261,6 +263,20 @@ try {
     (u) => u.email === 'driver-luis@mandaria.local' && u.role === 'DRIVER',
   )
   assert.ok(luis, 'Existing local Luis DRIVER account required')
+  // Other suites create new WEB_ INDEPENDENT providers; a User has one Driver profile, so
+  // reuse the independent provider that already holds Luis instead of the newest one.
+  for (const candidate of providerPage.items.filter(
+    (p) => p.type === 'INDEPENDENT' && p.code.startsWith('WEB_'),
+  )) {
+    const found = await request(
+      admin,
+      `/admin/providers/${candidate.id}/drivers`,
+    )
+    if (found.items.some((d) => d.userId === luis.id)) {
+      independent = candidate
+      break
+    }
+  }
   pass()
 
   begin('Real Admin A: own drivers, vehicles, filters, reload and limits')
@@ -273,6 +289,8 @@ try {
   ).toHaveText([
     'Dashboard',
     'Mi proveedor',
+    'Servicios',
+    'Créditos',
     'Repartidores',
     'Vehículos',
     'Mi perfil',
@@ -287,18 +305,20 @@ try {
   const bici = vehiclesA.items.find((v) => v.identifier === 'BICI-01')
   assert.ok(carlos && pedro && jose && moto1 && moto2 && bici)
   await visit(a, url('drivers', providerA))
-  await expect(a.page.getByRole('table')).toContainText('Carlos')
+  await expect(a.page.getByRole('table').first()).toContainText('Carlos')
   await expect(
     a.page.getByRole('button', { name: 'Nuevo repartidor' }),
   ).toBeDisabled()
   await a.page.getByLabel('Buscar', { exact: true }).fill('Carlos')
   await a.page.getByRole('button', { name: 'Buscar', exact: true }).click()
-  await expect(a.page.getByRole('table').getByRole('row')).toHaveCount(2)
+  await expect(a.page.getByRole('table').first().getByRole('row')).toHaveCount(
+    2,
+  )
   await a.page.getByLabel('Filtrar por disponibilidad').selectOption('OFFLINE')
-  await expect(a.page.getByRole('table')).toContainText('Desconectado')
+  await expect(a.page.getByRole('table').first()).toContainText('Desconectado')
   const oldRefresh = a.auth.refreshToken
   await a.page.reload()
-  await expect(a.page.getByRole('table')).toContainText('Carlos')
+  await expect(a.page.getByRole('table').first()).toContainText('Carlos')
   await Promise.all(a.pending)
   assert.notEqual(a.auth.refreshToken, oldRefresh)
   await visit(a, url('vehicles', providerA))
@@ -306,8 +326,10 @@ try {
     a.page.getByRole('button', { name: 'Nuevo vehículo' }),
   ).toBeDisabled()
   await a.page.getByLabel('Filtrar por tipo').selectOption('BICYCLE')
-  await expect(a.page.getByRole('table')).toContainText('Sin placa')
-  await expect(a.page.getByRole('table').getByRole('row')).toHaveCount(2)
+  await expect(a.page.getByRole('table').first()).toContainText('Sin placa')
+  await expect(a.page.getByRole('table').first().getByRole('row')).toHaveCount(
+    2,
+  )
   for (const kind of ['drivers', 'vehicles']) {
     await visit(a, url(kind, providerA, 'new'))
     await expect(
@@ -454,7 +476,7 @@ try {
   ]) {
     for (const kind of ['drivers', 'vehicles']) {
       await visit(state, url(kind, own))
-      await expect(state.page.getByRole('table')).toBeVisible()
+      await expect(state.page.getByRole('table').first()).toBeVisible()
       const ownData = await request(
         state,
         `/provider/${kind}?providerId=${own.id}`,
@@ -605,7 +627,7 @@ try {
     await a.page.setViewportSize({ width, height })
     for (const kind of ['drivers', 'vehicles']) {
       await visit(a, url(kind, providerA))
-      await expect(a.page.getByRole('table')).toBeVisible()
+      await expect(a.page.getByRole('table').first()).toBeVisible()
       assert.ok(
         await a.page.evaluate(
           () => document.documentElement.scrollWidth <= window.innerWidth + 1,

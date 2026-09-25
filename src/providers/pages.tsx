@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Plus, Search, ArrowUpRight } from 'lucide-react'
 import { providers } from './service'
+import { AdminCreditsPanel } from '../credits/components'
 import { users } from '../users/service'
 import { queryClient } from '../services/query'
 import {
@@ -20,6 +21,11 @@ import {
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ActivityCards, CapacityCards } from '../logistics/components'
+import {
+  InvitationsPanel,
+  InviteButton,
+  InviteProviderAdminDialog,
+} from '../invitations/components'
 import { date, labels } from '../utils/format'
 import type {
   Member,
@@ -27,6 +33,7 @@ import type {
   ProviderInput,
   ProviderProfile,
 } from '../types/api'
+import { MyCoverage, ProviderCoveragePanel } from '../service-coverage/pages'
 const invalidate = () =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: ['providers'] }),
@@ -301,7 +308,8 @@ export function ProviderNew() {
     </>
   )
 }
-function Memberships({ id }: { id: string }) {
+function Memberships({ id, name }: { id: string; name: string }) {
+  const [inviting, setInviting] = useState(false)
   const [page, setPage] = useState(1)
   const query = useQuery({
     queryKey: ['providers', id, 'members', page],
@@ -317,9 +325,13 @@ function Memberships({ id }: { id: string }) {
     <div className="panel">
       <div className="panel-toolbar">
         <div>
-          <h2>Administradores asociados</h2>
+          <h2>Administradores</h2>
           <p>Gestiona quién puede consultar este proveedor.</p>
         </div>
+        <InviteButton
+          label="Invitar administrador"
+          onClick={() => setInviting(true)}
+        />
       </div>
       {query.isPending ? (
         <Loading />
@@ -334,6 +346,8 @@ function Memberships({ id }: { id: string }) {
         <>
           <Table
             rows={query.data.items}
+            emptyTitle="No hay administradores"
+            empty="Invita a un administrador para este proveedor."
             columns={[
               { label: 'Usuario', render: (row) => row.user.email },
               {
@@ -419,11 +433,18 @@ function Memberships({ id }: { id: string }) {
             </Field>
           </div>
           <p className="panel-note">
-            Las sugerencias provienen de los últimos 100 usuarios. La API no
-            permite crear usuarios desde este panel.
+            Para cuentas nuevas usa Invitar administrador. Esta opción sólo
+            asocia cuentas activas existentes; las sugerencias provienen de los
+            últimos 100 usuarios.
           </p>
         </ActionForm>
       </div>
+      {inviting && (
+        <InviteProviderAdminDialog
+          provider={{ id, name }}
+          onClose={() => setInviting(false)}
+        />
+      )}
       {remove && (
         <Confirm
           title="Retirar administrador"
@@ -506,7 +527,22 @@ export function ProviderDetail() {
           />
         </div>
       </div>
-      <Memberships id={id} />
+      {/* V1.10-F: the provider's credits live in its own file, not in a parallel Providers list. */}
+      <AdminCreditsPanel
+        scope="provider"
+        ownerId={id}
+        ownerName={item.name}
+        missingDescription="Este proveedor todavía no tiene cuenta de créditos en Mandaria. No es un saldo en cero."
+      />
+      <Memberships id={id} name={item.name} />
+      <ProviderCoveragePanel providerId={id} />
+      <InvitationsPanel
+        scope={{ kind: 'admin', providerId: id }}
+        title="Invitaciones del proveedor"
+        description="Administradores y repartidores invitados a este proveedor."
+        showProvider={false}
+        roleFilter
+      />
       <CapacityCards scope={{ role: 'SUPER_ADMIN', providerId: id }} />
       {action && (
         <Confirm
@@ -582,6 +618,8 @@ function SelectedProfile({
     <>
       <ProfileCard item={query.data} />
       <CapacityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
+      {/* V1.9-C: read only; the dashboard keeps its activity cards instead. */}
+      {!showActivity && <MyCoverage providerId={id} />}
       {showActivity && (
         <ActivityCards scope={{ role: 'PROVIDER_ADMIN', providerId: id }} />
       )}
