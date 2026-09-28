@@ -59,6 +59,8 @@ export interface ProviderProfile extends Pick<
 export type IntegrationStatus = 'ACTIVE' | 'SUSPENDED' | 'REVOKED'
 export const scopes = [
   'quotes:create',
+  'quotes:read',
+  'quotes:accept',
   'deliveries:create',
   'deliveries:read',
   'deliveries:cancel',

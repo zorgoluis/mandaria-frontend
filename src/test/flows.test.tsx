@@ -328,6 +328,67 @@ describe('auth and permissions UX', () => {
   })
 })
 describe('integrations', () => {
+  it.each([
+    { selected: [] },
+    { selected: ['quotes:read'] },
+    { selected: ['quotes:accept'] },
+    { selected: ['quotes:read', 'quotes:accept'] },
+    {
+      selected: [
+        'quotes:create',
+        'quotes:read',
+        'quotes:accept',
+        'deliveries:create',
+        'deliveries:read',
+        'deliveries:cancel',
+      ],
+    },
+  ])(
+    'offers the full credential catalog and submits only the explicit selection $selected',
+    async ({ selected }) => {
+      vi.mocked(integrations.createCredential).mockResolvedValue({
+        clientId: 'credential-test',
+        integrationId: integration.id,
+        clientSecret: 'synthetic-secret',
+      })
+      mount('/integrations/integration-1')
+      const actor = userEvent.setup()
+      await actor.click(
+        await screen.findByRole('button', { name: 'Crear credencial' }),
+      )
+      const options = within(screen.getByRole('dialog')).getAllByRole(
+        'checkbox',
+      )
+      expect(
+        options.map((option) => (option as HTMLInputElement).value),
+      ).toEqual([
+        'quotes:create',
+        'quotes:read',
+        'quotes:accept',
+        'deliveries:create',
+        'deliveries:read',
+        'deliveries:cancel',
+      ])
+      for (const option of options) expect(option).not.toBeChecked()
+      for (const scope of selected)
+        await actor.click(screen.getByLabelText(scope))
+      // A permission checked and then unchecked must not be granted either.
+      await actor.click(screen.getByLabelText('deliveries:cancel'))
+      await actor.click(screen.getByLabelText('deliveries:cancel'))
+      await actor.click(
+        screen.getByRole('button', { name: 'Generar credencial' }),
+      )
+      await waitFor(() =>
+        expect(integrations.createCredential).toHaveBeenCalledExactlyOnceWith(
+          integration.id,
+          { scopes: selected },
+        ),
+      )
+      expect(integrations.create).not.toHaveBeenCalled()
+      expect(integrations.rotate).not.toHaveBeenCalled()
+      expect(integrations.revoke).not.toHaveBeenCalled()
+    },
+  )
   it('lists clients', async () => {
     mount('/integrations')
     expect(await screen.findByText('Cliente Demo')).toBeInTheDocument()
@@ -382,6 +443,8 @@ describe('integrations', () => {
       await screen.findByRole('button', { name: 'Crear credencial' }),
     )
     await actor.click(screen.getByLabelText('deliveries:read'))
+    await actor.click(screen.getByLabelText('quotes:read'))
+    await actor.click(screen.getByLabelText('quotes:accept'))
     await actor.click(
       screen.getByRole('button', { name: 'Generar credencial' }),
     )

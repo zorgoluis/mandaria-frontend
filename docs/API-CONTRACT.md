@@ -36,7 +36,7 @@ Todos los endpoints consumidos usan el prefijo `/api/v1`. El frontend sólo se c
 - Nombre: 1–100 caracteres. Código: `[A-Z][A-Z0-9_]{1,49}`; provider normaliza mayúsculas, integración exige mayúsculas.
 - Límites: enteros 1–10000. Se omiten al crear si el usuario deja campos vacíos. No se replica ningún default de negocio.
 - Paginación providers/members/perfiles: página desde 1 hasta 100000; tamaño 1–100, frontend 20. Búsqueda servidor por nombre/código; máximo 100 caracteres.
-- Scopes pertenecen a credenciales: `quotes:create`, `deliveries:create`, `deliveries:read`, `deliveries:cancel`. Son permisos B2B existentes; no implementan entregas ni cotizaciones en esta web.
+- Scopes pertenecen a credenciales. Catálogo actualizado el 2026-09-27 contra el backend local OpenAPI 1.12.0: `quotes:create`, `quotes:read`, `quotes:accept`, `deliveries:create`, `deliveries:read`, `deliveries:cancel`. La selección es explícita; omitirla no concede permisos. Ver [diagnóstico y validación B2B](B2B-CREDENTIAL-SCOPES.md).
 - Metadata `credential.id` es el clientId para intercambio B2B; `credential.clientId` es la relación con IntegrationClient. La UI muestra `id` como identificador público de autenticación.
 - Error real: `{statusCode,code,message,errors,timestamp,path}`. Se traducen mensajes conocidos mediante lista permitida; errores de validación y errores internos tienen explicación genérica segura, nunca se refleja texto arbitrario.
 - El backend tiene rate limiting y no soporta idempotency keys para crear/rotar. Las mutaciones no se reintentan automáticamente. Ante pérdida de conexión después de crear un secreto, comprobar metadata y revocar/regenerar si no se recibió la respuesta.
