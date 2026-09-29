@@ -459,7 +459,10 @@ function ServiceContent({
               <h2 id="service-money">Cobro y mercancía</h2>
             </div>
             <div className="panel-body">
-              <MoneyBlock service={service} />
+              <MoneyBlock
+                service={service}
+                collectionInstructions={dispatch.collectionInstructions}
+              />
             </div>
           </section>
           <section className="panel" aria-labelledby="service-packages">

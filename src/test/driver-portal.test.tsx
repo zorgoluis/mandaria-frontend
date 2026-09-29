@@ -1,3 +1,4 @@
+import { collectionFixture } from './collection-fixture'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -827,4 +828,57 @@ describe('role isolation', () => {
       expect(links).not.toContain(forbidden)
     expect(links).toContain('Mi servicio')
   })
+})
+
+describe('V1.13-D assigned fleet driver', () => {
+  it('shows real self projection and clears previous instructions after membership assignment ends', async () => {
+    const instructions = {
+      applicability: 'CURRENT' as const,
+      goodsPaidToRestaurant: true as const,
+      advanceToRestaurant: false as const,
+      collectGoodsFromRecipient: false as const,
+      deliveryFee: { amount: '25.10', currency: 'MXN' },
+      payer: 'RECIPIENT' as const,
+      method: 'CASH' as const,
+      dueAt: 'DELIVERY' as const,
+      component: 'DELIVERY_FEE' as const,
+    }
+    vi.mocked(driverPortal.me).mockResolvedValue(
+      me({
+        independent: null,
+        activeDeliveryAssignment: {
+          id: 'fleet-assignment',
+          mode: 'FLEET',
+          dispatchId: DISPATCH,
+          collectionInstructions: instructions,
+        },
+      }),
+    )
+    mount('/driver/my-service')
+    expect(
+      await screen.findByText(/Cobra únicamente el envío: 25.10 MXN/),
+    ).toBeInTheDocument()
+    expect(driverPortal.get).not.toHaveBeenCalled()
+    expect(
+      screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+    ).toBeNull()
+    vi.mocked(driverPortal.me).mockResolvedValue(
+      me({ independent: null, activeDeliveryAssignment: null }),
+    )
+    await queryClient.invalidateQueries({ queryKey: ['driver-portal'] })
+    await waitFor(() =>
+      expect(screen.queryByText(/Cobra únicamente/)).toBeNull(),
+    )
+  })
+})
+
+it('V1.13-D independent list displays offer terms without an advance instruction', async () => {
+  vi.mocked(driverPortal.available).mockResolvedValue(
+    page([dispatch({ collectionInstructions: collectionFixture })]),
+  )
+  mount('/driver/services')
+  expect(
+    await screen.findByText(/Condiciones previstas: comida pagada/),
+  ).toHaveTextContent('25.10 MXN')
+  expect(screen.queryByText(/Cobra únicamente|Requiere adelanto/)).toBeNull()
 })

@@ -1,3 +1,5 @@
+import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -61,11 +63,15 @@ export function Countdown({
 /** Delivery fee and goods value are different money: never add or merge them. */
 export function MoneyBlock({
   service,
+  collectionInstructions,
   compact = false,
 }: {
   service: DispatchService
+  collectionInstructions?: CollectionInstructions
   compact?: boolean
 }) {
+  if (collectionInstructions !== undefined)
+    return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
     <div className={`money-block ${compact ? 'compact' : ''}`}>
       <div className="money-fee">
@@ -169,7 +175,11 @@ export function ServiceCard({
               <span>{duration(service.route.durationSeconds)} estimados</span>
             </div>
           </dl>
-          <MoneyBlock service={service} compact />
+          <MoneyBlock
+            service={service}
+            collectionInstructions={dispatch.collectionInstructions}
+            compact
+          />
           <p className="credit-chip">
             Cuesta {creditCostLabel(dispatch.creditCost)}
           </p>
@@ -354,7 +364,11 @@ export function ClaimDialog({
           {service && (
             <>
               <ServiceSummary service={service} />
-              <MoneyBlock service={service} compact />
+              <MoneyBlock
+                service={service}
+                collectionInstructions={dispatch.collectionInstructions}
+                compact
+              />
             </>
           )}
           <InfoGrid

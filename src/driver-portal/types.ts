@@ -1,3 +1,4 @@
+import type { CollectionInstructions } from '../collection-instructions/types'
 import type {
   GoodsPaymentMode,
   PackageCategory,
@@ -40,10 +41,11 @@ export interface DriverSelf {
   provider: { id: string; name: string; code: string; status: string }
   currentAssignment: unknown | null
   /**
-   * V1.9: the ACTIVE delivery assignment in either model. The backend selects only these three
-   * fields, so the timestamp comes from the dispatch's own assignment, never from here.
+   * The ACTIVE delivery assignment in either model. V1.13-D adds collection instructions;
+   * timestamps still come from the dispatch assignment.
    */
   activeDeliveryAssignment: {
+    collectionInstructions?: CollectionInstructions
     id: string
     mode: 'FLEET' | 'INDEPENDENT'
     dispatchId: string
@@ -91,6 +93,7 @@ export interface DriverAssignment {
   vehicle: { id: string; identifier: string; type: VehicleType }
 }
 export interface DriverDispatch {
+  collectionInstructions?: CollectionInstructions
   id: string
   status: 'OPEN' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED' | 'DELIVERED'
   /** OFFER: I can take it. OWNER: I took it, so contacts and instructions appear. */

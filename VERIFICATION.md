@@ -1,3 +1,68 @@
+## 2026-09-29 — Continuación: pruebas de cuentas locales reales
+
+Por instrucción del usuario se conservaron las dos cuentas como datos exclusivamente locales de desarrollo, con instrucciones de uso en el directorio ignorado `test-results/local-accounts/`. Sus contraseñas no forman parte de Git ni de seeds o despliegues.
+
+Validación directa contra la API local: **24 comprobaciones correctas**, exit 0. Login, identidad/rol, refresh e identidad conservada, logout y rechazo del refresh revocado en ambas cuentas; membership del proveedor, listado vacío de servicios, rechazo de provider sin membership; driver/me sin asignación ni capacidad independiente; bloqueo de administración global para ambos roles. Una comprobación inicial esperaba erróneamente 403 al consultar ofertas independientes: el contrato local establece 409 / INDEPENDENT_NOT_APPROVED. Se confirmó en la política existente y se corrigió la expectativa; la ejecución posterior completa pasó. No hubo cambio de producto por este hallazgo ni ejecución de suites ajenas.
+
+Estas pruebas usaron HTTP real, sin mocks, pero **no acreditan instrucciones de cobro reales ni transiciones de un servicio**: el proveedor y el driver siguen PENDING y no hay dispatches. La revisión visual anterior continúa siendo simulada. Sin activaciones, despachos/cobros, cambios de backend/configuración, commit, push o despliegue.
+
+---
+
+## 2026-09-29 — V1.13-D: instrucciones de cobro para ejecutores
+
+Implementación frontend con validación focalizada y datos simulados. **No acredita integración real ni cobros.** Esta entrada conserva debajo el historial anterior; no constituye otro CHECK.
+
+### Contrato y superficies
+
+Referencia de sólo lectura: `mandaria-backend/docs/V1.13-D-EXECUTOR-COLLECTION-INSTRUCTIONS.md` (2026-09-29).
+
+- Proveedor: `/services`, `/services/:id`, diálogo de tomar servicio y diálogos de asignar/reasignar. Se lee el campo raíz de dispatch; SUMMARY sigue sin mostrar detalles.
+- Independiente: `/driver/services`, `/driver/services/:id`, diálogo de tomar y `/driver/my-service`.
+- Repartidor asignado: `GET /driver/me` → `activeDeliveryAssignment.collectionInstructions`. La superficie existente de bloqueo de la capacidad independiente muestra las instrucciones asignadas sin habilitar dicha capacidad. Una asignación FLEET en una cuenta con ambas capacidades tampoco consulta el endpoint de dispatch independiente ni habilita entregar/liberar como independiente.
+- Tipos ampliados: ProviderDispatch, DriverDispatch, DriverSelf.activeDeliveryAssignment y AssignmentWithPayment. El historial GET de asignaciones no incorpora el campo: no se reconstruyen instrucciones para sus filas.
+- No existe en Web una acción de `PATCH /driver/availability`; no se agregó una. Su integración queda pendiente si se implementa esa superficie. No se creó una pantalla de ejecución de flotilla.
+
+### Presentación y vigencia
+
+Componente compartido en `src/collection-instructions/`: valida todos los valores soportados antes de indicar un cobro. OFFER sólo informa condiciones; CURRENT indica comida pagada, sin adelanto ni cobro de comida, y únicamente envío al destinatario en efectivo al entregar; HISTORICAL conserva referencia sin instrucción vigente. Importe decimal y moneda se imprimen desde el campo recibido, sin float, sumas ni inferencias desde mercancía/créditos/PREPAID. Datos incompletos o desconocidos muestran un aviso no operativo. Campo ausente conserva el bloque legacy.
+
+Se reutilizan invalidaciones/refetch tras claim/take/release/entrega y asignación/reasignación/cancelación. La invalidación de asignaciones también alcanza la caché driver-portal; durante lecturas de estas superficies se oculta la instrucción almacenada y se muestra actualización. Los errores de autorización siguen los estados de error existentes. No se almacena la respuesta de una mutación como instrucción vigente; se vuelve a consultar la proyección autorizada. Cancelar una asignación no necesariamente termina el claim del proveedor: su detalle refleja la nueva lectura del backend, mientras el repartidor anterior pierde activeDeliveryAssignment.
+
+La detección de cambios externos sigue dependiendo del refetch existente (navegación/foco/actualización); no hay garantía de tiempo real ni nuevos sockets. La entrega física no se presenta como confirmación de cobro.
+
+### Archivos
+
+- `src/collection-instructions/{types.ts,validation.ts,CollectionInstructionsBlock.tsx}`: contrato, validación y presentación comunes.
+- `src/dispatch/{types.ts,components.tsx,pages.tsx}`: proveedor.
+- `src/driver-portal/{types.ts,pages.tsx}`: independiente y repartidor asignado.
+- `src/delivery-assignments/{types.ts,components.tsx,queries.ts}`: asignación y refresco.
+- `src/index.css`: legibilidad y adaptación al ancho disponible.
+- `src/test/{collection-fixture.ts,collection-instructions.test.tsx,dispatch.test.tsx,driver-portal.test.tsx}`: fixtures y pruebas focalizadas.
+
+### Verificaciones ejecutadas
+
+1. `npx tsc -b --pretty false`: exit 0; repetido tras el ajuste final.
+2. `npm run typecheck:test`: exit 0; repetido tras el ajuste final.
+3. `npm run lint`: exit 0; repetido tras el ajuste final.
+4. `npx vitest run src/test/collection-instructions.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/delivery-assignments.test.tsx src/test/delivery-completion.test.tsx`: **134 pruebas, 5 archivos, exit 0**.
+5. Tras añadir dos pruebas de rutas y ajustar validación/presentación: `npx vitest run src/test/collection-instructions.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx`: **90 pruebas, 3 archivos, exit 0**. Las dos suites de asignación/entrega no se repitieron. No se suman ejecuciones repetidas como casos nuevos.
+6. Revisión visual con Chromium/Playwright sobre componentes reales en un montaje local de simulación: 1280×1000, 768×1024 y 390×844. OFFER, CURRENT, HISTORICAL, legacy, campo incompleto y repartidor de flotilla. Sin desbordamiento horizontal ni errores pageerror. Se inspeccionaron capturas; tras detectar texto pequeño se mejoró la legibilidad y se repitió la captura. Red externa bloqueada y Vite apuntando a un puerto inactivo sólo en el proceso, sin cambiar .env. Artefactos locales ignorados en `test-results/collection-instructions/`.
+7. `git diff --check`: exit 0.
+
+Cobertura nueva: estados de aplicabilidad, importe/moneda exactos incluso fuera del rango seguro de float, valores desconocidos/incompletos, ausencia y compatibilidad legacy, listado proveedor/independiente, proyección driver/me, desaparición al finalizar la asignación, y reemplazo de proyección mediante los helpers de refetch para cambios operativos. Los tests de caché simulan respuestas; no prueban una transacción real del backend.
+
+No hubo aborto del runner ni diagnóstico adicional. No se ejecutó la suite completa, build de distribución, Docker ni scripts E2E operativos. No se accedió a Coita ni se realizaron despachos/cobros reales. Sin cambios de backend, .env, versión, configuración operativa, activación, commit, push o despliegue. Pendiente: integración real contra backend con V1.13-D desplegado y cuentas autorizadas, fuera de esta validación simulada.
+
+### Seguimiento local — cuentas autorizadas por el usuario (2026-09-29)
+
+Tras autorizar expresamente la creación/inserción de cuentas, se creó un proveedor sintético separado y dos identidades nuevas: PROVIDER_ADMIN con membership ADMIN y DRIVER con perfil asociado. Proveedor y perfil DRIVER permanecen PENDING; no se activaron capacidades ni se crearon servicios, asignaciones operativas o cobros. Usuarios insertados únicamente en la base local de desarrollo, con Argon2id; proveedor, membership y perfil creados mediante API existente. No se ejecutaron seeds generales ni se cambiaron cuentas previas.
+
+Login real y GET /auth/me correctos para ambos roles; GET /provider/profiles devolvió el proveedor asociado y GET /driver/me confirmó que no hay asignación activa. Se cerraron las sesiones de comprobación. Las contraseñas aleatorias permanecen sólo en un archivo local ignorado por Git, restringido al usuario del sistema; no se incluyen en esta documentación.
+
+Backend en ejecución: GET /health 200 y Swagger activo con collectionInstructions en las cuatro proyecciones esperadas. Esta comprobación acredita autenticación y lectura real de las cuentas, **no la visualización real de instrucciones**, porque las cuentas nuevas no tienen dispatches. Siguen pendientes los datos operativos sintéticos autorizados para esa validación. No se modificaron código/backend, .env ni configuración operativa.
+
+---
+
 # Estado actual — Mandaria Web V1.11-B (MVP Delivery Completion)
 
 Fecha: 2026-09-23. Rama `v1.11-mvp_delivery_completion`. Backend real Mandaria 1.11.0 (`v1.11-mvp-delivery-completion`) con `ROUTING_PROVIDER=local_fake`. Detalle en [docs/V1.11-B.md](docs/V1.11-B.md).

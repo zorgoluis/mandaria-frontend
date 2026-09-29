@@ -1,3 +1,4 @@
+import type { CollectionInstructions } from '../collection-instructions/types'
 import type {
   GoodsPaymentMode,
   PackageCategory,
@@ -79,6 +80,7 @@ export interface MyCandidate {
   releaseReason: string | null
 }
 export interface ProviderDispatch {
+  collectionInstructions?: CollectionInstructions
   id: string
   status: DispatchStatus
   access: DispatchAccess
