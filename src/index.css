@@ -2489,3 +2489,20 @@ dialog .money-block {
   display: grid;
   gap: 10px;
 }
+
+/* Executor instructions are operational content, not fine print. */
+.collection-instructions {
+  padding: 16px;
+  margin-block: 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--brand);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.collection-instructions p {
+  margin: 8px 0 0;
+}

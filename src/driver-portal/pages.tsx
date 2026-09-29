@@ -1,3 +1,5 @@
+import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -84,6 +86,9 @@ export function DriverPortal({
   if (blocked)
     return (
       <div className="panel">
+        <CollectionInstructionsBlock
+          value={query.data.activeDeliveryAssignment?.collectionInstructions}
+        />
         <Empty
           title="Todavía no puedes tomar servicios"
           description={blocked}
@@ -120,11 +125,15 @@ export function PortalTabs() {
 /** Delivery fee and goods value are different money and are never added together. */
 export function PaymentBlock({
   payment,
+  collectionInstructions,
   beforeTaking = false,
 }: {
   payment: DriverPaymentContext
+  collectionInstructions?: CollectionInstructions
   beforeTaking?: boolean
 }) {
+  if (collectionInstructions !== undefined)
+    return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
     <div className="driver-payment">
       <div className="payment-row">
@@ -197,15 +206,17 @@ function ServiceCard({ dispatch }: { dispatch: DriverDispatch }) {
           Cuesta {creditCostLabel(dispatch.creditCost)}
         </span>
       </p>
-      {paymentContext.driverAdvancesGoods && (
-        <p className="driver-advance-chip">
-          <AlertTriangle size={14} aria-hidden="true" />
-          Requiere adelanto
-          {paymentContext.driverAdvanceAmount
-            ? ` de ${amount(paymentContext.driverAdvanceAmount)}`
-            : ''}
-        </p>
-      )}
+      {dispatch.collectionInstructions === undefined &&
+        paymentContext.driverAdvancesGoods && (
+          <p className="driver-advance-chip">
+            <AlertTriangle size={14} aria-hidden="true" />
+            Requiere adelanto
+            {paymentContext.driverAdvanceAmount
+              ? ` de ${amount(paymentContext.driverAdvanceAmount)}`
+              : ''}
+          </p>
+        )}
+      <CollectionInstructionsBlock value={dispatch.collectionInstructions} />
       <Link
         className="button"
         to={`/driver/services/${encodeURIComponent(dispatch.id)}`}
@@ -453,7 +464,11 @@ function ServiceContent({
           <h2 id="driver-money">Cobro</h2>
         </div>
         <div className="panel-body">
-          <PaymentBlock payment={paymentContext} beforeTaking={!mine} />
+          <PaymentBlock
+            payment={paymentContext}
+            collectionInstructions={dispatch.collectionInstructions}
+            beforeTaking={!mine}
+          />
         </div>
       </section>
       <section className="panel" aria-labelledby="driver-credits-cost">
@@ -577,7 +592,11 @@ function TakeDialog({
             ]}
           />
           <CreditCheck cost={dispatch.creditCost} />
-          <PaymentBlock payment={dispatch.paymentContext} beforeTaking />
+          <PaymentBlock
+            payment={dispatch.paymentContext}
+            collectionInstructions={dispatch.collectionInstructions}
+            beforeTaking
+          />
           <ActionForm
             initialDirty
             submitLabel="CONFIRMAR"
@@ -655,7 +674,7 @@ function MyService({ me }: { me: DriverSelf }) {
   const query = useQuery({
     queryKey: driverKeys.dispatch(active?.dispatchId ?? 'none'),
     queryFn: ({ signal }) => driverPortal.get(active!.dispatchId, signal),
-    enabled: !!active,
+    enabled: !!active && active.mode === 'INDEPENDENT',
     staleTime: 0,
   })
   const [releasing, setReleasing] = useState(false)
@@ -679,6 +698,14 @@ function MyService({ me }: { me: DriverSelf }) {
             }
           />
         </div>
+      ) : active.mode === 'FLEET' ? (
+        <section className="panel">
+          <h2>Servicio asignado por tu proveedor</h2>
+          <CollectionInstructionsBlock value={active.collectionInstructions} />
+          <p className="panel-note">
+            La operación de este servicio la gestiona tu proveedor.
+          </p>
+        </section>
       ) : query.isPending ? (
         <Loading />
       ) : query.isError ? (
@@ -735,7 +762,14 @@ function MyService({ me }: { me: DriverSelf }) {
               ]}
             />
             <div className="panel-body">
-              <PaymentBlock payment={query.data.paymentContext} />
+              <PaymentBlock
+                payment={query.data.paymentContext}
+                collectionInstructions={
+                  active.collectionInstructions !== undefined
+                    ? active.collectionInstructions
+                    : query.data.collectionInstructions
+                }
+              />
             </div>
             <div className="panel-body driver-service-actions">
               <button

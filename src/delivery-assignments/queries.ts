@@ -1,3 +1,4 @@
+import { driverKeys } from '../driver-portal/queries'
 import { queryClient } from '../services/query'
 import { dispatchKeys } from '../dispatch/queries'
 
@@ -26,6 +27,7 @@ export async function refreshAfterAssignment(
   dispatchId: string,
 ) {
   await Promise.all([
+    queryClient.invalidateQueries({ queryKey: driverKeys.all }),
     queryClient.invalidateQueries({
       queryKey: dispatchKeys.provider(providerId),
     }),

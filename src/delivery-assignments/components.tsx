@@ -1,3 +1,5 @@
+import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, Clock3, Wallet } from 'lucide-react'
@@ -56,14 +58,18 @@ export function AssignmentBadge({
  */
 export function PaymentContextBlock({
   payment,
+  collectionInstructions,
   beforeAssigning = false,
 }: {
   payment: PaymentContext
+  collectionInstructions?: CollectionInstructions
   beforeAssigning?: boolean
 }) {
   const mode = payment.goodsPaymentMode
     ? paymentModes[payment.goodsPaymentMode]
     : undefined
+  if (collectionInstructions !== undefined)
+    return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
     <div className="payment-context">
       <div className="payment-row">
@@ -416,7 +422,13 @@ export function AssignDialog({
           value={choice}
           onChange={setChoice}
         />
-        {payment && <PaymentContextBlock payment={payment} beforeAssigning />}
+        {payment && (
+          <PaymentContextBlock
+            payment={payment}
+            collectionInstructions={dispatch.collectionInstructions}
+            beforeAssigning
+          />
+        )}
       </ActionForm>
     </Modal>
   )
@@ -475,7 +487,13 @@ export function ReassignDialog({
           onChange={setChoice}
         />
         <ReasonFields reason={reason} onReason={setReason} />
-        {payment && <PaymentContextBlock payment={payment} beforeAssigning />}
+        {payment && (
+          <PaymentContextBlock
+            payment={payment}
+            collectionInstructions={dispatch.collectionInstructions}
+            beforeAssigning
+          />
+        )}
       </ActionForm>
     </Modal>
   )
