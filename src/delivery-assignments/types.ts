@@ -1,3 +1,4 @@
+import type { CollectionInstructions } from '../collection-instructions/types'
 import type { GoodsPaymentMode } from '../delivery-requests/types'
 import type { Money } from '../dispatch/types'
 import type { VehicleType } from '../logistics/types'
@@ -60,6 +61,7 @@ export interface PaymentContext {
   driverAdvanceAmount: Money | null
 }
 export interface AssignmentWithPayment extends DeliveryAssignment {
+  collectionInstructions?: CollectionInstructions
   paymentContext: PaymentContext
 }
 export interface AdminDeliveryAssignment extends DeliveryAssignment {

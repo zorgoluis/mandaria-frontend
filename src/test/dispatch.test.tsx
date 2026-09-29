@@ -1,3 +1,4 @@
+import { collectionFixture } from './collection-fixture'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   cleanup,
@@ -817,4 +818,16 @@ describe('SUPER_ADMIN audit', () => {
     )
     expect(screen.queryByRole('button', { name: /TOMAR|LIBERAR/ })).toBeNull()
   })
+})
+
+it('V1.13-D provider list displays offer terms from its dispatch projection', async () => {
+  vi.mocked(providerDispatches.list).mockResolvedValue(
+    page([dispatch({ collectionInstructions: collectionFixture })]),
+  )
+  mount('/services')
+  expect(
+    await screen.findByText(/Condiciones previstas: comida pagada/),
+  ).toHaveTextContent('25.10 MXN')
+  expect(screen.queryByText(/Cobra únicamente/)).toBeNull()
+  expect(screen.queryByText(/El repartidor adelanta/)).toBeNull()
 })
