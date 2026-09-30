@@ -328,8 +328,59 @@ describe('auth and permissions UX', () => {
   })
 })
 describe('integrations', () => {
+  it('renders prequote scopes on existing credentials without granting other permissions', async () => {
+    vi.mocked(integrations.credentials).mockResolvedValue([
+      {
+        id: 'credential-existing',
+        clientId: 'client-existing',
+        status: 'ACTIVE',
+        scopes: [
+          'prequotes:create',
+          'prequotes:read',
+          'prequotes:convert',
+          'quotes:read',
+        ],
+        expiresAt: null,
+        lastUsedAt: null,
+        revokedAt: null,
+        createdAt: stamp,
+        updatedAt: stamp,
+      },
+    ])
+    mount('/integrations/integration-1')
+    for (const scope of [
+      'prequotes:create',
+      'prequotes:read',
+      'prequotes:convert',
+      'quotes:read',
+    ])
+      expect(
+        await screen.findByText(scope, { selector: 'code' }),
+      ).toBeInTheDocument()
+    expect(screen.queryByText('quotes:accept', { selector: 'code' })).toBeNull()
+    expect(integrations.createCredential).not.toHaveBeenCalled()
+    expect(integrations.rotate).not.toHaveBeenCalled()
+  })
+
   it.each([
     { selected: [] },
+    {
+      selected: [
+        'prequotes:convert',
+        'prequotes:create',
+        'prequotes:read',
+        'quotes:create',
+        'quotes:read',
+        'quotes:accept',
+        'deliveries:create',
+        'deliveries:read',
+        'deliveries:cancel',
+      ],
+    },
+    { selected: ['prequotes:create'] },
+    { selected: ['prequotes:read'] },
+    { selected: ['prequotes:convert'] },
+    { selected: ['prequotes:convert', 'prequotes:create', 'prequotes:read'] },
     { selected: ['quotes:read'] },
     { selected: ['quotes:accept'] },
     { selected: ['quotes:read', 'quotes:accept'] },
@@ -362,6 +413,9 @@ describe('integrations', () => {
       expect(
         options.map((option) => (option as HTMLInputElement).value),
       ).toEqual([
+        'prequotes:convert',
+        'prequotes:create',
+        'prequotes:read',
         'quotes:create',
         'quotes:read',
         'quotes:accept',
@@ -372,6 +426,9 @@ describe('integrations', () => {
       for (const option of options) expect(option).not.toBeChecked()
       for (const scope of selected)
         await actor.click(screen.getByLabelText(scope))
+      // New permissions also remain absent after checking and unchecking.
+      await actor.click(screen.getByLabelText('prequotes:convert'))
+      await actor.click(screen.getByLabelText('prequotes:convert'))
       // A permission checked and then unchecked must not be granted either.
       await actor.click(screen.getByLabelText('deliveries:cancel'))
       await actor.click(screen.getByLabelText('deliveries:cancel'))
