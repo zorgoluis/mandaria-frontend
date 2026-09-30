@@ -5,6 +5,23 @@ import type { Scope } from '../types/api'
 afterEach(() => vi.restoreAllMocks())
 it.each<{ selected: Scope[] }>([
   { selected: [] },
+  {
+    selected: [
+      'prequotes:convert',
+      'prequotes:create',
+      'prequotes:read',
+      'quotes:create',
+      'quotes:read',
+      'quotes:accept',
+      'deliveries:create',
+      'deliveries:read',
+      'deliveries:cancel',
+    ],
+  },
+  { selected: ['prequotes:create'] },
+  { selected: ['prequotes:read'] },
+  { selected: ['prequotes:convert'] },
+  { selected: ['prequotes:convert', 'prequotes:create', 'prequotes:read'] },
   { selected: ['quotes:read'] },
   { selected: ['quotes:accept'] },
   { selected: ['quotes:read', 'quotes:accept'] },
