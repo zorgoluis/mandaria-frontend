@@ -57,7 +57,11 @@ export interface ProviderProfile extends Pick<
   membershipRole: 'OWNER' | 'ADMIN'
 }
 export type IntegrationStatus = 'ACTIVE' | 'SUSPENDED' | 'REVOKED'
+// Matches Mandaria Backend INTEGRATION_SCOPES; permissions remain opt-in.
 export const scopes = [
+  'prequotes:convert',
+  'prequotes:create',
+  'prequotes:read',
   'quotes:create',
   'quotes:read',
   'quotes:accept',
