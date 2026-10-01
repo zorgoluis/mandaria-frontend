@@ -14,6 +14,23 @@ import type { Integration, Provider, Role, User } from '../types/api'
 import { ApiError } from '../services/errors'
 import { capacity } from '../logistics/service'
 import { deliveryRequests } from '../delivery-requests/service'
+vi.mock('../webhooks/service', () => ({
+  webhooks: {
+    endpoint: vi.fn().mockResolvedValue(null),
+    summary: vi
+      .fn()
+      .mockResolvedValue({ events: 0, pending: 0, delivered: 0, exhausted: 0 }),
+    events: vi
+      .fn()
+      .mockResolvedValue({
+        items: [],
+        total: 0,
+        totalPages: 0,
+        page: 1,
+        pageSize: 20,
+      }),
+  },
+}))
 vi.mock('../invitations/service', () => ({
   invitations: {
     list: vi.fn().mockResolvedValue({

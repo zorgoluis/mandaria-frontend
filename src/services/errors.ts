@@ -4,16 +4,20 @@ export class ApiError extends Error {
   code: string | null
   /** Raw backend validation strings. Never rendered verbatim; translate before display. */
   details: string[]
+  /** Backend correlation identifier; retained without rendering raw error bodies. */
+  requestId: string | null
   constructor(
     status: number,
     message: string,
     code: string | null = null,
     details: string[] = [],
+    requestId: string | null = null,
   ) {
     super(message)
     this.status = status
     this.code = code
     this.details = details
+    this.requestId = requestId
   }
 }
 export function normalizeError(status: number, body: unknown): ApiError {
@@ -242,6 +246,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
   const record = body && typeof body === 'object' ? body : undefined
   const raw = record && 'message' in record ? record.message : undefined
   const code = record && 'code' in record ? record.code : undefined
+  const requestId =
+    record && 'requestId' in record ? record.requestId : undefined
   const list = record && 'errors' in record ? record.errors : undefined
   const details =
     Array.isArray(list) && list.every((item) => typeof item === 'string')
@@ -255,6 +261,7 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'Mandaria no está disponible en este momento. Inténtalo más tarde.',
     typeof code === 'string' ? code : null,
     details,
+    typeof requestId === 'string' ? requestId : null,
   )
 }
 export const errorMessage = (error: unknown) =>

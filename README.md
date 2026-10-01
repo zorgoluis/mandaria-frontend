@@ -4,6 +4,40 @@ Base administrativa independiente para Mandaria Backend V1.4. React + Vite + Typ
 
 **Estado:** V1.11-B cierra el MVP con la confirmación manual de entrega: el PROVIDER_ADMIN dueño del servicio lo marca como entregado cuando su repartidor le avisa (fuera de Mandaria) y el repartidor independiente confirma la suya desde su portal. El Dispatch pasa a `DELIVERED`, la asignación a `COMPLETED`, el repartidor y el vehículo quedan libres y no hay movimientos de créditos. `DELIVERED` es terminal: no se deshace. Sin prueba de entrega, seguimiento ni webhooks. Ver [V1.11-B](docs/V1.11-B.md). V1.10-F agrega la administración de créditos y monetización: SUPER_ADMIN consulta el saldo y el historial de créditos de cada proveedor y de cada repartidor independiente desde su propia ficha, registra recargas (pagos confirmados fuera de Mandaria) y ajustes administrativos, y administra las políticas de créditos versionadas con su calculadora; PROVIDER_ADMIN y DRIVER consultan su propio saldo en sólo lectura. Los créditos Mandaria son una unidad interna de consumo y nunca se muestran como dinero. No hay pasarela de pago, recargas automáticas ni devoluciones manuales. Ver [V1.10-F](docs/V1.10-F.md). V1.9-C agrega la administración de cobertura de servicio: SUPER_ADMIN decide desde el detalle del proveedor en qué zonas y tipos de servicio recibe servicios de flotilla (agregar, activar, desactivar; nunca borrar) y PROVIDER_ADMIN consulta «Mi cobertura» en sólo lectura. La cobertura afecta a los nuevos Dispatches; los candidatos de los ya abiertos no se recalculan. Ver [V1.9-C](docs/V1.9-C.md). V1.9-B agrega la administración de repartidores independientes y un portal web temporal para ellos: SUPER_ADMIN habilita, suspende y rechaza la capacidad independiente y administra sus vehículos propios; el repartidor habilitado consulta servicios disponibles, los toma con una sola operación atómica, ve su servicio actual y puede liberarlo. Sin Driver App, sin sockets y sin estados de ejecución. Ver [V1.9-B](docs/V1.9-B.md). V1.8-B agrega la asignación de repartidor y vehículo: el PROVIDER_ADMIN dueño de un servicio tomado asigna, reasigna y cancela la asignación, con el backend como única autoridad de cuál queda vigente. El Dispatch sigue siendo `CLAIMED`; que esté asignado se deriva de la `DeliveryAssignment` real. SUPER_ADMIN sólo audita el historial. Ver [V1.8-B](docs/V1.8-B.md). V1.7-B agrega visibilidad de despachos y toma de servicios: PROVIDER_ADMIN ve los servicios ofrecidos a su proveedor, los toma (el backend decide quién gana) y puede liberarlos; SUPER_ADMIN audita los despachos en sólo lectura. No asigna repartidor ni vehículo (V1.8) y no usa sockets. Ver [V1.7-B](docs/V1.7-B.md). V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
+## 2026-10-01 — Webhooks administrativos y portal B2B
+
+Esta entrada amplía el estado histórico descrito arriba. Se agregó administración de webhooks para SUPER_ADMIN y documentación pública anónima; no habilita envíos ni acredita integración real.
+
+- `/integrations/:id`: destino HTTPS, habilitación explícita, metadata del secreto de firma, deliverFrom, resumen y eventos paginados del cliente. Filtros: estado, solicitud, referencia externa exacta y fechas.
+- `/integrations/:id/webhooks/:eventId`: intentos, HTTP, causa, duración y destino histórico separado del actual. Se comprueba el cliente antes de mostrar el evento.
+- `/webhooks/health`: métricas compartidas separadas de `thisInstance`. Acceso desde el detalle de integración; sin rescate ni envío manual.
+- `/developers` y subrutas `authentication`, `prequotes`, `webhooks`, `errors`, `reference`: acceso anónimo sin montar AuthProvider ni restaurar sesión administrativa. Guías revisadas, ejemplos copiables, referencia y descarga; sin consola de ejecución.
+
+El secreto de firma es distinto de clientSecret B2B. Generación/rotación requiere confirmación y realiza un solo intento HTTP (sin repetición tras 401). El valor sólo vive en el componente, fuera de cachés y almacenamiento; se retira al cerrar, desmontar/navegar, cerrar sesión o salir de la página. Las respuestas tardías se descartan. Una respuesta perdida muestra incertidumbre explícita: el backend pudo rotarlo. No hay convivencia de secretos. Deshabilitar conserva pendientes y no garantiza detener peticiones en vuelo. HTTP 2xx/DELIVERED acredita aceptación por el receptor, no procesamiento comercial.
+
+La configuración distingue GET 404 de errores de autorización/red. Refetch/foco actualiza datos limpios; si hay edición local y revisión remota diferente, se conserva la edición y se bloquea el guardado hasta resolver el conflicto. Las mutaciones invalidan las consultas de webhooks.
+
+### Actualizar la documentación pública
+
+Referencia de sólo lectura: `mandaria-backend/docs/B2B-FRONTEND-HANDOFF.md`. La entrega local revisada del 2026-10-01 ya existe; se copiaron únicamente cinco artefactos aprobados, nunca `docs/openapi.json` ni el handoff interno. `manifest.json` registra SHA-256 por archivo.
+
+1. Solicitar al mantenedor backend una entrega revisada y su verificación `npm run docs:b2b:check`. El frontend no sustituye esa revisión ni ejecuta aquí comandos backend.
+2. Revisar el diff de la entrega y actualizar explícitamente la lista de operaciones aprobadas si el contrato cambia.
+3. Ejecutar desde frontend:
+
+```bash
+node scripts/sync-public-b2b.mjs --backend ../mandaria-backend
+node scripts/sync-public-b2b.mjs --check --backend ../mandaria-backend
+```
+
+La primera orden copia exclusivamente los archivos públicos aprobados; `--check` no escribe y falla si las copias/huellas difieren del handoff disponible. La lista explícita admite las 15 operaciones revisadas; no publica automáticamente operaciones nuevas. El check necesita el checkout backend correcto y no demuestra por sí solo que su exportación esté actualizada frente al código backend.
+
+El portal muestra el origen centralizado `VITE_API_URL`, con rutas `/api/v1`. La revisión local del 2026-10-01 confirmó `http://localhost:3000` en la configuración local y de ejemplo; Dockerfile recibe la misma variable como argumento de build. Ninguno de esos valores confirma el origen de publicación. El JSON descargable mantiene `https://api.mandaria.example`, deliberadamente ficticio: el integrador debe sustituirlo por el origen confirmado del entorno. El host del portal nunca se infiere como backend. No se cambió `.env`, nginx ni configuración operativa. El hosting debe conservar el fallback SPA existente para enlaces directos; sólo se comprobó localmente con Vite.
+
+Dependencias nuevas: `react-markdown` y `remark-gfm` para representar directamente las guías revisadas y sus tablas, con HTML crudo deshabilitado y enlaces públicos controlados. No se ejecuta código de los ejemplos.
+
+Implementación: `src/webhooks/`, `src/developers/`, integración en App/Root/detalle de integración y transporte `apiOnce` centralizado. Evidencia y límites en [VERIFICATION.md](VERIFICATION.md). No requiere cambios backend para este alcance según el contrato local consultado; despliegue equivalente, origen definitivo y prueba E2E real quedan por confirmar.
+
 ## Requisitos e instalación
 
 - Node.js 24 o posterior compatible, npm 11.
