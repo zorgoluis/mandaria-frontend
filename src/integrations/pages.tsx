@@ -1,3 +1,4 @@
+import { WebhookPanel } from '../webhooks/pages'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -495,6 +496,7 @@ export function IntegrationDetail() {
           recuperarse.
         </p>
       </div>
+      <WebhookPanel id={id} />
       {create && (
         <CreateCredential
           id={id}

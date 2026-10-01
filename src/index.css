@@ -2506,3 +2506,183 @@ dialog .money-block {
 .collection-instructions p {
   margin: 8px 0 0;
 }
+
+/* Webhook operations and anonymous documentation share the Mandaria tokens. */
+.webhook-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+.webhook-filters .field {
+  margin: 0;
+}
+.webhook-filters button {
+  min-height: 44px;
+}
+.panel[aria-label='Webhook de integraci�n'] {
+  overflow-wrap: anywhere;
+}
+.developer-shell {
+  max-width: 1440px;
+  margin: auto;
+}
+.developer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 36px;
+  border-bottom: 1px solid var(--line);
+}
+.developer-brand {
+  font-size: 24px;
+  font-weight: 750;
+  color: var(--brand-dark);
+  text-decoration: none;
+}
+.developer-brand span {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.developer-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 36px;
+  padding: 36px;
+}
+.developer-layout nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: start;
+  position: sticky;
+  top: 24px;
+}
+.developer-layout nav a {
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.developer-layout nav a.active {
+  background: var(--brand-dark);
+  color: white;
+}
+.developer-layout main {
+  min-width: 0;
+  max-width: 980px;
+  line-height: 1.7;
+}
+.developer-layout h1 {
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.18;
+  margin: 12px 0 24px;
+}
+.developer-layout h2 {
+  margin-top: 28px;
+}
+.developer-eyebrow {
+  color: var(--brand);
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  font-weight: 700;
+}
+.developer-lead {
+  font-size: 20px;
+  max-width: 700px;
+}
+.developer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+.developer-cards a {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.developer-cards h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+.developer-code {
+  background: #132d30;
+  color: #ecf6f3;
+  padding: 20px;
+  border-radius: 10px;
+  overflow: auto;
+  max-width: 100%;
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.developer-example {
+  margin: 16px 0;
+}
+.developer-example [role='status'] {
+  margin-left: 12px;
+  font-size: 13px;
+}
+.developer-operation {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin: 12px 0;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+.developer-operation summary {
+  cursor: pointer;
+  min-height: 32px;
+}
+.developer-prose li {
+  margin: 8px 0;
+}
+.developer-footer {
+  padding: 32px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.developer-skip {
+  position: absolute;
+  left: 20px;
+  top: -100px;
+  padding: 12px;
+  background: white;
+  z-index: 100;
+}
+.developer-skip:focus {
+  top: 10px;
+}
+.developer-shell :focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .developer-header {
+    padding: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .developer-layout {
+    display: block;
+    padding: 20px;
+  }
+  .developer-layout nav {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 28px;
+    gap: 4px;
+  }
+  .developer-layout nav a {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

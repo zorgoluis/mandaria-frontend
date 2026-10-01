@@ -15,6 +15,45 @@ beforeEach(() => {
   sessionStorage.clear()
 })
 describe('HTTP and human session', () => {
+  it('uses the confirmed origin with exactly one prefix across all transports', async () => {
+    vi.stubEnv('VITE_API_URL', 'https://mandaria.com.mx/')
+    try {
+      const fetcher = vi
+        .spyOn(globalThis, 'fetch')
+        .mockImplementation(async (url) => {
+          if (
+            String(url).endsWith('/auth/login') ||
+            String(url).endsWith('/auth/refresh')
+          )
+            return response(tokens)
+          return response(user)
+        })
+      const { authService, api, apiOnce, publicApi } =
+        await import('../services/api')
+      await authService.login('synthetic@example.test', 'synthetic-password')
+      await authService.restore()
+      await api('/admin/integrations')
+      await apiOnce('/admin/integrations/synthetic/webhook/secret', 'POST')
+      await publicApi('/invitations/activate', 'POST', {})
+      await authService.logout()
+      const urls = fetcher.mock.calls.map(([url]) => String(url))
+      expect(urls.some((url) => url.endsWith('/auth/refresh'))).toBe(true)
+      for (const url of urls) {
+        expect(url.startsWith('https://mandaria.com.mx/api/v1/')).toBe(true)
+        expect(url.match(/\/api\/v1/g)).toHaveLength(1)
+      }
+    } finally {
+      vi.unstubAllEnvs()
+    }
+  })
+  it.each(['/api/v1', '/api/v1/', '/other'])(
+    'rejects a path in VITE_API_URL: %s',
+    (path) => {
+      expect(() =>
+        parseEnv({ VITE_API_URL: `https://mandaria.com.mx${path}` }),
+      ).toThrow(/sin \/api\/v1/)
+    },
+  )
   it('preserves the PROVIDER_ADMIN identity returned by auth/me after human login', async () => {
     const providerUser = { ...user, role: 'PROVIDER_ADMIN' }
     const fetcher = vi
