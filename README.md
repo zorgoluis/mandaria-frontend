@@ -4,6 +4,67 @@ Base administrativa independiente para Mandaria Backend V1.4. React + Vite + Typ
 
 **Estado:** V1.11-B cierra el MVP con la confirmación manual de entrega: el PROVIDER_ADMIN dueño del servicio lo marca como entregado cuando su repartidor le avisa (fuera de Mandaria) y el repartidor independiente confirma la suya desde su portal. El Dispatch pasa a `DELIVERED`, la asignación a `COMPLETED`, el repartidor y el vehículo quedan libres y no hay movimientos de créditos. `DELIVERED` es terminal: no se deshace. Sin prueba de entrega, seguimiento ni webhooks. Ver [V1.11-B](docs/V1.11-B.md). V1.10-F agrega la administración de créditos y monetización: SUPER_ADMIN consulta el saldo y el historial de créditos de cada proveedor y de cada repartidor independiente desde su propia ficha, registra recargas (pagos confirmados fuera de Mandaria) y ajustes administrativos, y administra las políticas de créditos versionadas con su calculadora; PROVIDER_ADMIN y DRIVER consultan su propio saldo en sólo lectura. Los créditos Mandaria son una unidad interna de consumo y nunca se muestran como dinero. No hay pasarela de pago, recargas automáticas ni devoluciones manuales. Ver [V1.10-F](docs/V1.10-F.md). V1.9-C agrega la administración de cobertura de servicio: SUPER_ADMIN decide desde el detalle del proveedor en qué zonas y tipos de servicio recibe servicios de flotilla (agregar, activar, desactivar; nunca borrar) y PROVIDER_ADMIN consulta «Mi cobertura» en sólo lectura. La cobertura afecta a los nuevos Dispatches; los candidatos de los ya abiertos no se recalculan. Ver [V1.9-C](docs/V1.9-C.md). V1.9-B agrega la administración de repartidores independientes y un portal web temporal para ellos: SUPER_ADMIN habilita, suspende y rechaza la capacidad independiente y administra sus vehículos propios; el repartidor habilitado consulta servicios disponibles, los toma con una sola operación atómica, ve su servicio actual y puede liberarlo. Sin Driver App, sin sockets y sin estados de ejecución. Ver [V1.9-B](docs/V1.9-B.md). V1.8-B agrega la asignación de repartidor y vehículo: el PROVIDER_ADMIN dueño de un servicio tomado asigna, reasigna y cancela la asignación, con el backend como única autoridad de cuál queda vigente. El Dispatch sigue siendo `CLAIMED`; que esté asignado se deriva de la `DeliveryAssignment` real. SUPER_ADMIN sólo audita el historial. Ver [V1.8-B](docs/V1.8-B.md). V1.7-B agrega visibilidad de despachos y toma de servicios: PROVIDER_ADMIN ve los servicios ofrecidos a su proveedor, los toma (el backend decide quién gana) y puede liberarlos; SUPER_ADMIN audita los despachos en sólo lectura. No asigna repartidor ni vehículo (V1.8) y no usa sockets. Ver [V1.7-B](docs/V1.7-B.md). V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
+## Swagger completo: restricción pública reversible — 2026-10-01
+
+Configuración preparada, **no desplegada**. Se conserva Swagger en backend. `src/setup.ts` del backend registra `SwaggerModule.setup('docs', app, doc)` sin `useGlobalPrefix`. La dependencia instalada confirma UI `/docs`, `/docs/`, `/docs/index.html`, JSON `/docs-json`, YAML `/docs-yaml` y recursos `/docs/swagger-ui-init.js`, CSS, bundles, favicons y LICENSE bajo `/docs/`. También se cubre cualquier subruta anidada; no existe en el código consultado un montaje raíz `/swagger` alternativo.
+
+### Interruptor central
+
+Al inicio de `nginx.conf`, en contexto `http` (como se incluye actualmente en `/etc/nginx/conf.d/default.conf`), existe una sola política:
+
+```nginx
+map $uri $block_public_swagger {
+    default 0;
+    ~*^/(?:api/v1/)?docs 1;
+}
+```
+
+**1 = bloqueado, 0 = público.** Cambiar únicamente el valor final de la línea del patrón; mantener `default 0`. Ambos servidores, HTTP y HTTPS, aplican `if ($block_public_swagger) { return 404; }` antes de elegir ubicación/proxy/fallback. `if` sólo ejecuta `return`, no reescribe ni redirige. El map trabaja sobre `$uri` normalizada, sin argumentos, y es insensible a mayúsculas. Abarca el prefijo completo `/docs` (incluye JSON/YAML) y `/api/v1/docs` defensivamente; no depende de cookies, cabeceras, parámetros ni JavaScript. No usar `?swagger=1` ni mecanismos equivalentes.
+
+Los proxies existentes quedan presentes para facilitar reversión. `/developers`, sus archivos B2B, `/api/`, `/health`, certificados ACME y assets mantienen sus reglas. Este bloqueo no revoca copias del contrato descargadas anteriormente.
+
+### Restringir públicamente
+
+1. En el fichero de configuración efectivo, respaldar la configuración y establecer `~*^/(?:api/v1/)?docs 1;`. Mantener el mismo valor en el repositorio para futuras publicaciones.
+2. En el **entorno nginx efectivo**, con sus certificados y resolución del upstream disponibles, ejecutar `nginx -t`. Si falla, no recargar: corregir o restaurar el respaldo.
+3. Sólo después de éxito, ejecutar `nginx -s reload` en ese mismo entorno, o el procedimiento equivalente del servicio utilizado. No validar una instalación distinta de la que se recarga. El Dockerfile copia este fichero al construir: si se usa imagen inmutable, operación debe preparar la configuración por su procedimiento de publicación; editar el repositorio no altera un contenedor existente. No se ejecutó Docker aquí.
+4. Comprobar sin sesión desde fuera de la red privada las rutas y variantes de la matriz inferior. Swagger debe devolver **404**, nunca 200 con UI/JSON/YAML ni HTML del fallback SPA. HTTP también devuelve 404 para esas rutas; no sólo una redirección a HTTPS.
+5. Confirmar 200 y navegación directa de `/developers/reference`, 200 `application/json` y JSON válido en `/developers/assets/openapi-b2b.json`; comprobar `/health` y una lectura API autorizada sin operaciones reales.
+
+### Volver a habilitar públicamente
+
+1. Cambiar sólo `~*^/(?:api/v1/)?docs 1;` por `~*^/(?:api/v1/)?docs 0;`. Esto vuelve a exponer **todo** el contrato, no sólo la interfaz. Sin cambio backend, rebuild frontend ni controles de navegador.
+2. Ejecutar `nginx -t` en el entorno efectivo. Si no pasa, no recargar.
+3. Después de éxito, ejecutar `nginx -s reload` (o recarga del servicio equivalente).
+4. Comprobar `/docs` y `/docs/` (UI, admitiendo redirección canónica), `/docs-json` (200 JSON parseable), `/docs-yaml` (200 YAML), `/docs/swagger-ui-init.js`, CSS y bundles (200). HTTP vuelve a redirigir por la regla existente. Las variantes defensivas `/api/v1/docs` no se convierten en nuevos endpoints al revertir: sólo las rutas reales deben servir Swagger.
+5. Repetir comprobación de portal, descarga B2B, API y health. Para restringir otra vez, repetir el procedimiento anterior poniendo 1.
+
+### Matriz HTTP posterior (no ejecutada aquí)
+
+Usar `curl --path-as-is -i 'https://mandaria.com.mx/RUTA'` y repetir con HTTP cuando corresponda. En modo restringido, esperar 404 para:
+
+- `/docs`, `/docs/`, `/docs/index.html`, `/docs-json`, `/docs-yaml`.
+- `/docs/swagger-ui-init.js`, `/docs/swagger-ui.css`, `/docs/swagger-ui-bundle.js`, `/docs/swagger-ui-standalone-preset.js`, `/docs/favicon-32x32.png`, `/docs/LICENSE`, `/docs/docs/swagger-ui-init.js`.
+- `/DOCS`, `/DOCS-JSON`, `//docs`, `/docs//swagger-ui.css`, `/%64ocs`, `/docs%2fswagger-ui.css`, `/x/../docs-json`, `/api/v1/../../docs-yaml`.
+- `/api/v1/docs`, `/api/v1/docs-json`, `/api/v1/docs-yaml`, `/docs?public=1`, `/docs-json?download=1`.
+
+Nginx normaliza escapes, barras y segmentos antes de aplicar ubicaciones; las entradas malformadas pueden recibir 400, lo que también deniega acceso. Las pruebas HTTP deben verificar que ninguna variante entrega Swagger o `index.html`. La comprobación Node local sólo revisa el patrón sobre rutas normalizadas y la presencia de reglas: **no sustituye al parser ni a la normalización real de nginx**. Repetir contra cualquier otro virtual host/puerto proxy de la instalación; el repositorio no acredita que no existan configuraciones adicionales en el servidor.
+
+### Soporte mediante túnel SSH privado
+
+Evidencia disponible de sólo lectura: `mandaria-backend/docker-compose.yml` publica el backend como `127.0.0.1:${PORT:-3000}:3000`; nginx apunta a `backend:3000` dentro de su red. El proceso Nest escucha `0.0.0.0` dentro de su entorno. **3000 es un valor por defecto del host, no un puerto desplegado confirmado**. No se consultó `.env` remoto, firewall ni listeners reales.
+
+1. Acceder por SSH al host autorizado y comprobar el listener con `ss -lntp` y la configuración efectiva disponible, sin volcar secretos. Identificar el puerto backend ligado a loopback y comprobar privadamente `/health` y `/docs-json`. No asumir que el nombre de red `backend` resuelve desde el host.
+2. Si existe ese listener privado, desde el equipo de soporte usar valores comprobados (los marcadores siguientes no son destinos reales):
+
+```text
+ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:<PUERTO_LOCAL_LIBRE>:127.0.0.1:<PUERTO_BACKEND_VERIFICADO> <USUARIO_SSH>@<HOST_SSH_AUTORIZADO>
+```
+
+3. Abrir `http://127.0.0.1:<PUERTO_LOCAL_LIBRE>/docs` en ese equipo; JSON/YAML por el mismo túnel. Accede directamente al backend privado, sin pasar por el nginx público. Mantener ambos extremos locales a loopback; cerrar SSH al terminar. No hace falta desactivar el bloqueo público. Si no existe un listener privado alcanzable desde el host SSH, detenerse y pedir a operación un destino privado comprobado; no abrir ni publicar un puerto como solución.
+
+**Posible bypass:** si el backend desplegado escucha directamente en una IP/puerto públicos y el firewall permite entrada, `/docs`, `/docs-json` y `/docs-yaml` seguirán accesibles por ese puerto: nginx no puede proteger tráfico que lo evita. El compose consultado limita el binding a loopback, pero no prueba la instalación real. Antes de declarar la restricción efectiva, operación debe comprobar listeners, reglas de red/firewall y ausencia de acceso directo desde fuera. No se modificó ni abrió ningún puerto.
+
 ## Publicación confirmada — 2026-10-01
 
 - Web: `https://mandaria.com.mx`
