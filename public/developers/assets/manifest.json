@@ -1,8 +1,8 @@
 {
   "source": "Mandaria Backend / B2B-FRONTEND-HANDOFF.md",
   "files": {
-    "openapi-b2b.json": "2c91dc1b67ed50a23b011811205a72e398f7e19a3c2866433e7e0830d7138cfa",
-    "B2B-PUBLIC-GUIDE.md": "8d59821e164bf1595beca03996aab4f26d9625b209309dede4bc07a1b96d42fb",
+    "openapi-b2b.json": "0032babe6d6d3d269fa978c11dd43e5bc24f241c3b7187c15dd369f90a524351",
+    "B2B-PUBLIC-GUIDE.md": "1690cfa9c06ee59c82923883d77fc15c4ca7346106ae9aed82052bee135dd120",
     "B2B-WEBHOOKS.md": "4637561a753610e514cf21328c96f3d86d5f5c449815d6f5618e2bda20b93b5f",
     "examples/b2b-flow.json": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57",
     "examples/verify-mandaria-webhook.mjs": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"

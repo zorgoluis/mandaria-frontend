@@ -155,11 +155,16 @@ function Intro() {
         implícito.
       </p>
       <p>
-        La descarga conserva el servidor ficticio{' '}
-        <code>https://api.mandaria.example</code>. Sustitúyelo por el origen
-        confirmado de tu entorno. Esta página no confirma una dirección de
-        producción ni activa capacidades.
+        API pública confirmada: <code>https://mandaria.com.mx/api/v1</code>.
+        Portal: <code>https://mandaria.com.mx/developers</code>. Publicar la
+        documentación no activa capacidades ni envíos. Consulta el servidor
+        incluido en el JSON en la referencia API antes de importarlo.
       </p>
+      <h2>Ejemplo de conexión desde tu backend</h2>
+      <CopyCode>{`# Sólo ejemplo: ejecutar desde tu servidor con un token B2B autorizado.
+MANDARIA_API_BASE=https://mandaria.com.mx/api/v1
+curl "$MANDARIA_API_BASE/integrations/me" \\
+  -H "Authorization: Bearer <TOKEN_B2B>"`}</CopyCode>
       <p>
         Los ejemplos son ficticios y copiables. No introduzcas secretos aquí: no
         hay consola de ejecución ni se envían peticiones B2B desde el navegador.
@@ -264,9 +269,19 @@ function Reference() {
     <>
       <h1>Referencia API B2B</h1>
       <p>
-        Origen configurado: <code>{env.apiUrl}</code>. El JSON descargable
-        conserva su servidor ficticio; no apunta automáticamente a este portal.
+        Origen configurado: <code>{env.apiUrl}</code>. Origen público
+        confirmado: <code>https://mandaria.com.mx</code>. Las rutas del contrato
+        ya incluyen
+        <code> /api/v1</code>; no añadas ese prefijo al servidor del JSON.
       </p>
+      {query.data && (
+        <p role="status">
+          Servidor del artefacto descargable:{' '}
+          <code>{query.data.servers[0]?.url ?? 'No declarado'}</code>.
+          {query.data.servers[0]?.url !== 'https://mandaria.com.mx' &&
+            ' Pendiente de actualización por backend al origen confirmado. Sustituye el servidor al importarlo; la descarga se conserva sin modificaciones manuales.'}
+        </p>
+      )}
       <div className="row-actions">
         <a className="button" href={assets + 'openapi-b2b.json'} download>
           Descargar OpenAPI B2B

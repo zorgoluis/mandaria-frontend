@@ -37,6 +37,10 @@ it('anonymous portal does not restore an administrative session or send tokens',
   expect(restore).not.toHaveBeenCalled()
   expect(fetcher).not.toHaveBeenCalled()
   expect(screen.getByText('http://localhost:3000')).toBeInTheDocument()
+  expect(screen.getByText('https://mandaria.com.mx/api/v1')).toBeInTheDocument()
+  expect(
+    screen.getByText(/MANDARIA_API_BASE=https:\/\/mandaria.com.mx\/api\/v1/),
+  ).toBeInTheDocument()
 })
 it.each(['authentication', 'prequotes', 'errors', 'webhooks'])(
   'loads direct anonymous documentation route %s from reviewed local assets',
@@ -82,6 +86,12 @@ it('reference offers only the reviewed JSON and copyable synthetic examples', as
   fireEvent.click(screen.getAllByRole('button', { name: 'Copiar ejemplo' })[0])
   expect(copy).toHaveBeenCalledOnce()
   expect(screen.queryByRole('link', { name: /Swagger/ })).toBeNull()
+  const spec = JSON.parse(publicFile('openapi-b2b.json')) as {
+    servers: { url: string }[]
+  }
+  expect(
+    screen.getByText(/Servidor del artefacto descargable:/),
+  ).toHaveTextContent(spec.servers[0].url)
 })
 it('public artifact includes only reviewed B2B paths and no admin security or endpoint schema', () => {
   const spec = JSON.parse(publicFile('openapi-b2b.json')) as {

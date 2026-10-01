@@ -4,6 +4,50 @@ Base administrativa independiente para Mandaria Backend V1.4. React + Vite + Typ
 
 **Estado:** V1.11-B cierra el MVP con la confirmación manual de entrega: el PROVIDER_ADMIN dueño del servicio lo marca como entregado cuando su repartidor le avisa (fuera de Mandaria) y el repartidor independiente confirma la suya desde su portal. El Dispatch pasa a `DELIVERED`, la asignación a `COMPLETED`, el repartidor y el vehículo quedan libres y no hay movimientos de créditos. `DELIVERED` es terminal: no se deshace. Sin prueba de entrega, seguimiento ni webhooks. Ver [V1.11-B](docs/V1.11-B.md). V1.10-F agrega la administración de créditos y monetización: SUPER_ADMIN consulta el saldo y el historial de créditos de cada proveedor y de cada repartidor independiente desde su propia ficha, registra recargas (pagos confirmados fuera de Mandaria) y ajustes administrativos, y administra las políticas de créditos versionadas con su calculadora; PROVIDER_ADMIN y DRIVER consultan su propio saldo en sólo lectura. Los créditos Mandaria son una unidad interna de consumo y nunca se muestran como dinero. No hay pasarela de pago, recargas automáticas ni devoluciones manuales. Ver [V1.10-F](docs/V1.10-F.md). V1.9-C agrega la administración de cobertura de servicio: SUPER_ADMIN decide desde el detalle del proveedor en qué zonas y tipos de servicio recibe servicios de flotilla (agregar, activar, desactivar; nunca borrar) y PROVIDER_ADMIN consulta «Mi cobertura» en sólo lectura. La cobertura afecta a los nuevos Dispatches; los candidatos de los ya abiertos no se recalculan. Ver [V1.9-C](docs/V1.9-C.md). V1.9-B agrega la administración de repartidores independientes y un portal web temporal para ellos: SUPER_ADMIN habilita, suspende y rechaza la capacidad independiente y administra sus vehículos propios; el repartidor habilitado consulta servicios disponibles, los toma con una sola operación atómica, ve su servicio actual y puede liberarlo. Sin Driver App, sin sockets y sin estados de ejecución. Ver [V1.9-B](docs/V1.9-B.md). V1.8-B agrega la asignación de repartidor y vehículo: el PROVIDER_ADMIN dueño de un servicio tomado asigna, reasigna y cancela la asignación, con el backend como única autoridad de cuál queda vigente. El Dispatch sigue siendo `CLAIMED`; que esté asignado se deriva de la `DeliveryAssignment` real. SUPER_ADMIN sólo audita el historial. Ver [V1.8-B](docs/V1.8-B.md). V1.7-B agrega visibilidad de despachos y toma de servicios: PROVIDER_ADMIN ve los servicios ofrecidos a su proveedor, los toma (el backend decide quién gana) y puede liberarlos; SUPER_ADMIN audita los despachos en sólo lectura. No asigna repartidor ni vehículo (V1.8) y no usa sockets. Ver [V1.7-B](docs/V1.7-B.md). V1.6.1-B agrega invitaciones y activación de cuentas: **production user provisioning no longer requires local seeds**. SUPER_ADMIN invita administradores de proveedor y repartidores; PROVIDER_ADMIN invita repartidores de sus proveedores; la persona invitada crea su contraseña en `/activate-account`. Los seeds locales quedan sólo como herramientas de desarrollo. Ver [V1.6.1-B](docs/V1.6.1-B.md). V1.6-B agrega zonas de servicio, tarifas versionadas y consulta de cotizaciones (sólo SUPER_ADMIN) sobre la administración V1.5 de Delivery Requests. Contrato y decisiones en [V1.6-B](docs/V1.6-B.md), [V1.5-B](docs/V1.5-B.md) y [V1.4-B](docs/V1.4-B.md). Resultados ejecutados en [VERIFICATION.md](VERIFICATION.md). CI y Docker permanecen pendientes; no forman parte de esta tarea.
 
+## Publicación confirmada — 2026-10-01
+
+- Web: `https://mandaria.com.mx`
+- API: `https://mandaria.com.mx/api/v1`
+- Portal: `https://mandaria.com.mx/developers`
+- **Valor de build: `VITE_API_URL=https://mandaria.com.mx`**, sin `/api/v1`.
+
+Todos los consumidores de la configuración fueron revisados: el transporte central de `src/services/api.ts` añade `/api/v1` para login, refresh, logout, API autenticada, operaciones públicas y generación única de secretos; el portal muestra el origen explícito. `parseEnv` rechaza rutas, incluido `/api/v1`, en vez de construir un prefijo duplicado. Los scripts E2E usan su variable separada `E2E_API_URL`, también sin prefijo; no se ejecutaron contra publicación. Se conserva `.env` local; `.env.example` documenta ambas opciones. Cambiar variables del contenedor después de compilar no cambia el JS estático: suministrar el valor al build.
+
+Build de publicación local, sin desplegar ni Docker:
+
+```powershell
+$env:VITE_API_URL='https://mandaria.com.mx'
+npm run build
+```
+
+En shell POSIX: `VITE_API_URL=https://mandaria.com.mx npm run build`. El Dockerfile existente recibe la misma variable mediante ARG si operación decide construir su imagen posteriormente; no se cambió ni ejecutó aquí.
+
+El backend ya entregó `servers[0].url=https://mandaria.com.mx` y la guía con los destinos confirmados. Se sincronizaron mediante el script documentado abajo, incluyendo manifest; ninguna copia generada se editó a mano. Las rutas del OpenAPI llevan `/api/v1` y se concatenan al origen sin duplicarlo. La referencia muestra el servidor leído del JSON, y el ejemplo copiable usa `MANDARIA_API_BASE=https://mandaria.com.mx/api/v1` seguido de `/integrations/me`, sin ejecutar peticiones.
+
+### Diff mínimo de hosting preparado
+
+`nginx.conf` conserva TLS, redirect HTTP, proxy `/api/` (sin reescritura de URI), `/docs`, `/health`, `/assets/` y fallback SPA. Agrega únicamente:
+
+- `/developers/assets/` con prioridad `^~`, `try_files $uri =404`, JSON como `application/json` y guías/ejemplo como texto. Revalidación con `expires -1` para no perpetuar documentación antigua. Un archivo ausente devuelve 404 de nginx, nunca `index.html`.
+- JSON bajo `/developers/` fuera de assets devuelve 404 JSON. No se interpreta como ruta SPA.
+
+`/developers`, `/developers/reference` y las demás páginas siguen usando el fallback existente `/index.html`. El acceso a Swagger completo no cambia. El diff está preparado localmente: no es confirmación de configuración instalada.
+
+### Comprobaciones después del despliegue (no ejecutadas aquí)
+
+En el entorno de hosting, validar `nginx -t` con su configuración/certificados/red reales antes de aplicar. Después de un despliegue autorizado:
+
+```bash
+curl -I https://mandaria.com.mx/developers
+curl -I https://mandaria.com.mx/developers/reference
+curl -D openapi-headers.txt -o openapi-b2b.json https://mandaria.com.mx/developers/assets/openapi-b2b.json
+node -e "const s=JSON.parse(require('fs').readFileSync('openapi-b2b.json','utf8')); console.log(s.servers)"
+curl -i https://mandaria.com.mx/developers/assets/missing.json
+curl -i https://mandaria.com.mx/developers/missing.json
+```
+
+Esperados: páginas 200 HTML y navegación directa/recarga funcional sin sesión; contrato 200 `application/json`, JSON válido y origen confirmado; inexistentes 404 sin HTML de la aplicación. Comparar descarga con manifest normalizando CRLF a LF. Comprobar en navegador que las solicitudes autorizadas usen exactamente `/api/v1` y que proxy/rutas administrativas sigan funcionando, sin activar envíos de prueba. No se accedió a producción para estas comprobaciones.
+
 ## 2026-10-01 — Webhooks administrativos y portal B2B
 
 Esta entrada amplía el estado histórico descrito arriba. Se agregó administración de webhooks para SUPER_ADMIN y documentación pública anónima; no habilita envíos ni acredita integración real.
@@ -32,11 +76,11 @@ node scripts/sync-public-b2b.mjs --check --backend ../mandaria-backend
 
 La primera orden copia exclusivamente los archivos públicos aprobados; `--check` no escribe y falla si las copias/huellas difieren del handoff disponible. La lista explícita admite las 15 operaciones revisadas; no publica automáticamente operaciones nuevas. El check necesita el checkout backend correcto y no demuestra por sí solo que su exportación esté actualizada frente al código backend.
 
-El portal muestra el origen centralizado `VITE_API_URL`, con rutas `/api/v1`. La revisión local del 2026-10-01 confirmó `http://localhost:3000` en la configuración local y de ejemplo; Dockerfile recibe la misma variable como argumento de build. Ninguno de esos valores confirma el origen de publicación. El JSON descargable mantiene `https://api.mandaria.example`, deliberadamente ficticio: el integrador debe sustituirlo por el origen confirmado del entorno. El host del portal nunca se infiere como backend. No se cambió `.env`, nginx ni configuración operativa. El hosting debe conservar el fallback SPA existente para enlaces directos; sólo se comprobó localmente con Vite.
+El portal muestra el origen centralizado `VITE_API_URL`, sin inferirlo del host. La preparación posterior de publicación descrita arriba sustituye la advertencia inicial de dominio ficticio: el artefacto vigente ya usa el origen confirmado. La revisión visual previa sólo acreditó el servidor local Vite; hosting real sigue pendiente.
 
 Dependencias nuevas: `react-markdown` y `remark-gfm` para representar directamente las guías revisadas y sus tablas, con HTML crudo deshabilitado y enlaces públicos controlados. No se ejecuta código de los ejemplos.
 
-Implementación: `src/webhooks/`, `src/developers/`, integración en App/Root/detalle de integración y transporte `apiOnce` centralizado. Evidencia y límites en [VERIFICATION.md](VERIFICATION.md). No requiere cambios backend para este alcance según el contrato local consultado; despliegue equivalente, origen definitivo y prueba E2E real quedan por confirmar.
+Implementación: `src/webhooks/`, `src/developers/`, integración en App/Root/detalle de integración y transporte `apiOnce` centralizado. Evidencia y límites en [VERIFICATION.md](VERIFICATION.md). No requiere cambios backend para este alcance según el contrato local consultado; despliegue equivalente y prueba E2E real quedan por confirmar; el origen definitivo ya está documentado arriba.
 
 ## Requisitos e instalación
 

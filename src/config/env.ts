@@ -9,11 +9,12 @@ export function parseEnv(values: Record<string, unknown>) {
     !['http:', 'https:'].includes(url.protocol) ||
     url.username ||
     url.password ||
+    url.pathname !== '/' ||
     url.search ||
     url.hash
   )
     throw new Error(
-      'VITE_API_URL debe ser una URL HTTP válida sin credenciales ni parámetros.',
+      'VITE_API_URL debe ser un origen HTTP(S), sin /api/v1, rutas, credenciales ni parámetros.',
     )
   return { apiUrl: url.toString().replace(/\/$/, '') }
 }
