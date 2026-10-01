@@ -1,3 +1,32 @@
+## 2026-10-01 — Corrección de entrada SPA /developers en nginx
+
+**Preparada localmente, no desplegada.** Evidencia aportada por propietario: `/developers` devuelve 301 hacia `/developers/`, ésta 403; ruta profunda y OpenAPI real 200; Swagger bloqueado. No se hicieron peticiones a producción en esta tarea.
+
+### Diff y alcance
+
+- `nginx.conf`: únicamente dos ubicaciones exactas HTTPS `/developers` y `/developers/`, cada una con `try_files /index.html =404;` y `expires -1;`. Evitan seleccionar el directorio físico `developers` mediante `$uri/`; sirven la entrada SPA y fallan con 404 si ésta no existe.
+- `scripts/check-developers-entry.test.mjs`: regresión estática de ambas entradas y conservación de archivos reales, JSON inexistente y fallback de rutas profundas.
+- `README.md`: causa, comportamiento esperado, comandos y matriz de validación real pendiente.
+- Este documento conserva debajo todo el historial.
+
+El diff no modifica assets, regex JSON, fallback general, proxies API/health/docs, TLS ni map/guardas de Swagger. Se conserva HTTP→HTTPS. Backend, .env, versión y aplicación React intactos.
+
+### Ejecutado ahora
+
+- Antes de corregir nginx: `node --test --test-isolation=none scripts/check-developers-entry.test.mjs`: **1/3**, exit 1. Fallaron exactamente las dos entradas por ausencia de ubicaciones exactas. Es evidencia de regresión estática, no reproducción HTTP.
+- Después: mismo comando, **3/3**, exit 0, sin omitidos/cancelados.
+- `node scripts/check-swagger-policy.mjs`: exit 0, 16 rutas Swagger y 9 no afectadas, interruptor 1 y dos guardas/proxies conservados. No representa peticiones HTTP.
+- `git diff --check`: exit 0; revisión del diff nginx confirma sólo 11 líneas añadidas.
+- Disponibilidad local: `Get-Command nginx` / `nginx.exe` no encontró ejecutable. **No se ejecutaron nginx -t ni pruebas reales con nginx**, ni se instaló nginx.
+
+### Pendiente para operación
+
+Validar `nginx -t` en el entorno efectivo y, sólo después de publicación autorizada, comprobar ambas entradas HTTPS 200 HTML sin redirect/Location, ruta profunda 200, JSON existente 200 parseable, JSON/asset inexistentes 404 sin fallback, Swagger bloqueado y proxies API/health conservados. Pasos en README. La revisión estática no acredita comportamiento del servidor desplegado.
+
+No build/tests React: no cambió código de aplicación. Sin Docker, backend modificado, recarga, despliegue, commit ni push.
+
+---
+
 ## 2026-10-01 — Restricción reversible de Swagger público
 
 Solicitud aprobada por propietario: bloquear documentación completa en nginx conservando posibilidad de reabrir. **Preparado localmente; no desplegado.** Sin backend modificado, Docker, commit ni push.
