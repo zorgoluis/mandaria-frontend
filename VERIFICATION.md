@@ -1,3 +1,120 @@
+## 2026-10-01 — Restricción reversible de Swagger público
+
+Solicitud aprobada por propietario: bloquear documentación completa en nginx conservando posibilidad de reabrir. **Preparado localmente; no desplegado.** Sin backend modificado, Docker, commit ni push.
+
+### Archivos y alcance
+
+- `nginx.conf`: map único de `$uri` a `$block_public_swagger`; patrón insensible a mayúsculas `^/(?:api/v1/)?docs`, valor 1 bloquea y 0 habilita. Ambos servidores HTTP/HTTPS retornan 404 antes del proxy/fallback. Se conservan los bloques de proxy API/docs/health, SPA y archivos B2B. No se agrega autenticación por query/cookie/cabecera ni navegador.
+- `scripts/check-swagger-policy.mjs`: comprobación estática del patrón, ambas guardas, rutas afectadas/no afectadas y presencia de proxies/fallback conservados. No es parser nginx ni simulación del normalizador HTTP.
+- `README.md`: rutas reales, procedimientos bloquear/reabrir (nginx -t obligatorio antes de recargar), matriz posterior y túnel SSH con puertos/destinos a verificar.
+
+Fuente consultada: setup.ts y swagger-module.js de la dependencia instalada del backend. UI /docs, /docs/, /docs/index.html; JSON /docs-json; YAML /docs-yaml; init JS, CSS/bundles/favicons y LICENSE bajo /docs/. Prefijo global no aplicado a Swagger. Se bloquean también subrutas anidadas y el alias defensivo /api/v1/docs; no se encontró otro montaje Swagger en setup.
+
+### Verificaciones ejecutadas
+
+- `node scripts/check-swagger-policy.mjs`: exit 0; **16 rutas Swagger y 9 rutas no afectadas**, interruptor 1, dos guardas y proxies conservados.
+- `npx eslint scripts/check-swagger-policy.mjs`: exit 0.
+- `git diff --check`: exit 0.
+- Revisión del diff nginx: sólo map y dos guardas; no cambios a upstream, TLS, redirecciones ordinarias, portal ni descarga B2B.
+- Comprobación de disponibilidad de nginx: no hay ejecutable en el entorno. **No ejecutados nginx -t, recarga ni pruebas HTTP reales**. No se repiten build/tests React porque no se modificó la aplicación.
+
+### Exposición directa y soporte
+
+Compose backend consultado: binding host `127.0.0.1:${PORT:-3000}:3000`; upstream nginx backend:3000; Nest escucha 0.0.0.0 dentro del entorno. No son pruebas de listeners/firewall del servidor desplegado. Puerto host, usuario y host SSH se documentan como valores a confirmar, sin inventarlos ni abrir acceso. Túnel local atado a 127.0.0.1 hacia listener backend privado confirmado; soporte usa /docs directamente por el túnel.
+
+Si otro puerto backend o proxy público entrega Swagger, este bloqueo puede eludirse. Pendiente operación: verificar listeners/firewall y virtual hosts alternativos, nginx -t en entorno efectivo, recarga autorizada y matriz HTTP (incluye mayúsculas, escapes, barras repetidas, dot segments y parámetros). En restringido: 404 sin Swagger/fallback; entradas inválidas pueden ser 400. En habilitado: rutas reales UI/JSON/YAML/assets accesibles y resto sin regresión. La revisión estática no acredita esos resultados en despliegue.
+
+Reversión: cambiar únicamente el valor del patrón 1→0, nginx -t y sólo tras éxito recargar; verificar UI/JSON/YAML/assets y portal/API/health. Restaurar restricción con 0→1 y el mismo procedimiento. No eliminar Swagger backend ni cambiar su contrato.
+
+---
+
+## 2026-10-01 — Preparación de publicación con origen confirmado
+
+Propietario confirmó Web https://mandaria.com.mx, API https://mandaria.com.mx/api/v1 y portal /developers. Sin despliegue, Docker, backend modificado ni activación/envíos reales. Sin commit/push en esta tarea. Historial anterior conservado abajo.
+
+### Cambios
+
+- `src/config/env.ts`: exige origen sin pathname para prevenir /api/v1 duplicado. Transporte central añade prefijo a auth/login/me/refresh/logout, api, apiOnce y publicApi. Únicos consumidores VITE: cliente HTTP y portal; scripts E2E usan otra variable. `.env.example` documenta publicación sin sustituir desarrollo local ni escribir .env.
+- `src/developers/pages.tsx`: destinos confirmados, ejemplo copiable server-to-server, servidor real del JSON y aviso condicional si no coincide con publicación.
+- `nginx.conf`: assets de documentación con MIME explícito, 404 sin fallback y revalidación; JSON fuera de ese directorio devuelve 404. Rutas SPA y proxies API/Swagger/health permanecen intactos. Revisión del diff local, no validación nginx en ejecución.
+- Artefactos generados: guía pública, OpenAPI y manifest actualizados exclusivamente mediante sincronización, después de que backend entregara dominio confirmado. Handoff interno no publicado.
+- Tests de configuración/URLs/portal y README con comandos de build y comprobación posterior.
+
+### Ejecutado
+
+1. `node scripts/sync-public-b2b.mjs` y `node scripts/sync-public-b2b.mjs --check`: exit 0. Origen backend ya actualizado a https://mandaria.com.mx; copia coincide.
+2. `npx vitest run src/test/api.test.ts src/test/developers.test.tsx src/test/webhooks-api.test.ts`: **31/31**, 3 archivos, exit 0. Cubre origen confirmado con prefijo único en todos los transportes y auth/refresh, rechazo de configuración con ruta, portal anónimo y referencia. Primera ejecución 30/31: selector de test ambiguo cuando servidor del artefacto y origen confirmado coinciden; se delimitó al párrafo del artefacto y la repetición pasó. No hubo petición real: fetch simulado.
+3. `npm run typecheck:test`: exit 0.
+4. `npm run lint`: exit 0.
+5. `$env:VITE_API_URL='https://mandaria.com.mx'; npm run build`: exit 0, incluye TypeScript. Variable sólo del proceso; .env intacto. Advertencia de chunk Root ~541.15 kB / 147.13 kB gzip.
+6. Verificación Node local del dist: cinco artefactos coinciden con public, JSON parseable y las 15 operaciones tienen exactamente un /api/v1 al unir server+ruta. No OpenAPI general añadido.
+
+### Límites y pendientes
+
+No hay nginx disponible en este entorno: no se ejecutó `nginx -t` ni se simula que Vite acredite reglas nginx. MIME efectivo, 404 sin fallback, acceso directo/recarga y conservación del proxy requieren comprobación en el hosting tras despliegue autorizado; pasos en README. La descarga/navegación visual local anteriores siguen documentadas, pero no acreditan la instalación real. Ya no falta dominio ni entrega backend actualizada. Persiste únicamente validación de hosting/integración y aviso de tamaño del bundle; no se cambia el acceso a Swagger.
+
+---
+
+## 2026-10-01 — Confirmación de la entrega revisada B2B
+
+Continuación del mismo alcance, sin repetir la implementación ni la revisión visual ya completada. Releídos handoff, contrato administrativo y configuración. Los cinco artefactos públicos ya integrados coinciden exactamente con la entrega revisada; el handoff continúa sólo como referencia interna y no se publica.
+
+- Contraste: GET/PUT endpoint, POST secret, GET summary, eventos/lista/detalle y salud coinciden con el handoff. Boolean enabled explícito; 404 sólo representa ausencia al consultar endpoint; estados PENDING/DELIVERED/EXHAUSTED/NO_DELIVERY y razones NO_ENDPOINT/BEFORE_BOUNDARY/NOT_YET_PICKED_UP correctos; failureKind y destino histórico correctos. No se incorporan rescue/deliver ni el listado antiguo limitado a 100.
+- Ajuste encontrado: `src/services/errors.ts` descartaba requestId. Ahora conserva code/requestId como metadata sin incorporar mensajes internos a la UX. Prueba agregada en `src/test/webhooks-api.test.ts`.
+- `node scripts/sync-public-b2b.mjs --check`: exit 0, entrega vigente idéntica.
+- Casos negativos antes bloqueados: ejecutados mediante `node --input-type=module` con importaciones aisladas por URL en el mismo proceso y copias temporales, sin spawn. **3/3 aprobados**: coincidencia, rechazo de guía desactualizada y rechazo de operación no revisada. Esto resuelve la limitación EPERM documentada en la entrada anterior; el backend no fue escrito.
+- `npx vitest run src/test/webhooks-api.test.ts src/test/api.test.ts`: **20/20**, 2 archivos, exit 0. Complementa las 90/90 anteriores; no se suman como pruebas únicas porque hay casos repetidos.
+- `npm run typecheck:test`, `npm run lint`, `npm run build`: exit 0. Build incluye TypeScript; aviso de chunk Root 540.25 kB / 146.89 kB gzip, sin error.
+- `git diff --check`: exit 0. Inventario de public/dist: sólo openapi-b2b.json; no OpenAPI general ni handoff interno.
+- La descarga efectiva, rutas públicas anónimas y revisión visual escritorio/móvil/teclado de la entrada anterior siguen siendo aplicables: no hubo cambios visuales ni de artefactos. No se repitieron capturas.
+
+Configuración revisada sin alterarla: .env local y .env.example usan http://localhost:3000. src/config/env.ts centraliza VITE_API_URL; Dockerfile lo recibe como argumento de build, sin ejecutar Docker. No existe en estos datos un origen confirmado de publicación. El portal muestra el origen configurado y advierte que el JSON mantiene https://api.mandaria.example como placeholder. Confirmar el origen real y MIME/fallback en el hosting corresponde a publicación, sin bloquear este desarrollo.
+
+Persisten sólo las limitaciones de integración real/hosting y el aviso de tamaño descritos abajo. Las verificaciones backend son reportadas por BACKEND, no ejecutadas ni acreditadas por mocks frontend. Sin backend/nginx/Swagger/.env modificados, activaciones, envíos, commit, push o despliegue.
+
+---
+
+## 2026-10-01 — Webhooks administrativos y portal público
+
+Validación frontend focalizada. Se conserva íntegro el historial inferior. Sin operaciones reales, backend editado, Docker, Coita, cambios de .env/nginx/versión/configuración, commit, push ni despliegue.
+
+### Alcance y archivos
+
+- `src/webhooks/{types,service,queries,format,settings,pages}`: APIs existentes, configuración/sincronización, secreto efímero, resumen/eventos/intententos, salud.
+- `src/services/api.ts`: transporte de generación de secreto de un solo intento, sin refresh/repetición de la mutación.
+- `src/integrations/pages.tsx`, `src/app/{App,Root}.tsx`: módulo SUPER_ADMIN y separación de rutas públicas respecto de AuthProvider.
+- `src/developers/pages.tsx`, `src/index.css`, `public/developers/assets/`, `scripts/sync-public-b2b.mjs`: portal, guías y contrato B2B revisados, descarga y huellas. No se importó OpenAPI general.
+- `src/test/{webhooks,webhooks-api,developers}.test.*` y fixture de servicios en `flows.test.tsx`. Dependencias Markdown en package/lock. README actualizado.
+
+### Ejecuciones
+
+- `npx tsc -b --pretty false`: exit 0.
+- `npm run typecheck:test`: exit 0 después de declarar tipos Node para lectura de los artefactos en el test del portal.
+- `npm run lint`: exit 0, sin advertencias después de corregir la limpieza del ref en el efecto.
+- `npx vitest run src/test/webhooks.test.tsx src/test/webhooks-api.test.ts src/test/developers.test.tsx src/test/flows.test.tsx src/test/integration-credentials-api.test.ts`: **5 archivos, 90/90 pruebas**, exit 0. Primera ejecución: 89/90, por referencia de test a un input desmontado tras actualizar la revisión remota; se corrigió el test para consultar el input vigente.
+- `npm run build`: exit 0; incluye TypeScript. Vite advierte un chunk Root de 540.15 kB (146.85 kB gzip), pendiente optimizar división de código si se prioriza rendimiento inicial.
+- `node scripts/sync-public-b2b.mjs --check`: exit 0, artefactos y manifest coinciden con la entrega backend local.
+- Intento adicional de comprobar casos negativos del sincronizador con copias temporales: bloqueado antes de ejecutar hijos por EPERM en spawnSync. Un diagnóstico confirmó status null / EPERM; no se reiteró. **Rechazo de fuente desactualizada/operación adicional no validado dinámicamente**; lista/rechazo revisados en código. No se escribió al backend.
+
+Cobertura focalizada: roles SUPER_ADMIN/PROVIDER_ADMIN/DRIVER, logout y respuestas tardías, acceso anónimo sin restauración; configuración ausente vs 401/403/red, guardado y refetch, edición limpia/sucia y conflicto remoto; confirmación, doble clic, respuesta perdida, limpieza al cerrar/pagehide/desmontaje y ausencia del secreto en caché/almacenamiento; estados, filtros, paginación, cliente de evento y destinos; salud compartida/instancia; descarga y rutas directas de documentación, contrato de 15 operaciones; regresión de credenciales e integraciones.
+
+### Revisión visual real de navegador, datos simulados
+
+Servidor Vite local temporal en 127.0.0.1:5178, origen API de proceso no operativo (sin cambiar .env). Fixture de administración con servicios simulados y fetch de red bloqueado, usuario/URLs sintéticos; ningún secreto real. Artefactos públicos servidos por Vite.
+
+- Escritorio 1366×900: detalle de integración, formulario webhook, confirmación de rotación, referencia pública.
+- Móvil 390×844: guía webhook y detalle de evento con intento histórico en tabla adaptada. Sin desbordamiento horizontal medido.
+- Teclado: salto a main, Tab desde URL a checkbox, Escape cierra confirmación y navegación a details.
+- Descarga efectiva de `openapi-b2b.json` completada desde el enlace. Guía revisada renderizada; referencia muestra las 15 operaciones.
+- Consola del portal y del fixture: sin errores ni warnings capturados.
+- Capturas locales ignoradas por Git: `test-results/webhooks-preview/{webhooks-desktop,portal-desktop,portal-mobile,event-mobile}.jpg`. Fixture sólo en ese directorio ignorado; no pertenece al producto/build.
+
+### Qué no acredita esta validación
+
+Mocks frontend no prueban RBAC/SSRF/cifrado, comportamiento del worker, transporte, rotación efectiva ni aislamiento backend. No se generaron secretos reales ni se activaron envíos. No se probó recepción comercial, producción ni fallback de nginx. Se consultó el handoff revisado y código local; sus pruebas backend reportadas no se ejecutaron aquí. Pendientes: confirmar equivalencia desplegada, origen API definitivo y E2E autorizado en entorno de pruebas. No falta un endpoint backend para la UI implementada según la referencia local.
+
+---
+
 ## 2026-09-29 — Continuación: pruebas de cuentas locales reales
 
 Por instrucción del usuario se conservaron las dos cuentas como datos exclusivamente locales de desarrollo, con instrucciones de uso en el directorio ignorado `test-results/local-accounts/`. Sus contraseñas no forman parte de Git ni de seeds o despliegues.

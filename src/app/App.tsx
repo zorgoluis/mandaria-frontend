@@ -1,3 +1,4 @@
+import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
 import { Component, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/context'
@@ -99,6 +100,11 @@ export function App() {
           </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
             <Route path="integrations" element={<IntegrationsPage />} />
+            <Route
+              path="integrations/:id/webhooks/:eventId"
+              element={<WebhookEventPage key={location.pathname} />}
+            />
+            <Route path="webhooks/health" element={<WebhookHealthPage />} />
             <Route path="integrations/new" element={<IntegrationNew />} />
             <Route
               path="integrations/:id"

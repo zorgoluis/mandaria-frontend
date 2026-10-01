@@ -160,6 +160,28 @@ export async function api<T>(
     }
   }
 }
+/** Non-idempotent secrets: exactly one transport attempt, including on HTTP 401. */
+export async function apiOnce<T>(
+  path: string,
+  method: string,
+  body?: unknown,
+  signal?: AbortSignal,
+): Promise<T> {
+  const current = generation
+  try {
+    const result = await transport<T>(path, method, body, accessToken, signal)
+    if (generation !== current) throw normalizeError(401, null)
+    return result
+  } catch (error) {
+    if (
+      error instanceof ApiError &&
+      error.status === 401 &&
+      generation === current
+    )
+      expire()
+    throw error
+  }
+}
 /** Unauthenticated endpoint (e.g. account activation): never sends or refreshes a session. */
 export const publicApi = <T>(path: string, method: string, body?: unknown) =>
   transport<T>(path, method, body, null)
