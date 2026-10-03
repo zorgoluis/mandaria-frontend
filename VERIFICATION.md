@@ -1,3 +1,67 @@
+## 2026-10-03 — F-01 cerrado con integración real
+
+Resumen y entidad completa separados; asignación vigente resuelta por ID/estado/dispatch/proveedor desde historial no paginado. Bloqueo durante carga, error o divergencia; actualización por revisión. No se modificó Badge ni backend y se conservaron cambios existentes.
+
+**125/125 pruebas focalizadas** (dispatch, delivery-assignments, delivery-completion, execution); TypeScript, lint y build exit 0 (advertencia Root ~579 kB). Navegador real + PostgreSQL aislado: cinco hitos y DELIVERED del proveedor, transferencia A→B, antiguo proveedor sin operaciones, receptor continúa y entrega. Payload real sin status; sin errores de render, cargo adicional o evento duplicado. No repetida la suite de reconciliación real previamente aprobada.
+
+[Detalles, archivos, comandos, límites e historial](docs/EXECUTION-REAL-INTEGRATION.md). [Huellas/resultados sanitizados](docs/checks/f01-closure.json). F-01 deja de ser bloqueo vigente. Sin .env, backend, producción, Docker, commit, push ni despliegue.
+
+---
+
+## 2026-10-03 — Integración real con PostgreSQL aislado
+
+Backend real: **16/16 E2E** completos, migraciones 32/32 y build aprobados. Chromium sobre frontend actual: retorno/APPLIED con respuesta descartada, PENDING_OR_UNKNOWN tras recarga, cierre/409 original tardío, cambio de administrador, transferencia única sin nuevo cargo, continuación/entrega del receptor y legacy aprobados. Sin mocks de ejecución; routing local de fixtures, worker B2B deshabilitado y cero envíos.
+
+**Integración global parcial:** F-01 rompe detalle PROVIDER_ADMIN detallado activo: assignment resumida sin status se trata como DeliveryAssignment completo y Badge falla con toLowerCase. No se modificó frontend conforme a la solicitud. No se demostró defecto backend; no hubo cambios de implementación backend.
+
+[Informe, matriz, versiones, comandos y reproducción](docs/EXECUTION-REAL-INTEGRATION.md). [Evidencia sanitizada y hashes](docs/checks/execution-real-integration.json). Frontend base 65c4d77 y backend base 004b750, ambos con cambios locales preexistentes. Clúster nuevo loopback; sin .env, Docker, producción, Coita, commit, push ni despliegue. Historial anterior conservado.
+
+---
+
+## 2026-10-03 — Cierre y verificación actual de integración de intentos
+
+Se encontró la integración ya preparada sin commit; se conservó y contrastó con el contrato backend. AGENTS.md/BITACORA.md no existen en este frontend; continuidad en README, este archivo y docs. Backend no modificado en esta tarea.
+
+Cambios adicionales actuales: mensajes de respuesta incierta actualizados (tras recarga admite consulta y cierre explícito); APPLIED atribuye correctamente el resultado a la clave cuando el recibo y auditoría coinciden, sin acreditar cobro. Nueva regresión de interfaz verifica que abrir el diálogo no envía POST, confirmar envía sólo close, timeout conserva el marcador y la consulta posterior sigue bloqueando sin resolver automáticamente. Se conservan marcador mínimo, tipos y rutas ya preparados.
+
+Ejecutado ahora, no reutilizado de entradas inferiores:
+
+- npm run typecheck:test: exit 0.
+- npm run lint: exit 0.
+- npm run build: exit 0 (tsc -b y Vite); advertencia preexistente chunk Root ~578 kB.
+- Cuatro archivos completos con Vitest: **79/79**, exit 0: execution-reconciliation 24, execution.test 32, execution-attempt-service 2, api 21. Reporte local test-results/reconciliation-current.json. Sin omitidos ni abortos en esta ejecución de pruebas.
+- Chromium local con red externa bloqueada y fixture sintética: 1366x900 y 390x844, confirmación visible, Escape, ausencia de overflow horizontal, cierre incierto y marcador tras recarga. Capturas attempt-current-desktop.png y attempt-current-mobile.png inspeccionadas visualmente; cero errores de página. Reporte test-results/execution-preview/attempt-current-visual.json. Primer script visual utilizó view=admin, que la fixture interpreta como DRIVER: timeout esperando botón; corregido a view=incident y recorrido completo aprobado. No se cuenta el intento fallido.
+- git diff --check: exit 0 al cierre. Servidor Vite de esta tarea detenido.
+
+Límites: carreras close/resolve, permisos y respuesta perdida son mocks; no se verificaron locks ni llamadas reales backend en esta tarea. Reinicio simulado de módulos/navegador preserva almacenamiento. Pendiente prueba integrada autorizada contra backend con migración correspondiente. No garantiza bloqueo entre dispositivos ni tras borrado deliberado de almacenamiento. No modificación backend, activación, Docker, commit, push o despliegue.
+
+---
+
+## 2026-10-03 — Integración del recibo durable de intentos
+
+Implementado en main sobre 65c4d77. Backend sólo consultado: docs/EXECUTION-ATTEMPT-RECONCILIATION.md y execution.controller/service/responses. AGENTS.md y BITACORA.md no existen en la raíz; continuidad existente README/VERIFICATION y docs preservada.
+
+Archivos: src/execution/{types,service,commands,reconcile,components}, src/test/execution-reconciliation.test.ts y execution-attempt-service.test.ts, README y docs/EXECUTION-RECONCILIATION.md. Marcador mínimo sin cambios. GET/POST close usan clave original en cabecera y sin body, mediante apiOnce sin reintentos. APPLIED comprueba ID y actor de resolución y evidencia existente; CLOSED_NO_EFFECTS refresca antes de liberar un nuevo formulario; desconocido/timeout conserva bloqueo. 409 cerrado impide replay volátil y requiere consulta. Otra cuenta no puede reconciliar ni cerrar intento ajeno.
+
+### Ejecutado
+
+- npm run typecheck:test: exit 0 (incluye pruebas nuevas).
+- npm run lint: exit 0; npx eslint src/test/execution-attempt-service.test.ts: exit 0 para el último archivo añadido.
+- npm run build: exit 0, tsc -b + Vite; advertencia existente Root ~578 kB.
+- npx vitest run src/test/execution-reconciliation.test.ts src/test/execution.test.tsx src/test/api.test.ts: 76/76, tres archivos.
+- npx vitest run src/test/execution-attempt-service.test.ts: 2/2. Total focalizado: 78 pruebas.
+- git diff --check: sin errores.
+
+Primera corrida Vitest: ENOENT en temporales de sandbox, dos suites no arrancaron y API 21 pasó. Una repetición fuera del sandbox resolvió el problema y pasó 76/76. No fallo funcional ocultado.
+
+### Visual y límites
+
+Chromium headless con fixture sintética local: 1366x900 y 390x844; diálogo legible, sin overflow móvil, Tab enfoca confirmación, Escape cierra, Enter abre, cierre simulado mantiene bloqueo, recarga conserva marcador. Sin errores de página. Capturas locales ignoradas: test-results/execution-preview/attempt-desktop.png y attempt-mobile.png; inspeccionadas visualmente. Vite inicial aislado produjo timeout de conexión; instancia local fuera del sandbox permitió completar la revisión.
+
+Carreras close/resolve probadas con respuestas simuladas (ambos ganadores), no locks reales. Tests cubren APPLIED con ID exacto, PENDING_OR_UNKNOWN, CLOSED_NO_EFFECTS true/false, respuesta perdida de cierre, doble cierre, 409 del original tardío, permisos, identidad cambiada y marcador tras recarga. Sin POST automático de resolución. Ninguna operación física ni llamada real al backend en pruebas visuales. Pendiente integración real con backend/migración instalada y usuarios autorizados cuando se habilite una validación controlada; no se activó DETAILED_EXECUTION_ENABLED. Persistencia local no garantiza bloqueo en otro dispositivo ni tras borrar almacenamiento. Sin backend modificado, commit, push, Docker o despliegue.
+
+---
+
 ## 2026-10-03 — Reconciliación de resoluciones tras recarga/cierre
 
 Se conservaron los cambios anteriores sin commit en `main`. **Resuelto el bloqueo seguro en frontend; recuperación de un intento no aplicado con cuerpo perdido depende de BACKEND.** Sin cambio/activación de backend, configuración, despliegue, commit ni push. El historial anterior permanece debajo.

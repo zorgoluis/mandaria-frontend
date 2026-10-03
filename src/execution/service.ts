@@ -3,6 +3,7 @@ import { queryString } from '../services/query'
 import type { Page } from '../types/api'
 import type {
   Scope,
+  ResolutionAttempt,
   ExecutionDetail,
   Incident,
   IncidentDetail,
@@ -46,6 +47,22 @@ export const executionApi = {
       'GET',
       undefined,
       signal,
+    ),
+  attempt: (
+    dispatchId: string,
+    incidentId: string,
+    key: string,
+    close = false,
+  ) =>
+    apiOnce<ResolutionAttempt>(
+      executionPath(
+        { surface: 'admin', dispatchId },
+        `custody-incidents/${encodeURIComponent(incidentId)}/resolution-attempt${close ? '/close' : ''}`,
+      ),
+      close ? 'POST' : 'GET',
+      undefined,
+      undefined,
+      { 'Idempotency-Key': key },
     ),
   command: (path: string, body: unknown, key: string) =>
     apiOnce<unknown>(path, 'POST', body, undefined, { 'Idempotency-Key': key }),

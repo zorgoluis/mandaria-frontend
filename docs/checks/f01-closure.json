@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-03",
+  "frontendBase": "65c4d772198c8211600cd4c91e0ba6364ba9e385",
+  "backendBase": "004b750d5af2be006761e11116bf397aac474830",
+  "worktreesIncludeExistingChanges": true,
+  "postgres": "18.6 isolated loopback 55439",
+  "database": "mandaria_frontend_execution_test",
+  "focusedTests": 125,
+  "browser": [
+    {
+      "case": "provider-real-summary-five-ui-phases-delivered",
+      "status": "PASS",
+      "outbox": 1,
+      "activeAssignments": 0,
+      "errors": []
+    },
+    {
+      "case": "former-provider-after-FLEET-transfer",
+      "status": "PASS"
+    },
+    {
+      "case": "receiving-provider-summary-real-ui-continues-delivers",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "hashes": {
+    "src/dispatch/types.ts": "28bb9fea670d82b90166287c96d5aec69e0c70ca5f3f2cb7a7dcbaacefcaaef0",
+    "src/dispatch/pages.tsx": "389f1287ffad32b94514c77224d43a0904d00ecf88185d55df4c18b139c31af7",
+    "src/delivery-assignments/use-assignments.ts": "05dbcc94967c0a8b086ef7ea04b6c77b2f365d40f2ba4eb12b090b19f7601079",
+    "src/delivery-assignments/panel.tsx": "6784c78084a7d41f14d495d2dddca31545f075bb3adada84b0e889fb074a950b",
+    "src/execution/components.tsx": "304e4fdb4a61767640967062beb9ae19eef5c6e124b28a3e4fee0893a07ab57a"
+  }
+}

@@ -8,6 +8,7 @@ import {
 
 const mocks = vi.hoisted(() => ({
   command: vi.fn(),
+  attempt: vi.fn(),
   detail: vi.fn(),
   incident: vi.fn(),
   history: vi.fn(),
@@ -72,6 +73,11 @@ async function startLostResponse(type = 'TRANSFER') {
 beforeEach(() => {
   vi.resetAllMocks()
   localStorage.clear()
+  mocks.attempt.mockResolvedValue({
+    state: 'PENDING_OR_UNKNOWN',
+    resolutionId: null,
+    canStartNewAttempt: false,
+  })
   mocks.command.mockRejectedValue(new ApiError(0, 'Timeout'))
   mocks.detail.mockResolvedValue({
     ...detailFixture,
@@ -87,6 +93,11 @@ beforeEach(() => {
   ])
 })
 function applied(type: 'TRANSFER' | 'RETURN_TO_ORIGIN') {
+  mocks.attempt.mockResolvedValue({
+    state: 'APPLIED',
+    resolutionId: 'resolution',
+    canStartNewAttempt: false,
+  })
   const transfer = type === 'TRANSFER'
   mocks.incident.mockResolvedValue({
     ...incidentFixture,
@@ -306,4 +317,178 @@ it('a corrupt durable marker fails closed rather than silently enabling resoluti
   await runtime.runCommand(command)
   expect(store.resolutionBlocked('dispatch', 'incident')).toBe(true)
   expect(mocks.command).not.toHaveBeenCalled()
+})
+it('close wins: closed key unlocks only a fresh explicit form, never replays resolution', async () => {
+  const marker = await startLostResponse()
+  mocks.attempt.mockResolvedValue({
+    state: 'CLOSED_NO_EFFECTS',
+    resolutionId: null,
+    canStartNewAttempt: true,
+  })
+  const runtime = await reload()
+  await runtime.reconcileCommand(
+    marker.key,
+    marker.actor,
+    'SUPER_ADMIN',
+    () => true,
+    true,
+  )
+  expect(mocks.attempt).toHaveBeenCalledWith(
+    'dispatch',
+    'incident',
+    marker.key,
+    true,
+  )
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toEqual([])
+  expect(mocks.command).toHaveBeenCalledOnce()
+})
+it('resolution wins against close: verifies APPLIED receipt and history without another resolution', async () => {
+  const marker = await startLostResponse()
+  applied('TRANSFER')
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, marker.actor, 'SUPER_ADMIN', () => true, true)
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toEqual([])
+  expect(mocks.history).toHaveBeenCalledOnce()
+  expect(mocks.command).toHaveBeenCalledOnce()
+})
+it('lost close response survives reload; only explicit GET can establish closure', async () => {
+  const marker = await startLostResponse()
+  mocks.attempt.mockRejectedValueOnce(new ApiError(0, 'timeout'))
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, marker.actor, 'SUPER_ADMIN', () => true, true)
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+  mocks.attempt.mockResolvedValue({
+    state: 'CLOSED_NO_EFFECTS',
+    resolutionId: null,
+    canStartNewAttempt: true,
+  })
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, marker.actor, 'SUPER_ADMIN')
+  expect(mocks.attempt).toHaveBeenLastCalledWith(
+    'dispatch',
+    'incident',
+    marker.key,
+    false,
+  )
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toEqual([])
+  expect(mocks.command).toHaveBeenCalledOnce()
+})
+it.each(['PROVIDER_ADMIN', 'DRIVER'])(
+  'denies attempt close for %s',
+  async (role) => {
+    const marker = await startLostResponse()
+    await (
+      await reload()
+    ).reconcileCommand(marker.key, marker.actor, role, () => true, true)
+    expect(mocks.attempt).not.toHaveBeenCalled()
+  },
+)
+it('another administrator cannot close the original key', async () => {
+  const marker = await startLostResponse()
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, 'other-admin', 'SUPER_ADMIN', () => true, true)
+  expect(mocks.attempt).not.toHaveBeenCalled()
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+})
+it('CLOSED_NO_EFFECTS without permission and an open incident remains blocked', async () => {
+  const marker = await startLostResponse()
+  mocks.attempt.mockResolvedValue({
+    state: 'CLOSED_NO_EFFECTS',
+    resolutionId: null,
+    canStartNewAttempt: false,
+  })
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, marker.actor, 'SUPER_ADMIN')
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+})
+it('APPLIED requires the exact receipt resolution, not a different audited resolution', async () => {
+  const marker = await startLostResponse()
+  applied('TRANSFER')
+  mocks.attempt.mockResolvedValue({
+    state: 'APPLIED',
+    resolutionId: 'different-resolution',
+    canStartNewAttempt: false,
+  })
+  await (
+    await reload()
+  ).reconcileCommand(marker.key, marker.actor, 'SUPER_ADMIN')
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+})
+it('double close is single-flight and identity change keeps the durable lock', async () => {
+  const marker = await startLostResponse()
+  let resolve!: (v: unknown) => void
+  let authorized = true
+  mocks.attempt.mockImplementation(
+    () =>
+      new Promise((r) => {
+        resolve = r
+      }),
+  )
+  const runtime = await reload()
+  const first = runtime.reconcileCommand(
+    marker.key,
+    marker.actor,
+    'SUPER_ADMIN',
+    () => authorized,
+    true,
+  )
+  await runtime.reconcileCommand(
+    marker.key,
+    marker.actor,
+    'SUPER_ADMIN',
+    () => authorized,
+    true,
+  )
+  expect(mocks.attempt).toHaveBeenCalledOnce()
+  authorized = false
+  resolve({
+    state: 'CLOSED_NO_EFFECTS',
+    resolutionId: null,
+    canStartNewAttempt: true,
+  })
+  await first
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+})
+it('late original rejected EXECUTION_ATTEMPT_CLOSED keeps marker until receipt lookup', async () => {
+  const marker = await startLostResponse()
+  mocks.command.mockRejectedValue(
+    new ApiError(409, 'Closed', 'EXECUTION_ATTEMPT_CLOSED'),
+  )
+  const runtime = await import('../execution/commands')
+  await runtime.retryCommand(marker.key, marker.actor)
+  expect(
+    (await import('../execution/reconciliation-store')).readResolutionMarkers()
+      .markers,
+  ).toHaveLength(1)
+  expect(mocks.command).toHaveBeenCalledTimes(2)
+  expect(mocks.attempt).not.toHaveBeenCalled()
 })

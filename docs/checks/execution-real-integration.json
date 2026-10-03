@@ -1,0 +1,133 @@
+{
+  "frontendBase": "65c4d772198c8211600cd4c91e0ba6364ba9e385",
+  "backendBase": "004b750d5af2be006761e11116bf397aac474830",
+  "bothHaveUncommittedChanges": true,
+  "isolatedDatabase": "mandaria_frontend_execution_test",
+  "backendCases": [
+    {
+      "name": "requires five consecutive reports; rejects role and duplicate writes; delivers once",
+      "status": "passed"
+    },
+    {
+      "name": "holds custody, rejects ordinary cancellation, and resolves return once under concurrency",
+      "status": "passed"
+    },
+    {
+      "name": "transfers fleet custody to independent atomically without another award or fabricated pickup",
+      "status": "passed"
+    },
+    {
+      "name": "rejects replay changes, forged actors and direct SQL jumps while preserving the original event",
+      "status": "passed"
+    },
+    {
+      "name": "transfers independent custody to fleet, rejects an ineligible vehicle and rolls back a forced insertion failure",
+      "status": "passed"
+    },
+    {
+      "name": "serializes pickup against B2B cancellation without a refund under custody",
+      "status": "passed"
+    },
+    {
+      "name": "permits only one of two concurrent custody transfers to the same recipient",
+      "status": "passed"
+    },
+    {
+      "name": "starts a fresh chain on ordinary reassignment before pickup, even when new admission is disabled",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: lost response",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: rollback",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: delayed original",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: race",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: closed replay",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: unauthorized",
+      "status": "passed"
+    },
+    {
+      "name": "reconciles resolution attempt: process restart",
+      "status": "passed"
+    },
+    {
+      "name": "preserves untracked assignments when admission is disabled; legacy delivers without invented milestones",
+      "status": "passed"
+    }
+  ],
+  "hashes": {
+    "frontend": {
+      "src/execution/commands.ts": "ecee2526ad732412b2cea371a8d61764d6ad758593c7d983bb663a260a2956bb",
+      "src/execution/reconcile.ts": "fdd72b36d2b4909b1ae7831c39ce385c4231ab1a22832469244773fa3046ef0c",
+      "src/execution/components.tsx": "22a19052e5690e1a2568ce86d28922eccf1329bcc414ebd3c613054dd9080231",
+      "src/dispatch/pages.tsx": "1efa22fcc1590d73efe8a13f97beca86fd7584a35fb01f85366943aa365ba91a"
+    },
+    "backend": {
+      "src/delivery-execution/execution.service.ts": "5674ec9f9e61336f4d5d6cde3839c2a5b3fc94bcc595da3cacc5501f03a96bd1",
+      "src/delivery-execution/execution.controller.ts": "1ec8628cda2d48d1056b47d60936f351f189e42f4288488eabc3152d89c09fa0",
+      "test/delivery-execution.e2e-spec.ts": "98b36716414a0e0d94d735340e2e18667650a557a9799142ede460da59e9c369"
+    }
+  },
+  "browserReports": {
+    "ui-results": [
+      {
+        "case": "real-ui-return-lost-response-APPLIED-reload",
+        "status": "PASS"
+      },
+      {
+        "case": "real-ui-PENDING_OR_UNKNOWN-reload",
+        "status": "PASS"
+      },
+      {
+        "case": "real-ui-CLOSED_NO_EFFECTS-late-original",
+        "status": "PASS"
+      },
+      {
+        "case": "legacy-real-api-outbox",
+        "status": "PASS"
+      }
+    ],
+    "transfer-user-results": [
+      {
+        "case": "real-ui-account-switch-reload-blocks-other-admin",
+        "status": "PASS"
+      },
+      {
+        "case": "real-ui-transfer-one-custodian-preserves-progress-ledger",
+        "status": "PASS"
+      }
+    ],
+    "driver-results": [
+      {
+        "case": "receiver-real-ui-remaining-phases-delivery-outbox",
+        "status": "PASS"
+      }
+    ],
+    "legacy-results": [
+      {
+        "case": "old-provider-no-operational-actions-after-transfer",
+        "status": "PASS"
+      },
+      {
+        "case": "legacy-delivered-real-ui",
+        "status": "PASS"
+      }
+    ]
+  },
+  "backendPassed": 16,
+  "frontendBlocker": "Provider detailed assignment summary passed as full assignment: status undefined in Badge"
+}

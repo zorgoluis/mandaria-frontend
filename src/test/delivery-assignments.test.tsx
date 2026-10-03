@@ -428,7 +428,7 @@ describe('conflicts', () => {
 describe('reassign', () => {
   beforeEach(() => {
     vi.mocked(providerDispatches.get).mockResolvedValue(
-      owned({ assignment: carlosOnMoto03 }),
+      owned({ assignment: summary(carlosOnMoto03) }),
     )
     vi.mocked(deliveryAssignments.history).mockResolvedValue([carlosOnMoto03])
   })
@@ -511,7 +511,7 @@ describe('reassign', () => {
 describe('history', () => {
   it('lists the assignments newest first and marks the current one', async () => {
     vi.mocked(providerDispatches.get).mockResolvedValue(
-      owned({ assignment: luisOnMoto02 }),
+      owned({ assignment: summary(luisOnMoto02) }),
     )
     vi.mocked(deliveryAssignments.history).mockResolvedValue([
       luisOnMoto02,
@@ -538,7 +538,7 @@ describe('history', () => {
 describe('cancel assignment and release protection', () => {
   beforeEach(() => {
     vi.mocked(providerDispatches.get).mockResolvedValue(
-      owned({ assignment: carlosOnMoto03 }),
+      owned({ assignment: summary(carlosOnMoto03) }),
     )
     vi.mocked(deliveryAssignments.history).mockResolvedValue([carlosOnMoto03])
   })
@@ -571,7 +571,7 @@ describe('cancel assignment and release protection', () => {
         { ...carlosOnMoto03, status: 'CANCELLED', endedAt: stamp },
       ])
     vi.mocked(providerDispatches.get)
-      .mockResolvedValueOnce(owned({ assignment: carlosOnMoto03 }))
+      .mockResolvedValueOnce(owned({ assignment: summary(carlosOnMoto03) }))
       .mockResolvedValue(owned({ assignment: null }))
     mount(detailPath)
     const user = userEvent.setup()
@@ -750,4 +750,15 @@ describe('security', () => {
 function cleanupRender() {
   queryClient.clear()
   document.body.innerHTML = ''
+}
+
+function summary(item: DeliveryAssignment) {
+  return {
+    id: item.id,
+    mode: 'FLEET' as const,
+    assignedAt: item.assignedAt,
+    assignedByUserId: item.assignedByUserId,
+    driver: item.driver,
+    vehicle: { ...item.vehicle, plate: null },
+  }
 }

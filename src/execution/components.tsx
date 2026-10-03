@@ -38,6 +38,9 @@ export function ExecutionRecovery() {
   const { items, message, messageActor } = usePendingCommands()
   const own = items.filter((c) => c.actor === user?.id)
   const durable = useResolutionMarkers()
+  const [closing, setClosing] = useState<{ key: string; actor: string } | null>(
+    null,
+  )
   const [reading, setReading] = useState<string | null>(null)
   return (
     <>
@@ -91,9 +94,60 @@ export function ExecutionRecovery() {
                 }}
               >
                 Reconciliar por lectura
+              </button>{' '}
+              <button
+                className="button secondary"
+                disabled={
+                  reading !== null ||
+                  items.some((c) => c.key === m.key && c.busy)
+                }
+                onClick={() => setClosing({ key: m.key, actor: user.id })}
+              >
+                Cerrar intento pendiente
               </button>
             </section>
           ))}
+      {closing && closing.actor === user?.id && user.role === 'SUPER_ADMIN' && (
+        <Modal
+          title="Cerrar intento técnico"
+          onClose={() => {
+            if (!reading) setClosing(null)
+          }}
+        >
+          <p>
+            Este cierre invalida permanentemente la clave si la resolución aún
+            no se registró. Si ya se aplicó, consultaremos su resultado.
+          </p>
+          <p>
+            No cancela el servicio ni cancela o revierte una entrega, devolución
+            o transferencia física. Verifica la situación física antes de
+            preparar otra resolución. No repitas movimientos.
+          </p>
+          <button
+            className="button danger"
+            disabled={reading !== null}
+            onClick={async () => {
+              setReading(closing.key)
+              try {
+                await reconcileCommand(
+                  closing.key,
+                  user.id,
+                  user.role,
+                  () =>
+                    currentUser.current?.id === user.id &&
+                    currentUser.current?.role === 'SUPER_ADMIN',
+                  true,
+                )
+              } finally {
+                setReading(null)
+                setClosing(null)
+              }
+            }}
+          >
+            Confirmar cierre técnico
+          </button>
+        </Modal>
+      )}
       {message && messageActor === user?.id && (
         <p className="notice" role="status">
           {message}
@@ -191,9 +245,11 @@ export function ExecutionProgress({
 export function ExecutionPanel({
   scope,
   legacy404 = false,
+  operationalAssignmentId,
 }: {
   scope: Scope
   legacy404?: boolean
+  operationalAssignmentId?: string | null
 }) {
   const { user } = useAuth()
   const [page, setPage] = useState(1)
@@ -234,8 +290,13 @@ export function ExecutionPanel({
     query.isFetching ||
     items.some((c) => c.actor === user?.id && c.dispatchId === scope.dispatchId)
   const next = phases[e.phase === null ? 0 : phases.indexOf(e.phase) + 1]
+  const assignmentConfirmed =
+    operationalAssignmentId === undefined ||
+    (operationalAssignmentId !== null &&
+      operationalAssignmentId === e.activeAssignmentId)
   const advance =
     actorAllowed &&
+    assignmentConfirmed &&
     scope.surface !== 'admin' &&
     e.allowedActions.includes('ADVANCE') &&
     !e.openIncidentId &&
@@ -243,6 +304,7 @@ export function ExecutionPanel({
     !!next
   const report =
     actorAllowed &&
+    assignmentConfirmed &&
     e.allowedActions.includes('REPORT_INCIDENT') &&
     !e.openIncidentId &&
     !!e.activeAssignmentId

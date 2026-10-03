@@ -1,3 +1,31 @@
+> Integración real posterior (2026-10-03): APPLIED, PENDING_OR_UNKNOWN, cierre, recarga y cambio de usuario comprobados contra backend/PostgreSQL aislados. El bloqueo frontend F-01 del proveedor fue corregido y cerrado en el seguimiento con cinco hitos y entrega desde UI real. Ver [matriz y reproducción](EXECUTION-REAL-INTEGRATION.md). No se autoriza producción.
+
+# Actualización — contrato durable de intentos, 2026-10-03
+
+Esta sección sustituye el bloqueo de backend descrito en el historial inferior. Referencia de sólo lectura: mandaria-backend/docs/EXECUTION-ATTEMPT-RECONCILIATION.md. No se modificó ni activó backend.
+
+## Procedimiento vigente
+
+1. Conservar el marcador mínimo por origen API y volver con la cuenta SUPER_ADMIN iniciadora. Otra cuenta no puede consultar/cerrar esa clave ni elimina el bloqueo local de la incidencia.
+2. «Reconciliar por lectura» envía GET /admin/dispatches/:dispatchId/custody-incidents/:incidentId/resolution-attempt con Idempotency-Key original en cabecera. Sin body, clave en URL ni caché de consultas.
+3. APPLIED: verificar resolutionId y actor del recibo contra incidencia/resolución, asignaciones e historial paginado; releer estabilidad. Sólo retirar marcador tras evidencia coherente y refresco. Una transferencia histórica puede haber avanzado posteriormente.
+4. PENDING_OR_UNKNOWN: mantener bloqueo; consultar otra vez o abrir «Cerrar intento pendiente». No equivale a fracaso ni expira por tiempo.
+5. Confirmar explícitamente cierre técnico ejecuta POST a la misma ruta con /close, sin body y con la misma clave. No cancela servicio ni revierte entrega, devolución o transferencia física. Si responde APPLIED, seguir paso 3.
+6. CLOSED_NO_EFFECTS: con canStartNewAttempt=true, releer incidencia y ejecución abierta, refrescar vistas y retirar marcador para preparar un formulario nuevo con revisión actual y confirmaciones vacías. Nunca se envía automáticamente ni se reconstruye cuerpo privado. Verificar situación física antes de confirmar; no repetir movimientos. Si false, auditar resolución de otro administrador: sólo retirar marcador con evidencia coherente; de lo contrario conservar bloqueo.
+7. Timeout/401/403/red durante cierre: conservar marcador y consultar; no inferir cierre. 409 EXECUTION_ATTEMPT_CLOSED del original tardío retira replay volátil, conserva marcador y requiere consulta explícita.
+
+El backend mantiene la autoridad de concurrencia y elegibilidad. No hay toma de control del intento ajeno. Coordinar con el iniciador si se necesita cerrar su clave. Marcador local no sustituye un bloqueo distribuido: borrado de datos, otro perfil/dispositivo no quedan cubiertos. No persiste cuerpo, contactos, motivos, tokens ni secretos. Las claves cerradas las garantiza backend, no el navegador.
+
+## Validación
+
+Cierre actual: 79/79 en cuatro archivos completos y revisión visual nueva de escritorio/móvil. Abrir confirmación no envía la escritura; timeout conserva marcador, consultar no reenvía resolución. APPLIED con recibo y evidencia coherentes sí correlaciona esta clave; el cierre por otra resolución auditada no la atribuye. Evidencia y límites en la entrada más reciente de VERIFICATION.
+
+Tests frontend simulan ambos ganadores resolve/close, pérdida de respuesta, estados, permisos, recarga de módulos conservando almacenamiento, doble envío, identidad cambiante y coincidencia exacta de resolución. No acreditan locks ni migración desplegada del backend. Chromium con fixture local verificó escritorio, móvil, teclado, recarga y bloqueo; cero operaciones reales. Comandos/resultados en VERIFICATION.md.
+
+---
+
+## Historial previo (conservado)
+
 # Reconciliación de transferencias y devoluciones
 
 2026-10-03. Complementa y sustituye el límite de recuperación exclusivamente en memoria documentado el 2026-10-02. **No habilita ejecución detallada.** Backend sólo consultado; no se cambian endpoints.

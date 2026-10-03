@@ -1,3 +1,4 @@
+import type { DeliveryAssignment } from '../delivery-assignments/types'
 import { collectionFixture } from './collection-fixture'
 import { executionFixture, detailFixture } from './execution-fixture'
 import { executionApi } from '../execution/service'
@@ -225,16 +226,41 @@ const card = (address: string) =>
     .find((node) => node.textContent?.includes(address))!
 const listCalls = () => vi.mocked(providerDispatches.list).mock.calls
 
+const currentAssignment: DeliveryAssignment = {
+  id: executionFixture.activeAssignmentId!,
+  dispatchId: owned.id,
+  providerId: A,
+  status: 'ACTIVE',
+  driver: { id: 'driver', name: 'Repartidor actual' },
+  vehicle: { id: 'vehicle', identifier: 'MOTO-TEST', type: 'MOTORCYCLE' },
+  assignedAt: stamp,
+  assignedByUserId: 'admin',
+  endedAt: null,
+  endedByUserId: null,
+  endReason: null,
+  endReasonDetail: null,
+}
+const realSummary: NonNullable<ProviderDispatch['assignment']> = {
+  id: currentAssignment.id,
+  mode: 'FLEET',
+  driver: currentAssignment.driver,
+  vehicle: { ...currentAssignment.vehicle, plate: null },
+  assignedAt: stamp,
+  assignedByUserId: 'admin',
+}
 it('transferred provider uses current OWNER permissions and selected provider, not historical claim', async () => {
   vi.mocked(providerDispatches.get).mockResolvedValue({
     ...owned,
     claimedByMe: false,
     myCandidate: null,
     execution: executionFixture,
+    assignment: realSummary,
     collectionActionAllowed: false,
     advanceToOriginAllowed: false,
   })
-  vi.spyOn(deliveryAssignments, 'history').mockResolvedValue([])
+  vi.spyOn(deliveryAssignments, 'history').mockResolvedValue([
+    currentAssignment,
+  ])
   const detail = vi
     .spyOn(executionApi, 'detail')
     .mockResolvedValue(detailFixture)
@@ -865,4 +891,95 @@ it('V1.13-D provider list displays offer terms from its dispatch projection', as
   ).toHaveTextContent('25.10 MXN')
   expect(screen.queryByText(/Cobra únicamente/)).toBeNull()
   expect(screen.queryByText(/El repartidor adelanta/)).toBeNull()
+})
+
+it.each([
+  'missing',
+  'wrong-id',
+  'ended',
+  'wrong-provider',
+  'wrong-dispatch',
+  'error',
+])('F-01 blocks a detailed assignment with %s history', async (kind) => {
+  vi.mocked(providerDispatches.get).mockResolvedValue({
+    ...owned,
+    execution: executionFixture,
+    assignment: realSummary,
+  })
+  vi.spyOn(executionApi, 'detail').mockResolvedValue(detailFixture)
+  const history = vi.spyOn(deliveryAssignments, 'history')
+  if (kind === 'error') history.mockRejectedValue(normalizeError(403, null))
+  else
+    history.mockResolvedValue(
+      kind === 'missing'
+        ? []
+        : [
+            {
+              ...currentAssignment,
+              ...(kind === 'wrong-id' ? { id: 'stale' } : {}),
+              ...(kind === 'ended' ? { status: 'TRANSFERRED' as const } : {}),
+              ...(kind === 'wrong-provider' ? { providerId: B } : {}),
+              ...(kind === 'wrong-dispatch' ? { dispatchId: 'other' } : {}),
+            },
+          ],
+    )
+  mount('/services/' + owned.id + '?providerId=' + A)
+  expect(
+    await screen.findByText(/La asignación vigente no coincide/),
+  ).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
+  expect(
+    screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+  ).toBeNull()
+  expect(screen.queryByText('No fue posible mostrar esta página')).toBeNull()
+})
+it('F-01 summary without status waits for complete history and then renders current assignment', async () => {
+  expect(realSummary).not.toHaveProperty('status')
+  vi.mocked(providerDispatches.get).mockResolvedValue({
+    ...owned,
+    execution: executionFixture,
+    assignment: realSummary,
+  })
+  vi.spyOn(executionApi, 'detail').mockResolvedValue(detailFixture)
+  let resolve!: (items: DeliveryAssignment[]) => void
+  vi.spyOn(deliveryAssignments, 'history').mockImplementation(
+    () =>
+      new Promise((r) => {
+        resolve = r
+      }),
+  )
+  mount('/services/' + owned.id + '?providerId=' + A)
+  expect(
+    await screen.findByText('Consultando la asignación vigente…'),
+  ).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
+  resolve([currentAssignment])
+  expect(
+    await screen.findByRole('button', { name: /Registrar:/ }),
+  ).toBeEnabled()
+  expect(screen.queryByText('No fue posible mostrar esta página')).toBeNull()
+})
+it('F-01 removes operative actions when a concurrent transfer changes the history', async () => {
+  vi.mocked(providerDispatches.get).mockResolvedValue({
+    ...owned,
+    execution: executionFixture,
+    assignment: realSummary,
+  })
+  vi.spyOn(executionApi, 'detail').mockResolvedValue(detailFixture)
+  const history = vi
+    .spyOn(deliveryAssignments, 'history')
+    .mockResolvedValue([currentAssignment])
+  mount('/services/' + owned.id + '?providerId=' + A)
+  expect(
+    await screen.findByRole('button', { name: /Registrar:/ }),
+  ).toBeEnabled()
+  history.mockResolvedValue([{ ...currentAssignment, status: 'TRANSFERRED' }])
+  await queryClient.invalidateQueries({ queryKey: ['delivery-assignments'] })
+  expect(
+    await screen.findByText(/La asignación vigente no coincide/),
+  ).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
+  expect(
+    screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+  ).toBeNull()
 })

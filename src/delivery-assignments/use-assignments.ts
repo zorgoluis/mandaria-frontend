@@ -11,13 +11,21 @@ export function useDispatchAssignments(
   providerId: string,
   dispatchId: string,
   enabled: boolean,
+  executionRevision?: number,
 ) {
   const query = useQuery({
-    queryKey: assignmentKeys.history(providerId, dispatchId),
+    queryKey:
+      executionRevision === undefined
+        ? assignmentKeys.history(providerId, dispatchId)
+        : [
+            ...assignmentKeys.history(providerId, dispatchId),
+            executionRevision,
+          ],
     queryFn: ({ signal }) =>
       deliveryAssignments.history(providerId, dispatchId, signal),
     enabled,
     staleTime: 0,
+    refetchInterval: executionRevision === undefined ? false : 15000,
   })
   const active = query.data?.find((item) => item.status === 'ACTIVE') ?? null
   return { query, active }

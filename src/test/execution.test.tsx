@@ -47,6 +47,7 @@ vi.mock('../execution/service', async (original) => ({
     incidents: vi.fn(),
     incident: vi.fn(),
     candidates: vi.fn(),
+    attempt: vi.fn(),
   },
 }))
 vi.mock('../providers/service', () => ({ providers: { members: vi.fn() } }))
@@ -688,4 +689,26 @@ it('does not discard an incident draft during background refresh', async () => {
   expect(screen.getByLabelText('Detalle del motivo')).toHaveValue(
     'Aviso aún en edición',
   )
+})
+
+it('requires visible confirmation for technical closure; timeout retains marker and never resolves automatically', async () => {
+  const store = await import('../execution/reconciliation-store')
+  const key = '10000000-0000-4000-8000-000000000001'
+  store.persistResolutionMarker({actor:'actor',dispatchId:'dispatch',incidentId:'incident',assignmentId:executionFixture.activeAssignmentId!,expectedRevision:4,type:'TRANSFER',key})
+  vi.mocked(executionApi.attempt).mockRejectedValue(new ApiError(0,'Timeout'))
+  mount(null, 'SUPER_ADMIN')
+  fireEvent.click(screen.getByRole('button',{name:'Cerrar intento pendiente'}))
+  expect(screen.getByRole('dialog')).toHaveTextContent('No cancela el servicio')
+  expect(executionApi.attempt).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button',{name:'Confirmar cierre técnico'}))
+  await waitFor(()=>expect(executionApi.attempt).toHaveBeenCalledWith('dispatch','incident',key,true))
+  await waitFor(()=>expect(screen.queryByRole('dialog')).toBeNull())
+  expect(store.readResolutionMarkers().markers).toHaveLength(1)
+  expect(executionApi.command).not.toHaveBeenCalled()
+  expect(screen.getByText(/El cierre pudo registrarse/)).toBeInTheDocument()
+  vi.mocked(executionApi.attempt).mockResolvedValue({state:'PENDING_OR_UNKNOWN',resolutionId:null,canStartNewAttempt:false})
+  fireEvent.click(screen.getByRole('button',{name:'Reconciliar por lectura'}))
+  await waitFor(()=>expect(executionApi.attempt).toHaveBeenLastCalledWith('dispatch','incident',key,false))
+  expect(store.readResolutionMarkers().markers).toHaveLength(1)
+  expect(executionApi.command).not.toHaveBeenCalled()
 })

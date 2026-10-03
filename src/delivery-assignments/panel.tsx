@@ -133,9 +133,12 @@ export function AssignmentPanel({
           ) : (
             <div className="panel-body">
               <p className="warning" role="status">
-                {dispatch.access === 'OWNER'
-                  ? 'Este servicio todavía no tiene repartidor asignado.'
-                  : 'Tu proveedor no es el ejecutor vigente.'}
+                {dispatch.execution?.activeAssignmentId &&
+                dispatch.access === 'OWNER'
+                  ? 'No se ha confirmado la asignación vigente en el historial. Actualiza antes de operar.'
+                  : dispatch.access === 'OWNER'
+                    ? 'Este servicio todavía no tiene repartidor asignado.'
+                    : 'Tu proveedor no es el ejecutor vigente.'}
               </p>
               <AssignmentDeadline dispatch={dispatch} />
             </div>

@@ -1,5 +1,11 @@
 # Mandaria Web — V1.11-B
 
+## Intentos de resolución — 2026-10-03
+
+Cierre actual revisado: 79 pruebas focalizadas, TypeScript, lint, build y revisión visual local aprobados. Los cambios ya preparados se conservaron; se completaron mensajes y prueba de confirmación/timeout. Ver VERIFICATION para distinguir esta ejecución de las anteriores. Integración real backend todavía pendiente; función sin activar.
+
+Integrada consulta durable y cierre explícito del intento propio. APPLIED exige auditoría coherente; PENDING_OR_UNKNOWN bloquea; CLOSED_NO_EFFECTS permite sólo preparar una nueva resolución cuando el contrato y el estado vigente lo permiten. Sin repetición automática ni reversión física. [Procedimiento vigente e historial](docs/EXECUTION-RECONCILIATION.md).
+
 ## Ejecución detallada — 2026-10-02
 
 Interfaces preparadas sin activar la capacidad: cinco fases según permisos del servidor, historial paginado, incidencias reteniendo custodia, cola SUPER_ADMIN y resolución por devolución/transferencia. Integradas en los servicios existentes de proveedor/independiente y consulta de flotilla. Legacy conserva su flujo. El portal `/developers/execution` consume sólo la guía/OpenAPI B2B revisados.

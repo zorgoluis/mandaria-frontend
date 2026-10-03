@@ -124,3 +124,15 @@ export interface IncidentDetail {
     confirmations: Resolution
   }
 }
+export type ResolutionAttempt =
+  | { state: 'APPLIED'; resolutionId: string; canStartNewAttempt: false }
+  | {
+      state: 'PENDING_OR_UNKNOWN'
+      resolutionId: null
+      canStartNewAttempt: false
+    }
+  | {
+      state: 'CLOSED_NO_EFFECTS'
+      resolutionId: null
+      canStartNewAttempt: boolean
+    }

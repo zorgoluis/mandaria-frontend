@@ -1,3 +1,4 @@
+import { refreshAfterAssignment } from '../delivery-assignments/queries'
 import { useState, type ReactNode } from 'react'
 import { ExecutionPanel } from '../execution/components'
 import { useExecutionBusy } from '../execution/commands'
@@ -292,249 +293,296 @@ function ServiceContent({
     mine ||
       (dispatch.access === 'SUMMARY' &&
         dispatch.myCandidate?.status === 'CLAIMED'),
+    dispatch.execution?.revision,
   )
   const active = dispatch.execution
-    ? dispatch.assignment?.id === dispatch.execution.activeAssignmentId
-      ? dispatch.assignment
-      : null
+    ? (assignments.data?.find(
+        (item) =>
+          item.id === dispatch.execution?.activeAssignmentId &&
+          item.id === dispatch.assignment?.id &&
+          item.dispatchId === dispatch.id &&
+          item.providerId === scope.providerId &&
+          item.status === 'ACTIVE',
+      ) ?? null)
     : mine
       ? historyActive
       : null
-  const deliverable = canDeliver(dispatch, active)
+  const assignmentPending =
+    !!dispatch.execution &&
+    mine &&
+    dispatch.status === 'CLAIMED' &&
+    (assignments.isFetching || assignments.isError || !active)
+  const deliverable = !assignmentPending && canDeliver(dispatch, active)
   const service = dispatch.service
   const title =
     service?.deliveryRequestPublicId ??
     `Servicio en ${dispatch.serviceZone.name}`
   return (
     <>
-      <PageTitle
-        title={title}
-        description={`${serviceTypeLabels[dispatch.serviceType] ?? 'Servicio'} · ${scope.name}`}
-        back={back}
-        action={
-          dispatch.access === 'OFFER' && dispatch.status === 'OPEN' ? (
-            <button
-              className="button"
-              disabled={!canClaim(dispatch, now)}
-              onClick={() => setClaiming(true)}
-            >
-              TOMAR SERVICIO
-            </button>
-          ) : mine && dispatch.status === 'CLAIMED' ? (
-            <div className="row-actions">
-              {owner && (
-                <button
-                  className="button secondary destructive"
-                  disabled={active !== null}
-                  title={
-                    active
-                      ? 'Cancela la asignación antes de liberar el servicio.'
-                      : undefined
-                  }
-                  onClick={() => setReleasing(true)}
-                >
-                  LIBERAR SERVICIO
-                </button>
-              )}
-              {deliverable && (
-                <button className="button" onClick={() => setDelivering(true)}>
-                  MARCAR COMO ENTREGADO
-                </button>
-              )}
-            </div>
-          ) : undefined
-        }
-      />
-      <section className="panel" aria-labelledby="service-state">
-        <div className="panel-toolbar">
-          <h2 id="service-state">Estado</h2>
-          <DispatchBadge status={dispatch.status} />
-        </div>
-        <InfoGrid
-          items={[
-            [
-              'Tiempo para tomarlo',
-              dispatch.status === 'OPEN' ? (
-                <Countdown expiresAt={dispatch.expiresAt} now={now} />
-              ) : (
-                `Hasta ${date(dispatch.expiresAt)}`
-              ),
-            ],
-            ['Zona', dispatch.serviceZone.name],
-            ['Costo en créditos', creditCostLabel(dispatch.creditCost)],
-            ...(dispatch.claimedByMe && dispatch.claimedAt
-              ? ([['Tomado', date(dispatch.claimedAt)]] as [string, string][])
-              : []),
-            ...(dispatch.cancelledAt
-              ? ([['Cancelado', date(dispatch.cancelledAt)]] as [
-                  string,
-                  string,
-                ][])
-              : []),
-            ...(dispatch.deliveredAt
-              ? ([['Entregado', date(dispatch.deliveredAt)]] as [
-                  string,
-                  string,
-                ][])
-              : []),
-            ...(dispatch.myCandidate
-              ? ([
-                  [
-                    'Mi proveedor',
-                    candidateStatusLabels[dispatch.myCandidate.status],
-                  ],
-                ] as [string, string][])
-              : []),
-            ...(dispatch.myCandidate?.releaseReason
-              ? ([
-                  ['Motivo de liberación', dispatch.myCandidate.releaseReason],
-                ] as [string, string][])
-              : []),
-          ]}
-        />
-        {!service && <p className="panel-note">{summaryReason(dispatch)}</p>}
-        {dispatch.status === 'DELIVERED' ? (
-          <p className="panel-note">
-            Servicio entregado. La entrega es definitiva: ya no puede liberarse,
-            reasignarse ni cancelarse, y no genera movimientos de créditos.
+      {assignmentPending && (
+        <div className="notice" role="status">
+          <p>
+            {assignments.isFetching
+              ? 'Consultando la asignación vigente…'
+              : 'La asignación vigente no coincide con el historial disponible. Actualiza el servicio antes de operar.'}
           </p>
-        ) : (
-          owner &&
-          !dispatch.execution && (
+          <button
+            className="button secondary"
+            disabled={assignments.isFetching}
+            onClick={() =>
+              void refreshAfterAssignment(scope.providerId, dispatch.id)
+            }
+          >
+            Actualizar servicio y asignación
+          </button>
+        </div>
+      )}
+      <fieldset className="execution-fieldset" disabled={assignmentPending}>
+        <PageTitle
+          title={title}
+          description={`${serviceTypeLabels[dispatch.serviceType] ?? 'Servicio'} · ${scope.name}`}
+          back={back}
+          action={
+            dispatch.access === 'OFFER' && dispatch.status === 'OPEN' ? (
+              <button
+                className="button"
+                disabled={!canClaim(dispatch, now)}
+                onClick={() => setClaiming(true)}
+              >
+                TOMAR SERVICIO
+              </button>
+            ) : mine && dispatch.status === 'CLAIMED' ? (
+              <div className="row-actions">
+                {owner && (
+                  <button
+                    className="button secondary destructive"
+                    disabled={active !== null}
+                    title={
+                      active
+                        ? 'Cancela la asignación antes de liberar el servicio.'
+                        : undefined
+                    }
+                    onClick={() => setReleasing(true)}
+                  >
+                    LIBERAR SERVICIO
+                  </button>
+                )}
+                {deliverable && (
+                  <button
+                    className="button"
+                    onClick={() => setDelivering(true)}
+                  >
+                    MARCAR COMO ENTREGADO
+                  </button>
+                )}
+              </div>
+            ) : undefined
+          }
+        />
+        <section className="panel" aria-labelledby="service-state">
+          <div className="panel-toolbar">
+            <h2 id="service-state">Estado</h2>
+            <DispatchBadge status={dispatch.status} />
+          </div>
+          <InfoGrid
+            items={[
+              [
+                'Tiempo para tomarlo',
+                dispatch.status === 'OPEN' ? (
+                  <Countdown expiresAt={dispatch.expiresAt} now={now} />
+                ) : (
+                  `Hasta ${date(dispatch.expiresAt)}`
+                ),
+              ],
+              ['Zona', dispatch.serviceZone.name],
+              ['Costo en créditos', creditCostLabel(dispatch.creditCost)],
+              ...(dispatch.claimedByMe && dispatch.claimedAt
+                ? ([['Tomado', date(dispatch.claimedAt)]] as [string, string][])
+                : []),
+              ...(dispatch.cancelledAt
+                ? ([['Cancelado', date(dispatch.cancelledAt)]] as [
+                    string,
+                    string,
+                  ][])
+                : []),
+              ...(dispatch.deliveredAt
+                ? ([['Entregado', date(dispatch.deliveredAt)]] as [
+                    string,
+                    string,
+                  ][])
+                : []),
+              ...(dispatch.myCandidate
+                ? ([
+                    [
+                      'Mi proveedor',
+                      candidateStatusLabels[dispatch.myCandidate.status],
+                    ],
+                  ] as [string, string][])
+                : []),
+              ...(dispatch.myCandidate?.releaseReason
+                ? ([
+                    [
+                      'Motivo de liberación',
+                      dispatch.myCandidate.releaseReason,
+                    ],
+                  ] as [string, string][])
+                : []),
+            ]}
+          />
+          {!service && <p className="panel-note">{summaryReason(dispatch)}</p>}
+          {dispatch.status === 'DELIVERED' ? (
             <p className="panel-note">
-              {active
-                ? 'El repartidor asignado ejecuta el servicio. Cuando te avise que entregó, márcalo como entregado; para liberarlo, cancela primero la asignación.'
-                : 'Servicio tomado y pendiente de asignación. Asigna un repartidor y un vehículo para ejecutarlo.'}
+              Servicio entregado. La entrega es definitiva: ya no puede
+              liberarse, reasignarse ni cancelarse, y no genera movimientos de
+              créditos.
             </p>
-          )
-        )}
-      </section>
-      {dispatch.execution && dispatch.access === 'OWNER' && (
-        <ExecutionPanel
-          scope={{
-            surface: 'provider',
-            providerId: scope.providerId,
-            dispatchId: dispatch.id,
-          }}
-        />
-      )}
-      {(mine ||
-        (dispatch.access === 'SUMMARY' &&
-          dispatch.myCandidate?.status === 'CLAIMED')) && (
-        <AssignmentPanel
-          providerId={scope.providerId}
-          dispatch={dispatch}
-          assignments={assignments}
-          active={active}
-        />
-      )}
-      {service && (
-        <>
-          <section className="panel" aria-labelledby="service-route">
-            <div className="panel-toolbar">
-              <h2 id="service-route">Ruta</h2>
-            </div>
-            <div className="delivery-stops service-stops">
-              {(
-                [
-                  ['Origen', service.pickup],
-                  ['Destino', service.dropoff],
-                ] as const
-              ).map(([label, stop]) => (
-                <InfoGrid
-                  key={label}
-                  items={[
-                    [label, stop.address],
-                    ['Coordenadas', coordinates(stop.latitude, stop.longitude)],
-                    ...(stop.contactName !== undefined
-                      ? ([
-                          ['Contacto', stop.contactName],
-                          [
-                            'Teléfono',
-                            <a
-                              href={`tel:${(stop.contactPhone ?? '').replace(/[^\d+]/g, '')}`}
-                            >
-                              {stop.contactPhone}
-                            </a>,
-                          ],
-                          [
-                            'Instrucciones',
-                            stop.instructions ?? 'Sin instrucciones',
-                          ],
-                        ] as [string, ReactNode][])
-                      : []),
-                  ]}
-                />
-              ))}
-            </div>
-            <InfoGrid
-              items={[
-                ['Distancia', km(service.route.distanceMeters)],
-                ['Duración estimada', duration(service.route.durationSeconds)],
-                ...(service.externalReference !== undefined
-                  ? ([
-                      [
-                        'Referencia del comercio',
-                        service.externalReference ?? '—',
-                      ],
-                    ] as [string, string][])
-                  : []),
-              ]}
-            />
-            {dispatch.access === 'OFFER' && (
+          ) : (
+            owner &&
+            !dispatch.execution && (
               <p className="panel-note">
-                Los contactos e instrucciones se muestran cuando tu proveedor
-                toma el servicio.
+                {active
+                  ? 'El repartidor asignado ejecuta el servicio. Cuando te avise que entregó, márcalo como entregado; para liberarlo, cancela primero la asignación.'
+                  : 'Servicio tomado y pendiente de asignación. Asigna un repartidor y un vehículo para ejecutarlo.'}
               </p>
-            )}
-          </section>
-          <section className="panel" aria-labelledby="service-money">
-            <div className="panel-toolbar">
-              <h2 id="service-money">Cobro y mercancía</h2>
-            </div>
-            <div className="panel-body">
-              <MoneyBlock
-                service={service}
-                collectionInstructions={dispatch.collectionInstructions}
-                executionFields={dispatch}
+            )
+          )}
+        </section>
+        {dispatch.execution && dispatch.access === 'OWNER' && (
+          <ExecutionPanel
+            operationalAssignmentId={
+              assignmentPending ? null : (active?.id ?? null)
+            }
+            scope={{
+              surface: 'provider',
+              providerId: scope.providerId,
+              dispatchId: dispatch.id,
+            }}
+          />
+        )}
+        {(mine ||
+          (dispatch.access === 'SUMMARY' &&
+            dispatch.myCandidate?.status === 'CLAIMED')) && (
+          <AssignmentPanel
+            providerId={scope.providerId}
+            dispatch={dispatch}
+            assignments={assignments}
+            active={active}
+          />
+        )}
+        {service && (
+          <>
+            <section className="panel" aria-labelledby="service-route">
+              <div className="panel-toolbar">
+                <h2 id="service-route">Ruta</h2>
+              </div>
+              <div className="delivery-stops service-stops">
+                {(
+                  [
+                    ['Origen', service.pickup],
+                    ['Destino', service.dropoff],
+                  ] as const
+                ).map(([label, stop]) => (
+                  <InfoGrid
+                    key={label}
+                    items={[
+                      [label, stop.address],
+                      [
+                        'Coordenadas',
+                        coordinates(stop.latitude, stop.longitude),
+                      ],
+                      ...(stop.contactName !== undefined
+                        ? ([
+                            ['Contacto', stop.contactName],
+                            [
+                              'Teléfono',
+                              <a
+                                href={`tel:${(stop.contactPhone ?? '').replace(/[^\d+]/g, '')}`}
+                              >
+                                {stop.contactPhone}
+                              </a>,
+                            ],
+                            [
+                              'Instrucciones',
+                              stop.instructions ?? 'Sin instrucciones',
+                            ],
+                          ] as [string, ReactNode][])
+                        : []),
+                    ]}
+                  />
+                ))}
+              </div>
+              <InfoGrid
+                items={[
+                  ['Distancia', km(service.route.distanceMeters)],
+                  [
+                    'Duración estimada',
+                    duration(service.route.durationSeconds),
+                  ],
+                  ...(service.externalReference !== undefined
+                    ? ([
+                        [
+                          'Referencia del comercio',
+                          service.externalReference ?? '—',
+                        ],
+                      ] as [string, string][])
+                    : []),
+                ]}
               />
-            </div>
-          </section>
-          <section className="panel" aria-labelledby="service-packages">
-            <div className="panel-toolbar">
-              <h2 id="service-packages">Paquetes</h2>
-            </div>
-            <PackagesList packages={service.packages} />
-          </section>
-        </>
-      )}
-      {claiming && (
-        <ClaimDialog
-          providerId={scope.providerId}
-          dispatch={dispatch}
-          onClose={() => setClaiming(false)}
-          onClaimed={() => setClaiming(false)}
-        />
-      )}
-      {releasing && (
-        <ReleaseDialog
-          providerId={scope.providerId}
-          dispatch={dispatch}
-          onClose={() => setReleasing(false)}
-          onReleased={() => {
-            setReleasing(false)
-            navigate(`${back}&tab=claimed`)
-          }}
-        />
-      )}
-      {delivering && active && deliverable && (
-        <DeliverDialog
-          providerId={scope.providerId}
-          dispatch={dispatch}
-          assignment={active}
-          onClose={() => setDelivering(false)}
-        />
-      )}
+              {dispatch.access === 'OFFER' && (
+                <p className="panel-note">
+                  Los contactos e instrucciones se muestran cuando tu proveedor
+                  toma el servicio.
+                </p>
+              )}
+            </section>
+            <section className="panel" aria-labelledby="service-money">
+              <div className="panel-toolbar">
+                <h2 id="service-money">Cobro y mercancía</h2>
+              </div>
+              <div className="panel-body">
+                <MoneyBlock
+                  service={service}
+                  collectionInstructions={dispatch.collectionInstructions}
+                  executionFields={dispatch}
+                />
+              </div>
+            </section>
+            <section className="panel" aria-labelledby="service-packages">
+              <div className="panel-toolbar">
+                <h2 id="service-packages">Paquetes</h2>
+              </div>
+              <PackagesList packages={service.packages} />
+            </section>
+          </>
+        )}
+        {claiming && (
+          <ClaimDialog
+            providerId={scope.providerId}
+            dispatch={dispatch}
+            onClose={() => setClaiming(false)}
+            onClaimed={() => setClaiming(false)}
+          />
+        )}
+        {releasing && (
+          <ReleaseDialog
+            providerId={scope.providerId}
+            dispatch={dispatch}
+            onClose={() => setReleasing(false)}
+            onReleased={() => {
+              setReleasing(false)
+              navigate(`${back}&tab=claimed`)
+            }}
+          />
+        )}
+        {delivering && active && deliverable && (
+          <DeliverDialog
+            providerId={scope.providerId}
+            dispatch={dispatch}
+            assignment={active}
+            onClose={() => setDelivering(false)}
+          />
+        )}
+      </fieldset>
     </>
   )
 }
