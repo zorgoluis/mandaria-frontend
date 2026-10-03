@@ -15,6 +15,42 @@ beforeEach(() => {
   sessionStorage.clear()
 })
 describe('HTTP and human session', () => {
+  it.each([200, 401, 409, 500])(
+    'execution commands send the exact key/body once on HTTP %s',
+    async (status) => {
+      const fetcher = vi
+        .spyOn(globalThis, 'fetch')
+        .mockResolvedValue(response({}, status))
+      const { executionApi, executionPath } =
+        await import('../execution/service')
+      const body = {
+        assignmentId: '11111111-1111-4111-8111-111111111111',
+        expectedRevision: 7,
+        phase: 'TO_DROPOFF',
+      }
+      const key = '22222222-2222-4222-8222-222222222222'
+      const path = executionPath(
+        {
+          surface: 'provider',
+          dispatchId: 'dispatch',
+          providerId: 'provider-B',
+        },
+        'execution-events',
+      )
+      const result = executionApi.command(path, body, key)
+      if (status === 200) await expect(result).resolves.toEqual({})
+      else await expect(result).rejects.toMatchObject({ status })
+      expect(fetcher).toHaveBeenCalledOnce()
+      expect(fetcher.mock.calls[0][0]).toBe(
+        'http://localhost:3000/api/v1/provider/dispatches/dispatch/execution-events?providerId=provider-B',
+      )
+      expect(fetcher.mock.calls[0][1]).toMatchObject({
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Idempotency-Key': key },
+      })
+    },
+  )
   it('uses the confirmed origin with exactly one prefix across all transports', async () => {
     vi.stubEnv('VITE_API_URL', 'https://mandaria.com.mx/')
     try {

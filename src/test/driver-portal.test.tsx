@@ -1,4 +1,6 @@
 import { collectionFixture } from './collection-fixture'
+import { executionFixture, detailFixture } from './execution-fixture'
+import { executionApi } from '../execution/service'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -276,6 +278,72 @@ function mount(path: string, role: Role = 'DRIVER') {
 const section = async (name: string) =>
   within(await screen.findByRole('region', { name }))
 const dialog = () => within(screen.getByRole('dialog'))
+
+it('fleet driver sees detailed progress via real MyService composition without independent write endpoints', async () => {
+  vi.mocked(driverPortal.me).mockResolvedValue(
+    me({
+      independent: null,
+      activeDeliveryAssignment: {
+        id: 'assignment-1',
+        mode: 'FLEET',
+        dispatchId: DISPATCH,
+        execution: { ...executionFixture, allowedActions: [] },
+        collectionInstructions: {
+          ...collectionFixture,
+          applicability: 'CURRENT',
+        },
+        collectionActionAllowed: false,
+        advanceToOriginAllowed: false,
+      },
+    }),
+  )
+  const detail = vi.spyOn(executionApi, 'detail')
+  mount('/driver/my-service')
+  expect(await screen.findByText(/Continúa reportando/)).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
+  expect(screen.queryByText(/Cobra únicamente/)).toBeNull()
+  expect(detail).not.toHaveBeenCalled()
+  expect(driverPortal.get).not.toHaveBeenCalled()
+})
+it('current independent custodian continues detailed execution despite commercial suspension', async () => {
+  const current = { ...executionFixture, activeAssignmentId: 'assignment-1' }
+  vi.mocked(driverPortal.me).mockResolvedValue(
+    me({
+      independent: {
+        ...me().independent!,
+        status: 'SUSPENDED',
+        canTakeServices: false,
+      },
+      activeDeliveryAssignment: {
+        id: 'assignment-1',
+        mode: 'INDEPENDENT',
+        dispatchId: DISPATCH,
+        execution: current,
+      },
+    }),
+  )
+  vi.mocked(driverPortal.get).mockResolvedValue({
+    ...taken,
+    execution: current,
+    advanceToOriginAllowed: false,
+    collectionActionAllowed: false,
+  })
+  vi.spyOn(executionApi, 'detail').mockResolvedValue({
+    ...detailFixture,
+    execution: current,
+  })
+  mount('/driver/my-service')
+  expect(
+    await screen.findByRole('button', {
+      name: /Registrar: En camino al destino/,
+    }),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+  ).toBeNull()
+  expect(screen.queryByRole('button', { name: 'LIBERAR SERVICIO' })).toBeNull()
+  expect(screen.queryByText(/Adelanto contractual/)).toBeNull()
+})
 
 beforeEach(() => {
   queryClient.clear()
@@ -575,7 +643,9 @@ describe('my service', () => {
     ])
       expect(screen.queryByRole('button', { name: label })).toBeNull()
     expect(
-      screen.getByText(/llegar[áa]n en una próxima versión/i),
+      screen.getByText(
+        /únicamente cuando el servicio tiene ejecución detallada/i,
+      ),
     ).toBeInTheDocument()
   })
   it('releases with a reason and warns it returns to others', async () => {

@@ -1,4 +1,5 @@
 import type { CollectionInstructions } from '../collection-instructions/types'
+import type { ExecutionFields } from '../execution/types'
 import type {
   GoodsPaymentMode,
   PackageCategory,
@@ -44,12 +45,14 @@ export interface DriverSelf {
    * The ACTIVE delivery assignment in either model. V1.13-D adds collection instructions;
    * timestamps still come from the dispatch assignment.
    */
-  activeDeliveryAssignment: {
-    collectionInstructions?: CollectionInstructions
-    id: string
-    mode: 'FLEET' | 'INDEPENDENT'
-    dispatchId: string
-  } | null
+  activeDeliveryAssignment:
+    | (ExecutionFields & {
+        collectionInstructions?: CollectionInstructions
+        id: string
+        mode: 'FLEET' | 'INDEPENDENT'
+        dispatchId: string
+      })
+    | null
   independent: DriverSelfIndependent | null
 }
 
@@ -92,10 +95,11 @@ export interface DriverAssignment {
   assignedAt: string
   vehicle: { id: string; identifier: string; type: VehicleType }
 }
-export interface DriverDispatch {
+export interface DriverDispatch extends ExecutionFields {
   collectionInstructions?: CollectionInstructions
   id: string
-  status: 'OPEN' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED' | 'DELIVERED'
+  status:
+    'OPEN' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED' | 'DELIVERED' | 'RETURNED'
   /** OFFER: I can take it. OWNER: I took it, so contacts and instructions appear. */
   access: 'OWNER' | 'OFFER'
   serviceType: ServiceType

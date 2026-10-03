@@ -42,7 +42,7 @@ it('anonymous portal does not restore an administrative session or send tokens',
     screen.getByText(/MANDARIA_API_BASE=https:\/\/mandaria.com.mx\/api\/v1/),
   ).toBeInTheDocument()
 })
-it.each(['authentication', 'prequotes', 'errors', 'webhooks'])(
+it.each(['authentication', 'prequotes', 'errors', 'webhooks', 'execution'])(
   'loads direct anonymous documentation route %s from reviewed local assets',
   async (route) => {
     const fetcher = vi
@@ -114,4 +114,15 @@ it('public artifact includes only reviewed B2B paths and no admin security or en
     'integration-bearer',
   ])
   expect(spec.components.schemas).not.toHaveProperty('WebhookSecretResponse')
+  expect(
+    Object.keys(spec.components.schemas).some((name) =>
+      /Custody|Resolution|ExecutionEvent/.test(name),
+    ),
+  ).toBe(false)
+  const publicJson = publicFile('openapi-b2b.json')
+  expect(publicJson).toContain('executionProgress')
+  expect(publicJson).toContain('executionOutcome')
+  const guide = publicFile('B2B-PUBLIC-GUIDE.md')
+  expect(guide).toContain('delivery.completed')
+  expect(guide).toContain('executionOutcome')
 })

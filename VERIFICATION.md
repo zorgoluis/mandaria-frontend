@@ -1,3 +1,95 @@
+## 2026-10-03 — Reconciliación de resoluciones tras recarga/cierre
+
+Se conservaron los cambios anteriores sin commit en `main`. **Resuelto el bloqueo seguro en frontend; recuperación de un intento no aplicado con cuerpo perdido depende de BACKEND.** Sin cambio/activación de backend, configuración, despliegue, commit ni push. El historial anterior permanece debajo.
+
+### Cambios
+
+- `src/execution/reconciliation-store.ts`: marcador mínimo localStorage por origen API, guardado/verificado antes del POST. IDs de actor/despacho/incidencia/asignación, revisión, tipo y clave. Sin cuerpo, motivos, contactos, receptor, confirmaciones, tokens o secretos. Sin expiración automática de incertidumbre. Eventos storage actualizan las vistas abiertas; no se presenta localStorage como lock distribuido.
+- `src/execution/reconcile.ts`: reconciliación sólo GET con incidencia/resolución, asignaciones e historial paginado, más relecturas de estabilidad. No identifica un recibo por clave ni atribuye el cierre al intento local.
+- `commands.ts`, `components.tsx`, `incidents.tsx`: bloqueo durable de nueva resolución, incluso tras cambio de usuario; aviso «Pendiente de reconciliación» y acción de lectura. Replay exacto sólo mientras existe cuerpo original en memoria; nunca se reconstruye tras recargar. Si se cambia identidad durante lectura se interrumpe y no se retira el marcador.
+- Nuevas pruebas `execution-reconciliation.test.ts`, extendidas `execution.test.tsx`. README y documentación de continuidad actualizados. [Procedimiento operativo y bloqueo exacto para BACKEND](docs/EXECUTION-RECONCILIATION.md).
+
+### Ejecutado en esta tarea
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run typecheck:test` | Exit 0 |
+| `npm run lint` | Exit 0 |
+| `npm run build` | Exit 0, incluye `tsc -b`; advertencia de chunk Root ~575 kB |
+| `npx vitest run src/test/execution-reconciliation.test.ts src/test/execution.test.tsx src/test/api.test.ts` | **66/66**, tres archivos, exit 0 |
+| `git diff --check` | Exit 0 |
+
+Pruebas de reconciliación: 14; ejecución/interfaz: 31; transporte/API: 21. Una corrida previa de los dos primeros archivos pasó 40/40 antes de ampliar casos. Sin abortos del runner. No se repitieron suites ajenas, Docker ni CHECK operativo.
+
+### Evidencia y límites
+
+- Recarga/reapertura simulada reiniciando módulos JavaScript, manteniendo exclusivamente el localStorage anterior. TRANSFER/RETURN_TO_ORIGIN confirmados con respuesta perdida: resolución y evento presentes, asignaciones coherentes, retiro del marcador y cero POST adicionales.
+- Operación no aplicada: incidencia abierta, sin resolución; **bloqueo conservado**, incluso si se intenta generar nueva clave/cuerpo. Esa lectura no distingue «falló» de «todavía en vuelo».
+- Incertidumbre: red, asignaciones contradictorias, evento ausente, revisión cambiante; todos retienen marcador y bloqueo. Historial paginado probado.
+- Cambio de cuenta: no hay consulta/replay del intento anterior; el formulario de esa incidencia continúa bloqueado. Cambio durante la primera lectura detiene las siguientes y conserva el marcador.
+- Marcador escrito antes de transporte y sin datos privados del formulario; almacenamiento no disponible impide POST, corrupción falla de forma cerrada. Prueba de interfaz tras perder estado volátil: ofrece lectura y no ofrece replay ni nueva resolución.
+- Son mocks/frontend. No se cerraron pestañas de un navegador real en este seguimiento, no se hicieron resoluciones reales ni se verificaron nuevamente los locks/recibos del backend. La documentación anterior de evidencia visual sigue siendo histórica.
+
+### Bloqueo para BACKEND
+
+El backend guarda recibos exitosos de `DeliveryExecutionCommand` y ofrece replay con clave/cuerpo idénticos, pero no una lectura de recibo/estado del intento ni una garantía terminal «sin efectos». Hace falta ese contrato autorizado, serializado con las escrituras y capaz de garantizar que el intento original no confirme más tarde. «No encontrado» o incidencia abierta no son prueba suficiente. No se inventó endpoint ni se habilitó la repetición con otra clave.
+
+El marcador sólo protege el mismo perfil/origen mientras se conserve el almacenamiento; no garantiza bloqueo en otro dispositivo o tras borrar datos. Un control universal de intentos pendientes también corresponde a Backend. Procedimiento: reabrir con la cuenta iniciadora, consultar incidencia, reconciliar por lectura; si no hay cierre coherente, escalar sin borrar marcador ni repetir la operación física.
+
+---
+
+## 2026-10-02 — Interfaces de ejecución detallada
+
+**Implementadas y verificadas localmente con fixtures; sin activación ni validación operativa real.** Rama `main`, árbol inicialmente limpio. Backend sólo leído. Historial anterior conservado. Sin Docker, Coita, producción, .env/configuración modificada, commit, push o despliegue.
+
+### Archivos y comportamiento
+
+Nuevo dominio `src/execution/{types,service,format,commands,components,incidents,payment}`: fases, historial, cola y resolución, idempotencia exacta y condiciones económicas. Integrado en dispatch proveedor/admin, driver-portal, delivery-assignments, collection-instructions, App, AdminLayout, cliente HTTP/errores y CSS. Pruebas nuevas `execution-fixture.ts`, `execution.test.tsx`; extendidas api, dispatch, driver-portal y developers. Portal agrega `/developers/execution`; artefactos públicos sincronizados mediante script existente. Inventario y contrato completo: [docs/DETAILED-EXECUTION.md](docs/DETAILED-EXECUTION.md). README actualizado.
+
+Se corrigieron durante la revisión: inferencia del ejecutor desde claim histórico; instrucciones de adelanto después de recogida; permisos económicos durante refetch; borrado de formulario por polling; bloqueo comercial del independiente que aún tiene custodia; confirmaciones que debían reiniciarse al cambiar receptor; overflow móvil del ejemplo JSON público. SUPER_ADMIN no avanza ni entrega y DRIVER de flotilla sólo consulta.
+
+### Comandos y resultados realmente ejecutados
+
+| Comando | Resultado final |
+| --- | --- |
+| `node scripts/sync-public-b2b.mjs` | Exit 0; se copiaron artefactos revisados, sin edición manual |
+| `node scripts/sync-public-b2b.mjs --check` | Exit 0; artefactos coinciden con backend |
+| `npm run typecheck:test` | Exit 0 |
+| `npm run lint` | Exit 0 |
+| `npm run build` | Exit 0; incluye TypeScript `tsc -b`; advertencia por chunk Root ~568 kB, no error |
+| Vitest focalizado, comando debajo | **197/197, ocho archivos**, exit 0, sin omitidas ni canceladas |
+| `git diff --check` | Exit 0 |
+
+```sh
+npx vitest run src/test/execution.test.tsx src/test/api.test.ts src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/collection-instructions.test.tsx src/test/developers.test.tsx src/test/delivery-assignments.test.tsx src/test/delivery-completion.test.tsx --reporter=default --reporter=json --outputFile=test-results/execution-preview/tests.json
+```
+
+Desglose final: execution 29, api 21, dispatch 39, driver-portal 32, collection-instructions 22, developers 8, delivery-assignments 22, delivery-completion 24. Roles/rutas, cinco transiciones, legacy, incidencia abierta, retorno, transferencia FLEET/INDEPENDENT, selección providerId, custodio comercialmente suspendido, cambio de acceso, 409/receptor inelegible, doble envío, respuesta perdida y replay idéntico, confirmaciones vacías/reiniciadas, lectura sin éxito optimista, permisos económicos y regresión de entrega. API transport prueba Idempotency-Key y cuerpo exacto, sin retry en 401/409/500.
+
+Primeros intentos detectaron una expectativa legacy obsoleta y errores TypeScript de una fixture/corrección textual; se corrigieron, sin silenciar tipos. Las corridas posteriores pasaron. No hubo aborto del runner. No se ejecutaron suites ajenas ni otro CHECK operativo. Una consulta HTTP a localhost fue bloqueada por el sandbox; repetida con permiso de red local, respondió correctamente.
+
+### Revisión visual local
+
+Vite en `127.0.0.1:5178`, fixtures sintéticos con llamadas operativas interceptadas en memoria y fetch deshabilitado. Sin cuentas ni secretos reales. Componentes productivos dentro del layout real; la prueba de composición de las páginas de proveedor/repartidor se complementa con Vitest. No equivale a login o flujo E2E real backend.
+
+- Escritorio 1366×900: progreso, historial, detalle/retorno y selector de transferencia con administrador receptor.
+- Móvil 390×844: progreso proveedor, consulta flotilla, formulario de transferencia y guía pública. Tras corregir inline code, ancho del portal 375/375 px útiles, sin overflow horizontal.
+- Teclado: Enter abre modal de avance, foco inicial en cerrar, Tab alcanza confirmación vacía; Escape cierra y devuelve foco al botón iniciador. Tab en transferencia pasa del selector de administrador a la primera confirmación. Ninguna confirmación inicialmente marcada.
+- Consola inspeccionada de fixture administrativo y portal público: sin errores/advertencias capturados.
+- Ruta directa anónima `/developers/execution` carga guía real local. Descarga desde enlace `openapi-b2b.json`: JSON parseable y SHA256 idéntico al artefacto público. GET local: HTTP 200, `Content-Type: application/json`, OpenAPI 3.0.0. Esto verifica Vite, no nginx desplegado.
+
+Evidencia local ignorada por Git, en `test-results/execution-preview/`: `progress-desktop.jpg`, `progress-mobile.jpg`, `admin-desktop.jpg`, `transfer-desktop.jpg`, `transfer-mobile.jpg`, `fleet-mobile.jpg`, `independent-dialog.jpg`, `public-mobile.jpg`, fixture local y `tests.json`. Una captura fullPage falló; las capturas de viewport posteriores funcionaron. La navegación desde el formulario con cambios quedó abortada; las otras superficies se revisaron en pestañas separadas sin enviar operaciones.
+
+### Pendientes y límites reales
+
+- No se activó `DETAILED_EXECUTION_ENABLED`. Integración real, locks, transacciones, persistencia y autorizaciones de backend no se verificaron con mocks frontend. Sus resultados pertenecen al documento de Backend, consultado como referencia.
+- Recuperación de comandos en memoria, conservada al navegar dentro de la pestaña y aislada por identidad. No sobrevive a recarga/cierre/crash: aviso y beforeunload; ante pérdida, reconciliar estado con SUPER_ADMIN sin generar otra operación a ciegas. No se persisten motivos/contactos.
+- Driver flotilla sólo recibe progreso desde driver/me; no existe contrato de timeline paginado para ese actor. Actores de historial vienen como ID/rol, sin nombre: se muestran los datos disponibles.
+- Refetch periódico de 15 s/foco y tras operaciones; no revocación visual instantánea entre pestañas. Backend valida cada escritura.
+- Build advierte tamaño del chunk; no se cambió configuración para ocultarlo. No se encontró un dato/endpoint faltante que bloquee las interfaces solicitadas.
+
+---
+
 ## 2026-10-01 — Corrección de entrada SPA /developers en nginx
 
 **Preparada localmente, no desplegada.** Evidencia aportada por propietario: `/developers` devuelve 301 hacia `/developers/`, ésta 403; ruta profunda y OpenAPI real 200; Swagger bloqueado. No se hicieron peticiones a producción en esta tarea.

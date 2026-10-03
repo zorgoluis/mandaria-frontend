@@ -11,6 +11,8 @@ export const assignmentStatuses = [
   'REASSIGNED',
   'CANCELLED',
   'COMPLETED',
+  'RETURNED',
+  'TRANSFERRED',
 ] as const
 export type AssignmentStatus = (typeof assignmentStatuses)[number]
 /** DELIVERY_CANCELLED is reserved for the official service cancellation, never sent by us. */
@@ -65,7 +67,7 @@ export interface AssignmentWithPayment extends DeliveryAssignment {
   paymentContext: PaymentContext
 }
 export interface AdminDeliveryAssignment extends DeliveryAssignment {
-  provider: { id: string; name: string; code: string }
+  provider: { id: string; name: string; code: string } | null
 }
 /** Paired in V1.4: when present the assignment must use exactly that counterpart. */
 export interface AvailableDriver {

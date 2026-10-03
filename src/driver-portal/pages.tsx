@@ -1,4 +1,8 @@
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import { ExecutionPanel, ExecutionProgress } from '../execution/components'
+import { useExecutionBusy } from '../execution/commands'
+import { DetailedPayment } from '../execution/payment'
+import type { ExecutionFields } from '../execution/types'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
@@ -70,6 +74,7 @@ export function DriverPortal({
     queryFn: ({ signal }) => driverPortal.me(signal),
     enabled: user?.role === 'DRIVER',
     staleTime: 0,
+    refetchInterval: 15000,
   })
   if (user?.role !== 'DRIVER') return <ErrorPage code={403} />
   if (query.isPending) return <Loading />
@@ -83,11 +88,29 @@ export function DriverPortal({
       />
     )
   const blocked = portalBlock(query.data.independent)
-  if (blocked)
+  if (
+    blocked &&
+    !(
+      query.data.activeDeliveryAssignment?.mode === 'INDEPENDENT' &&
+      query.data.activeDeliveryAssignment.execution
+    )
+  )
     return (
       <div className="panel">
+        {query.data.activeDeliveryAssignment?.execution && (
+          <ExecutionProgress
+            execution={query.data.activeDeliveryAssignment.execution}
+            fleet
+          />
+        )}
         <CollectionInstructionsBlock
           value={query.data.activeDeliveryAssignment?.collectionInstructions}
+          collectionActionAllowed={
+            query.data.activeDeliveryAssignment?.execution
+              ? query.data.activeDeliveryAssignment.collectionActionAllowed ===
+                true
+              : undefined
+          }
         />
         <Empty
           title="Todavía no puedes tomar servicios"
@@ -126,12 +149,24 @@ export function PortalTabs() {
 export function PaymentBlock({
   payment,
   collectionInstructions,
+  executionFields,
   beforeTaking = false,
 }: {
   payment: DriverPaymentContext
   collectionInstructions?: CollectionInstructions
+  executionFields?: ExecutionFields
   beforeTaking?: boolean
 }) {
+  if (executionFields?.execution)
+    return (
+      <DetailedPayment
+        fields={executionFields}
+        value={collectionInstructions}
+        fee={payment.deliveryFee}
+        goods={payment.goodsValue}
+        advance={payment.driverAdvanceAmount}
+      />
+    )
   if (collectionInstructions !== undefined)
     return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
@@ -375,7 +410,9 @@ function ServiceContent({
 }) {
   const [taking, setTaking] = useState(false)
   const { service, paymentContext } = dispatch
-  const mine = dispatch.takenByMe
+  const mine = dispatch.execution
+    ? dispatch.access === 'OWNER'
+    : dispatch.takenByMe
   const busyElsewhere = !mine && me.activeDeliveryAssignment !== null
   const gone = !mine && dispatch.status !== 'OPEN'
   return (
@@ -467,6 +504,7 @@ function ServiceContent({
           <PaymentBlock
             payment={paymentContext}
             collectionInstructions={dispatch.collectionInstructions}
+            executionFields={dispatch}
             beforeTaking={!mine}
           />
         </div>
@@ -511,6 +549,11 @@ function ServiceContent({
           ))}
         </ul>
       </section>
+      {mine && dispatch.execution && (
+        <ExecutionPanel
+          scope={{ surface: 'driver', dispatchId: dispatch.id }}
+        />
+      )}
       {taking && (
         <TakeDialog dispatch={dispatch} onClose={() => setTaking(false)} />
       )}
@@ -671,11 +714,13 @@ export function MyServicePage() {
 }
 function MyService({ me }: { me: DriverSelf }) {
   const active = me.activeDeliveryAssignment
+  const busy = useExecutionBusy(active?.dispatchId ?? '')
   const query = useQuery({
     queryKey: driverKeys.dispatch(active?.dispatchId ?? 'none'),
     queryFn: ({ signal }) => driverPortal.get(active!.dispatchId, signal),
     enabled: !!active && active.mode === 'INDEPENDENT',
     staleTime: 0,
+    refetchInterval: 15000,
   })
   const [releasing, setReleasing] = useState(false)
   const [delivering, setDelivering] = useState(false)
@@ -701,7 +746,17 @@ function MyService({ me }: { me: DriverSelf }) {
       ) : active.mode === 'FLEET' ? (
         <section className="panel">
           <h2>Servicio asignado por tu proveedor</h2>
-          <CollectionInstructionsBlock value={active.collectionInstructions} />
+          {active.execution && (
+            <ExecutionProgress execution={active.execution} fleet />
+          )}
+          <CollectionInstructionsBlock
+            value={active.collectionInstructions}
+            collectionActionAllowed={
+              active.execution
+                ? active.collectionActionAllowed === true
+                : undefined
+            }
+          />
           <p className="panel-note">
             La operación de este servicio la gestiona tu proveedor.
           </p>
@@ -764,44 +819,74 @@ function MyService({ me }: { me: DriverSelf }) {
             <div className="panel-body">
               <PaymentBlock
                 payment={query.data.paymentContext}
+                executionFields={query.data}
                 collectionInstructions={
-                  active.collectionInstructions !== undefined
-                    ? active.collectionInstructions
-                    : query.data.collectionInstructions
+                  query.data.execution
+                    ? query.data.collectionInstructions
+                    : active.collectionInstructions !== undefined
+                      ? active.collectionInstructions
+                      : query.data.collectionInstructions
                 }
               />
             </div>
             <div className="panel-body driver-service-actions">
-              <button
-                className="button full"
-                onClick={() => setDelivering(true)}
-              >
-                MARCAR COMO ENTREGADO
-              </button>
-              <button
-                className="button secondary destructive full"
-                onClick={() => setReleasing(true)}
-              >
-                LIBERAR SERVICIO
-              </button>
+              {(!query.data.execution ||
+                (query.data.execution.allowedActions.includes('DELIVER') &&
+                  !query.data.execution.openIncidentId &&
+                  query.data.execution.activeAssignmentId === active.id)) && (
+                <button
+                  className="button full"
+                  disabled={busy || query.isFetching}
+                  onClick={() => setDelivering(true)}
+                >
+                  MARCAR COMO ENTREGADO
+                </button>
+              )}
+              {(!query.data.execution ||
+                (query.data.execution.allowedActions.includes(
+                  'ORDINARY_ASSIGNMENT_OPERATIONS',
+                ) &&
+                  !query.data.execution.openIncidentId &&
+                  query.data.execution.activeAssignmentId === active.id)) && (
+                <button
+                  className="button secondary destructive full"
+                  disabled={busy || query.isFetching}
+                  onClick={() => setReleasing(true)}
+                >
+                  LIBERAR SERVICIO
+                </button>
+              )}
             </div>
             <p className="panel-note">
-              Los pasos de la entrega (llegué, recogí, entregado) llegarán en
-              una próxima versión.
+              Los avances se registran únicamente cuando el servicio tiene
+              ejecución detallada.
             </p>
           </section>
-          {releasing && (
-            <ReleaseDialog
-              dispatchId={query.data.id}
-              onClose={() => setReleasing(false)}
+          {query.data.execution && (
+            <ExecutionPanel
+              scope={{ surface: 'driver', dispatchId: query.data.id }}
             />
           )}
-          {delivering && (
-            <DeliverDialog
-              dispatch={query.data}
-              onClose={() => setDelivering(false)}
-            />
-          )}
+          {releasing &&
+            (!query.data.execution ||
+              query.data.execution.allowedActions.includes(
+                'ORDINARY_ASSIGNMENT_OPERATIONS',
+              )) && (
+              <ReleaseDialog
+                dispatchId={query.data.id}
+                onClose={() => setReleasing(false)}
+              />
+            )}
+          {delivering &&
+            (!query.data.execution ||
+              (query.data.execution.allowedActions.includes('DELIVER') &&
+                !query.data.execution.openIncidentId &&
+                query.data.execution.activeAssignmentId === active.id)) && (
+              <DeliverDialog
+                dispatch={query.data}
+                onClose={() => setDelivering(false)}
+              />
+            )}
         </>
       )}
     </>

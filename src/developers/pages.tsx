@@ -53,6 +53,7 @@ const nav = [
   ['', 'Introducción'],
   ['authentication', 'Autenticación y scopes'],
   ['prequotes', 'Precotización y aceptación'],
+  ['execution', 'Progreso y resultado'],
   ['webhooks', 'Webhooks'],
   ['errors', 'Errores e idempotencia'],
   ['reference', 'Referencia API'],
@@ -107,6 +108,15 @@ export function DeveloperPortal() {
               element={<Guide title="Webhooks" file="B2B-WEBHOOKS.md" />}
             />
             <Route path="reference" element={<Reference />} />
+            <Route
+              path="execution"
+              element={
+                <Guide
+                  title="Progreso y resultado de ejecución"
+                  section="Progreso logístico detallado (aditivo, sin activación)"
+                />
+              }
+            />
             <Route
               path="*"
               element={

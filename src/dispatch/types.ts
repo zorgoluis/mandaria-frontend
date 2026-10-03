@@ -1,4 +1,5 @@
 import type { CollectionInstructions } from '../collection-instructions/types'
+import type { ExecutionFields } from '../execution/types'
 import type {
   GoodsPaymentMode,
   PackageCategory,
@@ -16,6 +17,7 @@ export const dispatchStatuses = [
   // V1.11-A: terminal and irreversible. A DELIVERED service can no longer be released,
   // reassigned, cancelled or claimed again.
   'DELIVERED',
+  'RETURNED',
 ] as const
 export const candidateStatuses = ['OFFERED', 'CLAIMED', 'RELEASED'] as const
 export const dispatchViews = ['AVAILABLE', 'CLAIMED', 'ALL'] as const
@@ -79,7 +81,7 @@ export interface MyCandidate {
   releasedAt: string | null
   releaseReason: string | null
 }
-export interface ProviderDispatch {
+export interface ProviderDispatch extends ExecutionFields {
   collectionInstructions?: CollectionInstructions
   id: string
   status: DispatchStatus

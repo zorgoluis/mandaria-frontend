@@ -160,16 +160,24 @@ export async function api<T>(
     }
   }
 }
-/** Non-idempotent secrets: exactly one transport attempt, including on HTTP 401. */
+/** Exactly one attempt, including on HTTP 401: secrets and explicit command recovery. */
 export async function apiOnce<T>(
   path: string,
   method: string,
   body?: unknown,
   signal?: AbortSignal,
+  headers?: Record<string, string>,
 ): Promise<T> {
   const current = generation
   try {
-    const result = await transport<T>(path, method, body, accessToken, signal)
+    const result = await transport<T>(
+      path,
+      method,
+      body,
+      accessToken,
+      signal,
+      headers,
+    )
     if (generation !== current) throw normalizeError(401, null)
     return result
   } catch (error) {

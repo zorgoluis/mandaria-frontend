@@ -1,4 +1,5 @@
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
+import { IncidentsPage, IncidentPage } from '../execution/incidents'
 import { Component, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/context'
@@ -140,6 +141,11 @@ export function App() {
               element={<QuoteDetail key={location.pathname} />}
             />
             <Route path="dispatches" element={<AdminDispatchesPage />} />
+            <Route path="custody-incidents" element={<IncidentsPage />} />
+            <Route
+              path="custody-incidents/:dispatchId/:incidentId"
+              element={<IncidentPage key={location.pathname} />}
+            />
             <Route
               path="dispatches/:id"
               element={<AdminDispatchDetail key={location.pathname} />}

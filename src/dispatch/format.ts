@@ -6,6 +6,7 @@ export const dispatchStatusLabels: Record<DispatchStatus, string> = {
   EXPIRED: 'Expirado',
   CANCELLED: 'Cancelado',
   DELIVERED: 'Entregado',
+  RETURNED: 'Devuelto al origen',
 }
 export const candidateStatusLabels: Record<CandidateStatus, string> = {
   OFFERED: 'Ofrecido',

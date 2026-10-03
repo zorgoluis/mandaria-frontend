@@ -14,4 +14,9 @@ export const dispatchKeys = {
 }
 /** No sockets in V1.7: every claim/release outcome refetches what the backend now says. */
 export const refreshProviderDispatches = (providerId: string) =>
-  queryClient.invalidateQueries({ queryKey: dispatchKeys.provider(providerId) })
+  Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: dispatchKeys.provider(providerId),
+    }),
+    queryClient.invalidateQueries({ queryKey: ['execution'] }),
+  ])

@@ -14,6 +14,7 @@ export const driverKeys = {
  * the driver's own state, the available list and the dispatch itself.
  */
 export async function refreshDriverPortal(dispatchId?: string) {
+  await queryClient.invalidateQueries({ queryKey: ['execution'] })
   await queryClient.invalidateQueries({ queryKey: driverKeys.all })
   await Promise.all([
     queryClient.refetchQueries({ queryKey: driverKeys.me }),

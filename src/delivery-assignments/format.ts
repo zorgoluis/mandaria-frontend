@@ -16,6 +16,8 @@ export const assignmentStatusLabels: Record<AssignmentStatus, string> = {
   REASSIGNED: 'Reasignado',
   CANCELLED: 'Cancelado',
   COMPLETED: 'Entrega completada',
+  RETURNED: 'Devuelto al origen',
+  TRANSFERRED: 'Custodia transferida',
 }
 export const endReasonLabels: Record<AssignmentEndReason, string> = {
   DRIVER_UNAVAILABLE: 'Repartidor no disponible',

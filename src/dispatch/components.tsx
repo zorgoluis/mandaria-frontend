@@ -1,4 +1,6 @@
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import { DetailedPayment } from '../execution/payment'
+import type { ExecutionFields } from '../execution/types'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
@@ -64,12 +66,35 @@ export function Countdown({
 export function MoneyBlock({
   service,
   collectionInstructions,
+  executionFields,
   compact = false,
 }: {
   service: DispatchService
   collectionInstructions?: CollectionInstructions
+  executionFields?: ExecutionFields
   compact?: boolean
 }) {
+  if (executionFields?.execution)
+    return (
+      <DetailedPayment
+        fields={executionFields}
+        value={collectionInstructions}
+        fee={service.deliveryFee}
+        goods={
+          service.goods?.value
+            ? { amount: service.goods.value, currency: service.goods.currency }
+            : null
+        }
+        advance={
+          service.goods?.driverAdvanceAmount
+            ? {
+                amount: service.goods.driverAdvanceAmount,
+                currency: service.goods.currency,
+              }
+            : null
+        }
+      />
+    )
   if (collectionInstructions !== undefined)
     return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
@@ -178,6 +203,7 @@ export function ServiceCard({
           <MoneyBlock
             service={service}
             collectionInstructions={dispatch.collectionInstructions}
+            executionFields={dispatch}
             compact
           />
           <p className="credit-chip">

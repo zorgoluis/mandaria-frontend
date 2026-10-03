@@ -45,7 +45,17 @@ export function AssignmentPanel({
   const history = assignments.data ?? []
   // V1.11: DELIVERED is terminal. The history stays on screen, but nothing can be changed and
   // the assignment that executed the service is now COMPLETED, not ACTIVE.
-  const delivered = dispatch.status === 'DELIVERED'
+  const delivered =
+    dispatch.status === 'DELIVERED' || dispatch.status === 'RETURNED'
+  const ordinary =
+    dispatch.access === 'OWNER' &&
+    dispatch.status === 'CLAIMED' &&
+    (!dispatch.execution ||
+      (dispatch.execution.allowedActions.includes(
+        'ORDINARY_ASSIGNMENT_OPERATIONS',
+      ) &&
+        !dispatch.execution.openIncidentId &&
+        active?.id === dispatch.execution.activeAssignmentId))
   const completed = history.find((item) => item.status === 'COMPLETED') ?? null
   return (
     <section className="panel" aria-labelledby="service-assignment">
@@ -53,11 +63,15 @@ export function AssignmentPanel({
         <div>
           <h2 id="service-assignment">Asignación</h2>
           <p>
-            {delivered
-              ? 'Quién entregó este servicio'
-              : active
-                ? 'Quién ejecuta este servicio'
-                : 'Pendiente de asignación'}
+            {dispatch.status === 'RETURNED'
+              ? 'Custodia finalizada: devolución al origen'
+              : dispatch.access !== 'OWNER'
+                ? 'Historial de tu proveedor'
+                : delivered
+                  ? 'Quién entregó este servicio'
+                  : active
+                    ? 'Quién ejecuta este servicio'
+                    : 'Pendiente de asignación'}
           </p>
         </div>
         <div className="row-actions">
@@ -74,7 +88,7 @@ export function AssignmentPanel({
             />
             Actualizar
           </button>
-          {delivered ? null : active ? (
+          {delivered || !ordinary ? null : active ? (
             <>
               <button
                 className="button secondary destructive small"
@@ -112,14 +126,16 @@ export function AssignmentPanel({
           ) : delivered ? (
             <div className="panel-body">
               <p className="panel-note">
-                Este servicio se entregó. Su historial de asignaciones se
-                conserva tal como lo devuelve Mandaria.
+                La ejecución terminó. Su historial de asignaciones se conserva
+                tal como lo devuelve Mandaria.
               </p>
             </div>
           ) : (
             <div className="panel-body">
               <p className="warning" role="status">
-                Este servicio todavía no tiene repartidor asignado.
+                {dispatch.access === 'OWNER'
+                  ? 'Este servicio todavía no tiene repartidor asignado.'
+                  : 'Tu proveedor no es el ejecutor vigente.'}
               </p>
               <AssignmentDeadline dispatch={dispatch} />
             </div>
@@ -133,18 +149,20 @@ export function AssignmentPanel({
         </>
       )}
       <p className="panel-note">
-        {delivered
-          ? 'El repartidor y el vehículo quedaron libres al confirmar la entrega; aquí permanece quién la realizó.'
-          : 'Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.'}
+        {dispatch.status === 'RETURNED'
+          ? 'Devolución al origen; no acredita entrega al destinatario ni reembolso automático.'
+          : delivered
+            ? 'El repartidor y el vehículo quedaron libres al confirmar la entrega; aquí permanece quién la realizó.'
+            : 'Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.'}
       </p>
-      {assigning && (
+      {assigning && ordinary && (
         <AssignDialog
           providerId={providerId}
           dispatch={dispatch}
           onClose={() => setAssigning(false)}
         />
       )}
-      {reassigning && active && (
+      {reassigning && active && ordinary && (
         <ReassignDialog
           providerId={providerId}
           dispatch={dispatch}
@@ -152,7 +170,7 @@ export function AssignmentPanel({
           onClose={() => setReassigning(false)}
         />
       )}
-      {cancelling && active && (
+      {cancelling && active && ordinary && (
         <CancelAssignmentDialog
           providerId={providerId}
           dispatch={dispatch}

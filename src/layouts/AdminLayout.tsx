@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ExecutionRecovery } from '../execution/components'
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -105,6 +106,11 @@ export function AdminLayout() {
             to: '/dispatches',
             label: 'Despachos',
             icon: Send,
+          },
+          {
+            to: '/custody-incidents',
+            label: 'Incidencias de custodia',
+            icon: BadgeCheck,
           },
         ]
       : []),
@@ -238,6 +244,7 @@ export function AdminLayout() {
           </div>
         </header>
         <main id="main-content">
+          <ExecutionRecovery />
           <Outlet />
         </main>
         <footer className="app-footer">

@@ -1,13 +1,22 @@
 import { useIsFetching } from '@tanstack/react-query'
 import { isSupportedCollection } from './validation'
 
-export function CollectionInstructionsBlock({ value }: { value: unknown }) {
+export function CollectionInstructionsBlock({
+  value,
+  collectionActionAllowed,
+}: {
+  value: unknown
+  collectionActionAllowed?: boolean
+}) {
   // Hide cached instructions while executor state is being read back after an operation.
   const refreshing = useIsFetching({
     predicate: (query) =>
-      ['dispatches', 'driver-portal', 'delivery-assignments'].includes(
-        String(query.queryKey[0]),
-      ),
+      [
+        'dispatches',
+        'driver-portal',
+        'delivery-assignments',
+        'execution',
+      ].includes(String(query.queryKey[0])),
   })
   if (value === undefined) return null
   if (refreshing)
@@ -24,7 +33,8 @@ export function CollectionInstructionsBlock({ value }: { value: unknown }) {
       </p>
     )
   const fee = `${value.deliveryFee.amount} ${value.deliveryFee.currency}`
-  const current = value.applicability === 'CURRENT'
+  const current =
+    value.applicability === 'CURRENT' && collectionActionAllowed !== false
   const offer = value.applicability === 'OFFER'
   return (
     <section
@@ -34,7 +44,9 @@ export function CollectionInstructionsBlock({ value }: { value: unknown }) {
           ? 'Instrucciones de cobro'
           : offer
             ? 'Condiciones de la oferta'
-            : 'Condiciones históricas'
+            : value.applicability === 'CURRENT'
+              ? 'Condiciones de referencia'
+              : 'Condiciones históricas'
       }
     >
       <strong>
@@ -42,9 +54,14 @@ export function CollectionInstructionsBlock({ value }: { value: unknown }) {
           ? 'Instrucciones de cobro'
           : offer
             ? 'Condiciones de la oferta'
-            : 'Condiciones históricas'}
+            : value.applicability === 'CURRENT'
+              ? 'Condiciones de referencia'
+              : 'Condiciones históricas'}
       </strong>
       <p>
+        {value.applicability === 'CURRENT' &&
+          collectionActionAllowed === false &&
+          'No cobrar en esta etapa. '}
         {current
           ? `Comida pagada al restaurante. No adelantes dinero ni cobres comida. Cobra únicamente el envío: ${fee}, al destinatario, en efectivo, al entregar.`
           : `${offer ? 'Condiciones previstas' : 'Condiciones registradas'}: comida pagada al restaurante, sin adelanto al restaurante ni cobro de comida. Envío: ${fee}; a cargo del destinatario, en efectivo, al entregar.`}
@@ -54,7 +71,9 @@ export function CollectionInstructionsBlock({ value }: { value: unknown }) {
           ? 'La entrega física no acredita el cobro.'
           : offer
             ? 'Información previa a tomar el servicio; todavía no es una instrucción de cobro.'
-            : 'Información histórica; no es una instrucción vigente de cobro.'}
+            : value.applicability === 'CURRENT'
+              ? 'Referencia contractual; el cobro no está autorizado en esta etapa.'
+              : 'Información histórica; no es una instrucción vigente de cobro.'}
       </p>
     </section>
   )

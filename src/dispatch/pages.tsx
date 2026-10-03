@@ -1,4 +1,6 @@
 import { useState, type ReactNode } from 'react'
+import { ExecutionPanel } from '../execution/components'
+import { useExecutionBusy } from '../execution/commands'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { RefreshCw } from 'lucide-react'
@@ -231,18 +233,20 @@ export function ProviderServiceDetail() {
 }
 
 function ServiceRecord({ scope, id }: { scope: ProviderContext; id: string }) {
+  const busy = useExecutionBusy(id)
   const back = `/services?providerId=${encodeURIComponent(scope.providerId)}`
   const query = useQuery({
     queryKey: dispatchKeys.providerDetail(scope.providerId, id),
     queryFn: ({ signal }) =>
       providerDispatches.get(scope.providerId, id, signal),
     staleTime: 0,
+    refetchInterval: 15000,
   })
   if (query.isPending || query.isError)
     return (
       <>
         <PageTitle title="Servicio" back={back} />
-        {query.isPending ? (
+        {query.isPending || query.isFetching ? (
           <Loading />
         ) : (
           <ErrorState
@@ -254,7 +258,14 @@ function ServiceRecord({ scope, id }: { scope: ProviderContext; id: string }) {
         )}
       </>
     )
-  return <ServiceContent scope={scope} dispatch={query.data} back={back} />
+  return (
+    <fieldset
+      className="execution-fieldset"
+      disabled={query.isFetching || busy}
+    >
+      <ServiceContent scope={scope} dispatch={query.data} back={back} />
+    </fieldset>
+  )
 }
 
 function ServiceContent({
@@ -275,11 +286,20 @@ function ServiceContent({
   // A delivered service is still mine: its detail and history stay visible after the close.
   const mine = isClaimOwner(dispatch)
   // V1.8: who executes the service is read back from the backend, never kept locally.
-  const { query: assignments, active } = useDispatchAssignments(
+  const { query: assignments, active: historyActive } = useDispatchAssignments(
     scope.providerId,
     dispatch.id,
-    mine,
+    mine ||
+      (dispatch.access === 'SUMMARY' &&
+        dispatch.myCandidate?.status === 'CLAIMED'),
   )
+  const active = dispatch.execution
+    ? dispatch.assignment?.id === dispatch.execution.activeAssignmentId
+      ? dispatch.assignment
+      : null
+    : mine
+      ? historyActive
+      : null
   const deliverable = canDeliver(dispatch, active)
   const service = dispatch.service
   const title =
@@ -300,20 +320,22 @@ function ServiceContent({
             >
               TOMAR SERVICIO
             </button>
-          ) : owner ? (
+          ) : mine && dispatch.status === 'CLAIMED' ? (
             <div className="row-actions">
-              <button
-                className="button secondary destructive"
-                disabled={active !== null}
-                title={
-                  active
-                    ? 'Cancela la asignación antes de liberar el servicio.'
-                    : undefined
-                }
-                onClick={() => setReleasing(true)}
-              >
-                LIBERAR SERVICIO
-              </button>
+              {owner && (
+                <button
+                  className="button secondary destructive"
+                  disabled={active !== null}
+                  title={
+                    active
+                      ? 'Cancela la asignación antes de liberar el servicio.'
+                      : undefined
+                  }
+                  onClick={() => setReleasing(true)}
+                >
+                  LIBERAR SERVICIO
+                </button>
+              )}
               {deliverable && (
                 <button className="button" onClick={() => setDelivering(true)}>
                   MARCAR COMO ENTREGADO
@@ -377,7 +399,8 @@ function ServiceContent({
             reasignarse ni cancelarse, y no genera movimientos de créditos.
           </p>
         ) : (
-          owner && (
+          owner &&
+          !dispatch.execution && (
             <p className="panel-note">
               {active
                 ? 'El repartidor asignado ejecuta el servicio. Cuando te avise que entregó, márcalo como entregado; para liberarlo, cancela primero la asignación.'
@@ -386,7 +409,18 @@ function ServiceContent({
           )
         )}
       </section>
-      {mine && (
+      {dispatch.execution && dispatch.access === 'OWNER' && (
+        <ExecutionPanel
+          scope={{
+            surface: 'provider',
+            providerId: scope.providerId,
+            dispatchId: dispatch.id,
+          }}
+        />
+      )}
+      {(mine ||
+        (dispatch.access === 'SUMMARY' &&
+          dispatch.myCandidate?.status === 'CLAIMED')) && (
         <AssignmentPanel
           providerId={scope.providerId}
           dispatch={dispatch}
@@ -462,6 +496,7 @@ function ServiceContent({
               <MoneyBlock
                 service={service}
                 collectionInstructions={dispatch.collectionInstructions}
+                executionFields={dispatch}
               />
             </div>
           </section>
@@ -492,7 +527,7 @@ function ServiceContent({
           }}
         />
       )}
-      {delivering && active && (
+      {delivering && active && deliverable && (
         <DeliverDialog
           providerId={scope.providerId}
           dispatch={dispatch}

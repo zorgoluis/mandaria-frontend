@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { ExecutionPanel } from '../execution/components'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, Search } from 'lucide-react'
 import {
@@ -175,7 +176,7 @@ export function AdminDispatchesPage() {
                   render: (row) => row.deliveryQuote.serviceZone.name,
                 },
                 {
-                  label: 'Tomado por',
+                  label: 'Tomado por (histórico)',
                   render: (row) => claimedBy(row) ?? '—',
                 },
                 {
@@ -286,7 +287,7 @@ export function AdminDispatchDetail() {
             ],
             ['Abierto', date(item.openedAt)],
             ['Vence', date(item.expiresAt)],
-            ['Tomado por', claimedBy(item) ?? '—'],
+            ['Tomado por (histórico)', claimedBy(item) ?? '—'],
             ['Tomado', item.claimedAt ? date(item.claimedAt) : '—'],
             ...(item.expiredAt
               ? ([['Expiró', date(item.expiredAt)]] as [string, string][])
@@ -444,6 +445,10 @@ export function AdminDispatchDetail() {
         />
       </section>
       <AdminAssignments dispatchId={item.id} />
+      <ExecutionPanel
+        scope={{ surface: 'admin', dispatchId: item.id }}
+        legacy404
+      />
     </>
   )
 }
@@ -463,7 +468,10 @@ function AdminAssignments({ dispatchId }: { dispatchId: string }) {
       <div className="panel-toolbar">
         <div>
           <h2 id="dispatch-assignments">Asignaciones</h2>
-          <p>Quién ejecuta el servicio, de la más reciente a la más antigua</p>
+          <p>
+            Historial de ejecutores, de la asignación más reciente a la más
+            antigua
+          </p>
         </div>
       </div>
       {query.isPending ? (
@@ -481,8 +489,10 @@ function AdminAssignments({ dispatchId }: { dispatchId: string }) {
             <InfoGrid
               items={[
                 [
-                  'Proveedor',
-                  `${query.data[0].provider.name} · ${query.data[0].provider.code}`,
+                  'Proveedor de la asignación más reciente (histórico)',
+                  query.data[0].provider
+                    ? `${query.data[0].provider.name} · ${query.data[0].provider.code}`
+                    : 'Independiente',
                 ],
               ]}
             />

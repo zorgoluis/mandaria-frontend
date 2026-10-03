@@ -27,6 +27,7 @@ export async function refreshAfterAssignment(
   dispatchId: string,
 ) {
   await Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['execution'] }),
     queryClient.invalidateQueries({ queryKey: driverKeys.all }),
     queryClient.invalidateQueries({
       queryKey: dispatchKeys.provider(providerId),

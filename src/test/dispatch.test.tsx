@@ -1,4 +1,7 @@
 import { collectionFixture } from './collection-fixture'
+import { executionFixture, detailFixture } from './execution-fixture'
+import { executionApi } from '../execution/service'
+import { deliveryAssignments } from '../delivery-assignments/service'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   cleanup,
@@ -221,6 +224,38 @@ const card = (address: string) =>
     .getAllByRole('article')
     .find((node) => node.textContent?.includes(address))!
 const listCalls = () => vi.mocked(providerDispatches.list).mock.calls
+
+it('transferred provider uses current OWNER permissions and selected provider, not historical claim', async () => {
+  vi.mocked(providerDispatches.get).mockResolvedValue({
+    ...owned,
+    claimedByMe: false,
+    myCandidate: null,
+    execution: executionFixture,
+    collectionActionAllowed: false,
+    advanceToOriginAllowed: false,
+  })
+  vi.spyOn(deliveryAssignments, 'history').mockResolvedValue([])
+  const detail = vi
+    .spyOn(executionApi, 'detail')
+    .mockResolvedValue(detailFixture)
+  mount(`/services/${owned.id}?providerId=${A}`)
+  expect(
+    await screen.findByRole('button', {
+      name: /Registrar: En camino al destino/,
+    }),
+  ).toBeInTheDocument()
+  expect(detail).toHaveBeenCalledWith(
+    { surface: 'provider', providerId: A, dispatchId: owned.id },
+    1,
+    expect.any(AbortSignal),
+  )
+  expect(
+    screen.queryByRole('button', {
+      name: /LIBERAR SERVICIO|MARCAR COMO ENTREGADO|REASIGNAR/,
+    }),
+  ).toBeNull()
+  expect(screen.queryByText(/Adelanto contractual/)).toBeNull()
+})
 
 beforeEach(() => {
   queryClient.clear()

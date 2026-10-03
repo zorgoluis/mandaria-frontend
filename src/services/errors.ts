@@ -35,6 +35,23 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    EXECUTION_CONFLICT:
+      'La asignación o revisión cambió. Consulta el progreso vigente.',
+    EXECUTION_TRANSITION_INVALID:
+      'El avance no corresponde a la siguiente fase permitida.',
+    CUSTODY_OPERATION_FORBIDDEN:
+      'Esta operación no está permitida bajo la custodia actual.',
+    CUSTODY_INCIDENT_REQUIRED:
+      'Registra una incidencia para resolver esta situación de custodia.',
+    CUSTODY_INCIDENT_OPEN:
+      'Existe una incidencia abierta. Custodia y recursos siguen retenidos.',
+    INCIDENT_ALREADY_OPEN: 'Ya existe una incidencia abierta para el servicio.',
+    INCIDENT_ALREADY_RESOLVED:
+      'Otro administrador ya resolvió esta incidencia.',
+    IDEMPOTENCY_KEY_REUSED:
+      'La clave ya corresponde a otra operación. No se volvió a aplicar; consulta el estado y concilia el registro.',
+    CUSTODY_RECIPIENT_NOT_ELIGIBLE:
+      'El receptor ya no es elegible o sus recursos están ocupados. Actualiza los candidatos.',
     SERVICE_ZONE_CODE_EXISTS: 'Ya existe una zona de servicio con ese código.',
     SERVICE_ZONE_NOT_EDITABLE:
       'Desactiva la zona antes de reemplazar su cobertura.',

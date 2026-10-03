@@ -1,4 +1,6 @@
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
+import { DetailedPayment } from '../execution/payment'
+import type { ExecutionFields } from '../execution/types'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -59,15 +61,27 @@ export function AssignmentBadge({
 export function PaymentContextBlock({
   payment,
   collectionInstructions,
+  executionFields,
   beforeAssigning = false,
 }: {
   payment: PaymentContext
   collectionInstructions?: CollectionInstructions
+  executionFields?: ExecutionFields
   beforeAssigning?: boolean
 }) {
   const mode = payment.goodsPaymentMode
     ? paymentModes[payment.goodsPaymentMode]
     : undefined
+  if (executionFields?.execution)
+    return (
+      <DetailedPayment
+        fields={executionFields}
+        value={collectionInstructions}
+        fee={payment.deliveryFee}
+        goods={payment.goodsValue}
+        advance={payment.driverAdvanceAmount}
+      />
+    )
   if (collectionInstructions !== undefined)
     return <CollectionInstructionsBlock value={collectionInstructions} />
   return (
@@ -426,6 +440,7 @@ export function AssignDialog({
           <PaymentContextBlock
             payment={payment}
             collectionInstructions={dispatch.collectionInstructions}
+            executionFields={dispatch}
             beforeAssigning
           />
         )}
@@ -491,6 +506,7 @@ export function ReassignDialog({
           <PaymentContextBlock
             payment={payment}
             collectionInstructions={dispatch.collectionInstructions}
+            executionFields={dispatch}
             beforeAssigning
           />
         )}
