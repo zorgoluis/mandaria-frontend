@@ -25,7 +25,9 @@ export interface Execution {
   allowedActions: string[]
   lastRecordedAt: string
 }
+export type TrackingMode = 'LEGACY' | 'DETAILED' | null
 export interface ExecutionFields {
+  trackingMode?: TrackingMode
   execution?: Execution
   collectionActionAllowed?: boolean
   advanceToOriginAllowed?: boolean
@@ -136,3 +138,16 @@ export type ResolutionAttempt =
       resolutionId: null
       canStartNewAttempt: boolean
     }
+
+export interface DriverAttempt {
+  state: 'APPLIED' | 'PENDING_OR_UNKNOWN' | 'CLOSED_NO_EFFECTS'
+  assignmentId: string
+  operation: 'ADVANCE' | 'REPORT' | 'DELIVER'
+  canStartNewAttempt: boolean
+}
+
+export interface ProviderAdvanceAttempt {
+  state: 'APPLIED' | 'PENDING_OR_UNKNOWN' | 'CLOSED_NO_EFFECTS'
+  appliedRevision: number | null
+  canStartNewAttempt: false
+}

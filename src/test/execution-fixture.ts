@@ -5,6 +5,7 @@ import type {
 } from '../execution/types'
 import type { ProviderDispatch } from '../dispatch/types'
 export const dispatchFixture: ProviderDispatch = {
+  trackingMode: null,
   id: 'dispatch',
   status: 'CLAIMED',
   access: 'OWNER',

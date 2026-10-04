@@ -87,6 +87,7 @@ function service(overrides: Partial<DispatchService> = {}): DispatchService {
 function dispatch(overrides: Partial<ProviderDispatch> = {}): ProviderDispatch {
   return {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',
+    trackingMode: null,
     status: 'OPEN',
     access: 'OFFER',
     serviceType: 'LOCAL_DELIVERY',
@@ -128,6 +129,7 @@ const prepaid = dispatch({
 })
 const owned = dispatch({
   id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3',
+  trackingMode: 'LEGACY',
   status: 'CLAIMED',
   access: 'OWNER',
   claimedByMe: true,
@@ -253,6 +255,7 @@ it('transferred provider uses current OWNER permissions and selected provider, n
     ...owned,
     claimedByMe: false,
     myCandidate: null,
+    trackingMode: 'DETAILED',
     execution: executionFixture,
     assignment: realSummary,
     collectionActionAllowed: false,
@@ -267,7 +270,7 @@ it('transferred provider uses current OWNER permissions and selected provider, n
   mount(`/services/${owned.id}?providerId=${A}`)
   expect(
     await screen.findByRole('button', {
-      name: /Registrar: En camino al destino/,
+      name: 'Reportar incidencia',
     }),
   ).toBeInTheDocument()
   expect(detail).toHaveBeenCalledWith(
@@ -903,6 +906,7 @@ it.each([
 ])('F-01 blocks a detailed assignment with %s history', async (kind) => {
   vi.mocked(providerDispatches.get).mockResolvedValue({
     ...owned,
+    trackingMode: 'DETAILED',
     execution: executionFixture,
     assignment: realSummary,
   })
@@ -937,6 +941,7 @@ it('F-01 summary without status waits for complete history and then renders curr
   expect(realSummary).not.toHaveProperty('status')
   vi.mocked(providerDispatches.get).mockResolvedValue({
     ...owned,
+    trackingMode: 'DETAILED',
     execution: executionFixture,
     assignment: realSummary,
   })
@@ -955,13 +960,14 @@ it('F-01 summary without status waits for complete history and then renders curr
   expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
   resolve([currentAssignment])
   expect(
-    await screen.findByRole('button', { name: /Registrar:/ }),
+    await screen.findByRole('button', { name: 'Reportar incidencia' }),
   ).toBeEnabled()
   expect(screen.queryByText('No fue posible mostrar esta página')).toBeNull()
 })
 it('F-01 removes operative actions when a concurrent transfer changes the history', async () => {
   vi.mocked(providerDispatches.get).mockResolvedValue({
     ...owned,
+    trackingMode: 'DETAILED',
     execution: executionFixture,
     assignment: realSummary,
   })
@@ -971,7 +977,7 @@ it('F-01 removes operative actions when a concurrent transfer changes the histor
     .mockResolvedValue([currentAssignment])
   mount('/services/' + owned.id + '?providerId=' + A)
   expect(
-    await screen.findByRole('button', { name: /Registrar:/ }),
+    await screen.findByRole('button', { name: 'Reportar incidencia' }),
   ).toBeEnabled()
   history.mockResolvedValue([{ ...currentAssignment, status: 'TRANSFERRED' }])
   await queryClient.invalidateQueries({ queryKey: ['delivery-assignments'] })

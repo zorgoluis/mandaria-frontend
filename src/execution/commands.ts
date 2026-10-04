@@ -1,3 +1,9 @@
+import {
+  persistHistoricalMarker,
+  useHistoricalMarkers,
+  readHistoricalMarkers,
+  removeHistoricalMarker,
+} from './historical-store'
 import { useEffect, useSyncExternalStore } from 'react'
 import { ApiError } from '../services/errors'
 import { queryClient } from '../services/query'
@@ -61,8 +67,15 @@ export function usePendingCommands() {
 }
 export function useExecutionBusy(dispatchId: string) {
   const { user } = useAuth()
-  return usePendingCommands().items.some(
+  const history = useHistoricalMarkers()
+  const inMemory = usePendingCommands().items.some(
     (c) => c.actor === user?.id && c.dispatchId === dispatchId,
+  )
+  return (
+    inMemory ||
+    (user?.role === 'PROVIDER_ADMIN' &&
+      (history.unavailable ||
+        history.markers.some((m) => m.dispatchId === dispatchId)))
   )
 }
 export async function runCommand(
@@ -110,14 +123,171 @@ export async function runCommand(
       return
     }
   }
+  preserveHistoricalCommand(item)
   pending = [...pending, item]
   message = ''
   emit()
   await retryCommand(item.key, command.actor)
 }
+/** Retired commands must never be replayed against either the old or a replacement write route. */
+export const retiredWebCommand = (item: PendingCommand) =>
+  /^\/driver\/dispatches\/[^/]+\/(execution-events|custody-incidents|execution-completion|deliver)(?:\?|$)/.test(
+    item.path,
+  ) ||
+  /^\/provider\/dispatches\/[^/]+\/execution-events(?:\?|$)/.test(item.path)
+
+export const isHistoricalProviderCommand = (item: PendingCommand) =>
+  /^\/provider\/dispatches\/[^/]+\/execution-events(?:\?|$)/.test(item.path)
+export function preserveHistoricalCommand(item: PendingCommand) {
+  if (!isHistoricalProviderCommand(item)) return false
+  const params = new URLSearchParams(item.path.split('?')[1] ?? '')
+  const providerId = params.get('providerId') || undefined
+  return persistHistoricalMarker({
+    actor: item.actor,
+    dispatchId: item.dispatchId,
+    key: item.key,
+    ...(providerId ? { providerId } : {}),
+  })
+}
+export async function reconcileHistoricalAdvance(
+  key: string,
+  actor: string,
+  role: string,
+  authorized: () => boolean,
+  close = false,
+) {
+  const marker = readHistoricalMarkers().markers.find(
+    (m) => m.key === key && m.actor === actor,
+  )
+  if (
+    !marker ||
+    role !== 'PROVIDER_ADMIN' ||
+    !authorized() ||
+    reconciling.has(key)
+  )
+    return
+  reconciling.add(key)
+  try {
+    const result = await executionApi.providerAttempt(
+      marker.dispatchId,
+      marker.providerId,
+      key,
+      close,
+    )
+    if (!authorized()) return
+    await refreshExecution()
+    if (!authorized()) return
+    messageActor = actor
+    const applied =
+      result.state === 'APPLIED' &&
+      Number.isSafeInteger(result.appliedRevision) &&
+      Number(result.appliedRevision) > 0
+    const closed =
+      result.state === 'CLOSED_NO_EFFECTS' && result.appliedRevision === null
+    if (
+      result.canStartNewAttempt === false &&
+      (applied || closed) &&
+      removeHistoricalMarker(key, actor)
+    ) {
+      pending = pending.filter((c) => c.key !== key || c.actor !== actor)
+      message = applied
+        ? 'Avance histórico acreditado en revisión ' +
+          result.appliedRevision +
+          '. Se actualizaron las vistas autorizadas; no se reenvió ningún avance.'
+        : 'Intento histórico cerrado sin efectos. No autoriza nuevos avances del proveedor ni revierte movimientos físicos.'
+    } else
+      message =
+        'Pendiente de reconciliación. Conservamos el marcador y el bloqueo. Consulta o cierra expresamente el intento; nunca reenvíes el avance histórico.'
+  } catch {
+    if (authorized()) {
+      messageActor = actor
+      message = close
+        ? 'Pendiente de reconciliación. El cierre pudo registrarse aunque no recibimos respuesta; conserva el marcador y consulta. No se asume CLOSED_NO_EFFECTS.'
+        : 'Pendiente de revisión de acceso o reconciliación. No se pudo acreditar el recibo con esta cuenta y membership; conserva el marcador.'
+    }
+  } finally {
+    reconciling.delete(key)
+    pending = [...pending]
+    emit()
+  }
+}
+export async function inspectRetiredCommand(
+  key: string,
+  actor: string,
+  role: string,
+  authorized: () => boolean,
+) {
+  const item = pending.find((c) => c.key === key && c.actor === actor)
+  if (
+    !item ||
+    !retiredWebCommand(item) ||
+    item.busy ||
+    reconciling.has(key) ||
+    !authorized()
+  )
+    return
+  if (isHistoricalProviderCommand(item)) {
+    preserveHistoricalCommand(item)
+    await reconcileHistoricalAdvance(key, actor, role, authorized)
+    return
+  }
+  reconciling.add(key)
+  try {
+    const body = item.body as { assignmentId?: unknown }
+    const operation = item.path.includes('/execution-events')
+      ? 'ADVANCE'
+      : item.path.includes('/custody-incidents')
+        ? 'REPORT'
+        : 'DELIVER'
+    if (
+      role !== 'DRIVER' ||
+      !item.path.startsWith('/driver/') ||
+      typeof body?.assignmentId !== 'string'
+    ) {
+      messageActor = actor
+      message =
+        'Pendiente de reconciliación: este intento anterior no dispone de un recibo consultable por este rol. Conserva la clave y consulta soporte; no reenvíes ni suplantes al repartidor.'
+      return
+    }
+    const receipt = await executionApi.driverAttempt(
+      item.dispatchId,
+      body.assignmentId,
+      operation,
+      key,
+    )
+    if (!authorized()) return
+    await refreshExecution()
+    if (!authorized()) return
+    messageActor = actor
+    if (
+      receipt.assignmentId === body.assignmentId &&
+      receipt.operation === operation &&
+      (receipt.state === 'APPLIED' || receipt.state === 'CLOSED_NO_EFFECTS')
+    ) {
+      pending = pending.filter((c) => c.key !== key)
+      message =
+        receipt.state === 'APPLIED'
+          ? 'El recibo propio confirma el registro anterior. Se actualizaron las consultas; no se envió otra operación.'
+          : 'Intento anterior cerrado sin efectos. No se repitió ninguna operación. El cierre técnico no revierte hechos físicos; los nuevos registros detallados corresponden a la app.'
+    } else
+      message =
+        'Pendiente de reconciliación. Conservamos el bloqueo; consulta nuevamente con la cuenta iniciadora. No se reenvió la operación.'
+  } catch {
+    if (authorized()) {
+      messageActor = actor
+      message =
+        'Pendiente de reconciliación. No se pudo confirmar el recibo; conservamos el intento y no lo reenviamos.'
+    }
+  } finally {
+    reconciling.delete(key)
+    pending = [...pending]
+    emit()
+  }
+}
 export async function retryCommand(key: string, actor: string) {
   const item = pending.find((c) => c.key === key && c.actor === actor)
   if (!item || item.busy || reconciling.has(key)) return
+  if (retiredWebCommand(item)) return
   messageActor = actor
   pending = pending.map((c) => (c.key === key ? { ...c, busy: true } : c))
   emit()

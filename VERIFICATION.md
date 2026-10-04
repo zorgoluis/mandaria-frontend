@@ -1,5 +1,64 @@
 ## 2026-10-03 — F-01 cerrado con integración real
 
+## 2026-10-04 — Cierre del contrato de trackingMode y avance histórico propio
+
+Incremental sobre cambios pendientes de la misma rama QA; no se descartaron. Contrato leído: backend docs/DRIVER-APP-EXECUTION.md, sección Cierre de limitaciones WEB; DTO ProviderAdvanceAttemptResponse y proyecciones trackingMode. Backend no modificado.
+
+- trackingMode superior explícito: LEGACY conserva cierre anterior autorizado; DETAILED no habilita avance/entrega en web; null nunca habilita entrega. Campo ausente/desconocido, carga, error e inconsistencias no se convierten en legacy. Fixtures existentes actualizados al contrato.
+- GET /provider/dispatches/:dispatchId/execution-attempt y POST .../execution-attempt/close mediante apiOnce, providerId original e Idempotency-Key original, sin body. Modal de confirmación, sin replay ni comandos de avance nuevos.
+- Marcador mínimo durable histórico separado de resoluciones SUPER_ADMIN, sólo actor/dispatchId/providerId opcional/key, por origen API. Migración de intención anterior en memoria preserva clave exacta. Timeout/errores/DTO incoherente mantienen marcador; APPLIED requiere revisión entera positiva y CLOSED_NO_EFFECTS revisión null, ambos con canStartNewAttempt=false. Permisos, doble clic, respuesta tardía, recarga y cambio de identidad cubiertos. No se restauran permisos administrativos de avance.
+- Recuperación DRIVER y resolución/reconciliación SUPER_ADMIN conservadas.
+
+### Ejecución realizada
+
+- npx vitest run src/test/provider-historical-attempt.test.tsx src/test/execution-attempt-service.test.ts src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/delivery-completion.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx --maxWorkers=1: **7 archivos, 198 pruebas PASS**. Sólo módulos directamente afectados y regresiones de recuperación.
+- npm run lint: PASS. Revisión ESLint adicional de módulos modificados/script visual: PASS.
+- npm run build: PASS (incluye tsc -b); chunk Root 587.55 kB, advertencia de tamaño >500 kB, no error.
+- npm run typecheck:test: PASS.
+- node scripts/sync-public-b2b.mjs --check: PASS, artefactos públicos coinciden; no se agregaron rutas humanas ni se copió OpenAPI general.
+- node scripts/verify-driver-authority.mjs: PASS con fixtures Chromium; proveedor detallado/legacy, DRIVER detallado, proveedor con marcador histórico, null y campo ausente; 1440x1000 y 390x844. Tab/Enter/Escape para controles/diálogos. Sin overflow, errores de render ni escritura operativa. Marcador y datos exclusivamente sintéticos. Capturas locales ignoradas en test-results/driver-authority/, incluidas historical-confirm-mobile.png y provider-unknown-desktop.png; se esperó la carga final para capturar modos incompletos.
+- git diff --check: PASS.
+
+Durante adaptación se corrigieron un fixture de oferta que heredaba el modo anterior, una propiedad duplicada en fixture y una opción no admitida por el tipado de Testing Library. Las verificaciones fallidas anteriores no se presentan como aprobadas; se ejecutó de nuevo la selección final. La primera captura de campo ausente se tomó durante carga y fue reemplazada tras esperar la proyección final.
+
+Archivos nuevos: src/execution/historical-store.ts, historical-recovery.tsx y src/test/provider-historical-attempt.test.tsx. Archivos modificados: tipos/servicio/commands/components de execution; tipos/reglas/páginas de dispatch; driver-portal/pages.tsx; delivery-assignments/panel.tsx; tests/fixtures relacionados; script visual; README y guías de continuidad. Se conserva el historial de verificaciones previas abajo.
+
+### Pendientes
+
+Integración real con backend/migraciones nuevas y app Driver no ejecutada: Docker permaneció apagado. Mocks no acreditan locks, permisos reales ni carreras transaccionales. Claves antiguas que ya se perdieron antes de persistir no pueden reconstruirse; soporte debe revisar acceso si el actor perdió cuenta/membership. No hay ya bloqueo contractual de recibos propios PROVIDER_ADMIN: la ruta nueva lo resuelve cuando se dispone de la clave original y permisos. Sin producción, activación, commit, push o despliegue.
+
+
+## 2026-10-04 — Autoridad APP REPARTIDOR / web de consulta
+
+Base QA 1b8f426. Referencia read-only: backend docs/DRIVER-APP-EXECUTION.md y selectores/servicio de ejecución. No se arrancó Docker ni se consultó backend real. Los recorridos manuales previos no validan esta nueva autoridad.
+
+### Archivos
+
+- src/execution/components.tsx: sin formulario de hitos en web; DRIVER tampoco registra incidencias detalladas nuevas. Mensajes de app, historia PHONE_REPORT preservada, recuperación antigua por consulta.
+- src/execution/commands.ts, service.ts, types.ts: DTO DriverAttempt y GET de recibo del mismo actor/asignación/clave. Reenvío de comandos retirados bloqueado. Resoluciones SUPER_ADMIN y almacenamiento durable existentes conservados.
+- src/dispatch/rules.ts, pages.tsx y src/driver-portal/pages.tsx: entrega sólo legacy con proyección OWNER completa, carga/error/refetch y correspondencia de asignación controlados. Detallado siempre de consulta para avance/entrega, independientemente de permisos viejos.
+- src/test/{execution,dispatch,driver-portal,delivery-completion,execution-attempt-service}.test.*: pruebas adaptadas y nuevas. scripts/verify-driver-authority.mjs: revisión reproducible con red interceptada y datos sintéticos.
+- README.md, docs/DETAILED-EXECUTION.md y docs/EXECUTION-RECONCILIATION.md: autoridad actual, recuperación anterior, límites y continuidad; historial conservado.
+
+### Comandos y resultados realmente ejecutados
+
+- node scripts/sync-public-b2b.mjs y node scripts/sync-public-b2b.mjs --check: PASS; artefactos iguales al backend, sin diferencias de contenido. Sólo 15 operaciones B2B; sin rutas DRIVER ni OpenAPI general.
+- npx vitest run src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/execution-attempt-service.test.ts src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/delivery-completion.test.tsx src/test/developers.test.tsx --maxWorkers=1: **7 archivos, 185 pruebas PASS**.
+- npm run lint: PASS.
+- npm run build: PASS, incluye tsc -b. Advertencia existente: chunk Root de 581.28 kB (>500 kB), no error.
+- npm run typecheck:test: PASS.
+- node scripts/verify-driver-authority.mjs: PASS con Chromium y fixtures, proveedor detallado/legacy y DRIVER detallado en 1440x1000 y 390x844. Sin overflow horizontal, pageerrors ni POST operativo. Tab/Enter/Escape verificaron controles y diálogos conservados; no se confirmó ninguna operación. Capturas revisadas visualmente en test-results/driver-authority/ (ignoradas): provider-detailed-mobile.png, provider-legacy-desktop.png, driver-detailed-desktop.png y otras tres variantes. results.json contiene el resumen.
+- git diff --check: PASS.
+
+Incidencias de validación: la primera ejecución dentro del sandbox falló con ENOENT al cargar módulos transformados desde el temporal de Vitest; no se contó como prueba aprobada. Fuera del sandbox se ejecutaron las pruebas; se corrigió una expectativa del texto anterior y se repitió la selección final. La primera revisión visual encontró Vite detenido; se inició sólo Vite con variable de proceso local, sin editar .env ni arrancar Docker. Las capturas se repitieron esperando el final de la transición responsive.
+
+### Límites y pendientes
+
+Mocks verifican UI, rutas solicitadas y conservación de recuperación; no acreditan autorización/transacciones backend ni operación real de app. Pendiente construir/verificar APP REPARTIDOR y recorrido integrado autorizado con el contrato nuevo. No se publica ni activa nada.
+
+Para antiguos avances PROVIDER_ADMIN inciertos, el contrato no permite consultar/cerrar recibos con ese rol. La web conserva bloqueo y comunica soporte; hace falta procedimiento/backend específico si tales intentos existen. Intentos DRIVER antiguos aún en memoria se consultan con la misma clave; si la pestaña antigua ya se perdió, no se pueden reconstruir claves no persistidas. Las resoluciones SUPER_ADMIN sí conservan su marcador durable previo. Detalle y límites del discriminante legacy en docs/DETAILED-EXECUTION.md.
+
+
 Resumen y entidad completa separados; asignación vigente resuelta por ID/estado/dispatch/proveedor desde historial no paginado. Bloqueo durante carga, error o divergencia; actualización por revisión. No se modificó Badge ni backend y se conservaron cambios existentes.
 
 **125/125 pruebas focalizadas** (dispatch, delivery-assignments, delivery-completion, execution); TypeScript, lint y build exit 0 (advertencia Root ~579 kB). Navegador real + PostgreSQL aislado: cinco hitos y DELIVERED del proveedor, transferencia A→B, antiguo proveedor sin operaciones, receptor continúa y entrega. Payload real sin status; sin errores de render, cargo adicional o evento duplicado. No repetida la suite de reconciliación real previamente aprobada.

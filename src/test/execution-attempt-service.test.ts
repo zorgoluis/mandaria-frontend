@@ -20,3 +20,40 @@ it.each([false, true])(
     )
   },
 )
+
+it('old DRIVER receipt uses exact assignment, operation and original key, with no new write', async () => {
+  await executionApi.driverAttempt(
+    'dispatch',
+    'assignment',
+    'ADVANCE',
+    'original-key',
+  )
+  expect(apiOnce).toHaveBeenLastCalledWith(
+    '/driver/dispatches/dispatch/assignments/assignment/attempt?operation=ADVANCE',
+    'GET',
+    undefined,
+    undefined,
+    { 'Idempotency-Key': 'original-key' },
+  )
+})
+
+it.each([false, true])(
+  'provider historical transport close=%s preserves original provider/key and no body',
+  async (close) => {
+    await executionApi.providerAttempt(
+      'dispatch',
+      'provider-A',
+      'original-key',
+      close,
+    )
+    expect(apiOnce).toHaveBeenLastCalledWith(
+      '/provider/dispatches/dispatch/execution-attempt' +
+        (close ? '/close' : '') +
+        '?providerId=provider-A',
+      close ? 'POST' : 'GET',
+      undefined,
+      undefined,
+      { 'Idempotency-Key': 'original-key' },
+    )
+  },
+)

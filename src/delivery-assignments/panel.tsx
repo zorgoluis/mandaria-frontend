@@ -50,10 +50,13 @@ export function AssignmentPanel({
   const ordinary =
     dispatch.access === 'OWNER' &&
     dispatch.status === 'CLAIMED' &&
-    (!dispatch.execution ||
-      (dispatch.execution.allowedActions.includes(
-        'ORDINARY_ASSIGNMENT_OPERATIONS',
-      ) &&
+    (dispatch.trackingMode === 'LEGACY' ||
+      dispatch.trackingMode === null ||
+      (dispatch.trackingMode === 'DETAILED' &&
+        !!dispatch.execution &&
+        dispatch.execution.allowedActions.includes(
+          'ORDINARY_ASSIGNMENT_OPERATIONS',
+        ) &&
         !dispatch.execution.openIncidentId &&
         active?.id === dispatch.execution.activeAssignmentId))
   const completed = history.find((item) => item.status === 'COMPLETED') ?? null

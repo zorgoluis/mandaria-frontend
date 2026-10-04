@@ -130,6 +130,7 @@ export interface AdminDispatchCandidate {
   releaseReason: string | null
 }
 export interface AdminDispatch {
+  trackingMode?: import('../execution/types').TrackingMode
   id: string
   status: DispatchStatus
   openedAt: string

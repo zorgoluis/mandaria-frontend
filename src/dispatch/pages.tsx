@@ -1,3 +1,4 @@
+import { legacyProjection } from './rules'
 import { refreshAfterAssignment } from '../delivery-assignments/queries'
 import { useState, type ReactNode } from 'react'
 import { ExecutionPanel } from '../execution/components'
@@ -262,8 +263,19 @@ function ServiceRecord({ scope, id }: { scope: ProviderContext; id: string }) {
   return (
     <fieldset
       className="execution-fieldset"
-      disabled={query.isFetching || busy}
+      disabled={
+        query.isFetching ||
+        busy ||
+        query.data.trackingMode === undefined ||
+        (query.data.trackingMode === 'DETAILED' && !query.data.execution)
+      }
     >
+      {query.data.trackingMode === undefined && (
+        <p role="alert" className="notice">
+          No se confirmó el modo de seguimiento. Actualiza el servicio; las
+          acciones están bloqueadas.
+        </p>
+      )}
       <ServiceContent scope={scope} dispatch={query.data} back={back} />
     </fieldset>
   )
@@ -308,11 +320,15 @@ function ServiceContent({
       ? historyActive
       : null
   const assignmentPending =
-    !!dispatch.execution &&
+    dispatch.trackingMode === 'DETAILED' &&
     mine &&
     dispatch.status === 'CLAIMED' &&
     (assignments.isFetching || assignments.isError || !active)
-  const deliverable = !assignmentPending && canDeliver(dispatch, active)
+  const deliverable =
+    !assignments.isFetching &&
+    !assignments.isError &&
+    !assignmentPending &&
+    canDeliver(dispatch, active)
   const service = dispatch.service
   const title =
     service?.deliveryRequestPublicId ??
@@ -438,27 +454,28 @@ function ServiceContent({
             </p>
           ) : (
             owner &&
-            !dispatch.execution && (
+            legacyProjection(dispatch) && (
               <p className="panel-note">
                 {active
-                  ? 'El repartidor asignado ejecuta el servicio. Cuando te avise que entregó, márcalo como entregado; para liberarlo, cancela primero la asignación.'
+                  ? 'Servicio anterior sin ejecución detallada. El repartidor asignado ejecuta el servicio. Cuando te avise que entregó, márcalo como entregado; para liberarlo, cancela primero la asignación.'
                   : 'Servicio tomado y pendiente de asignación. Asigna un repartidor y un vehículo para ejecutarlo.'}
               </p>
             )
           )}
         </section>
-        {dispatch.execution && dispatch.access === 'OWNER' && (
-          <ExecutionPanel
-            operationalAssignmentId={
-              assignmentPending ? null : (active?.id ?? null)
-            }
-            scope={{
-              surface: 'provider',
-              providerId: scope.providerId,
-              dispatchId: dispatch.id,
-            }}
-          />
-        )}
+        {dispatch.trackingMode === 'DETAILED' &&
+          dispatch.access === 'OWNER' && (
+            <ExecutionPanel
+              operationalAssignmentId={
+                assignmentPending ? null : (active?.id ?? null)
+              }
+              scope={{
+                surface: 'provider',
+                providerId: scope.providerId,
+                dispatchId: dispatch.id,
+              }}
+            />
+          )}
         {(mine ||
           (dispatch.access === 'SUMMARY' &&
             dispatch.myCandidate?.status === 'CLAIMED')) && (

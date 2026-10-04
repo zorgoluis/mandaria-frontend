@@ -1,5 +1,48 @@
 > Integración real posterior (2026-10-03): APPLIED, PENDING_OR_UNKNOWN, cierre, recarga y cambio de usuario comprobados contra backend/PostgreSQL aislados. El bloqueo frontend F-01 del proveedor fue corregido y cerrado en el seguimiento con cinco hitos y entrega desde UI real. Ver [matriz y reproducción](EXECUTION-REAL-INTEGRATION.md). No se autoriza producción.
 
+## 2026-10-04 — Cierre contractual: trackingMode y recibos históricos
+
+Esta entrada sustituye las limitaciones de discriminante y recuperación PROVIDER_ADMIN de la actualización anterior, que se conserva como historial.
+
+### Clasificación y permisos
+
+Se consume trackingMode superior en las proyecciones de proveedor/Driver y activeDeliveryAssignment: LEGACY permite únicamente el cierre anterior según propietario, estado CLAIMED y asignación activa; DETAILED mantiene avance/entrega de sólo lectura en web; null indica que nunca hubo asignación y no permite entregar. Campo ausente/desconocido, carga, errores y proyección incompleta no autorizan cierre. La ausencia de execution ya no clasifica como legacy. No se inventan hitos ni se busca otra ruta ante 403.
+
+### Recuperación histórica propia del proveedor
+
+- GET /api/v1/provider/dispatches/:dispatchId/execution-attempt y POST a la misma ruta con /close. Se conserva providerId original en query (si existía; backend lo requiere con varias memberships) e Idempotency-Key UUID original en cabecera. Sin body ni replay histórico. Bearer humano mediante el cliente centralizado; sin retry automático.
+- DTO: state, appliedRevision, canStartNewAttempt=false. APPLIED exige appliedRevision entero positivo; acredita el hito histórico, refresca vistas autorizadas y retira marcador. CLOSED_NO_EFFECTS exige appliedRevision=null y retira únicamente el bloqueo técnico. Ninguno habilita avances del proveedor. PENDING_OR_UNKNOWN, DTO incoherente, error, timeout o cambio de identidad conservan marcador.
+- Cierre con modal y confirmación explícita, exclusión de doble envío y aviso de que no cancela/revierte movimientos físicos. Respuesta perdida: conservar marcador y consultar el mismo intento. No asumir CLOSED_NO_EFFECTS. No enviar otra intención.
+- Se exige la misma cuenta PROVIDER_ADMIN; otro usuario/rol no consulta ni cierra. Respuestas tardías tras desmontar/cambiar identidad no retiran el marcador. Backend sigue validando cuenta activa, membership y asignación histórica; un 403/404 conserva el pendiente para revisión de acceso, sin suplantación.
+- Nuevo almacén mínimo separado por origen API: mandaria.provider-advance-pending.v1:<origen>. Contiene sólo actor, dispatchId, providerId opcional y key; nunca body, contactos, tokens o secretos. Se migra la clave exacta de intentos históricos aún presentes en memoria. Sobrevive a recarga/logout/cambio de cuenta; un marcador de ese despacho conserva bloqueo operativo del proveedor. Si el almacenamiento falla/corrompe, no se borra. No se recrean claves perdidas en pestañas antiguas ya cerradas.
+- Recuperación DRIVER por recibo propio y resoluciones SUPER_ADMIN/marcadores previos conservadas. No se implementó un nuevo cliente operativo de repartidor.
+
+### Archivos y validación
+
+Tipos/servicios y recuperación en src/execution/{types,service,commands,components}. Nuevos historical-store.ts y historical-recovery.tsx. Discriminante en src/dispatch/{types,rules,pages}, src/driver-portal/pages.tsx y src/delivery-assignments/panel.tsx. Pruebas en provider-historical-attempt.test.tsx, execution-attempt-service.test.ts, execution.test.tsx, delivery-completion.test.tsx y fixtures relacionados. Revisión visual reproducible: scripts/verify-driver-authority.mjs.
+
+Resultados finales y comandos en VERIFICATION.md. Fixtures frontend: no acreditan locks/permisos del backend real. Sin Docker ni operación real. Contrato público B2B comprobado por el mecanismo existente; no contiene rutas humanas.
+
+### Pendientes reales
+
+Integración real con las migraciones/backend nuevo y APP REPARTIDOR, sólo en entorno autorizado. Cuenta iniciadora sin acceso requiere resolver su cuenta/membership con soporte; otro administrador no puede reconciliarla. Claves perdidas antes de disponer de persistencia no son recuperables desde frontend. Se mantienen las condiciones de despliegue coordinado del handoff, sin ejecutarlo aquí.
+
+
+## 2026-10-04 — Cambio de autoridad
+
+Resoluciones SUPER_ADMIN: se conservan marcadores durables, consulta/cierre y comprobación de resultado descritos abajo. No se borran al cambiar de usuario.
+
+Los nuevos avances y entregas detalladas corresponden a la app Driver. La web sólo permite consultar el recibo de intentos DRIVER anteriores todavía disponibles en memoria, con assignmentId, operación e Idempotency-Key originales; no los reenvía. APPLIED o CLOSED_NO_EFFECTS coherentes refrescan consultas y retiran el pendiente; PENDING_OR_UNKNOWN/error conserva bloqueo. El recibo sólo puede consultarlo su actor.
+
+Un avance anterior de PROVIDER_ADMIN no tiene recibo consultable para ese rol en el contrato nuevo: conservar pendiente, consultar soporte y no suplantar ni reintentar. Si la pestaña antigua ya se perdió, sus claves operativas no eran durables y no pueden reconstruirse. Esto no afecta a los marcadores persistidos de resoluciones SUPER_ADMIN.
+
+Procedimiento de transición, límites de legacy y pendientes APP: [DETAILED-EXECUTION.md](DETAILED-EXECUTION.md), actualización 2026-10-04. Las secciones antiguas se conservan como historial.
+
+---
+
+Historial anterior (las reglas de autoridad quedan sustituidas por la actualización superior):
+
+
 # Actualización — contrato durable de intentos, 2026-10-03
 
 Esta sección sustituye el bloqueo de backend descrito en el historial inferior. Referencia de sólo lectura: mandaria-backend/docs/EXECUTION-ATTEMPT-RECONCILIATION.md. No se modificó ni activó backend.

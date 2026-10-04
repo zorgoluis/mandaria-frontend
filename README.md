@@ -1,5 +1,15 @@
 # Mandaria Web — V1.11-B
 
+### Cierre contractual de ejecución (2026-10-04)
+
+El cierre web exige trackingMode=LEGACY explícito y asignación activa propia. DETAILED es de consulta; null/campo ausente/error no habilitan entrega. Los avances históricos propios de PROVIDER_ADMIN se consultan o cierran técnicamente con la clave original y confirmación, sin reenviarlos ni recuperar permisos de avance. Marcador mínimo durable, timeout y permisos: [procedimiento actualizado](docs/EXECUTION-RECONCILIATION.md). Esta entrada sustituye las limitaciones de contrato documentadas anteriormente.
+
+
+## Autoridad de ejecución — 2026-10-04
+
+El repartidor registra hitos y entrega detallada desde la futura app compatible. Mandaria Web muestra progreso e historial en lectura para proveedor y DRIVER; conserva incidencias/asignaciones autorizadas, resoluciones SUPER_ADMIN y cierre legacy del proveedor/independiente. No usar avisos telefónicos para registrar nuevos hitos administrativos. PHONE_REPORT permanece en la historia y en incidencias recibidas. Recuperación anterior, límites contractuales y pendientes de la app: [docs/DETAILED-EXECUTION.md](docs/DETAILED-EXECUTION.md).
+
+
 ## Intentos de resolución — 2026-10-03
 
 Cierre actual revisado: 79 pruebas focalizadas, TypeScript, lint, build y revisión visual local aprobados. Los cambios ya preparados se conservaron; se completaron mensajes y prueba de confirmación/timeout. Ver VERIFICATION para distinguir esta ejecución de las anteriores. Integración real backend todavía pendiente; función sin activar.
