@@ -1,5 +1,15 @@
 # Mandaria Web — V1.11-B
 
+## Portal: seguimiento público B2B — 2026-10-04
+
+Actualización editorial posterior: OpenAPI público resincronizado; la descripción de executionProgress ya indica ordenar fotografías de una misma solicitud mediante publicVersion. Queda cerrada la discrepancia editorial registrada inicialmente en VERIFICATION. revision interna y expectedRevision de concurrencia permanecen sin cambios. No implica despliegue.
+
+`/developers/execution` documenta publicVersion (comparación BigInt por MDR), trackingMode, assignmentState, terminalOutcome persistente, identidad receptora tras transferencia y atención/cancelación bajo custodia. Consulta compartida desde el backend integrador: objetivo 15 segundos sujeto a límites agregados, backoff y parada al confirmar terminal. Se conserva delivery.completed; sin timeline, GPS ni nuevos webhooks. **Disponible en el checkout QA del backend, pendiente de despliegue; no se acredita producción.**
+
+Actualizar con `node scripts/sync-public-b2b.mjs` y detectar diferencias con `node scripts/sync-public-b2b.mjs --check` (opcional `--backend <ruta>`). El mecanismo conserva la allowlist de cinco artefactos públicos y sus hashes; no copiar OpenAPI general ni documentos administrativos. Los ejemplos de seguimiento se leen del JSON público sincronizado. `src/developers/tracking.md` contiene la explicación pública revisada contra el handoff; al cambiarlo, revisar también este texto y ejecutar las pruebas del portal. No distribuir PUBLIC-B2B-TRACKING.md completo: contiene información interna de implementación/despliegue; su enlace público se dirige a `/developers/execution`.
+
+Verificación local, evidencia visual y discrepancia editorial pendiente del contrato: [VERIFICATION.md](VERIFICATION.md). La sincronización no habilita ninguna capacidad ni ejecuta peticiones de seguimiento.
+
 ### Cierre contractual de ejecución (2026-10-04)
 
 El cierre web exige trackingMode=LEGACY explícito y asignación activa propia. DETAILED es de consulta; null/campo ausente/error no habilitan entrega. Los avances históricos propios de PROVIDER_ADMIN se consultan o cierran técnicamente con la clave original y confirmación, sin reenviarlos ni recuperar permisos de avance. Marcador mínimo durable, timeout y permisos: [procedimiento actualizado](docs/EXECUTION-RECONCILIATION.md). Esta entrada sustituye las limitaciones de contrato documentadas anteriormente.

@@ -2644,6 +2644,15 @@ dialog .money-block {
 .developer-prose li {
   margin: 8px 0;
 }
+.developer-prose {
+  overflow-wrap: anywhere;
+}
+.developer-prose th,
+.developer-prose td {
+  white-space: normal;
+  vertical-align: top;
+  font-size: 14px;
+}
 .developer-footer {
   padding: 32px;
   border-top: 1px solid var(--line);

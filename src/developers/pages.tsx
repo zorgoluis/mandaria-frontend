@@ -4,6 +4,7 @@ import { Link, NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { env } from '../config/env'
+import trackingGuide from './tracking.md?raw'
 
 const assets = '/developers/assets/'
 const downloads = [
@@ -113,7 +114,8 @@ export function DeveloperPortal() {
               element={
                 <Guide
                   title="Progreso y resultado de ejecución"
-                  section="Progreso logístico detallado (aditivo, sin activación)"
+                  section="Fotografía pública versionada — disponible en checkout QA, no desplegada"
+                  appendix={trackingGuide}
                 />
               }
             />
@@ -145,6 +147,10 @@ function Intro() {
         condiciones y sigue el resultado de la entrega.
       </p>
       <div className="developer-cards">
+        <Link to="/developers/execution">
+          <h2>Seguimiento B2B versionado</h2>
+          <p>Disponible en QA; pendiente de despliegue.</p>
+        </Link>
         <Link to="/developers/prequotes">
           <h2>Del precio al servicio</h2>
           <p>Precotización → conversión → consentimiento → aceptación.</p>
@@ -186,10 +192,12 @@ function Guide({
   title,
   file = 'B2B-PUBLIC-GUIDE.md',
   section,
+  appendix,
 }: {
   title: string
   file?: string
   section?: string
+  appendix?: string
 }) {
   const query = useQuery({
     queryKey: ['developer-assets', file],
@@ -200,9 +208,18 @@ function Guide({
   let body = query.data ?? ''
   if (section) body = body.split(`## ${section}`)[1]?.split('\n## ')[0] ?? ''
   else body = body.replace(/^# .*\n/, '')
+  if (appendix) body += '\n\n' + appendix
   return (
     <article className="developer-prose">
       <h1>{title}</h1>
+      {appendix && (
+        <p>
+          <strong>
+            Seguimiento B2B: disponible en QA. Pendiente de despliegue;
+            producción no verificada.
+          </strong>
+        </p>
+      )}
       {query.isPending ? (
         <p role="status">Cargando documentación…</p>
       ) : query.isError ? (
@@ -218,6 +235,8 @@ function Guide({
             a: ({ href, children }) => {
               if (href === 'B2B-WEBHOOKS.md')
                 return <Link to="/developers/webhooks">{children}</Link>
+              if (href === 'PUBLIC-B2B-TRACKING.md')
+                return <Link to="/developers/execution">{children}</Link>
               return href && downloads.includes(href) ? (
                 <a href={assets + href} download>
                   {children}
@@ -250,6 +269,7 @@ function Guide({
           Descargar guía revisada
         </a>
       </p>
+      {appendix && <TrackingExamples />}
     </article>
   )
 }
@@ -267,6 +287,64 @@ interface PublicSpec {
   paths: Record<string, Record<string, Operation>>
   components: { schemas: Record<string, unknown> }
 }
+function TrackingExamples() {
+  const query = useQuery({
+    queryKey: ['developer-assets', 'tracking-examples'],
+    queryFn: async () => {
+      const spec = JSON.parse(await asset('openapi-b2b.json')) as {
+        paths: Record<
+          string,
+          {
+            get: {
+              responses: Record<
+                string,
+                {
+                  content: Record<
+                    string,
+                    {
+                      examples: Record<
+                        string,
+                        { summary: string; value: unknown }
+                      >
+                    }
+                  >
+                }
+              >
+            }
+          }
+        >
+      }
+      return spec.paths['/api/v1/delivery-requests/{publicId}/status'].get
+        .responses['200'].content['application/json'].examples
+    },
+    retry: false,
+    staleTime: Infinity,
+  })
+  return (
+    <section aria-label="Ejemplos de seguimiento">
+      <h2>Ejemplos exactos del OpenAPI público</h2>
+      <p>
+        Fotografías ficticias independientes, no una secuencia de eventos. Se
+        leen del mismo JSON descargable.
+      </p>
+      {query.isPending ? (
+        <p role="status">Cargando ejemplos…</p>
+      ) : query.isError ? (
+        <p role="alert">
+          No se pudieron cargar los ejemplos.{' '}
+          <button onClick={() => void query.refetch()}>Reintentar</button>
+        </p>
+      ) : (
+        Object.entries(query.data).map(([key, example]) => (
+          <details className="developer-operation" key={key}>
+            <summary>{example.summary}</summary>
+            <CopyCode>{JSON.stringify(example.value, null, 2)}</CopyCode>
+          </details>
+        ))
+      )}
+    </section>
+  )
+}
 function Reference() {
   const query = useQuery({
     queryKey: ['developer-assets', 'openapi-b2b.json'],
@@ -278,6 +356,14 @@ function Reference() {
   return (
     <>
       <h1>Referencia API B2B</h1>
+      <p>
+        Seguimiento versionado disponible en QA y pendiente de despliegue; no
+        acredita disponibilidad en producción.{' '}
+        <Link to="/developers/execution">
+          Reglas de seguimiento y publicVersion
+        </Link>
+        .
+      </p>
       <p>
         Origen configurado: <code>{env.apiUrl}</code>. Origen público
         confirmado: <code>https://mandaria.com.mx</code>. Las rutas del contrato

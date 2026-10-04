@@ -1,3 +1,46 @@
+## 2026-10-04 — Resincronización editorial del OpenAPI público
+
+Referencia interna leída: B2B-FRONTEND-HANDOFF.md, «Resincronización editorial». No se copió ese documento ni docs/openapi.json completo. Se conservaron todos los cambios pendientes del portal. Sin cambios funcionales ni modificaciones backend.
+
+- Ejecutados `node scripts/sync-public-b2b.mjs` y `node scripts/sync-public-b2b.mjs --check`: PASS; allowlist pública y hashes coinciden con backend. En esta resincronización cambian el OpenAPI público y su hash en manifest.json.
+- **Cerrada la discrepancia editorial anterior:** DeliveryStatusResponse.executionProgress.description exige comparar publicVersion numéricamente por solicitud; revision sólo describe la ejecución interna. El campo revision conserva tipo number, minimum 1 y obligatoriedad en PublicExecutionProgressResponse. La guía/copiar ejemplo siguen comparando BigInt(publicVersion).
+- Revisión estática de src/execution/types.ts, commands.ts, components.tsx e incidents.tsx: revision permanece en progreso/historial; expectedRevision continúa capturando e.revision en comandos/incidencias/resoluciones para concurrencia. No se reemplazaron ni modificaron esos campos; no se publican comandos administrativos en el OpenAPI B2B.
+- `npx vitest run src/test/developers.test.tsx --maxWorkers=1`: 22/22 PASS; fortalecidas aserciones documentales de descripción y revision. Incluye ejemplos idénticos al contrato, comparación BigInt, anonimato y exclusión de operaciones internas. Fetch de componentes simulado; no es integración backend.
+- Descarga HTTP local mediante servidor Vite temporal en 127.0.0.1:4174 (`createServer`, fetch y cierre en finally): PASS, HTTP 200, Content-Type application/json, JSON válido e igualdad estructural con public/developers/assets/openapi-b2b.json y backend/docs/openapi-b2b.json. Servidor temporal cerrado. No se reconstruyó dist: futuros builds deben incorporar el artefacto actualizado.
+- Continuidad: README y esta entrada; la advertencia anterior se conserva como historial y queda resuelta por esta resincronización. Prueba documental actualizada en src/test/developers.test.tsx.
+
+No se repitieron suites operativas, build ni revisión visual completa. Descarga verificada en fuente local, no en nginx ni producción. Disponibilidad QA y despliegue pendiente sin cambios. Sin commit, push ni despliegue.
+
+## 2026-10-04 — Portal de seguimiento B2B público
+
+Alcance documental sobre QA `b122a62`, inicialmente sin cambios pendientes. Leídos PUBLIC-B2B-TRACKING.md y PUBLIC-B2B-TRACKING-VERIFICATION.md del backend como referencia de sólo lectura. Disponibilidad declarada: checkout QA; publicación y despliegue pendientes. El informe backend no se presenta como una verificación ejecutada desde frontend.
+
+### Archivos y comportamiento
+
+- Sincronizados por `scripts/sync-public-b2b.mjs`: OpenAPI B2B, guía pública, guía de webhooks y manifiesto. Los dos ejemplos existentes de la allowlist mantienen contenido. Nunca se editó manualmente el JSON generado ni se distribuyeron documentos de verificación/administración.
+- `src/developers/pages.tsx`, nuevo `src/developers/tracking.md`: ejecución, entrada y referencia conectadas; aviso QA, tipos/modos exactos, comparación decimal, asignación/transferencia, custodia/retorno, sondeo compartido/backoff/finales y continuidad de delivery.completed. Ejemplos cargados directamente desde las respuestas 200 del OpenAPI público; fotografías independientes, no una secuencia inventada.
+- `src/index.css`: corte de texto en prosa pública para impedir overflow móvil por cadenas largas de estados.
+- `src/test/developers.test.tsx`: contratos exactos y nullable, ejemplos idénticos al JSON, anonimato sin API y comparación BigInt del ejemplo copiable (atrasadas/iguales, números mayores que MAX_SAFE_INTEGER, valores inválidos y MDR distintas).
+- `scripts/verify-developer-tracking.mjs`: verificador reproducible del portal compilado; sólo loopback 4173, bloquea API y tráfico externo, sin credenciales.
+- README y esta continuidad; historial anterior conservado abajo.
+
+### Verificaciones ejecutadas
+
+- `node scripts/sync-public-b2b.mjs` y `node scripts/sync-public-b2b.mjs --check`: PASS, los cinco artefactos y hashes coinciden con backend normalizando CRLF.
+- `npx vitest run src/test/developers.test.tsx --maxWorkers=1`: 22/22 PASS. Pruebas de componentes usan fetch simulado de archivos públicos reales; no prueban autorización ni concurrencia backend.
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS. ESLint focalizado adicional para script/componentes/pruebas nuevos.
+- `npm run build`: PASS, incluye `tsc -b`. Advertencia de chunk principal >500 kB (Root ~599 kB), sin error; no se amplió el alcance a dividir la aplicación.
+- `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort` + `node scripts/verify-developer-tracking.mjs`: PASS sobre build local, Chromium a 1440×1000 y 390×844. Acceso anónimo directo, navegación referencia↔seguimiento, recarga, Tab/Enter, descarga mediante enlace y comparación del JSON con el artefacto, Content-Type application/json, sin overflow ni errores de renderizado y sin peticiones API/externas. Capturas revisadas en `test-results/developer-tracking/` (ignoradas por Git): desktop/mobile, top y example. No se prueba nginx con la vista previa Vite.
+- Primera conexión visual a 5173 agotó tiempo; un intento externo confirmó puerto ocupado y se usó 4173 sin detener el servicio previo. Primer recorrido alcanzó móvil y detectó overflow por texto largo: corregido en CSS; también se permitió envolver las celdas de tablas de la guía para legibilidad. Se repitió el recorrido sobre el build corregido. Los intentos fallidos no se cuentan como aprobación.
+- `git diff --check`: PASS (sólo avisos de normalización LF/CRLF de Git).
+
+### Límites y seguimiento
+
+- Discrepancia editorial backend: `DeliveryStatusResponse.properties.executionProgress.description` del OpenAPI todavía dice comparar `revision`; el nuevo handoff y `publicVersion.description` exigen publicVersion para ordenar fotografías completas. El portal explica la regla nueva. Se preservó el artefacto exacto; BACKEND debe corregir esa descripción y luego volver a sincronizar. No bloquea la publicación de las instrucciones correctas, pero la referencia descargable conserva esa frase contradictoria.
+- No se ejecutó integración HTTP backend, PostgreSQL, capacidad/benchmark, nginx ni despliegue. No se modificaron componentes operativos ni se repitieron sus suites. Sin Docker, Coita, producción, activación, commit o push.
+- Después del despliegue autorizado, comprobar versión/campos de todas las instancias, origen API, descarga JSON/MIME y rutas directas en hosting real. El objetivo de 15 segundos no constituye SLA ni capacidad garantizada.
+
 ## 2026-10-03 — F-01 cerrado con integración real
 
 ## 2026-10-04 — Cierre del contrato de trackingMode y avance histórico propio
