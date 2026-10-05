@@ -191,6 +191,13 @@ export function normalizeError(status: number, body: unknown): ApiError {
     INVITATION_ALREADY_ACCEPTED: 'Esta invitación ya fue utilizada.',
     ACCOUNT_NOT_ACTIVATABLE:
       'Esta cuenta no puede activarse con la invitación. Contacta a tu administrador.',
+    // Partner applications (landing leads). One code covers several causes; never read message.
+    PARTNER_APPLICATION_NOT_FOUND:
+      'La solicitud de socio no existe. Revisa la referencia.',
+    PARTNER_APPLICATION_INVALID_TRANSITION:
+      'La solicitud cambió o ese cambio de estado no está permitido. Actualiza la solicitud; aprobar exige una nota y pasar de aprobada a rechazada exige una nota nueva.',
+    PARTNER_APPLICATION_LINK_INVALID:
+      'Mandaria no aceptó el vínculo. Comprueba que la solicitud siga aprobada, que el proveedor exista y sea de tipo flotilla (sólo en solicitudes de flotilla), que la invitación se haya enviado al mismo correo de la solicitud y que pertenezca a ese proveedor.',
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {

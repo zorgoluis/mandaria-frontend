@@ -22,6 +22,7 @@ import {
   ReceiptText,
   BadgeCheck,
   Coins,
+  Handshake,
 } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
@@ -70,6 +71,11 @@ export function AdminLayout() {
           { to: '/providers', label: 'Proveedores', icon: Building2 },
           { to: '/users', label: 'Administradores', icon: UsersRound },
           { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
+          {
+            to: '/admin/partner-applications',
+            label: 'Solicitudes de socio',
+            icon: Handshake,
+          },
         ]
       : user?.role === 'PROVIDER_ADMIN'
         ? [
