@@ -9,6 +9,7 @@ import {
   Plus,
   PackageCheck,
   PackageX,
+  Handshake,
 } from 'lucide-react'
 import { providers } from '../providers/service'
 import { useAuth } from '../auth/context'
@@ -16,6 +17,8 @@ import { Badge, ErrorState, Loading, PageTitle, Table } from '../components/ui'
 import { MyProvider } from '../providers/pages'
 import { deliveryRequests } from '../delivery-requests/service'
 import { deliveryRequestKeys } from '../delivery-requests/queries'
+import { partnerApplications } from '../partner-applications/service'
+import { partnerApplicationKeys } from '../partner-applications/queries'
 export function Dashboard() {
   const { user } = useAuth()
   return user?.role === 'SUPER_ADMIN' ? (
@@ -233,8 +236,13 @@ function DeliveryRequestCounts() {
     queryFn: ({ signal }) =>
       deliveryRequests.list({ pageSize: 1, status: 'CANCELLED' }, signal),
   })
+  const received = useQuery({
+    queryKey: partnerApplicationKeys.count('RECEIVED'),
+    queryFn: ({ signal }) =>
+      partnerApplications.list({ pageSize: 1, status: 'RECEIVED' }, signal),
+  })
   return (
-    <div className="stat-grid delivery-stat-grid">
+    <div className="stat-grid">
       {[
         {
           title: 'Solicitudes creadas',
@@ -249,6 +257,13 @@ function DeliveryRequestCounts() {
           icon: PackageX,
           note: 'Canceladas por integración o administración',
           to: '/delivery-requests?status=CANCELLED',
+        },
+        {
+          title: 'Solicitudes de socio',
+          query: received,
+          icon: Handshake,
+          note: 'Recibidas desde la landing, sin atender',
+          to: '/admin/partner-applications?status=RECEIVED',
         },
       ].map(({ title, query, icon: Icon, note, to }) => (
         <div className="stat-card" key={title}>

@@ -1456,9 +1456,6 @@ dialog::backdrop {
 .button.secondary.destructive:hover {
   background: #fff4f4;
 }
-.delivery-stat-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
 .delivery-filters {
   align-items: center;
 }
@@ -1571,9 +1568,6 @@ dialog textarea {
   }
 }
 @media (max-width: 640px) {
-  .delivery-stat-grid {
-    grid-template-columns: 1fr;
-  }
   .delivery-filters .search,
   .delivery-filters select {
     flex: 1 1 100%;
@@ -2721,4 +2715,51 @@ dialog .money-block {
 .execution-check input {
   flex: 0 0 auto;
   margin-top: 4px;
+}
+
+/* Partner applications (landing leads) */
+.badge.received {
+  background: #fcf4df;
+  color: #af8a38;
+}
+.badge.contacted {
+  background: #edf2fb;
+  color: #6b80ae;
+}
+.badge.discarded {
+  background: #f1f3f3;
+  color: #6f7c7d;
+}
+.submissions-repeated {
+  background: #fff8ea;
+  color: #8b641f;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.contact-actions {
+  flex-wrap: wrap;
+  padding-top: 0;
+}
+.contact-actions .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.onboarding-steps {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 14px;
+  font-size: 13px;
+}
+.onboarding-steps p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.onboarding-steps li.done strong {
+  color: #338969;
+}
+.onboarding-steps svg {
+  vertical-align: -2px;
 }
