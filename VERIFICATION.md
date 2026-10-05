@@ -1,3 +1,19 @@
+## 2026-10-04 — Solicitudes de socio: vista «Abiertas» con varios estados
+
+El backend ahora acepta `status` con varios valores separados por comas (handoff actualizado, sección de bandeja administrativa). La bandeja usa por defecto «Abiertas» (`status=RECEIVED,CONTACTED`). En la URL, `status` vale `OPEN` (o no aparece), uno de los cinco estados o `ALL`, que omite el filtro. Si la URL trae una lista con comas, se rechaza como filtro inválido y no se llama al backend. El contador del dashboard no cambia: sigue contando sólo `RECEIVED`.
+
+Archivos: `src/partner-applications/pages.tsx`, `src/partner-applications/types.ts` (`status` pasa a ser texto con uno o varios estados) y `src/test/partner-applications.test.tsx`.
+
+### Ejecutado
+
+- `npx vitest run src/test/partner-applications.test.tsx --maxWorkers=1`: **25/25 PASS**. Cubre la vista por defecto con `RECEIVED,CONTACTED`, las opciones del filtro, el cambio entre un estado, `ALL` y `OPEN` (con `status` y `page` en la URL), un estado único restaurado desde la URL, los estados inválidos `PENDING` y `RECEIVED,CONTACTED` sin llamada, y el contador del dashboard con `RECEIVED`. Servicios simulados.
+- `npx vitest run src/test/flows.test.tsx`: 45/45 PASS.
+- `npx tsc -b`, `npm run typecheck:test`, `npm run lint`, `npm run build`: PASS. `prettier --check` de los archivos tocados: PASS.
+
+### No ejecutado
+
+- No hubo comprobación contra el backend real: `localhost:3000` rechazó la conexión (contenedor detenido) y no se arrancó Docker. No se repitió la suite completa ni la revisión visual.
+
 ## 2026-10-04 — Solicitudes de socio (Fase 1, SUPER_ADMIN)
 
 Fuente: `mandaria-backend/docs/PARTNER-APPLICATIONS-HANDOFF.md` (manda sobre `mandaria-landing/docs/solicitudes-socio/CONTRATO.md`). Backend local en Docker (`feat/solicitud-repartidor`, sin commit). Sin cambios de backend, commit, push ni despliegue.

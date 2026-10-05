@@ -52,9 +52,11 @@ import {
 
 const PAGE_SIZE = 20
 const LIST = '/admin/partner-applications'
-/** The backend filters one status per request; "open" (RECEIVED + CONTACTED) is two pages. */
-const DEFAULT_STATUS: PartnerApplicationStatus = 'RECEIVED'
+/** URL values of the status filter: OPEN (default), one status, or ALL (no filter). */
+const OPEN = 'OPEN'
 const ALL = 'ALL'
+/** Leads someone still has to work on; the backend takes them as one comma-separated filter. */
+const OPEN_STATUSES: PartnerApplicationStatus[] = ['RECEIVED', 'CONTACTED']
 /** These close or accept a lead, so they always ask for a reason and a confirmation. */
 const NOTE_REQUIRED: PartnerApplicationStatus[] = [
   'APPROVED',
@@ -85,17 +87,22 @@ export function PartnerApplicationsPage() {
     1,
     Math.min(100000, Math.trunc(Number(params.get('page')) || 1)),
   )
-  const rawStatus = params.get('status') ?? DEFAULT_STATUS
+  const rawStatus = params.get('status') ?? OPEN
   const rawType = params.get('type') ?? ''
   const q = (params.get('q') ?? '').trim()
   const valid =
-    (rawStatus === ALL || isStatus(rawStatus)) &&
+    (rawStatus === OPEN || rawStatus === ALL || isStatus(rawStatus)) &&
     (!rawType || isType(rawType)) &&
     q.length <= 100
   const filters = {
     page,
     pageSize: PAGE_SIZE,
-    status: isStatus(rawStatus) ? rawStatus : undefined,
+    status:
+      rawStatus === OPEN
+        ? OPEN_STATUSES.join(',')
+        : isStatus(rawStatus)
+          ? rawStatus
+          : undefined,
     type: isType(rawType) ? rawType : undefined,
     q: q || undefined,
   }
@@ -156,6 +163,7 @@ export function PartnerApplicationsPage() {
             value={rawStatus}
             onChange={(event) => update({ status: event.target.value })}
           >
+            <option value={OPEN}>Abiertas (recibidas y contactadas)</option>
             {partnerApplicationStatuses.map((value) => (
               <option key={value} value={value}>
                 {partnerStatusLabels[value]}
@@ -183,7 +191,7 @@ export function PartnerApplicationsPage() {
           <div className="panel-body">
             <p className="inline-error" role="alert">
               Los filtros de la dirección no son válidos.{' '}
-              <Link to={LIST}>Ver las solicitudes recibidas</Link>.
+              <Link to={LIST}>Ver las solicitudes abiertas</Link>.
             </p>
           </div>
         ) : query.isPending ? (
@@ -286,8 +294,9 @@ export function PartnerApplicationsPage() {
               }}
             />
             <p className="panel-note">
-              El servidor filtra un estado a la vez: por defecto se muestran las
-              recibidas. Consulta las contactadas con el filtro de estado.
+              Por defecto se muestran las abiertas: recibidas y contactadas. Las
+              aprobadas, rechazadas y descartadas se consultan con el filtro de
+              estado.
             </p>
           </>
         )}
