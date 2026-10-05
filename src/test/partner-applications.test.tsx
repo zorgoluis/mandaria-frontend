@@ -182,13 +182,16 @@ beforeEach(() => {
 })
 
 describe('partner applications inbox', () => {
-  it('lists RECEIVED by default with Spanish labels and highlights repeated submissions', async () => {
+  it('lists open applications by default with Spanish labels and highlights repeated submissions', async () => {
     mount('/admin/partner-applications')
     const table = await screen.findByRole('table')
     expect(partnerApplications.list).toHaveBeenCalledWith(
-      { page: 1, pageSize: 20, status: 'RECEIVED' },
+      { page: 1, pageSize: 20, status: 'RECEIVED,CONTACTED' },
       expect.anything(),
     )
+    expect(
+      screen.getByRole('combobox', { name: 'Filtrar por estado' }),
+    ).toHaveValue('OPEN')
     const [, first, second] = within(table).getAllByRole('row')
     expect(first).toHaveTextContent('SOC-000004')
     expect(first).toHaveTextContent('Individual')
@@ -249,6 +252,7 @@ describe('partner applications inbox', () => {
       ),
     )
     expect(location()).toContain('page=2')
+    expect(location()).toContain('status=CONTACTED')
     await user.selectOptions(
       screen.getByRole('combobox', { name: 'Filtrar por estado' }),
       'ALL',
@@ -259,15 +263,69 @@ describe('partner applications inbox', () => {
         expect.anything(),
       ),
     )
+    expect(location()).toContain('status=ALL')
+    expect(location()).toContain('page=1')
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filtrar por estado' }),
+      'OPEN',
+    )
+    await waitFor(() =>
+      expect(partnerApplications.list).toHaveBeenLastCalledWith(
+        {
+          page: 1,
+          pageSize: 20,
+          status: 'RECEIVED,CONTACTED',
+          type: 'FLEET',
+          q: 'maria',
+        },
+        expect.anything(),
+      ),
+    )
+    expect(location()).toContain('status=OPEN')
   })
 
-  it('refuses invalid URL filters without calling the backend', async () => {
-    mount('/admin/partner-applications?status=OPEN')
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Los filtros de la dirección no son válidos.',
-    )
-    expect(partnerApplications.list).not.toHaveBeenCalled()
+  it('offers Abiertas, each status and all statuses', async () => {
+    mount('/admin/partner-applications')
+    const select = await screen.findByRole('combobox', {
+      name: 'Filtrar por estado',
+    })
+    expect(
+      within(select)
+        .getAllByRole('option')
+        .map((option) => option.textContent),
+    ).toEqual([
+      'Abiertas (recibidas y contactadas)',
+      'Recibida',
+      'Contactada',
+      'Aprobada',
+      'Rechazada',
+      'Descartada',
+      'Todos los estados',
+    ])
   })
+
+  it('restores a single status from the URL', async () => {
+    mount('/admin/partner-applications?status=APPROVED&page=3')
+    await screen.findByRole('table')
+    expect(partnerApplications.list).toHaveBeenCalledWith(
+      { page: 3, pageSize: 20, status: 'APPROVED' },
+      expect.anything(),
+    )
+    expect(
+      screen.getByRole('combobox', { name: 'Filtrar por estado' }),
+    ).toHaveValue('APPROVED')
+  })
+
+  it.each(['PENDING', 'RECEIVED,CONTACTED'])(
+    'refuses the invalid URL status %s without calling the backend',
+    async (status) => {
+      mount(`/admin/partner-applications?status=${encodeURIComponent(status)}`)
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'Los filtros de la dirección no son válidos.',
+      )
+      expect(partnerApplications.list).not.toHaveBeenCalled()
+    },
+  )
 
   it('shows the sidebar entry and the dashboard counter for SUPER_ADMIN', async () => {
     vi.mocked(partnerApplications.list).mockResolvedValue(page([], 7))

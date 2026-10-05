@@ -53,11 +53,11 @@ export interface PartnerApplication {
   /** Decided by the backend state machine; the web never recomputes it. */
   allowedTransitions: PartnerApplicationStatus[]
 }
-/** The backend accepts a single status per request. */
 export interface PartnerApplicationFilters {
   page?: number
   pageSize?: number
-  status?: PartnerApplicationStatus
+  /** One status or several separated by commas (up to 5), e.g. "RECEIVED,CONTACTED". */
+  status?: string
   type?: PartnerApplicationType
   q?: string
 }
