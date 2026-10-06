@@ -25,6 +25,18 @@ El repartidor registra hitos y entrega detallada desde la futura app compatible.
 Cierre actual revisado: 79 pruebas focalizadas, TypeScript, lint, build y revisión visual local aprobados. Los cambios ya preparados se conservaron; se completaron mensajes y prueba de confirmación/timeout. Ver VERIFICATION para distinguir esta ejecución de las anteriores. Integración real backend todavía pendiente; función sin activar.
 
 Integrada consulta durable y cierre explícito del intento propio. APPLIED exige auditoría coherente; PENDING_OR_UNKNOWN bloquea; CLOSED_NO_EFFECTS permite sólo preparar una nueva resolución cuando el contrato y el estado vigente lo permiten. Sin repetición automática ni reversión física. [Procedimiento vigente e historial](docs/EXECUTION-RECONCILIATION.md).
+## Solicitudes de socio (Fase 1) — 2026-10-04
+
+Bandeja SUPER_ADMIN en `/admin/partner-applications` (menú «Solicitudes de socio») para los leads que envía la landing. Una solicitud **no es una cuenta**: aprobarla no crea proveedores, invitaciones ni repartidores. Contrato: `mandaria-landing/docs/solicitudes-socio/CONTRATO.md`; fuente que manda: `mandaria-backend/docs/PARTNER-APPLICATIONS-HANDOFF.md`. Backend implementado localmente en `feat/solicitud-repartidor`, sin commit ni despliegue.
+
+- Dominio `src/partner-applications/` (`types`, `service`, `queries`, `format`, `pages`). Clave `reference` (`SOC-NNNNNN`, sin distinguir mayúsculas); no existe `id` interno.
+- Lista: filtros estado, tipo y `q` en la URL; paginación `page`/`pageSize` (20). Vista por defecto «Abiertas» (`status=RECEIVED,CONTACTED`; el backend acepta varios estados separados por comas); también cada estado por separado y «Todos los estados», que omite el filtro. `submissionCount` > 1 se resalta.
+- Detalle: contacto (`tel:`, `https://wa.me/52<phone>`, `mailto:`), botones de estado sólo desde `allowedTransitions` (la máquina de estados no se duplica). `APPROVED`, `REJECTED` y `DISCARDED` piden nota (≤ 500) en un diálogo de confirmación; `APPROVED → REJECTED` nunca precarga la nota anterior. Un 409 de transición vuelve a leer la solicitud.
+- «Alta en Mandaria» (sólo `APPROVED`): pasos guiados con enlaces a Proveedores, Repartidores e Independientes. Los vínculos se eligen de proveedores FLEET reales y de invitaciones enviadas exactamente al correo de la solicitud (FLEET: PROVIDER_ADMIN; INDIVIDUAL: DRIVER y sin proveedor). El proveedor que recibe a los independientes sigue pendiente del propietario y no se fija en código.
+- Errores por `code`: `PARTNER_APPLICATION_NOT_FOUND`, `PARTNER_APPLICATION_INVALID_TRANSITION`, `PARTNER_APPLICATION_LINK_INVALID` (un solo código para varias causas; el mensaje las enumera y el formulario descarta antes las detectables: invitación de otro proveedor).
+- Dashboard SUPER_ADMIN: contador de solicitudes `RECEIVED`.
+
+Verificación real y límites: [VERIFICATION.md](VERIFICATION.md).
 
 ## Ejecución detallada — 2026-10-02
 
@@ -295,6 +307,7 @@ src/
   integrations/    Clientes B2B y credenciales
   layouts/         Sidebar, header, navegación responsive
   providers/       Catálogo, detalle, límites, membresías y perfil propio
+  partner-applications/ Bandeja de solicitudes de socio (leads de la landing)
   services/        HTTP, normalizador de errores y QueryClient
   test/            Pruebas de flujos, permisos, HTTP y sesión
   types/           Tipos adaptados al contrato inspeccionado
@@ -328,6 +341,7 @@ Se usan formularios HTML nativos con validaciones y `ActionForm`; no se agrega l
 | /providers, /providers/new, /providers/:id             | SUPER_ADMIN; el detalle administra la cobertura          |
 | /users                                                 | SUPER_ADMIN; cuentas, estado e invitar administrador     |
 | /invitations                                           | SUPER_ADMIN; invitaciones, reenviar y revocar            |
+| /admin/partner-applications, …/:reference              | SUPER_ADMIN; solicitudes de socio de la landing          |
 | /activate-account                                      | Público; activación de cuenta invitada                   |
 | /services, /services/:id                               | PROVIDER_ADMIN; servicios ofrecidos, tomar y liberar     |
 | /dispatches, /dispatches/:id                           | SUPER_ADMIN; auditoría de despachos, sólo lectura        |

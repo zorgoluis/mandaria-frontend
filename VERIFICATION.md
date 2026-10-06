@@ -1,3 +1,18 @@
+## 2026-10-06 — Integración local de main y QA
+
+Preparada en codex/merge-main-qa desde QA bcd70cf, integrando main 0a44d6e sin commit ni push. Los únicos conflictos textuales fueron README.md y VERIFICATION.md: se conservaron las entradas completas de ambas ramas. Comparación de líneas previas: ninguna ausente de ninguno de los dos documentos en ambas ramas.
+
+Se conserva ejecución/reconciliación y portal público de QA, junto con solicitudes de socio, rutas, navegación y dashboard de main. nginx.conf mantiene exactamente la configuración de main: servidor interno; TLS y proxies delegados a mandaria-proxy. Las instrucciones históricas de nginx anteriores no describen esta nueva topología. No se verificó nginx ni el proxy externo en ejecución.
+
+Validación local sobre la combinación:
+- npm run typecheck:test: PASS.
+- npm run lint: PASS.
+- npm run build: PASS (incluye TypeScript); advertencia existente de chunk Root de 618.50 kB.
+- npx vitest run src/test/partner-applications.test.tsx src/test/flows.test.tsx src/test/developers.test.tsx src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/execution-attempt-service.test.ts src/test/collection-instructions.test.tsx --maxWorkers=1: 180/180 PASS, 7 archivos. Pruebas frontend con servicios simulados; no acreditan integración backend.
+- git diff --check HEAD y listado de archivos sin resolver: sin incidencias.
+
+Sin operaciones reales, Docker, despliegue ni cambios backend. Merge preparado en el worktree aislado; QA y main no se movieron. Sin nueva verificación visual ni integración real.
+
 ## 2026-10-04 — Resincronización editorial del OpenAPI público
 
 Referencia interna leída: B2B-FRONTEND-HANDOFF.md, «Resincronización editorial». No se copió ese documento ni docs/openapi.json completo. Se conservaron todos los cambios pendientes del portal. Sin cambios funcionales ni modificaciones backend.
@@ -163,6 +178,52 @@ Chromium headless con fixture sintética local: 1366x900 y 390x844; diálogo leg
 Carreras close/resolve probadas con respuestas simuladas (ambos ganadores), no locks reales. Tests cubren APPLIED con ID exacto, PENDING_OR_UNKNOWN, CLOSED_NO_EFFECTS true/false, respuesta perdida de cierre, doble cierre, 409 del original tardío, permisos, identidad cambiada y marcador tras recarga. Sin POST automático de resolución. Ninguna operación física ni llamada real al backend en pruebas visuales. Pendiente integración real con backend/migración instalada y usuarios autorizados cuando se habilite una validación controlada; no se activó DETAILED_EXECUTION_ENABLED. Persistencia local no garantiza bloqueo en otro dispositivo ni tras borrar almacenamiento. Sin backend modificado, commit, push, Docker o despliegue.
 
 ---
+## 2026-10-04 — Solicitudes de socio: vista «Abiertas» con varios estados
+
+El backend ahora acepta `status` con varios valores separados por comas (handoff actualizado, sección de bandeja administrativa). La bandeja usa por defecto «Abiertas» (`status=RECEIVED,CONTACTED`). En la URL, `status` vale `OPEN` (o no aparece), uno de los cinco estados o `ALL`, que omite el filtro. Si la URL trae una lista con comas, se rechaza como filtro inválido y no se llama al backend. El contador del dashboard no cambia: sigue contando sólo `RECEIVED`.
+
+Archivos: `src/partner-applications/pages.tsx`, `src/partner-applications/types.ts` (`status` pasa a ser texto con uno o varios estados) y `src/test/partner-applications.test.tsx`.
+
+### Ejecutado
+
+- `npx vitest run src/test/partner-applications.test.tsx --maxWorkers=1`: **25/25 PASS**. Cubre la vista por defecto con `RECEIVED,CONTACTED`, las opciones del filtro, el cambio entre un estado, `ALL` y `OPEN` (con `status` y `page` en la URL), un estado único restaurado desde la URL, los estados inválidos `PENDING` y `RECEIVED,CONTACTED` sin llamada, y el contador del dashboard con `RECEIVED`. Servicios simulados.
+- `npx vitest run src/test/flows.test.tsx`: 45/45 PASS.
+- `npx tsc -b`, `npm run typecheck:test`, `npm run lint`, `npm run build`: PASS. `prettier --check` de los archivos tocados: PASS.
+
+### No ejecutado
+
+- No hubo comprobación contra el backend real: `localhost:3000` rechazó la conexión (contenedor detenido) y no se arrancó Docker. No se repitió la suite completa ni la revisión visual.
+
+## 2026-10-04 — Solicitudes de socio (Fase 1, SUPER_ADMIN)
+
+Fuente: `mandaria-backend/docs/PARTNER-APPLICATIONS-HANDOFF.md` (manda sobre `mandaria-landing/docs/solicitudes-socio/CONTRATO.md`). Backend local en Docker (`feat/solicitud-repartidor`, sin commit). Sin cambios de backend, commit, push ni despliegue.
+
+### Archivos
+
+- Nuevo `src/partner-applications/` (`types.ts`, `service.ts`, `queries.ts`, `format.ts`, `pages.tsx`) y `src/test/partner-applications.test.tsx`.
+- `src/app/App.tsx` (rutas SUPER_ADMIN `/admin/partner-applications` y `/:reference`), `src/layouts/AdminLayout.tsx` (menú), `src/dashboard/Dashboard.tsx` (contador `RECEIVED`), `src/services/errors.ts` (tres códigos), `src/index.css` (badges/pasos; se retiró `.delivery-stat-grid`, ya sin uso).
+- `src/test/flows.test.tsx`: la lista esperada del menú SUPER_ADMIN ya fallaba antes de esta tarea (le faltaba «Incidencias de custodia»); se actualizó con esa entrada y la nueva.
+
+### Diferencias con el contrato (reportadas)
+
+- Paginación `page`/`pageSize`, no `cursor`/`limit` (handoff).
+- **`status` admite un solo valor por petición** (`PartnerApplicationListQueryDto`, `@IsIn`). La vista por defecto es `RECEIVED`, no «abiertas» (`RECEIVED`+`CONTACTED`); «Todos los estados» omite el filtro. Si se quiere la bandeja de abiertas en una sola página, Backend debe aceptar varios estados.
+- `PARTNER_APPLICATION_LINK_INVALID` agrupa todas las causas; como no se lee `message`, la interfaz las enumera. El formulario sólo ofrece proveedores FLEET e invitaciones con el correo exacto, y antes de enviar rechaza una invitación que sea de otro proveedor.
+
+### Ejecutado
+
+- `npx vitest run src/test/partner-applications.test.tsx`: **22/22 PASS** (lista, filtros y paginación, URL inválida, menú y contador, 403 para PROVIDER_ADMIN/DRIVER, contacto, acciones según `allowedTransitions`, nota obligatoria en APPROVED/REJECTED/DISCARDED, APPROVED→REJECTED con nota nueva, 404 y 409 por `code`, vínculos FLEET/INDIVIDUAL, invitación de otro proveedor y vínculos conservados tras rechazar). Servicios simulados.
+- `npx vitest run` (suite completa): 698 PASS / 19 FAIL. 18 son de `delivery-assignments*.test.ts(x)` y fallan igual sin estos cambios (etiquetas de asignación desalineadas con su prueba; se comprobó con `git stash`). 1 de `dispatch.test.tsx` fue un tiempo agotado por carga: aislado, 47/47 PASS.
+- `npm run typecheck:test`, `npm run lint`, `npm run build`: PASS (advertencia de chunk >500 kB ya existente, Root 618 kB).
+- `npm run format:check`: FAIL en los mismos 14 archivos que ya fallaban antes (docs, assets públicos y pruebas ajenas); ninguno de esta tarea.
+- Revisión real: backend Docker `:3000`, Vite `localhost:5173` y Edge vía Playwright, con el SUPER_ADMIN bootstrap local (`MANDARIA_BACKEND_ENV`, sin imprimir credenciales). Se crearon SOC-000005…000009 con `curl` al endpoint público (dos tandas, respetando 5/10 min; 202, y el duplicado devolvió la misma referencia). Script en `test-results/partner-applications/` (ignorado por Git). Resultados: contador del dashboard, lista RECEIVED por defecto con «2 envíos», filtro de tipo y `q`, enlaces `tel:`/`wa.me/52…`/`mailto:`, RECEIVED→CONTACTED→APPROVED→REJECTED con notas, aprobar sin nota bloqueado, 409 `PARTNER_APPLICATION_INVALID_TRANSITION` real (cambio concurrente por API) con recarga de transiciones, 404 `PARTNER_APPLICATION_NOT_FOUND` real, vínculo de proveedor FLEET registrado (200) y visible, y 409 `PARTNER_APPLICATION_LINK_INVALID` real por API (`providerId` en INDIVIDUAL). En móvil (390 px) no hay desbordamiento horizontal y no hubo errores de navegador. Capturas revisadas: desktop (dashboard, lista, detalle, 409, aprobada individual y FLEET vinculada) y móvil (lista y detalle).
+
+### No verificado / límites
+
+- Registrar un `invitationId` real (exigiría crear una invitación y una cuenta INVITED); sólo está cubierto en Vitest. El 409 de vínculo en la interfaz también se probó sólo en Vitest.
+- SOC-000005 y SOC-000006 tienen nombres con caracteres corruptos porque el `curl` de Git Bash no envió UTF-8; no es un fallo de la interfaz. Las siguientes se enviaron desde archivos UTF-8 y se ven bien. Son datos locales de prueba.
+- El proveedor que recibe a los repartidores independientes sigue pendiente del propietario.
+- Sin nginx, producción ni `https://app.mandaria.com.mx`.
 
 ## 2026-10-03 — Reconciliación de resoluciones tras recarga/cierre
 

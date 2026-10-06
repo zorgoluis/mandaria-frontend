@@ -52,6 +52,10 @@ import {
   CreditPolicyNew,
 } from '../credit-policies/pages'
 import { DriverCreditsPage, MyCreditsPage } from '../credits/pages'
+import {
+  PartnerApplicationsPage,
+  PartnerApplicationDetail,
+} from '../partner-applications/pages'
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
@@ -163,6 +167,15 @@ export function App() {
             <Route
               path="credit-policies/:id"
               element={<CreditPolicyDetail key={location.pathname} />}
+            />
+            {/* Landing leads: SUPER_ADMIN only; the backend also gates it. */}
+            <Route
+              path="admin/partner-applications"
+              element={<PartnerApplicationsPage />}
+            />
+            <Route
+              path="admin/partner-applications/:reference"
+              element={<PartnerApplicationDetail key={location.pathname} />}
             />
             <Route path="users" element={<UsersPage />} />
             <Route path="invitations" element={<InvitationsPage />} />
