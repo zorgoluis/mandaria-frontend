@@ -1,4 +1,4 @@
-export type Role = 'SUPER_ADMIN' | 'PROVIDER_ADMIN' | 'DRIVER'
+export type Role = 'SUPER_ADMIN' | 'PROVIDER_ADMIN' | 'DRIVER' | 'CUSTOMER'
 export interface User {
   id: string
   email: string

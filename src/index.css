@@ -2772,3 +2772,39 @@ dialog .money-block {
 .onboarding-steps svg {
   vertical-align: -2px;
 }
+
+.customer-public {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 24px;
+}
+.customer-public fieldset {
+  min-width: 0;
+}
+
+.customer-panel,
+.shipping-policy {
+  padding: 24px;
+  margin-block: 20px;
+}
+.customer-area {
+  max-width: 1050px;
+}
+.customer-area input[type='checkbox'],
+.customer-public input[type='checkbox'],
+.shipping-policy input[type='checkbox'] {
+  width: auto;
+  align-self: flex-start;
+}
+.customer-area fieldset {
+  min-width: 0;
+}
+.customer-area h2,
+.shipping-policy h2 {
+  margin-bottom: 16px;
+}
+.customer-area .form-fields > fieldset {
+  border: 1px solid #dfe7e6;
+  border-radius: 12px;
+  padding: 18px;
+}

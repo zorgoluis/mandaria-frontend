@@ -1,5 +1,11 @@
 # Mandaria Web — V1.11-B
 
+## V1.17 Web — clientes directos y pagador (2026-10-06)
+
+Interfaz local de identidad cliente, capacidades, MPQ/conversión/consentimiento final, seguimiento, política B2B SUPER_ADMIN y shippingPayment operativo. Conserva roles operativos y lectura de ejecución detallada; no incorpora cobro ni avances DRIVER web. Admisión no activada, sin disponibilidad productiva acreditada. Recuperación durable mínima, límites contractuales, rutas/archivos y procedimiento: [V1.17-WEB](docs/V1.17-WEB.md).
+
+Validación frontend: 227 pruebas pertinentes, tipos, lint, build y recorrido visual con fixtures. Integración real A–E pendiente; no declarar V1.17 completa sólo por esta Web. Continuidad anterior preservada.
+
 ## Portal: seguimiento público B2B — 2026-10-04
 
 Actualización editorial posterior: OpenAPI público resincronizado; la descripción de executionProgress ya indica ordenar fotografías de una misma solicitud mediante publicVersion. Queda cerrada la discrepancia editorial registrada inicialmente en VERIFICATION. revision interna y expectedRevision de concurrencia permanecen sin cambios. No implica despliegue.

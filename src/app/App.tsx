@@ -1,6 +1,26 @@
+import { consumeAccessFragment } from '../customer/access'
+import {
+  CustomerArea,
+  CustomerHome,
+  NewRequest,
+  CustomerRequest,
+} from '../customer/pages'
+import {
+  CustomerProfile,
+  CustomerAccess,
+  CustomerRegistration,
+  PasswordRecovery,
+} from '../customer/identity'
+const accessChallenge =
+  window.location.pathname === '/customer/access'
+    ? consumeAccessFragment()
+    : { token: '', purpose: '' }
+const clearAccessChallenge = () => {
+  accessChallenge.token = ''
+}
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
 import { IncidentsPage, IncidentPage } from '../execution/incidents'
-import { Component, type ReactNode } from 'react'
+import { Component, useEffect, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Login } from '../auth/Login'
@@ -75,16 +95,42 @@ export function Protected({ roles }: { roles?: Role[] }) {
 }
 export function App() {
   const location = useLocation()
+  useEffect(() => {
+    if (location.pathname !== '/customer/access') {
+      accessChallenge.token = ''
+      accessChallenge.purpose = ''
+    }
+  }, [location.pathname])
   const auth = useAuth()
   if (auth.loading) return <Loading />
   return (
     <Routes>
+      <Route path="/customer/register" element={<CustomerRegistration />} />
+      <Route path="/customer/recovery" element={<PasswordRecovery />} />
+      <Route
+        path="/customer/access"
+        element={
+          <CustomerAccess
+            challenge={{ ...accessChallenge }}
+            onConsumed={clearAccessChallenge}
+          />
+        }
+      />
       <Route path="/login" element={<Login />} />
       {/* Public: invited people have no session yet. */}
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route element={<CustomerArea />}>
+            <Route path="customer" element={<CustomerHome />} />
+            <Route path="customer/profile" element={<CustomerProfile />} />
+            <Route path="customer/new" element={<NewRequest />} />
+            <Route
+              path="customer/requests/:publicId"
+              element={<CustomerRequest key={location.pathname} />}
+            />
+          </Route>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route

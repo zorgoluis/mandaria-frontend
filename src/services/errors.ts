@@ -35,6 +35,39 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    COMMAND_ATTEMPT_CLOSED:
+      'La clave original fue cerrada. Consulta el recibo antes de preparar explícitamente otra intención; no reenvíes este comando.',
+    COMMAND_ATTEMPT_SCOPE_CONFLICT:
+      'La clave pertenece a otra operación o referencia. Conserva el marcador y solicita revisión.',
+    CUSTOMER_ADMISSION_DISABLED:
+      'El registro de nuevos clientes está deshabilitado.',
+    CUSTOMER_CONTACT_NOT_VERIFIED:
+      'Verifica el correo de tu cuenta antes de continuar.',
+    CUSTOMER_ACCESS_DENIED:
+      'Se requiere un perfil cliente propio, activo y verificado.',
+    CUSTOMER_ACTIVE_REQUEST_LIMIT:
+      'Ya tienes una solicitud activa. Continúala antes de iniciar otra.',
+    CUSTOMER_ACTIVE_REQUESTS:
+      'El cambio de tipo requiere cerrar las solicitudes activas.',
+    PROFILE_REVISION_CONFLICT:
+      'El perfil cambió. Consulta la revisión actual antes de modificarlo.',
+    PROFILE_ALREADY_EXISTS:
+      'Tu cuenta ya tiene un perfil cliente. Consulta el perfil actual.',
+    SHIPPING_POLICY_CHANGED:
+      'La política de envío cambió. Consulta tus solicitudes antes de renovar la precotización.',
+    SHIPPING_POLICY_REVISION_CONFLICT:
+      'Otro administrador modificó la política. Consulta la revisión vigente.',
+    SHIPPING_PAYER_NOT_ALLOWED:
+      'Este pagador no está permitido para tu cuenta.',
+    SHIPPING_PAYER_CONTACT_REQUIRED:
+      'Indica quién pagará el envío en recogida y su contacto.',
+    SHIPPING_TERMS_MISMATCH:
+      'Los términos no coinciden. Consulta los términos finales de la solicitud.',
+    CUSTOMER_AUTHORIZATION_MISMATCH:
+      'El consentimiento no corresponde a esta cotización. Revisa sus condiciones.',
+    ACCESS_TOKEN_INVALID:
+      'El enlace es inválido o ya fue utilizado. Intenta iniciar sesión o recuperar tu acceso.',
+    ACCESS_TOKEN_EXPIRED: 'El enlace venció. Solicita otro enlace.',
     EXECUTION_CONFLICT:
       'La asignación o revisión cambió. Consulta el progreso vigente.',
     EXECUTION_TRANSITION_INVALID:

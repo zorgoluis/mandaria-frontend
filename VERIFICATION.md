@@ -1,3 +1,167 @@
+## 2026-10-06 — V1.17: navegador → backend real → PostgreSQL
+
+Validación nueva de los nueve escenarios solicitados, completada en ejecuciones reanudadas conservando la misma base. No es un recorrido completo ininterrumpido ni certificación de toda V1.17. No se repitieron las suites HTTP/fixtures aprobadas: únicamente recorridos fallidos/pendientes y regresiones de los defectos demostrados.
+
+### Entorno identificado
+
+Frontend `e90ca6c` + cambios existentes en `codex/merge-main-qa`. Backend baseline `609f6970535ff48237046dd91f74e60cb408c4d9` + implementación local A–E/reconciliación; se importó su `dist/AppModule` real sin modificar backend ni sustituir servicios Nest. PostgreSQL18.6 temporal loopback65063; base **mandaria_v117_browser_20261006_test**, nueva/exclusiva desde plantilla sintética migrada `mandaria_v117_recovery2_clean_test`. Antes de usarla se verificaron nombre, versión y migración40 `20261006000300_human_command_reconciliation`.
+
+Cadena real: Chromium → Vite127.0.0.1:4178 → proxy de transporte127.0.0.1:43172 → Nest127.0.0.1:43171 → PostgreSQL65063. Sin `page.route`, `context.route`, respuestas fabricadas ni fixtures HTTP. Backend seleccionó sus adaptadores existentes `ROUTING_PROVIDER=local_fake` y `MAIL_PROVIDER=local_outbox`; admisión durable, tarifas, cupo, JWT, recibos y transacciones son reales. Correo guardado en carpeta temporal privada; links consumidos desde el navegador sin imprimir tokens. Contraseñas sintéticas aleatorias sólo en memoria; al reanudar se renovó únicamente el hash de esos usuarios de prueba, sin cambiar roles ni perfiles. Todas las variables/flags fueron exclusivos del proceso. CWD temporal vacío evita cargar .env operativo. No Docker, proveedores externos, producción o Coita.
+
+### Matriz nueva
+
+| Caso desde interfaz | Resultado y evidencia |
+|---|---|
+| 1 Registro/verificación/acceso | PASS: PERSONAL registrado mediante formulario, correo local REGISTER real, enlace confirmado y emailVerifiedAt persistido; login humano. BUSINESS también registrado así. |
+| 2 PERSONAL cotizar/convertir/consentir/consultar | PASS: MPQ→MDR-000001→MQ, importe55.00MXN del backend, hash final y consentimiento desmarcado; aceptación y seguimiento Buscando ejecutor. |
+| 3 Segunda solicitud/cancelación | PASS: ruta nueva muestra Cupo no disponible sin botón de cotizar; cancelación legal desde formulario. SQL confirma CANCELLED y lifecycle cerrado. |
+| 4 BUSINESS múltiples/pagador | PASS tras corrección: MDR-000002 REQUESTER/PICKUP y MDR-000003 RECIPIENT/DELIVERY, ambas CREATED/lifecycle abierto; pantalla Activas:2. |
+| 5 Pérdida/recarga sin cuerpo | PASS: MPQ aplicada en backend, respuesta perdida por proxy, reload conserva marcador; GET APPLIED recupera MPQ sin reconstruir cuerpo. |
+| 6 Cierre explícito/timeout/bloqueo | PASS: petición original retenida antes de llegar al backend; GET PENDING_OR_UNKNOWN; cierre confirmado por checkbox, respuesta retenida hasta timeout20s; marcador permanece, reload+GET CLOSED_NO_EFFECTS; petición original liberada después recibe409 COMMAND_ATTEMPT_CLOSED. Preparación posterior explícita, sin comando automático. |
+| 7 Consentimiento otra sesión | PASS: contexto Chromium nuevo, login propio y URL MDR sin mapa MPQ local; consent-context real recupera MQ/importe/vigencia/hash; aceptación sólo después de checkbox. |
+| 8 Política original/actual | PASS: A cambia a REQUESTER y pierde cuerpo de respuesta200; B cambia a RECIPIENT; A recupera recibo APPLIED REQUESTER, pantalla mantiene RECIPIENT vigente. |
+| 9 Cambio de usuario/admin | PASS: al cambiar BUSINESS→PERSONAL con marcador ajeno se conserva bloqueo sin consulta/cierre; análogo A→B en política. Volver al actor original permite reconciliar. El límite UI no sustituye la autorización backend probada por HTTP anteriormente. |
+
+SQL complementario (lectura, sin alterar resultados): cero DeliveryAssignment, cero ShippingCollectionDeclaration y cero B2bOutboxEvent. No se simularon cobros/entregas administrativas. La solicitud PERSONAL fue aceptada y cancelada legalmente; no fue entregada.
+
+### Inyección de fallos de transporte
+
+`scripts/customer-real-harness.mjs` reenvía método/URL/cabeceras/body a Nest; jamás genera un recibo ni estado de negocio.
+
+- `lose`: consume respuesta real completa y corta socket sin enviarla. Sirvió para MPQ; al aplicarlo inicialmente a política Chromium repitió el POST por el fallo de conexión. Ese ensayo no se cuenta como prueba de conservación de incertidumbre de política.
+- `delay-request`: conserva en memoria la petición original del navegador y demora su envío a Nest hasta una liberación explícita. Después del cierre real se libera exactamente esa petición, y Nest devuelve409.
+- `timeout`: una vez recibida la respuesta real del cierre, la retiene25s; el fetch del producto vence a20s. GET posterior consulta la misma clave real.
+- `partial-response`: para la política final envía cabeceras200 y sólo el primer byte del JSON real, reteniendo el resto hasta timeout. No sustituye contenido: trunca transporte. Demuestra conservación del marcador tras cuerpo perdido; el hash de clave en la traza confirma **un único POST** para esa intención.
+
+### Defectos frontend encontrados y corregidos
+
+1. **BUSINESS bloqueado después de la primera solicitud** — `src/customer/pages.tsx`: interpretaba `capacity.occupied` como límite, pero backend lo define como existencia de solicitudes tanto PERSONAL como BUSINESS. Ahora gobiernan `canPrequote` y `canCreateRequest`. Backend conserva el límite PERSONAL. Regresión nueva con BUSINESS ocupado y creación permitida.
+2. **HTTP200 incompleto tratado como éxito** — `src/services/api.ts`: `response.json().catch(() => undefined)` convertía JSON abortado/truncado en resolución exitosa. Se observó aviso Query data cannot be undefined y se reprodujo con prueba focalizada fallida antes del arreglo. Ahora rechaza como fallo de transporte, conserva abortos del consumidor y respeta204. Prueba unitaria nueva y política con cuerpo real truncado acreditan que la incertidumbre no se borra.
+
+Sin defecto backend demostrado ni backend modificado. El primer fallo de script PERSONAL fue un selector que esperaba otro texto; se corrigió a Cupo no disponible y se continuó desde ahí. Tras el fallo BUSINESS se reanudó desde4, y tras ajustar el mecanismo de política desde8. Se conservaron resultados parciales; no se suman los fallos como aprobaciones.
+
+### Comandos/resultados y archivos
+
+```powershell
+node scripts/verify-customer-real.mjs
+$env:V117_BROWSER_RESUME='true'
+node scripts/verify-customer-real.mjs
+$env:V117_BROWSER_FROM='4'
+node scripts/verify-customer-real.mjs
+$env:V117_BROWSER_FROM='8'
+node scripts/verify-customer-real.mjs
+```
+
+Los scripts son harness local para esta base sintética, no una configuración operativa ni un comando contra cualquier DATABASE_URL. Inicio PostgreSQL con pg_ctl del directorio temporal identificado; creación con createdb -T de la plantilla40. Mismos datos durante las reanudaciones. Apps/proxy/navegadores se cierran al acabar cada ejecución.
+
+- `npx vitest run src/test/api.test.ts -t 'partial HTTP 200' --maxWorkers=1`: FAIL antes de corregir (resolvía undefined); no atribuirlo a backend.
+- `npx vitest run src/test/customer.test.tsx src/test/api.test.ts src/test/customer-reconciliation.test.tsx src/test/customer-service.test.ts --maxWorkers=1`: **87/87 PASS**, cuatro archivos; regresiones pertinentes por los dos defectos.
+- `npm run typecheck:test`, `npm run lint`, `npm run build`: PASS. Advertencia de chunk Root658.10kB, sin error.
+- Capturas reales inspeccionadas: `test-results/v117-browser-real/personal-consent.png`, `business-two-active.png`, `close-timeout.png`, `policy-current-after-old-receipt.png`. Escritorio1440×1000; no capturas con passwords/tokens. Sin pageerror en recorridos aprobados; errores de red intencionales esperados.
+- Evidencia consolidada: [docs/checks/v117-browser-real.json](docs/checks/v117-browser-real.json). Reportes parciales inicial/business-defect/transport/final en test-results, ignorados por Git; sólo metadatos de transporte, estados y datos sintéticos. Sin cuerpos de login, tokens ni secretos.
+- Archivos de este incremento: `src/customer/pages.tsx`, `src/services/api.ts`, `src/test/customer.test.tsx`, `src/test/api.test.ts`, `scripts/customer-real-harness.mjs`, `scripts/verify-customer-real.mjs`, esta continuidad, V1.17-WEB y evidencia nueva. Cambios previos conservados.
+
+### Separación de evidencias y límites
+
+1. **Anteriores fixtures**: 65 pruebas + revisión visual interceptada, documentadas abajo. No prueban backend ni PostgreSQL.
+2. **Anteriores HTTP reales**: cinco casos Nest/Supertest/PostgreSQL en otra base exclusiva, sin navegador; conservados abajo, no repetidos.
+3. **Nuevas navegador→backend→PostgreSQL**: matriz anterior con HTTP de la aplicación real y adaptadores locales de correo/routing. Nueve escenarios acreditados a través de reanudaciones, no una pasada completa ininterrumpida.
+
+No acreditados: correo SMTP/proveedor externo, rutas externas, navegador móvil contra backend real (la revisión móvil anterior fue con fixtures), toda la suite A–E, ejecución física/cobro/entrega o funcionamiento desplegado. No se activó admisión real ni se declara V1.17 completa. Sin commit, push o despliegue.
+
+Cierre del entorno de esta validación: navegador, Vite4178, proxy43172 y Nest43171 cerrados; PostgreSQL65063 detenido después de confirmar ausencia de sesiones ajenas. Base sintética y evidencias conservadas. No se detuvieron servicios preexistentes.
+
+## 2026-10-06 — V1.17: cierre contractual de reconciliación humana
+
+Conservada implementación previa en worktree `codex/merge-main-qa`, baseline `e90ca6c`. Consultados V1.17-COMMAND-RECONCILIATION, V1.17-DEMAND-IMPLEMENTATION, OpenAPI humano y API_ACCESS. No backend/.env/producción/portal público modificado en este cierre; no commit/push/despliegue ni activación.
+
+### Cambios
+
+- `src/customer/reconciliation-contract.ts`, `reconciliation.ts`, `AttemptRecovery.tsx`: HumanAttemptResult, rutas humanas exactas, Idempotency-Key original, POST cierre sin body; recibo/coherencia/estado vigente antes de desbloquear. Tres estados, cierre y preparación separados con confirmación; timeout conserva marcador y ofrece GET. canPrepareNewAttempt y COMMAND_ATTEMPT_CLOSED no se confunden con DRIVER.
+- `src/customer/pages.tsx`, `service.ts`, `consent.ts`: consent-context desde MDR propia sin MPQ local obligatoria, importe/vigencia/hash FINAL, referencias nullable, terminal/expiración y consentimiento explícito. Recibo histórico no sobrescribe estado actual.
+- `src/customer/pending.ts`, `src/shipping/Policy.tsx`, `src/services/errors.ts`: marcador mínimo compatible, política recuperada por recibo propio, bloqueo entre actores y errores contractuales. Sin reenvíos automáticos ni persistencia de datos personales.
+- `src/test/customer-reconciliation.test.tsx`, pruebas cliente existentes, `scripts/verify-customer-fixtures.mjs`, `docs/V1.17-WEB.md`, `docs/checks/v117-web-reconciliation.json` y esta continuidad.
+
+### Comandos y resultados
+
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS.
+- `npm run build`: PASS (tsc -b y Vite); advertencia existente de chunk principal >500 kB, sin error.
+- `npx vitest run src/test/customer-reconciliation.test.tsx src/test/customer-service.test.ts src/test/customer.test.tsx src/test/customer-tracking.test.ts --maxWorkers=1`: **65/65 PASS**, cuatro archivos. Incluye 23 casos de reconciliación nuevos: rutas/body ausente, tres estados, cierre confirmado/perdido, reload, usuario/admin diferente, respuesta tardía al desmontar, doble clic, APPLIED antiguo/actual terminal, error cerrado, almacenamiento y consentimiento desde otro dispositivo. Fixtures de servicios, no prueba de transacciones backend.
+- `node scripts/verify-customer-fixtures.mjs`: PASS. Chromium1440×1000 y390×844, consentimiento desde URL MDR sin mapa local, confirmaciones por teclado/Space, aceptación perdida y recuperación después de reload sin otro POST, cierre técnico perdido/reload/CLOSED y preparación explícita sin POST de política. API interceptada, salida externa bloqueada. Sin pageerror ni overflow móvil. Vite4177 temporal cerrado por script.
+- Capturas inspeccionadas: `test-results/v117-customer/consent-mobile.png`, `recovery-desktop.png`, `close-mobile.png`, `closed-desktop.png`; script también produce desktop/móvil de consentimiento, recuperación, política y cierre. Sólo fixtures sintéticos.
+- `git diff --check`: PASS; avisos de normalización LF/CRLF, sin conflictos ni whitespace inválido.
+
+### HTTP real y PostgreSQL exclusivo
+
+Identificados antes de uso: backend baseline **609f6970535ff48237046dd91f74e60cb408c4d9**, implementación local A–E más reconciliación no desplegada; hashes de fuente/dist/handoff/OpenAPI en `docs/checks/v117-web-reconciliation.json`. PostgreSQL18.6 temporal previamente detenido, sólo127.0.0.1:65063. Se inició ese clúster de pruebas y creó exclusivamente **mandaria_frontend_reconciliation_20261006_test** desde `mandaria_v117_recovery2_clean_test`. SQL verificó nombre/base/versión y migraciones38,39,40; última **20261006000300_human_command_reconciliation**. No se utilizó backend Docker previo ni base comercial.
+
+Comandos ejecutados desde backend sin editar sus archivos, con variables sólo del proceso:
+
+```powershell
+$env:NODE_ENV='test'
+$env:DOTENV_CONFIG_PATH='C:/Users/zorgl/AppData/Local/Temp/mandaria-v117-z5t2IE/absent.env'
+$env:DATABASE_URL='postgresql://postgres@127.0.0.1:65063/unused'
+$env:TEST_DATABASE_URL='postgresql://postgres@127.0.0.1:65063/mandaria_frontend_reconciliation_20261006_test'
+node node_modules/vitest/vitest.mjs run --config vitest.config.e2e.ts test/direct-demand.e2e-spec.ts --pool=forks --maxWorkers=1 --no-cache -t 'recovers original|GET is read only|policy recovery|close fences|consent context|consent-context|races' --reporter=default --reporter=json --outputFile=C:/Users/zorgl/.codex/worktrees/f1fe/mandaria-frontend/test-results/v117-real-reconciliation.json
+node node_modules/vitest/vitest.mjs run --config vitest.config.e2e.ts test/direct-demand.e2e-spec.ts --pool=forks --maxWorkers=1 --no-cache -t 'recovers exact final terms' --reporter=default --reporter=json --outputFile=C:/Users/zorgl/.codex/worktrees/f1fe/mandaria-frontend/test-results/v117-real-consent-context.json
+```
+
+Primer filtro: **4 PASS,19 omitidos**; segundo: **1 PASS,22 omitidos** (consent-context no coincidió con el primer filtro). Cinco casos únicos; no sumar omitidos ni declarar toda la suite aprobada.
+
+| Caso HTTP/Nest con transacciones PostgreSQL | Resultado |
+|---|---|
+| Recibos originales crear/convertir/aceptar sin cuerpos tras reiniciar app/proceso | PASS |
+| GET no modifica; cierre contra creación/conversión/aceptación tardía y concurrente | PASS |
+| Política histórica tras nueva revisión, actores separados y POST cerrado | PASS |
+| Cierre durante routing autorizado: consumo retenido, MPQ no publicada, recibo durable | PASS |
+| consent-context desde MDR propia/otra sesión: hash final, MQ/TTL, ajeno404 y terminal | PASS |
+
+El harness existente usa Nest real/Supertest, JWT humano y PostgreSQL real. Routing es doble determinista, correo local_outbox, polling externo deshabilitado; flags sólo en proceso de pruebas. La prueba de routing en curso utiliza consumo durable real y proveedor de ruta simulado. No se atribuye a mocks frontend la garantía transaccional. No se prueba navegador contra backend real en esta ejecución ni toda la versión A–E.
+
+
+Entorno temporal al finalizar este cierre: sin sesiones cliente ajenas, se detuvo el PostgreSQL65063 iniciado para la prueba mediante pg_ctl stop; se conservaron la base sintética y sus datos. No se detuvo ningún servicio preexistente. Build final: Root658.09kB, advertencia >500kB sin error. Resultados finales repetidos tras el refresco previo a desbloqueo:65/65, tipos, lint, build y script visual PASS.
+### Fallos intermedios y límites
+
+EPERM inicial de Vite al escribir caché en node_modules enlazado: repetido con permisos y PASS. Fallos iniciales de tests eran expectativas antiguas de recuperación/selector del botón mientras está ocupado y fixture incompleto; corregidos. Lint detectó ref en render y Date.now impuro: guard de actor en layout effect y reloj de estado; comprobaciones finales aprobadas. No aborto nativo pendiente.
+
+Corrección documental: OFFER **ya estaba soportado por backend**; la afirmación anterior de omisión fue incorrecta, no constituye cambio funcional. No se habilita cobro desde ofertas. Las antiguas brechas de recibos/cierre y consent-context quedan superadas por este complemento. Se conserva historial anterior abajo.
+
+Pendientes fuera de esta verificación: navegador con backend real extremo a extremo, correo/routing externos, resto de escenarios A–E/operativos no seleccionados, despliegue/activación autorizados. No declarar V1.17 activada ni toda la versión cerrada. Procedimiento operativo vigente en [docs/V1.17-WEB.md](docs/V1.17-WEB.md).
+
+## 2026-10-06 — V1.17 Web: clientes directos y configuración del pagador
+
+Base frontend e90ca6c en worktree codex/merge-main-qa, inicialmente limpio. Backend A–E leído como referencia sin modificar. AGENTS.md/BITACORA.md no existen en la raíz; README y VERIFICATION conservados. Alcance, inventario de archivos/rutas, contratos, procedimiento y bloqueos exactos: [docs/V1.17-WEB.md](docs/V1.17-WEB.md). Sin nuevas dependencias.
+
+### Comandos finales ejecutados
+
+- npm run typecheck:test: PASS.
+- npm run lint: PASS.
+- npm run build: PASS, incluye tsc -b; advertencia de chunk Root 652.47 kB, sin error.
+- npx vitest run src/test/customer-service.test.ts src/test/customer.test.tsx src/test/customer-tracking.test.ts src/test/delivery-requests.test.tsx src/test/flows.test.tsx src/test/developers.test.tsx src/test/collection-instructions.test.tsx src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/execution-attempt-service.test.ts --maxWorkers=1: **227/227 PASS, 10 archivos**. No se ejecutaron suites ajenas.
+- node scripts/sync-public-b2b.mjs --backend C:/Users/zorgl/Documents/mandaria-backend: PASS; después mismo comando con --check: PASS. Sólo allowlist pública y hashes; no OpenAPI humano publicable.
+- node scripts/verify-customer-fixtures.mjs: PASS. Vite temporal 127.0.0.1:4177 cerrado al finalizar. Chromium 1440×1000 y 390×844, registro y foco por Tab; creación MPQ PERSONAL, conversión con contacto pagador separado, consentimiento con hash final distinto al MPQ, pérdida de respuesta aplicada, reload y consulta sin segundo POST, política SUPER_ADMIN sólo GET y confirmación desmarcada, portal anónimo. Todas las APIs interceptadas, sin backend real ni tráfico externo. Sin overflow móvil ni pageerror.
+- git diff --check: PASS.
+
+### Cobertura y evidencia
+
+Pruebas nuevas: resend completo/202 genérico, reset/nuevo login, VERIFY autenticado, perfil compatible con rol operativo, PERSONAL/BUSINESS y pagadores permitidos, cupo ocupado, hash/importe/vencimiento exactos, respuesta perdida/cuerpo inmutable/clave estable, reload sin cuerpo, cambio de usuario, lock entre pestañas, 401/403/409/429/503, cancelación confirmada sin confundir expiry, política UUID/revisión, shipping OFFER/CURRENT/HISTORICAL/DECLARED/incompleto y publicVersion BigInt. Regresión administrativa para IntegrationClient null, más ejecución/reconciliación/legacy y portal existentes. Servicios simulados; no prueban locks PostgreSQL ni ownership real del backend.
+
+Capturas inspeccionadas: test-results/v117-customer/register-desktop.png, consent-desktop.png, consent-mobile.png, policy-desktop.png, policy-mobile.png. Results.json contiene sólo resultados/contadores sintéticos. No tokens ni secretos reales. La captura móvil inicial coincidía con la transición del sidebar al cambiar viewport: repetida tras finalizar la transición.
+
+### Fallos encontrados y corregidos
+
+- MPQ en caché conservaba estado anterior tras convertir y ocultaba el consentimiento: corregida invalidación de consultas cliente tras comandos confirmados; recorrido visual repetido completo.
+- Vista administrativa asumía IntegrationClient no nulo: corregida para titular directo y cubierta por regresión.
+- Esquema OpenAPI omite OFFER operativo y nullable de IntegrationClient, aunque las implementaciones reales los emiten: adaptaciones acotadas/documentadas, sin backend modificado.
+- Durante desarrollo fallaron tipado/lint (importaciones, limpieza del token y JSX) y dobles de Web Locks/una importación de test. Corregidos; resultados intermedios fallidos no sumados como PASS. Un primer build tuvo EPERM al escribir caché de dependencias fuera del worktree; comprobación repetida con permisos y final aprobada. No aborto nativo del runner en la ejecución final.
+
+### No verificado y límites
+
+Sin integración real del backend A–E, correos/routing, PostgreSQL, nginx ni producción. No se abrió el backend Docker anterior como sustituto de la versión nueva; sin Docker ni flags modificados. Respuestas perdidas sin cuerpo conservan bloqueo cuando el contrato no permite acreditar resultado/no-efectos; las rutas de recuperación logística de DRIVER no se reutilizan para demandas o políticas. Pendiente backend: recuperación autorizada de creación MPQ por clave y recibos/cierre para las otras intenciones cuando falta cuerpo y las lecturas no resuelven; referencia MPQ desde MDR para otro dispositivo. Ver detalle operativo en V1.17-WEB.
+
+Sin .env/configuración, backend, datos reales, commit, push, despliegue ni activación. No se declara V1.17 completa.
+
 ## 2026-10-06 — Integración local de main y QA
 
 Preparada en codex/merge-main-qa desde QA bcd70cf, integrando main 0a44d6e sin commit ni push. Los únicos conflictos textuales fueron README.md y VERIFICATION.md: se conservaron las entradas completas de ambas ramas. Comparación de líneas previas: ninguna ausente de ninguno de los dos documentos en ambas ramas.

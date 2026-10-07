@@ -261,3 +261,21 @@ describe('HTTP and human session', () => {
     )
   })
 })
+
+it('partial HTTP 200 JSON rejects instead of reporting an applied command', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue(
+      new Response('{', {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    )
+  const { apiOnce } = await import('../services/api')
+  await expect(
+    apiOnce('/customer/delivery-prequotes', 'POST', {}, undefined, {
+      'Idempotency-Key': 'synthetic-original',
+    }),
+  ).rejects.toMatchObject({ status: 0 })
+  expect(fetcher).toHaveBeenCalledOnce()
+})

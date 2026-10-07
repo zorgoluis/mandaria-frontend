@@ -1,3 +1,4 @@
+import { forgetBodies } from '../customer/pending'
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { authService, onSessionExpired } from '../services/api'
 import { queryClient } from '../services/query'
@@ -38,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null)
       setExpired(true)
       setError(null)
+      forgetBodies()
       queryClient.clear()
     })
     return () => {
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setError(null)
   }
   async function logout() {
+    forgetBodies()
     setLoading(true)
     try {
       await authService.logout()

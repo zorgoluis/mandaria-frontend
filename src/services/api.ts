@@ -76,10 +76,17 @@ async function transport<T>(
     if (signal?.aborted) throw error
     throw normalizeError(0, null)
   }
-  const data: unknown =
-    response.status === 204
-      ? undefined
-      : await response.json().catch(() => undefined)
+  let data: unknown
+  if (response.status !== 204) {
+    try {
+      data = await response.json()
+    } catch (error) {
+      // A received status does not prove we received the command receipt.
+      // Never turn an interrupted/truncated successful response into success.
+      if (signal?.aborted) throw error
+      throw normalizeError(response.ok ? 0 : response.status, null)
+    }
+  }
   if (!response.ok) throw normalizeError(response.status, data)
   return data as T
 }

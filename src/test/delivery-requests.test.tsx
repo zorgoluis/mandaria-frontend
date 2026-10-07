@@ -662,3 +662,19 @@ describe('dashboard', () => {
       expect(filters.pageSize).toBe(1)
   })
 })
+it('V1.17 direct customer rows and detail allow null integration without inventing a B2B link', async () => {
+  const direct = request({ integrationClientId: null, integrationClient: null })
+  vi.mocked(deliveryRequests.list).mockResolvedValue(page([summary(direct)]))
+  mount('/delivery-requests')
+  expect(await screen.findByText('Cliente directo')).toBeInTheDocument()
+  cleanup()
+  queryClient.clear()
+  vi.mocked(deliveryRequests.get).mockResolvedValue(direct)
+  mount('/delivery-requests/' + direct.publicId)
+  expect(
+    await screen.findByText('Solicitado por cliente directo'),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('link', { name: 'Cliente directo' }),
+  ).not.toBeInTheDocument()
+})

@@ -1,3 +1,4 @@
+import { ShippingPolicyPanel } from '../shipping/Policy'
 import { WebhookPanel } from '../webhooks/pages'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -496,6 +497,7 @@ export function IntegrationDetail() {
           recuperarse.
         </p>
       </div>
+      <ShippingPolicyPanel id={id} />
       <WebhookPanel id={id} />
       {create && (
         <CreateCredential
