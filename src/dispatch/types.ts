@@ -5,7 +5,10 @@ import type {
   PackageCategory,
 } from '../delivery-requests/types'
 import type { ServiceType } from '../pricing/types'
-import type { DeliveryAssignment } from '../delivery-assignments/types'
+import type {
+  AssignmentDriver,
+  AssignmentVehicle,
+} from '../delivery-assignments/types'
 
 // Mandaria Backend OpenAPI 1.7.0: dispatch.dto.ts, dispatch.responses.ts, dispatch-policy.ts
 // and dispatch.select.ts (providerDispatchView / adminDispatchView).
@@ -81,6 +84,15 @@ export interface MyCandidate {
   releasedAt: string | null
   releaseReason: string | null
 }
+/** providerDispatchView returns a summary, not the complete history row. */
+export interface DispatchAssignmentSummary {
+  id: string
+  mode: 'FLEET' | 'INDEPENDENT'
+  assignedAt: string
+  assignedByUserId: string | null
+  driver: AssignmentDriver
+  vehicle: AssignmentVehicle & { plate: string | null }
+}
 export interface ProviderDispatch extends ExecutionFields {
   collectionInstructions?: CollectionInstructions
   id: string
@@ -96,7 +108,7 @@ export interface ProviderDispatch extends ExecutionFields {
   myCandidate: MyCandidate | null
   service: DispatchService | null
   /** V1.8: who executes the service. Only the claim owner sees it; null while unassigned. */
-  assignment: DeliveryAssignment | null
+  assignment: DispatchAssignmentSummary | null
   /** Derived by the backend from claimedAt + TTL. Never computed here, never auto-released. */
   assignmentDeadline: string | null
   assignmentOverdue: boolean
@@ -118,6 +130,7 @@ export interface AdminDispatchCandidate {
   releaseReason: string | null
 }
 export interface AdminDispatch {
+  trackingMode?: import('../execution/types').TrackingMode
   id: string
   status: DispatchStatus
   openedAt: string

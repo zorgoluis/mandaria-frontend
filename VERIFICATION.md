@@ -1,3 +1,183 @@
+## 2026-10-06 — Integración local de main y QA
+
+Preparada en codex/merge-main-qa desde QA bcd70cf, integrando main 0a44d6e sin commit ni push. Los únicos conflictos textuales fueron README.md y VERIFICATION.md: se conservaron las entradas completas de ambas ramas. Comparación de líneas previas: ninguna ausente de ninguno de los dos documentos en ambas ramas.
+
+Se conserva ejecución/reconciliación y portal público de QA, junto con solicitudes de socio, rutas, navegación y dashboard de main. nginx.conf mantiene exactamente la configuración de main: servidor interno; TLS y proxies delegados a mandaria-proxy. Las instrucciones históricas de nginx anteriores no describen esta nueva topología. No se verificó nginx ni el proxy externo en ejecución.
+
+Validación local sobre la combinación:
+- npm run typecheck:test: PASS.
+- npm run lint: PASS.
+- npm run build: PASS (incluye TypeScript); advertencia existente de chunk Root de 618.50 kB.
+- npx vitest run src/test/partner-applications.test.tsx src/test/flows.test.tsx src/test/developers.test.tsx src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/execution-attempt-service.test.ts src/test/collection-instructions.test.tsx --maxWorkers=1: 180/180 PASS, 7 archivos. Pruebas frontend con servicios simulados; no acreditan integración backend.
+- git diff --check HEAD y listado de archivos sin resolver: sin incidencias.
+
+Sin operaciones reales, Docker, despliegue ni cambios backend. Merge preparado en el worktree aislado; QA y main no se movieron. Sin nueva verificación visual ni integración real.
+
+## 2026-10-04 — Resincronización editorial del OpenAPI público
+
+Referencia interna leída: B2B-FRONTEND-HANDOFF.md, «Resincronización editorial». No se copió ese documento ni docs/openapi.json completo. Se conservaron todos los cambios pendientes del portal. Sin cambios funcionales ni modificaciones backend.
+
+- Ejecutados `node scripts/sync-public-b2b.mjs` y `node scripts/sync-public-b2b.mjs --check`: PASS; allowlist pública y hashes coinciden con backend. En esta resincronización cambian el OpenAPI público y su hash en manifest.json.
+- **Cerrada la discrepancia editorial anterior:** DeliveryStatusResponse.executionProgress.description exige comparar publicVersion numéricamente por solicitud; revision sólo describe la ejecución interna. El campo revision conserva tipo number, minimum 1 y obligatoriedad en PublicExecutionProgressResponse. La guía/copiar ejemplo siguen comparando BigInt(publicVersion).
+- Revisión estática de src/execution/types.ts, commands.ts, components.tsx e incidents.tsx: revision permanece en progreso/historial; expectedRevision continúa capturando e.revision en comandos/incidencias/resoluciones para concurrencia. No se reemplazaron ni modificaron esos campos; no se publican comandos administrativos en el OpenAPI B2B.
+- `npx vitest run src/test/developers.test.tsx --maxWorkers=1`: 22/22 PASS; fortalecidas aserciones documentales de descripción y revision. Incluye ejemplos idénticos al contrato, comparación BigInt, anonimato y exclusión de operaciones internas. Fetch de componentes simulado; no es integración backend.
+- Descarga HTTP local mediante servidor Vite temporal en 127.0.0.1:4174 (`createServer`, fetch y cierre en finally): PASS, HTTP 200, Content-Type application/json, JSON válido e igualdad estructural con public/developers/assets/openapi-b2b.json y backend/docs/openapi-b2b.json. Servidor temporal cerrado. No se reconstruyó dist: futuros builds deben incorporar el artefacto actualizado.
+- Continuidad: README y esta entrada; la advertencia anterior se conserva como historial y queda resuelta por esta resincronización. Prueba documental actualizada en src/test/developers.test.tsx.
+
+No se repitieron suites operativas, build ni revisión visual completa. Descarga verificada en fuente local, no en nginx ni producción. Disponibilidad QA y despliegue pendiente sin cambios. Sin commit, push ni despliegue.
+
+## 2026-10-04 — Portal de seguimiento B2B público
+
+Alcance documental sobre QA `b122a62`, inicialmente sin cambios pendientes. Leídos PUBLIC-B2B-TRACKING.md y PUBLIC-B2B-TRACKING-VERIFICATION.md del backend como referencia de sólo lectura. Disponibilidad declarada: checkout QA; publicación y despliegue pendientes. El informe backend no se presenta como una verificación ejecutada desde frontend.
+
+### Archivos y comportamiento
+
+- Sincronizados por `scripts/sync-public-b2b.mjs`: OpenAPI B2B, guía pública, guía de webhooks y manifiesto. Los dos ejemplos existentes de la allowlist mantienen contenido. Nunca se editó manualmente el JSON generado ni se distribuyeron documentos de verificación/administración.
+- `src/developers/pages.tsx`, nuevo `src/developers/tracking.md`: ejecución, entrada y referencia conectadas; aviso QA, tipos/modos exactos, comparación decimal, asignación/transferencia, custodia/retorno, sondeo compartido/backoff/finales y continuidad de delivery.completed. Ejemplos cargados directamente desde las respuestas 200 del OpenAPI público; fotografías independientes, no una secuencia inventada.
+- `src/index.css`: corte de texto en prosa pública para impedir overflow móvil por cadenas largas de estados.
+- `src/test/developers.test.tsx`: contratos exactos y nullable, ejemplos idénticos al JSON, anonimato sin API y comparación BigInt del ejemplo copiable (atrasadas/iguales, números mayores que MAX_SAFE_INTEGER, valores inválidos y MDR distintas).
+- `scripts/verify-developer-tracking.mjs`: verificador reproducible del portal compilado; sólo loopback 4173, bloquea API y tráfico externo, sin credenciales.
+- README y esta continuidad; historial anterior conservado abajo.
+
+### Verificaciones ejecutadas
+
+- `node scripts/sync-public-b2b.mjs` y `node scripts/sync-public-b2b.mjs --check`: PASS, los cinco artefactos y hashes coinciden con backend normalizando CRLF.
+- `npx vitest run src/test/developers.test.tsx --maxWorkers=1`: 22/22 PASS. Pruebas de componentes usan fetch simulado de archivos públicos reales; no prueban autorización ni concurrencia backend.
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS. ESLint focalizado adicional para script/componentes/pruebas nuevos.
+- `npm run build`: PASS, incluye `tsc -b`. Advertencia de chunk principal >500 kB (Root ~599 kB), sin error; no se amplió el alcance a dividir la aplicación.
+- `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort` + `node scripts/verify-developer-tracking.mjs`: PASS sobre build local, Chromium a 1440×1000 y 390×844. Acceso anónimo directo, navegación referencia↔seguimiento, recarga, Tab/Enter, descarga mediante enlace y comparación del JSON con el artefacto, Content-Type application/json, sin overflow ni errores de renderizado y sin peticiones API/externas. Capturas revisadas en `test-results/developer-tracking/` (ignoradas por Git): desktop/mobile, top y example. No se prueba nginx con la vista previa Vite.
+- Primera conexión visual a 5173 agotó tiempo; un intento externo confirmó puerto ocupado y se usó 4173 sin detener el servicio previo. Primer recorrido alcanzó móvil y detectó overflow por texto largo: corregido en CSS; también se permitió envolver las celdas de tablas de la guía para legibilidad. Se repitió el recorrido sobre el build corregido. Los intentos fallidos no se cuentan como aprobación.
+- `git diff --check`: PASS (sólo avisos de normalización LF/CRLF de Git).
+
+### Límites y seguimiento
+
+- Discrepancia editorial backend: `DeliveryStatusResponse.properties.executionProgress.description` del OpenAPI todavía dice comparar `revision`; el nuevo handoff y `publicVersion.description` exigen publicVersion para ordenar fotografías completas. El portal explica la regla nueva. Se preservó el artefacto exacto; BACKEND debe corregir esa descripción y luego volver a sincronizar. No bloquea la publicación de las instrucciones correctas, pero la referencia descargable conserva esa frase contradictoria.
+- No se ejecutó integración HTTP backend, PostgreSQL, capacidad/benchmark, nginx ni despliegue. No se modificaron componentes operativos ni se repitieron sus suites. Sin Docker, Coita, producción, activación, commit o push.
+- Después del despliegue autorizado, comprobar versión/campos de todas las instancias, origen API, descarga JSON/MIME y rutas directas en hosting real. El objetivo de 15 segundos no constituye SLA ni capacidad garantizada.
+
+## 2026-10-03 — F-01 cerrado con integración real
+
+## 2026-10-04 — Cierre del contrato de trackingMode y avance histórico propio
+
+Incremental sobre cambios pendientes de la misma rama QA; no se descartaron. Contrato leído: backend docs/DRIVER-APP-EXECUTION.md, sección Cierre de limitaciones WEB; DTO ProviderAdvanceAttemptResponse y proyecciones trackingMode. Backend no modificado.
+
+- trackingMode superior explícito: LEGACY conserva cierre anterior autorizado; DETAILED no habilita avance/entrega en web; null nunca habilita entrega. Campo ausente/desconocido, carga, error e inconsistencias no se convierten en legacy. Fixtures existentes actualizados al contrato.
+- GET /provider/dispatches/:dispatchId/execution-attempt y POST .../execution-attempt/close mediante apiOnce, providerId original e Idempotency-Key original, sin body. Modal de confirmación, sin replay ni comandos de avance nuevos.
+- Marcador mínimo durable histórico separado de resoluciones SUPER_ADMIN, sólo actor/dispatchId/providerId opcional/key, por origen API. Migración de intención anterior en memoria preserva clave exacta. Timeout/errores/DTO incoherente mantienen marcador; APPLIED requiere revisión entera positiva y CLOSED_NO_EFFECTS revisión null, ambos con canStartNewAttempt=false. Permisos, doble clic, respuesta tardía, recarga y cambio de identidad cubiertos. No se restauran permisos administrativos de avance.
+- Recuperación DRIVER y resolución/reconciliación SUPER_ADMIN conservadas.
+
+### Ejecución realizada
+
+- npx vitest run src/test/provider-historical-attempt.test.tsx src/test/execution-attempt-service.test.ts src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/delivery-completion.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx --maxWorkers=1: **7 archivos, 198 pruebas PASS**. Sólo módulos directamente afectados y regresiones de recuperación.
+- npm run lint: PASS. Revisión ESLint adicional de módulos modificados/script visual: PASS.
+- npm run build: PASS (incluye tsc -b); chunk Root 587.55 kB, advertencia de tamaño >500 kB, no error.
+- npm run typecheck:test: PASS.
+- node scripts/sync-public-b2b.mjs --check: PASS, artefactos públicos coinciden; no se agregaron rutas humanas ni se copió OpenAPI general.
+- node scripts/verify-driver-authority.mjs: PASS con fixtures Chromium; proveedor detallado/legacy, DRIVER detallado, proveedor con marcador histórico, null y campo ausente; 1440x1000 y 390x844. Tab/Enter/Escape para controles/diálogos. Sin overflow, errores de render ni escritura operativa. Marcador y datos exclusivamente sintéticos. Capturas locales ignoradas en test-results/driver-authority/, incluidas historical-confirm-mobile.png y provider-unknown-desktop.png; se esperó la carga final para capturar modos incompletos.
+- git diff --check: PASS.
+
+Durante adaptación se corrigieron un fixture de oferta que heredaba el modo anterior, una propiedad duplicada en fixture y una opción no admitida por el tipado de Testing Library. Las verificaciones fallidas anteriores no se presentan como aprobadas; se ejecutó de nuevo la selección final. La primera captura de campo ausente se tomó durante carga y fue reemplazada tras esperar la proyección final.
+
+Archivos nuevos: src/execution/historical-store.ts, historical-recovery.tsx y src/test/provider-historical-attempt.test.tsx. Archivos modificados: tipos/servicio/commands/components de execution; tipos/reglas/páginas de dispatch; driver-portal/pages.tsx; delivery-assignments/panel.tsx; tests/fixtures relacionados; script visual; README y guías de continuidad. Se conserva el historial de verificaciones previas abajo.
+
+### Pendientes
+
+Integración real con backend/migraciones nuevas y app Driver no ejecutada: Docker permaneció apagado. Mocks no acreditan locks, permisos reales ni carreras transaccionales. Claves antiguas que ya se perdieron antes de persistir no pueden reconstruirse; soporte debe revisar acceso si el actor perdió cuenta/membership. No hay ya bloqueo contractual de recibos propios PROVIDER_ADMIN: la ruta nueva lo resuelve cuando se dispone de la clave original y permisos. Sin producción, activación, commit, push o despliegue.
+
+
+## 2026-10-04 — Autoridad APP REPARTIDOR / web de consulta
+
+Base QA 1b8f426. Referencia read-only: backend docs/DRIVER-APP-EXECUTION.md y selectores/servicio de ejecución. No se arrancó Docker ni se consultó backend real. Los recorridos manuales previos no validan esta nueva autoridad.
+
+### Archivos
+
+- src/execution/components.tsx: sin formulario de hitos en web; DRIVER tampoco registra incidencias detalladas nuevas. Mensajes de app, historia PHONE_REPORT preservada, recuperación antigua por consulta.
+- src/execution/commands.ts, service.ts, types.ts: DTO DriverAttempt y GET de recibo del mismo actor/asignación/clave. Reenvío de comandos retirados bloqueado. Resoluciones SUPER_ADMIN y almacenamiento durable existentes conservados.
+- src/dispatch/rules.ts, pages.tsx y src/driver-portal/pages.tsx: entrega sólo legacy con proyección OWNER completa, carga/error/refetch y correspondencia de asignación controlados. Detallado siempre de consulta para avance/entrega, independientemente de permisos viejos.
+- src/test/{execution,dispatch,driver-portal,delivery-completion,execution-attempt-service}.test.*: pruebas adaptadas y nuevas. scripts/verify-driver-authority.mjs: revisión reproducible con red interceptada y datos sintéticos.
+- README.md, docs/DETAILED-EXECUTION.md y docs/EXECUTION-RECONCILIATION.md: autoridad actual, recuperación anterior, límites y continuidad; historial conservado.
+
+### Comandos y resultados realmente ejecutados
+
+- node scripts/sync-public-b2b.mjs y node scripts/sync-public-b2b.mjs --check: PASS; artefactos iguales al backend, sin diferencias de contenido. Sólo 15 operaciones B2B; sin rutas DRIVER ni OpenAPI general.
+- npx vitest run src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/execution-attempt-service.test.ts src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/delivery-completion.test.tsx src/test/developers.test.tsx --maxWorkers=1: **7 archivos, 185 pruebas PASS**.
+- npm run lint: PASS.
+- npm run build: PASS, incluye tsc -b. Advertencia existente: chunk Root de 581.28 kB (>500 kB), no error.
+- npm run typecheck:test: PASS.
+- node scripts/verify-driver-authority.mjs: PASS con Chromium y fixtures, proveedor detallado/legacy y DRIVER detallado en 1440x1000 y 390x844. Sin overflow horizontal, pageerrors ni POST operativo. Tab/Enter/Escape verificaron controles y diálogos conservados; no se confirmó ninguna operación. Capturas revisadas visualmente en test-results/driver-authority/ (ignoradas): provider-detailed-mobile.png, provider-legacy-desktop.png, driver-detailed-desktop.png y otras tres variantes. results.json contiene el resumen.
+- git diff --check: PASS.
+
+Incidencias de validación: la primera ejecución dentro del sandbox falló con ENOENT al cargar módulos transformados desde el temporal de Vitest; no se contó como prueba aprobada. Fuera del sandbox se ejecutaron las pruebas; se corrigió una expectativa del texto anterior y se repitió la selección final. La primera revisión visual encontró Vite detenido; se inició sólo Vite con variable de proceso local, sin editar .env ni arrancar Docker. Las capturas se repitieron esperando el final de la transición responsive.
+
+### Límites y pendientes
+
+Mocks verifican UI, rutas solicitadas y conservación de recuperación; no acreditan autorización/transacciones backend ni operación real de app. Pendiente construir/verificar APP REPARTIDOR y recorrido integrado autorizado con el contrato nuevo. No se publica ni activa nada.
+
+Para antiguos avances PROVIDER_ADMIN inciertos, el contrato no permite consultar/cerrar recibos con ese rol. La web conserva bloqueo y comunica soporte; hace falta procedimiento/backend específico si tales intentos existen. Intentos DRIVER antiguos aún en memoria se consultan con la misma clave; si la pestaña antigua ya se perdió, no se pueden reconstruir claves no persistidas. Las resoluciones SUPER_ADMIN sí conservan su marcador durable previo. Detalle y límites del discriminante legacy en docs/DETAILED-EXECUTION.md.
+
+
+Resumen y entidad completa separados; asignación vigente resuelta por ID/estado/dispatch/proveedor desde historial no paginado. Bloqueo durante carga, error o divergencia; actualización por revisión. No se modificó Badge ni backend y se conservaron cambios existentes.
+
+**125/125 pruebas focalizadas** (dispatch, delivery-assignments, delivery-completion, execution); TypeScript, lint y build exit 0 (advertencia Root ~579 kB). Navegador real + PostgreSQL aislado: cinco hitos y DELIVERED del proveedor, transferencia A→B, antiguo proveedor sin operaciones, receptor continúa y entrega. Payload real sin status; sin errores de render, cargo adicional o evento duplicado. No repetida la suite de reconciliación real previamente aprobada.
+
+[Detalles, archivos, comandos, límites e historial](docs/EXECUTION-REAL-INTEGRATION.md). [Huellas/resultados sanitizados](docs/checks/f01-closure.json). F-01 deja de ser bloqueo vigente. Sin .env, backend, producción, Docker, commit, push ni despliegue.
+
+---
+
+## 2026-10-03 — Integración real con PostgreSQL aislado
+
+Backend real: **16/16 E2E** completos, migraciones 32/32 y build aprobados. Chromium sobre frontend actual: retorno/APPLIED con respuesta descartada, PENDING_OR_UNKNOWN tras recarga, cierre/409 original tardío, cambio de administrador, transferencia única sin nuevo cargo, continuación/entrega del receptor y legacy aprobados. Sin mocks de ejecución; routing local de fixtures, worker B2B deshabilitado y cero envíos.
+
+**Integración global parcial:** F-01 rompe detalle PROVIDER_ADMIN detallado activo: assignment resumida sin status se trata como DeliveryAssignment completo y Badge falla con toLowerCase. No se modificó frontend conforme a la solicitud. No se demostró defecto backend; no hubo cambios de implementación backend.
+
+[Informe, matriz, versiones, comandos y reproducción](docs/EXECUTION-REAL-INTEGRATION.md). [Evidencia sanitizada y hashes](docs/checks/execution-real-integration.json). Frontend base 65c4d77 y backend base 004b750, ambos con cambios locales preexistentes. Clúster nuevo loopback; sin .env, Docker, producción, Coita, commit, push ni despliegue. Historial anterior conservado.
+
+---
+
+## 2026-10-03 — Cierre y verificación actual de integración de intentos
+
+Se encontró la integración ya preparada sin commit; se conservó y contrastó con el contrato backend. AGENTS.md/BITACORA.md no existen en este frontend; continuidad en README, este archivo y docs. Backend no modificado en esta tarea.
+
+Cambios adicionales actuales: mensajes de respuesta incierta actualizados (tras recarga admite consulta y cierre explícito); APPLIED atribuye correctamente el resultado a la clave cuando el recibo y auditoría coinciden, sin acreditar cobro. Nueva regresión de interfaz verifica que abrir el diálogo no envía POST, confirmar envía sólo close, timeout conserva el marcador y la consulta posterior sigue bloqueando sin resolver automáticamente. Se conservan marcador mínimo, tipos y rutas ya preparados.
+
+Ejecutado ahora, no reutilizado de entradas inferiores:
+
+- npm run typecheck:test: exit 0.
+- npm run lint: exit 0.
+- npm run build: exit 0 (tsc -b y Vite); advertencia preexistente chunk Root ~578 kB.
+- Cuatro archivos completos con Vitest: **79/79**, exit 0: execution-reconciliation 24, execution.test 32, execution-attempt-service 2, api 21. Reporte local test-results/reconciliation-current.json. Sin omitidos ni abortos en esta ejecución de pruebas.
+- Chromium local con red externa bloqueada y fixture sintética: 1366x900 y 390x844, confirmación visible, Escape, ausencia de overflow horizontal, cierre incierto y marcador tras recarga. Capturas attempt-current-desktop.png y attempt-current-mobile.png inspeccionadas visualmente; cero errores de página. Reporte test-results/execution-preview/attempt-current-visual.json. Primer script visual utilizó view=admin, que la fixture interpreta como DRIVER: timeout esperando botón; corregido a view=incident y recorrido completo aprobado. No se cuenta el intento fallido.
+- git diff --check: exit 0 al cierre. Servidor Vite de esta tarea detenido.
+
+Límites: carreras close/resolve, permisos y respuesta perdida son mocks; no se verificaron locks ni llamadas reales backend en esta tarea. Reinicio simulado de módulos/navegador preserva almacenamiento. Pendiente prueba integrada autorizada contra backend con migración correspondiente. No garantiza bloqueo entre dispositivos ni tras borrado deliberado de almacenamiento. No modificación backend, activación, Docker, commit, push o despliegue.
+
+---
+
+## 2026-10-03 — Integración del recibo durable de intentos
+
+Implementado en main sobre 65c4d77. Backend sólo consultado: docs/EXECUTION-ATTEMPT-RECONCILIATION.md y execution.controller/service/responses. AGENTS.md y BITACORA.md no existen en la raíz; continuidad existente README/VERIFICATION y docs preservada.
+
+Archivos: src/execution/{types,service,commands,reconcile,components}, src/test/execution-reconciliation.test.ts y execution-attempt-service.test.ts, README y docs/EXECUTION-RECONCILIATION.md. Marcador mínimo sin cambios. GET/POST close usan clave original en cabecera y sin body, mediante apiOnce sin reintentos. APPLIED comprueba ID y actor de resolución y evidencia existente; CLOSED_NO_EFFECTS refresca antes de liberar un nuevo formulario; desconocido/timeout conserva bloqueo. 409 cerrado impide replay volátil y requiere consulta. Otra cuenta no puede reconciliar ni cerrar intento ajeno.
+
+### Ejecutado
+
+- npm run typecheck:test: exit 0 (incluye pruebas nuevas).
+- npm run lint: exit 0; npx eslint src/test/execution-attempt-service.test.ts: exit 0 para el último archivo añadido.
+- npm run build: exit 0, tsc -b + Vite; advertencia existente Root ~578 kB.
+- npx vitest run src/test/execution-reconciliation.test.ts src/test/execution.test.tsx src/test/api.test.ts: 76/76, tres archivos.
+- npx vitest run src/test/execution-attempt-service.test.ts: 2/2. Total focalizado: 78 pruebas.
+- git diff --check: sin errores.
+
+Primera corrida Vitest: ENOENT en temporales de sandbox, dos suites no arrancaron y API 21 pasó. Una repetición fuera del sandbox resolvió el problema y pasó 76/76. No fallo funcional ocultado.
+
+### Visual y límites
+
+Chromium headless con fixture sintética local: 1366x900 y 390x844; diálogo legible, sin overflow móvil, Tab enfoca confirmación, Escape cierra, Enter abre, cierre simulado mantiene bloqueo, recarga conserva marcador. Sin errores de página. Capturas locales ignoradas: test-results/execution-preview/attempt-desktop.png y attempt-mobile.png; inspeccionadas visualmente. Vite inicial aislado produjo timeout de conexión; instancia local fuera del sandbox permitió completar la revisión.
+
+Carreras close/resolve probadas con respuestas simuladas (ambos ganadores), no locks reales. Tests cubren APPLIED con ID exacto, PENDING_OR_UNKNOWN, CLOSED_NO_EFFECTS true/false, respuesta perdida de cierre, doble cierre, 409 del original tardío, permisos, identidad cambiada y marcador tras recarga. Sin POST automático de resolución. Ninguna operación física ni llamada real al backend en pruebas visuales. Pendiente integración real con backend/migración instalada y usuarios autorizados cuando se habilite una validación controlada; no se activó DETAILED_EXECUTION_ENABLED. Persistencia local no garantiza bloqueo en otro dispositivo ni tras borrar almacenamiento. Sin backend modificado, commit, push, Docker o despliegue.
+
+---
 ## 2026-10-04 — Solicitudes de socio: vista «Abiertas» con varios estados
 
 El backend ahora acepta `status` con varios valores separados por comas (handoff actualizado, sección de bandeja administrativa). La bandeja usa por defecto «Abiertas» (`status=RECEIVED,CONTACTED`). En la URL, `status` vale `OPEN` (o no aparece), uno de los cinco estados o `ALL`, que omite el filtro. Si la URL trae una lista con comas, se rechaza como filtro inválido y no se llama al backend. El contador del dashboard no cambia: sigue contando sólo `RECEIVED`.

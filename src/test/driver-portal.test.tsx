@@ -149,6 +149,7 @@ function me(over: Partial<DriverSelf> = {}): DriverSelf {
 function dispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
   return {
     id: DISPATCH,
+    trackingMode: null,
     status: 'OPEN',
     access: 'OFFER',
     serviceType: 'LOCAL_DELIVERY',
@@ -194,6 +195,7 @@ const prepaid = dispatch({
   },
 })
 const taken = dispatch({
+  trackingMode: 'LEGACY',
   status: 'CLAIMED',
   access: 'OWNER',
   takenByMe: true,
@@ -299,7 +301,7 @@ it('fleet driver sees detailed progress via real MyService composition without i
   )
   const detail = vi.spyOn(executionApi, 'detail')
   mount('/driver/my-service')
-  expect(await screen.findByText(/Continúa reportando/)).toBeInTheDocument()
+  expect(await screen.findByText(/desde la app/)).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
   expect(screen.queryByText(/Cobra únicamente/)).toBeNull()
   expect(detail).not.toHaveBeenCalled()
@@ -317,6 +319,7 @@ it('current independent custodian continues detailed execution despite commercia
       activeDeliveryAssignment: {
         id: 'assignment-1',
         mode: 'INDEPENDENT',
+        trackingMode: 'DETAILED',
         dispatchId: DISPATCH,
         execution: current,
       },
@@ -324,6 +327,7 @@ it('current independent custodian continues detailed execution despite commercia
   )
   vi.mocked(driverPortal.get).mockResolvedValue({
     ...taken,
+    trackingMode: 'DETAILED',
     execution: current,
     advanceToOriginAllowed: false,
     collectionActionAllowed: false,
@@ -334,9 +338,7 @@ it('current independent custodian continues detailed execution despite commercia
   })
   mount('/driver/my-service')
   expect(
-    await screen.findByRole('button', {
-      name: /Registrar: En camino al destino/,
-    }),
+    await screen.findByText(/En la web, el progreso es de consulta/),
   ).toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
@@ -644,7 +646,7 @@ describe('my service', () => {
       expect(screen.queryByRole('button', { name: label })).toBeNull()
     expect(
       screen.getByText(
-        /únicamente cuando el servicio tiene ejecución detallada/i,
+        /el repartidor registra avances y entrega desde la app/i,
       ),
     ).toBeInTheDocument()
   })

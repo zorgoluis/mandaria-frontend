@@ -1,3 +1,5 @@
+import { executionApi } from '../execution/service'
+import { detailFixture } from './execution-fixture'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -15,7 +17,7 @@ import { driverPortal } from '../driver-portal/service'
 import { myDriverCredits, myProviderCredits } from '../credits/service'
 import { dispatchStatusLabels } from '../dispatch/format'
 import { assignmentStatusLabels } from '../delivery-assignments/format'
-import { canDeliver, isClaimOwner } from '../dispatch/rules'
+import { canDeliver, isClaimOwner, legacyProjection } from '../dispatch/rules'
 import type { DeliveryAssignment } from '../delivery-assignments/types'
 import type { DispatchService, ProviderDispatch } from '../dispatch/types'
 import type {
@@ -159,6 +161,7 @@ function service(over: Partial<DispatchService> = {}): DispatchService {
 function owned(over: Partial<ProviderDispatch> = {}): ProviderDispatch {
   return {
     id: DISPATCH,
+    trackingMode: 'LEGACY',
     status: 'CLAIMED',
     access: 'OWNER',
     serviceType: 'LOCAL_DELIVERY',
@@ -242,6 +245,7 @@ function me(over: Partial<DriverSelf> = {}): DriverSelf {
     activeDeliveryAssignment: {
       id: 'assignment-1',
       mode: 'INDEPENDENT',
+      trackingMode: 'LEGACY',
       dispatchId: DISPATCH,
     },
     independent: {
@@ -258,6 +262,7 @@ function me(over: Partial<DriverSelf> = {}): DriverSelf {
 function driverDispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
   return {
     id: DISPATCH,
+    trackingMode: 'LEGACY',
     status: 'CLAIMED',
     access: 'OWNER',
     serviceType: 'LOCAL_DELIVERY',
@@ -718,3 +723,94 @@ describe('status formatters and already-delivered handling', () => {
     expect(isClaimOwner(delivered)).toBe(true)
   })
 })
+
+it.each([
+  { execution: null },
+  { execution: {} },
+  { collectionActionAllowed: false },
+  { service: null },
+  { service: {} },
+  { assignment: undefined },
+  { deliveredAt: undefined },
+])(
+  'incomplete or detailed projection cannot authorize legacy close: %j',
+  (patch) => {
+    expect(legacyProjection({ ...owned(), ...patch })).toBe(false)
+  },
+)
+it('provider loading and failed detail never offer legacy completion', async () => {
+  let fail!: (e: Error) => void
+  vi.mocked(providerDispatches.get).mockImplementation(
+    () =>
+      new Promise((_, reject) => {
+        fail = reject
+      }),
+  )
+  mount(detailPath)
+  await waitFor(() => expect(providerDispatches.get).toHaveBeenCalled())
+  expect(
+    screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+  ).toBeNull()
+  fail(new Error('Synthetic read failure'))
+  await waitFor(() =>
+    expect(
+      screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+    ).toBeNull(),
+  )
+  expect(providerDispatches.deliver).not.toHaveBeenCalled()
+})
+it('driver mismatched assignment cannot enable legacy completion', async () => {
+  vi.mocked(driverPortal.get).mockResolvedValue(
+    driverDispatch({
+      assignment: { ...driverDispatch().assignment!, id: 'previous' },
+    }),
+  )
+  mount('/driver/my-service', 'DRIVER')
+  await screen.findByText('Servicio actual')
+  expect(
+    screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+  ).toBeNull()
+  expect(driverPortal.deliver).not.toHaveBeenCalled()
+})
+
+it.each(['LEGACY', 'DETAILED', null, undefined] as const)(
+  'provider explicit mode %s governs legacy close',
+  async (trackingMode) => {
+    vi.spyOn(executionApi, 'detail').mockResolvedValue(detailFixture)
+    vi.mocked(providerDispatches.get).mockResolvedValue(owned({ trackingMode }))
+    mount(detailPath)
+    await screen.findByText('MDR-000900')
+    await waitFor(() => expect(deliveryAssignments.history).toHaveBeenCalled())
+    if (trackingMode === 'LEGACY') expect(await deliverButton()).toBeEnabled()
+    else
+      expect(
+        screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+      ).toBeNull()
+    expect(providerDispatches.deliver).not.toHaveBeenCalled()
+  },
+)
+it.each(['LEGACY', 'DETAILED', null, undefined] as const)(
+  'independent explicit mode %s governs legacy close',
+  async (trackingMode) => {
+    vi.spyOn(executionApi, 'detail').mockResolvedValue(detailFixture)
+    vi.mocked(driverPortal.get).mockResolvedValue(
+      driverDispatch({ trackingMode }),
+    )
+    vi.mocked(driverPortal.me).mockResolvedValue(
+      me({
+        activeDeliveryAssignment: {
+          ...me().activeDeliveryAssignment!,
+          trackingMode,
+        },
+      }),
+    )
+    mount('/driver/my-service', 'DRIVER')
+    await screen.findByText('Servicio actual')
+    if (trackingMode === 'LEGACY') expect(await deliverButton()).toBeEnabled()
+    else
+      expect(
+        screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+      ).toBeNull()
+    expect(driverPortal.deliver).not.toHaveBeenCalled()
+  },
+)

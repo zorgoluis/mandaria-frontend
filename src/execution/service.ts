@@ -3,6 +3,9 @@ import { queryString } from '../services/query'
 import type { Page } from '../types/api'
 import type {
   Scope,
+  DriverAttempt,
+  ProviderAdvanceAttempt,
+  ResolutionAttempt,
   ExecutionDetail,
   Incident,
   IncidentDetail,
@@ -11,6 +14,41 @@ import type {
 export const executionPath = (scope: Scope, suffix: string) =>
   `/${scope.surface}/dispatches/${encodeURIComponent(scope.dispatchId)}/${suffix}${scope.surface === 'provider' ? `?providerId=${encodeURIComponent(scope.providerId ?? '')}` : ''}`
 export const executionApi = {
+  providerAttempt: (
+    dispatchId: string,
+    providerId: string | undefined,
+    key: string,
+    close = false,
+  ) =>
+    apiOnce<ProviderAdvanceAttempt>(
+      '/provider/dispatches/' +
+        encodeURIComponent(dispatchId) +
+        '/execution-attempt' +
+        (close ? '/close' : '') +
+        (providerId ? '?providerId=' + encodeURIComponent(providerId) : ''),
+      close ? 'POST' : 'GET',
+      undefined,
+      undefined,
+      { 'Idempotency-Key': key },
+    ),
+  driverAttempt: (
+    dispatchId: string,
+    assignmentId: string,
+    operation: DriverAttempt['operation'],
+    key: string,
+  ) =>
+    apiOnce<DriverAttempt>(
+      '/driver/dispatches/' +
+        encodeURIComponent(dispatchId) +
+        '/assignments/' +
+        encodeURIComponent(assignmentId) +
+        '/attempt?operation=' +
+        operation,
+      'GET',
+      undefined,
+      undefined,
+      { 'Idempotency-Key': key },
+    ),
   detail: (scope: Scope, page: number, signal?: AbortSignal) =>
     api<ExecutionDetail>(
       executionPath(scope, 'execution') +
@@ -46,6 +84,22 @@ export const executionApi = {
       'GET',
       undefined,
       signal,
+    ),
+  attempt: (
+    dispatchId: string,
+    incidentId: string,
+    key: string,
+    close = false,
+  ) =>
+    apiOnce<ResolutionAttempt>(
+      executionPath(
+        { surface: 'admin', dispatchId },
+        `custody-incidents/${encodeURIComponent(incidentId)}/resolution-attempt${close ? '/close' : ''}`,
+      ),
+      close ? 'POST' : 'GET',
+      undefined,
+      undefined,
+      { 'Idempotency-Key': key },
     ),
   command: (path: string, body: unknown, key: string) =>
     apiOnce<unknown>(path, 'POST', body, undefined, { 'Idempotency-Key': key }),

@@ -1,3 +1,4 @@
+import { legacyProjection } from '../dispatch/rules'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { ExecutionPanel, ExecutionProgress } from '../execution/components'
 import { useExecutionBusy } from '../execution/commands'
@@ -410,9 +411,10 @@ function ServiceContent({
 }) {
   const [taking, setTaking] = useState(false)
   const { service, paymentContext } = dispatch
-  const mine = dispatch.execution
-    ? dispatch.access === 'OWNER'
-    : dispatch.takenByMe
+  const mine =
+    dispatch.trackingMode === 'DETAILED'
+      ? dispatch.access === 'OWNER'
+      : dispatch.takenByMe
   const busyElsewhere = !mine && me.activeDeliveryAssignment !== null
   const gone = !mine && dispatch.status !== 'OPEN'
   return (
@@ -425,7 +427,7 @@ function ServiceContent({
           mine ? undefined : gone ? undefined : (
             <button
               className="button"
-              disabled={busyElsewhere}
+              disabled={busyElsewhere || dispatch.trackingMode === undefined}
               onClick={() => setTaking(true)}
             >
               TOMAR SERVICIO
@@ -549,7 +551,7 @@ function ServiceContent({
           ))}
         </ul>
       </section>
-      {mine && dispatch.execution && (
+      {mine && dispatch.trackingMode === 'DETAILED' && (
         <ExecutionPanel
           scope={{ surface: 'driver', dispatchId: dispatch.id }}
         />
@@ -722,6 +724,17 @@ function MyService({ me }: { me: DriverSelf }) {
     staleTime: 0,
     refetchInterval: 15000,
   })
+  const legacyDeliverable =
+    query.isSuccess &&
+    !query.isFetching &&
+    !query.isError &&
+    legacyProjection(query.data) &&
+    active?.trackingMode === 'LEGACY' &&
+    !active.execution &&
+    active?.mode === 'INDEPENDENT' &&
+    query.data.takenByMe &&
+    query.data.assignment?.id === active.id &&
+    query.data.id === active.dispatchId
   const [releasing, setReleasing] = useState(false)
   const [delivering, setDelivering] = useState(false)
   return (
@@ -731,6 +744,12 @@ function MyService({ me }: { me: DriverSelf }) {
         description="El servicio que estás ejecutando ahora."
       />
       <PortalTabs />
+      {query.isSuccess && query.data.trackingMode === undefined && (
+        <p role="alert" className="notice">
+          No se confirmó el modo de seguimiento. No se permite cerrar este
+          servicio.
+        </p>
+      )}
       {!active ? (
         <div className="panel">
           <Empty
@@ -758,7 +777,8 @@ function MyService({ me }: { me: DriverSelf }) {
             }
           />
           <p className="panel-note">
-            La operación de este servicio la gestiona tu proveedor.
+            La asignación la gestiona tu proveedor. Los avances y la entrega
+            detallada se registran desde la app del repartidor.
           </p>
         </section>
       ) : query.isPending ? (
@@ -830,10 +850,7 @@ function MyService({ me }: { me: DriverSelf }) {
               />
             </div>
             <div className="panel-body driver-service-actions">
-              {(!query.data.execution ||
-                (query.data.execution.allowedActions.includes('DELIVER') &&
-                  !query.data.execution.openIncidentId &&
-                  query.data.execution.activeAssignmentId === active.id)) && (
+              {legacyDeliverable && (
                 <button
                   className="button full"
                   disabled={busy || query.isFetching}
@@ -842,10 +859,12 @@ function MyService({ me }: { me: DriverSelf }) {
                   MARCAR COMO ENTREGADO
                 </button>
               )}
-              {(!query.data.execution ||
-                (query.data.execution.allowedActions.includes(
-                  'ORDINARY_ASSIGNMENT_OPERATIONS',
-                ) &&
+              {(legacyProjection(query.data) ||
+                (query.data.trackingMode === 'DETAILED' &&
+                  !!query.data.execution &&
+                  query.data.execution.allowedActions.includes(
+                    'ORDINARY_ASSIGNMENT_OPERATIONS',
+                  ) &&
                   !query.data.execution.openIncidentId &&
                   query.data.execution.activeAssignmentId === active.id)) && (
                 <button
@@ -858,35 +877,34 @@ function MyService({ me }: { me: DriverSelf }) {
               )}
             </div>
             <p className="panel-note">
-              Los avances se registran únicamente cuando el servicio tiene
-              ejecución detallada.
+              En servicios detallados, el repartidor registra avances y entrega
+              desde la app. El cierre web sólo está disponible para servicios
+              anteriores sin ejecución detallada.
             </p>
           </section>
-          {query.data.execution && (
+          {query.data.trackingMode === 'DETAILED' && (
             <ExecutionPanel
               scope={{ surface: 'driver', dispatchId: query.data.id }}
             />
           )}
           {releasing &&
-            (!query.data.execution ||
-              query.data.execution.allowedActions.includes(
-                'ORDINARY_ASSIGNMENT_OPERATIONS',
-              )) && (
+            (legacyProjection(query.data) ||
+              (query.data.trackingMode === 'DETAILED' &&
+                !!query.data.execution &&
+                query.data.execution.allowedActions.includes(
+                  'ORDINARY_ASSIGNMENT_OPERATIONS',
+                ))) && (
               <ReleaseDialog
                 dispatchId={query.data.id}
                 onClose={() => setReleasing(false)}
               />
             )}
-          {delivering &&
-            (!query.data.execution ||
-              (query.data.execution.allowedActions.includes('DELIVER') &&
-                !query.data.execution.openIncidentId &&
-                query.data.execution.activeAssignmentId === active.id)) && (
-              <DeliverDialog
-                dispatch={query.data}
-                onClose={() => setDelivering(false)}
-              />
-            )}
+          {delivering && legacyDeliverable && (
+            <DeliverDialog
+              dispatch={query.data}
+              onClose={() => setDelivering(false)}
+            />
+          )}
         </>
       )}
     </>

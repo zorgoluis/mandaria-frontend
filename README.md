@@ -1,5 +1,30 @@
 # Mandaria Web — V1.11-B
 
+## Portal: seguimiento público B2B — 2026-10-04
+
+Actualización editorial posterior: OpenAPI público resincronizado; la descripción de executionProgress ya indica ordenar fotografías de una misma solicitud mediante publicVersion. Queda cerrada la discrepancia editorial registrada inicialmente en VERIFICATION. revision interna y expectedRevision de concurrencia permanecen sin cambios. No implica despliegue.
+
+`/developers/execution` documenta publicVersion (comparación BigInt por MDR), trackingMode, assignmentState, terminalOutcome persistente, identidad receptora tras transferencia y atención/cancelación bajo custodia. Consulta compartida desde el backend integrador: objetivo 15 segundos sujeto a límites agregados, backoff y parada al confirmar terminal. Se conserva delivery.completed; sin timeline, GPS ni nuevos webhooks. **Disponible en el checkout QA del backend, pendiente de despliegue; no se acredita producción.**
+
+Actualizar con `node scripts/sync-public-b2b.mjs` y detectar diferencias con `node scripts/sync-public-b2b.mjs --check` (opcional `--backend <ruta>`). El mecanismo conserva la allowlist de cinco artefactos públicos y sus hashes; no copiar OpenAPI general ni documentos administrativos. Los ejemplos de seguimiento se leen del JSON público sincronizado. `src/developers/tracking.md` contiene la explicación pública revisada contra el handoff; al cambiarlo, revisar también este texto y ejecutar las pruebas del portal. No distribuir PUBLIC-B2B-TRACKING.md completo: contiene información interna de implementación/despliegue; su enlace público se dirige a `/developers/execution`.
+
+Verificación local, evidencia visual y discrepancia editorial pendiente del contrato: [VERIFICATION.md](VERIFICATION.md). La sincronización no habilita ninguna capacidad ni ejecuta peticiones de seguimiento.
+
+### Cierre contractual de ejecución (2026-10-04)
+
+El cierre web exige trackingMode=LEGACY explícito y asignación activa propia. DETAILED es de consulta; null/campo ausente/error no habilitan entrega. Los avances históricos propios de PROVIDER_ADMIN se consultan o cierran técnicamente con la clave original y confirmación, sin reenviarlos ni recuperar permisos de avance. Marcador mínimo durable, timeout y permisos: [procedimiento actualizado](docs/EXECUTION-RECONCILIATION.md). Esta entrada sustituye las limitaciones de contrato documentadas anteriormente.
+
+
+## Autoridad de ejecución — 2026-10-04
+
+El repartidor registra hitos y entrega detallada desde la futura app compatible. Mandaria Web muestra progreso e historial en lectura para proveedor y DRIVER; conserva incidencias/asignaciones autorizadas, resoluciones SUPER_ADMIN y cierre legacy del proveedor/independiente. No usar avisos telefónicos para registrar nuevos hitos administrativos. PHONE_REPORT permanece en la historia y en incidencias recibidas. Recuperación anterior, límites contractuales y pendientes de la app: [docs/DETAILED-EXECUTION.md](docs/DETAILED-EXECUTION.md).
+
+
+## Intentos de resolución — 2026-10-03
+
+Cierre actual revisado: 79 pruebas focalizadas, TypeScript, lint, build y revisión visual local aprobados. Los cambios ya preparados se conservaron; se completaron mensajes y prueba de confirmación/timeout. Ver VERIFICATION para distinguir esta ejecución de las anteriores. Integración real backend todavía pendiente; función sin activar.
+
+Integrada consulta durable y cierre explícito del intento propio. APPLIED exige auditoría coherente; PENDING_OR_UNKNOWN bloquea; CLOSED_NO_EFFECTS permite sólo preparar una nueva resolución cuando el contrato y el estado vigente lo permiten. Sin repetición automática ni reversión física. [Procedimiento vigente e historial](docs/EXECUTION-RECONCILIATION.md).
 ## Solicitudes de socio (Fase 1) — 2026-10-04
 
 Bandeja SUPER_ADMIN en `/admin/partner-applications` (menú «Solicitudes de socio») para los leads que envía la landing. Una solicitud **no es una cuenta**: aprobarla no crea proveedores, invitaciones ni repartidores. Contrato: `mandaria-landing/docs/solicitudes-socio/CONTRATO.md`; fuente que manda: `mandaria-backend/docs/PARTNER-APPLICATIONS-HANDOFF.md`. Backend implementado localmente en `feat/solicitud-repartidor`, sin commit ni despliegue.

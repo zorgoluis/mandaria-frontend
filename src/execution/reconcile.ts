@@ -26,6 +26,7 @@ const sameResolution = (a: IncidentDetail, b: IncidentDetail) =>
 export async function inspectResolution(
   marker: ResolutionMarker,
   authorized: () => boolean = () => true,
+  resolutionId?: string,
 ): Promise<ReconciliationResult> {
   try {
     const read = async <T>(work: () => Promise<T>) => {
@@ -66,6 +67,9 @@ export async function inspectResolution(
         'No hay una resolución confirmada en las lecturas. Esto no demuestra que la operación haya fallado o terminado.',
       )
     if (
+      (resolutionId !== undefined &&
+        (resolution.id !== resolutionId ||
+          resolution.actorUserId !== marker.actor)) ||
       resolution.fromAssignmentId !== marker.assignmentId ||
       head.openIncidentId === marker.incidentId ||
       !Number.isSafeInteger(resolution.confirmations?.expectedRevision)
@@ -137,7 +141,7 @@ export async function inspectResolution(
       )
     return {
       resolved: true,
-      message: `Incidencia resuelta verificada: ${transfer ? 'transferencia de custodia' : 'devolución al origen (RETURNED)'}. Resolución, asignaciones e historial coherentes. No repetir. Esta lectura acredita el cierre de la incidencia, no atribuye el resultado a la clave local ni acredita cobro.`,
+      message: `Incidencia resuelta verificada: ${transfer ? 'transferencia de custodia' : 'devolución al origen (RETURNED)'}. Resolución, asignaciones e historial coherentes. No repetir. ${resolutionId ? 'El recibo acredita esta clave y el cierre coherente; no acredita cobro.' : 'Esta lectura acredita el cierre de la incidencia, no atribuye el resultado a la clave local ni acredita cobro.'}`,
     }
   } catch {
     return uncertain(

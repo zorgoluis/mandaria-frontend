@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { readFileSync } from 'node:fs'
+import { runInNewContext } from 'node:vm'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -125,4 +126,131 @@ it('public artifact includes only reviewed B2B paths and no admin security or en
   const guide = publicFile('B2B-PUBLIC-GUIDE.md')
   expect(guide).toContain('delivery.completed')
   expect(guide).toContain('executionOutcome')
+})
+
+it('tracking documents QA, shared polling, custody and renders exact downloaded examples', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockImplementation(
+      async (input) =>
+        new Response(publicFile(String(input).split('/developers/assets/')[1])),
+    )
+  mount('/developers/execution')
+  expect(
+    await screen.findByText('Pedido recogido con seguimiento detallado'),
+  ).toBeInTheDocument()
+  expect(screen.getByText(/pendiente de despliegue/)).toBeInTheDocument()
+  for (const title of [
+    'Campos y presentación',
+    'Descartar respuestas atrasadas',
+    'Ejecutor e incidencias',
+    'Consulta compartida, frecuencia y errores',
+    'delivery.completed continúa igual',
+  ]) {
+    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
+  }
+  const spec = JSON.parse(publicFile('openapi-b2b.json'))
+  const examples = spec.paths['/api/v1/delivery-requests/{publicId}/status'].get
+    .responses['200'].content['application/json'].examples as Record<
+    string,
+    { summary: string; value: unknown }
+  >
+  for (const example of Object.values(examples)) {
+    const summary = screen.getByText(example.summary)
+    expect(
+      JSON.parse(
+        summary.closest('details')!.querySelector('code')!.textContent!,
+      ),
+    ).toEqual(example.value)
+  }
+  expect(
+    fetcher.mock.calls.every(([url]) =>
+      String(url).startsWith('/developers/assets/'),
+    ),
+  ).toBe(true)
+  expect(
+    screen.getByRole('link', {
+      name: 'Contrato, ejemplos, recuperación y límites',
+    }),
+  ).toHaveAttribute('href', '/developers/execution')
+})
+
+it('reviewed schema preserves exact nullable modes, assignment states and terminal outcomes', () => {
+  const schemas = JSON.parse(publicFile('openapi-b2b.json')).components.schemas
+  const fields = schemas.DeliveryStatusResponse.properties
+  expect(fields.executionProgress.description).toContain(
+    'Comparar publicVersion numéricamente por solicitud',
+  )
+  expect(fields.executionProgress.description).toContain(
+    'revision describe únicamente la ejecución interna',
+  )
+  expect(
+    schemas.PublicExecutionProgressResponse.properties.revision,
+  ).toMatchObject({ type: 'number', minimum: 1 })
+  expect(schemas.PublicExecutionProgressResponse.required).toContain('revision')
+  expect(fields.publicVersion).toMatchObject({
+    type: 'string',
+    pattern: '^[1-9][0-9]*$',
+  })
+  expect(fields.trackingMode).toMatchObject({
+    enum: ['LEGACY', 'DETAILED'],
+    nullable: true,
+  })
+  expect(fields.assignmentState.enum).toEqual(['NONE', 'ACTIVE', 'ENDED'])
+  expect(fields.terminalOutcome.nullable).toBe(true)
+  expect(schemas.PublicTerminalOutcomeResponse.properties.type.enum).toEqual([
+    'DELIVERED',
+    'RETURNED_TO_ORIGIN',
+    'CANCELLED',
+    'EXPIRED',
+  ])
+  expect(
+    schemas.PublicTerminalOutcomeResponse.properties.occurredAt.nullable,
+  ).toBe(true)
+})
+
+it.each([
+  ['9', '10', true],
+  ['10', '9', false],
+  ['10', '10', false],
+  ['9007199254740992', '9007199254740993', true],
+  ['9007199254740993', '9007199254740992', false],
+  ['10', undefined, false],
+  ['10', '0', false],
+  ['10', '01', false],
+  ['10', 11, false],
+  ['10', '1e2', false],
+  [undefined, '11', false],
+])(
+  'copyable comparison example orders %s → %s safely',
+  (previous, incoming, expected) => {
+    const guide = readFileSync('src/developers/tracking.md', 'utf8').replaceAll(
+      '\r\n',
+      '\n',
+    )
+    const code = guide.split('```javascript\n')[1].split('```')[0]
+    expect(
+      runInNewContext(code + '\nshouldReplace(previous, incoming)', {
+        previous: { publicId: 'MDR-000123', publicVersion: previous },
+        incoming: { publicId: 'MDR-000123', publicVersion: incoming },
+      }),
+    ).toBe(expected)
+  },
+)
+
+it('comparison example accepts first validated snapshot but never compares different MDRs', () => {
+  const code = readFileSync('src/developers/tracking.md', 'utf8')
+    .replaceAll('\r\n', '\n')
+    .split('```javascript\n')[1]
+    .split('```')[0]
+  const incoming = { publicId: 'MDR-000123', publicVersion: '18' }
+  expect(
+    runInNewContext(code + '\nshouldReplace(null, incoming)', { incoming }),
+  ).toBe(true)
+  expect(
+    runInNewContext(code + '\nshouldReplace(previous, incoming)', {
+      incoming,
+      previous: { publicId: 'MDR-000124', publicVersion: '1' },
+    }),
+  ).toBe(false)
 })

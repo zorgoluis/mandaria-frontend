@@ -21,6 +21,8 @@ import {
   runCommand,
   resetCommands,
   refreshExecution,
+  inspectRetiredCommand,
+  retryCommand,
 } from '../execution/commands'
 import { executionApi } from '../execution/service'
 import { providers } from '../providers/service'
@@ -33,7 +35,6 @@ import {
   dispatchFixture,
 } from './execution-fixture'
 import { ApiError, normalizeError } from '../services/errors'
-import { phaseLabels } from '../execution/format'
 import { DetailedPayment } from '../execution/payment'
 import { collectionFixture } from './collection-fixture'
 import { canDeliver, canRelease, isClaimOwner } from '../dispatch/rules'
@@ -47,6 +48,9 @@ vi.mock('../execution/service', async (original) => ({
     incidents: vi.fn(),
     incident: vi.fn(),
     candidates: vi.fn(),
+    attempt: vi.fn(),
+    driverAttempt: vi.fn(),
+    providerAttempt: vi.fn(),
   },
 }))
 vi.mock('../providers/service', () => ({ providers: { members: vi.fn() } }))
@@ -146,36 +150,23 @@ beforeEach(() => {
     totalPages: 1,
   })
 })
-it.each([null, ...phases.slice(0, 4)])(
-  'offers only the consecutive next phase after %s',
+it.each([null, ...phases])(
+  'provider only reads phase %s even with stale ADVANCE permission',
   async (phase) => {
     vi.mocked(executionApi.detail).mockResolvedValue({
       ...detailFixture,
-      execution: { ...executionFixture, phase, allowedActions: ['ADVANCE'] },
+      execution: {
+        ...executionFixture,
+        phase,
+        allowedActions: ['ADVANCE', 'DELIVER'],
+      },
     })
     mount(<ExecutionPanel scope={scope} />)
-    const next = phases[phase === null ? 0 : phases.indexOf(phase) + 1]
-    fireEvent.click(
-      await screen.findByRole('button', {
-        name: `Registrar: ${phaseLabels[next]}`,
-      }),
-    )
-    fireEvent.click(screen.getByRole('checkbox'))
-    fireEvent.submit(
-      screen
-        .getByRole('button', { name: 'Confirmar registro' })
-        .closest('form')!,
-    )
-    await waitFor(() => expect(executionApi.command).toHaveBeenCalledOnce())
-    expect(executionApi.command).toHaveBeenCalledWith(
-      expect.stringContaining('providerId=provider-A'),
-      {
-        assignmentId: executionFixture.activeAssignmentId,
-        expectedRevision: 4,
-        phase: next,
-      },
-      expect.stringMatching(/^[0-9a-f-]{36}$/),
-    )
+    await screen.findByText('Progreso de ejecución')
+    expect(
+      screen.queryByRole('button', { name: /Registrar:|ENTREGADO/ }),
+    ).toBeNull()
+    expect(executionApi.command).not.toHaveBeenCalled()
   },
 )
 it('lists server actor/source/time and paginates without manufacturing phases', async () => {
@@ -200,7 +191,7 @@ it('keeps legacy without invented progress', async () => {
     <ExecutionPanel scope={{ surface: 'admin', dispatchId: 'dispatch' }} />,
     'SUPER_ADMIN',
   )
-  expect(await screen.findByText(/Ejecución legacy/)).toBeInTheDocument()
+  expect(await screen.findByText(/Sin proyección detallada confirmada/)).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
 })
 it('SUPER_ADMIN cannot advance even with an inconsistent allowedActions response', async () => {
@@ -214,7 +205,7 @@ it('SUPER_ADMIN cannot advance even with an inconsistent allowedActions response
     screen.getByRole('button', { name: 'Reportar incidencia' }),
   ).toBeInTheDocument()
 })
-it('fleet driver is read only and continues reporting by telephone', () => {
+it('fleet driver is read only and directs execution to the app', () => {
   mount(
     <ExecutionProgress
       execution={{ ...executionFixture, allowedActions: [] }}
@@ -222,26 +213,21 @@ it('fleet driver is read only and continues reporting by telephone', () => {
     />,
     'DRIVER',
   )
-  expect(screen.getByText(/Continúa reportando/)).toBeInTheDocument()
+  expect(screen.getByText(/desde la app/)).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Registrar/ })).toBeNull()
 })
-it('independent sends its event to the driver endpoint', async () => {
+it('independent cannot send detailed commands from web', async () => {
   mount(
     <ExecutionPanel scope={{ surface: 'driver', dispatchId: 'dispatch' }} />,
     'DRIVER',
   )
-  fireEvent.click(await screen.findByRole('button', { name: /Registrar:/ }))
-  fireEvent.click(screen.getByRole('checkbox'))
-  fireEvent.submit(
-    screen.getByRole('button', { name: 'Confirmar registro' }).closest('form')!,
-  )
-  await waitFor(() =>
-    expect(executionApi.command).toHaveBeenCalledWith(
-      '/driver/dispatches/dispatch/execution-events',
-      expect.objectContaining({ expectedRevision: 4 }),
-      expect.any(String),
-    ),
-  )
+  await screen.findByText('Progreso de ejecución')
+  expect(
+    screen.queryByRole('button', {
+      name: /Registrar:|Reportar incidencia|ENTREGADO/,
+    }),
+  ).toBeNull()
+  expect(executionApi.command).not.toHaveBeenCalled()
 })
 it('an open incident blocks progress and delivery while retaining custody', async () => {
   const execution = {
@@ -324,11 +310,11 @@ it('does not grant the historical claimant rights after transfer', () => {
     canDeliver(current, {
       id: executionFixture.activeAssignmentId,
     } as DeliveryAssignment),
-  ).toBe(true)
+  ).toBe(false)
 })
 it('retires operations after a refetch denies the previous executor', async () => {
   mount(<ExecutionPanel scope={scope} />)
-  await screen.findByRole('button', { name: /Registrar:/ })
+  await screen.findByRole('button', { name: 'Reportar incidencia' })
   vi.mocked(executionApi.detail).mockRejectedValue(
     new ApiError(403, 'Ya no eres el ejecutor vigente.'),
   )
@@ -688,4 +674,138 @@ it('does not discard an incident draft during background refresh', async () => {
   expect(screen.getByLabelText('Detalle del motivo')).toHaveValue(
     'Aviso aún en edición',
   )
+})
+
+it('requires visible confirmation for technical closure; timeout retains marker and never resolves automatically', async () => {
+  const store = await import('../execution/reconciliation-store')
+  const key = '10000000-0000-4000-8000-000000000001'
+  store.persistResolutionMarker({
+    actor: 'actor',
+    dispatchId: 'dispatch',
+    incidentId: 'incident',
+    assignmentId: executionFixture.activeAssignmentId!,
+    expectedRevision: 4,
+    type: 'TRANSFER',
+    key,
+  })
+  vi.mocked(executionApi.attempt).mockRejectedValue(new ApiError(0, 'Timeout'))
+  mount(null, 'SUPER_ADMIN')
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Cerrar intento pendiente' }),
+  )
+  expect(screen.getByRole('dialog')).toHaveTextContent('No cancela el servicio')
+  expect(executionApi.attempt).not.toHaveBeenCalled()
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Confirmar cierre técnico' }),
+  )
+  await waitFor(() =>
+    expect(executionApi.attempt).toHaveBeenCalledWith(
+      'dispatch',
+      'incident',
+      key,
+      true,
+    ),
+  )
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+  expect(store.readResolutionMarkers().markers).toHaveLength(1)
+  expect(executionApi.command).not.toHaveBeenCalled()
+  expect(screen.getByText(/El cierre pudo registrarse/)).toBeInTheDocument()
+  vi.mocked(executionApi.attempt).mockResolvedValue({
+    state: 'PENDING_OR_UNKNOWN',
+    resolutionId: null,
+    canStartNewAttempt: false,
+  })
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Reconciliar por lectura' }),
+  )
+  await waitFor(() =>
+    expect(executionApi.attempt).toHaveBeenLastCalledWith(
+      'dispatch',
+      'incident',
+      key,
+      false,
+    ),
+  )
+  expect(store.readResolutionMarkers().markers).toHaveLength(1)
+  expect(executionApi.command).not.toHaveBeenCalled()
+})
+
+it.each(['APPLIED', 'PENDING_OR_UNKNOWN', 'CLOSED_NO_EFFECTS'] as const)(
+  'old driver receipt %s is consulted without a new execution POST',
+  async (state) => {
+    await runCommand({
+      actor: 'actor',
+      dispatchId: 'dispatch',
+      path: '/driver/dispatches/dispatch/execution-events',
+      body: {
+        assignmentId: 'assignment-old',
+        expectedRevision: 2,
+        phase: 'AT_PICKUP',
+      },
+      label: 'Avance anterior',
+    })
+    mount(null, 'DRIVER')
+    expect(executionApi.command).not.toHaveBeenCalled()
+    expect(
+      screen.getByRole('button', { name: 'Recuperar misma operación' }),
+    ).toBeDisabled()
+    vi.mocked(executionApi.driverAttempt).mockResolvedValue({
+      state,
+      assignmentId: 'assignment-old',
+      operation: 'ADVANCE',
+      canStartNewAttempt: state === 'CLOSED_NO_EFFECTS',
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Consultar estado' }))
+    await waitFor(() =>
+      expect(executionApi.driverAttempt).toHaveBeenCalledOnce(),
+    )
+    const key = vi.mocked(executionApi.driverAttempt).mock.calls[0][3]
+    await act(() => retryCommand(key, 'actor'))
+    expect(executionApi.command).not.toHaveBeenCalled()
+    if (state === 'PENDING_OR_UNKNOWN')
+      expect(screen.getByText('Avance anterior')).toBeInTheDocument()
+    else
+      await waitFor(() =>
+        expect(screen.queryByText('Avance anterior')).toBeNull(),
+      )
+  },
+)
+it('receipt lookup refuses a different actor', async () => {
+  await runCommand({
+    actor: 'actor',
+    dispatchId: 'dispatch',
+    path: '/driver/dispatches/dispatch/custody-incidents',
+    body: {
+      assignmentId: 'old',
+      expectedRevision: 2,
+      reasonCode: 'OTHER',
+      reasonDetail: 'Synthetic',
+    },
+    label: 'Incidencia anterior',
+  })
+  mount(null, 'DRIVER')
+  let finish!: (
+    value: Awaited<ReturnType<typeof executionApi.driverAttempt>>,
+  ) => void
+  vi.mocked(executionApi.driverAttempt).mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve
+      }),
+  )
+  // Read the key from the exact original request, never reconstruct an operation body.
+  fireEvent.click(screen.getByRole('button', { name: 'Consultar estado' }))
+  await waitFor(() => expect(executionApi.driverAttempt).toHaveBeenCalledOnce())
+  const key = vi.mocked(executionApi.driverAttempt).mock.calls[0][3]
+  await inspectRetiredCommand(key, 'different', 'DRIVER', () => true)
+  expect(executionApi.driverAttempt).toHaveBeenCalledOnce()
+  await act(async () =>
+    finish({
+      state: 'PENDING_OR_UNKNOWN',
+      assignmentId: 'old',
+      operation: 'REPORT',
+      canStartNewAttempt: false,
+    }),
+  )
+  expect(screen.getByText('Incidencia anterior')).toBeInTheDocument()
 })
