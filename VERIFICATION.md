@@ -1,3 +1,60 @@
+## 2026-10-07 — Recorrido conjunto V1.18: navegador → backend → PostgreSQL → Google REAL
+
+Checkout utilizado exclusivamente: C:/Users/zorgl/Documents/mandaria-frontend, rama v1.18-GPS_seguimiento_temporal, HEAD f36f771. Conservados VERIFICATION y scripts/verify-google-real.mjs pendientes; no se usó ni copió configuración del worktree f1fe. Backend b97b9d1be54a2c37601e51990d66ccaf73d0203f; hash SHA256 de dist/location/location.service.js registrado en [evidencia estructurada](docs/checks/v118-google-joint.json). No cambios backend.
+
+PostgreSQL18.6 temporal exclusivo en127.0.0.1:55439. Copias nuevas desde mandaria_v118_web_20261007_test: mandaria_v118_google_joint_20261007_test, mandaria_v118_google_race_20261007_test, mandaria_v118_google_race2_20261007_test y recorrido final mandaria_v118_google_race3_20261007_test. Fuente y evidencias previas conservadas. Migraciones41/42 verificadas antes de mutar; una asignación activa del servicio sintético MDR-000029 ya en PICKED_UP. Contraseñas aleatorias sólo en memoria y hashes actualizados únicamente en copias de prueba.
+
+| Paso mínimo | Resultado conjunto |
+|---|---|
+| Servicio autorizado visible | PASS: servicio sintético existente PICKED_UP, actor CUSTOMER propietario y DRIVER de asignación real |
+| GPS DRIVER real | PASS: apertura de stream y PUT location por actor/asignación vigentes; sin rutas administrativas de GPS |
+| Detalle completo cliente | PASS: login real, ruta existente, lectura real, Google con teselas/atribución, punto y precisión40m |
+| Enlace real /track | PASS: emisión desde UI contra backend, secreto sólo en memoria, fragmento retirado antes del SDK y lectura anónima real |
+| Segunda muestra | PASS: sequence2, posición17.421/-93.38 en ambos mapas y una sola instancia Map por pantalla |
+| Pérdida de visibilidad | PASS: DRIVER abre incidencia VEHICLE_FAILURE mediante contrato real; ambas pantallas retiran coordenadas y ambos círculos se desprenden del mapa |
+| Respuesta anterior | PASS final: respuesta GPS real preincidencia, con sample, termina3ms después de retirada visible; no restaura marcador ni coordenadas |
+
+### Carrera sin interceptar APIs
+
+Sin Playwright route interception, SDK simulado, respuestas fabricadas ni clock inyectado. Vite sólo hace proxy normal /api al Nest aislado127.0.0.1:43181. Observador pasivo de finish del servidor identifica lectura completada; CDP Network.emulateNetworkConditionsByRule limita únicamente la URL GPS del cliente (latencia10s, descarga10bytes/s). Con bytes reales aún en tránsito, el DRIVER reporta incidencia; la UI consulta estado mediante su botón existente. Tras retirar el mapa se restaura la red. response.finished se registra desde el inicio de la espera; se exige completedAt > hiddenAt y sample presente, además de overlays retirados. El SDK Google no se sustituye: constructores delegan al constructor real únicamente para contar instancias e inspeccionar círculos.
+
+Primer recorrido se detuvo por selector de captura ambiguo (.location-panel también correspondía al enlace); se corrigió sólo el arnés. Recorridos intermedios conservaron respuesta antigua sin restauración pero fallaron la aserción temporal estricta: NO acreditan el orden de la carrera. La regla CDP con URL exacta del último recorrido sí lo acredita. Se reutilizó el setup mínimo de dos pantallas en las copias necesarias, sin suites completas. Todos los resultados intermedios se conservan; prevalece el final de v118-google-race3.
+
+### Seguridad, CSP y evidencia
+
+Recorrido final:66 solicitudes Google inspeccionadas en memoria, cero coincidencias de los tokens/identificadores/contacto sintéticos monitorizados y cero llamadas detectadas a Routes/Places/Geocoding. Sin errores de consola ni violaciones CSP. No se persistieron HAR, URLs, headers, claves ni tokens. Clave Web cargada privadamente por Vite; flags GPS/enlaces y secretos JWT aleatorios sólo en proceso aislado, CWD temporal sin .env backend. Routing local_fake, correo local_outbox, webhooks polling0. No comunicaciones externas excepto Google autorizado.
+
+CSP de nginx.conf aplicada como header local por Vite, sin plugin React Refresh inline. Esto acredita la política en ese servidor local, NO nginx ni headers productivos. Capturas recortadas al panel GPS cliente y destinatario, sin formulario de clave/enlace, cuenta, contactos ni barra de direcciones: test-results/v118-google-race3/customer-map.png y recipient-map.png; copias iniciales revisadas visualmente muestran cartografía real y atribución. Resultados/identity/network sanitizados en ese directorio y docs/checks/v118-google-joint.json.
+
+Comando ejecutado: node scripts/verify-google-joint.mjs. node --check, Prettier y ESLint focalizado del arnés PASS. Sin defectos nuevos de producto demostrados; no se repitieron build, tipos ni suites completas del producto previamente aprobadas. Las pruebas SDK simulado y HTTP reales anteriores permanecen separadas; esta entrada acredita ahora el recorrido conjunto.
+
+Nest, Vite y Chromium propios cerrados por finally. PostgreSQL detenido después de verificar cero otros clientes; datos de las copias conservados. No se detuvieron servicios ajenos. Límite: emisor GPS sintético por HTTP, no captura desde teléfono/APP DRIVER; pérdida por incidencia, no operación física ni cobro. No acredita nginx desplegado ni declara V1.18 completa o activada. Sin Docker, producción, commit, push o despliegue.
+
+## 2026-10-07 — Reintento Google real: origen autorizado
+
+Checkout principal C:/Users/zorgl/Documents/mandaria-frontend, rama v1.18-GPS_seguimiento_temporal. Después del ajuste de restricciones realizado por el propietario, Google ya no devuelve RefererNotAllowedMapError para http://localhost:5173. Clave leída únicamente por Vite desde configuración privada; no copiada ni impresa.
+
+- Componente LocationCard del cliente con Google REAL y datos sintéticos: una instancia Map, dos Circle, imágenes/teselas y atribución visibles. Actualización a17.021 conserva una instancia; retirada de muestra por botón usando teclado deja ambos círculos sin mapa. Capturas escritorio1280 y móvil390 revisadas, sin claves ni tokens visibles.
+- SharedTracking en /track con Google REAL y API de seguimiento simulada: fragmento retirado antes del callback de carga del SDK; una instancia, dos círculos, teselas y atribución. STALE visible; al llegar eraseAfter, temporizador frontend retira mapa/coordenadas. No se aceleró el reloj del equipo ni se acredita expiración backend con este fixture.
+- Recorridos finales:26 y27 solicitudes Google inspeccionadas en memoria; cero coincidencias de Bearer/Tracking, referencia/contacto sintéticos privados o token sintético bruto/codificado. Cero llamadas adicionales detectadas a Routes/Places/Geocoding; sin errores de consola ni violaciones CSP. No HAR ni URLs/cabeceras persistidas. La inspección no es una garantía exhaustiva sobre futuras versiones del SDK.
+- CSP efectiva del arnés: copia de la política nginx.conf en headers Vite, con JSX automático sin React Refresh. No ejecuta ni certifica nginx desplegado. SDK fallido/fallback textual ya observado realmente en el intento anterior rechazado por Google.
+
+Comandos: node scripts/verify-google-real.mjs; GOOGLE_REAL_SHARED=true para la segunda superficie; prettier y eslint del arnés PASS. Resultados sanitizados y capturas en test-results/google-real y test-results/google-real-shared. Durante preparación de /track hubo un intento sin llamadas Google por connect-src hacia API HTTP externa; se alineó únicamente la API simulada al mismo origen del arnés. Un selector del fixture de cliente y un ajuste de finales CRLF provocaron recorridos incompletos/una interrupción antes del recorrido final aprobado. No se interpretan como defectos del producto. No se modificó código funcional ni se repitieron suites/build del producto ya aprobados.
+
+Límites: se valida SDK real dentro de los componentes existentes, no login/detalle completo → backend real → PostgreSQL. Retirada al ocultar pestaña, controles internos de Google por teclado y hosting/nginx real permanecen sin nueva acreditación real; conservan sólo pruebas previas cuando corresponda. No activación, backend, Docker, producción, commit, push ni despliegue. V1.18 no declarada completa.
+
+## 2026-10-07 — Google real desde checkout principal: bloqueo de referencia
+
+Directorio confirmado: C:/Users/zorgl/Documents/mandaria-frontend, rama v1.18-GPS_seguimiento_temporal, base f36f771. La clave VITE_GOOGLE_MAPS_API_KEY sí está disponible aquí; la comprobación anterior de ausencia correspondía al worktree de Codex y no a este checkout. No se copió, imprimió ni registró la clave.
+
+Arnés scripts/verify-google-real.mjs: Maps JavaScript API REAL con LocationCard y datos sintéticos, sin backend real. Origen local http://localhost:5173. Resultado: RefererNotAllowedMapError de Google; requiere autorizar ese origen en las restricciones Web de la clave. No se modificaron restricciones ni credenciales. SDK llegó a crear mapa y dos círculos, pero Google rechazó el origen y no cargó teselas: NO aprobado como mapa funcional. La interfaz retiró el mapa y mostró fallback textual.
+
+Inspección en memoria de 16 solicitudes Google: sin coincidencias de Authorization Bearer/Tracking, marcador MDR privado sintético ni contacto sintético; cero llamadas adicionales detectadas a Routes/Places/Geocoding. No se guardaron HAR, URLs ni cabeceras; sólo contadores y códigos sanitizados en test-results/google-real/result.json. La ausencia de coincidencias tiene el alcance limitado de esta carga rechazada, no certifica todo el SDK autorizado.
+
+La política CSP de nginx.conf se suministró como header del servidor local Vite: cero violaciones en el intento Google, pero no se ejecutó nginx ni se certificaron headers desplegados. Intentos iniciales del arnés, sin solicitudes Google: React Refresh incompatible con scripts inline restringidos; se deshabilitó ese plugin sólo en el arnés y se usó JSX automático. Otra muestra sintética tenía accuracy120m fuera del contrato; se corrigió a40m. No defectos nuevos del frontend demostrados.
+
+Pendiente tras autorización del origen: teselas/atribución efectiva, actualización sin reconstrucción, retirada y caducidad con mapa funcional, móvil/escritorio/teclado, /track y eliminación del fragmento antes del SDK, inspección completa de tráfico y recorrido con backend real. Pruebas anteriores simuladas/backend mantienen su alcance independiente. No se generaron capturas de la carga rechazada ni se cambió configuración operativa, backend o producción. Sin Docker, activación, commit, push o despliegue.
+
 ## 2026-10-06 — Continuación V1.18 real: transferencia y fronteras temporales
 
 PASS nuevos con Chromium → Nest real → PostgreSQL18.6 aislado: transferencia (antiguo DRIVER sin acceso, receptor con nueva muestra, custodia única/progreso/ledger), incidencia sin coordenadas en ambas superficies, retorno terminal sin restauración por respuesta HTTP antigua, STALE60s+1ms, purga600s, vencimiento24h y ambas ramas de min(vencimiento,cierre+1h). Frontend e395929 + cambios previos; backend b97b9d1be54a2c37601e51990d66ccaf73d0203f; migraciones41/42. Bases exclusivas boundaries/grace, no fuente modificada.

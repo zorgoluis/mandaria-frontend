@@ -1,0 +1,64 @@
+{
+  "frontend": "f36f771 + existing documentation/harness changes",
+  "backend": "b97b9d1be54a2c37601e51990d66ccaf73d0203f",
+  "identity": {
+    "identity": [
+      {
+        "db": "mandaria_v118_google_race3_20261007_test",
+        "version": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit"
+      }
+    ],
+    "migrations": [
+      {
+        "migration_name": "20261007000100_location_tracking"
+      },
+      {
+        "migration_name": "20261007000200_location_policy_epoch"
+      }
+    ],
+    "backend": "b97b9d1be54a2c37601e51990d66ccaf73d0203f",
+    "locationDistSha256": "68b142d137ad8da653b429fed840bab6ff2920261a9addd64d169a5201033704"
+  },
+  "results": {
+    "database": "mandaria_v118_google_race3_20261007_test",
+    "results": [
+      {
+        "name": "Customer detail: real login, GPS API and Google tiles/circles",
+        "result": "PASS"
+      },
+      {
+        "name": "Real tracking link and anonymous /track, fragment removed before SDK",
+        "result": "PASS"
+      },
+      {
+        "name": "Second DRIVER sample updates both real maps without reconstruction",
+        "result": "PASS"
+      },
+      {
+        "name": "Authorized DRIVER incident removes coordinates and both maps",
+        "result": "PASS"
+      },
+      {
+        "name": "Real pre-incident GPS response completes after withdrawal and cannot restore marker",
+        "result": "PASS"
+      }
+    ],
+    "errors": []
+  },
+  "network": {
+    "google": 66,
+    "leaks": 0,
+    "additional": 0,
+    "errors": [],
+    "csp": [],
+    "oldResponseSample": true,
+    "oldAborted": false,
+    "responseCompletedAfterWithdrawalMs": 3
+  },
+  "limitations": [
+    "Synthetic DRIVER publisher, not a mobile app",
+    "Vite uses local nginx CSP header, not deployed nginx",
+    "CDP network shaping only; no API interception or fabricated HTTP responses",
+    "Google key/tokens/URLs/headers not persisted"
+  ]
+}
