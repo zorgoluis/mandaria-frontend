@@ -1,3 +1,4 @@
+import { ShippingPaymentBlock } from '../shipping/Payment'
 import { legacyProjection } from '../dispatch/rules'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { ExecutionPanel, ExecutionProgress } from '../execution/components'
@@ -104,15 +105,21 @@ export function DriverPortal({
             fleet
           />
         )}
-        <CollectionInstructionsBlock
-          value={query.data.activeDeliveryAssignment?.collectionInstructions}
-          collectionActionAllowed={
-            query.data.activeDeliveryAssignment?.execution
-              ? query.data.activeDeliveryAssignment.collectionActionAllowed ===
-                true
-              : undefined
-          }
-        />
+        {query.data.activeDeliveryAssignment?.shippingPayment != null ? (
+          <ShippingPaymentBlock
+            value={query.data.activeDeliveryAssignment.shippingPayment}
+          />
+        ) : (
+          <CollectionInstructionsBlock
+            value={query.data.activeDeliveryAssignment?.collectionInstructions}
+            collectionActionAllowed={
+              query.data.activeDeliveryAssignment?.execution
+                ? query.data.activeDeliveryAssignment
+                    .collectionActionAllowed === true
+                : undefined
+            }
+          />
+        )}
         <Empty
           title="Todavía no puedes tomar servicios"
           description={blocked}
@@ -158,6 +165,13 @@ export function PaymentBlock({
   executionFields?: ExecutionFields
   beforeTaking?: boolean
 }) {
+  if (executionFields?.shippingPayment != null && !executionFields.execution)
+    return (
+      <ShippingPaymentBlock
+        value={executionFields.shippingPayment}
+        offer={beforeTaking}
+      />
+    )
   if (executionFields?.execution)
     return (
       <DetailedPayment
@@ -252,7 +266,11 @@ function ServiceCard({ dispatch }: { dispatch: DriverDispatch }) {
               : ''}
           </p>
         )}
-      <CollectionInstructionsBlock value={dispatch.collectionInstructions} />
+      {dispatch.shippingPayment != null ? (
+        <ShippingPaymentBlock value={dispatch.shippingPayment} offer />
+      ) : (
+        <CollectionInstructionsBlock value={dispatch.collectionInstructions} />
+      )}
       <Link
         className="button"
         to={`/driver/services/${encodeURIComponent(dispatch.id)}`}
@@ -768,14 +786,18 @@ function MyService({ me }: { me: DriverSelf }) {
           {active.execution && (
             <ExecutionProgress execution={active.execution} fleet />
           )}
-          <CollectionInstructionsBlock
-            value={active.collectionInstructions}
-            collectionActionAllowed={
-              active.execution
-                ? active.collectionActionAllowed === true
-                : undefined
-            }
-          />
+          {active.shippingPayment != null ? (
+            <ShippingPaymentBlock value={active.shippingPayment} />
+          ) : (
+            <CollectionInstructionsBlock
+              value={active.collectionInstructions}
+              collectionActionAllowed={
+                active.execution
+                  ? active.collectionActionAllowed === true
+                  : undefined
+              }
+            />
+          )}
           <p className="panel-note">
             La asignación la gestiona tu proveedor. Los avances y la entrega
             detallada se registran desde la app del repartidor.

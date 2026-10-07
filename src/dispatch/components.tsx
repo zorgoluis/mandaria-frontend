@@ -1,3 +1,4 @@
+import { ShippingPaymentBlock } from '../shipping/Payment'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { DetailedPayment } from '../execution/payment'
 import type { ExecutionFields } from '../execution/types'
@@ -68,12 +69,21 @@ export function MoneyBlock({
   collectionInstructions,
   executionFields,
   compact = false,
+  offer = false,
 }: {
   service: DispatchService
   collectionInstructions?: CollectionInstructions
   executionFields?: ExecutionFields
   compact?: boolean
+  offer?: boolean
 }) {
+  if (executionFields?.shippingPayment != null && !executionFields.execution)
+    return (
+      <ShippingPaymentBlock
+        value={executionFields.shippingPayment}
+        offer={offer}
+      />
+    )
   if (executionFields?.execution)
     return (
       <DetailedPayment
@@ -205,6 +215,7 @@ export function ServiceCard({
             collectionInstructions={dispatch.collectionInstructions}
             executionFields={dispatch}
             compact
+            offer={dispatch.status === 'OPEN'}
           />
           <p className="credit-chip">
             Cuesta {creditCostLabel(dispatch.creditCost)}

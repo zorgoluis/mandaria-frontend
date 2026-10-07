@@ -1,3 +1,4 @@
+import { CustomerOperationNotice } from '../customer/pages'
 import { useEffect, useRef, useState } from 'react'
 import { ExecutionRecovery } from '../execution/components'
 import { NavLink, Outlet, Link } from 'react-router-dom'
@@ -64,6 +65,7 @@ export function AdminLayout() {
   }, [open])
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
+    { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ...(admin
       ? [
@@ -251,6 +253,7 @@ export function AdminLayout() {
         </header>
         <main id="main-content">
           <ExecutionRecovery />
+          <CustomerOperationNotice />
           <Outlet />
         </main>
         <footer className="app-footer">

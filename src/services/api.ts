@@ -76,11 +76,26 @@ async function transport<T>(
     if (signal?.aborted) throw error
     throw normalizeError(0, null)
   }
-  const data: unknown =
-    response.status === 204
-      ? undefined
-      : await response.json().catch(() => undefined)
-  if (!response.ok) throw normalizeError(response.status, data)
+  let data: unknown
+  if (response.status !== 204) {
+    try {
+      data = await response.json()
+    } catch (error) {
+      // A received status does not prove we received the command receipt.
+      // Never turn an interrupted/truncated successful response into success.
+      if (signal?.aborted) throw error
+      throw normalizeError(response.ok ? 0 : response.status, null)
+    }
+  }
+  if (!response.ok) {
+    const error = normalizeError(response.status, data)
+    const value = response.headers.get('Retry-After')
+    if (value)
+      error.retryAfterMs = Number.isFinite(Number(value))
+        ? Math.max(0, Number(value) * 1000)
+        : Math.max(0, Date.parse(value) - Date.now()) || 0
+    throw error
+  }
   return data as T
 }
 async function refresh() {

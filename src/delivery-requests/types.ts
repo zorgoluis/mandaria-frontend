@@ -25,8 +25,8 @@ export interface IntegrationClientSummary {
 export interface DeliveryRequestSummary {
   id: string
   publicId: string
-  integrationClientId: string
-  integrationClient: IntegrationClientSummary
+  integrationClientId: string | null
+  integrationClient: IntegrationClientSummary | null
   externalReference: string | null
   status: DeliveryRequestStatus
   requestedAt: string
