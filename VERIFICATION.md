@@ -1121,3 +1121,8 @@ V1.4 no se implementa aquí. Sus módulos de repartidores y vehículos podrán a
 - Comparación de archivos publicables y assets compilados contra los secretos reales del backend: ninguna coincidencia, sin imprimir valores.
 - Capturas responsive regeneradas después de completar las transiciones del drawer; cierre con Escape verificado.
 - Prueba adicional de respuesta HTTP tardía tras logout: evita afectar sesiones posteriores.
+## 2026-10-06 — Google Maps V1.18 (SDK simulado)
+
+Implementación y configuración: [V1.18-WEB](docs/V1.18-WEB.md#google-maps--2026-10-06), [decisión cartográfica](docs/V1.18-MAP-PROPOSAL.md). Conserva implementación previa. 64/64 pruebas focalizadas (google-map, google-loader, location, api); typecheck:test, lint y build PASS. Advertencia de tamaño Root680.94kB, sin error. Primer tsc encontró EPERM al escribir caché compartida; reejecución autorizada aprobada. Una ejecución posterior de lint detectó el TSX temporal del arnés visual; el arnés ahora elimina sus fuentes temporales al cerrar y lint volvió a pasar.
+
+Arnés navegador scripts/verify-google-map.mjs PASS con Google interceptado por SDK sintético: móvil/escritorio, retirada mediante teclado, una carga, sin cabeceras de sesión y referencia sólo origen. Capturas en test-results/google-map. No clave real leída ni servicios Google invocados. Esto no acredita SDK/teselas/CSP reales. Pendiente comprobación con clave restringida del propietario y hosting equivalente; no cambia resultados PostgreSQL anteriores. nginx revisado estáticamente, Docker no ejecutado. Sin backend, activación, commit, push ni despliegue.

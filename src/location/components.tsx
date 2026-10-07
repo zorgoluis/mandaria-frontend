@@ -7,6 +7,7 @@ import { locationService, sharedLocation } from './service'
 import { decimal, terminalLocation, usableSample } from './snapshot'
 import { captureTrackingFragment, takeTrackingToken } from './fragment'
 import type { LocationView } from './types'
+import { LocationMap } from './LocationMap'
 const reasons: Record<string, string> = {
   NO_ASSIGNMENT: 'Sin asignación vigente.',
   NO_SAMPLE: 'Sin señal GPS recibida.',
@@ -57,6 +58,13 @@ export function LocationCard({
       )}
       {sample ? (
         <>
+          <LocationMap
+            sample={sample}
+            stale={
+              now > Date.parse(sample.freshUntil) ||
+              view.observation.freshness === 'STALE'
+            }
+          />
           <InfoGrid
             items={[
               ['Posición', `${sample.latitude}, ${sample.longitude}`],

@@ -2832,3 +2832,5 @@ dialog .money-block {
   margin-block: 8px;
   white-space: normal;
 }
+.location-map { width: 100%; height: 320px; border-radius: 12px; }
+.location-map-panel { margin-block: 1rem; }
