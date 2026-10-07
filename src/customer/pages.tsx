@@ -1,3 +1,5 @@
+import { OwnerLocation } from '../location/components'
+import { TrackingLinks } from '../location/TrackingLinks'
 import { AttemptRecovery } from './AttemptRecovery'
 import { retainCustomerSnapshot } from './tracking'
 import { consentFromContext } from './consent'
@@ -688,6 +690,14 @@ export function CustomerRequest() {
           ]}
         />
       )}
+      <OwnerLocation
+        key={`${user?.id}:${publicId}`}
+        publicId={publicId}
+        stop={terminal}
+        publicVersion={state.data.publicVersion}
+        attention={state.data.executionProgress?.attentionRequired}
+      />
+      <TrackingLinks publicId={publicId} terminal={terminal} />
       <ShippingPaymentBlock value={state.data.shippingPayment} />
       {custody && (
         <p className="notice">

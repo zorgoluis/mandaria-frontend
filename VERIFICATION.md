@@ -1,3 +1,68 @@
+## 2026-10-06 — Continuación V1.18 real: transferencia y fronteras temporales
+
+PASS nuevos con Chromium → Nest real → PostgreSQL18.6 aislado: transferencia (antiguo DRIVER sin acceso, receptor con nueva muestra, custodia única/progreso/ledger), incidencia sin coordenadas en ambas superficies, retorno terminal sin restauración por respuesta HTTP antigua, STALE60s+1ms, purga600s, vencimiento24h y ambas ramas de min(vencimiento,cierre+1h). Frontend e395929 + cambios previos; backend b97b9d1be54a2c37601e51990d66ccaf73d0203f; migraciones41/42. Bases exclusivas boundaries/grace, no fuente modificada.
+
+Detalle de comandos, aislamiento, errores del arnés corregidos, evidencia y límites en [V1.18-WEB](docs/V1.18-WEB.md#continuación-real--2026-10-06-2026-10-07-utc); [resultados](docs/checks/v118-boundaries.json). LocationClock controlado únicamente en Nest de pruebas; respuestas API reales y persistencia PostgreSQL. No se aceleró ni acreditó el worker que usa reloj SQL real. Temporizadores frontend con fixtures y once escenarios reales anteriores de respuesta perdida/reconciliación se conservan separados, sin repetición.
+
+Nuevo scripts/verify-location-boundaries.mjs: node --check PASS, eslint focalizado PASS, Prettier aplicado. Ejecuciones finales normal con V118_SKIP_TIME=true y V118_EARLY_EXPIRY=true PASS; límites60/600 aprobados en primer recorrido conservado. No defectos nuevos de producto demostrados; no se repitieron tipos/build/suites previamente aprobados al no cambiar producto. Revisión visual de captura escritorio transferencia y móvil terminal sin coordenadas ni secretos. Clúster y procesos propios detenidos, datos conservados.
+
+[Propuesta cartográfica](docs/V1.18-MAP-PROPOSAL.md): Leaflet/raster MapTiler sujeto a evaluación comercial, privacidad, claves/orígenes, atribución y CSP. Sin dependencias, claves, proveedor ni configuración nuevos. Sin backend, Docker, producción, commit, push o despliegue. V1.18 no declarada completa/activada.
+
+## 2026-10-06 — V1.18 Web: GPS y enlaces temporales (local)
+
+Conservado V1.17 sobre frontend e395929 / codex/merge-main-qa. Backend b97b9d1be54a2c37601e51990d66ccaf73d0203f consultado únicamente como referencia. Implementación/procedimiento/archivos: [V1.18-WEB](docs/V1.18-WEB.md); [resultados estructurados](docs/checks/v118-web.json). Sin activación, commit, push, despliegue ni cambios backend/.env/nginx. No declara V1.18 completa.
+
+### Cambios
+
+Módulo src/location, posición/frescura y enlaces en detalle cliente, /track público separado de AuthProvider, captura temprana y reapertura de fragmento, transporte Tracking separado, marcadores mínimos y cuatro estados contractuales. Orden BigInt, invalidación por estado/generación, caducidad local, pausa/revalidación, backoff/jitter/Retry-After. Catálogo añade dos scopes sin preselección. Portal /developers/location y sincronizador con cinco operaciones adicionales B2B revisadas. No existe /close de tracking. No biblioteca cartográfica disponible: coordenadas y precisión, mapa pendiente.
+
+### Pruebas focalizadas con fixtures
+
+- Primer lote:170 casos,157 PASS y13 fallos de expectativas antiguas (catálogo nueve scopes y15 operaciones públicas). Se actualizaron a once scopes y20 operaciones revisadas; no se cambió el backend para satisfacer pruebas.
+- `npx vitest run src/test/flows.test.tsx src/test/developers.test.tsx src/test/integration-credentials-api.test.ts --maxWorkers=1`:79/79 PASS.
+- `npx vitest run src/test/location.test.tsx src/test/customer.test.tsx src/test/customer-reconciliation.test.tsx src/test/api.test.ts --maxWorkers=1`:98/98 PASS. **177 casos únicos en siete archivos**, no sumar repetidos.
+- Tras ajustes finales de caducidad/recibos: location.test.tsx29/29 PASS.
+- Cubre frescura60s/caducidad600s, BigInt, respuestas cruzadas/transferencia/incidencia/terminal, rol, scopes opt-in, fragmento/recarga, transporte sin JWT, Retry-After, pausa y foreground, doble clic, emisión perdida/replay sin secreto, revocación incierta, cuatro estados,409, actor distinto, respuesta tardía y datos mínimos persistidos. Servicios simulados: estos casos no acreditan transacciones backend.
+
+### Navegador → backend real → PostgreSQL
+
+PostgreSQL18.6 temporal exclusivo. El puerto anterior65063 rechazó bind (Permission denied de Windows); mismo clúster de pruebas iniciado sólo en127.0.0.1:55439 con opción de proceso. Nueva copia **mandaria_v118_web_20261007_test** desde **mandaria_v118_direct_order2_test**, migraciones41/42 comprobadas antes de mutaciones. No base comercial. Chromium→Vite4181→proxy43182→Nest real43181→PG55439. CWD temporal vacío; flags sólo del proceso; routing local_fake, correo local_outbox y webhooks polling0. Sin Docker, producción ni servicios externos.
+
+Comando: `node scripts/verify-location-real.mjs`. Continuación focalizada: `$env:V118_FINAL='true'; node scripts/verify-location-real.mjs` (después se retiró la variable). El script requiere esta copia sintética; no ejecutarlo contra una base desplegada. Preparación inicial encontró dos errores de harness: faltaba presupuesto de routing explícito y la política de cuotas no coincidía con la plantilla. Se alinearon únicamente variables del proceso con la plantilla; no se alteró backend ni se contó como integración aprobada esos intentos.
+
+| Caso real | Resultado |
+|---|---|
+| Titular CUSTOMER login y GPS TO_PICKUP | PASS, posición17.42/-93.38 y precisión12m de HTTP real |
+| Emisión y destinatario antes de recogida | PASS, sólo primera respuesta tiene URL; anónimo, fragmento retirado, sin GPS antes de PICKED_UP |
+| Destinatario después de PICKED_UP | PASS, GPS autorizado tras hitos sintéticos DRIVER por HTTP |
+| Recarga sin fragmento | PASS, pide enlace original sin recuperar token de storage |
+| Emisión aplicada con respuesta perdida | PASS, timeout20s + reload + GET APPLIED_SECRET_UNAVAILABLE, sin replay ni recuperación del secreto |
+| Revocación con respuesta perdida | PASS, marcador retenido + GET APPLIED_REVOKED y metadata actual |
+| Reabrir fragmento en misma pestaña | PASS tras corregir defecto de consumo del hash; no recarga completa obligatoria |
+| Enlace revocado | PASS, error genérico y ninguna coordenada |
+| Intento retenido antes de llegar a backend | PASS, PENDING_OR_UNKNOWN después de reload; emisión bloqueada |
+| Cierre técnico frente a ISSUE tardío | PASS, revoke explícito/revisión actual/UUID nueva; GET SUPERSEDED y POST original liberado recibe409 |
+| Privacidad y errores navegador | PASS, no URL/token compartido/password en storage; sin pageerror. Refresh token humano conserva estrategia V1.17 |
+
+Son ejecuciones reanudadas: seis casos del primer recorrido y cinco de la continuación, no once escenarios en una corrida ininterrumpida. Primer recorrido se detuvo al reabrir un enlace con navegación sólo de fragmento; se corrigió hashchange y se acreditó después. El proxy no fabrica JSON/estados: retiene cuerpo de respuesta real tras HTTP200 hasta timeout o guarda la petición original en memoria antes de enviarla. Luego la libera con misma clave/cuerpo. Sin operaciones físicas, confirmaciones de cobro ni entregas administrativas.
+
+### Visual y calidad
+
+Escritorio1440×1000, móvil390×844 y navegación Tab del destinatario con backend real; sin overflow móvil. Capturas sintéticas inspeccionadas en test-results/v118-real: owner-desktop.png, recipient-mobile.png, owner-reconciled.png, revoked-mobile.png. No se capturó la URL secreta ni contraseñas. La captura inicial aún muestra el aviso técnico de mapa pendiente; el texto final se simplificó a ubicación aproximada, visible en owner-reconciled.png.
+
+- `npm run typecheck:test`:PASS.
+- `npm run lint`:PASS.
+- `npm run build`:PASS, advertencia existente de chunk principal >500kB.
+- `node scripts/sync-public-b2b.mjs --backend C:/Users/zorgl/Documents/mandaria-backend`:PASS; sólo cinco artefactos públicos y hashes.
+- Mismo comando con `--check`:PASS.
+- `git diff --check`:PASS; avisos LF/CRLF sin conflictos.
+
+### Límites y pendientes
+
+No nuevo recorrido real de transferencia/incidencia/terminal, frontera exacta de caducidad, cambio de usuario o429 real; cubiertos por fixtures focalizados donde corresponde, sin afirmar controles backend por mocks. No mapa cartográfico ni APP DRIVER/dispositivo GPS. No validación productiva de headers/analítica, concurrencia masiva, cuotas comerciales o backups. Conservados todos los historiales de continuidad anteriores.
+
+Entorno cerrado: Chromium, Vite4181, proxy43182 y Nest43181 detenidos por el harness; PostgreSQL55439 detenido tras comprobar cero conexiones ajenas. Bases/evidencias conservadas, sin detener servicios preexistentes.
+
 ## 2026-10-06 — V1.17: navegador → backend real → PostgreSQL
 
 Validación nueva de los nueve escenarios solicitados, completada en ejecuciones reanudadas conservando la misma base. No es un recorrido completo ininterrumpido ni certificación de toda V1.17. No se repitieron las suites HTTP/fixtures aprobadas: únicamente recorridos fallidos/pendientes y regresiones de los defectos demostrados.

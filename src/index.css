@@ -2808,3 +2808,27 @@ dialog .money-block {
   border-radius: 12px;
   padding: 18px;
 }
+
+.shared-tracking {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 48px);
+}
+.location-panel {
+  padding: 24px;
+  margin-block: 20px;
+  overflow-wrap: anywhere;
+}
+.location-panel .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.location-panel input[readonly] {
+  width: 100%;
+  min-width: 0;
+}
+.location-panel button {
+  margin-block: 8px;
+  white-space: normal;
+}

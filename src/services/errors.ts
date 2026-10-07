@@ -1,4 +1,5 @@
 export class ApiError extends Error {
+  retryAfterMs = 0
   status: number
   /** Stable backend code (DomainException), e.g. OUT_OF_SERVICE_AREA. Never shown raw. */
   code: string | null

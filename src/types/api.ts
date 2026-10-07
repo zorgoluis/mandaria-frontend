@@ -67,6 +67,8 @@ export const scopes = [
   'quotes:accept',
   'deliveries:create',
   'deliveries:read',
+  'deliveries:location:read',
+  'deliveries:tracking-links:manage',
   'deliveries:cancel',
 ] as const
 export type Scope = (typeof scopes)[number]

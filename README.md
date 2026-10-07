@@ -1,5 +1,9 @@
 # Mandaria Web — V1.11-B
 
+## V1.18 Web — GPS y enlaces temporales (local)
+
+Detalle cliente con posición/frescura y gestión de enlaces; `/track` anónimo con secreto sólo en memoria y `/developers/location` B2B. Recuperación propia de V1.18, sin reutilizar estados V1.17. Contratos, privacidad, procedimiento, validación y pendientes: [V1.18-WEB](docs/V1.18-WEB.md). Mapa cartográfico y APP DRIVER pendientes; no se declara V1.18 completa ni activada. Continuidad V1.17 conservada.
+
 ## V1.17 Web — clientes directos y pagador (2026-10-06)
 
 Interfaz local de identidad cliente, capacidades, MPQ/conversión/consentimiento final, seguimiento, política B2B SUPER_ADMIN y shippingPayment operativo. Conserva roles operativos y lectura de ejecución detallada; no incorpora cobro ni avances DRIVER web. Admisión no activada, sin disponibilidad productiva acreditada. Recuperación durable mínima, límites contractuales, rutas/archivos y procedimiento: [V1.17-WEB](docs/V1.17-WEB.md).
