@@ -5,6 +5,7 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { env } from '../config/env'
 import trackingGuide from './tracking.md?raw'
+import locationGuide from './location.md?raw'
 
 const assets = '/developers/assets/'
 const downloads = [
@@ -55,6 +56,7 @@ const nav = [
   ['authentication', 'Autenticación y scopes'],
   ['prequotes', 'Precotización y aceptación'],
   ['execution', 'Progreso y resultado'],
+  ['location', 'GPS y enlaces temporales'],
   ['webhooks', 'Webhooks'],
   ['errors', 'Errores e idempotencia'],
   ['reference', 'Referencia API'],
@@ -109,6 +111,17 @@ export function DeveloperPortal() {
               element={<Guide title="Webhooks" file="B2B-WEBHOOKS.md" />}
             />
             <Route path="reference" element={<Reference />} />
+            <Route
+              path="location"
+              element={
+                <>
+                  <h1>GPS y enlaces temporales</h1>
+                  <Markdown remarkPlugins={[remarkGfm]}>
+                    {locationGuide}
+                  </Markdown>
+                </>
+              }
+            />
             <Route
               path="execution"
               element={

@@ -167,8 +167,10 @@ export function DeliveryRequestsPage() {
                     label: 'Origen',
                     render: (row) => (
                       <span className="cell-meta">
-                        {row.integrationClient.name}
-                        <small>{row.integrationClient.code}</small>
+                        {row.integrationClient?.name ?? 'Cliente directo'}
+                        <small>
+                          {row.integrationClient?.code ?? 'Mandaria'}
+                        </small>
                       </span>
                     ),
                   },
@@ -433,7 +435,7 @@ function DeliveryRequestContent({
     <>
       <PageTitle
         title={item.publicId}
-        description={`Solicitado por ${item.integrationClient.name}`}
+        description={`Solicitado por ${item.integrationClient?.name ?? 'cliente directo'}`}
         back={back}
         action={
           item.status === 'CREATED' && (
@@ -455,13 +457,17 @@ function DeliveryRequestContent({
             ['Estado', <Badge value={item.status} />],
             [
               'Solicitado por',
-              <Link
-                className="entity-name"
-                to={`/integrations/${encodeURIComponent(item.integrationClient.id)}`}
-              >
-                {item.integrationClient.name}
-                <small>{item.integrationClient.code}</small>
-              </Link>,
+              item.integrationClient ? (
+                <Link
+                  className="entity-name"
+                  to={`/integrations/${encodeURIComponent(item.integrationClient.id)}`}
+                >
+                  {item.integrationClient.name}
+                  <small>{item.integrationClient.code}</small>
+                </Link>
+              ) : (
+                'Cliente directo'
+              ),
             ],
             ['Referencia externa', item.externalReference ?? NOT_PROVIDED],
             ['Solicitada', date(item.requestedAt)],

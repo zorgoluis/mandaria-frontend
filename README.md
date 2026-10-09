@@ -1,5 +1,15 @@
 # Mandaria Web — V1.11-B
 
+## V1.18 Web — GPS y enlaces temporales (local)
+
+Detalle cliente con posición/frescura y gestión de enlaces; `/track` anónimo con secreto sólo en memoria y `/developers/location` B2B. Recuperación propia de V1.18, sin reutilizar estados V1.17. Contratos, privacidad, procedimiento, validación y pendientes: [V1.18-WEB](docs/V1.18-WEB.md). Mapa cartográfico y APP DRIVER pendientes; no se declara V1.18 completa ni activada. Continuidad V1.17 conservada.
+
+## V1.17 Web — clientes directos y pagador (2026-10-06)
+
+Interfaz local de identidad cliente, capacidades, MPQ/conversión/consentimiento final, seguimiento, política B2B SUPER_ADMIN y shippingPayment operativo. Conserva roles operativos y lectura de ejecución detallada; no incorpora cobro ni avances DRIVER web. Admisión no activada, sin disponibilidad productiva acreditada. Recuperación durable mínima, límites contractuales, rutas/archivos y procedimiento: [V1.17-WEB](docs/V1.17-WEB.md).
+
+Validación frontend: 227 pruebas pertinentes, tipos, lint, build y recorrido visual con fixtures. Integración real A–E pendiente; no declarar V1.17 completa sólo por esta Web. Continuidad anterior preservada.
+
 ## Portal: seguimiento público B2B — 2026-10-04
 
 Actualización editorial posterior: OpenAPI público resincronizado; la descripción de executionProgress ya indica ordenar fotografías de una misma solicitud mediante publicVersion. Queda cerrada la discrepancia editorial registrada inicialmente en VERIFICATION. revision interna y expectedRevision de concurrencia permanecen sin cambios. No implica despliegue.
@@ -372,7 +382,7 @@ Sidebar y rutas usan el rol de `/auth/me`; escribir una URL prohibida muestra 40
 - Sin HTML dinámico peligroso, persistencia de caché, analytics ni logs de tokens. Errores del backend pasan por mensajes seguros permitidos; no se muestran SQL, trazas ni texto arbitrario.
 - Client Secrets de integración **nunca se almacenan permanentemente en Mandaria Web**. Sólo viven en estado local del diálogo, se eliminan al cerrar/desmontar/cambiar detalle y nunca se incluyen en QueryClient. El portapapeles se usa sólo por acción explícita y pertenece al sistema del usuario.
 - Rotar conserva la credencial anterior según backend: la UI lo advierte y requiere revocación explícita. Revocación y cambios de estado tienen confirmación.
-- Invitaciones: la web nunca muestra ni persiste tokens de activación ni contraseñas. `/activate-account` retira el token de la URL al cargar, lo envía sólo en el body sin cabecera de sesión (`publicApi`) y declara `no-referrer`. Nadie define contraseñas ajenas.
+- Invitaciones: la web nunca muestra ni persiste tokens de activación ni contraseñas. `/activate-account` retira el token de la URL al cargar, lo envía sólo en el body sin cabecera de sesión (`publicApi`) y limita la referencia global al origen (sin ruta, query ni fragmento). Nadie define contraseñas ajenas.
 - La web nunca llama a `/integrations/token` ni utiliza clientId/clientSecret para su propio login.
 - Servir producción con HTTPS y origen CORS exacto. Nginx incluye CSP, anti-frame, no-sniff y referrer policy. `connect-src` permite HTTP/HTTPS para una imagen sin dominio fijo; restringirlo al origen real del backend al desplegar. No hay scripts ni fuentes remotos.
 
@@ -394,3 +404,6 @@ docker run --rm -p 8080:80 mandaria-web:v1.4
 V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. V1.6.1-B incorpora administradores y repartidores reales mediante invitación segura, sin acceso al servidor. V1.7-B abre la visibilidad de despachos y la toma de servicios, V1.8-B asigna repartidor y vehículo, V1.9 incorpora al repartidor independiente y su portal, y V1.10-F administra los créditos Mandaria que cuesta adjudicarse un servicio. No se implementaron pasarela de pago, compra de créditos, wallet en pesos, sockets, GPS, tracking, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
 
 Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.
+## Mapa Google opcional (V1.18)
+
+Configurar privadamente `VITE_GOOGLE_MAPS_API_KEY` en `.env.local` para desarrollo (reiniciar Vite) o en el entorno de build. `.env.example` deja el valor vacío. Dockerfile admite el build arg del mismo nombre; no basta añadirlo al contenedor después de compilar. No requiere Map ID. La clave Web es pública: restringir dominios y Maps JavaScript API; nunca reutilizar claves backend. Sin clave, el seguimiento textual funciona normalmente. Ver [configuración, CSP, privacidad y validación pendiente](docs/V1.18-MAP-PROPOSAL.md).

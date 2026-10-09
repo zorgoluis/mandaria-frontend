@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, Eye, EyeOff, ShieldCheck, Route } from 'lucide-react'
 import { useAuth } from './context'
 import { ActionForm, Field } from '../components/ui'
@@ -49,7 +49,11 @@ export function Login() {
         <div className="login-form">
           <span className="eyebrow">BIENVENIDO A MANDARIA</span>
           <h2>Tu operación empieza aquí.</h2>
-          <p>Ingresa con tu cuenta administrativa.</p>
+          <p>Ingresa con tu cuenta Mandaria.</p>
+          <p>
+            <Link to="/customer/register">Crear perfil cliente</Link> ·{' '}
+            <Link to="/customer/recovery">Recuperar contraseña</Link>
+          </p>
           {auth.expired && (
             <p className="notice" role="status">
               Tu sesión expiró. Inicia sesión nuevamente.

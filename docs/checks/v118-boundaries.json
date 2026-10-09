@@ -1,0 +1,116 @@
+{
+  "frontend": "e395929 + cambios locales V1.18 conservados",
+  "backend": "b97b9d1be54a2c37601e51990d66ccaf73d0203f",
+  "runs": [
+    {
+      "path": "test-results/v118-boundaries/time-results.json",
+      "database": "mandaria_v118_boundaries_20261007_test",
+      "results": [
+        {
+          "name": "Backend60s/600s boundaries through both browsers; durable PostgreSQL purge at600s",
+          "result": "PASS"
+        }
+      ],
+      "boundaryEvidence": [
+        {
+          "label": "60s inclusive",
+          "evaluatedAt": "2026-10-07T05:14:01.758Z",
+          "freshness": "RECENT",
+          "samplePresent": true
+        },
+        {
+          "label": "60s + 1ms",
+          "evaluatedAt": "2026-10-07T05:14:01.759Z",
+          "freshness": "STALE",
+          "samplePresent": true
+        },
+        {
+          "label": "600s - 1ms",
+          "evaluatedAt": "2026-10-07T05:23:01.757Z",
+          "freshness": "STALE",
+          "samplePresent": true
+        },
+        {
+          "label": "600s exact",
+          "evaluatedAt": "2026-10-07T05:23:01.758Z",
+          "freshness": "UNAVAILABLE",
+          "samplePresent": false
+        }
+      ],
+      "errors": [
+        {
+          "step": "absolute24h",
+          "message": "response.json: Protocol error (Network.getResponseBody): No data found for resource with given identifier\nResponse body is not available for a response that was navigated away from. Read response.body() before triggering any navigation."
+        }
+      ]
+    },
+    {
+      "path": "test-results/v118-boundaries/results.json",
+      "database": "mandaria_v118_boundaries_20261007_test",
+      "results": [
+        {
+          "name": "Absolute24h: before expiry200, exact boundary404, reads never renew expiry",
+          "result": "PASS"
+        },
+        {
+          "name": "Authorized DRIVER incident removes GPS for customer and recipient",
+          "result": "PASS"
+        },
+        {
+          "name": "Transfer keeps one custodian/progress/no debit; old DRIVER denied; only recipient sample replaces GPS",
+          "result": "PASS"
+        },
+        {
+          "name": "RETURNED terminal removes GPS; held preterminal HTTP response cannot restore it",
+          "result": "PASS"
+        },
+        {
+          "name": "Grace=min(expiresAt,terminal+1h): terminal+1h enforced",
+          "result": "PASS"
+        }
+      ],
+      "boundaryEvidence": [
+        {
+          "label": "24h exact",
+          "at": "2026-10-08T05:18:24.648Z",
+          "status": 404
+        },
+        {
+          "label": "terminal+1h earlier than expiry",
+          "expiresAt": "2026-10-08T05:18:24.648Z",
+          "closedAt": "2026-10-07T05:18:27.791Z",
+          "until": "2026-10-07T06:18:27.791Z",
+          "beforeStatus": 200,
+          "atStatus": 404
+        }
+      ],
+      "errors": []
+    },
+    {
+      "path": "test-results/v118-grace/results.json",
+      "database": "mandaria_v118_grace_20261007_test",
+      "results": [
+        {
+          "name": "Grace=min(expiresAt,terminal+1h): earlier absolute expiry enforced",
+          "result": "PASS"
+        }
+      ],
+      "boundaryEvidence": [
+        {
+          "label": "expiry earlier than terminal+1h",
+          "expiresAt": "2026-10-07T05:48:47.234Z",
+          "closedAt": "2026-10-07T05:18:47.584Z",
+          "until": "2026-10-07T05:48:47.234Z",
+          "beforeStatus": 200,
+          "atStatus": 404
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "notes": [
+    "El error de lectura Playwright del primer recorrido no invalida las fronteras anteriores aprobadas; el recorrido posterior acredita 24h.",
+    "La segunda ejecución fue interrumpida por espera del arnés; se corrigió el filtro GET y se retiró finished().",
+    "Sin modificaciones del producto en esta continuación."
+  ]
+}

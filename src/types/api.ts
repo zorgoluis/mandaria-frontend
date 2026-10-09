@@ -1,4 +1,4 @@
-export type Role = 'SUPER_ADMIN' | 'PROVIDER_ADMIN' | 'DRIVER'
+export type Role = 'SUPER_ADMIN' | 'PROVIDER_ADMIN' | 'DRIVER' | 'CUSTOMER'
 export interface User {
   id: string
   email: string
@@ -67,6 +67,8 @@ export const scopes = [
   'quotes:accept',
   'deliveries:create',
   'deliveries:read',
+  'deliveries:location:read',
+  'deliveries:tracking-links:manage',
   'deliveries:cancel',
 ] as const
 export type Scope = (typeof scopes)[number]

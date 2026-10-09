@@ -107,9 +107,11 @@ it('public artifact includes only reviewed B2B paths and no admin security or en
       (n, methods) => n + Object.keys(methods).length,
       0,
     ),
-  ).toBe(15)
+  ).toBe(20)
   expect(
-    Object.keys(spec.paths).some((p) => /admin|provider|driver|auth\//.test(p)),
+    Object.keys(spec.paths).some((p) =>
+      /admin|provider|driver|customer|shared|auth\//.test(p),
+    ),
   ).toBe(false)
   expect(Object.keys(spec.components.securitySchemes)).toEqual([
     'integration-bearer',

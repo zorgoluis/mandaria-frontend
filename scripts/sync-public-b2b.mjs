@@ -40,6 +40,11 @@ if (
   throw new Error('Unexpected public security schemes')
 // Expanding publication requires reviewing and updating this explicit operation list.
 const approved = new Set([
+  'get /api/v1/delivery-requests/{publicId}/location',
+  'get /api/v1/delivery-requests/{publicId}/tracking-link',
+  'post /api/v1/delivery-requests/{publicId}/tracking-link',
+  'post /api/v1/delivery-requests/{publicId}/tracking-link/revoke',
+  'get /api/v1/delivery-requests/{publicId}/tracking-link/attempt',
   'post /api/v1/integrations/token',
   'get /api/v1/integrations/me',
   'get /api/v1/integrations/scope-check',

@@ -20,15 +20,13 @@ vi.mock('../webhooks/service', () => ({
     summary: vi
       .fn()
       .mockResolvedValue({ events: 0, pending: 0, delivered: 0, exhausted: 0 }),
-    events: vi
-      .fn()
-      .mockResolvedValue({
-        items: [],
-        total: 0,
-        totalPages: 0,
-        page: 1,
-        pageSize: 20,
-      }),
+    events: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 20,
+    }),
   },
 }))
 vi.mock('../invitations/service', () => ({
@@ -242,6 +240,7 @@ describe('auth and permissions UX', () => {
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
+      'Mis envíos',
       'Dashboard',
       'Mi proveedor',
       'Servicios',
@@ -277,6 +276,7 @@ describe('auth and permissions UX', () => {
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
+      'Mis envíos',
       'Dashboard',
       'Integraciones',
       'Proveedores',
@@ -393,9 +393,13 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:location:read',
+        'deliveries:tracking-links:manage',
         'deliveries:cancel',
       ],
     },
+    { selected: ['deliveries:location:read'] },
+    { selected: ['deliveries:tracking-links:manage'] },
     { selected: ['prequotes:create'] },
     { selected: ['prequotes:read'] },
     { selected: ['prequotes:convert'] },
@@ -410,6 +414,8 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:location:read',
+        'deliveries:tracking-links:manage',
         'deliveries:cancel',
       ],
     },
@@ -440,6 +446,8 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:location:read',
+        'deliveries:tracking-links:manage',
         'deliveries:cancel',
       ])
       for (const option of options) expect(option).not.toBeChecked()

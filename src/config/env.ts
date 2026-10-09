@@ -16,6 +16,12 @@ export function parseEnv(values: Record<string, unknown>) {
     throw new Error(
       'VITE_API_URL debe ser un origen HTTP(S), sin /api/v1, rutas, credenciales ni parámetros.',
     )
-  return { apiUrl: url.toString().replace(/\/$/, '') }
+  return {
+    apiUrl: url.toString().replace(/\/$/, ''),
+    googleMapsApiKey:
+      typeof values.VITE_GOOGLE_MAPS_API_KEY === 'string'
+        ? values.VITE_GOOGLE_MAPS_API_KEY.trim()
+        : '',
+  }
 }
 export const env = parseEnv(import.meta.env)
