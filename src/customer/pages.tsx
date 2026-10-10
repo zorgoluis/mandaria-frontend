@@ -1,4 +1,7 @@
 import { OwnerLocation } from '../location/components'
+import { ApiError } from '../services/errors'
+import { LocationPicker } from './LocationPicker'
+import { validPosition, type SelectedLocation } from './location-selection'
 import { TrackingLinks } from '../location/TrackingLinks'
 import { AttemptRecovery } from './AttemptRecovery'
 import { retainCustomerSnapshot } from './tracking'
@@ -267,38 +270,9 @@ export function CustomerHome() {
     </>
   )
 }
-function Coordinates() {
-  return (
-    <>
-      {['Origen', 'Destino'].map((label, i) => (
-        <fieldset key={label}>
-          <legend>{label}</legend>
-          <Field label={`Latitud de ${label.toLowerCase()}`}>
-            <input
-              name={`lat${i}`}
-              type="number"
-              min={-90}
-              max={90}
-              step="0.000001"
-              required
-            />
-          </Field>
-          <Field label={`Longitud de ${label.toLowerCase()}`}>
-            <input
-              name={`lng${i}`}
-              type="number"
-              min={-180}
-              max={180}
-              step="0.000001"
-              required
-            />
-          </Field>
-        </fieldset>
-      ))}
-    </>
-  )
-}
 export function NewRequest() {
+  const [origin, setOrigin] = useState<SelectedLocation | null>(null)
+  const [destination, setDestination] = useState<SelectedLocation | null>(null)
   const { user } = useAuth(),
     navigate = useNavigate()
   const [search, setSearch] = useSearchParams()
@@ -362,7 +336,18 @@ export function NewRequest() {
       </p>
       <ActionForm
         submitLabel="Obtener precotización"
+        initialDirty
         onSubmit={async (d) => {
+          if (
+            !origin ||
+            !destination ||
+            !validPosition(origin) ||
+            !validPosition(destination)
+          )
+            throw new ApiError(
+              400,
+              'Selecciona un origen y un destino válidos antes de cotizar.',
+            )
           const conditions: DirectPrequoteDto['conditions'] = {
             conditionsVersion: 1,
             serviceType: 'LOCAL_DELIVERY',
@@ -370,14 +355,14 @@ export function NewRequest() {
               {
                 type: 'PICKUP',
                 sequence: 1,
-                latitude: Number(d.get('lat0')),
-                longitude: Number(d.get('lng0')),
+                latitude: Number(origin.lat.toFixed(6)),
+                longitude: Number(origin.lng.toFixed(6)),
               },
               {
                 type: 'DROPOFF',
                 sequence: 2,
-                latitude: Number(d.get('lat1')),
-                longitude: Number(d.get('lng1')),
+                latitude: Number(destination.lat.toFixed(6)),
+                longitude: Number(destination.lng.toFixed(6)),
               },
             ],
             packages: [
@@ -403,7 +388,12 @@ export function NewRequest() {
           setSearch({ prequote: r.prequote.publicId })
         }}
       >
-        <Coordinates />
+        <LocationPicker label="Origen" value={origin} onChange={setOrigin} />
+        <LocationPicker
+          label="Destino"
+          value={destination}
+          onChange={setDestination}
+        />
         <Field label="Categoría">
           <select name="category">
             {packageCategories.map((c) => (

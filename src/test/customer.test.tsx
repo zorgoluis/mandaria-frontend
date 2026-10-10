@@ -137,6 +137,94 @@ beforeEach(() => {
     totalPages: 0,
   })
 })
+it('quote requires both selected points and sends exact coordinates through the existing command', async () => {
+  vi.mocked(customer.capabilities).mockResolvedValue({
+    type: 'PERSONAL',
+    allowedShippingPayers: ['REQUESTER'],
+    defaultShippingPayer: 'REQUESTER',
+    capacity: {
+      occupied: false,
+      activeCount: 0,
+      maxActiveRequests: 1,
+      activeRequestPublicId: null,
+    },
+    canPrequote: true,
+    canCreateRequest: true,
+    reason: null,
+  })
+  const locate = vi.fn()
+  Object.defineProperty(navigator, 'geolocation', {
+    configurable: true,
+    value: { getCurrentPosition: locate },
+  })
+  vi.mocked(apiOnce).mockResolvedValue({
+    prequote: { ...mpq, status: 'OFFERED' },
+    replayed: false,
+  })
+  vi.mocked(customer.prequote).mockResolvedValue(mpq)
+  mount(<NewRequest />)
+  const submit = await screen.findByRole('button', {
+    name: 'Obtener precotización',
+  })
+  fireEvent.click(submit)
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'Selecciona un origen y un destino',
+  )
+  expect(apiOnce).not.toHaveBeenCalled()
+  locate.mockImplementationOnce((success: PositionCallback) =>
+    success({
+      coords: {
+        latitude: 17.123456789,
+        longitude: -93.123456789,
+        accuracy: 10,
+      },
+    } as GeolocationPosition),
+  )
+  fireEvent.click(
+    screen.getAllByRole('button', { name: 'Usar mi ubicación' })[0],
+  )
+  fireEvent.click(submit)
+  await waitFor(() => expect(submit).toBeEnabled())
+  expect(apiOnce).not.toHaveBeenCalled()
+  locate.mockImplementationOnce((success: PositionCallback) =>
+    success({
+      coords: {
+        latitude: 18.987654321,
+        longitude: -94.987654321,
+        accuracy: 10,
+      },
+    } as GeolocationPosition),
+  )
+  fireEvent.click(
+    screen.getAllByRole('button', { name: 'Usar mi ubicación' })[1],
+  )
+  fireEvent.click(submit)
+  await waitFor(() => expect(apiOnce).toHaveBeenCalledOnce())
+  expect(apiOnce).toHaveBeenCalledWith(
+    '/customer/delivery-prequotes',
+    'POST',
+    expect.objectContaining({
+      conditions: expect.objectContaining({
+        stops: [
+          {
+            type: 'PICKUP',
+            sequence: 1,
+            latitude: 17.123457,
+            longitude: -93.123457,
+          },
+          {
+            type: 'DROPOFF',
+            sequence: 2,
+            latitude: 18.987654,
+            longitude: -94.987654,
+          },
+        ],
+      }),
+    }),
+    undefined,
+    { 'Idempotency-Key': expect.any(String) },
+  )
+})
 it('consent uses FINAL MDR hash and exact MPQ amount and expiry', () => {
   const body = consent(mpq, terms)
   expect(body.customerAuthorization.shippingTermsHash).toBe(terms.termsHash)

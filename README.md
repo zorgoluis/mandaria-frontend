@@ -1,5 +1,13 @@
 # Mandaria Web — V1.11-B
 
+## Cotización de cliente: origen y destino — 2026-10-09
+
+En `/customer/new`, cada punto se elige buscando una dirección y seleccionando un resultado, usando la ubicación del dispositivo bajo permiso, o haciendo clic en Google Maps. También se puede mover el mapa con teclado y confirmar el centro. Ningún punto está seleccionado por defecto; editar la búsqueda invalida el anterior. La consulta se ejecuta al pulsar Buscar/Enter, no en cada tecla.
+
+Reutiliza `VITE_GOOGLE_MAPS_API_KEY` y el cargador existente; requiere Maps JavaScript API y **Geocoding API** habilitadas para la misma clave/proyecto, con restricciones web por referente y APIs autorizadas. [Documentación oficial del geocodificador](https://developers.google.com/maps/documentation/javascript/geocoding). No se modificaron claves, `.env`, dependencias ni configuración de Google. La geolocalización requiere permiso del navegador y contexto seguro (HTTPS o localhost). Sin clave, mapa/búsqueda se indican no disponibles; ubicación del dispositivo permanece como alternativa.
+
+Se envían únicamente las coordenadas seleccionadas como PICKUP/1 y DROPOFF/2 al comando existente de precotización, redondeadas a seis decimales conforme al normalizador backend. Direcciones/contactos de la solicitud definitiva se completan en la conversión existente; no se agregan campos al DTO de precotización. Sin precios ni rutas calculados por frontend. Validación local con fixtures; Google real y cotización backend real pendientes: ver VERIFICATION.
+
 ## V1.18 Web — GPS y enlaces temporales (local)
 
 Detalle cliente con posición/frescura y gestión de enlaces; `/track` anónimo con secreto sólo en memoria y `/developers/location` B2B. Recuperación propia de V1.18, sin reutilizar estados V1.17. Contratos, privacidad, procedimiento, validación y pendientes: [V1.18-WEB](docs/V1.18-WEB.md). Mapa cartográfico y APP DRIVER pendientes; no se declara V1.18 completa ni activada. Continuidad V1.17 conservada.

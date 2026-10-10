@@ -50,10 +50,6 @@ export function Login() {
           <span className="eyebrow">BIENVENIDO A MANDARIA</span>
           <h2>Tu operación empieza aquí.</h2>
           <p>Ingresa con tu cuenta Mandaria.</p>
-          <p>
-            <Link to="/customer/register">Crear perfil cliente</Link> ·{' '}
-            <Link to="/customer/recovery">Recuperar contraseña</Link>
-          </p>
           {auth.expired && (
             <p className="notice" role="status">
               Tu sesión expiró. Inicia sesión nuevamente.
@@ -102,14 +98,30 @@ export function Login() {
                 </button>
               </span>
             </Field>
+            <div className="login-recovery">
+              <Link to="/customer/recovery">¿Olvidaste tu contraseña?</Link>
+            </div>
           </ActionForm>
+          <section
+            className="login-registration"
+            aria-labelledby="login-registration-title"
+          >
+            <h3 id="login-registration-title">
+              ¿Aún no tienes perfil de cliente?
+            </h3>
+            <p>Regístrate como persona o negocio para solicitar envíos.</p>
+            <Link className="button secondary" to="/customer/register">
+              Crear perfil de cliente
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
+          </section>
           <p className="muted login-invitation">
             ¿Recibiste una invitación? Activa tu cuenta desde el enlace del
             correo antes de iniciar sesión.
           </p>
           <div className="login-security">
             <ShieldCheck size={18} />
-            <span>Acceso exclusivo para administradores autorizados.</span>
+            <span>Usa tu cuenta personal para acceder a Mandaria.</span>
           </div>
         </div>
         <small>Mandaria · Logística independiente</small>

@@ -1,9 +1,17 @@
-/** Minimal surface of Maps JavaScript API used here; no Places, routing or geolocation. */
+/** Minimal Maps surface, shared by tracking and customer location selection. */
 export interface MapInstance {
   setCenter(position: Position): void
+  setZoom?(zoom: number): void
+  getCenter?(): { lat(): number; lng(): number } | undefined
+  addListener?(
+    event: 'click',
+    callback: (event: {
+      latLng?: { lat(): number; lng(): number } | null
+    }) => void,
+  ): { remove(): void }
   unbindAll(): void
 }
-interface Position {
+export interface Position {
   lat: number
   lng: number
 }
@@ -13,12 +21,23 @@ export interface CircleInstance {
   unbindAll(): void
 }
 export interface MapsSdk {
+  importLibrary?(name: 'geocoding'): Promise<GeocodingLibrary>
   Map: new (
     element: HTMLElement,
     options: Record<string, unknown>,
   ) => MapInstance
   Circle: new (options: Record<string, unknown>) => CircleInstance
   event: { clearInstanceListeners(instance: object): void }
+}
+export interface GeocodingLibrary {
+  Geocoder: new () => {
+    geocode(request: { address: string; region: string }): Promise<{
+      results: {
+        formatted_address: string
+        geometry: { location: { lat(): number; lng(): number } }
+      }[]
+    }>
+  }
 }
 declare global {
   interface Window {

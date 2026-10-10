@@ -299,6 +299,23 @@ Validación local sobre la combinación:
 
 Sin operaciones reales, Docker, despliegue ni cambios backend. Merge preparado en el worktree aislado; QA y main no se movieron. Sin nueva verificación visual ni integración real.
 
+## 2026-10-09 — Selector de origen/destino para cotización cliente
+
+Cambios previos del login conservados. Nuevos `src/customer/LocationPicker.tsx`, `location-selection.ts`, `src/test/customer-location.test.tsx`; modificados `customer/pages.tsx`, `location/googleMaps.ts`, `index.css`, `test/customer.test.tsx` y README. Sin cambios backend, configuración, dependencias ni credenciales.
+
+Reutiliza cargador Google Maps; importa geocoding sólo al buscar, selección explícita de resultado, geolocalización sólo a petición y mapa por clic o centro (teclado). Errores genéricos seguros, permiso denegado, respuesta tardía, desmontaje y ausencia de key sin inventar coordenadas. Campos de origen/destino independientes; una nueva búsqueda invalida la selección. Bloqueo de precotización incompleta antes de crear intención/idempotencia.
+
+Contrato contrastado en backend `customers/direct-demand.dto.ts` y `delivery-prequotes/prequote-conditions.ts`: PrequoteStop sólo type/sequence/latitude/longitude; normalizador exige máximo seis decimales. Se redondea al construir DTO, se conserva idempotencia existente y no se envían etiquetas de Google ni contactos en precotización. Google no calcula precio ni valida cobertura: backend conserva esas decisiones.
+
+### Validación focalizada
+
+- `npx vitest run src/test/customer-location.test.tsx src/test/customer.test.tsx src/test/google-map.test.tsx --maxWorkers=1`: 43 pruebas (9 nuevas del selector, 25 del cliente y 9 de mapa existente). Cubren selección explícita, edición, búsqueda vacía/error/coordenadas inválidas, respuestas atrasadas, permiso denegado, clic repetido, mapa/centro, cleanup y envío exacto del DTO con seis decimales. Corrigidas aserciones iniciales del fixture (output también tiene role=status, firma posicional de apiOnce y expectativa de redondeo); los intentos fallidos no acreditan aprobación.
+- ESLint focalizado en seis módulos/test modificados; `npm run typecheck:test`; `npm run build` (incluye tsc -b). Se conserva aviso de chunk principal >500 kB (~688 kB).
+- `node test-results/verify-customer-location.mjs`: recorrido Chromium con API, Google y ubicación sintéticos, 1440×1000 y 390×844; búsqueda con Enter, resultado, mapa y ubicación actual, sin overflow, coordenadas observadas en petición simulada. Capturas revisadas en `test-results/customer-location/` (ignoradas por Git). API interceptada responde 422 intencionalmente tras comprobar cuerpo; no se creó una precotización real.
+- El primer fixture visual carecía del preámbulo React y luego de charset UTF-8; corregido antes del recorrido completo. Vite HMR genera avisos de WebSocket local bloqueado por Chromium; no errores de render pageerror. Es una limitación del servidor de pruebas, no una verificación de consola limpia con Google real.
+
+Pendiente: habilitación/comprobación real de Geocoding API y referentes de la clave existente; mapa cartográfico real, precisión/permiso de dispositivo real y cotización con backend. No se accedió a Google real, producción ni Coita; sin operaciones reales, commit, push o despliegue. La revisión visual simulada no acredita disponibilidad ni facturación de Google.
+
 ## 2026-10-04 — Resincronización editorial del OpenAPI público
 
 Referencia interna leída: B2B-FRONTEND-HANDOFF.md, «Resincronización editorial». No se copió ese documento ni docs/openapi.json completo. Se conservaron todos los cambios pendientes del portal. Sin cambios funcionales ni modificaciones backend.
