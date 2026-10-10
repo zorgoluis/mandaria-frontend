@@ -1,3 +1,4 @@
+import type { DispatchSearch } from '../dispatch/search'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import type { ExecutionFields } from '../execution/types'
 import type {
@@ -96,6 +97,7 @@ export interface DriverAssignment {
   vehicle: { id: string; identifier: string; type: VehicleType }
 }
 export interface DriverDispatch extends ExecutionFields {
+  search?: DispatchSearch
   collectionInstructions?: CollectionInstructions
   id: string
   status:

@@ -1,3 +1,4 @@
+import { searchAllowsTake } from './search'
 import { remaining } from './format'
 import type { DeliveryAssignment } from '../delivery-assignments/types'
 import type { ProviderDispatch } from './types'
@@ -5,6 +6,7 @@ import type { ProviderDispatch } from './types'
 /** UI hints only: the backend decides every claim and release. */
 export const canClaim = (dispatch: ProviderDispatch, now: number) =>
   dispatch.trackingMode !== undefined &&
+  searchAllowsTake(dispatch.search, now) &&
   dispatch.access === 'OFFER' &&
   dispatch.status === 'OPEN' &&
   dispatch.myCandidate?.status === 'OFFERED' &&

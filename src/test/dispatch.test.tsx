@@ -830,6 +830,53 @@ describe('SUPER_ADMIN audit', () => {
     creditSnapshots: [],
     legacyWithoutCreditSnapshots: true,
   }
+  it('shows intermediate search on admin detail without promising final expiration', async () => {
+    vi.mocked(adminDispatches.get).mockResolvedValue({
+      ...audit,
+      status: 'OPEN',
+      noProviderAvailable: true,
+      search: {
+        state: 'RETRY_PENDING',
+        attempt: 4,
+        maxAttempts: 5,
+        windowExpiresAt: stamp,
+        stoppedReason: null,
+      },
+    })
+    mount('/dispatches/' + audit.id, 'SUPER_ADMIN')
+    expect(
+      await screen.findByText(
+        /Esperando reintento automático — intento 4 de 5/,
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/Expirará al vencer/)).toBeNull()
+    expect(screen.queryByRole('button', { name: /TOMAR|LIBERAR/ })).toBeNull()
+  })
+  it('shows exhausted search in the admin request-filtered list', async () => {
+    vi.mocked(adminDispatches.list).mockResolvedValue(
+      page([
+        {
+          ...audit,
+          status: 'EXPIRED',
+          search: {
+            state: 'EXHAUSTED',
+            attempt: 5,
+            maxAttempts: 5,
+            windowExpiresAt: stamp,
+            stoppedReason: 'EXHAUSTED',
+          },
+        },
+      ]),
+    )
+    mount('/dispatches?request=MDR-000901', 'SUPER_ADMIN')
+    expect(
+      await screen.findByText(/No se encontró ejecutor/),
+    ).toBeInTheDocument()
+    expect(adminDispatches.list).toHaveBeenCalledWith(
+      expect.objectContaining({ deliveryRequestPublicId: 'MDR-000901' }),
+      expect.any(AbortSignal),
+    )
+  })
   it('lists and filters dispatches read-only', async () => {
     vi.mocked(adminDispatches.list).mockResolvedValue(
       page([
@@ -988,4 +1035,142 @@ it('F-01 removes operative actions when a concurrent transfer changes the histor
   expect(
     screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
   ).toBeNull()
+})
+
+describe('automatic dispatch search', () => {
+  it('keeps provider detail take action and search state together', async () => {
+    vi.mocked(providerDispatches.get).mockResolvedValue(
+      dispatch({
+        search: {
+          state: 'SEARCHING',
+          attempt: 1,
+          maxAttempts: 5,
+          windowExpiresAt: inMinutes(10),
+          stoppedReason: null,
+        },
+      }),
+    )
+    mount('/services/' + advance.id + '?providerId=' + A)
+    expect(
+      await screen.findByText(/Buscando repartidor — intento 1 de 5/),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'TOMAR SERVICIO' })).toBeEnabled()
+  })
+
+  const search = {
+    state: 'SEARCHING' as const,
+    attempt: 2,
+    maxAttempts: 5 as const,
+    windowExpiresAt: inMinutes(10),
+    stoppedReason: null,
+  }
+  it('keeps the last round during a late refetch, then accepts retry pending and the renewed window', async () => {
+    const item = dispatch({
+      search: { ...search, windowExpiresAt: inMinutes(-1) },
+    })
+    vi.mocked(providerDispatches.list).mockResolvedValue(page([item]))
+    mount('/services?providerId=' + A)
+    expect(
+      await screen.findByText(/Buscando repartidor — intento 2 de 5/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/contador no confirma el cierre/),
+    ).toBeInTheDocument()
+    let resolve!: (value: ReturnType<typeof page<ProviderDispatch>>) => void
+    vi.mocked(providerDispatches.list).mockReturnValueOnce(
+      new Promise((r) => {
+        resolve = r
+      }),
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Actualizar' }))
+    expect(
+      screen.getByText(/Buscando repartidor — intento 2 de 5/),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/No se encontró ejecutor/)).toBeNull()
+    resolve(
+      page([{ ...item, search: { ...item.search!, state: 'RETRY_PENDING' } }]),
+    )
+    expect(
+      await screen.findByText(
+        /Esperando reintento automático — intento 2 de 5/,
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Esperando actualización' }),
+    ).toBeDisabled()
+    vi.mocked(providerDispatches.list).mockResolvedValue(
+      page([
+        {
+          ...item,
+          expiresAt: inMinutes(10),
+          search: { ...search, attempt: 3, windowExpiresAt: inMinutes(10) },
+        },
+      ]),
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Actualizar' }))
+    expect(
+      await screen.findByText(/Buscando repartidor — intento 3 de 5/),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'TOMAR SERVICIO' })).toBeEnabled()
+    expect(providerDispatches.claim).not.toHaveBeenCalled()
+    expect(providerDispatches.release).not.toHaveBeenCalled()
+  })
+  it('refreshes a RETRY_PENDING claim conflict without calling claim again', async () => {
+    vi.mocked(providerDispatches.list).mockResolvedValue(
+      page([dispatch({ search })]),
+    )
+    vi.mocked(providerDispatches.claim).mockRejectedValue(
+      normalizeError(409, { code: 'DISPATCH_RETRY_PENDING' }),
+    )
+    mount('/services?providerId=' + A)
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'TOMAR SERVICIO' }),
+    )
+    vi.mocked(providerDispatches.list).mockResolvedValue(
+      page([dispatch({ search: { ...search, state: 'RETRY_PENDING' } })]),
+    )
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Confirmar y tomar' }),
+    )
+    expect(
+      await screen.findByText(/La búsqueda sigue abierta/),
+    ).toBeInTheDocument()
+    await waitFor(() =>
+      expect(providerDispatches.list).toHaveBeenCalledTimes(2),
+    )
+    expect(providerDispatches.claim).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText(/No se encontró ejecutor/)).toBeNull()
+  })
+  it.each(['EXHAUSTED', 'CANCELLED', 'EXECUTOR_FOUND'] as const)(
+    'shows backend outcome %s in provider services',
+    async (state) => {
+      vi.mocked(providerDispatches.list).mockResolvedValue(
+        page([
+          dispatch({
+            status:
+              state === 'EXECUTOR_FOUND'
+                ? 'CLAIMED'
+                : state === 'CANCELLED'
+                  ? 'CANCELLED'
+                  : 'EXPIRED',
+            search: { ...search, state, attempt: 5 },
+          }),
+        ]),
+      )
+      mount('/services?providerId=' + A)
+      expect(
+        await screen.findByText(
+          state === 'EXHAUSTED'
+            ? /No se encontró ejecutor/
+            : state === 'CANCELLED'
+              ? /Búsqueda cancelada/
+              : /hubo una toma/,
+        ),
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'TOMAR SERVICIO' }),
+      ).toBeNull()
+      expect(screen.queryByText(/pago devuelto|comida cancelada/i)).toBeNull()
+    },
+  )
 })
