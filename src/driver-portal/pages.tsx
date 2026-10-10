@@ -1,3 +1,6 @@
+import { SearchStatus } from '../dispatch/SearchStatus'
+import { searchAllowsTake, dispatchPollInterval } from '../dispatch/search'
+import { useNow } from '../dispatch/use-now'
 import { legacyProjection } from '../dispatch/rules'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { ExecutionPanel, ExecutionProgress } from '../execution/components'
@@ -31,7 +34,7 @@ import {
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { useAuth } from '../auth/context'
-import { ApiError } from '../services/errors'
+import { ApiError, errorMessage } from '../services/errors'
 import { km } from '../pricing/format'
 import { duration } from '../quotes/format'
 import { categoryLabels, weight } from '../delivery-requests/format'
@@ -225,6 +228,7 @@ function ServiceCard({ dispatch }: { dispatch: DriverDispatch }) {
         <span className="tag">Servicio disponible</span>
         <strong>{amount(paymentContext.deliveryFee)}</strong>
       </header>
+      <SearchStatus search={dispatch.search} />
       <dl>
         <div>
           <dt>Origen</dt>
@@ -273,6 +277,7 @@ function AvailableServices({ me }: { me: DriverSelf }) {
     queryKey: driverKeys.available(page),
     queryFn: ({ signal }) => driverPortal.available(page, PAGE_SIZE, signal),
     enabled: !busy,
+    refetchInterval: dispatchPollInterval,
   })
   return (
     <>
@@ -341,8 +346,8 @@ function AvailableServices({ me }: { me: DriverSelf }) {
             />
           )}
           <p className="panel-note">
-            Sin avisos automáticos todavía: usa Actualizar. Otro repartidor o
-            proveedor puede tomar un servicio antes que tú.
+            La lista se consulta periódicamente; también puedes usar Actualizar.
+            Otro repartidor o proveedor puede tomar un servicio antes que tú.
           </p>
         </div>
       )}
@@ -362,6 +367,7 @@ function ServiceRecord({ me, id }: { me: DriverSelf; id: string }) {
   const query = useQuery({
     queryKey: driverKeys.dispatch(id),
     queryFn: ({ signal }) => driverPortal.get(id, signal),
+    refetchInterval: dispatchPollInterval,
     staleTime: 0,
   })
   // The backend answers 404 for a dispatch this driver can neither take nor owns, exactly as for
@@ -409,6 +415,7 @@ function ServiceContent({
   me: DriverSelf
   dispatch: DriverDispatch
 }) {
+  const now = useNow(!!dispatch.search && dispatch.status === 'OPEN')
   const [taking, setTaking] = useState(false)
   const { service, paymentContext } = dispatch
   const mine =
@@ -427,7 +434,11 @@ function ServiceContent({
           mine ? undefined : gone ? undefined : (
             <button
               className="button"
-              disabled={busyElsewhere || dispatch.trackingMode === undefined}
+              disabled={
+                busyElsewhere ||
+                dispatch.trackingMode === undefined ||
+                !searchAllowsTake(dispatch.search, now)
+              }
               onClick={() => setTaking(true)}
             >
               TOMAR SERVICIO
@@ -435,7 +446,8 @@ function ServiceContent({
           )
         }
       />
-      {gone && (
+      <SearchStatus search={dispatch.search} />
+      {gone && !dispatch.search && (
         <div className="panel">
           <Empty
             title="Este servicio ya no está disponible."
@@ -601,6 +613,7 @@ function TakeDialog({
   const notify = useFeedback()
   const [vehicleId, setVehicleId] = useState('')
   const [gone, setGone] = useState(false)
+  const [waiting, setWaiting] = useState<string | null>(null)
   const vehicles = useQuery({
     queryKey: driverKeys.vehicles,
     queryFn: ({ signal }) => driverPortal.vehicles(signal),
@@ -609,7 +622,14 @@ function TakeDialog({
   const usable = (vehicles.data ?? []).filter((v) => v.status === 'ACTIVE')
   return (
     <Modal title="Tomar servicio" onClose={onClose}>
-      {gone ? (
+      {waiting ? (
+        <>
+          <p role="status">{waiting}</p>
+          <button className="button" onClick={onClose}>
+            Volver al servicio
+          </button>
+        </>
+      ) : gone ? (
         <>
           <p className="inline-error" role="alert">
             Este servicio ya no está disponible.
@@ -648,11 +668,26 @@ function TakeDialog({
             cancelLabel="Volver"
             onCancel={onClose}
             onSubmit={async () => {
+              if (dispatch.search && !searchAllowsTake(dispatch.search)) {
+                setWaiting(
+                  'Esperando actualización de Mandaria; la búsqueda no se ha confirmado como cerrada.',
+                )
+                await refreshDriverPortal(dispatch.id)
+                return
+              }
               if (!vehicleId)
                 throw new ApiError(400, 'Elige el vehículo que vas a usar.')
               try {
                 await driverPortal.take(dispatch.id, vehicleId)
               } catch (error) {
+                if (
+                  error instanceof ApiError &&
+                  error.code === 'DISPATCH_RETRY_PENDING'
+                ) {
+                  setWaiting(errorMessage(error))
+                  await refreshDriverPortal(dispatch.id)
+                  return
+                }
                 // Someone else won the race: refresh and stop offering it.
                 if (
                   error instanceof ApiError &&
@@ -797,6 +832,7 @@ function MyService({ me }: { me: DriverSelf }) {
               <h2 id="my-service">Servicio actual</h2>
               <Badge value="ACTIVE" label="En curso" />
             </div>
+            <SearchStatus search={query.data.search} />
             <InfoGrid
               items={[
                 ['Origen', query.data.service.pickup.address],

@@ -454,6 +454,14 @@ function DeliveryRequestContent({
           items={[
             ['Estado', <Badge value={item.status} />],
             [
+              'Búsqueda de repartidor',
+              <Link
+                to={`/dispatches?request=${encodeURIComponent(item.publicId)}`}
+              >
+                Consultar búsqueda y servicio
+              </Link>,
+            ],
+            [
               'Solicitado por',
               <Link
                 className="entity-name"

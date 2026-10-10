@@ -1,5 +1,24 @@
 ## 2026-10-06 — Integración local de main y QA
 
+## 2026-10-10 — Búsqueda automática de hasta cinco intentos
+
+Implementación y validación local juntas. Fuentes leídas: README/continuidad de este repositorio (sin AGENTS.md propio), mandaria-backend/docs/AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md y esquema DispatchSearchResponse/referencias ProviderDispatchResponse, DriverDispatchResponse y AdminDispatchResponse del OpenAPI final local. Backend sólo leído; no se copió ni publicó el OpenAPI general.
+
+- Nuevo SearchStatus compartido y contrato search opcional: intento/maxAttempts/ventana/causa siempre provienen del backend. El reloj sólo presenta el tiempo; aun en la quinta ventana, cero no determina EXHAUSTED ni cambia la ronda.
+- Integrado en tarjetas y detalles de proveedor/independiente, servicio actual independiente y auditoría administrativa. Solicitud enlaza a despachos filtrados por MDR; su endpoint administrativo no expone search. RETRY_PENDING bloquea tomar aunque el reloj local discrepe; EXHAUSTED informa que no se encontró ejecutor. STOPPED distingue servicio/integración no disponibles. EXECUTOR_FOUND recuerda una toma histórica y no implica que conserve ejecutor después de liberarse. Cancelación logística se presenta sin conclusiones comerciales.
+- React Query conserva claves/refetch, agrega sondeo de 15 segundos a listas/detalles sin él y espacia errores (60–120 segundos). Sigue consultando durante la espera y al cero local; no hace POST por temporizador ni por conflicto. 409 DISPATCH_RETRY_PENDING en claim/take refresca mediante las funciones existentes, muestra espera y exige nueva decisión humana para una toma posterior.
+- Legacy sin search conserva presentación y permisos; no se modifican instrucciones financieras, collectionInstructions, flujo de créditos ni reglas de cierre detallado/legacy. Corregido aviso administrativo que prometía expiración final al vencer cualquier ventana.
+
+Validación final:
+
+- npx vitest run src/test/dispatch-search.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/collection-instructions.test.tsx src/test/delivery-requests.test.tsx --pool=threads --maxWorkers=1: **151/151 PASS, cinco archivos**. Sólo componentes afectados y regresión financiera asociada.
+- Casos nuevos: contador hasta cero en quinta ronda sin inferir cierre; espera prolongada sin incrementar; ventana nueva recibida; respuesta/refetch tardío; 409 intermedio en proveedor e independiente con una sola toma; agotamiento; cancelación; toma histórica/liberación; causas de detención; ausencia de search; auditoría y enlace desde solicitud; permisos de toma conservados en detalle; errores de sondeo.
+- npx tsc -b --pretty false y npx tsc --project tsconfig.test.json --pretty false: PASS. ESLint sobre archivos fuente y pruebas afectados: PASS. git diff --check: PASS.
+- Primera ejecución de Vitest con pool predeterminado: tres archivos no cargaron por ENOENT en caché temporal del sandbox; no se contabilizó como válida. Con threads/1 worker, una expectativa nueva suponía exactamente dos GET; refreshDriverPortal ya invalida y refetchea, produciendo tres. Se ajustó la prueba para exigir refetch y exactamente un comando take; corrida final completa focalizada aprobada. Errores transitorios de preparación (alias Python no disponible, cierre JSX e import faltante) corregidos antes de la validación final.
+
+Límites: pruebas de componentes con servicios simulados y reloj controlado, no validación del worker/PostgreSQL ni E2E operativo/visual en navegador. No se ejecutó suite completa, backend, activación, operaciones reales, cambios de entorno, commit, push ni despliegue. Activación/despliegue coordinado permanecen pendientes de autorización operativa, conforme al handoff. Historial previo conservado abajo.
+
+
 Preparada en codex/merge-main-qa desde QA bcd70cf, integrando main 0a44d6e sin commit ni push. Los únicos conflictos textuales fueron README.md y VERIFICATION.md: se conservaron las entradas completas de ambas ramas. Comparación de líneas previas: ninguna ausente de ninguno de los dos documentos en ambas ramas.
 
 Se conserva ejecución/reconciliación y portal público de QA, junto con solicitudes de socio, rutas, navegación y dashboard de main. nginx.conf mantiene exactamente la configuración de main: servidor interno; TLS y proxies delegados a mandaria-proxy. Las instrucciones históricas de nginx anteriores no describen esta nueva topología. No se verificó nginx ni el proxy externo en ejecución.

@@ -662,3 +662,10 @@ describe('dashboard', () => {
       expect(filters.pageSize).toBe(1)
   })
 })
+
+it('links request search to the existing filtered admin dispatch view', async () => {
+  mount('/delivery-requests/MDR-000123')
+  expect(
+    await screen.findByRole('link', { name: 'Consultar búsqueda y servicio' }),
+  ).toHaveAttribute('href', '/dispatches?request=MDR-000123')
+})

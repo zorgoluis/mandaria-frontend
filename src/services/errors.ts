@@ -109,6 +109,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
       'La cotización o la solicitud ya no pueden aceptarse.',
     // V1.7 dispatch claiming. The backend decides every outcome.
     DISPATCH_ALREADY_CLAIMED: 'Este servicio ya fue tomado por otro proveedor.',
+    DISPATCH_RETRY_PENDING:
+      'Esperando reintento automático de Mandaria. La búsqueda sigue abierta; espera la actualización antes de tomar el servicio.',
     DISPATCH_EXPIRED: 'El tiempo para tomar este servicio terminó.',
     DISPATCH_CANCELLED:
       'La solicitud fue cancelada; el servicio ya no está disponible.',

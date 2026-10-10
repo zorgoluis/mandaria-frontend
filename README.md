@@ -1,5 +1,14 @@
 # Mandaria Web — V1.11-B
 
+## Búsqueda automática de repartidor — 2026-10-10
+
+Integrado el campo opcional search del handoff AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md y docs/openapi.json del checkout local mandaria-backend. La Web muestra el intento confirmado (hasta 5), el contador de windowExpiresAt y los estados SEARCHING, RETRY_PENDING, EXECUTOR_FOUND, CANCELLED, EXHAUSTED y STOPPED en listas/detalles de proveedor, independiente y administración. Desde una solicitud se enlaza al listado de despachos filtrado por MDR; el contrato administrativo de solicitudes no incorpora search, por lo que no se inventa ese campo ni se usa la ruta B2B con sesión humana.
+
+El contador local es informativo: cero conserva la última fotografía y espera confirmación. React Query reutiliza las claves/refetch existentes y sondea cada 15 segundos (60–120 segundos tras errores); sólo realiza lecturas. No incrementa intentos, renueva ventanas, reabre solicitudes ni llama a reintentos. DISPATCH_RETRY_PENDING en claim/take refresca y muestra espera; nunca repite el comando. EXECUTOR_FOUND conserva significado histórico tras una liberación y no prueba asignación vigente. Sin search se mantienen la presentación y reglas legacy. OFFER/OWNER, collectionInstructions, créditos y permisos de ejecución permanecen separados de la búsqueda. Agotamiento no comunica pago devuelto ni comida cancelada.
+
+Capacidad sin activar. Sin cambios de backend, configuración, operaciones reales, commit, push ni despliegue. Validación focalizada y límites en [VERIFICATION.md](VERIFICATION.md).
+
+
 ## Portal: seguimiento público B2B — 2026-10-04
 
 Actualización editorial posterior: OpenAPI público resincronizado; la descripción de executionProgress ya indica ordenar fotografías de una misma solicitud mediante publicVersion. Queda cerrada la discrepancia editorial registrada inicialmente en VERIFICATION. revision interna y expectedRevision de concurrencia permanecen sin cambios. No implica despliegue.
