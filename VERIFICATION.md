@@ -1,3 +1,38 @@
+## 2026-10-11 — Compatibilidad visual con backend patches
+
+**Resultado:** recorridos focalizados aprobados; ningún defecto frontend demostrado ni cambio de código de producto. No se fuerza LEGACY ni se modifica el bloqueo defensivo.
+
+### Versiones y aislamiento
+
+- Frontend principal: `C:/Users/zorgl/Documents/mandaria-frontend`, `main f0b2e4e448f78c17558b7e650d7ad0ac220914bd`. Durante la preparación hubo un cambio externo de QA a main (reflog 16:09:40); no lo realizó este trabajo. Se repitió únicamente este recorrido en main, comprobando HEAD antes y después. No se acredita QA con esta evidencia.
+- Backend: `C:/Users/zorgl/.codex/worktrees/mandaria-web-contract/mandaria-backend`, `patches 30f625b`; contrato OPERATIONAL-WEB-COMPATIBILITY.md. Se utilizó su compilación dist y cliente Prisma existentes, sin modificar backend ni ejecutar build, migraciones o suites backend.
+- PostgreSQL18 privado: loopback `127.0.0.1:56862`, base exclusiva `contract_web_visual_test`, copia de `contract_3_test` ya migrada. Verificadas las 32 migraciones de patches, no las 43 de QA. Cluster temporal `mandaria-contract-J9Xupc`; datos sintéticos conservados.
+- Nest local `43185`, Vite `4185` con proxy /api hacia ese Nest. Routing nativo `local_fake`, correo `local_outbox` temporal, polling de webhooks desactivado sólo en el proceso. Sin .env modificado, VM, Docker, Coita, servicios externos o actividad productiva.
+
+### Recorridos navegador → backend → PostgreSQL
+
+| Caso | Resultado real |
+| --- | --- |
+| Proveedor, servicio nunca asignado | GET con trackingMode=null, sin aviso de modo desconocido y toma habilitada |
+| Tomar y asignar | Login PROVIDER_ADMIN; claim y selección de conductor/vehículo mediante la UI y permisos reales |
+| Asignación vigente | GET con trackingMode=LEGACY, conductor y vehículo visibles, entrega habilitada |
+| Entrega proveedor | Confirmación desde PROVIDER_ADMIN; detalle refrescado y GET DELIVERED |
+| Independiente | Login DRIVER independiente; TAKE con vehículo propio; Mi servicio y driver/me.activeDeliveryAssignment coherentes con LEGACY |
+| Entrega independiente | Confirmación por ese DRIVER; GET DELIVERED y activeDeliveryAssignment=null |
+
+Prueba negativa **simulada, separada de la integración real**: sobre un tercer servicio real se interceptó exclusivamente su GET de detalle para retirar trackingMode. La UI mostró el aviso defensivo y TOMAR SERVICIO quedó deshabilitado. No se omitió ni forzó el campo en backend. Los demás recorridos no interceptaron APIs.
+
+### Ejecución y evidencia
+
+- `node scripts/verify-patches-web.mjs`: exit0; seis resultados agrupados aprobados; `errors: []` (sin pageerror). Chromium real mediante Playwright; capturas inspeccionadas de proveedor asignado, independiente asignado y bloqueo por campo ausente.
+- Runner focalizado: prepara fixtures sintéticas usando sólo helpers de siembra existentes del backend, no ejecuta sus suites. Las claves y contraseñas se generan en memoria; no se guardan en la evidencia.
+- Evidencia local ignorada en Git: `test-results/patches-web/identity.json`, `results.json`, `provider-assigned.png`, `independent-assigned.png`, `missing-field.png`. Las capturas contienen únicamente datos sintéticos. identity enumera las migraciones reales.
+- Ajustes previos del runner: normalización CRLF al extraer la siembra, selectores adaptados a radios reales y espera del selector de vehículo independiente; no fueron defectos de producto.
+- `node --check scripts/verify-patches-web.mjs`, ESLint del runner y `git diff --check`: aprobados. Sin suites generales ni build de producto, puesto que no cambió código de aplicación.
+- Vite, Nest y navegador temporales cerrados. Cluster propio detenido tras comprobar ausencia de otros clientes; datos conservados.
+
+Límites: verificación local de estos flujos legacy, no de nginx/despliegue, ejecución detallada, GPS o clientes directos exclusivos de otras ramas. La entrega sintética sólo ejercita el flujo autorizado; no hubo entrega física ni cobro real. No commit, push ni despliegue.
+
 ## 2026-10-06 — Integración local de main y QA
 
 ## 2026-10-10 — Búsqueda automática de hasta cinco intentos
