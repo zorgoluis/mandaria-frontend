@@ -1,3 +1,21 @@
+## 2026-10-12 — Registro público de clientes (QA)
+
+Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, QA sobre `2e189b8`. Nuevos `src/customer/RegistrationPage.tsx`, `registration.css`, `src/test/customer-registration-design.test.tsx`, `scripts/verify-registration-design.mjs`; ajustes en `identity.tsx`, regresión de registro/reenvío en `customer.test.tsx`, README y V1.17-WEB.
+
+Diseño independiente del panel: dos columnas con marca/lema, Figtree local, inputs y selector Personal/Negocio en píldora, asteriscos, errores al blur/envío, bloqueo de doble envío, loading y confirmación con foco accesible. Menos de 1000px: franja de marca y formulario a una columna. Negocio requiere nombre comercial según el diseño; backend sigue admitiéndolo opcionalmente. No cambia el perfil ni el contrato del servidor.
+
+Adaptaciones al contrato real (backend sólo lectura: customers.dto.ts, customers.controller.ts y customers.service.ts): RegisterCustomerDto contiene email/type/displayName/businessName, no teléfono. No se presenta ni envía teléfono que no podría guardarse. ACCEPTED es genérico y no indica correo previamente registrado; no se inventa ese estado ni una casilla basada en él. Se conserva reenvío explícito tras la solicitud aceptada mediante `/customer-registration/resend`, enviando el perfil completo en memoria; la bandera del service elige endpoint y no es un campo DTO. No se reenvía automáticamente ni se persisten contactos. La confirmación no promete aprobación, envío o entrega de correo; enlace a login disponible.
+
+Verificación ejecutada:
+- `npx vitest run src/test/customer-registration-design.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`: **32/32 PASS**, seis pruebas nuevas y 26 regresiones. Personal, negocio obligatorio, validación inline, DTO normalizado sin campos inventados, foco en confirmación, doble envío, admisión deshabilitada, errores de campo sin detalle técnico y reenvío explícito.
+- `npm run typecheck:test`: PASS. `npm run lint`: PASS; eslint final focalizado sobre archivos afectados/script: PASS.
+- `npm run build`: PASS. Aviso existente de chunk Root 736.17 kB (gzip 203.25 kB).
+- `node scripts/verify-registration-design.mjs`: **PASS**, Chromium 1440/1000/390 px sin overflow horizontal, teclado en selector, validación, solicitud BUSINESS, payload exacto y reenvío manual. Capturas revisadas en `test-results/registration-design/width-1440.png`, `width-390.png`, `mobile-success.png`; además width-1000, mobile-validation y result.json. Sin errores pageerror. API interceptada con datos sintéticos: no backend/correo real ni creación de usuarios. Fuentes y servicios temporales retirados al finalizar.
+- Primer intento de tests tenía selector ambiguo Nombre/Nombre del negocio; el primer arnés visual buscaba Nombre sin asterisco. Corregidos sólo los selectores; ejecución final aprobada.
+- `git diff --check`: PASS.
+
+Sin backend, configuración, producción, commit, push ni despliegue. El campo teléfono y la detección de correo registrado no están soportados por el contrato actual; no se implementan ficticiamente.
+
 ## 2026-10-12 — Seguimiento público: rediseño de /track (QA)
 
 Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, rama QA. Conservados todos los cambios pendientes anteriores. Nuevos `src/location/PublicTrackingScreen.tsx`, `shared-tracking.css`, `src/test/public-tracking-design.test.tsx`, `scripts/verify-public-tracking-design.mjs`; ajustes `components.tsx`, `LocationMap.tsx`, `googleMaps.ts`, `google-map.test.tsx`, README y V1.18-WEB.

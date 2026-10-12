@@ -455,3 +455,7 @@ Configurar privadamente `VITE_GOOGLE_MAPS_API_KEY` en `.env.local` para desarrol
 ### Seguimiento público — diseño 2026-10-12
 
 `/track` tiene layout independiente, mapa con panel flotante en escritorio y panel inferior expandible en móvil. Conserva las restricciones de GPS: terminal, incidencia y posición no autorizada retiran coordenadas; el enlace permanece sólo en memoria. Revisión visual sintética reproducible: `node scripts/verify-public-tracking-design.mjs`. No usa claves reales ni cartografía externa; resultados y pendientes en VERIFICATION.md.
+
+### Registro público de clientes — diseño 2026-10-12
+
+Pantalla con marca/formulario responsive, validación inline y confirmación genérica conforme al contrato. No pide teléfono (no existe en el DTO). Revisión visual con API sintética: `node scripts/verify-registration-design.mjs`; pruebas focalizadas: `npx vitest run src/test/customer-registration-design.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`. Véase VERIFICATION.md.

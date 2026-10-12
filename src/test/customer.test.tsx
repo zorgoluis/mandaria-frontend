@@ -526,23 +526,25 @@ it('executor OFFER from real projection is informational with amount', () => {
 it('registration resend submits profile and generic acknowledgement does not claim email delivery', async () => {
   vi.mocked(customer.register).mockResolvedValue({ status: 'ACCEPTED' })
   mount(<CustomerRegistration />)
-  fireEvent.change(screen.getByLabelText('Correo electrónico'), {
+  fireEvent.change(screen.getByLabelText(/^Correo electrónico/), {
     target: { value: 'synthetic@example.test' },
   })
-  fireEvent.change(screen.getByLabelText('Nombre'), {
+  fireEvent.change(screen.getByLabelText(/^Nombre\s*\*?$/), {
     target: { value: 'Cliente sintético' },
   })
-  fireEvent.change(screen.getByLabelText('Tipo de cliente'), {
-    target: { value: 'BUSINESS' },
-  })
-  fireEvent.change(screen.getByLabelText('Nombre del negocio (opcional)'), {
+  fireEvent.click(screen.getByRole('radio', { name: 'Negocio' }))
+  fireEvent.change(screen.getByLabelText(/^Nombre del negocio/), {
     target: { value: 'Negocio sintético' },
   })
+  fireEvent.click(screen.getByRole('button', { name: 'Solicitar registro' }))
+  await screen.findByRole('heading', { name: 'Solicitud enviada' })
+  expect(
+    screen.getByText(/no confirma la aprobación del alta ni la entrega/),
+  ).toBeInTheDocument()
   fireEvent.click(
-    screen.getByLabelText('Reenviar registro con este perfil completo'),
+    screen.getByRole('button', { name: 'Reenviar solicitud con este perfil' }),
   )
-  fireEvent.click(screen.getByRole('button', { name: 'Reenviar confirmación' }))
-  await screen.findByText(/no confirma la entrega del mensaje/)
+  await waitFor(() => expect(customer.register).toHaveBeenCalledTimes(2))
   expect(customer.register).toHaveBeenCalledWith(
     {
       email: 'synthetic@example.test',

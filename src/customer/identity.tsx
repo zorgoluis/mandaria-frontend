@@ -1,3 +1,4 @@
+import { RegistrationPage } from './RegistrationPage'
 import { CustomerProfilePage } from './ProfilePage'
 import type { AccessChallenge } from './access'
 import { useEffect, useState } from 'react'
@@ -48,55 +49,8 @@ export function ProfileFields({
     </>
   )
 }
-function profileData(data: FormData) {
-  return {
-    type:
-      data.get('type') === 'BUSINESS'
-        ? ('BUSINESS' as const)
-        : ('PERSONAL' as const),
-    displayName: String(data.get('displayName')).trim(),
-    ...(String(data.get('businessName') ?? '').trim()
-      ? { businessName: String(data.get('businessName')).trim() }
-      : {}),
-  }
-}
 export function CustomerRegistration() {
-  const [resend, setResend] = useState(false),
-    [message, setMessage] = useState('')
-  return (
-    <main className="customer-public">
-      <PageTitle title="Crear perfil cliente" />
-      <p>
-        Solicita envíos como persona o negocio. El alta depende de la admisión
-        del servicio.
-      </p>
-      <ActionForm
-        initialDirty
-        submitLabel={resend ? 'Reenviar confirmación' : 'Solicitar registro'}
-        onSubmit={async (d) => {
-          await customer.register(
-            {
-              ...profileData(d),
-              email: String(d.get('email')).trim().toLowerCase(),
-            },
-            resend,
-          )
-          setMessage(accepted)
-        }}
-      >
-        <ProfileFields email />
-        <Field label="Reenviar registro con este perfil completo">
-          <input
-            type="checkbox"
-            checked={resend}
-            onChange={(e) => setResend(e.target.checked)}
-          />
-        </Field>
-      </ActionForm>
-      <p role="status">{message}</p>
-      <Link to="/login">Ya tengo cuenta</Link>
-    </main>
-  )
+  return <RegistrationPage />
 }
 export function PasswordRecovery() {
   const [message, setMessage] = useState('')
