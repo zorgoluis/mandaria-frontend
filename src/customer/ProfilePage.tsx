@@ -2,19 +2,17 @@ import { profileInitials } from './profile-format'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Info, Mail, Package, RefreshCw } from 'lucide-react'
+import { Mail, Package, RefreshCw } from 'lucide-react'
 import { useAuth } from '../auth/context'
 import { Confirm, ErrorState, Field } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError, errorMessage } from '../services/errors'
 import { customer } from './service'
-import type { CustomerProfileViewDto } from './contract'
 import './quote.css'
 import './profile.css'
 type Draft = {
   displayName: string
   businessName: string
-  type: CustomerProfileViewDto['type']
   revision?: number
 }
 export function CustomerProfilePage() {
@@ -42,7 +40,7 @@ function ProfileContent() {
     [message, setMessage] = useState(''),
     [failure, setFailure] = useState<unknown>(),
     [fieldErrors, setFieldErrors] = useState<Record<string, string>>({}),
-    [dialog, setDialog] = useState<'refresh' | 'type' | null>(null)
+    [dialog, setDialog] = useState<'refresh' | null>(null)
   const [mailBusy, setMailBusy] = useState(false),
     [retryAt, setRetryAt] = useState(0),
     [now, setNow] = useState(Date.now)
@@ -64,7 +62,6 @@ function ProfileContent() {
   const form = draft ?? {
     displayName: profile?.displayName ?? '',
     businessName: profile?.businessName ?? '',
-    type: profile?.type ?? 'PERSONAL',
     revision: profile?.revision,
   }
   const name = form.displayName.trim(),
@@ -72,8 +69,7 @@ function ProfileContent() {
   const changed =
     name !== (profile?.displayName ?? '') ||
     business !== (profile?.businessName ?? '')
-  const typeChanged = !!profile && form.type !== profile.type
-  const dirty = changed || typeChanged
+  const dirty = changed
   const remoteChanged =
     !!draft && !!profile && draft.revision !== profile.revision
   const cannotClear = !!profile?.businessName && !business
@@ -85,15 +81,6 @@ function ProfileContent() {
     q.isFetching ||
     remoteChanged ||
     (!!profile && q.isError)
-  const count = cap.data?.capacity.activeCount
-  const canType =
-    !!profile &&
-    !!cap.data &&
-    !cap.isFetching &&
-    !cap.isError &&
-    count === 0 &&
-    typeChanged &&
-    !locked
   const cooldown = Math.max(0, Math.ceil((retryAt - now) / 1000))
   useEffect(() => {
     if (!dirty) return
@@ -127,11 +114,7 @@ function ProfileContent() {
       if (alive.current) setBusy(false)
     }
   }
-  async function mutate(
-    work: () => Promise<unknown>,
-    success: string,
-    section: 'profile' | 'type' = 'profile',
-  ) {
+  async function mutate(work: () => Promise<unknown>, success: string) {
     if (lock.current || uncertain || remoteChanged) return
     lock.current = true
     setBusy(true)
@@ -144,19 +127,7 @@ function ProfileContent() {
       const current = await q.refetch()
       if (!alive.current) return
       if (!current.isSuccess) throw current.error
-      const saved = current.data
-      setDraft(
-        section === 'type' && changed
-          ? { ...form, type: saved.type, revision: saved.revision }
-          : section === 'profile' && typeChanged
-            ? {
-                displayName: saved.displayName,
-                businessName: saved.businessName ?? '',
-                type: form.type,
-                revision: saved.revision,
-              }
-            : undefined,
-      )
+      setDraft(undefined)
       setUncertain(false)
       notify(success)
       void client.invalidateQueries({
@@ -324,7 +295,7 @@ function ProfileContent() {
                           })
                         : customer.attach({
                             displayName: name,
-                            type: form.type,
+                            type: 'PERSONAL',
                             ...(business ? { businessName: business } : {}),
                           }),
                     'Perfil guardado',
@@ -374,24 +345,6 @@ function ProfileContent() {
                       )}
                     </Field>
                   </div>
-                  {!profile && (
-                    <Field label="Tipo de cliente">
-                      <select
-                        value={form.type}
-                        onChange={(e) =>
-                          edit({
-                            type:
-                              e.target.value === 'BUSINESS'
-                                ? 'BUSINESS'
-                                : 'PERSONAL',
-                          })
-                        }
-                      >
-                        <option value="PERSONAL">Personal</option>
-                        <option value="BUSINESS">Negocio</option>
-                      </select>
-                    </Field>
-                  )}
                   <div className="profile-save">
                     <span id="profile-save-reason">
                       {!valid
@@ -417,74 +370,16 @@ function ProfileContent() {
                 </fieldset>
               </form>
             </section>
-            {profile && (
-              <section className="profile-card">
-                <h2>Tipo de cuenta</h2>
-                <p>
-                  Tipo actual: <strong>{typeLabel(profile.type)}</strong>
-                </p>
-                <fieldset className="quote-choice" disabled={locked}>
-                  <legend>Nuevo tipo</legend>
-                  <div
-                    className="quote-segments"
-                    role="radiogroup"
-                    aria-label="Nuevo tipo"
-                  >
-                    {(['PERSONAL', 'BUSINESS'] as const).map((type) => (
-                      <label key={type}>
-                        <input
-                          type="radio"
-                          name="profileType"
-                          value={type}
-                          checked={form.type === type}
-                          onChange={() => edit({ type })}
-                        />
-                        <span>{typeLabel(type)}</span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-                <div className="profile-type-action">
-                  <div
-                    className={`profile-type-note ${count && count > 0 ? 'warning' : ''}`}
-                    id="profile-type-reason"
-                  >
-                    <Info size={20} aria-hidden="true" />
-                    <span>
-                      {cap.isPending || cap.isFetching ? (
-                        'Consultando solicitudes abiertas…'
-                      ) : cap.isError || count === undefined ? (
-                        'No se pudo comprobar si tienes solicitudes abiertas. Consulta el perfil actual antes de cambiar el tipo.'
-                      ) : count > 0 ? (
-                        <>
-                          Tienes {count}{' '}
-                          {count === 1
-                            ? 'solicitud abierta'
-                            : 'solicitudes abiertas'}
-                          .{' '}
-                          {count === 1
-                            ? 'Finalízala o cancélala'
-                            : 'Finalízalas o cancélalas'}{' '}
-                          para cambiar de tipo.{' '}
-                          <Link to="/customer">Ver solicitudes</Link>
-                        </>
-                      ) : (
-                        'El cambio requiere no tener solicitudes abiertas. No cambia contratos anteriores.'
-                      )}
-                      {!typeChanged && ' Elige un tipo distinto al actual.'}
-                    </span>
-                  </div>
-                  <button
-                    className="button"
-                    disabled={!canType}
-                    aria-describedby="profile-type-reason"
-                    onClick={() => setDialog('type')}
-                  >
-                    Cambiar tipo
-                  </button>
-                </div>
-              </section>
-            )}
+            <section className="profile-card">
+              <h2>Cuenta Negocio</h2>
+              <p>
+                El acceso comercial requiere aprobación. No concede roles
+                operativos ni una integración B2B.
+              </p>
+              <Link className="button secondary" to="/customer/business">
+                Solicitar cuenta Negocio
+              </Link>
+            </section>
           </div>
         </div>
       )}
@@ -495,26 +390,6 @@ function ProfileContent() {
           label="Descartar y consultar"
           onClose={() => setDialog(null)}
           onConfirm={refresh}
-        />
-      )}
-      {dialog === 'type' && (
-        <Confirm
-          title={`¿Cambiar a ${typeLabel(form.type)}?`}
-          description="No cambia contratos anteriores. El servidor comprobará nuevamente que no existan solicitudes abiertas."
-          label="Confirmar cambio de tipo"
-          onClose={() => setDialog(null)}
-          onConfirm={async () => {
-            if (canType)
-              await mutate(
-                () =>
-                  customer.type({
-                    type: form.type,
-                    expectedRevision: form.revision!,
-                  }),
-                'Tipo de cuenta actualizado',
-                'type',
-              )
-          }}
         />
       )}
     </section>

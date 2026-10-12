@@ -23,14 +23,6 @@ export function ProfileFields({
           <input name="email" type="email" required autoComplete="email" />
         </Field>
       )}
-      {!profile && (
-        <Field label="Tipo de cliente">
-          <select name="type">
-            <option value="PERSONAL">Personal</option>
-            <option value="BUSINESS">Negocio</option>
-          </select>
-        </Field>
-      )}
       <Field label="Nombre">
         <input
           name="displayName"
@@ -84,6 +76,7 @@ export function CustomerAccess({
   const navigate = useNavigate()
   const auth = useAuth(),
     [done, setDone] = useState(false),
+    [businessRequired, setBusinessRequired] = useState(false),
     [token, setToken] = useState(challenge.token)
   useEffect(() => {
     onConsumed?.()
@@ -93,6 +86,12 @@ export function CustomerAccess({
       <main className="customer-public">
         <PageTitle title="Confirmación completada" />
         <p>Inicia sesión nuevamente para continuar.</p>
+        {businessRequired && (
+          <p>
+            Se creó tu perfil Personal. Negocio requiere aprobación:{' '}
+            <Link to="/customer/business">Solicitar cuenta Negocio</Link>.
+          </p>
+        )}
         <Link to="/login">Iniciar sesión</Link>
       </main>
     )
@@ -149,12 +148,17 @@ export function CustomerAccess({
           initialDirty
           submitLabel="Confirmar"
           onSubmit={async (d) => {
-            await customer.confirm(
+            const result = await customer.confirm(
               challenge.purpose,
               token,
               challenge.purpose === 'VERIFY'
                 ? undefined
                 : String(d.get('password')),
+            )
+            setBusinessRequired(
+              challenge.purpose === 'REGISTER' &&
+                result?.profileType === 'PERSONAL' &&
+                result.businessApplicationRequired === true,
             )
             setToken('')
             setDone(true)

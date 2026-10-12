@@ -1,5 +1,6 @@
+import type { CompatibleProjection } from '../customer-business/contract'
 // Internal types derived from backend OpenAPI V1.17. Never distributes the human OpenAPI.
-export type CustomerProfileViewDto = {
+export type CustomerProfileViewDto = CompatibleProjection & {
   type: 'PERSONAL' | 'BUSINESS'
   displayName: string
   businessName: string | null
@@ -8,7 +9,7 @@ export type CustomerProfileViewDto = {
 }
 export type RegisterCustomerDto = {
   email: string
-  type: 'PERSONAL' | 'BUSINESS'
+  type: 'PERSONAL'
   displayName: string
   businessName?: string
 }

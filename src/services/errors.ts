@@ -36,6 +36,33 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    BUSINESS_APPROVAL_REQUIRED:
+      'Negocio requiere una solicitud y aprobación administrativa. No puedes activar ese acceso desde el perfil.',
+    BUSINESS_REVIEW_REQUIRED:
+      'Tu cuenta Negocio requiere revisión antes de generar nueva demanda.',
+    BUSINESS_ACCESS_RESTRICTED:
+      'El acceso Negocio está restringido; tus servicios comprometidos conservan las operaciones autorizadas.',
+    BUSINESS_APPLICATION_REVISION_CONFLICT:
+      'La solicitud cambió. Consulta su estado vigente antes de preparar una nueva intención.',
+    BUSINESS_APPLICATION_NOT_PENDING:
+      'La solicitud ya no está pendiente. Consulta su resolución vigente.',
+    BUSINESS_REAPPLICATION_REQUIRES_ADMIN:
+      'Sólo SUPER_ADMIN puede habilitar una nueva solicitud después de una revocación.',
+    BUSINESS_ACCESS_ALREADY_ACTIVE:
+      'La cuenta ya tiene acceso Negocio activo. Consulta el estado actual.',
+    BUSINESS_APPLICATION_PENDING:
+      'Ya existe una solicitud Negocio pendiente en esta cuenta.',
+    BUSINESS_GRANT_NOT_ACTIVE:
+      'El acceso que intentas revocar ya no está activo. Consulta el estado actual.',
+    BUSINESS_REAPPLICATION_NOT_BLOCKED:
+      'La readmisión ya no está bloqueada. Consulta el estado actual.',
+    BUSINESS_REVOCATION_MISMATCH:
+      'La revocación cambió. No se habilitó la readmisión; consulta el acceso actual.',
+    BUSINESS_ATTEMPT_CLOSED:
+      'El intento original quedó cerrado. Consulta su recibo antes de preparar otra intención.',
+    BUSINESS_RATE_LIMITED:
+      'Se alcanzó el límite técnico de solicitudes y retiros. Respeta Retry-After; no se reenviará automáticamente.',
+
     COMMAND_ATTEMPT_CLOSED:
       'La clave original fue cerrada. Consulta el recibo antes de preparar explícitamente otra intención; no reenvíes este comando.',
     COMMAND_ATTEMPT_SCOPE_CONFLICT:

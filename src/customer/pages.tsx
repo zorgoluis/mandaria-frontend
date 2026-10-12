@@ -1,3 +1,4 @@
+import { hasBusinessContract } from '../customer-business/contract'
 import { MyShipments } from './MyShipments'
 import { ArrowLeft, Check, RefreshCw } from 'lucide-react'
 import { RequestConsent, RequestCancellation } from './RequestActions'
@@ -255,7 +256,10 @@ export function NewRequest() {
   if (id) {
     if (quote.isPending) return <Loading />
     if (quote.isError) return <ErrorState error={quote.error} />
-    if (quote.data.status !== 'CONVERTED' && !cap.data.canCreateRequest)
+    if (
+      quote.data.status !== 'CONVERTED' &&
+      (!hasBusinessContract(cap.data) || !cap.data.canCreateRequest)
+    )
       return (
         <>
           <p>No puedes convertir otra solicitud en este momento.</p>
@@ -279,10 +283,18 @@ export function NewRequest() {
         />
       )
   }
+  if (!hasBusinessContract(cap.data))
+    return (
+      <p role="alert">
+        Contrato comercial incompatible. No se habilita nueva demanda.{' '}
+        <Link to="/customer">Consultar servicios existentes</Link>
+      </p>
+    )
   if (!cap.data.canPrequote || !cap.data.canCreateRequest)
     return (
       <>
-        <PageTitle title="Cupo no disponible" />
+        <PageTitle title="Nueva demanda no disponible" />
+        <Link to="/customer/business">Consultar acceso comercial</Link>
         <Link to="/customer">Continuar solicitud activa</Link>
       </>
     )

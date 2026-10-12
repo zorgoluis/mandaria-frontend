@@ -1,3 +1,7 @@
+import type {
+  CompatibleProjection,
+  Receipt,
+} from '../customer-business/contract'
 import type { ConsentContext } from './reconciliation-contract'
 import { api, apiOnce, publicApi } from '../services/api'
 import type { Page } from '../types/api'
@@ -8,7 +12,7 @@ import type {
   DeliveryRequestResponse,
   DeliveryStatusResponse,
 } from './contract'
-export interface Capabilities {
+export interface Capabilities extends CompatibleProjection {
   type: 'PERSONAL' | 'BUSINESS'
   allowedShippingPayers: ('REQUESTER' | 'RECIPIENT')[]
   defaultShippingPayer: 'REQUESTER'
@@ -37,8 +41,16 @@ export const customer = {
     publicApi('/auth/password-recovery', 'POST', { email }),
   confirm: (purpose: string, token: string, password?: string) =>
     purpose === 'VERIFY'
-      ? apiOnce('/customer/contact-verification/confirm', 'POST', { token })
-      : publicApi(
+      ? apiOnce<{
+          status: 'CONFIRMED'
+          profileType?: 'PERSONAL'
+          businessApplicationRequired?: boolean
+        }>('/customer/contact-verification/confirm', 'POST', { token })
+      : publicApi<{
+          status: 'CONFIRMED'
+          profileType?: 'PERSONAL'
+          businessApplicationRequired?: boolean
+        }>(
           purpose === 'RESET'
             ? '/auth/password-reset'
             : '/customer-registration/confirm',
@@ -55,8 +67,10 @@ export const customer = {
     displayName: string
     businessName?: string
   }) => apiOnce<CustomerProfileViewDto>('/customer/profile', 'PATCH', body),
-  type: (body: { type: 'PERSONAL' | 'BUSINESS'; expectedRevision: number }) =>
-    apiOnce<CustomerProfileViewDto>('/customer/profile/type', 'POST', body),
+  type: (body: { type: 'PERSONAL'; expectedRevision: number }, key: string) =>
+    apiOnce<Receipt>('/customer/profile/type', 'POST', body, undefined, {
+      'Idempotency-Key': key,
+    }),
   prequote: (id: string) =>
     api<DirectPrequoteResponse>(
       `/customer/delivery-prequotes/${encodeURIComponent(id)}`,

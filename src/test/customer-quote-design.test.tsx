@@ -177,3 +177,28 @@ it('restores the quoted coordinates and package data when returning from details
     expect(submit).toHaveBeenCalledWith(conditions, 'RECIPIENT'),
   )
 })
+
+it('empty allowed payers does not grant the default REQUESTER even with unlimited capacity and selected points', () => {
+  const submit = vi.fn()
+  render(
+    <MemoryRouter>
+      <QuoteForm
+        capabilities={{
+          ...cap,
+          allowedShippingPayers: [],
+          defaultShippingPayer: 'REQUESTER',
+        }}
+        onSubmit={submit}
+      />
+    </MemoryRouter>,
+  )
+  fireEvent.click(screen.getByRole('button', { name: 'Seleccionar Origen' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Seleccionar Destino' }))
+  expect(
+    screen.queryByRole('radio', { name: 'Solicitante' }),
+  ).not.toBeInTheDocument()
+  const button = screen.getByRole('button', { name: 'Obtener precotización' })
+  expect(button).toBeDisabled()
+  fireEvent.click(button)
+  expect(submit).not.toHaveBeenCalled()
+})

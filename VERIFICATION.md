@@ -1,3 +1,94 @@
+## 2026-10-12 — Aprobación manual de cuenta Negocio: implementación Web
+
+### Base y fuentes
+
+- Checkout **principal** `C:/Users/zorgl/Documents/mandaria-frontend`, rama **QA**, HEAD base `a5fe19a6c0375207e552f1b04580ba7bbe04b3e7`. Índice vacío al inicio; conservados README/VERIFICATION/V1.17/propuesta pendientes y cambio de logo del registro. No se usó el worktree f1fe.
+- Backend consultado sólo lectura: QA `9ad39b9a2bf1c87d40905dcd404f6c39b824d4cb`, contrato publicado/migración46. Contraste con Git, OpenAPI humano, API_ACCESS, BUSINESS-APPROVAL-IMPLEMENTATION, ejemplos y código de business-approval/customers. Sus cambios ajenos BITACORA y `nul` se conservaron.
+- Nuevo módulo `src/customer-business/`: `contract.ts`, `service.ts`, `pending.ts`, `pages.tsx`, `business.css`.
+- Consumidores modificados: `src/app/App.tsx`, `src/auth/AuthProvider.tsx`, `Login.tsx`, `src/layouts/AdminLayout.tsx`, `src/services/errors.ts`; `src/customer/{contract.ts,service.ts,RegistrationPage.tsx,identity.tsx,ProfilePage.tsx,pages.tsx,MyShipments.tsx}`. Logo/CSS de registro previo conservado. Nada del contrato humano se publicó en /developers.
+- Pruebas nuevas: `src/test/business-{fixtures.ts,recovery.test.ts,service.test.ts,pages.test.tsx}`. Actualizadas regresiones de registro, perfil, servicios, listado, cotización, detalle MDR y `customer.test.tsx`. Scripts visuales nuevos/actualizados: `verify-business-approval.mjs`, `verify-registration-design.mjs`, `verify-profile-design.mjs`.
+
+### Comandos ejecutados y resultados
+
+Desde el checkout principal, sin suite completa ni otra etapa CHECK:
+
+```powershell
+npx vitest run src/test/business-recovery.test.ts src/test/business-service.test.ts src/test/business-pages.test.tsx src/test/customer.test.tsx src/test/customer-service.test.ts src/test/customer-profile-design.test.tsx src/test/customer-registration-design.test.tsx src/test/customer-shipments-design.test.tsx src/test/customer-reconciliation.test.tsx src/test/customer-request-design.test.tsx
+# 149/149 PASS en 10 archivos completos, antes de agregar 2 regresiones finales y el archivo de cotización.
+npx vitest run src/test/business-pages.test.tsx src/test/customer-quote-design.test.tsx
+# 29/29 PASS (25 páginas comerciales + 4 cotización, incluyendo pagadores vacíos).
+npx vitest run src/test/business-recovery.test.ts
+# 16/16 PASS, incluye nueva regresión explícita cambio de SUPER_ADMIN.
+npx vitest run src/test/business-pages.test.tsx
+# 26/26 PASS, incluye cancelar confirmación y volver a revisar sin cambiar datos.
+npm run typecheck:test
+# PASS: TypeScript de las pruebas.
+npm run build
+# PASS: tsc -b + Vite; 2343 módulos. Root final ~762.67 kB (gzip 210.19).
+```
+
+Total sin duplicar casos reejecutados: **155 pruebas distintas, 11 archivos completos**. No se redujeron pruebas para obtener verde. Las primeras ejecuciones detectaron codificación accidental en textos/aserciones, expectativa antigua BUSINESS y problemas de espera/tipado de la nueva prueba; se corrigieron y reejecutaron los archivos completos pertinentes. No hubo aborto EPERM del runner ni resultados parciales acreditados.
+
+Lint focalizado ejecutado y aprobado:
+
+```powershell
+npx eslint src/customer-business src/app/App.tsx src/auth/AuthProvider.tsx src/auth/Login.tsx src/customer/MyShipments.tsx src/customer/ProfilePage.tsx src/customer/RegistrationPage.tsx src/customer/contract.ts src/customer/identity.tsx src/customer/pages.tsx src/customer/service.ts src/layouts/AdminLayout.tsx src/services/errors.ts src/test/business-fixtures.ts src/test/business-recovery.test.ts src/test/business-service.test.ts src/test/business-pages.test.tsx src/test/customer.test.tsx src/test/customer-service.test.ts src/test/customer-profile-design.test.tsx src/test/customer-registration-design.test.tsx src/test/customer-shipments-design.test.tsx src/test/customer-request-design.test.tsx src/test/customer-quote-design.test.tsx scripts/verify-business-approval.mjs scripts/verify-profile-design.mjs scripts/verify-registration-design.mjs
+# PASS. Tras las regresiones finales se repitió lint de páginas comerciales y sus pruebas.
+```
+
+También: Prettier únicamente archivos editados; `git diff --check` PASS. Se conserva advertencia de build por chunk >500 kB, sin cambiar empaquetado/configuración.
+
+### Matriz focalizada (fixtures/mocks)
+
+| Área | Resultado acreditado |
+|---|---|
+| Registro, resend, anexión | Sólo PERSONAL; negocio opcional no activa acceso. Logo oficial conservado. |
+| REGISTER histórico | PERSONAL/businessApplicationRequired orienta a solicitud; RESET/VERIFY conservados. |
+| Formulario | Trim, máximos, note vacía omitida, revisión actual, confirmación, cancelación conserva campos. |
+| Cliente comercial | PENDING/REJECTED Personal no equivalen a acceso Negocio; revisión, readmisión bloqueada y descenso con Receipt. Retiro y terminal remiten a nueva solicitud explícita. |
+| Administración | SUPER_ADMIN, conflicto por abiertas, motivo obligatorio REJECT, revisión, grant leído, revocación/readmisión sin activación implícita; notas sólo administrativas. |
+| Recuperación | APPLIED/REJECTED/CLOSED/NOT_OBSERVED, cuerpo perdido, replay mismo cuerpo/clave, cierre perdido, recarga, usuario y administrador distintos, respuesta tardía tras logout, doble clic, Web Locks y almacenamiento fallido. |
+| Recibo/caché | Resultado original separado de revisión actual más nueva; lectura actual antes de limpiar; no Receipt en perfil; rechazo administrativo APPLIED diferenciado de comando REJECTED. |
+| HTTP | Rutas sin duplicar prefijo, targets reales por operación, GET query/close JSON, paginación sin totalPages, 429 Retry-After sin reenvío automático. |
+| Continuidad | MDR comprometida mantiene consentimiento/GPS/enlaces bajo REVIEW_REQUIRED/RESTRICTED; recuperación logística existente pasa sin mezclar protocolos. |
+| Compatibilidad | Campos ausentes bloquean sólo dependencias; [] no concede REQUESTER; capacidad null no habilita por sí sola. |
+
+### Revisión visual local — NO backend real
+
+```powershell
+node scripts/verify-business-approval.mjs
+node scripts/verify-registration-design.mjs
+node scripts/verify-profile-design.mjs
+# PASS en los tres.
+```
+
+Chromium headless, Vite con `envDir:false`, clave Google vacía, API interceptada exclusivamente con fixtures sintéticos y tráfico externo bloqueado. No se cargó configuración local privada. Los servidores temporales fueron cerrados por sus scripts.
+
+- Cliente/admin a **1440 y 390 px**: sin overflow, paneles legibles, tabla responsive, CTA, form, refetch, marcador tras recarga, permisos por URL. Registro/perfil: 1440/1000/390.
+- Teclado: Tab entre campos, foco en diálogo, Escape, reenfoque, controles accesibles. Login del harness sintético acredita retorno de CTA, no autenticación backend real.
+- Capturas locales en `test-results/business-approval/`: `customer-1440.png`, `customer-390.png`, `admin-1440.png`, `admin-390.png`, `confirmation-mobile.png`, `customer-pending.png`, `recovery-mobile.png`; `result.json` con resultado. Revisadas visualmente capturas finales de cliente escritorio y administración móvil. Registro/perfil conservan sus carpetas de evidencia.
+- Corregidos durante revisión: paneles con estilo compartido, doble activo del menú y carga infinita del detalle administrativo al fallar su lectura (regresión 404). Ajustes del harness: JSX y sesión anónima antes de recarga; capturas responsive esperan finalizar transición del sidebar.
+
+### Resultado y límites
+
+Implementación y validación focalizada **frontend local** aprobadas. Ruta estable Landing **`/customer/business`**, no declarada desplegada. Procedimiento HTTP/recuperación y comportamiento por perfil en [documentación](docs/BUSINESS-APPROVAL-WEB-PROPOSAL.md), estado en [BITACORA](BITACORA.md).
+
+No se ejecutó integración navegador → backend real → PostgreSQL para este módulo. Los **69/69 E2E backend publicados** son evidencia histórica independiente, no pruebas Web/VM de esta tarea. No se comprobaron despliegue ni transacciones/concurrencia reales. El entorno destino debe tener contrato 9ad39b9/migración46; campos ausentes no habilitan nuevas operaciones. Marcadores locales no equivalen a un ledger compartido entre dispositivos.
+
+Backend no modificado; no .env/configuración/versiones/flags, Docker, migraciones, mensajes a otros agentes, servicios externos, Coita, operaciones reales, commit, push o despliegue. Se conserva historial anterior a continuación.
+
+---
+
+## 2026-10-12 — Aprobación manual Negocio: análisis documental
+
+Frontend principal QA `a5fe19a6c0375207e552f1b04580ba7bbe04b3e7`, limpio al inicio. Backend sólo lectura QA `ce45dff84b3f3e4c388b5d90cf5b8a095bc36210`, 45 directorios de migraciones: sin avance respecto de la base del diseño; cambios documentales y nul ajenos preservados. Leídos README/VERIFICATION/continuidad y ambos documentos BUSINESS-APPROVAL del backend. AGENTS.md/BITACORA.md ausentes en raíz frontend.
+
+Nueva propuesta `docs/BUSINESS-APPROVAL-WEB-PROPOSAL.md`: inventario de consumidores reales, rutas/DTO candidatos, pantallas, copy, matriz, transición, cache/recuperación comercial, compatibilidad y pruebas futuras. Actualizados únicamente README.md, esta continuidad y docs/V1.17-WEB.md además de la propuesta. Producto, API, OpenAPI generado, migraciones, configuración y versión intactos.
+
+Verificaciones documentales nuevas: Git branch/HEAD/status, recuento de directorios de migración, búsquedas rg de consumidores y de contrato comercial en src/OpenAPI, revisión de código, referencias de archivos y diff. No se ejecutaron tests, tipos, lint, build, navegador ni otra etapa CHECK: una propuesta no se acredita con suites del producto actual. Las 32 pruebas históricas del registro (entrada siguiente) prueban su comportamiento anterior, no aprobación manual.
+
+Hallazgos: altas/anexión/tipo aún permiten BUSINESS; confirm ignora campos de respuesta; profile/type actual sin key/Receipt; capacidades sin businessAccess. Aceptación ya depende de consent-context por MDR, frontera a conservar. Pendientes precisos: identificador de cuenta propio para recovery, query/body de intentos, snapshot «seis campos» frente a cinco comerciales, DTO/paginación/admin, readmisión REVOKED y contrato implementado. Correos de decisión no incluidos según diseño actualizado. Sin implementación, DB, Docker, backend, otros repositorios, mensajes a otros chats, commit, push o despliegue.
+
 ## 2026-10-12 — Registro público de clientes (QA)
 
 Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, QA sobre `2e189b8`. Nuevos `src/customer/RegistrationPage.tsx`, `registration.css`, `src/test/customer-registration-design.test.tsx`, `scripts/verify-registration-design.mjs`; ajustes en `identity.tsx`, regresión de registro/reenvío en `customer.test.tsx`, README y V1.17-WEB.

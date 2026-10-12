@@ -81,10 +81,16 @@ export function AdminLayout() {
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
     { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
+    { to: '/customer/business', label: 'Cuenta Negocio', icon: Building2 },
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ...(admin
       ? [
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
+          {
+            to: '/admin/customer-business-applications',
+            label: 'Solicitudes Negocio',
+            icon: Building2,
+          },
           { to: '/providers', label: 'Proveedores', icon: Building2 },
           { to: '/users', label: 'Administradores', icon: UsersRound },
           { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
@@ -200,7 +206,11 @@ export function AdminLayout() {
             <NavLink
               key={to}
               to={to}
-              end={to === '/customer' && pathname === '/customer/profile'}
+              end={
+                to === '/customer' &&
+                (pathname === '/customer/profile' ||
+                  pathname.startsWith('/customer/business'))
+              }
               className={({ isActive }) =>
                 isActive ||
                 (to === profilePath && pathname === '/customer/profile')

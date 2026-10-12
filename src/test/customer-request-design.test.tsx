@@ -1,3 +1,4 @@
+import { capabilities } from './business-fixtures'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -222,3 +223,51 @@ it('page refreshes real service readers and preserves the existing acceptance pa
   expect(await screen.findByText(/Autorización confirmada/)).toBeInTheDocument()
   expect(screen.getByText('Buscando ejecutor')).toBeInTheDocument()
 })
+
+it.each(['REVIEW_REQUIRED', 'RESTRICTED'] as const)(
+  'committed MDR still offers authorized consent, tracking and recovery under %s',
+  async (state) => {
+    const client = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    })
+    client.setQueryData(['customer', 'synthetic', 'capabilities'], {
+      ...capabilities,
+      type: 'BUSINESS',
+      businessAccess: {
+        ...capabilities.businessAccess,
+        state,
+        canApply: false,
+      },
+      canPrequote: false,
+      canCreateRequest: false,
+      allowedShippingPayers: [],
+    })
+    vi.mocked(customer.detail).mockResolvedValue(detail)
+    vi.mocked(customer.status).mockResolvedValue(status)
+    vi.mocked(customer.consentContext).mockResolvedValue(context)
+    render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={['/customer/requests/MDR-000009']}>
+          <Routes>
+            <Route
+              path="/customer/requests/:publicId"
+              element={<CustomerRequest />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    )
+    const button = await screen.findByRole('button', {
+      name: 'Autorizar y solicitar servicio',
+    })
+    fireEvent.click(
+      screen.getByLabelText(
+        'Acepto el importe, vigencia y condiciones del envío',
+      ),
+    )
+    expect(button).toBeEnabled()
+    expect(screen.getByText('GPS existente')).toBeInTheDocument()
+    expect(screen.getByText('Enlaces existentes')).toBeInTheDocument()
+    expect(customer.consentContext).toHaveBeenCalledWith('MDR-000009')
+  },
+)

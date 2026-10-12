@@ -1,13 +1,16 @@
 import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowUpRight, Eye, EyeOff, ShieldCheck, Route } from 'lucide-react'
 import { useAuth } from './context'
 import { ActionForm, Field } from '../components/ui'
 export function Login() {
   const auth = useAuth()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const destination =
+    params.get('next') === 'business' ? '/customer/business' : '/dashboard'
   const [visible, setVisible] = useState(false)
-  if (auth.user) return <Navigate to="/dashboard" replace />
+  if (auth.user) return <Navigate to={destination} replace />
   return (
     <div className="login-page">
       <section className="login-story">
@@ -63,7 +66,7 @@ export function Login() {
                 String(data.get('email')),
                 String(data.get('password')),
               )
-              navigate('/dashboard', { replace: true })
+              navigate(destination, { replace: true })
             }}
           >
             <Field label="Correo electrónico">
@@ -109,7 +112,10 @@ export function Login() {
             <h3 id="login-registration-title">
               ¿Aún no tienes perfil de cliente?
             </h3>
-            <p>Regístrate como persona o negocio para solicitar envíos.</p>
+            <p>
+              Crea tu perfil Personal. Podrás solicitar acceso Negocio sujeto a
+              aprobación.
+            </p>
             <Link className="button secondary" to="/customer/register">
               Crear perfil de cliente
               <ArrowUpRight size={16} aria-hidden="true" />

@@ -1,3 +1,8 @@
+import {
+  BusinessCustomerPage,
+  BusinessAdminPage,
+  BusinessAdminDetail,
+} from '../customer-business/pages'
 import { consumeAccessFragment } from '../customer/access'
 import {
   CustomerArea,
@@ -79,6 +84,7 @@ import {
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
+  const location = useLocation()
   if (auth.loading) return <Loading />
   if (auth.error)
     return (
@@ -89,7 +95,17 @@ export function Protected({ roles }: { roles?: Role[] }) {
         }}
       />
     )
-  if (!auth.user) return <Navigate to="/login" replace />
+  if (!auth.user)
+    return (
+      <Navigate
+        to={
+          location.pathname.startsWith('/customer/business')
+            ? '/login?next=business'
+            : '/login'
+        }
+        replace
+      />
+    )
   if (roles && !roles.includes(auth.user.role)) return <ErrorPage code={403} />
   return <Outlet />
 }
@@ -125,6 +141,14 @@ export function App() {
           <Route element={<CustomerArea />}>
             <Route path="customer" element={<CustomerHome />} />
             <Route path="customer/profile" element={<CustomerProfile />} />
+            <Route
+              path="customer/business"
+              element={<BusinessCustomerPage key={location.pathname} />}
+            />
+            <Route
+              path="customer/business/:id"
+              element={<BusinessCustomerPage key={location.pathname} />}
+            />
             <Route path="customer/new" element={<NewRequest />} />
             <Route
               path="customer/requests/:publicId"
@@ -150,6 +174,18 @@ export function App() {
             />
           </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+            <Route
+              path="admin/customer-business-applications"
+              element={<BusinessAdminPage />}
+            />
+            <Route
+              path="admin/customer-business-applications/:id"
+              element={<BusinessAdminDetail key={location.pathname} />}
+            />
+            <Route
+              path="admin/customer-business-access/:accountId"
+              element={<BusinessAdminDetail key={location.pathname} />}
+            />
             <Route path="integrations" element={<IntegrationsPage />} />
             <Route
               path="integrations/:id/webhooks/:eventId"

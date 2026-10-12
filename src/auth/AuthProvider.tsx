@@ -1,3 +1,4 @@
+import { forgetBusinessBodies } from '../customer-business/pending'
 import { forgetBodies } from '../customer/pending'
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { authService, onSessionExpired } from '../services/api'
@@ -40,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setExpired(true)
       setError(null)
       forgetBodies()
+      forgetBusinessBodies()
       queryClient.clear()
     })
     return () => {
@@ -48,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
   async function login(email: string, password: string) {
+    forgetBusinessBodies()
     queryClient.clear()
     const next = await authService.login(email, password)
     setUser(next)
@@ -56,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
   async function logout() {
     forgetBodies()
+    forgetBusinessBodies()
     setLoading(true)
     try {
       await authService.logout()

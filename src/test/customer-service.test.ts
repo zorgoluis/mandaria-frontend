@@ -39,7 +39,7 @@ beforeEach(() => {
 it('resend sends the full profile; reset uses public endpoint', async () => {
   const profile = {
     email: 'synthetic@example.test',
-    type: 'BUSINESS' as const,
+    type: 'PERSONAL' as const,
     displayName: 'Sintético',
     businessName: 'Local',
   }
@@ -55,18 +55,24 @@ it('resend sends the full profile; reset uses public endpoint', async () => {
     password: 'synthetic-long-password',
   })
 })
-it('VERIFY requires human transport and type change has revision without idempotency header', async () => {
+it('VERIFY requires human transport and downgrade uses revision and original idempotency key', async () => {
   await customer.confirm('VERIFY', 'synthetic-token')
   expect(apiOnce).toHaveBeenCalledWith(
     '/customer/contact-verification/confirm',
     'POST',
     { token: 'synthetic-token' },
   )
-  await customer.type({ type: 'BUSINESS', expectedRevision: 4 })
-  expect(apiOnce).toHaveBeenLastCalledWith('/customer/profile/type', 'POST', {
-    type: 'BUSINESS',
-    expectedRevision: 4,
-  })
+  await customer.type({ type: 'PERSONAL', expectedRevision: 4 }, 'original-key')
+  expect(apiOnce).toHaveBeenLastCalledWith(
+    '/customer/profile/type',
+    'POST',
+    {
+      type: 'PERSONAL',
+      expectedRevision: 4,
+    },
+    undefined,
+    { 'Idempotency-Key': 'original-key' },
+  )
 })
 it('all customer reads use authorized own-resource endpoints', async () => {
   await customer.capabilities()

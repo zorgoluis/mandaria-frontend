@@ -1,5 +1,10 @@
 # Mandaria Web — V1.11-B
 
+## Cuenta Negocio: aprobación manual (2026-10-12)
+
+Implementación local sobre backend QA `9ad39b9`: registro/anexión Personal, solicitud comercial propia, revisión exclusiva SUPER_ADMIN, revocación/readmisión y recuperación comercial durable. Ruta estable para Landing: **`/customer/business`**; visitante pasa por login y vuelve a esa ruta, sin perfil se orienta a anexión/verificación, con pendiente o restricción se muestran los límites reales. No implica despliegue ni activación.
+
+[Implementación, rutas y procedimiento de recuperación](docs/BUSINESS-APPROVAL-WEB-PROPOSAL.md), [resultados](VERIFICATION.md) y [bitácora](BITACORA.md). La propuesta histórica permanece al final del documento. Campos comerciales ausentes bloquean nueva demanda; aceptación/seguimiento de servicios comprometidos mantienen sus fuentes existentes. No borrar el marcador de un intento incierto ni reenviarlo con otra clave. La revisión visual usa APIs sintéticas, no backend real.
 
 ## Mis envíos — listado (2026-10-12)
 

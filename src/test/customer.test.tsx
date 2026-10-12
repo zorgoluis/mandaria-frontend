@@ -1,3 +1,4 @@
+import { projection } from './business-fixtures'
 import { requestDetail } from './fixtures/request-design'
 import { env } from '../config/env'
 import { loadMaps } from '../location/googleMaps'
@@ -146,6 +147,7 @@ beforeEach(() => {
 })
 it('quote requires both selected points and sends exact coordinates through the existing command', async () => {
   vi.mocked(customer.capabilities).mockResolvedValue({
+    ...projection,
     type: 'PERSONAL',
     allowedShippingPayers: ['REQUESTER'],
     defaultShippingPayer: 'REQUESTER',
@@ -279,6 +281,7 @@ it.each(['PERSONAL', 'BUSINESS'] as const)(
   '%s capabilities govern the create link',
   async (type) => {
     vi.mocked(customer.capabilities).mockResolvedValue({
+      ...projection,
       type,
       allowedShippingPayers:
         type === 'PERSONAL' ? ['REQUESTER'] : ['REQUESTER', 'RECIPIENT'],
@@ -305,6 +308,7 @@ it('occupied PERSONAL shows continue instead of new request', async () => {
     publicId: 'MDR-000001',
   })
   vi.mocked(customer.capabilities).mockResolvedValue({
+    ...projection,
     type: 'PERSONAL',
     allowedShippingPayers: ['REQUESTER'],
     defaultShippingPayer: 'REQUESTER',
@@ -532,7 +536,6 @@ it('registration resend submits profile and generic acknowledgement does not cla
   fireEvent.change(screen.getByLabelText(/^Nombre\s*\*?$/), {
     target: { value: 'Cliente sintético' },
   })
-  fireEvent.click(screen.getByRole('radio', { name: 'Negocio' }))
   fireEvent.change(screen.getByLabelText(/^Nombre del negocio/), {
     target: { value: 'Negocio sintético' },
   })
@@ -548,7 +551,7 @@ it('registration resend submits profile and generic acknowledgement does not cla
   expect(customer.register).toHaveBeenCalledWith(
     {
       email: 'synthetic@example.test',
-      type: 'BUSINESS',
+      type: 'PERSONAL',
       displayName: 'Cliente sintético',
       businessName: 'Negocio sintético',
     },
@@ -576,6 +579,7 @@ it.each(['PERSONAL', 'BUSINESS'] as const)(
   '%s quote form only offers allowed payers',
   async (type) => {
     vi.mocked(customer.capabilities).mockResolvedValue({
+      ...projection,
       type,
       allowedShippingPayers:
         type === 'PERSONAL' ? ['REQUESTER'] : ['REQUESTER', 'RECIPIENT'],
@@ -603,6 +607,7 @@ it.each(['PERSONAL', 'BUSINESS'] as const)(
 
 it('BUSINESS with active requests can quote again when backend permits creation', async () => {
   vi.mocked(customer.capabilities).mockResolvedValue({
+    ...projection,
     type: 'BUSINESS',
     allowedShippingPayers: ['REQUESTER', 'RECIPIENT'],
     defaultShippingPayer: 'REQUESTER',
@@ -671,6 +676,7 @@ it('direct MPQ URL suggests both addresses but conversion retains original coord
       },
     ]
     vi.mocked(customer.capabilities).mockResolvedValue({
+      ...projection,
       type: 'PERSONAL',
       allowedShippingPayers: ['REQUESTER', 'RECIPIENT'],
       defaultShippingPayer: 'REQUESTER',

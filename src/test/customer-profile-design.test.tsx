@@ -56,10 +56,6 @@ beforeEach(() => {
     profile = { ...profile, ...body, revision: 2 }
     return profile
   })
-  vi.mocked(customer.type).mockImplementation(async (body) => {
-    profile = { ...profile, type: body.type, revision: 2 }
-    return profile
-  })
 })
 async function mount() {
   const client = new QueryClient({
@@ -90,26 +86,19 @@ it('preloads identity and only saves valid changed data, then refreshes identity
     expectedRevision: 1,
   })
 })
-it('requires confirmation for type and preserves unsaved contact edits', async () => {
+it('links to approval without enabling direct upgrade or losing contact edits', async () => {
   await mount()
   fireEvent.change(screen.getByLabelText('Nombre *'), {
     target: { value: 'Edición pendiente' },
   })
-  fireEvent.click(screen.getByRole('radio', { name: 'Negocio' }))
-  await waitFor(() =>
-    expect(screen.getByRole('button', { name: 'Cambiar tipo' })).toBeEnabled(),
-  )
-  fireEvent.click(screen.getByRole('button', { name: 'Cambiar tipo' }))
-  expect(customer.type).not.toHaveBeenCalled()
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Confirmar cambio de tipo' }),
-  )
-  await screen.findByText('Cliente · Negocio')
+  expect(
+    screen.queryByRole('radio', { name: 'Negocio' }),
+  ).not.toBeInTheDocument()
+  expect(
+    screen.getByRole('link', { name: 'Solicitar cuenta Negocio' }),
+  ).toHaveAttribute('href', '/customer/business')
   expect(screen.getByLabelText('Nombre *')).toHaveValue('Edición pendiente')
-  expect(customer.type).toHaveBeenCalledWith({
-    type: 'BUSINESS',
-    expectedRevision: 1,
-  })
+  expect(customer.type).not.toHaveBeenCalled()
 })
 it('confirms discard and never overwrites edits when refresh fails', async () => {
   await mount()
@@ -147,17 +136,23 @@ it('does not allow clearing an existing business name unsupported by DTO', async
   expect(screen.getByRole('button', { name: 'Guardar perfil' })).toBeDisabled()
   expect(screen.getByText(/no permite borrar/)).toBeInTheDocument()
 })
-it('blocks type changes when capacity cannot be confirmed', async () => {
+it('capacity failure does not enable direct upgrade nor block independent profile editing', async () => {
   vi.mocked(customer.capabilities).mockRejectedValue(new Error('Sin conexión'))
   await mount()
-  fireEvent.click(screen.getByRole('radio', { name: 'Negocio' }))
-  await screen.findByText(/No se pudo comprobar/)
-  expect(screen.getByRole('button', { name: 'Cambiar tipo' })).toBeDisabled()
+  expect(
+    screen.queryByRole('button', { name: 'Cambiar tipo' }),
+  ).not.toBeInTheDocument()
+  fireEvent.change(screen.getByLabelText('Nombre *'), {
+    target: { value: 'Nuevo nombre' },
+  })
+  expect(screen.getByRole('button', { name: 'Guardar perfil' })).toBeEnabled()
 })
 it('prevents duplicate verification requests and explains accepted is not delivered', async () => {
   await mount()
   fireEvent.click(
-    screen.getByRole('button', { name: 'Solicitar verificación de mi correo' }),
+    screen.getByRole('button', {
+      name: 'Solicitar verificación de mi correo',
+    }),
   )
   const sent = await screen.findByRole('button', {
     name: 'Verificación solicitada',

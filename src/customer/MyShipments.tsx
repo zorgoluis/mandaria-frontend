@@ -1,3 +1,4 @@
+import { hasBusinessContract } from '../customer-business/contract'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Package, UserRound } from 'lucide-react'
 import { ErrorState, Pagination } from '../components/ui'
@@ -34,7 +35,13 @@ export function MyShipments({
   const active =
     items?.items.find((item) => item.publicId === activeId) ??
     (activeRequest?.publicId === activeId ? activeRequest : undefined)
-  const canQuote = !!capabilities?.canPrequote && !blocked && !activeId
+  const canQuote =
+    hasBusinessContract(capabilities) &&
+    !!capabilities?.canPrequote &&
+    !!capabilities?.canCreateRequest &&
+    capabilities.allowedShippingPayers.length > 0 &&
+    !blocked &&
+    !activeId
   const empty = !!items && items.items.length === 0 && !loading && !error
   const limit = capabilities?.capacity.maxActiveRequests
   const quoteLink = (
@@ -66,6 +73,19 @@ export function MyShipments({
         </Link>
       </header>
       {children}
+      {capabilities && !hasBusinessContract(capabilities) && (
+        <p role="alert" className="notice">
+          Faltan campos del contrato comercial. No se habilita nueva demanda;
+          puedes consultar tus servicios.
+        </p>
+      )}
+      {hasBusinessContract(capabilities) && !capabilities.canPrequote && (
+        <p className="notice">
+          No se permite cotizar ahora.{' '}
+          <Link to="/customer/business">Consultar acceso comercial</Link>. Tus
+          servicios existentes siguen disponibles.
+        </p>
+      )}
       {activeId ? (
         <section className="shipments-active" aria-label="Solicitud activa">
           <div className="shipments-active-info">

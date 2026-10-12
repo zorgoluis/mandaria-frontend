@@ -1,3 +1,4 @@
+import { projection } from './business-fixtures'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { expect, it, vi } from 'vitest'
@@ -14,6 +15,7 @@ const cap: Capabilities = {
     maxActiveRequests: 1,
     activeRequestPublicId: null,
   },
+  ...projection,
   canPrequote: true,
   canCreateRequest: true,
   reason: null,

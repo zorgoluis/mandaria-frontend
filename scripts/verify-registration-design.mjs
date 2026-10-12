@@ -60,9 +60,8 @@ try {
       fullPage: true,
     })
   }
-  await page.getByRole('radio', { name: 'Personal' }).focus()
-  await page.keyboard.press('ArrowRight')
-  assert(await page.getByRole('radio', { name: 'Negocio' }).isChecked())
+  await page.getByRole('link', { name: 'Solicitar cuenta Negocio' }).focus()
+  await page.keyboard.press('Tab')
   await page.getByLabel('Correo electrónico').fill('incorrecto')
   await page.getByLabel(/^Nombre\s*\*?$/).focus()
   await page.getByText('Introduce un correo electrónico válido.').waitFor()
@@ -77,7 +76,7 @@ try {
   await page.getByRole('heading', { name: 'Solicitud enviada' }).waitFor()
   assert.equal(calls.length, 1)
   assert.deepEqual(calls[0].body, {
-    type: 'BUSINESS',
+    type: 'PERSONAL',
     email: 'synthetic@example.test',
     displayName: 'Cliente Sintético',
     businessName: 'Negocio Sintético',

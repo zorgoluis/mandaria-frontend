@@ -7,7 +7,7 @@ import './registration.css'
 
 type Fields = { email: string; displayName: string; businessName: string }
 export function RegistrationPage() {
-  const [type, setType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL')
+  const type = 'PERSONAL' as const
   const [fields, setFields] = useState<Fields>({
     email: '',
     displayName: '',
@@ -47,11 +47,7 @@ export function RegistrationPage() {
         ? undefined
         : 'Introduce tu nombre (hasta 100 caracteres).',
     businessName:
-      business.length > 160
-        ? 'Usa hasta 160 caracteres.'
-        : type === 'BUSINESS' && !business
-          ? 'Introduce el nombre de tu negocio.'
-          : undefined,
+      business.length > 160 ? 'Usa hasta 160 caracteres.' : undefined,
   }
   const valid = !Object.values(errors).some(Boolean)
   function change(key: keyof Fields, value: string) {
@@ -146,7 +142,7 @@ export function RegistrationPage() {
           className="registration-logo"
           aria-label="Mandaria, inicio"
         >
-          <span>m</span>
+          <img src="/mandaria.svg" alt="" width={40} height={40} />
           <strong>
             mandaria<b>.</b>
           </strong>
@@ -211,29 +207,11 @@ export function RegistrationPage() {
                 }}
               >
                 <fieldset disabled={busy} className="registration-fields">
-                  <fieldset className="registration-type">
-                    <legend>Tipo de cliente</legend>
-                    <div
-                      role="radiogroup"
-                      aria-label="Tipo de cliente"
-                      className="registration-segments"
-                    >
-                      {(['PERSONAL', 'BUSINESS'] as const).map((value) => (
-                        <label key={value}>
-                          <input
-                            type="radio"
-                            name="type"
-                            checked={type === value}
-                            value={value}
-                            onChange={() => setType(value)}
-                          />
-                          <span>
-                            {value === 'PERSONAL' ? 'Personal' : 'Negocio'}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </fieldset>
+                  <p>
+                    El registro crea un perfil Personal. Negocio requiere una
+                    solicitud y aprobación administrativa.
+                  </p>
+                  <Link to="/customer/business">Solicitar cuenta Negocio</Link>
                   {field(
                     'email',
                     'Correo electrónico',
@@ -250,11 +228,9 @@ export function RegistrationPage() {
                   )}
                   {field(
                     'businessName',
-                    type === 'BUSINESS'
-                      ? 'Nombre del negocio'
-                      : 'Nombre del negocio (opcional)',
+                    'Nombre del negocio (opcional)',
                     'Ej. Pastelería Salgado',
-                    type === 'BUSINESS',
+                    false,
                     'organization',
                   )}
                   {failure && (

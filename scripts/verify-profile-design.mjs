@@ -81,12 +81,12 @@ try {
       fullPage: true,
     })
   }
-  await page.getByRole('radio', { name: 'Negocio' }).focus()
-  await page.keyboard.press('Space')
-  assert(await page.getByRole('button', { name: 'Cambiar tipo' }).isDisabled())
+  await page.getByRole('link', { name: 'Solicitar cuenta Negocio' }).focus()
+  assert.equal(await page.getByRole('radio', { name: 'Negocio' }).count(), 0)
   await page.getByLabel('Nombre *', { exact: true }).fill('Laura Actualizada')
   await page.getByRole('button', { name: 'Guardar perfil' }).click()
   await page.getByRole('heading', { name: 'Laura Actualizada' }).waitFor()
+  await page.getByLabel('Nombre *', { exact: true }).fill('Edición pendiente')
   await page.getByRole('button', { name: 'Consultar perfil actual' }).click()
   await page.getByRole('dialog').waitFor()
   await page.getByRole('button', { name: 'Cancelar', exact: true }).click()

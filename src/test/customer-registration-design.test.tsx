@@ -23,7 +23,7 @@ function fill() {
 }
 it('defaults to personal, marks required fields and validates on blur', () => {
   mount()
-  expect(screen.getByRole('radio', { name: 'Personal' })).toBeChecked()
+  expect(screen.queryByRole('radio')).not.toBeInTheDocument()
   expect(
     screen.getByRole('button', { name: 'Solicitar registro' }),
   ).toBeDisabled()
@@ -64,22 +64,19 @@ it('sends exact normalized DTO without phone, no automatic retry and focuses gen
     screen.getByRole('link', { name: 'Ir a iniciar sesión' }),
   ).toHaveAttribute('href', '/login')
 })
-it('business requires business name and switching back retains the entered text', () => {
+it('keeps business name optional and points to authenticated approval', () => {
   mount()
   fill()
-  fireEvent.click(screen.getByRole('radio', { name: 'Negocio' }))
-  expect(screen.getByLabelText(/^Nombre del negocio/)).toBeRequired()
+  expect(
+    screen.queryByRole('radio', { name: 'Negocio' }),
+  ).not.toBeInTheDocument()
+  expect(screen.getByLabelText(/^Nombre del negocio/)).not.toBeRequired()
+  expect(
+    screen.getByRole('link', { name: 'Solicitar cuenta Negocio' }),
+  ).toHaveAttribute('href', '/customer/business')
   expect(
     screen.getByRole('button', { name: 'Solicitar registro' }),
-  ).toBeDisabled()
-  fireEvent.change(screen.getByLabelText(/^Nombre del negocio/), {
-    target: { value: 'Negocio Sintético' },
-  })
-  fireEvent.click(screen.getByRole('radio', { name: 'Personal' }))
-  expect(screen.getByLabelText(/^Nombre del negocio/)).toHaveValue(
-    'Negocio Sintético',
-  )
-  expect(screen.getByLabelText(/^Nombre del negocio/)).not.toBeRequired()
+  ).toBeEnabled()
 })
 it('guards double submit during a pending request', async () => {
   let done!: (value: unknown) => void
