@@ -1,4 +1,7 @@
 import { ShippingPaymentBlock } from '../shipping/Payment'
+import type { DispatchSearch } from './search'
+import { SearchStatus } from './SearchStatus'
+import { searchAllowsTake } from './search'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { DetailedPayment } from '../execution/payment'
 import type { ExecutionFields } from '../execution/types'
@@ -43,8 +46,20 @@ import {
   type ProviderDispatch,
 } from './types'
 
-export function DispatchBadge({ status }: { status: DispatchStatus }) {
-  return <Badge value={status} label={dispatchStatusLabels[status]} />
+export function DispatchBadge({
+  status,
+  search,
+}: {
+  status: DispatchStatus
+  search?: DispatchSearch
+}) {
+  const label =
+    status === 'OPEN' && search?.state === 'RETRY_PENDING'
+      ? 'En espera de reintento'
+      : status === 'OPEN' && search?.state === 'SEARCHING'
+        ? 'Buscando repartidor'
+        : dispatchStatusLabels[status]
+  return <Badge value={status} label={label} />
 }
 
 export function Countdown({
@@ -188,12 +203,13 @@ export function ServiceCard({
           <small>{dispatch.serviceZone.name}</small>
         </div>
         <div className="service-card-state">
-          <DispatchBadge status={dispatch.status} />
-          {dispatch.status === 'OPEN' && (
+          <DispatchBadge status={dispatch.status} search={dispatch.search} />
+          {!dispatch.search && dispatch.status === 'OPEN' && (
             <Countdown expiresAt={dispatch.expiresAt} now={now} />
           )}
         </div>
       </header>
+      <SearchStatus search={dispatch.search} />
       {service ? (
         <>
           <dl className="service-route">
@@ -238,7 +254,11 @@ export function ServiceCard({
             disabled={!canClaim(dispatch, now)}
             onClick={() => onClaim(dispatch)}
           >
-            {expiredLocally ? 'Tiempo terminado' : 'TOMAR SERVICIO'}
+            {dispatch.search && !searchAllowsTake(dispatch.search, now)
+              ? 'Esperando actualización'
+              : expiredLocally
+                ? 'Tiempo terminado'
+                : 'TOMAR SERVICIO'}
           </button>
         )}
         {canRelease(dispatch) && (
@@ -417,17 +437,28 @@ export function ClaimDialog({
             providerId={providerId}
             cost={dispatch.creditCost}
           />
-          <p className="modal-description">
-            <Countdown expiresAt={dispatch.expiresAt} now={now} />
-          </p>
+          <div className="modal-description">
+            {dispatch.search ? (
+              <SearchStatus search={dispatch.search} />
+            ) : (
+              <Countdown expiresAt={dispatch.expiresAt} now={now} />
+            )}
+          </div>
           <ActionForm
             initialDirty
             submitLabel="Confirmar y tomar"
             cancelLabel="Volver"
             onCancel={onClose}
             onSubmit={async () => {
-              if (remaining(dispatch.expiresAt, Date.now()) === null) {
-                setFinal('El tiempo para tomar este servicio terminó.')
+              if (
+                !searchAllowsTake(dispatch.search) ||
+                remaining(dispatch.expiresAt, Date.now()) === null
+              ) {
+                setFinal(
+                  dispatch.search
+                    ? 'Esperando actualización de Mandaria. El contador no confirma el cierre de la búsqueda.'
+                    : 'El tiempo para tomar este servicio terminó.',
+                )
                 await refreshProviderDispatches(providerId)
                 return
               }
@@ -440,6 +471,14 @@ export function ClaimDialog({
                 notify('Servicio tomado correctamente.')
                 onClaimed(result)
               } catch (error) {
+                if (
+                  error instanceof ApiError &&
+                  error.code === 'DISPATCH_RETRY_PENDING'
+                ) {
+                  setFinal(errorMessage(error))
+                  await refreshProviderDispatches(providerId)
+                  return
+                }
                 if (!isFinal(error)) throw error
                 setFinal(errorMessage(error))
                 await refreshProviderDispatches(providerId)

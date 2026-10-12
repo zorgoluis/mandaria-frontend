@@ -678,3 +678,10 @@ it('V1.17 direct customer rows and detail allow null integration without inventi
     screen.queryByRole('link', { name: 'Cliente directo' }),
   ).not.toBeInTheDocument()
 })
+
+it('links request search to the existing filtered admin dispatch view', async () => {
+  mount('/delivery-requests/MDR-000123')
+  expect(
+    await screen.findByRole('link', { name: 'Consultar búsqueda y servicio' }),
+  ).toHaveAttribute('href', '/dispatches?request=MDR-000123')
+})

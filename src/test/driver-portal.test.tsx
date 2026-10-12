@@ -954,3 +954,82 @@ it('V1.13-D independent list displays offer terms without an advance instruction
   ).toHaveTextContent('25.10 MXN')
   expect(screen.queryByText(/Cobra únicamente|Requiere adelanto/)).toBeNull()
 })
+
+describe('automatic search in independent services', () => {
+  const search = {
+    state: 'SEARCHING' as const,
+    attempt: 2,
+    maxAttempts: 5 as const,
+    windowExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    stoppedReason: null,
+  }
+  it('displays the backend round on the available card', async () => {
+    vi.mocked(driverPortal.available).mockResolvedValue(
+      page([dispatch({ search })]),
+    )
+    mount('/driver/services')
+    expect(
+      await screen.findByText(/Buscando repartidor — intento 2 de 5/),
+    ).toBeInTheDocument()
+  })
+  it('disables taking during server retry pending even with a future timestamp', async () => {
+    vi.mocked(driverPortal.get).mockResolvedValue(
+      dispatch({ search: { ...search, state: 'RETRY_PENDING' } }),
+    )
+    mount('/driver/services/' + DISPATCH)
+    expect(
+      await screen.findByText(
+        /Esperando reintento automático — intento 2 de 5/,
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'TOMAR SERVICIO' }),
+    ).toBeDisabled()
+    expect(driverPortal.take).not.toHaveBeenCalled()
+  })
+  it('refetches RETRY_PENDING from take without reporting definitive unavailability', async () => {
+    vi.mocked(driverPortal.get)
+      .mockResolvedValueOnce(dispatch({ search }))
+      .mockResolvedValue(
+        dispatch({ search: { ...search, state: 'RETRY_PENDING' } }),
+      )
+    vi.mocked(driverPortal.take).mockRejectedValue(
+      normalizeError(409, { code: 'DISPATCH_RETRY_PENDING' }),
+    )
+    mount('/driver/services/' + DISPATCH)
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'TOMAR SERVICIO' }),
+    )
+    await userEvent.selectOptions(
+      await dialog().findByLabelText('Vehículo'),
+      MOTO,
+    )
+    await userEvent.click(dialog().getByRole('button', { name: 'CONFIRMAR' }))
+    expect(
+      await screen.findByText(/La búsqueda sigue abierta/),
+    ).toBeInTheDocument()
+    await waitFor(() =>
+      expect(vi.mocked(driverPortal.get).mock.calls.length).toBeGreaterThan(1),
+    )
+    expect(driverPortal.take).toHaveBeenCalledTimes(1)
+    expect(
+      screen.queryByText('Este servicio ya no está disponible.'),
+    ).toBeNull()
+  })
+  it('shows exhaustion instead of claiming another executor took it', async () => {
+    vi.mocked(driverPortal.get).mockResolvedValue(
+      dispatch({
+        status: 'EXPIRED',
+        search: { ...search, state: 'EXHAUSTED', attempt: 5 },
+      }),
+    )
+    mount('/driver/services/' + DISPATCH)
+    expect(
+      await screen.findByText(/No se encontró ejecutor/),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(/Otro repartidor o proveedor lo tomó antes/),
+    ).toBeNull()
+    expect(screen.queryByRole('button', { name: 'TOMAR SERVICIO' })).toBeNull()
+  })
+})

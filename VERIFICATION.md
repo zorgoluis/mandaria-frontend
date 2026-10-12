@@ -1,3 +1,21 @@
+## 2026-10-11 — Integración de main en QA, pendiente de commit
+
+Base QA `6801fa3`; main incorporado `06d9766`. Merge local con `git merge --no-commit --no-ff main` en el checkout principal, permaneciendo en QA. No se modificó backend ni configuración operativa.
+
+- Resueltos cinco conflictos: README.md, VERIFICATION.md, src/dispatch/components.tsx, src/driver-portal/pages.tsx y src/test/delivery-requests.test.tsx. Conservadas ambas entradas documentales, imports de ShippingPaymentBlock y búsqueda, y las dos pruebas independientes (integración nullable del cliente y enlace a búsqueda administrativa).
+- Se incorporan estados/ventanas de búsqueda automática, polling y manejo DISPATCH_RETRY_PENDING de main. Se conserva V1.17, GPS/Google Maps/enlaces V1.18, recuperación, hitos de consulta, permisos legacy, instrucciones económicas, selector de ubicación y scroll lateral de QA.
+- Comparación documental: todas las líneas no vacías de QA permanecen en README/VERIFICATION; todas las de VERIFICATION de main también. README conserva la política de referencia más reciente de QA (sólo origen para Google), en lugar de restaurar la antigua descripción global no-referrer de main. El transporte Tracking conserva su protección propia.
+
+Validación ejecutada sobre el resultado combinado:
+
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS.
+- `npm run build`: PASS (incluye TypeScript de aplicación). Advertencia de chunk Root de 691.93 kB; no error de compilación.
+- `npx vitest run src/test/dispatch-search.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/delivery-requests.test.tsx src/test/collection-instructions.test.tsx src/test/execution.test.tsx src/test/execution-reconciliation.test.ts src/test/customer.test.tsx src/test/customer-reconciliation.test.tsx src/test/customer-location.test.tsx src/test/location.test.tsx src/test/google-map.test.tsx --pool=threads --maxWorkers=1`: **308/308 PASS, 12 archivos**.
+- `git diff --cached --check`, archivos sin resolver y búsqueda de marcadores: sin incidencias.
+
+Estas regresiones son pruebas frontend con servicios/SDK simulados según cada archivo; no acreditan una nueva integración real con backend, Google o PostgreSQL del resultado combinado. Las evidencias reales anteriores se conservan con sus versiones originales. Sin despliegue, activación, commit ni push. Merge resuelto y preparado en el índice, pendiente de commit autorizado.
+
 ## 2026-10-07 — Recorrido conjunto V1.18: navegador → backend → PostgreSQL → Google REAL
 
 Checkout utilizado exclusivamente: C:/Users/zorgl/Documents/mandaria-frontend, rama v1.18-GPS_seguimiento_temporal, HEAD f36f771. Conservados VERIFICATION y scripts/verify-google-real.mjs pendientes; no se usó ni copió configuración del worktree f1fe. Backend b97b9d1be54a2c37601e51990d66ccaf73d0203f; hash SHA256 de dist/location/location.service.js registrado en [evidencia estructurada](docs/checks/v118-google-joint.json). No cambios backend.
@@ -284,7 +302,61 @@ Sin integración real del backend A–E, correos/routing, PostgreSQL, nginx ni p
 
 Sin .env/configuración, backend, datos reales, commit, push, despliegue ni activación. No se declara V1.17 completa.
 
+## 2026-10-11 — Compatibilidad visual con backend patches
+
+**Resultado:** recorridos focalizados aprobados; ningún defecto frontend demostrado ni cambio de código de producto. No se fuerza LEGACY ni se modifica el bloqueo defensivo.
+
+### Versiones y aislamiento
+
+- Frontend principal: `C:/Users/zorgl/Documents/mandaria-frontend`, `main f0b2e4e448f78c17558b7e650d7ad0ac220914bd`. Durante la preparación hubo un cambio externo de QA a main (reflog 16:09:40); no lo realizó este trabajo. Se repitió únicamente este recorrido en main, comprobando HEAD antes y después. No se acredita QA con esta evidencia.
+- Backend: `C:/Users/zorgl/.codex/worktrees/mandaria-web-contract/mandaria-backend`, `patches 30f625b`; contrato OPERATIONAL-WEB-COMPATIBILITY.md. Se utilizó su compilación dist y cliente Prisma existentes, sin modificar backend ni ejecutar build, migraciones o suites backend.
+- PostgreSQL18 privado: loopback `127.0.0.1:56862`, base exclusiva `contract_web_visual_test`, copia de `contract_3_test` ya migrada. Verificadas las 32 migraciones de patches, no las 43 de QA. Cluster temporal `mandaria-contract-J9Xupc`; datos sintéticos conservados.
+- Nest local `43185`, Vite `4185` con proxy /api hacia ese Nest. Routing nativo `local_fake`, correo `local_outbox` temporal, polling de webhooks desactivado sólo en el proceso. Sin .env modificado, VM, Docker, Coita, servicios externos o actividad productiva.
+
+### Recorridos navegador → backend → PostgreSQL
+
+| Caso | Resultado real |
+| --- | --- |
+| Proveedor, servicio nunca asignado | GET con trackingMode=null, sin aviso de modo desconocido y toma habilitada |
+| Tomar y asignar | Login PROVIDER_ADMIN; claim y selección de conductor/vehículo mediante la UI y permisos reales |
+| Asignación vigente | GET con trackingMode=LEGACY, conductor y vehículo visibles, entrega habilitada |
+| Entrega proveedor | Confirmación desde PROVIDER_ADMIN; detalle refrescado y GET DELIVERED |
+| Independiente | Login DRIVER independiente; TAKE con vehículo propio; Mi servicio y driver/me.activeDeliveryAssignment coherentes con LEGACY |
+| Entrega independiente | Confirmación por ese DRIVER; GET DELIVERED y activeDeliveryAssignment=null |
+
+Prueba negativa **simulada, separada de la integración real**: sobre un tercer servicio real se interceptó exclusivamente su GET de detalle para retirar trackingMode. La UI mostró el aviso defensivo y TOMAR SERVICIO quedó deshabilitado. No se omitió ni forzó el campo en backend. Los demás recorridos no interceptaron APIs.
+
+### Ejecución y evidencia
+
+- `node scripts/verify-patches-web.mjs`: exit0; seis resultados agrupados aprobados; `errors: []` (sin pageerror). Chromium real mediante Playwright; capturas inspeccionadas de proveedor asignado, independiente asignado y bloqueo por campo ausente.
+- Runner focalizado: prepara fixtures sintéticas usando sólo helpers de siembra existentes del backend, no ejecuta sus suites. Las claves y contraseñas se generan en memoria; no se guardan en la evidencia.
+- Evidencia local ignorada en Git: `test-results/patches-web/identity.json`, `results.json`, `provider-assigned.png`, `independent-assigned.png`, `missing-field.png`. Las capturas contienen únicamente datos sintéticos. identity enumera las migraciones reales.
+- Ajustes previos del runner: normalización CRLF al extraer la siembra, selectores adaptados a radios reales y espera del selector de vehículo independiente; no fueron defectos de producto.
+- `node --check scripts/verify-patches-web.mjs`, ESLint del runner y `git diff --check`: aprobados. Sin suites generales ni build de producto, puesto que no cambió código de aplicación.
+- Vite, Nest y navegador temporales cerrados. Cluster propio detenido tras comprobar ausencia de otros clientes; datos conservados.
+
+Límites: verificación local de estos flujos legacy, no de nginx/despliegue, ejecución detallada, GPS o clientes directos exclusivos de otras ramas. La entrega sintética sólo ejercita el flujo autorizado; no hubo entrega física ni cobro real. No commit, push ni despliegue.
+
 ## 2026-10-06 — Integración local de main y QA
+
+## 2026-10-10 — Búsqueda automática de hasta cinco intentos
+
+Implementación y validación local juntas. Fuentes leídas: README/continuidad de este repositorio (sin AGENTS.md propio), mandaria-backend/docs/AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md y esquema DispatchSearchResponse/referencias ProviderDispatchResponse, DriverDispatchResponse y AdminDispatchResponse del OpenAPI final local. Backend sólo leído; no se copió ni publicó el OpenAPI general.
+
+- Nuevo SearchStatus compartido y contrato search opcional: intento/maxAttempts/ventana/causa siempre provienen del backend. El reloj sólo presenta el tiempo; aun en la quinta ventana, cero no determina EXHAUSTED ni cambia la ronda.
+- Integrado en tarjetas y detalles de proveedor/independiente, servicio actual independiente y auditoría administrativa. Solicitud enlaza a despachos filtrados por MDR; su endpoint administrativo no expone search. RETRY_PENDING bloquea tomar aunque el reloj local discrepe; EXHAUSTED informa que no se encontró ejecutor. STOPPED distingue servicio/integración no disponibles. EXECUTOR_FOUND recuerda una toma histórica y no implica que conserve ejecutor después de liberarse. Cancelación logística se presenta sin conclusiones comerciales.
+- React Query conserva claves/refetch, agrega sondeo de 15 segundos a listas/detalles sin él y espacia errores (60–120 segundos). Sigue consultando durante la espera y al cero local; no hace POST por temporizador ni por conflicto. 409 DISPATCH_RETRY_PENDING en claim/take refresca mediante las funciones existentes, muestra espera y exige nueva decisión humana para una toma posterior.
+- Legacy sin search conserva presentación y permisos; no se modifican instrucciones financieras, collectionInstructions, flujo de créditos ni reglas de cierre detallado/legacy. Corregido aviso administrativo que prometía expiración final al vencer cualquier ventana.
+
+Validación final:
+
+- npx vitest run src/test/dispatch-search.test.tsx src/test/dispatch.test.tsx src/test/driver-portal.test.tsx src/test/collection-instructions.test.tsx src/test/delivery-requests.test.tsx --pool=threads --maxWorkers=1: **151/151 PASS, cinco archivos**. Sólo componentes afectados y regresión financiera asociada.
+- Casos nuevos: contador hasta cero en quinta ronda sin inferir cierre; espera prolongada sin incrementar; ventana nueva recibida; respuesta/refetch tardío; 409 intermedio en proveedor e independiente con una sola toma; agotamiento; cancelación; toma histórica/liberación; causas de detención; ausencia de search; auditoría y enlace desde solicitud; permisos de toma conservados en detalle; errores de sondeo.
+- npx tsc -b --pretty false y npx tsc --project tsconfig.test.json --pretty false: PASS. ESLint sobre archivos fuente y pruebas afectados: PASS. git diff --check: PASS.
+- Primera ejecución de Vitest con pool predeterminado: tres archivos no cargaron por ENOENT en caché temporal del sandbox; no se contabilizó como válida. Con threads/1 worker, una expectativa nueva suponía exactamente dos GET; refreshDriverPortal ya invalida y refetchea, produciendo tres. Se ajustó la prueba para exigir refetch y exactamente un comando take; corrida final completa focalizada aprobada. Errores transitorios de preparación (alias Python no disponible, cierre JSX e import faltante) corregidos antes de la validación final.
+
+Límites: pruebas de componentes con servicios simulados y reloj controlado, no validación del worker/PostgreSQL ni E2E operativo/visual en navegador. No se ejecutó suite completa, backend, activación, operaciones reales, cambios de entorno, commit, push ni despliegue. Activación/despliegue coordinado permanecen pendientes de autorización operativa, conforme al handoff. Historial previo conservado abajo.
+
 
 Preparada en codex/merge-main-qa desde QA bcd70cf, integrando main 0a44d6e sin commit ni push. Los únicos conflictos textuales fueron README.md y VERIFICATION.md: se conservaron las entradas completas de ambas ramas. Comparación de líneas previas: ninguna ausente de ninguno de los dos documentos en ambas ramas.
 

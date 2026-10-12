@@ -1,3 +1,5 @@
+import { SearchStatus } from './SearchStatus'
+import { dispatchPollInterval } from './search'
 import { legacyProjection } from './rules'
 import { refreshAfterAssignment } from '../delivery-assignments/queries'
 import { useState, type ReactNode } from 'react'
@@ -100,6 +102,7 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
     queryKey: dispatchKeys.providerList(scope.providerId, filters),
     queryFn: ({ signal }) =>
       providerDispatches.list(scope.providerId, filters, signal),
+    refetchInterval: dispatchPollInterval,
   })
   const now = useNow(tab !== 'history')
   const [claiming, setClaiming] = useState<ProviderDispatch | null>(null)
@@ -242,7 +245,7 @@ function ServiceRecord({ scope, id }: { scope: ProviderContext; id: string }) {
     queryFn: ({ signal }) =>
       providerDispatches.get(scope.providerId, id, signal),
     staleTime: 0,
-    refetchInterval: 15000,
+    refetchInterval: dispatchPollInterval,
   })
   if (query.isPending || query.isError)
     return (
@@ -398,13 +401,15 @@ function ServiceContent({
         <section className="panel" aria-labelledby="service-state">
           <div className="panel-toolbar">
             <h2 id="service-state">Estado</h2>
-            <DispatchBadge status={dispatch.status} />
+            <DispatchBadge status={dispatch.status} search={dispatch.search} />
           </div>
           <InfoGrid
             items={[
               [
                 'Tiempo para tomarlo',
-                dispatch.status === 'OPEN' ? (
+                dispatch.search ? (
+                  <SearchStatus search={dispatch.search} />
+                ) : dispatch.status === 'OPEN' ? (
                   <Countdown expiresAt={dispatch.expiresAt} now={now} />
                 ) : (
                   `Hasta ${date(dispatch.expiresAt)}`

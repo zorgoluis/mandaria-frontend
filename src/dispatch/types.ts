@@ -1,3 +1,4 @@
+import type { DispatchSearch } from '../dispatch/search'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import type { ExecutionFields } from '../execution/types'
 import type {
@@ -94,6 +95,7 @@ export interface DispatchAssignmentSummary {
   vehicle: AssignmentVehicle & { plate: string | null }
 }
 export interface ProviderDispatch extends ExecutionFields {
+  search?: DispatchSearch
   collectionInstructions?: CollectionInstructions
   id: string
   status: DispatchStatus
@@ -130,6 +132,7 @@ export interface AdminDispatchCandidate {
   releaseReason: string | null
 }
 export interface AdminDispatch {
+  search?: DispatchSearch
   trackingMode?: import('../execution/types').TrackingMode
   id: string
   status: DispatchStatus

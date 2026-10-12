@@ -1,3 +1,5 @@
+import { SearchStatus } from './SearchStatus'
+import { dispatchPollInterval } from './search'
 import { useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ExecutionPanel } from '../execution/components'
@@ -61,6 +63,7 @@ export function AdminDispatchesPage() {
     queryKey: dispatchKeys.adminList(filters),
     queryFn: ({ signal }) => adminDispatches.list(filters, signal),
     enabled: !invalid,
+    refetchInterval: dispatchPollInterval,
   })
   const [draft, setDraft] = useState(requestParam)
   const apply = (next: {
@@ -158,12 +161,13 @@ export function AdminDispatchesPage() {
                 {
                   label: 'Estado',
                   render: (row) => (
-                    <span className="cell-meta">
-                      <DispatchBadge status={row.status} />
+                    <div className="cell-meta">
+                      <DispatchBadge status={row.status} search={row.search} />
+                      <SearchStatus search={row.search} />
                       {row.noProviderAvailable && (
                         <small>Sin proveedor disponible</small>
                       )}
-                    </span>
+                    </div>
                   ),
                 },
                 {
@@ -231,6 +235,7 @@ export function AdminDispatchDetail() {
     queryKey: dispatchKeys.adminDetail(id),
     queryFn: ({ signal }) => adminDispatches.get(id, signal),
     enabled: valid,
+    refetchInterval: dispatchPollInterval,
   })
   if (!valid || query.isPending || query.isError)
     return (
@@ -265,8 +270,9 @@ export function AdminDispatchDetail() {
       <section className="panel" aria-labelledby="dispatch-summary">
         <div className="panel-toolbar">
           <h2 id="dispatch-summary">Resumen</h2>
-          <DispatchBadge status={item.status} />
+          <DispatchBadge status={item.status} search={item.search} />
         </div>
+        <SearchStatus search={item.search} />
         <InfoGrid
           items={[
             [
@@ -305,8 +311,9 @@ export function AdminDispatchDetail() {
         />
         {item.noProviderAvailable && (
           <p className="panel-note warning">
-            Ningún proveedor puede tomarlo: no quedan candidatos ofrecidos.
-            Expirará al vencer la ventana.
+            {item.search
+              ? 'Sin candidatos de proveedor ofrecidos en esta ventana. El estado de búsqueda lo confirma Mandaria.'
+              : 'Ningún proveedor puede tomarlo: no quedan candidatos ofrecidos. Expirará al vencer la ventana.'}
           </p>
         )}
       </section>
