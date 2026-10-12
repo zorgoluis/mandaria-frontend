@@ -1,15 +1,9 @@
+import { CustomerProfilePage } from './ProfilePage'
 import type { AccessChallenge } from './access'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../auth/context'
-import {
-  ActionForm,
-  Field,
-  PageTitle,
-  Loading,
-  ErrorState,
-} from '../components/ui'
+import { ActionForm, Field, PageTitle } from '../components/ui'
 import { customer } from './service'
 import type { CustomerProfileViewDto } from './contract'
 const accepted =
@@ -234,103 +228,5 @@ export function CustomerAccess({
   )
 }
 export function CustomerProfile() {
-  const { user } = useAuth()
-  const q = useQuery({
-    queryKey: ['customer', user?.id, 'profile'],
-    queryFn: customer.profile,
-    retry: false,
-  })
-  const [message, setMessage] = useState(''),
-    [uncertain, setUncertain] = useState(false)
-  if (q.isPending) return <Loading />
-  const profile = q.data
-  return (
-    <>
-      <PageTitle title="Mi perfil cliente" />
-      <p>Tu perfil cliente no cambia tu rol ni concede permisos operativos.</p>
-      {q.isError && <ErrorState error={q.error} />}
-      <button
-        className="button secondary"
-        onClick={() =>
-          void customer
-            .verify()
-            .then(() => setMessage(accepted))
-            .catch(() =>
-              setMessage(
-                'No se pudo solicitar la verificación. Revisa tu sesión e inténtalo más tarde.',
-              ),
-            )
-        }
-      >
-        Solicitar verificación de mi correo
-      </button>
-      <p role="status">{message}</p>
-      <button
-        className="button secondary"
-        onClick={() =>
-          void q.refetch().then((r) => {
-            if (r.isSuccess) setUncertain(false)
-          })
-        }
-      >
-        Consultar perfil actual
-      </button>
-      {uncertain && (
-        <p role="alert">
-          Cambio pendiente de consulta. No repitas la modificación antes de leer
-          el perfil actual.
-        </p>
-      )}
-      <fieldset disabled={uncertain || q.isFetching}>
-        <ActionForm
-          key={profile?.revision ?? 'new'}
-          submitLabel={profile ? 'Guardar perfil' : 'Anexar perfil a mi cuenta'}
-          onSubmit={async (d) => {
-            setUncertain(true)
-            if (profile)
-              await customer.update({
-                expectedRevision: profile.revision,
-                displayName: String(d.get('displayName')),
-                ...(String(d.get('businessName') ?? '').trim()
-                  ? { businessName: String(d.get('businessName')) }
-                  : {}),
-              })
-            else await customer.attach(profileData(d))
-            await q.refetch()
-            setUncertain(false)
-            setMessage('Perfil guardado.')
-          }}
-        >
-          <ProfileFields profile={profile} />
-        </ActionForm>
-        {profile && (
-          <ActionForm
-            key={'type' + profile.revision}
-            submitLabel="Cambiar tipo"
-            onSubmit={async (d) => {
-              setUncertain(true)
-              await customer.type({
-                type: d.get('type') === 'BUSINESS' ? 'BUSINESS' : 'PERSONAL',
-                expectedRevision: profile.revision,
-              })
-              await q.refetch()
-              setUncertain(false)
-            }}
-          >
-            <p>
-              El cambio requiere no tener solicitudes abiertas. No cambia
-              contratos anteriores.
-            </p>
-            <Field label="Nuevo tipo">
-              <select name="type" defaultValue={profile.type}>
-                <option value="PERSONAL">Personal</option>
-                <option value="BUSINESS">Negocio</option>
-              </select>
-            </Field>
-          </ActionForm>
-        )}
-      </fieldset>
-      <Link to="/customer">Mis solicitudes</Link>
-    </>
-  )
+  return <CustomerProfilePage />
 }

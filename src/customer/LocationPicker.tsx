@@ -1,5 +1,6 @@
+import { AddressAutocomplete } from './AddressAutocomplete'
 import { useEffect, useRef, useState } from 'react'
-import { LocateFixed, MapPin, Search } from 'lucide-react'
+import { LocateFixed, Map, MapPin, Search } from 'lucide-react'
 import { Field } from '../components/ui'
 import { env } from '../config/env'
 import {
@@ -14,7 +15,9 @@ export function LocationPicker({
   label,
   value,
   onChange,
+  autocomplete = false,
 }: {
+  autocomplete?: boolean
   label: 'Origen' | 'Destino'
   value: SelectedLocation | null
   onChange: (value: SelectedLocation | null) => void
@@ -157,7 +160,9 @@ export function LocationPicker({
     try {
       const sdk = await loadMaps(env.googleMapsApiKey)
       if (!sdk.importLibrary) throw new Error('Unavailable')
-      const { Geocoder } = await sdk.importLibrary('geocoding')
+      const library = await sdk.importLibrary('geocoding')
+      if (!('Geocoder' in library)) throw new Error('Unavailable')
+      const { Geocoder } = library
       const response = await new Geocoder().geocode({
         address: address.trim(),
         region: 'MX',
@@ -246,40 +251,60 @@ export function LocationPicker({
           ? '¿Dónde recogemos el envío?'
           : '¿Dónde lo entregamos?'}
       </p>
-      <Field label={`Buscar dirección de ${label.toLowerCase()}`}>
-        <input
-          value={address}
-          placeholder="Calle, número, colonia y ciudad"
-          autoComplete="off"
-          maxLength={300}
-          onChange={(event) => {
+      {autocomplete ? (
+        <AddressAutocomplete
+          label={label}
+          selected={value}
+          onSelect={select}
+          onClear={() => {
             sequence.current++
-
             working.current = false
             setBusy(false)
-            setAddress(event.target.value)
-            setResults([])
-            setMessage('')
             onChange(null)
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault()
-              void search()
-            }
-          }}
         />
-      </Field>
+      ) : (
+        <>
+          <Field label={`Buscar dirección de ${label.toLowerCase()}`}>
+            <input
+              value={address}
+              placeholder="Calle, número, colonia y ciudad"
+              autoComplete="off"
+              maxLength={300}
+              onChange={(event) => {
+                sequence.current++
+
+                working.current = false
+                setBusy(false)
+                setAddress(event.target.value)
+                setResults([])
+                setMessage('')
+                onChange(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  void search()
+                }
+              }}
+            />
+          </Field>
+        </>
+      )}
       <div className="location-picker-actions">
-        <button
-          type="button"
-          className="button secondary"
-          disabled={busy || !address.trim() || !env.googleMapsApiKey}
-          onClick={() => void search()}
-        >
-          <Search size={16} aria-hidden="true" />
-          Buscar dirección
-        </button>
+        {!autocomplete && (
+          <>
+            <button
+              type="button"
+              className="button secondary"
+              disabled={busy || !address.trim() || !env.googleMapsApiKey}
+              onClick={() => void search()}
+            >
+              <Search size={16} aria-hidden="true" />
+              Buscar dirección
+            </button>
+          </>
+        )}
         <button
           type="button"
           className="button secondary"
@@ -289,6 +314,17 @@ export function LocationPicker({
           <LocateFixed size={16} aria-hidden="true" />
           Usar mi ubicación
         </button>
+        {!open && (
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!env.googleMapsApiKey}
+            onClick={() => setOpen(true)}
+          >
+            <Map size={16} aria-hidden="true" />
+            Elegir en el mapa
+          </button>
+        )}
       </div>
       <p role="status">{message || (busy ? 'Buscando…' : '')}</p>
       {!!results.length && (
@@ -307,15 +343,6 @@ export function LocationPicker({
       )}
       {env.googleMapsApiKey ? (
         <>
-          {!open && (
-            <button
-              type="button"
-              className="button secondary"
-              onClick={() => setOpen(true)}
-            >
-              Elegir en el mapa
-            </button>
-          )}
           {open && (
             <>
               <p>
@@ -360,7 +387,10 @@ export function LocationPicker({
           usar tu ubicación actual.
         </p>
       )}
-      <div className="location-picker-selection" aria-live="polite">
+      <div
+        className={`location-picker-selection ${value ? 'ready' : 'pending'}`}
+        aria-live="polite"
+      >
         <strong>
           {value
             ? `${label} seleccionado`

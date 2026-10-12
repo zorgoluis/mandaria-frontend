@@ -1,3 +1,156 @@
+## 2026-10-12 — Seguimiento público: rediseño de /track (QA)
+
+Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, rama QA. Conservados todos los cambios pendientes anteriores. Nuevos `src/location/PublicTrackingScreen.tsx`, `shared-tracking.css`, `src/test/public-tracking-design.test.tsx`, `scripts/verify-public-tracking-design.mjs`; ajustes `components.tsx`, `LocationMap.tsx`, `googleMaps.ts`, `google-map.test.tsx`, README y V1.18-WEB.
+
+- `npx vitest run src/test/public-tracking-design.test.tsx src/test/location.test.tsx src/test/google-map.test.tsx src/test/google-loader.test.ts --pool=threads --maxWorkers=1`: **53/53 PASS**. Diez casos nuevos del panel (frescura/caducidad, panel expandible, terminal/incidencia/transferencia/antes de recogida, permisos y red) y un caso del mapa público. Regresiones existentes conservan extracción del fragmento, no persistencia, fotografías fuera de orden, retirada, carga tardía, SDK fallido y recuperación de enlaces.
+- Tras reforzar la comprobación de bounds: `npx vitest run src/test/google-map.test.tsx --pool=threads --maxWorkers=1`: **10/10 PASS**. Mantiene instancia, no recentra cuando el punto sigue dentro del área del mapa, marcador gris en STALE y animaciones canceladas al desmontar.
+- `npm run typecheck:test`: PASS; `npm run lint`: PASS; eslint focalizado final de los siete archivos TS/script: PASS.
+- `npm run build`: PASS final. Advertencia existente de tamaño: Root 732.41 kB, gzip 202.25 kB.
+- `node scripts/verify-public-tracking-design.mjs`: PASS, repetido tras corregir padding heredado de main. Chromium 1440/900/390 px sin overflow horizontal, teclado para expandir panel, recientes/desactualizadas/sin señal/terminal/enlace denegado. Un SDK cargado, sin Authorization Mandaria en petición de SDK, sin errores pageerror. Capturas revisadas: `test-results/public-tracking-design/width-1440.png`, `width-390.png`, `mobile-expanded.png`; también 900px y estados especiales. Los datos y el SDK son **simulados**, marcados en las capturas: no acredita cartografía Google ni integración backend real. No llamadas externas, claves reales ni operaciones reales. Servicios temporales cerrados y fuentes temporales eliminadas.
+- `git diff --check`: PASS.
+
+Hallazgos durante implementación: dos tests iniciales coincidían con texto duplicado de enlace faltante; se eliminó la repetición del título. La animación inicial mezclaba el reloj de performance con el de RAF en JSDOM: usa ahora únicamente timestamps de RAF. Lint detectó Date.now en render sin muestra; se retiró esa lectura innecesaria. Revisión visual detectó padding global de main y se anuló sólo en el layout público. Todos corregidos antes de la validación final.
+
+Decisiones contractuales: a diferencia del boceto, DELIVERED no conserva posición: se retira conforme a usableSample/terminalLocation. Sin muestra autorizada no se carga Google ni se conserva un centro anterior; se muestra fondo neutro, nunca coordenadas inventadas. Frescura y borrado respetan freshUntil/eraseAfter, sin cambiar polling/backoff. Diferencia enlaces denegados de fallos temporales. Token, transporte Tracking, secuencia de versiones y reglas de privacidad no cambian. El modo de presentación del mapa es opcional; el mapa del cliente conserva su presentación. La transición visual de 300 ms no representa trayectoria GPS. Cambio de generación desmonta el mapa anterior. En móvil el panel reserva espacio fuera del mapa para no cubrir controles/atribución; se puede desplazar internamente al expandirlo.
+
+Pendiente: comprobar estos ajustes visuales con Google real (teselas, zoom, fullscreen y atribución efectiva) en sesión autorizada. No se repite ni se reclama una nueva integración backend/PostgreSQL. Sin commit, push ni despliegue.
+
+## 2026-10-12 — Mi perfil cliente (QA)
+
+Rediseño en el checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, rama QA, conservando todos los cambios pendientes. Contenido con identidad, iniciales, correo de sesión, tarjetas de datos/tipo, confirmaciones, skeleton, errores y adaptación móvil. El layout existente sólo cambia enlaces/estado activo de Mi perfil y observa la caché del perfil para actualizar el nombre, sin nuevas consultas para usuarios operativos.
+
+Archivos: nuevos `src/customer/ProfilePage.tsx`, `profile-format.ts`, `profile.css`, `src/test/customer-profile-design.test.tsx`, `scripts/verify-profile-design.mjs`; ajustes en `src/customer/identity.tsx`, `src/layouts/AdminLayout.tsx`, README y V1.17-WEB.
+
+- `npx vitest run src/test/customer-profile-design.test.tsx src/test/customer.test.tsx src/test/flows.test.tsx --pool=threads --maxWorkers=1`: **81/81 PASS** (8 nuevas de perfil y regresiones existentes). Guardado/revisión, confirmación del tipo, conservación de ediciones de otra sección, consulta fallida, respuesta perdida, negocio no borrable, capacidad desconocida, verificación sin doble envío y layout/caché. La primera ejecución perfil+customer pasó 33/33 antes de añadir el caso de layout.
+- `npm run typecheck:test`: PASS, incluida repetición tras la última prueba. `npm run lint`: PASS; eslint focalizado final de prueba/script: PASS.
+- `npm run build`: PASS (TypeScript y Vite). Advertencia de chunk Root 726.23 kB (gzip 200.76 kB), sin errores.
+- `node scripts/verify-profile-design.mjs`: PASS. Chromium 1440/1000/390 px, sin overflow; teclado sobre radiogroup, bloqueo por solicitud abierta, guardado, confirmación al consultar con edición pendiente y cooldown de correo. Capturas de escritorio/móvil revisadas visualmente: `test-results/profile-design/width-1440.png`, `width-390.png`; además width-1000 y result.json. Sin errores de ejecución en página. Vite/Chromium temporales cerrados.
+- `git diff --check`: PASS.
+
+Contrato conservado: nombre/negocio/tipo/revisión vienen del perfil, correo/verificación de Auth y solicitudes abiertas de capabilities. Cambiar tipo requiere capacidad conocida sin abiertas y confirmación, con expectedRevision. Una respuesta incierta bloquea nuevas escrituras hasta consultar el perfil. Cambios remotos de revisión no sobreescriben el borrador. No se borra un businessName existente con vacío, porque el DTO lo prohíbe. La respuesta ACCEPTED de verificación no acredita entrega de correo: se muestra «Verificación solicitada» y cooldown local de 60 s (respeta Retry-After cuando existe). El estado de verificación sigue siendo el de sesión; no se añade restauración de tokens al consultar perfil.
+
+Límites: tests de servicios y API visual simulados con datos sintéticos; no es integración real backend ni acredita entrega de correo. Sin cambios backend, configuración, credenciales, commit, push ni despliegue.
+
+## 2026-10-12 — Mis envíos (QA)
+
+Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, QA, conservando cambios anteriores. Nuevos `src/customer/MyShipments.tsx`, `shipments.css`, `src/test/customer-shipments-design.test.tsx` y `scripts/verify-shipments-design.mjs`; ajustes en `pages.tsx`, fixture de `customer.test.tsx`, README y V1.17-WEB. Contrato backend leído, no modificado.
+
+- `npx vitest run src/test/customer-shipments-design.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`: **32/32 PASS**. Seis casos nuevos: orden/enlaces/paginación, solicitud activa fuera de página, vacío permitido/bloqueado, skeleton sin filas anteriores y capacidad BUSINESS. Conservadas regresiones de alta PERSONAL/BUSINESS y conversión.
+- `npm run typecheck:test`: PASS. `npm run lint`: PASS; tras ajuste final, eslint focalizado sobre los cinco archivos TypeScript/script afectados: PASS.
+- `npm run build`: PASS final (incluye TypeScript). Advertencia existente: chunk Root 717.76 kB, gzip 198.29 kB.
+- `node scripts/verify-shipments-design.mjs`: PASS. Chromium a 1440/900/390 px, sin overflow horizontal; paginación, teclado Enter, clic físico en celda de estado navega por el enlace de toda la fila, vacío y tres skeletons. Capturas revisadas `test-results/shipments-design/width-1440.png` y `width-390.png`; también width-900, mobile-empty, mobile-loading y result.json.
+- Primera ejecución del arnés quiso pulsar el td directamente, pero el enlace extendido de la fila intercepta correctamente ese clic. Se ajustó la prueba a clic físico en el centro de la celda; recorrido final aprobado. No se alteró la navegación para acomodar el test.
+- `git diff --check`: PASS. Vite/Chromium temporales cerrados y archivos temporales retirados.
+
+Límites: pruebas unitarias con servicios simulados y visualización con fixtures de componente, sin backend/Google real ni operaciones reales. El contrato del listado sólo acredita CREATED/CANCELLED; se mantiene su orden descendente desde backend. Sin commit, push, despliegue ni cambios de configuración.
+
+## 2026-10-12 — Confirmar y seguimiento, Paso 3 (QA)
+
+Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, QA, base b91f2ad; conservados los cambios pendientes de Pasos 1/2 y precarga. Rediseño limitado al contenido. Archivos y decisiones contractuales en `docs/V1.17-WEB.md`.
+
+### Comandos y resultados
+
+- `npx vitest run src/test/customer-request-design.test.tsx src/test/location.test.tsx src/test/customer-reconciliation.test.tsx src/test/customer.test.tsx src/test/flows.test.tsx --pool=threads --maxWorkers=1`: **132/132 PASS, cinco archivos**. Siete pruebas nuevas: consentimiento explícito y doble clic sin éxito optimista, confirmación sólo desde estado servidor, vencimiento, contexto terminal/incompleto, cancelación cerrada con motivo/confirmación/errores, custodia y CANCELLED, actualización y payload FINAL de aceptación conservado.
+- Tras últimos ajustes de botón vencido e icono, `npx vitest run src/test/customer-request-design.test.tsx src/test/location.test.tsx --pool=threads --maxWorkers=1`: **36/36 PASS**. No se repitieron suites ajenas.
+- `npm run typecheck:test`: PASS final.
+- `npm run lint`: PASS; tras último ajuste `npx eslint src/customer/pages.tsx src/customer/RequestActions.tsx src/location/components.tsx src/location/TrackingLinks.tsx src/shipping/Payment.tsx src/test/customer-request-design.test.tsx src/test/fixtures/request-design.ts scripts/verify-request-design.mjs`: PASS.
+- `npm run build`: PASS final. Advertencia de chunk grande existente, Root 714.23 kB (gzip 197.39 kB).
+- `node scripts/verify-request-design.mjs`: PASS final. Chromium 1440/1024/390px, sin overflow horizontal, autorización antes del contenido en móvil, teclado Enter/Space en acordeón y aceptación, cancelación inicialmente deshabilitada, autorización sólo tras marcar casilla, confirmación con estado simulado, vencimiento y CTA deshabilitado. Sin errores de renderizado. Capturas revisadas en `test-results/request-design/width-1440.png`, `width-390.png`; también width-1024, mobile-cancellation, mobile-authorized, mobile-expired y result.json.
+- `git diff --check`: PASS. Vite/Chromium temporales cerrados, archivos temporales del arnés retirados.
+
+### Hallazgos y límites
+
+Revisión visual detectó colisión de la cuadrícula de Paso 1 que estrechaba el checkbox; corregida con selector acotado al Paso 3 y evidencia regenerada. TypeScript detectó un enum incorrecto sólo en fixture de frescura: corregido a UNAVAILABLE. El contrato del cliente ofrece último avance/fecha, no un historial completo; no se inventó timeline de eventos anteriores ni estado AUTHORIZED.
+
+**Todo este recorrido nuevo usa fixtures frontend/API simuladas.** No acredita navegador → backend → PostgreSQL ni Google real. El arnés hizo un POST de aceptación interceptado por fixture y ninguna emisión/revocación de enlace ni cancelación real. Sin claves reales, servicios externos, cambios backend, .env, producción, commit, push o despliegue. Se conserva la evidencia histórica previa como tal.
+
+## 2026-10-12 — Asteriscos en campos requeridos
+
+`ConversionForm.tsx` y `conversion.css`: leyenda “* Campos obligatorios” y marca visual derivada del atributo required, incluidos los grupos de opciones. Valor de mercancía marcado únicamente con adelanto. Sin alterar datos o precarga editable.
+
+- `npx eslint src/customer/ConversionForm.tsx`: PASS.
+- `npx vitest run src/test/customer-conversion-design.test.tsx --pool=threads --maxWorkers=1`: 8/8 PASS.
+- `git diff --check`: PASS. Sin commit ni push.
+
+## 2026-10-12 — Precarga editable del pagador
+
+Cambio focalizado en `ConversionForm.tsx`; pruebas en `customer-conversion-design.test.tsx`. Nombre/teléfono sugeridos desde origen, protección independiente de campos editados o vaciados, respuesta tardía del perfil y envío sin captura duplicada.
+
+- `npx vitest run src/test/customer-conversion-design.test.tsx src/test/customer-contact.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`: **40/40 PASS, tres archivos**.
+- `npm run typecheck:test`: PASS.
+- `npx eslint src/customer/ConversionForm.tsx src/test/customer-conversion-design.test.tsx`: PASS.
+- Pruebas con APIs simuladas; sin nuevas operaciones backend, revisión visual o build en este ajuste de comportamiento. Se conserva la evidencia anterior del diseño. Sin commit ni push.
+
+## 2026-10-12 — Rediseño Detalles de la solicitud (Paso 2)
+
+Checkout: `C:/Users/zorgl/Documents/mandaria-frontend`, rama QA, base b91f2ad, conservando todos los cambios pendientes de Paso 1/direcciones/contacto. No se utilizó el worktree f1fe para estos cambios. Implementación y archivos descritos en `docs/V1.17-WEB.md`.
+
+### Verificaciones ejecutadas
+
+- `npx vitest run src/test/customer-conversion-design.test.tsx src/test/customer.test.tsx src/test/customer-address.test.tsx src/test/customer-contact.test.tsx src/test/customer-quote-design.test.tsx src/test/customer-reconciliation.test.tsx src/test/flows.test.tsx --pool=threads --maxWorkers=1`: **120/120 PASS, siete archivos**. Incluye cinco casos nuevos de conversión y retorno con paquete/coordenadas, más regresiones de recuperación y ActionForm.
+- Casos: precio del backend sin cálculo, resumen vivo, nombre automático/restaurable, PREPAID sin valor permitido, adelanto positivo obligatorio, hasta dos decimales, teléfonos inválidos, pagador sólo REQUESTER, vencimiento mientras está abierta la pantalla, ninguna conversión automática, conservación exacta de coordenadas tras editar direcciones y datos del paquete al volver a cotizar.
+- `npm run typecheck:test`: PASS. `npm run lint`: PASS. `npm run build`: PASS; advertencia existente de chunk grande, Root 709.76 kB (gzip 196.44 kB).
+- `node scripts/verify-conversion-design.mjs`: PASS final. Chromium a 1440/1024/390 px, sin overflow horizontal; radios por teclado, CTA, errores inline, importe, caducidad, estado móvil y submit simulado. Capturas revisadas en `test-results/conversion-design/`: `desktop-empty.png`, `desktop-error.png`, `width-1440.png`, `width-1024.png`, `width-390.png`, `mobile-expired.png`, más `result.json`. Se corrigió superposición visual del prefijo monetario y se regeneró evidencia.
+- Primera pasada visual alcanzó vencimiento pero el selector exacto de texto no contemplaba el botón hijo del aviso; corregido el arnés, no el estado de la aplicación. Primer lint detectó parámetro sin uso en test; corregido antes del PASS final.
+- `git diff --check`: PASS. Servidor Vite y navegador temporales detenidos; archivos temporales del arnés retirados.
+
+### Límites
+
+Pruebas unitarias con APIs simuladas. Revisión visual del contenido aislado, con perfil, Google y submit sintéticos; no acredita conversión contra backend ni Google reales. No se duplicó layout/sidebar. El backend siguió como referencia de sólo lectura; no cambios de .env, claves, infraestructura o contratos. Mercancía obligatoria sólo con adelanto por decisión explícita del propietario. No commit, push ni despliegue.
+
+## 2026-10-11 — Diseño Cotizar envío Paso 1 en QA
+
+Sobre b91f2ad y conservando todos los cambios locales de direcciones/contacto. Aplicado el diseño adjunto sólo al contenido, con fuente Figtree OFL local, timeline, paquete, stepper, resumen sticky, radios/switch y CTA condicionado a coordenadas válidas. Sin nuevo layout, precios inventados o cambios backend. Places API (New) agregado al selector usando el SDK existente, con selección explícita y protección ante respuestas antiguas. ActionForm conserva validación/dirty/errors y añade ubicación opcional del submit; rutas y reconciliación permanecen.
+
+### Comandos y resultados
+
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS; warnings iniciales de cleanup resueltos antes de ejecución final.
+- `npm run build`: PASS, advertencia Root de 702.58 kB. Ajustes posteriores únicamente de alineación CSS/atribución y del arnés visual; no nuevo build después de esos ajustes.
+- `npx vitest run src/test/customer-quote-design.test.tsx src/test/customer-autocomplete.test.tsx src/test/customer.test.tsx src/test/customer-location.test.tsx src/test/customer-address.test.tsx src/test/customer-contact.test.tsx src/test/customer-reconciliation.test.tsx src/test/flows.test.tsx --pool=threads --maxWorkers=1`: **127/127 PASS, ocho archivos**. Incluye contrato exacto, pagadores permitidos, CTA, resumen, teclado Places, carreras, errores y regresión del formulario compartido. Expectativas antiguas de select/opciones y CTA activo fueron adaptadas al diseño solicitado; categorías conservan etiquetas contractuales.
+- `node scripts/verify-quote-design.mjs`: PASS. Chromium 1440/1024/390px, sin overflow horizontal, selección de sugerencias mediante flechas/Enter, radio y switch por teclado, resumen actualizado y submit simulado. Figtree local cargada. Vite/Chromium temporales cerrados. No servidor backend ni envío real.
+- Capturas revisadas: `test-results/quote-design/desktop-empty.png`, `desktop-ready.png`, `width-1024.png`, `width-390.png`; `result.json`. Primera captura tenía codificación incorrecta sólo en fixture: corregido charset del SDK simulado y capturas regeneradas. Revisión final alinea marcadores con títulos y resumen con la tarjeta de ruta.
+- `npx eslint src/customer/AddressAutocomplete.tsx scripts/verify-quote-design.mjs` y `git diff --check`: PASS tras últimos ajustes.
+
+### Límites
+
+Google Places y submit simulados en navegador, APIs simuladas en tests. No se leyó clave real ni se enviaron consultas externas (salvo descarga pública de fuente/licencia durante implementación). Places real requiere habilitación/restricciones/cuotas del propietario; no se modificaron .env, backend, nginx o configuración de Google. No se acredita hosting/CSP desplegado. Sin commit, push, despliegue ni activación. Continuidad detallada en V1.17-WEB y README; historial anterior conservado.
+
+## 2026-10-11 — Nombre de origen precargado sin botón
+
+Por ajuste solicitado, OriginContact consulta automáticamente el perfil y muestra displayName inicialmente. No hay botón. El valor editado (incluido vacío) tiene prioridad sobre respuesta tardía/refetch; se conserva aislamiento por actor y teléfono manual. Sustituye el comportamiento opcional con botón de la entrada anterior.
+
+- `npx vitest run src/test/customer-contact.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`: **32/32 PASS**, incluidos precarga, edición/borrado durante consulta, error, cambio de usuario, refetch y conversión con coordenadas conservadas.
+- `npm run typecheck:test`: PASS. `npx eslint src/customer/OriginContact.tsx src/test/customer-contact.test.tsx`: PASS. `git diff --check`: PASS.
+- Servicios simulados; sin nueva prueba visual/Google/backend ni repetición de build para este ajuste focalizado. Conservados cambios pendientes de direcciones. Sin commit ni push; rama QA.
+
+## 2026-10-11 — Contacto de origen opcional del solicitante
+
+QA, conservando los cambios pendientes de direcciones. OriginContact consulta GET /customer/profile sólo mediante «Usar mi nombre de perfil». Recupera displayName, permite edición y no sobrescribe entrada anterior o hecha mientras llega la respuesta. Reinicio por actor/MPQ, doble envío protegido y captura manual ante error. Destino/pagador intactos.
+
+El DTO real CustomerProfileViewDto y la sesión User no exponen teléfono: origen.phone sigue manual con explicación visible. No se inventó contrato ni se modificó backend. Implementación en src/customer/OriginContact.tsx e integración en pages.tsx; continuidad en docs/V1.17-WEB.md.
+
+- `npm run typecheck:test`, `npm run lint`, `npm run build`: PASS. Build advierte Root de 694.77 kB, sin error.
+- `npx vitest run src/test/customer-contact.test.tsx src/test/customer.test.tsx src/test/customer-address.test.tsx src/test/customer-reconciliation.test.tsx --pool=threads --maxWorkers=1`: **65/65 PASS, cuatro archivos**.
+- Seis casos nuevos: consulta opcional/edición/teléfono manual; nombre previo protegido; edición y borrado ante respuesta tardía/doble clic; error; aislamiento al cambiar usuario. Regresión de conversión conserva direcciones editadas y coordenadas originales.
+- Servicios simulados: no nueva prueba de backend real ni visual en navegador. `git diff --check`: PASS. Sin commit, push ni despliegue.
+
+## 2026-10-11 — Geocodificación inversa de direcciones en conversión MPQ
+
+QA sobre b91f2ad, checkout principal. Sugerencias de origen y destino desde las coordenadas recibidas en la precotización, también por URL directa. Nuevo SuggestedAddress compartido; reutiliza SDK y Geocoding API existentes. Dirección editable, coordenadas de conversión intactas; protección ante escritura/borrado/autofill y respuestas tardías, navegación o timeout. Sin cambios backend, .env, claves ni dependencias.
+
+Validación final:
+
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS.
+- `npm run build`: PASS; advertencia de tamaño Root 693.47 kB.
+- `npx vitest run src/test/customer-address.test.tsx src/test/customer-location.test.tsx src/test/customer.test.tsx src/test/customer-reconciliation.test.tsx src/test/google-loader.test.ts src/test/google-map.test.tsx --pool=threads --maxWorkers=1`: **81/81 PASS, seis archivos**.
+- Diez casos del nuevo campo: ambas sugerencias y edición, escritura y borrado durante consulta, autofill, respuesta de otra precotización, vacío/error/longitud excesiva, sin clave y timeout. Regresión de formulario por URL MPQ: sugiere ambos puntos, edita direcciones, envía coordenadas originales y no consulta otra vez por editar.
+- Durante implementación se corrigieron la inserción inicial del componente y una fixture de pagador incompatible con el tipo contractual. La aserción de número de consultas se realiza antes del submit: el flujo de recuperación de comandos existente puede desmontar/remontar el formulario durante la conversión. Ejecución final aprobada.
+- `git diff --check`: PASS.
+
+Google y API Mandaria simulados en tests; no se ejercitó Google real, backend real ni revisión visual en navegador en esta tarea. No se leyeron claves ni se hicieron consultas externas de geocodificación. Continuidad: docs/V1.17-WEB.md. Sin commit, push, despliegue ni activación.
+
 ## 2026-10-11 — Integración de main en QA, pendiente de commit
 
 Base QA `6801fa3`; main incorporado `06d9766`. Merge local con `git merge --no-commit --no-ff main` en el checkout principal, permaneciendo en QA. No se modificó backend ni configuración operativa.

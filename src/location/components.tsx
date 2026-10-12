@@ -1,5 +1,6 @@
+import { Truck } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { PublicTrackingScreen } from './PublicTrackingScreen'
 import { Loading, InfoGrid } from '../components/ui'
 import { date } from '../utils/format'
 import { useLocationPoll } from './poll'
@@ -21,10 +22,12 @@ export function LocationCard({
   view,
   now,
   recipient = false,
+  customerDesign = false,
 }: {
   view: LocationView
   now: number
   recipient?: boolean
+  customerDesign?: boolean
 }) {
   const sample = usableSample(view, now, recipient)
   const phase: Record<string, string> = {
@@ -43,7 +46,12 @@ export function LocationCard({
   return (
     <section className="panel location-panel" aria-label="Seguimiento GPS">
       <h2>Seguimiento · {view.publicId}</h2>
-      <p>
+      <p className={customerDesign ? 'location-phase' : undefined}>
+        {customerDesign && (
+          <span className="location-phase-icon" aria-hidden="true">
+            <Truck size={22} />
+          </span>
+        )}
         {view.progress.terminalOutcome
           ? (outcomes[view.progress.terminalOutcome.type] ??
             'Servicio finalizado')
@@ -145,7 +153,11 @@ export function OwnerLocation({
         </p>
       </section>
     )
-  return view ? <LocationCard view={view} now={now} /> : <Loading />
+  return view ? (
+    <LocationCard view={view} now={now} customerDesign />
+  ) : (
+    <Loading />
+  )
 }
 export function SharedTracking() {
   const [token, setToken] = useState(() => {
@@ -165,33 +177,18 @@ export function SharedTracking() {
       window.removeEventListener('pagehide', clear)
     }
   }, [])
-  return (
-    <main className="shared-tracking">
-      <Link to="/">Mandaria</Link>
-      <h1>Seguimiento del envío</h1>
-      {token ? (
-        <SharedView key={token} token={token} />
-      ) : (
-        <p>
-          Abre el enlace original para consultar el envío. El enlace no se
-          conserva después de recargar.
-        </p>
-      )}
-    </main>
+  return token ? (
+    <SharedView key={token} token={token} />
+  ) : (
+    <PublicTrackingScreen now={0} missing />
   )
 }
+
 function SharedView({ token }: { token: string }) {
   const read = useCallback(
     (signal: AbortSignal) => sharedLocation(token, signal),
     [token],
   )
   const { view, error, now } = useLocationPoll(read)
-  if (error)
-    return (
-      <p role="status">
-        El enlace no está disponible en este momento. Puede haber caducado o
-        perdido autorización.
-      </p>
-    )
-  return view ? <LocationCard view={view} now={now} recipient /> : <Loading />
+  return <PublicTrackingScreen view={view} error={error} now={now} />
 }

@@ -1,3 +1,6 @@
+import { requestDetail } from './fixtures/request-design'
+import { env } from '../config/env'
+import { loadMaps } from '../location/googleMaps'
 import { consent } from '../customer/consent'
 import { consumeAccessFragment } from '../customer/access'
 import { beforeEach, expect, it, vi } from 'vitest'
@@ -41,6 +44,10 @@ vi.mock('../customer/service', () => ({
   },
   conversionReference: vi.fn(),
   rememberConversion: vi.fn(),
+}))
+vi.mock('../location/googleMaps', () => ({
+  loadMaps: vi.fn(),
+  onMapsFailure: () => () => {},
 }))
 vi.mock('../services/api', () => ({ api: vi.fn(), apiOnce: vi.fn() }))
 const auth: AuthState = {
@@ -102,7 +109,7 @@ const payment: ShippingPaymentResponse = {
   declaredAt: null,
   collectShipping: true,
 }
-function mount(node: ReactNode, session = auth) {
+function mount(node: ReactNode, session = auth, path = '/') {
   return render(
     <QueryClientProvider
       client={
@@ -110,7 +117,7 @@ function mount(node: ReactNode, session = auth) {
       }
     >
       <AuthContext.Provider value={session}>
-        <MemoryRouter>{node}</MemoryRouter>
+        <MemoryRouter initialEntries={[path]}>{node}</MemoryRouter>
       </AuthContext.Provider>
     </QueryClientProvider>,
   )
@@ -167,9 +174,7 @@ it('quote requires both selected points and sends exact coordinates through the 
     name: 'Obtener precotización',
   })
   fireEvent.click(submit)
-  expect(await screen.findByRole('alert')).toHaveTextContent(
-    'Selecciona un origen y un destino',
-  )
+  expect(submit).toBeDisabled()
   expect(apiOnce).not.toHaveBeenCalled()
   locate.mockImplementationOnce((success: PositionCallback) =>
     success({
@@ -184,7 +189,7 @@ it('quote requires both selected points and sends exact coordinates through the 
     screen.getAllByRole('button', { name: 'Usar mi ubicación' })[0],
   )
   fireEvent.click(submit)
-  await waitFor(() => expect(submit).toBeEnabled())
+  expect(submit).toBeDisabled()
   expect(apiOnce).not.toHaveBeenCalled()
   locate.mockImplementationOnce((success: PositionCallback) =>
     success({
@@ -295,6 +300,10 @@ it.each(['PERSONAL', 'BUSINESS'] as const)(
   },
 )
 it('occupied PERSONAL shows continue instead of new request', async () => {
+  vi.mocked(customer.detail).mockResolvedValue({
+    ...requestDetail,
+    publicId: 'MDR-000001',
+  })
   vi.mocked(customer.capabilities).mockResolvedValue({
     type: 'PERSONAL',
     allowedShippingPayers: ['REQUESTER'],
@@ -580,9 +589,11 @@ it.each(['PERSONAL', 'BUSINESS'] as const)(
       reason: null,
     })
     mount(<NewRequest />)
-    const select = await screen.findByLabelText('Pagador del envío')
-    expect(select).toHaveValue('REQUESTER')
-    expect(select.querySelectorAll('option')).toHaveLength(
+    const select = await screen.findByRole('radiogroup', {
+      name: 'Pagador del envío',
+    })
+    expect(screen.getByRole('radio', { name: 'Solicitante' })).toBeChecked()
+    expect(select.querySelectorAll('input[type=radio]')).toHaveLength(
       type === 'PERSONAL' ? 1 : 2,
     )
   },
@@ -607,9 +618,126 @@ it('BUSINESS with active requests can quote again when backend permits creation'
   expect(
     await screen.findByRole('button', { name: 'Obtener precotización' }),
   ).toBeInTheDocument()
-  expect(screen.getByLabelText('Pagador del envío')).toHaveValue('REQUESTER')
+  expect(screen.getByRole('radio', { name: 'Solicitante' })).toBeChecked()
   expect(
-    screen.getByRole('option', { name: 'Destinatario' }),
+    screen.getByRole('radio', { name: 'Destinatario' }),
   ).toBeInTheDocument()
   expect(screen.queryByText('Cupo no disponible')).not.toBeInTheDocument()
+})
+
+it('direct MPQ URL suggests both addresses but conversion retains original coordinates after editing', async () => {
+  const originalKey = env.googleMapsApiKey
+  env.googleMapsApiKey = 'synthetic-key'
+  try {
+    const geocode = vi
+      .fn()
+      .mockResolvedValueOnce({
+        results: [{ formatted_address: 'Origen sugerido' }],
+      })
+      .mockResolvedValueOnce({
+        results: [{ formatted_address: 'Destino sugerido' }],
+      })
+    vi.mocked(loadMaps).mockResolvedValue({
+      Map: class {
+        setCenter() {}
+        unbindAll() {}
+      },
+      Circle: class {
+        setOptions() {}
+        setMap() {}
+        unbindAll() {}
+      },
+      event: { clearInstanceListeners() {} },
+      importLibrary: async () => ({
+        Geocoder: class {
+          geocode = geocode
+        },
+      }),
+    })
+    const stops = [
+      {
+        type: 'PICKUP' as const,
+        sequence: 1,
+        latitude: 17.123456,
+        longitude: -93.123456,
+      },
+      {
+        type: 'DROPOFF' as const,
+        sequence: 2,
+        latitude: 18.123456,
+        longitude: -94.123456,
+      },
+    ]
+    vi.mocked(customer.capabilities).mockResolvedValue({
+      type: 'PERSONAL',
+      allowedShippingPayers: ['REQUESTER', 'RECIPIENT'],
+      defaultShippingPayer: 'REQUESTER',
+      capacity: {
+        occupied: false,
+        activeCount: 0,
+        maxActiveRequests: 1,
+        activeRequestPublicId: null,
+      },
+      canPrequote: true,
+      canCreateRequest: true,
+      reason: null,
+    })
+    vi.mocked(customer.prequote).mockResolvedValue({
+      ...mpq,
+      status: 'OFFERED',
+      deliveryRequestPublicId: null,
+      shippingTerms: { ...terms, payer: 'RECIPIENT' },
+      conditions: { ...mpq.conditions, stops },
+    })
+    vi.mocked(apiOnce).mockResolvedValue({
+      result: { deliveryRequestPublicId: 'MDR-000002' },
+    })
+    mount(<NewRequest />, auth, '/customer/new?prequote=MPQ-000001')
+    await waitFor(() =>
+      expect(screen.getByLabelText('Dirección de destino')).toHaveValue(
+        'Destino sugerido',
+      ),
+    )
+    expect(screen.getByLabelText('Dirección de origen')).toHaveValue(
+      'Origen sugerido',
+    )
+    fireEvent.change(screen.getByLabelText('Dirección de origen'), {
+      target: { value: 'Origen editado interior 2' },
+    })
+    fireEvent.change(screen.getByLabelText('Dirección de destino'), {
+      target: { value: 'Destino editado interior 3' },
+    })
+    for (const label of ['origen', 'destino']) {
+      fireEvent.change(screen.getByLabelText(`Contacto de ${label}`), {
+        target: { value: 'Contacto sintético' },
+      })
+      fireEvent.change(screen.getByLabelText(`Teléfono de ${label}`), {
+        target: { value: '9615550011' },
+      })
+    }
+    fireEvent.change(screen.getByLabelText('Descripción del paquete'), {
+      target: { value: 'Paquete sintético' },
+    })
+    expect(geocode).toHaveBeenCalledTimes(2)
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Crear solicitud y revisar términos',
+      }),
+    )
+    await waitFor(() => expect(apiOnce).toHaveBeenCalledTimes(1))
+    const body = vi.mocked(apiOnce).mock.calls[0][2] as {
+      deliveryRequest: { stops: unknown[] }
+    }
+    expect(body.deliveryRequest.stops).toEqual(
+      stops.map((stop, i) => ({
+        ...stop,
+        address:
+          i === 0 ? 'Origen editado interior 2' : 'Destino editado interior 3',
+        contactName: 'Contacto sintético',
+        contactPhone: '9615550011',
+      })),
+    )
+  } finally {
+    env.googleMapsApiKey = originalKey
+  }
 })

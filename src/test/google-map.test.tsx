@@ -47,6 +47,7 @@ function view(): LocationView {
     },
   }
 }
+const contains = vi.fn(() => false)
 const center = vi.fn(),
   detach = vi.fn(),
   update = vi.fn(),
@@ -59,6 +60,7 @@ const sdk: MapsSdk = {
     constructor(...args: unknown[]) {
       mapCtor(...args)
     }
+    getBounds = () => ({ contains })
     setCenter = center
     unbindAll = unbind
   },
@@ -75,6 +77,7 @@ const sdk: MapsSdk = {
 const original = env.googleMapsApiKey
 beforeEach(() => {
   vi.clearAllMocks()
+  contains.mockReturnValue(false)
   env.googleMapsApiKey = 'synthetic-web-key'
   mocks.load.mockResolvedValue(sdk)
 })
@@ -177,4 +180,51 @@ it('keeps text after blocked SDK and authentication failure', async () => {
   render(<LocationCard view={view()} now={time} />)
   await screen.findByText(/Mapa no disponible/)
   expect(screen.getByText('17, -93')).toBeVisible()
+})
+
+it('public map uses bounds, grey stale marker and cancels animation on withdrawal', async () => {
+  const { PublicTrackingScreen } =
+    await import('../location/PublicTrackingScreen')
+  const { MemoryRouter } = await import('react-router-dom')
+  const v = view()
+  const r = render(
+    <MemoryRouter>
+      <PublicTrackingScreen view={v} now={time} />
+    </MemoryRouter>,
+  )
+  await waitFor(() => expect(mapCtor).toHaveBeenCalledTimes(1))
+  expect(mapCtor).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.objectContaining({ fullscreenControl: true, zoom: 16 }),
+  )
+  contains.mockReturnValue(true)
+  center.mockClear()
+  const next = view()
+  next.location.sample!.latitude = 18
+  r.rerender(
+    <MemoryRouter>
+      <PublicTrackingScreen view={next} now={time} />
+    </MemoryRouter>,
+  )
+  await waitFor(() =>
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ center: { lat: 18, lng: -93 } }),
+    ),
+  )
+  expect(mapCtor).toHaveBeenCalledTimes(1)
+  expect(center).not.toHaveBeenCalled()
+  contains.mockReturnValue(false)
+  r.rerender(
+    <MemoryRouter>
+      <PublicTrackingScreen view={next} now={time + 61000} />
+    </MemoryRouter>,
+  )
+  expect(update).toHaveBeenCalledWith(
+    expect.objectContaining({ fillColor: '#8a9894' }),
+  )
+  r.unmount()
+  const calls = update.mock.calls.length
+  await new Promise((resolve) => setTimeout(resolve, 40))
+  expect(update).toHaveBeenCalledTimes(calls)
+  expect(detach).toHaveBeenCalledTimes(3)
 })

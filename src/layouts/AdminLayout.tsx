@@ -1,7 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
+import { customer } from '../customer/service'
+import { profileInitials } from '../customer/profile-format'
 import { CustomerOperationNotice } from '../customer/pages'
 import { useEffect, useRef, useState } from 'react'
 import { ExecutionRecovery } from '../execution/components'
-import { NavLink, Outlet, Link } from 'react-router-dom'
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   PlugZap,
@@ -31,6 +34,18 @@ import { useFeedback } from '../components/feedback-context'
 import { errorMessage } from '../services/errors'
 export function AdminLayout() {
   const { user, logout } = useAuth()
+  const { pathname } = useLocation()
+  // Observe the existing profile cache; do not add requests for operational users.
+  const profile = useQuery({
+    queryKey: ['customer', user?.id, 'profile'],
+    queryFn: customer.profile,
+    enabled: false,
+  })
+  const displayName = profile.data?.active
+    ? profile.data.displayName
+    : user?.email
+  const profilePath =
+    user?.role === 'CUSTOMER' ? '/customer/profile' : '/profile'
   const notify = useFeedback()
   const [open, setOpen] = useState(false)
   const [menu, setMenu] = useState(false)
@@ -147,7 +162,7 @@ export function AdminLayout() {
           { to: '/driver/credits', label: 'Créditos', icon: Coins },
         ]
       : []),
-    { to: '/profile', label: 'Mi perfil', icon: UserRound },
+    { to: profilePath, label: 'Mi perfil', icon: UserRound },
     ...(admin
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
       : []),
@@ -182,7 +197,18 @@ export function AdminLayout() {
         <span className="nav-label">ESPACIO DE TRABAJO</span>
         <nav aria-label="Navegación principal">
           {links.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} onClick={() => setOpen(false)}>
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/customer' && pathname === '/customer/profile'}
+              className={({ isActive }) =>
+                isActive ||
+                (to === profilePath && pathname === '/customer/profile')
+                  ? 'active'
+                  : undefined
+              }
+              onClick={() => setOpen(false)}
+            >
               <Icon size={19} />
               <span>{label}</span>
             </NavLink>
@@ -219,17 +245,17 @@ export function AdminLayout() {
               aria-expanded={menu}
             >
               <span className="avatar">
-                {user?.email.slice(0, 2).toUpperCase()}
+                {profileInitials(displayName ?? '')}
               </span>
               <span className="user-info">
-                <strong>{user?.email}</strong>
+                <strong>{displayName}</strong>
                 <small>{labels[user?.role ?? ''] ?? 'Usuario'}</small>
               </span>
               <ChevronDown size={15} />
             </button>
             {menu && (
               <div className="user-dropdown">
-                <Link to="/profile" onClick={() => setMenu(false)}>
+                <Link to={profilePath} onClick={() => setMenu(false)}>
                   <UserRound size={16} />
                   Mi perfil
                 </Link>

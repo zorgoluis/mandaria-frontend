@@ -61,12 +61,24 @@ export function ShippingPaymentBlock({
             ? 'Condiciones históricas del envío'
             : 'Pago del envío'}
       </strong>
-      <p>
-        {amount} ·{' '}
-        {p.payer === 'REQUESTER'
-          ? 'Solicitante o su representante'
-          : 'Destinatario'}{' '}
-        · En efectivo · {p.dueAt === 'PICKUP' ? 'En recogida' : 'Al entregar'}
+      <p className="shipping-payment-chips">
+        <span
+          className={
+            amount === 'Importe aún no confirmado' ? 'unconfirmed' : undefined
+          }
+        >
+          {amount}
+        </span>
+        {' · '}
+        <span>
+          {p.payer === 'REQUESTER'
+            ? 'Solicitante o su representante'
+            : 'Destinatario'}
+        </span>
+        {' · '}
+        <span>En efectivo</span>
+        {' · '}
+        <span>{p.dueAt === 'PICKUP' ? 'En recogida' : 'Al entregar'}</span>
       </p>
       {p.evidenceStatus === 'DECLARED' ? (
         <p>

@@ -252,9 +252,20 @@ function LinkControls({
         <InfoGrid
           items={[
             ['Estado vigente', labels[current.status]],
-            ['Creado', date(current.createdAt)],
-            ['Caduca', date(current.expiresAt)],
-            ['Acceso final hasta', date(current.terminalAccessUntil)],
+            [
+              'Creado',
+              current.createdAt ? date(current.createdAt) : 'Sin registro',
+            ],
+            [
+              'Caduca',
+              current.expiresAt ? date(current.expiresAt) : 'Sin registro',
+            ],
+            [
+              'Acceso final hasta',
+              current.terminalAccessUntil
+                ? date(current.terminalAccessUntil)
+                : 'Sin registro',
+            ],
           ]}
         />
       )}
@@ -270,26 +281,28 @@ function LinkControls({
         </p>
       ) : (
         <>
-          <button
-            className="button secondary"
-            disabled={busy}
-            onClick={() => void consult()}
-          >
-            Consultar estado e intentos
-          </button>
-          {pending.length > 0 && (
-            <p>
-              Pendiente de reconciliación. Otra emisión está bloqueada, también
-              después de recargar.
-            </p>
-          )}
-          {current && (
-            <>
+          <div className="tracking-review">
+            <div className="tracking-review-heading">
               <p>
                 Revocar usa la revisión consultada y puede cerrar técnicamente
                 una emisión incierta. No deshace entregas físicas ni cobros. Si
                 cambia la revisión, consulta y decide nuevamente.
               </p>
+              <button
+                className="button secondary"
+                disabled={busy}
+                onClick={() => void consult()}
+              >
+                Consultar estado e intentos
+              </button>
+            </div>
+            {pending.length > 0 && (
+              <p>
+                Pendiente de reconciliación. Otra emisión está bloqueada,
+                también después de recargar.
+              </p>
+            )}
+            {current && (
               <Field label="Confirmo cambiar el enlace vigente con esta revisión">
                 <input
                   type="checkbox"
@@ -298,29 +311,31 @@ function LinkControls({
                   onChange={(e) => setConfirmed(e.target.checked)}
                 />
               </Field>
-              <div className="actions">
-                <button
-                  className="button"
-                  disabled={
-                    busy ||
-                    !confirmed ||
-                    !decisionReady ||
-                    pending.length > 0 ||
-                    terminal
-                  }
-                  onClick={() => void mutate('ISSUE')}
-                >
-                  Emitir o sustituir enlace
-                </button>
-                <button
-                  className="button secondary"
-                  disabled={busy || !confirmed || !decisionReady}
-                  onClick={() => void mutate('REVOKE')}
-                >
-                  Revocar enlace / cerrar emisión incierta
-                </button>
-              </div>
-            </>
+            )}
+          </div>
+          {current && (
+            <div className="actions">
+              <button
+                className="button"
+                disabled={
+                  busy ||
+                  !confirmed ||
+                  !decisionReady ||
+                  pending.length > 0 ||
+                  terminal
+                }
+                onClick={() => void mutate('ISSUE')}
+              >
+                Emitir o sustituir enlace
+              </button>
+              <button
+                className="button secondary"
+                disabled={busy || !confirmed || !decisionReady}
+                onClick={() => void mutate('REVOKE')}
+              >
+                Revocar enlace / cerrar emisión incierta
+              </button>
+            </div>
           )}
         </>
       )}

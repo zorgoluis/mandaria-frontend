@@ -1,5 +1,28 @@
 # Mandaria Web — V1.11-B
 
+
+## Mis envíos — listado (2026-10-12)
+
+Listado responsive con capacidad y solicitud activa reales, tabla navegable completa, paginación, carga y vacío. Conserva las reglas de alta y recuperación; muestra únicamente los estados disponibles en la API del listado. [Continuidad](docs/V1.17-WEB.md) y [verificación](VERIFICATION.md).
+
+
+
+## Confirmar y seguimiento — Paso 3 (2026-10-12)
+
+Nuevo diseño del detalle MDR con estado real, seguimiento, enlaces temporales, pago, autorización explícita y cancelación desplegable. En móvil la autorización aparece primero. Vencimiento y custodia conservan bloqueos; el historial visual se limita al último registro disponible en el contrato. No se inventan eventos ni confirmaciones de cobro. [Continuidad](docs/V1.17-WEB.md) y [verificación](VERIFICATION.md).
+
+
+
+## Detalles de la solicitud — Paso 2 (2026-10-12)
+
+Rediseño del contenido con tarjetas, resumen y precio real, validación inline, caducidad y retorno a cotización conservando coordenadas/paquete. Valor de mercancía obligatorio sólo con adelanto; pagador en recogida sólo si lo indican los términos. Nombre del perfil automático y editable, con restauración explícita en el nuevo diseño. Sin cambio de contratos ni persistencia de contactos. [Continuidad](docs/V1.17-WEB.md) y [verificaciones](VERIFICATION.md).
+
+
+## Cotizar envío — diseño Paso 1 (2026-10-11)
+
+Nuevo contenido de `/customer/new`: ruta, paquete y resumen vivo, controles accesibles y responsive, Figtree local. Autocompletado mediante Places API (New), reutilizando la clave Maps Web; requiere habilitar esa API y revisar sus restricciones/cuotas. No se cambia configuración desde este trabajo. La descripción histórica de búsqueda únicamente por botón queda sustituida en Paso 1; Paso 2 conserva geocodificación inversa editable y nombre automático del perfil. [Contrato y continuidad](docs/V1.17-WEB.md). Verificación con Google/API simulados; pendiente recorrido real de Places.
+
+
 ## Cotización de cliente: origen y destino — 2026-10-09
 
 En `/customer/new`, cada punto se elige buscando una dirección y seleccionando un resultado, usando la ubicación del dispositivo bajo permiso, o haciendo clic en Google Maps. También se puede mover el mapa con teclado y confirmar el centro. Ningún punto está seleccionado por defecto; editar la búsqueda invalida el anterior. La consulta se ejecuta al pulsar Buscar/Enter, no en cada tecla.
@@ -424,3 +447,11 @@ Pendientes: ejecución Docker en un motor funcional, eventual paginación servid
 ## Mapa Google opcional (V1.18)
 
 Configurar privadamente `VITE_GOOGLE_MAPS_API_KEY` en `.env.local` para desarrollo (reiniciar Vite) o en el entorno de build. `.env.example` deja el valor vacío. Dockerfile admite el build arg del mismo nombre; no basta añadirlo al contenedor después de compilar. No requiere Map ID. La clave Web es pública: restringir dominios y Maps JavaScript API; nunca reutilizar claves backend. Sin clave, el seguimiento textual funciona normalmente. Ver [configuración, CSP, privacidad y validación pendiente](docs/V1.18-MAP-PROPOSAL.md).
+
+### Mi perfil cliente — diseño 2026-10-12
+
+`/customer/profile` presenta identidad, datos editables y cambio de tipo con confirmación. Protege las ediciones locales al consultar y conserva el bloqueo hasta leer el perfil tras un resultado incierto. La verificación de correo sólo confirma recepción de la solicitud. Pruebas del diseño: `npx vitest run src/test/customer-profile-design.test.tsx --pool=threads --maxWorkers=1`; revisión responsive con API sintética: `node scripts/verify-profile-design.mjs`. Resultados y límites en VERIFICATION.md.
+
+### Seguimiento público — diseño 2026-10-12
+
+`/track` tiene layout independiente, mapa con panel flotante en escritorio y panel inferior expandible en móvil. Conserva las restricciones de GPS: terminal, incidencia y posición no autorizada retiran coordenadas; el enlace permanece sólo en memoria. Revisión visual sintética reproducible: `node scripts/verify-public-tracking-design.mjs`. No usa claves reales ni cartografía externa; resultados y pendientes en VERIFICATION.md.

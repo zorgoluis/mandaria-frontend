@@ -2,6 +2,8 @@
 export interface MapInstance {
   setCenter(position: Position): void
   setZoom?(zoom: number): void
+  getBounds?(): { contains(position: Position): boolean } | undefined
+  getZoom?(): number | undefined
   getCenter?(): { lat(): number; lng(): number } | undefined
   addListener?(
     event: 'click',
@@ -21,7 +23,10 @@ export interface CircleInstance {
   unbindAll(): void
 }
 export interface MapsSdk {
-  importLibrary?(name: 'geocoding'): Promise<GeocodingLibrary>
+  ControlPosition?: { RIGHT_BOTTOM: number }
+  importLibrary?(
+    name: 'geocoding' | 'places',
+  ): Promise<GeocodingLibrary | PlacesLibrary>
   Map: new (
     element: HTMLElement,
     options: Record<string, unknown>,
@@ -31,7 +36,9 @@ export interface MapsSdk {
 }
 export interface GeocodingLibrary {
   Geocoder: new () => {
-    geocode(request: { address: string; region: string }): Promise<{
+    geocode(
+      request: { address: string; region: string } | { location: Position },
+    ): Promise<{
       results: {
         formatted_address: string
         geometry: { location: { lat(): number; lng(): number } }
@@ -98,4 +105,25 @@ export function loadMaps(key: string): Promise<MapsSdk> {
     document.head.append(script)
   })
   return loading
+}
+
+/** Only fields used by the quote address picker; no Places details beyond address/location. */
+export interface PlacePrediction {
+  text: { toString(): string }
+  toPlace(): {
+    formattedAddress?: string | null
+    location?: { lat(): number; lng(): number } | null
+    fetchFields(options: { fields: string[] }): Promise<unknown>
+  }
+}
+export interface PlacesLibrary {
+  AutocompleteSessionToken: new () => object
+  AutocompleteSuggestion: {
+    fetchAutocompleteSuggestions(request: {
+      input: string
+      sessionToken: object
+      language: string
+      region: string
+    }): Promise<{ suggestions: { placePrediction?: PlacePrediction }[] }>
+  }
 }

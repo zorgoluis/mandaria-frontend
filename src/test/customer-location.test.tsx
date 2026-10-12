@@ -194,7 +194,9 @@ it('map click and keyboard alternative select actual coordinates, cleanup remove
 it('missing key and map failure never fabricate a selected location', async () => {
   env.googleMapsApiKey = ''
   const view = render(<Harness />)
-  expect(screen.queryByRole('button', { name: 'Elegir en el mapa' })).toBeNull()
+  expect(
+    screen.getByRole('button', { name: 'Elegir en el mapa' }),
+  ).toBeDisabled()
   expect(screen.getByText(/no están configurados/)).toBeInTheDocument()
   view.unmount()
   env.googleMapsApiKey = 'synthetic-key'
