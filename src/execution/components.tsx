@@ -216,6 +216,8 @@ export function ExecutionProgress({
   execution: Execution
   fleet?: boolean
 }) {
+  const terminal =
+    e.custodyStatus === 'DELIVERED' || e.custodyStatus === 'RETURNED'
   return (
     <section className="panel" aria-label="Progreso de ejecución">
       <div className="panel-toolbar">
@@ -225,12 +227,15 @@ export function ExecutionProgress({
       <div className="panel-body">
         <ol className="execution-phases">
           {phases.map((p) => (
-            <li key={p} aria-current={p === e.phase ? 'step' : undefined}>
+            <li
+              key={p}
+              aria-current={!terminal && p === e.phase ? 'step' : undefined}
+            >
               <span>{phaseLabels[p]}</span>
-              {p === e.phase && <strong> · Fase actual</strong>}
+              {!terminal && p === e.phase && <strong> · Fase actual</strong>}
             </li>
           ))}
-          <li>
+          <li aria-current={terminal ? 'step' : undefined}>
             {e.custodyStatus === 'DELIVERED'
               ? 'Entrega confirmada · Entregado'
               : e.custodyStatus === 'RETURNED'
