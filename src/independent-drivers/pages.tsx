@@ -1,22 +1,26 @@
-import { useState } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Info } from 'lucide-react'
 import {
+  Button,
+  Select,
+  Textarea,
+  Input,
   ActionForm,
   Badge,
   Confirm,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowUpRight, Info } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date, labels } from '../utils/format'
@@ -83,13 +87,17 @@ export function IndependentDriversPage() {
   const [enabling, setEnabling] = useState(false)
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Repartidores independientes"
         description="Quién puede tomar servicios por su cuenta, con sus propios vehículos."
         action={
-          <button className="button" onClick={() => setEnabling(true)}>
+          <Button
+            type="submit"
+            className="button"
+            onClick={() => setEnabling(true)}
+          >
             Habilitar repartidor
-          </button>
+          </Button>
         }
       />
       <div className="panel">
@@ -103,7 +111,7 @@ export function IndependentDriversPage() {
           <CapabilityNote />
         </div>
         <div className="filters">
-          <select
+          <Select
             aria-label="Filtrar por estado de habilitación"
             value={status}
             onChange={(event) => {
@@ -119,7 +127,7 @@ export function IndependentDriversPage() {
                 {independentStatusLabels[value]}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         {!valid ? (
           <div className="panel-body">
@@ -200,7 +208,7 @@ export function IndependentDriversPage() {
             />
           </>
         ) : (
-          <Empty
+          <EmptyState
             title="No hay repartidores independientes."
             description={
               status
@@ -265,7 +273,7 @@ function EnableDialog({ onClose }: { onClose: () => void }) {
         }}
       >
         <Field label="Proveedor" hint="Sólo para localizar al repartidor.">
-          <select
+          <Select
             value={providerId}
             disabled={providerList.isPending}
             onChange={(event) => {
@@ -283,13 +291,13 @@ function EnableDialog({ onClose }: { onClose: () => void }) {
                 {provider.name}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         <Field
           label="Repartidor"
           hint="Sólo aparecen repartidores activos; el backend vuelve a comprobarlo."
         >
-          <select
+          <Select
             value={driverId}
             disabled={!UUID.test(providerId) || driverList.isPending}
             onChange={(event) => setDriverId(event.target.value)}
@@ -308,13 +316,13 @@ function EnableDialog({ onClose }: { onClose: () => void }) {
                 {driver.name}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         <Field
           label="Motivo (opcional)"
           hint={`Entre ${REASON_MIN} y ${REASON_MAX} caracteres. Queda en la auditoría: no incluyas datos personales.`}
         >
-          <textarea name="reason" maxLength={REASON_MAX} rows={3} />
+          <Textarea name="reason" maxLength={REASON_MAX} rows={3} />
         </Field>
       </ActionForm>
     </Modal>
@@ -335,7 +343,7 @@ function ProfileRecord({ driverId }: { driverId: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle
+        <PageHeader
           title="Repartidor independiente"
           back="/independent-drivers"
         />
@@ -361,30 +369,36 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
   const approved = profile.status === 'APPROVED'
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={profile.driver.name}
         description={`Habilitación independiente · cuenta ${driverStatusLabels[profile.driver.status]}`}
         back="/independent-drivers"
         action={
           approved ? (
             <div className="row-actions">
-              <button
+              <Button
+                type="submit"
                 className="button secondary destructive"
                 onClick={() => setClosing('reject')}
               >
                 Rechazar
-              </button>
-              <button
+              </Button>
+              <Button
+                type="submit"
                 className="button secondary destructive"
                 onClick={() => setClosing('suspend')}
               >
                 Suspender
-              </button>
+              </Button>
             </div>
           ) : (
-            <button className="button" onClick={() => setReEnabling(true)}>
+            <Button
+              type="submit"
+              className="button"
+              onClick={() => setReEnabling(true)}
+            >
               Habilitar
-            </button>
+            </Button>
           )
         }
       />
@@ -498,7 +512,7 @@ function CloseDialog({
           label="Motivo"
           hint={`Obligatorio, entre ${REASON_MIN} y ${REASON_MAX} caracteres. No incluyas datos personales.`}
         >
-          <textarea name="reason" required maxLength={REASON_MAX} rows={4} />
+          <Textarea name="reason" required maxLength={REASON_MAX} rows={4} />
         </Field>
       </ActionForm>
     </Modal>
@@ -520,12 +534,13 @@ function IndependentVehicles({ driverId }: { driverId: string }) {
           <h2 id="independent-vehicles">Vehículos propios</h2>
           <p>Del repartidor, no del proveedor</p>
         </div>
-        <button
+        <Button
+          type="submit"
           className="button secondary small"
           onClick={() => setAdding(true)}
         >
           Agregar vehículo
-        </button>
+        </Button>
       </div>
       {query.isPending ? (
         <Loading />
@@ -570,7 +585,7 @@ function IndependentVehicles({ driverId }: { driverId: string }) {
           ]}
         />
       ) : (
-        <Empty
+        <EmptyState
           title="Sin vehículos propios"
           description="Un repartidor independiente necesita al menos un vehículo activo para poder tomar servicios."
         />
@@ -598,7 +613,8 @@ function VehicleStatusAction({
   const [busy, setBusy] = useState(false)
   const active = vehicle.status === 'ACTIVE'
   return (
-    <button
+    <Button
+      type="submit"
       className="button secondary small"
       disabled={busy}
       onClick={async () => {
@@ -615,7 +631,7 @@ function VehicleStatusAction({
       }}
     >
       {active ? 'Desactivar' : 'Activar'}
-    </button>
+    </Button>
   )
 }
 
@@ -672,31 +688,31 @@ function VehicleDialog({
             label="Identificador"
             hint="Único dentro de este repartidor, no global."
           >
-            <input name="identifier" required maxLength={50} />
+            <Input name="identifier" required maxLength={50} />
           </Field>
           <Field label="Tipo">
-            <select name="type" defaultValue="MOTORCYCLE">
+            <Select name="type" defaultValue="MOTORCYCLE">
               {vehicleTypes.map((type) => (
                 <option key={type} value={type}>
                   {labels[type] ?? type}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label="Marca">
-            <input name="brand" maxLength={50} />
+            <Input name="brand" maxLength={50} />
           </Field>
           <Field label="Modelo">
-            <input name="model" maxLength={50} />
+            <Input name="model" maxLength={50} />
           </Field>
           <Field label="Color">
-            <input name="color" maxLength={30} />
+            <Input name="color" maxLength={30} />
           </Field>
           <Field label="Año">
-            <input name="year" type="number" min={1900} max={2100} />
+            <Input name="year" type="number" min={1900} max={2100} />
           </Field>
           <Field label="Placa" hint="Opcional; vacío para bicicletas.">
-            <input name="plate" maxLength={20} />
+            <Input name="plate" maxLength={20} />
           </Field>
         </div>
       </ActionForm>

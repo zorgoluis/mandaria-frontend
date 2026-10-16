@@ -1,3 +1,14 @@
+import {
+  ButtonLink,
+  Button,
+  Input,
+  Textarea,
+  ActionForm,
+  Badge,
+  Field,
+  InfoGrid,
+  Modal,
+} from '../components/ui'
 import type { DispatchSearch } from './search'
 import { SearchStatus } from './SearchStatus'
 import { searchAllowsTake } from './search'
@@ -6,10 +17,8 @@ import { DetailedPayment } from '../execution/payment'
 import type { ExecutionFields } from '../execution/types'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, ArrowUpRight, Clock3 } from 'lucide-react'
-import { ActionForm, Badge, Field, InfoGrid, Modal } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError, errorMessage } from '../services/errors'
 import { km, money, serviceTypeLabels } from '../pricing/format'
@@ -231,14 +240,15 @@ export function ServiceCard({
       )}
       {canRelease(dispatch) && <CardAssignment dispatch={dispatch} />}
       <footer className="row-actions">
-        <Link
+        <ButtonLink
           className="button secondary small"
           to={`/services/${encodeURIComponent(dispatch.id)}?providerId=${encodeURIComponent(providerId)}`}
         >
           Ver detalle <ArrowUpRight size={14} />
-        </Link>
+        </ButtonLink>
         {dispatch.access === 'OFFER' && dispatch.status === 'OPEN' && (
-          <button
+          <Button
+            type="submit"
             className="button small"
             disabled={!canClaim(dispatch, now)}
             onClick={() => onClaim(dispatch)}
@@ -248,10 +258,11 @@ export function ServiceCard({
               : expiredLocally
                 ? 'Tiempo terminado'
                 : 'TOMAR SERVICIO'}
-          </button>
+          </Button>
         )}
         {canRelease(dispatch) && (
-          <button
+          <Button
+            type="submit"
             className="button secondary destructive small"
             disabled={dispatch.assignment !== null}
             title={
@@ -262,7 +273,7 @@ export function ServiceCard({
             onClick={() => onRelease(dispatch)}
           >
             LIBERAR SERVICIO
-          </button>
+          </Button>
         )}
       </footer>
     </article>
@@ -341,9 +352,9 @@ function FinalState({
         La lista se actualizó con el estado que informó Mandaria.
       </p>
       <div className="form-actions">
-        <button className="button" onClick={onClose}>
+        <Button type="submit" className="button" onClick={onClose}>
           Entendido
-        </button>
+        </Button>
       </div>
     </>
   )
@@ -624,7 +635,7 @@ export function ReleaseDialog({
               <legend>Motivo de liberación</legend>
               {[...releaseReasons, OTHER_REASON].map((reason) => (
                 <label key={reason}>
-                  <input
+                  <Input
                     type="radio"
                     name="reasonChoice"
                     value={reason}
@@ -640,7 +651,7 @@ export function ReleaseDialog({
                 label="Describe el motivo"
                 hint="No incluyas datos personales. Queda registrado en la auditoría."
               >
-                <textarea
+                <Textarea
                   name="otherReason"
                   required
                   maxLength={RELEASE_REASON_MAX}

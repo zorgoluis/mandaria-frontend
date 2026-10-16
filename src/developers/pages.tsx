@@ -1,3 +1,4 @@
+import { Button } from '../components/ui'
 import { useState, type ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, NavLink, Navigate, Route, Routes } from 'react-router-dom'
@@ -30,7 +31,8 @@ export function CopyCode({ children }: { children: ReactNode }) {
   const text = typeof children === 'string' ? children : ''
   return (
     <div className="developer-example">
-      <button
+      <Button
+        type="submit"
         className="button secondary small"
         onClick={async () => {
           try {
@@ -42,7 +44,7 @@ export function CopyCode({ children }: { children: ReactNode }) {
         }}
       >
         Copiar ejemplo
-      </button>
+      </Button>
       <span role="status">{message}</span>
       <pre className="developer-code">
         <code>{text}</code>
@@ -225,7 +227,13 @@ function Guide({
       ) : query.isError ? (
         <p role="alert">
           No se pudo cargar la guía.{' '}
-          <button onClick={() => void query.refetch()}>Reintentar</button>
+          <Button
+            type="submit"
+            variant="ghost"
+            onClick={() => void query.refetch()}
+          >
+            Reintentar
+          </Button>
         </p>
       ) : (
         <Markdown
@@ -332,7 +340,13 @@ function TrackingExamples() {
       ) : query.isError ? (
         <p role="alert">
           No se pudieron cargar los ejemplos.{' '}
-          <button onClick={() => void query.refetch()}>Reintentar</button>
+          <Button
+            type="submit"
+            variant="ghost"
+            onClick={() => void query.refetch()}
+          >
+            Reintentar
+          </Button>
         </p>
       ) : (
         Object.entries(query.data).map(([key, example]) => (
@@ -394,7 +408,13 @@ function Reference() {
       ) : query.isError ? (
         <p role="alert">
           No se pudo cargar el contrato.{' '}
-          <button onClick={() => void query.refetch()}>Reintentar</button>
+          <Button
+            type="submit"
+            variant="ghost"
+            onClick={() => void query.refetch()}
+          >
+            Reintentar
+          </Button>
         </p>
       ) : (
         <>

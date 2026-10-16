@@ -1,28 +1,26 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import {
-  CircleCheck,
-  Info,
-  Mail,
-  MessageCircle,
-  Phone,
-  Search,
-} from 'lucide-react'
-import {
+  Input,
+  Select,
+  Button,
+  Textarea,
   ActionForm,
   Badge,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
+  RouteProgress,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState, type FormEvent, type ReactNode } from 'react'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Info, Mail, MessageCircle, Phone, Search } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
@@ -127,7 +125,7 @@ export function PartnerApplicationsPage() {
   const filtered = rawStatus !== ALL || !!rawType || !!q
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Solicitudes de socio"
         description="Personas y flotillas que pidieron sumarse a Mandaria desde la landing."
       />
@@ -148,7 +146,7 @@ export function PartnerApplicationsPage() {
         >
           <label className="search">
             <Search size={17} />
-            <input
+            <Input
               key={q}
               name="q"
               type="search"
@@ -158,7 +156,7 @@ export function PartnerApplicationsPage() {
               maxLength={100}
             />
           </label>
-          <select
+          <Select
             aria-label="Filtrar por estado"
             value={rawStatus}
             onChange={(event) => update({ status: event.target.value })}
@@ -170,8 +168,8 @@ export function PartnerApplicationsPage() {
               </option>
             ))}
             <option value={ALL}>Todos los estados</option>
-          </select>
-          <select
+          </Select>
+          <Select
             aria-label="Filtrar por tipo"
             value={rawType}
             onChange={(event) => update({ type: event.target.value })}
@@ -182,10 +180,10 @@ export function PartnerApplicationsPage() {
                 {partnerTypeLabels[value]}
               </option>
             ))}
-          </select>
-          <button className="button secondary small" type="submit">
+          </Select>
+          <Button className="button secondary small" type="submit">
             Buscar
-          </button>
+          </Button>
         </form>
         {!valid ? (
           <div className="panel-body">
@@ -274,7 +272,7 @@ export function PartnerApplicationsPage() {
                 ]}
               />
             ) : (
-              <Empty
+              <EmptyState
                 title="No hay solicitudes de socio."
                 description={
                   filtered
@@ -335,7 +333,7 @@ function ApplicationRecord({ reference }: { reference: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title={reference} back={LIST} />
+        <PageHeader title={reference} back={LIST} />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -367,7 +365,7 @@ function ApplicationContent({
   const fleet = application.type === 'FLEET'
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={application.reference}
         description={`${partnerTypeLabels[application.type]} · ${application.contactName}`}
         back={LIST}
@@ -472,7 +470,9 @@ function ApplicationContent({
           {application.allowedTransitions.length ? (
             <div className="row-actions">
               {application.allowedTransitions.map((status) => (
-                <button
+                <Button
+                  type="submit"
+                  variant="ghost"
                   key={status}
                   className={`button ${
                     status === 'REJECTED' || status === 'DISCARDED'
@@ -484,7 +484,7 @@ function ApplicationContent({
                   onClick={() => setTarget(status)}
                 >
                   {partnerActionLabels[status]}
-                </button>
+                </Button>
               ))}
             </div>
           ) : (
@@ -596,7 +596,7 @@ function StatusDialog({
             required ? '' : ' Si la dejas vacía se conserva la nota anterior.'
           }`}
         >
-          <textarea
+          <Textarea
             name="reviewNote"
             required={required}
             maxLength={REVIEW_NOTE_MAX}
@@ -733,17 +733,19 @@ function Onboarding({ application }: { application: PartnerApplication }) {
         </div>
       </div>
       <div className="panel-body">
-        <ol className="onboarding-steps">
-          {steps.map((step) => (
-            <li key={step.title} className={step.done ? 'done' : undefined}>
-              <strong>
-                {step.done && <CircleCheck size={15} aria-label="Registrado" />}{' '}
-                {step.title}
-              </strong>
-              <p>{step.body}</p>
-            </li>
-          ))}
-        </ol>
+        <RouteProgress
+          label="Pasos de alta en Mandaria"
+          steps={steps.map((step, index) => ({
+            id: step.title,
+            label: step.title,
+            description: step.body,
+            state: step.done
+              ? 'complete'
+              : index === steps.findIndex((item) => !item.done)
+                ? 'current'
+                : 'pending',
+          }))}
+        />
       </div>
       <CurrentLinks application={application} />
       <LinkForm application={application} />
@@ -837,7 +839,7 @@ function LinkForm({ application }: { application: PartnerApplication }) {
             label="Proveedor (flotilla)"
             hint="Sólo proveedores de tipo flotilla. Un valor nuevo reemplaza al anterior."
           >
-            <select
+            <Select
               name="providerId"
               value={providerId}
               disabled={fleets.isPending}
@@ -858,14 +860,14 @@ function LinkForm({ application }: { application: PartnerApplication }) {
                   {provider.name} · {provider.code}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
         )}
         <Field
           label="Invitación"
           hint={`Invitaciones de ${fleet ? 'administrador' : 'repartidor'} enviadas a ${application.email}. Un valor nuevo reemplaza al anterior.`}
         >
-          <select
+          <Select
             name="invitationId"
             value={invitationId}
             disabled={sent.isPending}
@@ -890,7 +892,7 @@ function LinkForm({ application }: { application: PartnerApplication }) {
                 {date(item.createdAt)}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
       </ActionForm>
     </div>

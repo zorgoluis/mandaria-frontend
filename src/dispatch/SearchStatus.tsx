@@ -2,6 +2,7 @@ import { remaining } from './format'
 import { useNow } from './use-now'
 import { date } from '../utils/format'
 import type { DispatchSearch } from './search'
+import { RouteProgress } from '../components/ui'
 
 export function SearchStatus({ search }: { search?: DispatchSearch }) {
   const now = useNow(search?.state === 'SEARCHING')
@@ -35,8 +36,28 @@ export function SearchStatus({ search }: { search?: DispatchSearch }) {
       break
   }
   return (
-    <div className="panel-note" role="status">
-      <strong>{message}</strong>
+    <div className="panel-note">
+      <strong role="status">{message}</strong>
+      <RouteProgress
+        label="Búsqueda de repartidor"
+        steps={[
+          {
+            id: 'search',
+            label: 'Buscar repartidor',
+            state:
+              search.state === 'SEARCHING' || search.state === 'RETRY_PENDING'
+                ? 'current'
+                : search.state === 'EXECUTOR_FOUND'
+                  ? 'complete'
+                  : 'blocked',
+          },
+          {
+            id: 'found',
+            label: 'Asignar ejecutor',
+            state: search.state === 'EXECUTOR_FOUND' ? 'complete' : 'pending',
+          },
+        ]}
+      />
       {search.state === 'SEARCHING' && (
         <div>
           Ventana vigente: {left ?? '0:00'}.

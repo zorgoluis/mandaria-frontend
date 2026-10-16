@@ -1,3 +1,13 @@
+import {
+  Button,
+  Select,
+  EmptyState,
+  ErrorState,
+  InfoGrid,
+  Loading,
+  PageHeader,
+  Pagination,
+} from '../components/ui'
 import { SearchStatus } from './SearchStatus'
 import { dispatchPollInterval } from './search'
 import { legacyProjection } from './rules'
@@ -7,15 +17,6 @@ import { ExecutionPanel } from '../execution/components'
 import { useExecutionBusy } from '../execution/commands'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { RefreshCw } from 'lucide-react'
-import {
-  Empty,
-  ErrorState,
-  InfoGrid,
-  Loading,
-  PageTitle,
-  Pagination,
-} from '../components/ui'
 import { ProviderScope } from '../logistics/components'
 import type { ProviderContext } from '../logistics/types'
 import { km, serviceTypeLabels } from '../pricing/format'
@@ -71,7 +72,7 @@ const empty: Record<TabId, [string, string]> = {
 export function ProviderServicesPage() {
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Servicios"
         description="Servicios ofrecidos a tu proveedor. Mandaria confirma quién toma cada uno."
       />
@@ -120,7 +121,9 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
         <div className="panel-toolbar">
           <div className="tab-list" role="tablist" aria-label="Servicios">
             {tabs.map((t) => (
-              <button
+              <Button
+                type="submit"
+                variant="ghost"
                 key={t.id}
                 role="tab"
                 aria-selected={tab === t.id}
@@ -128,23 +131,24 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
                 onClick={() => go({ tab: t.id })}
               >
                 {t.label}
-              </button>
+              </Button>
             ))}
           </div>
-          <button
+          <Button
+            loading={query.isFetching}
+            type="submit"
             className="button secondary small"
             onClick={() => {
               void query.refetch()
             }}
             disabled={query.isFetching}
           >
-            <RefreshCw size={14} className={query.isFetching ? 'spin' : ''} />
             Actualizar
-          </button>
+          </Button>
         </div>
         {tab === 'history' && (
           <div className="filters">
-            <select
+            <Select
               aria-label="Filtrar servicios por estado"
               value={status ?? ''}
               onChange={(e) => go({ tab, status: e.target.value })}
@@ -155,7 +159,7 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
                   {dispatchStatusLabels[value]}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
         <div role="tabpanel" aria-label={tabs.find((t) => t.id === tab)!.label}>
@@ -190,7 +194,7 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
               />
             </>
           ) : (
-            <Empty title={empty[tab][0]} description={empty[tab][1]} />
+            <EmptyState title={empty[tab][0]} description={empty[tab][1]} />
           )}
         </div>
         <p className="panel-note">
@@ -250,7 +254,7 @@ function ServiceRecord({ scope, id }: { scope: ProviderContext; id: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title="Servicio" back={back} />
+        <PageHeader title="Servicio" back={back} />
         {query.isPending || query.isFetching ? (
           <Loading />
         ) : (
@@ -345,7 +349,8 @@ function ServiceContent({
               ? 'Consultando la asignación vigente…'
               : 'La asignación vigente no coincide con el historial disponible. Actualiza el servicio antes de operar.'}
           </p>
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             disabled={assignments.isFetching}
             onClick={() =>
@@ -353,27 +358,29 @@ function ServiceContent({
             }
           >
             Actualizar servicio y asignación
-          </button>
+          </Button>
         </div>
       )}
       <fieldset className="execution-fieldset" disabled={assignmentPending}>
-        <PageTitle
+        <PageHeader
           title={title}
           description={`${serviceTypeLabels[dispatch.serviceType] ?? 'Servicio'} · ${scope.name}`}
           back={back}
           action={
             dispatch.access === 'OFFER' && dispatch.status === 'OPEN' ? (
-              <button
+              <Button
+                type="submit"
                 className="button"
                 disabled={!canClaim(dispatch, now)}
                 onClick={() => setClaiming(true)}
               >
                 TOMAR SERVICIO
-              </button>
+              </Button>
             ) : mine && dispatch.status === 'CLAIMED' ? (
               <div className="row-actions">
                 {owner && (
-                  <button
+                  <Button
+                    type="submit"
                     className="button secondary destructive"
                     disabled={active !== null}
                     title={
@@ -384,15 +391,16 @@ function ServiceContent({
                     onClick={() => setReleasing(true)}
                   >
                     LIBERAR SERVICIO
-                  </button>
+                  </Button>
                 )}
                 {deliverable && (
-                  <button
+                  <Button
+                    type="submit"
                     className="button"
                     onClick={() => setDelivering(true)}
                   >
                     MARCAR COMO ENTREGADO
-                  </button>
+                  </Button>
                 )}
               </div>
             ) : undefined

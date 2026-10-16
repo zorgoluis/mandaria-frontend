@@ -1,17 +1,21 @@
-import { useState, type ReactNode } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Search, Send } from 'lucide-react'
 import {
+  Input,
+  Button,
+  Select,
   ActionForm,
   Confirm,
-  Empty,
+  EmptyState,
   ErrorState,
   Field,
   Loading,
   Modal,
   Pagination,
   Table,
+  Badge,
 } from '../components/ui'
+import { useState, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Search, Send } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { providers } from '../providers/service'
 import { date, labels } from '../utils/format'
@@ -22,7 +26,6 @@ import {
   invitationStatusLabels,
   isOpen,
   membershipRoleLabels,
-  statusTone,
 } from './format'
 import {
   invitableRoles,
@@ -47,12 +50,7 @@ export function StatusBadge({
     status in invitationStatusLabels
       ? invitationStatusLabels[status as InvitationStatus]
       : accountStatusLabels[status as AccountStatus]
-  return (
-    <span className={`badge ${statusTone[status] ?? ''}`}>
-      <span className="status-dot" />
-      {label ?? 'Desconocido'}
-    </span>
-  )
+  return <Badge value={status} label={label} />
 }
 
 /** Feedback for invite/resend: the invitation exists even when the email failed. */
@@ -124,21 +122,22 @@ export function InvitationsPanel({
           }}
         >
           <Search size={17} />
-          <input
+          <Input
             name="search"
             aria-label="Buscar invitación por correo"
             placeholder="Correo electrónico"
             maxLength={254}
           />
-          <button
+          <Button
+            variant="ghost"
             className="text-button"
             type="submit"
             aria-label="Buscar invitaciones"
           >
             Buscar
-          </button>
+          </Button>
         </form>
-        <select
+        <Select
           aria-label="Filtrar invitaciones por estado"
           value={status}
           onChange={(e) => {
@@ -152,9 +151,9 @@ export function InvitationsPanel({
               {invitationStatusLabels[value]}
             </option>
           ))}
-        </select>
+        </Select>
         {roleFilter && (
-          <select
+          <Select
             aria-label="Filtrar invitaciones por rol"
             value={role}
             onChange={(e) => {
@@ -168,7 +167,7 @@ export function InvitationsPanel({
                 {labels[value]}
               </option>
             ))}
-          </select>
+          </Select>
         )}
       </div>
       {query.isPending ? (
@@ -236,7 +235,9 @@ export function InvitationsPanel({
                 render: (row) =>
                   isOpen(row.status) ? (
                     <span className="row-actions">
-                      <button
+                      <Button
+                        type="submit"
+                        variant="ghost"
                         className="text-button"
                         aria-label={`Reenviar invitación a ${row.email}`}
                         onClick={() =>
@@ -244,8 +245,10 @@ export function InvitationsPanel({
                         }
                       >
                         Reenviar invitación
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="ghost"
                         className="text-button destructive"
                         aria-label={`Revocar invitación de ${row.email}`}
                         onClick={() =>
@@ -253,7 +256,7 @@ export function InvitationsPanel({
                         }
                       >
                         Revocar invitación
-                      </button>
+                      </Button>
                     </span>
                   ) : (
                     '—'
@@ -269,7 +272,7 @@ export function InvitationsPanel({
           />
         </>
       ) : (
-        <Empty
+        <EmptyState
           title={
             status === 'PENDING'
               ? 'No hay invitaciones pendientes'
@@ -326,14 +329,14 @@ function ProviderPicker() {
   return (
     <>
       <Field label="Buscar proveedor" hint="Nombre o código.">
-        <input
+        <Input
           type="search"
           maxLength={100}
           onChange={(e) => setSearch(e.target.value.trim())}
         />
       </Field>
       <Field label="Proveedor">
-        <select name="providerId" required defaultValue="">
+        <Select name="providerId" required defaultValue="">
           <option value="" disabled>
             {query.isPending
               ? 'Cargando proveedores…'
@@ -344,7 +347,7 @@ function ProviderPicker() {
               {provider.name} · {provider.code}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       {query.isError && (
         <p className="inline-error" role="alert">
@@ -390,7 +393,7 @@ export function InviteProviderAdminDialog({
         }}
       >
         <Field label="Correo electrónico">
-          <input
+          <Input
             name="email"
             type="email"
             required
@@ -400,13 +403,13 @@ export function InviteProviderAdminDialog({
         </Field>
         {!provider && <ProviderPicker />}
         <Field label="Rol dentro del proveedor">
-          <select name="membershipRole" defaultValue="ADMIN">
+          <Select name="membershipRole" defaultValue="ADMIN">
             {membershipRoles.map((value) => (
               <option key={value} value={value}>
                 {membershipRoleLabels[value]}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         <p className="notice">Rol de la cuenta: Administrador de proveedor.</p>
       </ActionForm>
@@ -446,7 +449,7 @@ export function InviteDriverDialog({
         }}
       >
         <Field label="Correo electrónico">
-          <input
+          <Input
             name="email"
             type="email"
             required
@@ -455,7 +458,7 @@ export function InviteDriverDialog({
           />
         </Field>
         <Field label="Nombre operativo">
-          <input name="driverName" required maxLength={100} pattern=".*\S.*" />
+          <Input name="driverName" required maxLength={100} pattern=".*\S.*" />
         </Field>
       </ActionForm>
     </Modal>
@@ -472,8 +475,13 @@ export function InviteButton({
   disabled?: boolean
 }) {
   return (
-    <button className="button" onClick={onClick} disabled={disabled}>
+    <Button
+      type="submit"
+      className="button"
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Send size={16} /> {label}
-    </button>
+    </Button>
   )
 }

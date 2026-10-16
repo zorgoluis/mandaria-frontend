@@ -1,17 +1,18 @@
+import {
+  Select,
+  EmptyState,
+  ErrorState,
+  InfoGrid,
+  Loading,
+  PageHeader,
+  Pagination,
+  Table,
+} from '../components/ui'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight } from 'lucide-react'
 import { useAuth } from '../auth/context'
-import {
-  Empty,
-  ErrorState,
-  InfoGrid,
-  Loading,
-  PageTitle,
-  Pagination,
-  Table,
-} from '../components/ui'
 import { accounts } from '../invitations/service'
 import {
   InviteButton,
@@ -31,7 +32,7 @@ export function UsersPage() {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Administradores y usuarios"
         description="Consulta las cuentas de Mandaria e incorpora administradores por invitación."
         action={
@@ -52,7 +53,7 @@ export function UsersPage() {
           </Link>
         </div>
         <div className="filters">
-          <select
+          <Select
             aria-label="Filtrar por estado de cuenta"
             value={status}
             onChange={(e) => {
@@ -66,7 +67,7 @@ export function UsersPage() {
                 {accountStatusLabels[value]}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         {query.isPending ? (
           <Loading />
@@ -111,7 +112,7 @@ export function UsersPage() {
             />
           </>
         ) : (
-          <Empty
+          <EmptyState
             title="No hay administradores"
             description={
               status
@@ -136,7 +137,7 @@ export function ProfilePage() {
   const { user } = useAuth()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Mi perfil"
         description="Tu identidad y acceso a Mandaria."
       />
@@ -159,7 +160,7 @@ export function ProfilePage() {
 export function SettingsPage() {
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Configuración"
         description="Información de este espacio de trabajo."
       />

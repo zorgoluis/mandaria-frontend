@@ -1,3 +1,11 @@
+import {
+  ButtonLink,
+  Badge,
+  ErrorState,
+  Loading,
+  PageHeader,
+  Table,
+} from '../components/ui'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import {
@@ -13,7 +21,6 @@ import {
 } from 'lucide-react'
 import { providers } from '../providers/service'
 import { useAuth } from '../auth/context'
-import { Badge, ErrorState, Loading, PageTitle, Table } from '../components/ui'
 import { MyProvider } from '../providers/pages'
 import { deliveryRequests } from '../delivery-requests/service'
 import { deliveryRequestKeys } from '../delivery-requests/queries'
@@ -33,7 +40,7 @@ export function Dashboard() {
       <MyProvider showActivity />
     </>
   ) : (
-    <PageTitle
+    <PageHeader
       title="Bienvenido a Mandaria"
       description="Tu rol todavía no tiene módulos administrativos habilitados."
     />
@@ -56,13 +63,13 @@ function AdminDashboard() {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Vista general"
         description="Lo esencial de tu operación, en un solo lugar."
         action={
-          <Link className="button" to="/providers/new">
+          <ButtonLink className="button" to="/providers/new">
             <Plus size={17} /> Nuevo proveedor
-          </Link>
+          </ButtonLink>
         }
       />
       <div className="welcome-banner">

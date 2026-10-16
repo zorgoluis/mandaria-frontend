@@ -1,3 +1,15 @@
+import {
+  Input,
+  Textarea,
+  ActionForm,
+  Badge,
+  EmptyState,
+  ErrorState,
+  Field,
+  InfoGrid,
+  Loading,
+  Modal,
+} from '../components/ui'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { DetailedPayment } from '../execution/payment'
 import type { ExecutionFields } from '../execution/types'
@@ -5,16 +17,6 @@ import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, Clock3, Wallet } from 'lucide-react'
-import {
-  ActionForm,
-  Badge,
-  Empty,
-  ErrorState,
-  Field,
-  InfoGrid,
-  Loading,
-  Modal,
-} from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { paymentModes } from '../delivery-requests/format'
@@ -165,7 +167,7 @@ function DriverOption({
 }) {
   return (
     <label className={`resource-option ${checked ? 'selected' : ''}`}>
-      <input
+      <Input
         type="radio"
         name="driverId"
         value={driver.id}
@@ -200,7 +202,7 @@ function VehicleOption({
     <label
       className={`resource-option ${checked ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
     >
-      <input
+      <Input
         type="radio"
         name="vehicleId"
         value={vehicle.id}
@@ -264,7 +266,7 @@ function ResourcePicker({
   const vehicleList = vehicles.data.items
   if (!driverList.length || !vehicleList.length)
     return (
-      <Empty
+      <EmptyState
         title={
           !driverList.length && !vehicleList.length
             ? 'No hay repartidores ni vehículos disponibles'
@@ -347,7 +349,7 @@ function ReasonFields({
         <legend>Motivo</legend>
         {providerEndReasons.map((value) => (
           <label key={value}>
-            <input
+            <Input
               type="radio"
               name="endReason"
               value={value}
@@ -363,7 +365,7 @@ function ReasonFields({
           label="Describe el motivo"
           hint={`Entre ${REASON_DETAIL_MIN} y ${REASON_DETAIL_MAX} caracteres. No incluyas datos personales: queda en el historial.`}
         >
-          <textarea
+          <Textarea
             name="reasonDetail"
             required
             maxLength={REASON_DETAIL_MAX}
@@ -570,7 +572,9 @@ export function AssignmentHistory({
   emptyDescription?: string
 }) {
   if (!assignments.length)
-    return <Empty title="Sin asignaciones" description={emptyDescription} />
+    return (
+      <EmptyState title="Sin asignaciones" description={emptyDescription} />
+    )
   return (
     <ol className="assignment-history">
       {assignments.map((item) => (

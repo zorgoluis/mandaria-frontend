@@ -1,7 +1,6 @@
+import { Button, ErrorState, Loading, PageHeader } from '../components/ui'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { RefreshCw } from 'lucide-react'
-import { ErrorState, Loading, PageTitle } from '../components/ui'
 import { ProviderScope } from '../logistics/components'
 import type { ProviderContext } from '../logistics/types'
 import { PortalTabs } from '../driver-portal/pages'
@@ -22,7 +21,7 @@ const readOnlyNote =
 export function MyCreditsPage() {
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Créditos"
         description="Saldo e historial de créditos de mi proveedor"
       />
@@ -56,7 +55,9 @@ function ProviderCredits({ scope }: { scope: ProviderContext }) {
           <h2 id="my-credits">Créditos de {scope.name}</h2>
           <p>Un solo saldo para el proveedor y sus repartidores de flotilla</p>
         </div>
-        <button
+        <Button
+          loading={account.isFetching || ledger.isFetching}
+          type="submit"
           className="button secondary small"
           onClick={() => {
             void account.refetch()
@@ -64,9 +65,8 @@ function ProviderCredits({ scope }: { scope: ProviderContext }) {
           }}
           disabled={account.isFetching || ledger.isFetching}
         >
-          <RefreshCw size={14} className={account.isFetching ? 'spin' : ''} />
           Actualizar
-        </button>
+        </Button>
       </div>
       <div className="panel-body">
         {account.isPending ? (
@@ -124,7 +124,7 @@ export function DriverCreditsPage() {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Créditos"
         description="Mi saldo como repartidor independiente"
       />
@@ -135,7 +135,9 @@ export function DriverCreditsPage() {
             <h2 id="driver-credits">Mis créditos</h2>
             <p>Saldo e historial de mis movimientos</p>
           </div>
-          <button
+          <Button
+            loading={account.isFetching || ledger.isFetching}
+            type="submit"
             className="button secondary small"
             onClick={() => {
               void account.refetch()
@@ -143,9 +145,8 @@ export function DriverCreditsPage() {
             }}
             disabled={account.isFetching || ledger.isFetching}
           >
-            <RefreshCw size={14} className={account.isFetching ? 'spin' : ''} />
             Actualizar
-          </button>
+          </Button>
         </div>
         <div className="panel-body">
           {account.isPending ? (

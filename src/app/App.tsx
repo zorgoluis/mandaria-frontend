@@ -1,3 +1,4 @@
+import { Button, ErrorPage, ErrorState, Loading } from '../components/ui'
 import {
   VerificationLayout,
   DriverOnboarding,
@@ -13,7 +14,6 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Login } from '../auth/Login'
 import { AdminLayout } from '../layouts/AdminLayout'
-import { ErrorPage, ErrorState, Loading } from '../components/ui'
 import { Dashboard } from '../dashboard/Dashboard'
 import {
   IntegrationsPage,
@@ -302,9 +302,13 @@ export class AppBoundary extends Component<
       <div className="state full-state">
         <h1>No fue posible mostrar esta página</h1>
         <p>Vuelve a cargar Mandaria para continuar.</p>
-        <button className="button" onClick={() => window.location.reload()}>
+        <Button
+          type="submit"
+          className="button"
+          onClick={() => window.location.reload()}
+        >
           Volver a cargar
-        </button>
+        </Button>
       </div>
     ) : (
       this.props.children

@@ -1,3 +1,13 @@
+import {
+  Select,
+  Button,
+  Checkbox,
+  Textarea,
+  Field,
+  Loading,
+  Pagination,
+  Confirm,
+} from '../components/ui'
 import { useState } from 'react'
 import {
   Link,
@@ -8,7 +18,6 @@ import {
 } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../auth/context'
-import { Field, Loading, Pagination, Confirm } from '../components/ui'
 import { ProviderScope } from '../logistics/components'
 import { drivers } from '../drivers/service'
 import { vehicles } from '../vehicles/service'
@@ -190,7 +199,7 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
           rechaza la carga. No uses credenciales del conductor.
         </p>
         <Field label="Recurso">
-          <select
+          <Select
             value={kind}
             onChange={(e) => {
               setKind(e.target.value as SubjectType)
@@ -200,7 +209,7 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
           >
             <option value="DRIVER_IDENTITY">Conductor</option>
             <option value="VEHICLE">Unidad</option>
-          </select>
+          </Select>
         </Field>
         {q.isPending ? (
           <Loading />
@@ -209,7 +218,7 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
         ) : (
           <>
             <Field label="Seleccionar recurso autorizado">
-              <select
+              <Select
                 value={selected}
                 onChange={(e) => setSelected(e.target.value)}
               >
@@ -219,7 +228,7 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
                     {'name' in r ? r.name : r.identifier}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Pagination
               page={page}
@@ -300,7 +309,7 @@ export function CaseList({
     <section className="panel panel-body">
       <h2>Expedientes e historial</h2>
       <Field label="Estado del expediente">
-        <select
+        <Select
           value={status}
           onChange={(e) => {
             setStatus(e.target.value)
@@ -315,14 +324,15 @@ export function CaseList({
               </option>
             ),
           )}
-        </select>
+        </Select>
       </Field>
       {area === 'admin' && (
         <details>
           <summary>Filtrar por proveedor</summary>
           <ProviderScope>
             {(p) => (
-              <button
+              <Button
+                variant="ghost"
                 type="button"
                 onClick={() => {
                   setProvider(p.providerId)
@@ -330,13 +340,17 @@ export function CaseList({
                 }}
               >
                 Filtrar: {p.name}
-              </button>
+              </Button>
             )}
           </ProviderScope>
           {provider && (
-            <button onClick={() => setProvider('')}>
+            <Button
+              type="submit"
+              variant="ghost"
+              onClick={() => setProvider('')}
+            >
               Quitar filtro de proveedor
-            </button>
+            </Button>
           )}
         </details>
       )}
@@ -345,9 +359,13 @@ export function CaseList({
       ) : q.isError ? (
         <>
           <p role="alert">{message(q.error)}</p>
-          <button onClick={() => void q.refetch()}>
+          <Button
+            type="submit"
+            variant="ghost"
+            onClick={() => void q.refetch()}
+          >
             Consultar expedientes
-          </button>
+          </Button>
         </>
       ) : (
         <>
@@ -521,19 +539,23 @@ function CaseContent({
       {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
         <section className="panel panel-body">
           {record.status === 'DRAFT' && (
-            <button
+            <Button
+              type="submit"
+              variant="ghost"
               disabled={command.blocked || command.busy}
               onClick={() => setConfirm('SUBMIT')}
             >
               Presentar para revisión
-            </button>
+            </Button>
           )}{' '}
-          <button
+          <Button
+            type="submit"
+            variant="ghost"
             disabled={command.blocked || command.busy}
             onClick={() => setConfirm('WITHDRAW')}
           >
             Retirar expediente
-          </button>
+          </Button>
         </section>
       )}
       {canWrite && ['REJECTED', 'WITHDRAWN'].includes(record.status) && (
@@ -646,32 +668,32 @@ function Decision({
         }}
       >
         <Field label="Resultado">
-          <select
+          <Select
             value={decision}
             onChange={(e) => setDecision(e.target.value)}
           >
             <option value="APPROVE">Aprobar</option>
             <option value="REJECT">Rechazar</option>
-          </select>
+          </Select>
         </Field>
         {decision === 'APPROVE' &&
           required.map((c) => (
             <label className="verification-check" key={c}>
-              <input name="check" type="checkbox" value={c} />
+              <Checkbox name="check" value={c} />
               {labels[c] || c}
             </label>
           ))}
         <Field
           label={decision === 'REJECT' ? 'Motivo público *' : 'Motivo público'}
         >
-          <textarea
+          <Textarea
             name="publicReason"
             required={decision === 'REJECT'}
             maxLength={2000}
           />
         </Field>
         <Field label="Nota interna (sólo SUPER_ADMIN)">
-          <textarea name="internalNote" maxLength={4000} />
+          <Textarea name="internalNote" maxLength={4000} />
         </Field>
       </Form>
       <p>

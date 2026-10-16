@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import {
+  Button,
+  Input,
+  Checkbox,
+  Textarea,
   ActionForm,
   ErrorState,
   Field,
@@ -8,6 +10,8 @@ import {
   Loading,
   Modal,
 } from '../components/ui'
+import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
@@ -41,12 +45,13 @@ export function WebhookSettings({ id }: { id: string }) {
     <>
       <div className="panel-toolbar">
         <h3>Destino y envíos</h3>
-        <button
+        <Button
+          type="submit"
           className="button secondary"
           onClick={() => void query.refetch()}
         >
           Actualizar configuración
-        </button>
+        </Button>
       </div>
       <div className="panel-body">
         {!endpoint && <p role="status">No hay un destino configurado.</p>}
@@ -63,13 +68,13 @@ export function WebhookSettings({ id }: { id: string }) {
           <div className="warning notice" role="alert">
             La configuración cambió en el servidor. Tu edición se conserva;
             revisa y carga los datos actuales antes de guardar.
-            <button
+            <Button
               type="button"
               className="button secondary"
               onClick={() => setDraft(null)}
             >
               Descartar edición y cargar configuración actual
-            </button>
+            </Button>
           </div>
         )}
         <ActionForm
@@ -109,7 +114,7 @@ export function WebhookSettings({ id }: { id: string }) {
           }}
         >
           <Field label="URL receptora HTTPS">
-            <input
+            <Input
               name="url"
               type="url"
               required
@@ -119,9 +124,9 @@ export function WebhookSettings({ id }: { id: string }) {
             />
           </Field>
           <label>
-            <input
+            <Checkbox
               name="enabled"
-              type="checkbox"
+
               checked={values.enabled}
               onChange={(e) => change({ enabled: e.target.checked })}
             />{' '}
@@ -233,13 +238,14 @@ export function SecretManager({
           {uncertainSecret}
         </p>
       )}
-      <button
+      <Button
+        type="submit"
         className="button secondary"
         disabled={busy}
         onClick={() => setConfirm(true)}
       >
         {configured ? 'Rotar secreto de firma' : 'Generar secreto de firma'}
-      </button>
+      </Button>
       {confirm && (
         <Modal
           title={
@@ -260,20 +266,22 @@ export function SecretManager({
             automáticamente.
           </p>
           <div className="form-actions">
-            <button
+            <Button
+              type="submit"
               className="button secondary"
               disabled={busy}
               onClick={() => setConfirm(false)}
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
+              type="submit"
               className="button"
               disabled={busy}
               onClick={() => void issue()}
             >
               {busy ? 'Generando…' : 'Confirmar generación única'}
-            </button>
+            </Button>
           </div>
         </Modal>
       )}
@@ -291,14 +299,15 @@ export function SecretManager({
             privada del backend receptor.
           </p>
           <Field label="Secreto de firma de webhook">
-            <textarea
+            <Textarea
               readOnly
               autoComplete="off"
               spellCheck={false}
               value={secret}
             />
           </Field>
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             onClick={async () => {
               try {
@@ -310,14 +319,15 @@ export function SecretManager({
             }}
           >
             Copiar secreto
-          </button>
+          </Button>
           {copied && (
             <p role="status">
               Copiado. Sustituye el contenido del portapapeles después de
               guardarlo.
             </p>
           )}
-          <button
+          <Button
+            type="submit"
             className="button"
             onClick={() => {
               epoch.current++
@@ -326,7 +336,7 @@ export function SecretManager({
             }}
           >
             Ya lo guardé, cerrar
-          </button>
+          </Button>
         </Modal>
       )}
     </>

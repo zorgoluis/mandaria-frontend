@@ -1,22 +1,27 @@
-import { useState, type FormEvent } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Search } from 'lucide-react'
 import {
+  ButtonLink,
+  Input,
+  Select,
+  Button,
+  Textarea,
   ActionForm,
   Badge,
   Confirm,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowUpRight, Search } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { queryClient } from '../services/query'
 import { ApiError } from '../services/errors'
@@ -84,13 +89,13 @@ export function ServiceZonesPage() {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Zonas de servicio"
         description="Dónde puede operar Mandaria. Cada zona define su cobertura y su moneda."
         action={
-          <Link className="button" to="/service-zones/new">
+          <ButtonLink className="button" to="/service-zones/new">
             Nueva zona
-          </Link>
+          </ButtonLink>
         }
       />
       <div className="panel">
@@ -169,7 +174,7 @@ export function ServiceZonesPage() {
                 ]}
               />
             ) : (
-              <Empty
+              <EmptyState
                 title="No hay zonas de servicio."
                 description={
                   search || status
@@ -248,7 +253,7 @@ function ZoneFilters({
     <form className="filters" onSubmit={submit} aria-label="Filtros de zonas">
       <label className="search">
         <Search size={17} />
-        <input
+        <Input
           aria-label="Buscar zona"
           placeholder="Código o nombre"
           value={draft}
@@ -256,7 +261,7 @@ function ZoneFilters({
           onChange={(event) => setDraft(event.target.value)}
         />
       </label>
-      <select
+      <Select
         aria-label="Filtrar por estado"
         value={status}
         onChange={(event) => onStatus(event.target.value)}
@@ -267,11 +272,11 @@ function ZoneFilters({
             {zoneStatusLabels[value]}
           </option>
         ))}
-      </select>
+      </Select>
       <div className="row-actions">
-        <button className="button small" type="submit">
+        <Button className="button small" type="submit">
           Buscar
-        </button>
+        </Button>
       </div>
     </form>
   )
@@ -297,7 +302,7 @@ export function ServiceZoneNew() {
   const notify = useFeedback()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Nueva zona de servicio"
         description="Define el área donde Mandaria puede cotizar entregas locales."
         back="/service-zones"
@@ -350,16 +355,16 @@ export function ServiceZoneNew() {
               label="Código"
               hint="Mayúsculas, números y guion bajo. No puede cambiarse después."
             >
-              <input name="code" required maxLength={50} />
+              <Input name="code" required maxLength={50} />
             </Field>
             <Field label="Nombre" hint="Hasta 100 caracteres.">
-              <input name="name" required maxLength={100} />
+              <Input name="name" required maxLength={100} />
             </Field>
             <Field
               label="Moneda"
               hint="ISO 4217. Inmutable: las tarifas de la zona la heredan."
             >
-              <input
+              <Input
                 name="currency"
                 required
                 maxLength={3}
@@ -371,7 +376,7 @@ export function ServiceZoneNew() {
             label="Cobertura (GeoJSON)"
             hint="Polygon o MultiPolygon en orden [longitud, latitud], con el anillo cerrado. Máximo 10000 posiciones."
           >
-            <textarea
+            <Textarea
               name="boundary"
               required
               rows={12}
@@ -404,7 +409,7 @@ function ZoneRecord({ id }: { id: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title="Zona de servicio" back="/service-zones" />
+        <PageHeader title="Zona de servicio" back="/service-zones" />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -440,28 +445,31 @@ function ZoneContent({ zone }: { zone: ServiceZone }) {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={zone.name}
         description={`${zone.code} · ${zone.currency}`}
         back="/service-zones"
         action={
-          <button
+          <Button
+            type="submit"
+            variant="ghost"
             className={`button${active ? ' secondary' : ''}`}
             onClick={() => setTransition(active ? 'deactivate' : 'activate')}
           >
             {active ? 'Desactivar zona' : 'Activar zona'}
-          </button>
+          </Button>
         }
       />
       <section className="panel" aria-labelledby="zone-summary">
         <div className="panel-toolbar">
           <h2 id="zone-summary">Resumen</h2>
-          <button
+          <Button
+            type="submit"
             className="button secondary small"
             onClick={() => setRenaming(true)}
           >
             Cambiar nombre
-          </button>
+          </Button>
         </div>
         <InfoGrid
           items={[
@@ -525,9 +533,13 @@ function BoundaryPanel({
           <p>Área servida, en GeoJSON [longitud, latitud]</p>
         </div>
         {editable && (
-          <button className="button secondary small" onClick={onEdit}>
+          <Button
+            type="submit"
+            className="button secondary small"
+            onClick={onEdit}
+          >
             Reemplazar cobertura
-          </button>
+          </Button>
         )}
       </div>
       <InfoGrid
@@ -556,7 +568,7 @@ function BoundaryPanel({
           </pre>
         </div>
       ) : (
-        <Empty
+        <EmptyState
           title="Sin cobertura disponible"
           description="El backend no devolvió la geometría de esta zona."
         />
@@ -608,13 +620,14 @@ function ZoneRatePlans({ zone }: { zone: ServiceZone }) {
           <p>Versiones de tarifa de esta zona</p>
         </div>
         {!draft && (
-          <button
+          <Button
+            type="submit"
             className="button secondary small"
             disabled={query.isPending}
             onClick={() => setCreating(true)}
           >
             Crear nueva versión
-          </button>
+          </Button>
         )}
       </div>
       {query.isPending ? (
@@ -691,7 +704,7 @@ function ZoneRatePlans({ zone }: { zone: ServiceZone }) {
               ]}
             />
           ) : (
-            <Empty
+            <EmptyState
               title="No hay versiones históricas."
               description="Crea la primera versión para definir cuánto cuesta una entrega local en esta zona."
             />
@@ -760,7 +773,7 @@ function RenameDialog({
         }}
       >
         <Field label="Nombre" hint="Hasta 100 caracteres.">
-          <input
+          <Input
             name="name"
             required
             maxLength={100}
@@ -807,7 +820,7 @@ function BoundaryDialog({
           label="Cobertura (GeoJSON)"
           hint="Polygon o MultiPolygon en orden [longitud, latitud], con el anillo cerrado."
         >
-          <textarea
+          <Textarea
             name="boundary"
             required
             rows={12}

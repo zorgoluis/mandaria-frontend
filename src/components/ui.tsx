@@ -1,68 +1,150 @@
+import { ButtonLink, Button } from './controls'
 import {
   useEffect,
   useId,
   useRef,
   useState,
-  Children,
-  cloneElement,
-  isValidElement,
   type ReactNode,
   type FormEvent,
 } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  ArrowLeft,
-  CircleAlert,
-  LoaderCircle,
-  PackageOpen,
-  X,
-} from 'lucide-react'
+import { ArrowLeft, CircleAlert, PackageOpen, X } from 'lucide-react'
 import { ApiError, errorMessage } from '../services/errors'
 import { labels } from '../utils/format'
-export function Badge({ value, label }: { value: string; label?: string }) {
+export {
+  Button,
+  ButtonLink,
+  Field,
+  Input,
+  Select,
+  Textarea,
+  Checkbox,
+} from './controls'
+export { RouteProgress } from './RouteProgress'
+export type { RouteStep } from './RouteProgress'
+export { Toast } from './Toast'
+
+type BadgeTone = 'neutral' | 'active' | 'success' | 'attention' | 'stopped'
+const serviceLabels: Record<string, string> = {
+  SEARCHING: 'Buscando',
+  ASSIGNED: 'Asignado',
+  CLAIMED: 'Tomado',
+  IN_PROGRESS: 'En curso',
+  EXECUTOR_FOUND: 'Ejecutor encontrado',
+  COMPLETED: 'Completado',
+  DELIVERED: 'Entregado',
+  RETURNED: 'Devuelto',
+  TRANSFERRED: 'Transferido',
+  RELEASED: 'Liberado',
+  RETRY_PENDING: 'Reintento pendiente',
+}
+const serviceTones: Record<string, BadgeTone> = {
+  CREATED: 'neutral',
+  DRAFT: 'neutral',
+  AVAILABLE: 'active',
+  SEARCHING: 'active',
+  OPEN: 'active',
+  ACTIVE: 'active',
+  ASSIGNED: 'active',
+  CLAIMED: 'active',
+  IN_PROGRESS: 'active',
+  ACCEPTED: 'active',
+  EXECUTOR_FOUND: 'active',
+  PENDING: 'attention',
+  OFFERED: 'attention',
+  RETRY_PENDING: 'attention',
+  COMPLETED: 'success',
+  DELIVERED: 'success',
+  APPROVED: 'success',
+  CANCELLED: 'stopped',
+  REJECTED: 'stopped',
+  REVOKED: 'stopped',
+  EXPIRED: 'stopped',
+  SUSPENDED: 'stopped',
+  EXHAUSTED: 'stopped',
+  STOPPED: 'stopped',
+}
+export function Badge({
+  value,
+  label,
+  tone = serviceTones[value.toUpperCase()] ?? 'neutral',
+}: {
+  value: string
+  label?: string
+  tone?: BadgeTone
+}) {
   return (
-    <span className={`badge ${value.toLowerCase()}`}>
-      <span className="status-dot" />
-      {label ?? labels[value] ?? 'Desconocido'}
+    <span className={`badge ui-badge ${value.toLowerCase()}`} data-tone={tone}>
+      <span className="status-dot" aria-hidden="true" />
+      {label ?? serviceLabels[value] ?? labels[value] ?? 'Desconocido'}
     </span>
   )
 }
-export function PageTitle({
+export function PageHeader({
   title,
   description,
   action,
   back,
+  eyebrow = 'Mandaria',
 }: {
   title: string
   description?: string
   action?: ReactNode
   back?: string
+  eyebrow?: string
 }) {
   return (
-    <div className="page-heading">
+    <header className="page-heading ui-page-header">
       <div>
         {back && (
           <Link className="back-link" to={back}>
-            <ArrowLeft size={15} /> Volver
+            <ArrowLeft className="ui-icon" aria-hidden="true" /> Volver
           </Link>
         )}
+        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
         <h1>{title}</h1>
         {description && <p>{description}</p>}
       </div>
       {action}
+    </header>
+  )
+}
+export const PageTitle = PageHeader
+export function Skeleton({
+  rows = 3,
+  label = 'Cargando información',
+  decorative = false,
+}: {
+  rows?: number
+  label?: string
+  decorative?: boolean
+}) {
+  return (
+    <div
+      className="ui-skeleton"
+      role={decorative ? undefined : 'status'}
+      aria-hidden={decorative || undefined}
+      aria-label={decorative ? undefined : label}
+    >
+      {Array.from(
+        { length: Math.min(12, Math.max(1, Math.floor(rows) || 1)) },
+        (_, index) => (
+          <span className="skeleton-line" key={index} />
+        ),
+      )}
     </div>
   )
 }
 export function Loading() {
   return (
     <div className="state" role="status">
-      <LoaderCircle className="spin" size={28} />
+      <Skeleton decorative />
       <h3>Cargando información</h3>
       <p>Conectando con Mandaria…</p>
     </div>
   )
 }
-export function Empty({
+export function EmptyState({
   title = 'Todavía no hay registros',
   description = 'Los registros aparecerán aquí cuando estén disponibles.',
   action,
@@ -72,14 +154,15 @@ export function Empty({
   action?: ReactNode
 }) {
   return (
-    <div className="state">
-      <PackageOpen size={32} />
+    <div className="state ui-empty-state">
+      <PackageOpen className="ui-state-icon" aria-hidden="true" />
       <h3>{title}</h3>
       <p>{description}</p>
       {action}
     </div>
   )
 }
+export const Empty = EmptyState
 export function ErrorState({
   error,
   retry,
@@ -89,7 +172,7 @@ export function ErrorState({
 }) {
   return (
     <div className="state error-state" role="alert">
-      <CircleAlert size={30} />
+      <CircleAlert className="ui-state-icon" aria-hidden="true" />
       <h3>
         {error instanceof ApiError && error.status === 403
           ? '403 — Sin permisos'
@@ -99,9 +182,9 @@ export function ErrorState({
       </h3>
       <p>{errorMessage(error)}</p>
       {retry && (
-        <button className="button secondary" onClick={retry}>
+        <Button type="submit" className="button secondary" onClick={retry}>
           Reintentar
-        </button>
+        </Button>
       )}
     </div>
   )
@@ -116,9 +199,9 @@ export function ErrorPage({ code }: { code: 403 | 404 }) {
           ? 'Tu rol no tiene acceso a esta sección.'
           : 'Revisa la dirección o regresa al inicio.'}
       </p>
-      <Link className="button" to="/dashboard">
+      <ButtonLink className="button" to="/dashboard">
         Ir al dashboard
-      </Link>
+      </ButtonLink>
     </div>
   )
 }
@@ -126,10 +209,12 @@ export function Modal({
   title,
   children,
   onClose,
+  busy = false,
 }: {
   title: string
   children: ReactNode
   onClose: () => void
+  busy?: boolean
 }) {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
@@ -144,22 +229,50 @@ export function Modal({
   }, [])
   return (
     <dialog
+      className="ui-modal"
       ref={ref}
       aria-labelledby={titleId}
+      onKeyDown={(event) => {
+        if (event.key !== 'Tab') return
+        const controls = Array.from(
+          event.currentTarget.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+          ),
+        ).filter(
+          (element) =>
+            element.tabIndex >= 0 && element.getClientRects().length > 0,
+        )
+        const first = controls[0]
+        const last = controls[controls.length - 1]
+        if (!first) {
+          event.preventDefault()
+          event.currentTarget.focus()
+          return
+        }
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first.focus()
+        }
+      }}
       onCancel={(event) => {
         event.preventDefault()
-        onClose()
+        if (!busy) onClose()
       }}
     >
       <div className="modal-heading">
         <h2 id={titleId}>{title}</h2>
-        <button
+        <Button
+          variant="ghost"
           className="icon-button"
           onClick={onClose}
           aria-label="Cerrar diálogo"
+          disabled={busy}
         >
-          <X size={20} />
-        </button>
+          <X className="ui-icon" aria-hidden="true" />
+        </Button>
       </div>
       {children}
     </dialog>
@@ -228,23 +341,24 @@ export function ActionForm({
       <div className="form-actions">
         {dirty && <small>Cambios sin guardar</small>}
         {onCancel && (
-          <button
+          <Button
             type="button"
             className="button secondary"
             disabled={busy}
             onClick={onCancel}
           >
             {cancelLabel}
-          </button>
+          </Button>
         )}
-        <button
+        <Button
           className="button"
           disabled={busy || !(dirty || initialDirty)}
           type="submit"
+          loading={busy}
+          loadingLabel="Guardando…"
         >
-          {busy && <LoaderCircle size={16} className="spin" />}
-          {busy ? 'Guardando…' : submitLabel}
-        </button>
+          {submitLabel}
+        </Button>
       </div>
     </form>
   )
@@ -266,6 +380,7 @@ export function Confirm({
   return (
     <Modal
       title={title}
+      busy={busy}
       onClose={() => {
         if (!busy) onClose()
       }}
@@ -290,43 +405,17 @@ export function Confirm({
     </Modal>
   )
 }
-export function Field({
-  label,
-  children,
-  hint,
-}: {
-  label: string
-  children: ReactNode
-  hint?: string
-}) {
-  const labelId = useId()
-  const hintId = useId()
-  return (
-    <label className="field">
-      <span id={labelId}>{label}</span>
-      {Children.map(children, (child) =>
-        isValidElement<{
-          'aria-labelledby'?: string
-          'aria-describedby'?: string
-        }>(child) &&
-        typeof child.type === 'string' &&
-        ['input', 'select', 'textarea'].includes(child.type)
-          ? cloneElement(child, {
-              'aria-labelledby': labelId,
-              ...(hint ? { 'aria-describedby': hintId } : {}),
-            })
-          : child,
-      )}
-      {hint && <small id={hintId}>{hint}</small>}
-    </label>
-  )
-}
 export function Table<T extends { id: string }>({
   rows,
   columns,
   empty,
   emptyTitle,
   stacked = false,
+  caption,
+  loading = false,
+  error,
+  retry,
+  emptyAction,
 }: {
   rows: T[]
   columns: { label: string; render: (row: T) => ReactNode }[]
@@ -334,10 +423,26 @@ export function Table<T extends { id: string }>({
   emptyTitle?: string
   /** Renders rows as labelled cards on narrow screens instead of scrolling. */
   stacked?: boolean
+  caption?: string
+  loading?: boolean
+  error?: unknown
+  retry?: () => void
+  emptyAction?: ReactNode
 }) {
+  if (loading)
+    return (
+      <Skeleton rows={5} label={caption ? `Cargando ${caption}` : undefined} />
+    )
+  if (error) return <ErrorState error={error} retry={retry} />
   return rows.length ? (
-    <div className={`table-scroll${stacked ? ' table-stacked' : ''}`}>
+    <div
+      className={`table-scroll ui-table${stacked ? ' table-stacked' : ''}`}
+      tabIndex={0}
+      role="region"
+      aria-label={caption ?? 'Tabla de registros'}
+    >
       <table>
+        {caption && <caption>{caption}</caption>}
         <thead>
           <tr>
             {columns.map((col) => (
@@ -361,7 +466,7 @@ export function Table<T extends { id: string }>({
       </table>
     </div>
   ) : (
-    <Empty title={emptyTitle} description={empty} />
+    <EmptyState title={emptyTitle} description={empty} action={emptyAction} />
   )
 }
 export function Pagination({
@@ -381,20 +486,22 @@ export function Pagination({
         {total} registros · Página {totalPages ? page : 0} de {totalPages}
       </span>
       <div>
-        <button
+        <Button
+          type="submit"
           className="button secondary small"
           disabled={page <= 1}
           onClick={() => onPage(page - 1)}
         >
           Anterior
-        </button>
-        <button
+        </Button>
+        <Button
+          type="submit"
           className="button secondary small"
           disabled={page >= totalPages}
           onClick={() => onPage(page + 1)}
         >
           Siguiente
-        </button>
+        </Button>
       </div>
     </div>
   )

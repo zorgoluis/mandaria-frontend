@@ -1,10 +1,9 @@
-import { HistoricalAdvanceRecovery } from './historical-recovery'
-import { useHistoricalMarkers } from './historical-store'
-import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '../auth/context'
 import {
+  Button,
+  ButtonLink,
+  Select,
+  Textarea,
+  Checkbox,
   ActionForm,
   Field,
   Modal,
@@ -13,7 +12,14 @@ import {
   Pagination,
   Table,
   InfoGrid,
+  RouteProgress,
 } from '../components/ui'
+import { HistoricalAdvanceRecovery } from './historical-recovery'
+import { useHistoricalMarkers } from './historical-store'
+import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { useAuth } from '../auth/context'
 import { ApiError } from '../services/errors'
 import { date, labels } from '../utils/format'
 import { executionApi, executionPath } from './service'
@@ -85,7 +91,8 @@ export function ExecutionRecovery() {
               >
                 Consultar incidencia
               </Link>{' '}
-              <button
+              <Button
+                type="submit"
                 className="button secondary"
                 disabled={
                   reading === m.key ||
@@ -108,8 +115,9 @@ export function ExecutionRecovery() {
                 }}
               >
                 Reconciliar por lectura
-              </button>{' '}
-              <button
+              </Button>{' '}
+              <Button
+                type="submit"
                 className="button secondary"
                 disabled={
                   reading !== null ||
@@ -118,7 +126,7 @@ export function ExecutionRecovery() {
                 onClick={() => setClosing({ key: m.key, actor: user.id })}
               >
                 Cerrar intento pendiente
-              </button>
+              </Button>
             </section>
           ))}
       {closing && closing.actor === user?.id && user.role === 'SUPER_ADMIN' && (
@@ -137,7 +145,8 @@ export function ExecutionRecovery() {
             o transferencia física. Verifica la situación física antes de
             preparar otra resolución. No repitas movimientos.
           </p>
-          <button
+          <Button
+            type="submit"
             className="button danger"
             disabled={reading !== null}
             onClick={async () => {
@@ -159,7 +168,7 @@ export function ExecutionRecovery() {
             }}
           >
             Confirmar cierre técnico
-          </button>
+          </Button>
         </Modal>
       )}
       {message && messageActor === user?.id && (
@@ -179,7 +188,8 @@ export function ExecutionRecovery() {
               ? 'Esperando confirmación del servidor…'
               : 'Respuesta incierta. La clave y el cuerpo originales se conservan en esta pestaña. Consulta el estado antes de recuperar; no prepares otra operación.'}
           </p>
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             disabled={c.busy}
             onClick={() =>
@@ -196,14 +206,15 @@ export function ExecutionRecovery() {
             }
           >
             Consultar estado
-          </button>{' '}
-          <button
+          </Button>{' '}
+          <Button
+            type="submit"
             className="button"
             disabled={c.busy || retiredWebCommand(c)}
             onClick={() => user && void retryCommand(c.key, user.id)}
           >
             Recuperar misma operación
-          </button>
+          </Button>
         </section>
       ))}
     </>
@@ -223,21 +234,32 @@ export function ExecutionProgress({
         <span>Revisión {e.revision}</span>
       </div>
       <div className="panel-body">
-        <ol className="execution-phases">
-          {phases.map((p) => (
-            <li key={p} aria-current={p === e.phase ? 'step' : undefined}>
-              <span>{phaseLabels[p]}</span>
-              {p === e.phase && <strong> · Fase actual</strong>}
-            </li>
-          ))}
-          <li>
-            {e.custodyStatus === 'DELIVERED'
-              ? 'Entrega confirmada · Entregado'
-              : e.custodyStatus === 'RETURNED'
-                ? 'Sin entrega al destinatario · Devuelto al origen'
-                : 'Entrega al destinatario · Sin confirmar'}
-          </li>
-        </ol>
+        <RouteProgress
+          label="Fases de ejecución"
+          steps={[
+            ...phases.map((phase) => ({
+              id: phase,
+              label: phaseLabels[phase],
+              state:
+                phase === e.phase ? ('current' as const) : ('pending' as const),
+            })),
+            {
+              id: 'result',
+              label:
+                e.custodyStatus === 'DELIVERED'
+                  ? 'Entrega confirmada · Entregado'
+                  : e.custodyStatus === 'RETURNED'
+                    ? 'Sin entrega al destinatario · Devuelto al origen'
+                    : 'Entrega al destinatario · Sin confirmar',
+              state:
+                e.custodyStatus === 'DELIVERED'
+                  ? 'complete'
+                  : e.custodyStatus === 'RETURNED'
+                    ? 'blocked'
+                    : 'pending',
+            },
+          ]}
+        />
         <p>
           Último registro: {date(e.lastRecordedAt)}.{' '}
           {e.phase ? '' : 'Sin avances registrados.'}
@@ -346,32 +368,34 @@ export function ExecutionPanel({
       <section className="panel">
         <div className="panel-toolbar">
           <h2>Registro operativo</h2>
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             onClick={() => void query.refetch()}
           >
             Actualizar ejecución
-          </button>
+          </Button>
         </div>
         <div className="panel-body row-actions">
           {report && (
-            <button
+            <Button
+              type="submit"
               className="button secondary"
               disabled={blocked}
               onClick={() => setDialog('report')}
             >
               Reportar incidencia
-            </button>
+            </Button>
           )}
           {scope.surface === 'admin' &&
             e.openIncidentId &&
             e.allowedActions.includes('RESOLVE_INCIDENT') && (
-              <Link
+              <ButtonLink
                 className="button"
                 to={`/custody-incidents/${scope.dispatchId}/${e.openIncidentId}`}
               >
                 Resolver incidencia
-              </Link>
+              </ButtonLink>
             )}
         </div>
         <Table
@@ -458,17 +482,17 @@ export function ExecutionPanel({
               {
                 <>
                   <Field label="Motivo">
-                    <select name="reasonCode" required defaultValue="">
+                    <Select name="reasonCode" required defaultValue="">
                       <option value="">Selecciona el motivo</option>
                       {reasons.map((r) => (
                         <option key={r} value={r}>
                           {reasonLabels[r]}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </Field>
                   <Field label="Detalle del motivo">
-                    <textarea
+                    <Textarea
                       name="reasonDetail"
                       required
                       minLength={3}
@@ -482,8 +506,8 @@ export function ExecutionPanel({
                 </>
               }
               <label>
-                <input type="checkbox" required /> Confirmo que este aviso
-                corresponde a la asignación vigente.
+                <Checkbox required /> Confirmo que este aviso corresponde a la
+                asignación vigente.
               </label>
             </ActionForm>
           </fieldset>

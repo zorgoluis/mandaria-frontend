@@ -1,11 +1,9 @@
-import { WebhookPanel } from '../webhooks/pages'
-import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { Plus, ArrowUpRight, Copy, KeyRound, Search } from 'lucide-react'
-import { integrations } from './service'
-import { queryClient } from '../services/query'
 import {
+  ButtonLink,
+  Input,
+  Textarea,
+  Button,
+  Checkbox,
   ActionForm,
   Badge,
   Confirm,
@@ -14,10 +12,17 @@ import {
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { WebhookPanel } from '../webhooks/pages'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Plus, ArrowUpRight, Copy, KeyRound, Search } from 'lucide-react'
+import { integrations } from './service'
+import { queryClient } from '../services/query'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
@@ -43,13 +48,13 @@ export function IntegrationsPage() {
     ) ?? []
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Integraciones"
         description="Conecta otros negocios con tu plataforma logística."
         action={
-          <Link className="button" to="/integrations/new">
+          <ButtonLink className="button" to="/integrations/new">
             <Plus size={17} /> Nueva integración
-          </Link>
+          </ButtonLink>
         }
       />
       <div className="panel">
@@ -60,7 +65,7 @@ export function IntegrationsPage() {
           </div>
           <label className="search">
             <Search size={17} />
-            <input
+            <Input
               aria-label="Buscar integración"
               placeholder="Buscar nombre o código"
               value={search}
@@ -140,7 +145,7 @@ export function IntegrationNew() {
   const notify = useFeedback()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Nueva integración"
         description="Registra una plataforma que se conectará con Mandaria."
         back="/integrations"
@@ -160,7 +165,7 @@ export function IntegrationNew() {
           }}
         >
           <Field label="Nombre">
-            <input
+            <Input
               name="name"
               required
               maxLength={100}
@@ -172,7 +177,7 @@ export function IntegrationNew() {
             label="Código"
             hint="De 2 a 50 caracteres: mayúsculas, números y guion bajo. Comienza con letra."
           >
-            <input
+            <Input
               name="code"
               required
               pattern="[A-Z][A-Z0-9_]{1,49}"
@@ -222,10 +227,10 @@ export function SecretDialog({
         <p>Guarda este secreto ahora. No podrá consultarse nuevamente.</p>
       </div>
       <Field label="Client ID">
-        <input readOnly value={secret.clientId} />
+        <Input readOnly value={secret.clientId} />
       </Field>
       <Field label="Client secret">
-        <textarea
+        <Textarea
           aria-label="Client secret"
           readOnly
           value={secret.clientSecret}
@@ -234,22 +239,23 @@ export function SecretDialog({
           spellCheck={false}
         />
       </Field>
-      <button
+      <Button
+        type="submit"
         className="button secondary"
         onClick={() => {
           void copy()
         }}
       >
         <Copy size={16} /> Copiar secreto
-      </button>
+      </Button>
       <p className="panel-note">
         Al cerrar se elimina de esta pantalla. El portapapeles es administrado
         por tu dispositivo; reemplaza su contenido después de guardarlo.
       </p>
       <div className="form-actions">
-        <button className="button" onClick={onClose}>
+        <Button type="submit" className="button" onClick={onClose}>
           Ya lo guardé, cerrar
-        </button>
+        </Button>
       </div>
     </Modal>
   )
@@ -307,7 +313,7 @@ function CreateCredential({
         <div className="scope-options">
           {scopes.map((scope) => (
             <label key={scope}>
-              <input type="checkbox" name="scopes" value={scope} />
+              <Checkbox name="scopes" value={scope} />
               <code>{scope}</code>
             </label>
           ))}
@@ -316,7 +322,7 @@ function CreateCredential({
           label="Expiración (opcional)"
           hint="Hora local del dispositivo. Vacío: sin expiración."
         >
-          <input type="datetime-local" name="expiresAt" />
+          <Input type="datetime-local" name="expiresAt" />
         </Field>
       </ActionForm>
     </Modal>
@@ -359,20 +365,21 @@ export function IntegrationDetail() {
   const item = query.data
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={item.name}
         description={item.code}
         back="/integrations"
         action={
           item.status !== 'REVOKED' && (
-            <button
+            <Button
+              type="submit"
               className="button secondary"
               onClick={() => setAction({ type: 'status' })}
             >
               {item.status === 'ACTIVE'
                 ? 'Suspender integración'
                 : 'Activar integración'}
-            </button>
+            </Button>
           )
         }
       />
@@ -406,13 +413,14 @@ export function IntegrationDetail() {
             <h2>Credenciales de acceso</h2>
             <p>Permisos y actividad disponible de cada conexión</p>
           </div>
-          <button
+          <Button
+            type="submit"
             className="button"
             disabled={item.status !== 'ACTIVE'}
             onClick={() => setCreate(true)}
           >
             <Plus size={16} /> Crear credencial
-          </button>
+          </Button>
         </div>
         {credentials.isPending ? (
           <Loading />
@@ -464,7 +472,9 @@ export function IntegrationDetail() {
                 render: (row) =>
                   row.status === 'ACTIVE' && (
                     <div className="row-actions">
-                      <button
+                      <Button
+                        type="submit"
+                        variant="ghost"
                         className="text-button"
                         disabled={
                           item.status !== 'ACTIVE' ||
@@ -476,15 +486,17 @@ export function IntegrationDetail() {
                         }
                       >
                         Rotar
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="ghost"
                         className="text-button destructive"
                         onClick={() =>
                           setAction({ type: 'revoke', credential: row })
                         }
                       >
                         Revocar
-                      </button>
+                      </Button>
                     </div>
                   ),
               },

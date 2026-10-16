@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import {
+  Button,
+  Input,
+  Select,
   ActionForm,
   Confirm,
-  Empty,
+  EmptyState,
   ErrorState,
   Field,
   Loading,
@@ -12,6 +12,9 @@ import {
   Pagination,
   Table,
 } from '../components/ui'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import { vehicles } from '../vehicles/service'
 import { assignments } from './service'
@@ -130,15 +133,17 @@ export function DriverAssignment({
         <p>Sin vehículo</p>
       )}
       {driver.currentAssignment ? (
-        <button
+        <Button
+          type="submit"
           className="button secondary"
           onClick={() => setDialog('unassign')}
         >
           Desasignar
-        </button>
+        </Button>
       ) : (
         <>
-          <button
+          <Button
+            type="submit"
             className="button"
             disabled={
               driver.status === 'SUSPENDED' || scope.status === 'SUSPENDED'
@@ -146,7 +151,7 @@ export function DriverAssignment({
             onClick={() => setDialog('assign')}
           >
             Asignar vehículo
-          </button>
+          </Button>
           {(driver.status === 'SUSPENDED' || scope.status === 'SUSPENDED') && (
             <p className="notice">
               Activa el repartidor y su proveedor antes de asignar un vehículo.
@@ -226,16 +231,21 @@ function AssignDialog({
           setSearch(String(new FormData(e.currentTarget).get('search')).trim())
         }}
       >
-        <input
+        <Input
           name="search"
           aria-label="Buscar vehículo para asignar"
           maxLength={100}
           placeholder="Identificador"
           disabled={busy}
         />
-        <button className="text-button" disabled={busy}>
+        <Button
+          type="submit"
+          variant="ghost"
+          className="text-button"
+          disabled={busy}
+        >
           Buscar
-        </button>
+        </Button>
       </form>
       {query.isPending ? (
         <Loading />
@@ -270,7 +280,7 @@ function AssignDialog({
               }}
             >
               <Field label="Seleccionar vehículo">
-                <select name="vehicleId" defaultValue="" required>
+                <Select name="vehicleId" defaultValue="" required>
                   <option value="" disabled>
                     Selecciona un vehículo
                   </option>
@@ -279,11 +289,11 @@ function AssignDialog({
                       {v.identifier} · {labels[v.type]}
                     </option>
                   ))}
-                </select>
+                </Select>
               </Field>
             </ActionForm>
           ) : (
-            <Empty
+            <EmptyState
               title="Sin vehículos libres en esta página"
               description="Busca otro identificador o consulta la siguiente página de vehículos activos."
             />

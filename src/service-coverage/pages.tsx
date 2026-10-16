@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import {
+  Button,
+  Input,
+  Select,
   ActionForm,
   Badge,
-  Empty,
+  EmptyState,
   ErrorState,
   Field,
   Loading,
   Modal,
   Table,
 } from '../components/ui'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { queryClient } from '../services/query'
@@ -59,9 +62,9 @@ export function ProviderCoveragePanel({ providerId }: { providerId: string }) {
   const [adding, setAdding] = useState(false)
   const [changing, setChanging] = useState<ServiceCoverage | null>(null)
   const add = (
-    <button className="button" onClick={() => setAdding(true)}>
+    <Button type="submit" className="button" onClick={() => setAdding(true)}>
       Agregar cobertura
-    </button>
+    </Button>
   )
   return (
     <section className="panel" aria-labelledby="provider-coverage">
@@ -84,7 +87,7 @@ export function ProviderCoveragePanel({ providerId }: { providerId: string }) {
           }}
         />
       ) : query.data.length === 0 ? (
-        <Empty
+        <EmptyState
           title="Este proveedor todavía no tiene cobertura de servicio configurada."
           description="Sin cobertura activa no recibirá nuevos servicios de flotilla para esas zonas."
           action={add}
@@ -103,13 +106,15 @@ export function ProviderCoveragePanel({ providerId }: { providerId: string }) {
             {
               label: 'Acciones',
               render: (row) => (
-                <button
+                <Button
+                  type="submit"
+                  variant="ghost"
                   className={`button secondary small coverage-action${row.status === 'ACTIVE' ? ' destructive' : ''}`}
                   onClick={() => setChanging(row)}
                   aria-label={`${row.status === 'ACTIVE' ? 'Desactivar' : 'Activar'} cobertura de ${row.serviceZone.name}, ${serviceTypeLabel(row.serviceType)}`}
                 >
                   {row.status === 'ACTIVE' ? 'Desactivar' : 'Activar'}
-                </button>
+                </Button>
               ),
             },
           ]}
@@ -204,9 +209,9 @@ function AddCoverageDialog({
               esos servicios.
             </p>
             <div className="form-actions">
-              <button className="button" onClick={onClose}>
+              <Button type="submit" className="button" onClick={onClose}>
                 Entendido
-              </button>
+              </Button>
             </div>
           </>
         )}
@@ -255,7 +260,7 @@ function AddCoverageDialog({
           label="Buscar zona"
           hint="Por nombre o código de las zonas de servicio existentes."
         >
-          <input
+          <Input
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -275,7 +280,7 @@ function AddCoverageDialog({
             label="Zona de servicio"
             hint="Una zona inactiva no recibe servicios nuevos hasta que se active."
           >
-            <select
+            <Select
               value={zoneId}
               onChange={(event) => setZoneId(event.target.value)}
             >
@@ -288,16 +293,16 @@ function AddCoverageDialog({
                     : ''}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
         ) : (
-          <Empty
+          <EmptyState
             title="No hay zonas de servicio"
             description="Crea primero la zona en Zonas de servicio."
           />
         )}
         <Field label="Tipo de servicio">
-          <select
+          <Select
             value={serviceType}
             onChange={(event) =>
               setServiceType(event.target.value as ServiceType)
@@ -308,7 +313,7 @@ function AddCoverageDialog({
                 {serviceTypeLabel(type)}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
       </ActionForm>
     </Modal>
@@ -384,7 +389,7 @@ export function MyCoverage({ providerId }: { providerId: string }) {
           }}
         />
       ) : query.data.length === 0 ? (
-        <Empty
+        <EmptyState
           title="Tu proveedor no tiene cobertura de servicio configurada."
           description="Contacta al administrador de Mandaria para habilitar zonas de operación."
         />

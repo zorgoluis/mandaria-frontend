@@ -1,8 +1,14 @@
+import {
+  Input,
+  Button,
+  ActionForm,
+  Field,
+  RouteProgress,
+} from '../components/ui'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUpRight, Eye, EyeOff, ShieldCheck, Route } from 'lucide-react'
+import { Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { useAuth } from './context'
-import { ActionForm, Field } from '../components/ui'
 export function Login() {
   const auth = useAuth()
   const navigate = useNavigate()
@@ -36,15 +42,13 @@ export function Login() {
           <p>
             El punto de encuentro entre tus proveedores, integraciones y equipo.
           </p>
-          <div className="route-art" aria-hidden="true">
-            <span className="route-node">
-              <Route size={24} />
-            </span>
-            <span className="route-line" />
-            <span className="route-node end">
-              <ArrowUpRight size={28} />
-            </span>
-          </div>
+          <RouteProgress
+            label="Tu operación en Mandaria"
+            steps={[
+              { id: 'origin', label: 'Conecta tu operación', state: 'current' },
+              { id: 'destination', label: 'Sigue cada entrega' },
+            ]}
+          />
         </div>
         <small>MANDARIA WEB · PLATAFORMA ADMINISTRATIVA</small>
       </section>
@@ -70,7 +74,7 @@ export function Login() {
             }}
           >
             <Field label="Correo electrónico">
-              <input
+              <Input
                 name="email"
                 type="email"
                 autoComplete="username"
@@ -81,7 +85,7 @@ export function Login() {
             </Field>
             <Field label="Contraseña">
               <span className="password-field">
-                <input
+                <Input
                   name="password"
                   type={visible ? 'text' : 'password'}
                   autoComplete="current-password"
@@ -89,7 +93,8 @@ export function Login() {
                   required
                   maxLength={128}
                 />
-                <button
+                <Button
+                  variant="ghost"
                   className="icon-button"
                   type="button"
                   aria-label={
@@ -98,7 +103,7 @@ export function Login() {
                   onClick={() => setVisible(!visible)}
                 >
                   {visible ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+                </Button>
               </span>
             </Field>
           </ActionForm>

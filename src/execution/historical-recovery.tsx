@@ -1,6 +1,6 @@
+import { Button, Modal } from '../components/ui'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../auth/context'
-import { Modal } from '../components/ui'
 import { useHistoricalMarkers } from './historical-store'
 import { reconcileHistoricalAdvance } from './commands'
 
@@ -62,20 +62,22 @@ export function HistoricalAdvanceRecovery() {
               recarga y cierre de sesión. No permite reenviar el avance ni
               operar en nombre del repartidor.
             </p>
-            <button
+            <Button
+              type="submit"
               className="button secondary"
               disabled={busy}
               onClick={() => void inspect(m.key, user.id)}
             >
               Consultar avance histórico
-            </button>{' '}
-            <button
+            </Button>{' '}
+            <Button
+              type="submit"
               className="button secondary"
               disabled={busy}
               onClick={() => setClosing({ key: m.key, actor: user.id })}
             >
               Cerrar intento histórico
-            </button>
+            </Button>
           </section>
         ))}
       {closing && closing.actor === user.id && (
@@ -94,13 +96,14 @@ export function HistoricalAdvanceRecovery() {
             No cancela ni revierte una recogida, traslado o entrega física. No
             habilita nuevos avances del proveedor.
           </p>
-          <button
+          <Button
+            type="submit"
             className="button danger"
             disabled={busy}
             onClick={() => void inspect(closing.key, user.id, true)}
           >
             Confirmar cierre histórico
-          </button>
+          </Button>
         </Modal>
       )}
     </>

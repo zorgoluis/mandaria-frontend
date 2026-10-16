@@ -1,18 +1,21 @@
-import { useState, type FormEvent } from 'react'
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Search } from 'lucide-react'
 import {
+  Input,
+  Select,
+  Button,
   Badge,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState, type FormEvent } from 'react'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowUpRight, Search } from 'lucide-react'
 import { integrations } from '../integrations/service'
 import { serviceZones } from '../pricing/service'
 import { zoneKeys } from '../pricing/queries'
@@ -104,7 +107,7 @@ export function QuotesPage() {
   const filtered = fields.some((key) => current[key])
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Cotizaciones"
         description="Cuánto costó cada entrega local. Precios congelados por el backend, sólo lectura."
       />
@@ -144,7 +147,7 @@ export function QuotesPage() {
             {query.data.items.length ? (
               <QuoteTable items={query.data.items} from={location.search} />
             ) : (
-              <Empty
+              <EmptyState
                 title="No hay cotizaciones."
                 description={
                   filtered
@@ -293,7 +296,7 @@ function QuoteFilters({
     >
       <label className="search">
         <Search size={17} />
-        <input
+        <Input
           aria-label="Identificador de cotización"
           placeholder="MQ-000092"
           value={draft.publicId}
@@ -302,7 +305,7 @@ function QuoteFilters({
         />
       </label>
       <label className="search">
-        <input
+        <Input
           aria-label="Identificador de solicitud"
           placeholder="MDR-000123"
           value={draft.requestPublicId}
@@ -310,7 +313,7 @@ function QuoteFilters({
           onChange={(event) => set('requestPublicId', event.target.value)}
         />
       </label>
-      <select
+      <Select
         aria-label="Filtrar por integración"
         value={draft.integrationClientId}
         disabled={clients.isPending}
@@ -328,8 +331,8 @@ function QuoteFilters({
             {client.name}
           </option>
         ))}
-      </select>
-      <select
+      </Select>
+      <Select
         aria-label="Filtrar por zona"
         value={draft.serviceZoneId}
         disabled={zones.isPending}
@@ -345,8 +348,8 @@ function QuoteFilters({
             {zone.name}
           </option>
         ))}
-      </select>
-      <select
+      </Select>
+      <Select
         aria-label="Filtrar por estado"
         value={draft.status}
         onChange={(event) => selectAndApply('status', event.target.value)}
@@ -357,10 +360,10 @@ function QuoteFilters({
             {quoteStatusLabels[status]}
           </option>
         ))}
-      </select>
+      </Select>
       <label className="date-filter">
         <span>Desde</span>
-        <input
+        <Input
           type="date"
           aria-label="Creadas desde"
           value={draft.from}
@@ -370,7 +373,7 @@ function QuoteFilters({
       </label>
       <label className="date-filter">
         <span>Hasta</span>
-        <input
+        <Input
           type="date"
           aria-label="Creadas hasta"
           value={draft.to}
@@ -379,10 +382,10 @@ function QuoteFilters({
         />
       </label>
       <div className="row-actions">
-        <button className="button small" type="submit">
+        <Button className="button small" type="submit">
           Aplicar filtros
-        </button>
-        <button
+        </Button>
+        <Button
           className="button secondary small"
           type="button"
           onClick={() =>
@@ -390,7 +393,7 @@ function QuoteFilters({
           }
         >
           Limpiar
-        </button>
+        </Button>
       </div>
     </form>
   )
@@ -432,7 +435,7 @@ export function RequestQuotes({ publicId }: { publicId: string }) {
           />
         </>
       ) : (
-        <Empty
+        <EmptyState
           title="No hay cotizaciones."
           description="Esta solicitud todavía no tiene un costo de entrega calculado."
         />
@@ -475,7 +478,7 @@ function QuoteRecord({ publicId }: { publicId: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title={publicId} back={back} />
+        <PageHeader title={publicId} back={back} />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -496,7 +499,7 @@ function QuoteContent({ quote, back }: { quote: DeliveryQuote; back: string }) {
   const status: QuoteStatus = quote.status
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={quote.publicId}
         description={`Cotización de ${quote.deliveryRequest.publicId}`}
         back={back}

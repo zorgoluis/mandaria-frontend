@@ -1,3 +1,20 @@
+import {
+  ButtonLink,
+  Input,
+  Button,
+  Select,
+  ActionForm,
+  Badge,
+  Confirm,
+  EmptyState,
+  ErrorState,
+  Field,
+  InfoGrid,
+  Loading,
+  PageHeader,
+  Pagination,
+  Table,
+} from '../components/ui'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -6,19 +23,6 @@ import { providers } from './service'
 import { AdminCreditsPanel } from '../credits/components'
 import { users } from '../users/service'
 import { queryClient } from '../services/query'
-import {
-  ActionForm,
-  Badge,
-  Confirm,
-  Empty,
-  ErrorState,
-  Field,
-  InfoGrid,
-  Loading,
-  PageTitle,
-  Pagination,
-  Table,
-} from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
 import { ActivityCards, CapacityCards } from '../logistics/components'
 import {
@@ -64,13 +68,13 @@ export function ProvidersPage() {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Proveedores"
         description="Organiza tu red de flotillas e independientes."
         action={
-          <Link className="button" to="/providers/new">
+          <ButtonLink className="button" to="/providers/new">
             <Plus size={17} /> Nuevo proveedor
-          </Link>
+          </ButtonLink>
         }
       />
       <div className="panel">
@@ -92,7 +96,7 @@ export function ProvidersPage() {
             }}
           >
             <Search size={17} />
-            <input
+            <Input
               key={filters.search}
               name="search"
               aria-label="Buscar proveedor"
@@ -100,11 +104,11 @@ export function ProvidersPage() {
               placeholder="Nombre o código"
               maxLength={100}
             />
-            <button className="text-button" type="submit">
+            <Button variant="ghost" className="text-button" type="submit">
               Buscar
-            </button>
+            </Button>
           </form>
-          <select
+          <Select
             aria-label="Filtrar por tipo"
             value={filters.type}
             onChange={(e) => filter('type', e.target.value)}
@@ -112,8 +116,8 @@ export function ProvidersPage() {
             <option value="">Todos los tipos</option>
             <option value="FLEET">Flotillas</option>
             <option value="INDEPENDENT">Independientes</option>
-          </select>
-          <select
+          </Select>
+          <Select
             aria-label="Filtrar por estado"
             value={filters.status}
             onChange={(e) => filter('status', e.target.value)}
@@ -122,7 +126,7 @@ export function ProvidersPage() {
             <option value="PENDING">Pendientes</option>
             <option value="ACTIVE">Activos</option>
             <option value="SUSPENDED">Suspendidos</option>
-          </select>
+          </Select>
         </div>
         {query.isPending ? (
           <Loading />
@@ -193,7 +197,7 @@ function ProviderFields({ value }: { value?: Provider }) {
     <>
       <div className="form-grid">
         <Field label="Nombre">
-          <input
+          <Input
             name="name"
             defaultValue={value?.name}
             required
@@ -206,7 +210,7 @@ function ProviderFields({ value }: { value?: Provider }) {
           label="Código"
           hint="Mayúsculas, números y guion bajo. Comienza con letra."
         >
-          <input
+          <Input
             name="code"
             defaultValue={value?.code}
             required
@@ -218,13 +222,13 @@ function ProviderFields({ value }: { value?: Provider }) {
       </div>
       {!value && (
         <Field label="Tipo de proveedor">
-          <select name="type" required defaultValue="">
+          <Select name="type" required defaultValue="">
             <option value="" disabled>
               Selecciona un tipo
             </option>
             <option value="FLEET">Flotilla</option>
             <option value="INDEPENDENT">Independiente</option>
-          </select>
+          </Select>
         </Field>
       )}
       <h3>Límites operativos</h3>
@@ -236,7 +240,7 @@ function ProviderFields({ value }: { value?: Provider }) {
       </p>
       <div className="form-grid">
         <Field label="Máximo de repartidores">
-          <input
+          <Input
             type="number"
             name="maxDrivers"
             defaultValue={value?.maxDrivers}
@@ -248,7 +252,7 @@ function ProviderFields({ value }: { value?: Provider }) {
           />
         </Field>
         <Field label="Máximo de vehículos">
-          <input
+          <Input
             type="number"
             name="maxVehicles"
             defaultValue={value?.maxVehicles}
@@ -280,7 +284,7 @@ export function ProviderNew() {
   const notify = useFeedback()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Nuevo proveedor"
         description="Agrega un integrante a tu red logística."
         back="/providers"
@@ -361,12 +365,14 @@ function Memberships({ id, name }: { id: string; name: string }) {
               {
                 label: 'Acciones',
                 render: (row) => (
-                  <button
+                  <Button
+                    type="submit"
+                    variant="ghost"
                     className="text-button destructive"
                     onClick={() => setRemove(row)}
                   >
                     Retirar
-                  </button>
+                  </Button>
                 ),
               },
             ]}
@@ -406,7 +412,7 @@ function Memberships({ id, name }: { id: string; name: string }) {
               label="ID del usuario"
               hint="Selecciona una sugerencia o ingresa el UUID de un usuario activo con rol de administrador de proveedor."
             >
-              <input
+              <Input
                 name="userId"
                 list="provider-admins"
                 required
@@ -426,10 +432,10 @@ function Memberships({ id, name }: { id: string; name: string }) {
               </datalist>
             </Field>
             <Field label="Rol dentro del proveedor">
-              <select name="role" defaultValue="ADMIN">
+              <Select name="role" defaultValue="ADMIN">
                 <option value="ADMIN">Administrador</option>
                 <option value="OWNER">Propietario</option>
-              </select>
+              </Select>
             </Field>
           </div>
           <p className="panel-note">
@@ -483,12 +489,13 @@ export function ProviderDetail() {
   const item = query.data
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={item.name}
         description={item.code}
         back="/providers"
         action={
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             onClick={() =>
               setAction(item.status === 'ACTIVE' ? 'suspend' : 'activate')
@@ -497,7 +504,7 @@ export function ProviderDetail() {
             {item.status === 'ACTIVE'
               ? 'Suspender proveedor'
               : 'Activar proveedor'}
-          </button>
+          </Button>
         }
       />
       <div className="panel">
@@ -640,7 +647,7 @@ export function MyProvider({
   const selected = params.get('providerId')
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Mi proveedor"
         description="Consulta los proveedores asociados a tu cuenta."
       />
@@ -657,7 +664,7 @@ export function MyProvider({
         <>
           {query.data.total === 0 ? (
             <div className="panel">
-              <Empty
+              <EmptyState
                 title="Aún no tienes un proveedor asociado"
                 description="Solicita a un superadministrador que asocie tu cuenta."
               />
@@ -667,7 +674,7 @@ export function MyProvider({
               {query.data.total > 1 && (
                 <div className="panel panel-body">
                   <Field label="Seleccionar proveedor">
-                    <select
+                    <Select
                       value={selected ?? ''}
                       onChange={(e) =>
                         setParams({ providerId: e.target.value })
@@ -679,7 +686,7 @@ export function MyProvider({
                           {item.name}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </Field>
                   <Pagination
                     page={page}
@@ -701,7 +708,7 @@ export function MyProvider({
                   showActivity={showActivity}
                 />
               ) : (
-                <Empty
+                <EmptyState
                   title="Selecciona un proveedor"
                   description="Sólo puedes consultar tus asociaciones vigentes."
                 />

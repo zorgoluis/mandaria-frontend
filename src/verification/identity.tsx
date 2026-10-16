@@ -1,7 +1,7 @@
+import { Input, Button, Checkbox, Field, Loading } from '../components/ui'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Field, Loading } from '../components/ui'
 import { useAuth } from '../auth/context'
 import { Form, Warning } from './common'
 import { message, vkey } from './format'
@@ -33,7 +33,7 @@ export function Register() {
         }}
       >
         <Field label="Correo electrónico *">
-          <input type="email" name="email" required maxLength={254} />
+          <Input type="email" name="email" required maxLength={254} />
         </Field>
       </Form>
       {sent && (
@@ -71,7 +71,7 @@ export function RegistrationConfirm() {
         }}
       >
         <Field label="Código de confirmación *">
-          <input
+          <Input
             name="token"
             type="password"
             autoComplete="off"
@@ -81,10 +81,10 @@ export function RegistrationConfirm() {
           />
         </Field>
         <Field label="Nombre *">
-          <input name="name" required maxLength={100} />
+          <Input name="name" required maxLength={100} />
         </Field>
         <Field label="Contraseña nueva (16–128 caracteres) *">
-          <input
+          <Input
             name="password"
             type="password"
             autoComplete="new-password"
@@ -133,7 +133,7 @@ export function EmailVerification() {
         }}
       >
         <Field label="Código del correo *">
-          <input
+          <Input
             type="password"
             name="token"
             required
@@ -175,7 +175,13 @@ export function TermsPanel({
       ) : q.isError ? (
         <>
           <p role="alert">{message(q.error)}</p>
-          <button onClick={() => void q.refetch()}>Consultar términos</button>
+          <Button
+            type="submit"
+            variant="ghost"
+            onClick={() => void q.refetch()}
+          >
+            Consultar términos
+          </Button>
         </>
       ) : (
         <TermsForm
@@ -249,8 +255,7 @@ export function TermsForm({
         }}
       >
         <label className="verification-check">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={checked}
             onChange={(e) => setChecked(e.target.checked)}
           />

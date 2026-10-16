@@ -1,6 +1,6 @@
+import { Select, Input, Button, Field } from '../components/ui'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../auth/context'
-import { Field } from '../components/ui'
 import { Form } from './common'
 import { labels, message } from './format'
 import { useCommand } from './hooks'
@@ -134,16 +134,16 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
           }}
         >
           <Field label="Categoría *">
-            <select name="category">
+            <Select name="category">
               {categories.map((c) => (
                 <option key={c} value={c}>
                   {labels[c] || c}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label="Imagen sintética *">
-            <input
+            <Input
               name="file"
               type="file"
               accept="image/jpeg,image/png"
@@ -153,9 +153,13 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
         </Form>
       )}
       {busy && (
-        <button type="button" onClick={() => request.current?.abort()}>
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={() => request.current?.abort()}
+        >
           Cancelar transferencia de archivo
-        </button>
+        </Button>
       )}
       <p>
         Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó
@@ -167,7 +171,9 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
             <strong>{labels[a.category] || a.category}</strong> ·{' '}
             {labels[a.status] || a.status}
             {a.status === 'VALIDATED' && (
-              <button
+              <Button
+                type="submit"
+                variant="ghost"
                 onClick={async () => {
                   clear()
                   setError('')
@@ -197,7 +203,7 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
                 }}
               >
                 Ver evidencia
-              </button>
+              </Button>
             )}
             {canWrite &&
               record.status === 'DRAFT' &&
@@ -247,7 +253,9 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
           <figcaption>
             Imagen normalizada recibida por proxy autenticado.
           </figcaption>
-          <button onClick={clear}>Cerrar evidencia</button>
+          <Button type="submit" variant="ghost" onClick={clear}>
+            Cerrar evidencia
+          </Button>
         </figure>
       )}
     </section>

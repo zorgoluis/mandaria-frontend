@@ -1,8 +1,8 @@
-import { resourceLink, useResourceFilters } from '../logistics/navigation'
-import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import {
+  ButtonLink,
+  Button,
+  Input,
+  Select,
   ActionForm,
   Badge,
   Confirm,
@@ -10,10 +10,14 @@ import {
   Field,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { resourceLink, useResourceFilters } from '../logistics/navigation'
+import { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import {
   CapacityCards,
@@ -41,7 +45,7 @@ import {
 export function VehiclesPage() {
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Vehículos"
         description="Unidades y medios de transporte de cada proveedor."
       />
@@ -76,16 +80,16 @@ function VehicleList({ scope }: { scope: ProviderContext }) {
         <div className="panel-toolbar">
           <h2>Vehículos del proveedor</h2>
           {canCreate ? (
-            <Link
+            <ButtonLink
               className="button"
               to={resourceLink('vehicles', scope.providerId, 'new')}
             >
               Nuevo vehículo
-            </Link>
+            </ButtonLink>
           ) : (
-            <button className="button" disabled>
+            <Button type="submit" className="button" disabled>
               Nuevo vehículo
-            </button>
+            </Button>
           )}
         </div>
         <ResourceFilters kind="vehicles" />
@@ -176,7 +180,7 @@ function VehicleFields({ value }: { value?: Vehicle }) {
         label="Identificador"
         hint="Letras, números, guion y guion bajo; máximo 30 caracteres."
       >
-        <input
+        <Input
           name="identifier"
           required
           defaultValue={value?.identifier}
@@ -185,12 +189,12 @@ function VehicleFields({ value }: { value?: Vehicle }) {
         />
       </Field>
       <Field label="Tipo">
-        <select name="type" required defaultValue={value?.type ?? ''}>
+        <Select name="type" required defaultValue={value?.type ?? ''}>
           <option value="" disabled>
             Selecciona un tipo
           </option>
           <Options values={vehicleTypes} />
-        </select>
+        </Select>
       </Field>
       {(['brand', 'model', 'color', 'plate'] as const).map((key) => (
         <Field
@@ -204,7 +208,7 @@ function VehicleFields({ value }: { value?: Vehicle }) {
             }[key]
           }
         >
-          <input
+          <Input
             name={key}
             defaultValue={value?.[key] ?? ''}
             maxLength={key === 'plate' ? 15 : key === 'color' ? 30 : 50}
@@ -217,7 +221,7 @@ function VehicleFields({ value }: { value?: Vehicle }) {
         </Field>
       ))}
       <Field label="Año">
-        <input
+        <Input
           name="year"
           type="number"
           min={1900}
@@ -228,10 +232,10 @@ function VehicleFields({ value }: { value?: Vehicle }) {
       </Field>
       {!value && (
         <Field label="Estado inicial">
-          <select name="status" defaultValue="">
+          <Select name="status" defaultValue="">
             <option value="">Predeterminado por Mandaria</option>
             <Options values={vehicleStatuses} />
-          </select>
+          </Select>
         </Field>
       )}
     </div>
@@ -257,7 +261,7 @@ function vehicleData(data: FormData): VehicleInput {
 export function VehicleNew() {
   return (
     <>
-      <PageTitle title="Nuevo vehículo" back="/vehicles" />
+      <PageHeader title="Nuevo vehículo" back="/vehicles" />
       <ProviderScope>
         {(scope) => <CreateVehicle key={scope.providerId} scope={scope} />}
       </ProviderScope>
@@ -347,7 +351,7 @@ function VehicleContent({
   const notify = useFeedback()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={item.identifier}
         back={resourceLink('vehicles', scope.providerId)}
         description={scope.name}
@@ -379,7 +383,7 @@ function VehicleContent({
           ]}
         />
         <Field label="Cambiar estado">
-          <select
+          <Select
             value=""
             onChange={(e) => setStatus(e.target.value as VehicleStatus)}
           >
@@ -387,7 +391,7 @@ function VehicleContent({
             <Options
               values={vehicleStatuses.filter((v) => v !== item.status)}
             />
-          </select>
+          </Select>
         </Field>
         <ActionForm
           key={item.updatedAt}

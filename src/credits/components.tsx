@@ -1,10 +1,10 @@
-import { useRef, useState, type ReactNode } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-import { AlertTriangle, Coins } from 'lucide-react'
 import {
+  Button,
+  Textarea,
+  Input,
+  Select,
   ActionForm,
-  Empty,
+  EmptyState,
   ErrorState,
   Field,
   InfoGrid,
@@ -13,6 +13,10 @@ import {
   Pagination,
   Table,
 } from '../components/ui'
+import { useRef, useState, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
+import { AlertTriangle, Coins } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
@@ -91,13 +95,13 @@ export function MissingAccount({
   if (!isMissingAccount(error))
     return <ErrorState error={error} retry={retry} />
   return (
-    <Empty
+    <EmptyState
       title="Sin cuenta de créditos"
       description={description}
       action={
-        <button className="button secondary" onClick={retry}>
+        <Button type="submit" className="button secondary" onClick={retry}>
           Reintentar
-        </button>
+        </Button>
       }
     />
   )
@@ -183,7 +187,7 @@ function reasonField(required: boolean) {
       label={required ? 'Motivo' : 'Motivo (opcional)'}
       hint={`Entre ${CREDIT_REASON_MIN} y ${CREDIT_REASON_MAX} caracteres. Queda en el historial y lo ve el dueño de la cuenta: no incluyas datos personales.`}
     >
-      <textarea name="reason" rows={3} maxLength={CREDIT_REASON_MAX} />
+      <Textarea name="reason" rows={3} maxLength={CREDIT_REASON_MAX} />
     </Field>
   )
 }
@@ -336,7 +340,7 @@ function RechargeDialog({
               label="Créditos a sumar"
               hint={`Número entero entre 1 y ${MAX_CREDIT_MOVEMENT.toLocaleString('es-MX')}. Son créditos Mandaria, no pesos.`}
             >
-              <input
+              <Input
                 name="credits"
                 type="number"
                 min={1}
@@ -346,7 +350,7 @@ function RechargeDialog({
               />
             </Field>
             <Field label="Medio de pago confirmado">
-              <select
+              <Select
                 name="method"
                 value={method}
                 onChange={(event) =>
@@ -358,13 +362,13 @@ function RechargeDialog({
                     {formatRechargeMethod(value)}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field
               label="Referencia externa (opcional)"
               hint="Folio del pago, por ejemplo la referencia de la transferencia. Nunca datos de tarjeta."
             >
-              <input
+              <Input
                 name="externalReference"
                 maxLength={CREDIT_REFERENCE_MAX}
                 autoComplete="off"
@@ -461,7 +465,7 @@ function AdjustmentDialog({
               label="Créditos del ajuste"
               hint="Positivo suma, negativo resta. No admite cero. Mandaria decide si el saldo lo permite."
             >
-              <input
+              <Input
                 name="amount"
                 type="number"
                 min={-MAX_CREDIT_MOVEMENT}
@@ -516,18 +520,20 @@ export function AdminCreditsPanel({
         </div>
         {account.isSuccess && (
           <div className="row-actions">
-            <button
+            <Button
+              type="submit"
               className="button small"
               onClick={() => setDialog('recharge')}
             >
               Registrar recarga
-            </button>
-            <button
+            </Button>
+            <Button
+              type="submit"
               className="button secondary small"
               onClick={() => setDialog('adjustment')}
             >
               Ajuste administrativo
-            </button>
+            </Button>
           </div>
         )}
       </div>

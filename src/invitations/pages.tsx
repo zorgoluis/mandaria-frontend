@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageTitle } from '../components/ui'
+import { PageHeader } from '../components/ui'
 import {
   InvitationsPanel,
   InviteButton,
@@ -11,7 +11,7 @@ export function InvitationsPage() {
   const [inviting, setInviting] = useState(false)
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Invitaciones"
         description="Incorpora administradores y repartidores sin crear cuentas desde el servidor."
         action={

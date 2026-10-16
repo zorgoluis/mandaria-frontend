@@ -1,16 +1,21 @@
-import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import {
+  Select,
+  Button,
+  Textarea,
+  Input,
+  Checkbox,
   ActionForm,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../auth/context'
 import { ApiError } from '../services/errors'
 import { providers } from '../providers/service'
@@ -33,14 +38,14 @@ export function IncidentsPage() {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Incidencias de custodia"
         description="Cola de atención administrativa. No hay correos automáticos."
       />
       <section className="panel">
         <div className="filters">
           <Field label="Estado de incidencias">
-            <select
+            <Select
               value={status}
               onChange={(e) => {
                 setStatus(e.target.value)
@@ -49,14 +54,15 @@ export function IncidentsPage() {
             >
               <option value="OPEN">Abiertas</option>
               <option value="RESOLVED">Resueltas</option>
-            </select>
+            </Select>
           </Field>
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             onClick={() => void query.refetch()}
           >
             Actualizar incidencias
-          </button>
+          </Button>
         </div>
         {query.isPending ? (
           <Loading />
@@ -129,7 +135,7 @@ export function IncidentPage() {
   const e = state.data.execution
   return (
     <>
-      <PageTitle title="Incidencia de custodia" back="/custody-incidents" />
+      <PageHeader title="Incidencia de custodia" back="/custody-incidents" />
       <section className="panel">
         <InfoGrid
           items={[
@@ -230,7 +236,7 @@ export function ResolutionForm({
         ) : (
           <>
             <Field label="Tipo de resolución">
-              <select
+              <Select
                 value={type}
                 onChange={(v) => {
                   setType(v.target.value as typeof type)
@@ -239,7 +245,7 @@ export function ResolutionForm({
               >
                 <option value="RETURN_TO_ORIGIN">Devolución al origen</option>
                 <option value="TRANSFER">Transferencia de custodia</option>
-              </select>
+              </Select>
             </Field>
             <ActionForm
               key={type}
@@ -359,7 +365,7 @@ export function ResolutionForm({
               }}
             >
               <Field label="Motivo de resolución">
-                <textarea
+                <Textarea
                   name="reason"
                   minLength={3}
                   maxLength={500}
@@ -370,7 +376,7 @@ export function ResolutionForm({
                 label="Fecha y hora física (hora local)"
                 hint="El backend valida que no sea anterior al último hito de custodia o transferencia."
               >
-                <input name="occurredAt" type="datetime-local" required />
+                <Input name="occurredAt" type="datetime-local" required />
               </Field>
               <p>
                 Confirmación por teléfono: atestación administrativa, no prueba
@@ -379,10 +385,10 @@ export function ResolutionForm({
               {type === 'RETURN_TO_ORIGIN' ? (
                 <>
                   <Field label="Contacto receptor en origen (nombre o etiqueta)">
-                    <input name="originContactLabel" maxLength={100} required />
+                    <Input name="originContactLabel" maxLength={100} required />
                   </Field>
                   <Field label="Rol del contacto en origen">
-                    <input name="originContactRole" maxLength={100} required />
+                    <Input name="originContactRole" maxLength={100} required />
                   </Field>
                   <p>
                     No introduzcas teléfonos ni documentos. El resultado será
@@ -441,7 +447,7 @@ export function ResolutionForm({
 function Check({ name, label }: { name: string; label: string }) {
   return (
     <label className="execution-check">
-      <input type="checkbox" name={name} required /> {label}
+      <Checkbox name={name} required /> {label}
     </label>
   )
 }
@@ -468,7 +474,7 @@ function CandidateSelector({
   return (
     <>
       <Field label="Modo receptor">
-        <select
+        <Select
           value={mode}
           onChange={(v) => {
             setMode(v.target.value)
@@ -479,7 +485,7 @@ function CandidateSelector({
         >
           <option value="FLEET">Flotilla</option>
           <option value="INDEPENDENT">Independiente</option>
-        </select>
+        </Select>
       </Field>
       <p>
         Disponibilidad orientativa: estos recursos no están reservados. El
@@ -492,7 +498,7 @@ function CandidateSelector({
       ) : (
         <>
           <Field label="Repartidor y vehículo receptores">
-            <select
+            <Select
               required
               value={choice}
               onChange={(v) => {
@@ -513,7 +519,7 @@ function CandidateSelector({
                   {c.driverName} · {c.vehicleIdentifier}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Pagination
             page={page}
@@ -552,7 +558,7 @@ function RecipientAdmin({ providerId }: { providerId: string }) {
   return (
     <>
       <Field label="Administrador receptor con membership vigente">
-        <select
+        <Select
           name="recipientAdmin"
           key={`${providerId}:${page}`}
           required
@@ -564,7 +570,7 @@ function RecipientAdmin({ providerId }: { providerId: string }) {
               {m.user.email}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       <Pagination
         page={page}

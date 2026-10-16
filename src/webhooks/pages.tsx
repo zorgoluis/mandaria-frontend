@@ -1,17 +1,20 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Link, useParams } from 'react-router-dom'
-import { useAuth } from '../auth/context'
 import {
+  Button,
+  Select,
+  Input,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Link, useParams } from 'react-router-dom'
+import { useAuth } from '../auth/context'
 import { date } from '../utils/format'
 import { webhookQueries } from './queries'
 import { WebhookSettings } from './settings'
@@ -73,12 +76,13 @@ export function WebhookEvents({ id }: { id: string }) {
     <>
       <div className="panel-toolbar">
         <h3>Eventos e intentos</h3>
-        <button
+        <Button
+          type="submit"
           className="button secondary"
           onClick={() => void query.refetch()}
         >
           Actualizar eventos
-        </button>
+        </Button>
       </div>
       <form
         className="panel-body webhook-filters"
@@ -103,30 +107,30 @@ export function WebhookEvents({ id }: { id: string }) {
         }}
       >
         <Field label="Estado de transporte">
-          <select name="state">
+          <Select name="state">
             <option value="">Todos</option>
             {Object.entries(transportLabels).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         <Field label="Solicitud">
-          <input name="request" maxLength={32} placeholder="MDR-000123" />
+          <Input name="request" maxLength={32} placeholder="MDR-000123" />
         </Field>
         <Field label="Referencia externa exacta">
-          <input name="reference" maxLength={255} />
+          <Input name="reference" maxLength={255} />
         </Field>
         <Field label="Desde (hora local)">
-          <input type="datetime-local" name="from" />
+          <Input type="datetime-local" name="from" />
         </Field>
         <Field label="Hasta (hora local)">
-          <input type="datetime-local" name="to" />
+          <Input type="datetime-local" name="to" />
         </Field>
-        <button className="button" type="submit">
+        <Button className="button" type="submit">
           Aplicar filtros
-        </button>
+        </Button>
         {error && <p role="alert">{error}</p>}
       </form>
       {query.isPending ? (
@@ -199,7 +203,7 @@ export function WebhookEventPage() {
   const event = query.data
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={event.deliveryRequestPublicId}
         description="Evento y transporte de webhook"
         back={`/integrations/${encodeURIComponent(id)}`}
@@ -271,16 +275,17 @@ export function WebhookHealthPage() {
   const h = query.data
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Salud de webhooks"
         back="/integrations"
         action={
-          <button
+          <Button
+            type="submit"
             className="button secondary"
             onClick={() => void query.refetch()}
           >
             Actualizar salud
-          </button>
+          </Button>
         }
       />
       <section className="panel">

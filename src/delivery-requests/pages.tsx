@@ -1,21 +1,25 @@
-import { useState, type FormEvent } from 'react'
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Search } from 'lucide-react'
 import {
+  Input,
+  Select,
+  Button,
+  Textarea,
   ActionForm,
   Badge,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState, type FormEvent } from 'react'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowUpRight, Search } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { integrations } from '../integrations/service'
 import { queryClient } from '../services/query'
@@ -117,7 +121,7 @@ export function DeliveryRequestsPage() {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Solicitudes"
         description="Qué solicitaron transportar las integraciones. Consulta y cancelación."
       />
@@ -200,7 +204,7 @@ export function DeliveryRequestsPage() {
                 ]}
               />
             ) : (
-              <Empty
+              <EmptyState
                 title="No hay solicitudes de entrega."
                 description={
                   filtered
@@ -279,7 +283,7 @@ function DeliveryFilters({
     >
       <label className="search">
         <Search size={17} />
-        <input
+        <Input
           aria-label="Identificador"
           placeholder="MDR-000123"
           value={draft.publicId}
@@ -288,7 +292,7 @@ function DeliveryFilters({
         />
       </label>
       <label className="search">
-        <input
+        <Input
           aria-label="Referencia externa"
           placeholder="Referencia externa exacta"
           value={draft.externalReference}
@@ -296,7 +300,7 @@ function DeliveryFilters({
           onChange={(e) => set('externalReference', e.target.value)}
         />
       </label>
-      <select
+      <Select
         aria-label="Filtrar por integración"
         value={draft.integrationClientId}
         disabled={clients.isPending}
@@ -317,8 +321,8 @@ function DeliveryFilters({
             {client.name}
           </option>
         ))}
-      </select>
-      <select
+      </Select>
+      <Select
         aria-label="Filtrar por estado"
         value={draft.status}
         onChange={(e) => selectAndApply('status', e.target.value)}
@@ -329,10 +333,10 @@ function DeliveryFilters({
             {labels[status]}
           </option>
         ))}
-      </select>
+      </Select>
       <label className="date-filter">
         <span>Desde</span>
-        <input
+        <Input
           type="date"
           aria-label="Solicitadas desde"
           value={draft.from}
@@ -342,7 +346,7 @@ function DeliveryFilters({
       </label>
       <label className="date-filter">
         <span>Hasta</span>
-        <input
+        <Input
           type="date"
           aria-label="Solicitadas hasta"
           value={draft.to}
@@ -351,10 +355,10 @@ function DeliveryFilters({
         />
       </label>
       <div className="row-actions">
-        <button className="button small" type="submit">
+        <Button className="button small" type="submit">
           Aplicar filtros
-        </button>
-        <button
+        </Button>
+        <Button
           className="button secondary small"
           type="button"
           onClick={() =>
@@ -362,7 +366,7 @@ function DeliveryFilters({
           }
         >
           Limpiar
-        </button>
+        </Button>
       </div>
       {clients.isError && (
         <small className="muted">
@@ -403,7 +407,7 @@ function DeliveryRequestRecord({ publicId }: { publicId: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title={publicId} back={back} />
+        <PageHeader title={publicId} back={back} />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -431,18 +435,19 @@ function DeliveryRequestContent({
   const dropoff = item.stops.find((stop) => stop.type === 'DROPOFF')
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={item.publicId}
         description={`Solicitado por ${item.integrationClient.name}`}
         back={back}
         action={
           item.status === 'CREATED' && (
-            <button
+            <Button
+              type="submit"
               className="button secondary destructive"
               onClick={() => setCancelling(true)}
             >
               Cancelar solicitud
-            </button>
+            </Button>
           )
         }
       />
@@ -563,7 +568,7 @@ function StopPanel({
           ]}
         />
       ) : (
-        <Empty
+        <EmptyState
           title="Sin información"
           description="La solicitud no incluye esta parada."
         />
@@ -606,7 +611,7 @@ function PackagesPanel({ packages }: { packages: DeliveryPackage[] }) {
           ))}
         </ul>
       ) : (
-        <Empty
+        <EmptyState
           title="Sin paquetes"
           description="La solicitud no tiene paquetes."
         />
@@ -653,7 +658,7 @@ function FinancialPanel({
           </p>
         </>
       ) : (
-        <Empty
+        <EmptyState
           title="Sin contexto económico"
           description="La solicitud no tiene contexto económico registrado."
         />
@@ -723,7 +728,7 @@ function CancelDialog({
           label="Motivo de cancelación"
           hint="Obligatorio. Hasta 500 caracteres."
         >
-          <textarea name="reason" required maxLength={500} rows={4} />
+          <Textarea name="reason" required maxLength={500} rows={4} />
         </Field>
       </ActionForm>
     </Modal>

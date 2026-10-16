@@ -1,20 +1,22 @@
-import { useState, type FormEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle, Plus, Trash2 } from 'lucide-react'
 import {
+  Button,
+  Input,
   ActionForm,
   Badge,
   Confirm,
-  Empty,
+  EmptyState,
   ErrorPage,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Table,
 } from '../components/ui'
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Plus, Trash2 } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { queryClient } from '../services/query'
 import { ApiError, errorMessage } from '../services/errors'
@@ -64,7 +66,7 @@ function RatePlanRecord({ id }: { id: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title="Tarifa" back="/service-zones" />
+        <PageHeader title="Tarifa" back="/service-zones" />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -94,28 +96,37 @@ function RatePlanContent({ plan }: { plan: RatePlan }) {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={`Versión ${plan.version}`}
         description={`${plan.serviceZone.name} · ${serviceTypeLabels[plan.serviceType]}`}
         back={zoneLink}
         action={
           draft ? (
-            <button className="button" onClick={() => setActivating(true)}>
+            <Button
+              type="submit"
+              className="button"
+              onClick={() => setActivating(true)}
+            >
               Activar tarifa
-            </button>
+            </Button>
           ) : (
             <div className="row-actions">
               {plan.status === 'ACTIVE' && (
-                <button
+                <Button
+                  type="submit"
                   className="button secondary destructive"
                   onClick={() => setDeactivating(true)}
                 >
                   Desactivar tarifa
-                </button>
+                </Button>
               )}
-              <button className="button" onClick={() => setCloning(true)}>
+              <Button
+                type="submit"
+                className="button"
+                onClick={() => setCloning(true)}
+              >
                 Crear nueva versión
-              </button>
+              </Button>
             </div>
           )
         }
@@ -254,7 +265,7 @@ function ValidityPanel({
               label="Minutos"
               hint={`De ${QUOTE_VALIDITY.min} a ${QUOTE_VALIDITY.max} minutos para entrega local; recomendado ${QUOTE_VALIDITY.recommended}.`}
             >
-              <input
+              <Input
                 name="quoteValidityMinutes"
                 type="number"
                 required
@@ -303,7 +314,7 @@ function BandsPanel({ plan }: { plan: RatePlan }) {
           ]}
         />
       ) : (
-        <Empty
+        <EmptyState
           title="Sin bandas"
           description="Esta versión no tiene bandas de distancia configuradas."
         />
@@ -442,7 +453,7 @@ function BandEditor({
               </li>
               {rows.map((row, index) => (
                 <li key={row.key} className="band-row">
-                  <input
+                  <Input
                     aria-label={`Banda ${index + 1}: desde, en kilómetros`}
                     inputMode="decimal"
                     value={row.min}
@@ -450,7 +461,7 @@ function BandEditor({
                       set(row.key, 'min', event.target.value)
                     }
                   />
-                  <input
+                  <Input
                     aria-label={`Banda ${index + 1}: hasta, en kilómetros`}
                     inputMode="decimal"
                     value={row.max}
@@ -458,7 +469,7 @@ function BandEditor({
                       set(row.key, 'max', event.target.value)
                     }
                   />
-                  <input
+                  <Input
                     aria-label={`Banda ${index + 1}: precio en ${plan.currency}`}
                     inputMode="decimal"
                     value={row.amount}
@@ -466,7 +477,8 @@ function BandEditor({
                       set(row.key, 'amount', event.target.value)
                     }
                   />
-                  <button
+                  <Button
+                    variant="ghost"
                     type="button"
                     className="icon-button"
                     aria-label={`Quitar banda ${index + 1}`}
@@ -477,12 +489,12 @@ function BandEditor({
                     }
                   >
                     <Trash2 size={17} />
-                  </button>
+                  </Button>
                 </li>
               ))}
             </ol>
           ) : (
-            <Empty
+            <EmptyState
               title="Sin bandas todavía"
               description="Agrega la primera banda, desde 0 km, para poder activar esta versión."
             />
@@ -501,18 +513,17 @@ function BandEditor({
           </ul>
         )}
         <div className="form-actions">
-          <button
+          <Button
             type="button"
             className="button secondary"
             disabled={busy || rows.length >= MAX_BANDS}
             onClick={addRow}
           >
             <Plus size={16} /> Agregar banda
-          </button>
-          <button className="button" type="submit" disabled={busy}>
-            {busy && <LoaderCircle size={16} className="spin" />}
-            {busy ? 'Guardando…' : 'Guardar bandas'}
-          </button>
+          </Button>
+          <Button type="submit" loading={busy} loadingLabel="Guardando…">
+            Guardar bandas
+          </Button>
         </div>
       </form>
       <p className="panel-note">
@@ -537,7 +548,8 @@ function ValidationPanel({ plan }: { plan: RatePlan }) {
           <h2 id="plan-validation">Validación</h2>
           <p>Comprobación del backend antes de activar</p>
         </div>
-        <button
+        <Button
+          type="submit"
           className="button secondary small"
           disabled={query.isFetching}
           onClick={() => {
@@ -545,7 +557,7 @@ function ValidationPanel({ plan }: { plan: RatePlan }) {
           }}
         >
           Volver a validar
-        </button>
+        </Button>
       </div>
       {query.isPending ? (
         <Loading />

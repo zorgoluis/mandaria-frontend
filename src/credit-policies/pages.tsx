@@ -1,20 +1,25 @@
-import { useState } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { Calculator, History } from 'lucide-react'
 import {
+  ButtonLink,
+  Select,
+  Input,
+  Button,
+  Textarea,
   ActionForm,
   Badge,
-  Empty,
+  EmptyState,
   ErrorState,
   Field,
   InfoGrid,
   Loading,
   Modal,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Calculator, History } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { formatCredits, formatDistance } from '../credits/format'
@@ -75,13 +80,13 @@ export function CreditPoliciesPage() {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Políticas de créditos"
         description="Cuántos créditos cuesta adjudicarse un servicio, por tipo de servicio y actor"
         action={
-          <Link className="button" to="/credit-policies/new">
+          <ButtonLink className="button" to="/credit-policies/new">
             Nueva política
-          </Link>
+          </ButtonLink>
         }
       />
       <CreditCalculator />
@@ -96,7 +101,7 @@ export function CreditPoliciesPage() {
         </div>
         <div className="filters">
           <Field label="Tipo de servicio">
-            <select
+            <Select
               value={params.get('serviceType') ?? ''}
               onChange={(event) => set('serviceType', event.target.value)}
             >
@@ -106,10 +111,10 @@ export function CreditPoliciesPage() {
                   {serviceLabel(value)}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label="Actor que paga">
-            <select
+            <Select
               value={params.get('actorType') ?? ''}
               onChange={(event) => set('actorType', event.target.value)}
             >
@@ -119,10 +124,10 @@ export function CreditPoliciesPage() {
                   {actorTypeLabels[value]}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label="Estado">
-            <select
+            <Select
               value={params.get('status') ?? ''}
               onChange={(event) => set('status', event.target.value)}
             >
@@ -132,7 +137,7 @@ export function CreditPoliciesPage() {
                   {policyStatusLabels[value]}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
         </div>
         <div className="panel-body">
@@ -250,28 +255,28 @@ export function CreditCalculator() {
           }}
         >
           <Field label="Tipo de servicio">
-            <select name="serviceType" defaultValue={serviceTypes[0]}>
+            <Select name="serviceType" defaultValue={serviceTypes[0]}>
               {serviceTypes.map((value) => (
                 <option key={value} value={value}>
                   {serviceLabel(value)}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field label="Actor que paga">
-            <select name="actorType" defaultValue="PROVIDER">
+            <Select name="actorType" defaultValue="PROVIDER">
               {policyActorTypes.map((value) => (
                 <option key={value} value={value}>
                   {actorTypeLabels[value]}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field
             label="Distancia en metros"
             hint="El contrato trabaja en metros enteros; los kilómetros son sólo para leer."
           >
-            <input
+            <Input
               name="distanceMeters"
               type="number"
               min={0}
@@ -352,7 +357,7 @@ function RangesEditor({
         return (
           <div className="range-row" key={index}>
             <Field label={`Rango ${index + 1}: hasta (metros)`}>
-              <input
+              <Input
                 type="number"
                 min={1}
                 step={1}
@@ -371,7 +376,7 @@ function RangesEditor({
               />
             </Field>
             <Field label={`Rango ${index + 1}: créditos`}>
-              <input
+              <Input
                 type="number"
                 min={1}
                 step={1}
@@ -390,25 +395,25 @@ function RangesEditor({
               />
             </Field>
             {ranges.length > 1 && (
-              <button
+              <Button
                 type="button"
                 className="button secondary small"
                 onClick={() => onChange(ranges.filter((_, i) => i !== index))}
               >
                 Quitar rango {index + 1}
-              </button>
+              </Button>
             )}
           </div>
         )
       })}
       {ranges.length < MAX_POLICY_RANGES && (
-        <button
+        <Button
           type="button"
           className="button secondary small"
           onClick={() => onChange([...ranges, { max: '', credits: '' }])}
         >
           Agregar rango
-        </button>
+        </Button>
       )}
     </div>
   )
@@ -429,7 +434,7 @@ function PolicyFields({
   return (
     <>
       <Field label="Tipo de cálculo">
-        <select
+        <Select
           name="calculationType"
           value={calculation}
           onChange={(event) =>
@@ -441,7 +446,7 @@ function PolicyFields({
               {calculationTypeLabels[value]}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       {calculation === 'PER_KM' && (
         <>
@@ -449,7 +454,7 @@ function PolicyFields({
             label="Créditos por kilómetro"
             hint="Se cobra por kilómetro completo, según el motor del backend."
           >
-            <input
+            <Input
               name="creditsPerKm"
               type="number"
               min={1}
@@ -459,7 +464,7 @@ function PolicyFields({
             />
           </Field>
           <Field label="Créditos mínimos por servicio">
-            <input
+            <Input
               name="minimumCredits"
               type="number"
               min={0}
@@ -473,7 +478,7 @@ function PolicyFields({
       )}
       {calculation === 'FLAT' && (
         <Field label="Créditos por servicio">
-          <input
+          <Input
             name="flatCredits"
             type="number"
             min={1}
@@ -490,7 +495,7 @@ function PolicyFields({
         label="Motivo (opcional)"
         hint={`Entre ${POLICY_REASON_MIN} y ${POLICY_REASON_MAX} caracteres. Queda en el historial de la política.`}
       >
-        <textarea name="reason" rows={2} maxLength={POLICY_REASON_MAX} />
+        <Textarea name="reason" rows={2} maxLength={POLICY_REASON_MAX} />
       </Field>
     </>
   )
@@ -559,7 +564,7 @@ export function CreditPolicyNew() {
   const [ranges, setRanges] = useState([{ max: '', credits: '' }])
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Nueva política de créditos"
         description="Primera versión para una combinación de servicio y actor"
         back="/credit-policies"
@@ -585,22 +590,22 @@ export function CreditPolicyNew() {
             }}
           >
             <Field label="Tipo de servicio">
-              <select name="serviceType" defaultValue={serviceTypes[0]}>
+              <Select name="serviceType" defaultValue={serviceTypes[0]}>
                 {serviceTypes.map((value) => (
                   <option key={value} value={value}>
                     {serviceLabel(value)}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field label="Actor que paga">
-              <select name="actorType" defaultValue="PROVIDER">
+              <Select name="actorType" defaultValue="PROVIDER">
                 {policyActorTypes.map((value) => (
                   <option key={value} value={value}>
                     {actorTypeLabels[value]}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <PolicyFields
               calculation={calculation}
@@ -709,15 +714,19 @@ export function CreditPolicyDetail() {
   const current = query.data
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={policyTitle(current)}
         description={policySummary(current)}
         back="/credit-policies"
         action={
           current.status === 'ACTIVE' ? (
-            <button className="button" onClick={() => setVersioning(true)}>
+            <Button
+              type="submit"
+              className="button"
+              onClick={() => setVersioning(true)}
+            >
               Crear nueva versión
-            </button>
+            </Button>
           ) : undefined
         }
       />
@@ -852,7 +861,7 @@ export function CreditPolicyDetail() {
               ]}
             />
           ) : (
-            <Empty title="Sin historial disponible." />
+            <EmptyState title="Sin historial disponible." />
           )}
         </div>
       </section>

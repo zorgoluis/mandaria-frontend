@@ -1,3 +1,4 @@
+import { Button, Confirm } from '../components/ui'
 import { message } from './format'
 import { useCommand } from './hooks'
 import {
@@ -9,7 +10,6 @@ import {
 } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
-import { Confirm } from '../components/ui'
 import { reconcile, useMarkers } from './pending'
 import type { Marker } from './types'
 export function Warning() {
@@ -119,10 +119,19 @@ export function Form({
         </p>
       )}
       {result && <p role="status">{result}</p>}
-      {error && <p role="alert">{error}</p>}
-      <button className="button" disabled={disabled || busy}>
-        {busy ? 'Procesando…' : label}
-      </button>
+      {error && (
+        <p className="inline-error" role="alert">
+          {error}
+        </p>
+      )}
+      <Button
+        type="submit"
+        disabled={disabled}
+        loading={busy}
+        loadingLabel="Procesando…"
+      >
+        {label}
+      </Button>
     </form>
   )
 }
@@ -187,12 +196,22 @@ export function Recovery() {
               La operación pudo aplicarse. Conservamos sólo su referencia y
               clave, no el formulario ni archivos.
             </p>
-            <button disabled={busy} onClick={() => void act(m)}>
+            <Button
+              type="submit"
+              variant="ghost"
+              disabled={busy}
+              onClick={() => void act(m)}
+            >
               Consultar intento
-            </button>{' '}
-            <button disabled={busy} onClick={() => setClosing(m)}>
+            </Button>{' '}
+            <Button
+              type="submit"
+              variant="ghost"
+              disabled={busy}
+              onClick={() => setClosing(m)}
+            >
               Cerrar intento técnico
-            </button>
+            </Button>
           </section>
         ))}
       {text && <p role="status">{text}</p>}

@@ -1,3 +1,16 @@
+import {
+  Input,
+  Button,
+  Select,
+  Badge,
+  EmptyState,
+  ErrorState,
+  InfoGrid,
+  Loading,
+  PageHeader,
+  Pagination,
+  Table,
+} from '../components/ui'
 import { SearchStatus } from './SearchStatus'
 import { dispatchPollInterval } from './search'
 import { useState } from 'react'
@@ -5,16 +18,6 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ExecutionPanel } from '../execution/components'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, Search } from 'lucide-react'
-import {
-  Badge,
-  Empty,
-  ErrorState,
-  InfoGrid,
-  Loading,
-  PageTitle,
-  Pagination,
-  Table,
-} from '../components/ui'
 import { money, serviceTypeLabels } from '../pricing/format'
 import { paymentModes } from '../delivery-requests/format'
 import { PUBLIC_ID } from '../delivery-requests/types'
@@ -81,7 +84,7 @@ export function AdminDispatchesPage() {
   }
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Despachos"
         description="Oferta de servicios aceptados a proveedores. Auditoría de sólo lectura."
       />
@@ -101,18 +104,18 @@ export function AdminDispatchesPage() {
             }}
           >
             <Search size={17} />
-            <input
+            <Input
               aria-label="Buscar por solicitud"
               placeholder="MDR-000123"
               value={draft}
               maxLength={32}
               onChange={(e) => setDraft(e.target.value)}
             />
-            <button className="text-button" type="submit">
+            <Button variant="ghost" className="text-button" type="submit">
               Buscar
-            </button>
+            </Button>
           </form>
-          <select
+          <Select
             aria-label="Filtrar despachos por estado"
             value={status ?? ''}
             onChange={(e) => apply({ status: e.target.value, page: 1 })}
@@ -123,7 +126,7 @@ export function AdminDispatchesPage() {
                 {dispatchStatusLabels[value]}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         {invalid ? (
           <div className="panel-body">
@@ -210,7 +213,7 @@ export function AdminDispatchesPage() {
             />
           </>
         ) : (
-          <Empty
+          <EmptyState
             title="No hay despachos."
             description={
               status || requestParam
@@ -240,9 +243,9 @@ export function AdminDispatchDetail() {
   if (!valid || query.isPending || query.isError)
     return (
       <>
-        <PageTitle title="Despacho" back="/dispatches" />
+        <PageHeader title="Despacho" back="/dispatches" />
         {!valid ? (
-          <Empty
+          <EmptyState
             title="Despacho no encontrado"
             description="Revisa el enlace."
           />
@@ -262,7 +265,7 @@ export function AdminDispatchDetail() {
   const goods = item.goods
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={`Despacho de ${item.deliveryRequest.publicId}`}
         description={`${serviceTypeLabels[item.deliveryQuote.serviceType] ?? 'Servicio'} · ${item.deliveryQuote.serviceZone.name}`}
         back="/dispatches"
@@ -356,7 +359,7 @@ export function AdminDispatchDetail() {
         </div>
         <div className="panel-body">
           {item.legacyWithoutCreditSnapshots || !item.creditSnapshots.length ? (
-            <Empty
+            <EmptyState
               title="Sin costo registrado"
               description="Este despacho se abrió antes de que Mandaria congelara costos en créditos. No es un costo de cero: nunca se calculó."
             />

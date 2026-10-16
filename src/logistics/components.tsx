@@ -1,3 +1,15 @@
+import {
+  Input,
+  Button,
+  Select,
+  Badge,
+  EmptyState,
+  ErrorPage,
+  ErrorState,
+  Field,
+  Loading,
+  Pagination,
+} from '../components/ui'
 import { useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -5,15 +17,6 @@ import { useAuth } from '../auth/context'
 import { providers } from '../providers/service'
 import { drivers } from '../drivers/service'
 import { vehicles } from '../vehicles/service'
-import {
-  Badge,
-  Empty,
-  ErrorPage,
-  ErrorState,
-  Field,
-  Loading,
-  Pagination,
-} from '../components/ui'
 import { labels } from '../utils/format'
 import { resourceLink } from './navigation'
 import { logisticsKey, useCapacity } from './queries'
@@ -60,7 +63,7 @@ function ProviderSelector({
     )
   if (!query.data.total && role === 'PROVIDER_ADMIN')
     return (
-      <Empty
+      <EmptyState
         title="Aún no tienes un proveedor asociado"
         description="Solicita a un superadministrador que asocie tu cuenta."
       />
@@ -84,17 +87,19 @@ function ProviderSelector({
               setPage(1)
             }}
           >
-            <input
+            <Input
               name="search"
               aria-label="Buscar proveedor"
               placeholder="Buscar proveedor por nombre o código"
               maxLength={100}
             />
-            <button className="text-button">Buscar proveedor</button>
+            <Button type="submit" variant="ghost" className="text-button">
+              Buscar proveedor
+            </Button>
           </form>
         )}
         <Field label="Seleccionar proveedor">
-          <select
+          <Select
             value={id ?? ''}
             onChange={(e) =>
               setParams(e.target.value ? { providerId: e.target.value } : {})
@@ -109,7 +114,7 @@ function ProviderSelector({
                 {p.name}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         {query.data.totalPages > 1 && (
           <Pagination
@@ -128,7 +133,7 @@ function ProviderSelector({
           {children}
         </ResolvedProvider>
       ) : (
-        <Empty
+        <EmptyState
           title="Selecciona un proveedor"
           description="Consulta y administra sus repartidores y vehículos."
         />
@@ -284,7 +289,7 @@ export function ResourceFilters({ kind }: { kind: 'drivers' | 'vehicles' }) {
           )
         }}
       >
-        <input
+        <Input
           key={params.get('search')}
           name="search"
           aria-label="Buscar"
@@ -296,9 +301,11 @@ export function ResourceFilters({ kind }: { kind: 'drivers' | 'vehicles' }) {
               : 'Identificador, placa, marca o modelo'
           }
         />
-        <button className="text-button">Buscar</button>
+        <Button type="submit" variant="ghost" className="text-button">
+          Buscar
+        </Button>
       </form>
-      <select
+      <Select
         aria-label="Filtrar por estado"
         value={params.get('status') ?? ''}
         onChange={(e) => change('status', e.target.value)}
@@ -311,8 +318,8 @@ export function ResourceFilters({ kind }: { kind: 'drivers' | 'vehicles' }) {
               : ['ACTIVE', 'INACTIVE', 'MAINTENANCE', 'SUSPENDED']
           }
         />
-      </select>
-      <select
+      </Select>
+      <Select
         aria-label={
           kind === 'drivers' ? 'Filtrar por disponibilidad' : 'Filtrar por tipo'
         }
@@ -339,7 +346,7 @@ export function ResourceFilters({ kind }: { kind: 'drivers' | 'vehicles' }) {
                 ]
           }
         />
-      </select>
+      </Select>
     </div>
   )
 }

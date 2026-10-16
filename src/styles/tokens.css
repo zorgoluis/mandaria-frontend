@@ -10,6 +10,25 @@
  * 2/4px route/emphasis strokes retain existing geometry; ordinary borders use 1px.
  */
 :root {
+  /* Shared UI contracts. Density stays appropriate for operational screens. */
+  --control-height: 44px;
+  --control-padding-block: var(--space-10);
+  --control-padding-inline: var(--space-16);
+  --control-font-size: var(--font-size-14);
+  --icon-size: 18px;
+  --icon-size-state: 32px;
+  --heading-weight: 800;
+  --heading-leading: 1.05;
+  --heading-tracking: -0.03em;
+  --heading-size: clamp(var(--font-size-28), 3vw, var(--font-size-42));
+  --skeleton-opacity-low: 0.4;
+  --skeleton-opacity-high: 0.75;
+  --duration-skeleton: 1400ms;
+  --ease-skeleton: ease-in-out;
+  --route-point-size: 10px;
+  --route-track-width: 40px;
+  --route-point-offset: 4px;
+  --route-line-offset: 8px;
   /* Palette and semantic colours */
   --color-background: #f2f2f0;
   --color-ink: #1e1c1a;

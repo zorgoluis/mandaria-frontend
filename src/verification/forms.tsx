@@ -1,5 +1,5 @@
+import { Input, Checkbox, Select, Field } from '../components/ui'
 import { useState } from 'react'
-import { Field } from '../components/ui'
 import { vehicleTypes } from '../logistics/types'
 import { labels as operationalLabels } from '../utils/format'
 import { Form } from './common'
@@ -85,7 +85,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
         {identity ? (
           <>
             <Field label="Nombre completo *">
-              <input
+              <Input
                 name="fullName"
                 required
                 maxLength={150}
@@ -93,7 +93,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               />
             </Field>
             <Field label="Teléfono de contacto *">
-              <input
+              <Input
                 name="contactPhone"
                 required
                 minLength={5}
@@ -102,7 +102,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               />
             </Field>
             <Field label="Ciudad de operación *">
-              <input
+              <Input
                 name="operatingCity"
                 required
                 maxLength={150}
@@ -114,8 +114,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               cargan por separado.
             </p>
             <label className="verification-check">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={license}
                 onChange={(e) => setLicense(e.target.checked)}
               />
@@ -125,7 +124,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               <fieldset>
                 <legend>Licencia personal</legend>
                 <Field label="Emisor *">
-                  <input
+                  <Input
                     name="issuer"
                     required
                     maxLength={150}
@@ -133,7 +132,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
                   />
                 </Field>
                 <Field label="Categoría *">
-                  <input
+                  <Input
                     name="category"
                     required
                     maxLength={150}
@@ -141,7 +140,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
                   />
                 </Field>
                 <Field label="Vencimiento, hora local *">
-                  <input
+                  <Input
                     name="expiresAt"
                     type="datetime-local"
                     required
@@ -154,9 +153,9 @@ export function CaseForm({ record }: { record: VerificationCase }) {
                 </p>
                 {motorTypes.map((t) => (
                   <label className="verification-check" key={t}>
-                    <input
+                    <Checkbox
                       name="vehicleTypes"
-                      type="checkbox"
+
                       value={t}
                       defaultChecked={record.data.license?.vehicleTypes.includes(
                         t,
@@ -171,7 +170,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
         ) : (
           <>
             <Field label="Nombre del titular declarado *">
-              <input
+              <Input
                 name="declaredOwnerName"
                 required
                 maxLength={150}
@@ -179,7 +178,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               />
             </Field>
             <Field label="Número de serie *">
-              <input
+              <Input
                 name="serialNumber"
                 required
                 maxLength={150}
@@ -187,7 +186,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
               />
             </Field>
             <Field label="Propiedad o uso autorizado *">
-              <select
+              <Select
                 value={ownership}
                 onChange={(e) => setOwnership(e.target.value as Ownership)}
               >
@@ -196,10 +195,10 @@ export function CaseForm({ record }: { record: VerificationCase }) {
                     {labels[v]}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field label="Vencimiento de autorización, hora local (opcional)">
-              <input
+              <Input
                 name="authorizationExpiresAt"
                 type="datetime-local"
                 defaultValue={local(record.data.authorizationExpiresAt)}
@@ -253,7 +252,7 @@ export function NewUnit() {
         }}
       >
         <Field label="Identificador *">
-          <input
+          <Input
             name="identifier"
             required
             pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,29}"
@@ -261,13 +260,13 @@ export function NewUnit() {
           />
         </Field>
         <Field label="Tipo *">
-          <select name="type">
+          <Select name="type">
             {vehicleTypes.map((t) => (
               <option key={t} value={t}>
                 {operationalLabels[t] || t}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
         {[
           ['brand', 'Marca', 50],
@@ -276,11 +275,11 @@ export function NewUnit() {
           ['plate', 'Placa', 15],
         ].map(([name, label, max]) => (
           <Field key={name} label={String(label)}>
-            <input name={String(name)} maxLength={Number(max)} />
+            <Input name={String(name)} maxLength={Number(max)} />
           </Field>
         ))}
         <Field label="Año">
-          <input name="year" type="number" min={1900} max={2100} />
+          <Input name="year" type="number" min={1900} max={2100} />
         </Field>
         <p>
           Se crea INACTIVE; requiere expediente propio. OTHER necesita

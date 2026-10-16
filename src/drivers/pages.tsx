@@ -1,8 +1,7 @@
-import { resourceLink, useResourceFilters } from '../logistics/navigation'
-import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import {
+  ButtonLink,
+  Button,
+  Input,
   ActionForm,
   Badge,
   Confirm,
@@ -10,10 +9,14 @@ import {
   Field,
   InfoGrid,
   Loading,
-  PageTitle,
+  PageHeader,
   Pagination,
   Table,
 } from '../components/ui'
+import { resourceLink, useResourceFilters } from '../logistics/navigation'
+import { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import {
   CapacityCards,
@@ -39,7 +42,7 @@ import type { Driver, DriverStatus, ProviderContext } from '../logistics/types'
 export function DriversPage() {
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Repartidores"
         description="Personas que pueden transportar para cada proveedor."
       />
@@ -86,16 +89,16 @@ function DriverList({ scope }: { scope: ProviderContext }) {
               onClick={() => setInviting(true)}
             />
             {canCreate ? (
-              <Link
+              <ButtonLink
                 className="button"
                 to={resourceLink('drivers', scope.providerId, 'new')}
               >
                 Nuevo repartidor
-              </Link>
+              </ButtonLink>
             ) : (
-              <button className="button" disabled>
+              <Button type="submit" className="button" disabled>
                 Nuevo repartidor
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -196,7 +199,7 @@ function DriverList({ scope }: { scope: ProviderContext }) {
 export function DriverNew() {
   return (
     <>
-      <PageTitle title="Nuevo repartidor" back="/drivers" />
+      <PageHeader title="Nuevo repartidor" back="/drivers" />
       <ProviderScope>
         {(scope) => <CreateDriver key={scope.providerId} scope={scope} />}
       </ProviderScope>
@@ -242,13 +245,13 @@ function CreateDriver({ scope }: { scope: ProviderContext }) {
         }}
       >
         <Field label="Nombre operativo">
-          <input name="name" required maxLength={100} pattern=".*\S.*" />
+          <Input name="name" required maxLength={100} pattern=".*\S.*" />
         </Field>
         <Field
           label="ID del usuario"
           hint="UUID de una cuenta existente, activa y con rol Repartidor. Solicítalo al administrador que preparó la cuenta."
         >
-          <input
+          <Input
             name="userId"
             required
             pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
@@ -301,7 +304,7 @@ function DriverContent({
   const notify = useFeedback()
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={item.name}
         back={resourceLink('drivers', scope.providerId)}
         description={scope.name}
@@ -325,7 +328,8 @@ function DriverContent({
           {(['ACTIVE', 'SUSPENDED'] as const)
             .filter((value) => value !== item.status)
             .map((value) => (
-              <button
+              <Button
+                type="submit"
                 key={value}
                 className="button secondary"
                 onClick={() => setStatus(value)}
@@ -333,7 +337,7 @@ function DriverContent({
                 {value === 'ACTIVE'
                   ? 'Activar repartidor'
                   : 'Suspender repartidor'}
-              </button>
+              </Button>
             ))}
         </div>
         <ActionForm
@@ -347,7 +351,7 @@ function DriverContent({
           }}
         >
           <Field label="Nombre operativo">
-            <input
+            <Input
               name="name"
               defaultValue={item.name}
               required

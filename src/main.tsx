@@ -1,5 +1,7 @@
+import { Button } from './components/ui'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import './styles/components.css'
 const root = createRoot(document.getElementById('root')!)
 void import('./app/Root')
   .then(({ Root }) => root.render(<Root />))
@@ -11,9 +13,13 @@ void import('./app/Root')
           Comprueba que VITE_API_URL esté configurada con la URL de Mandaria
           Backend y vuelve a cargar la aplicación.
         </p>
-        <button className="button" onClick={() => window.location.reload()}>
+        <Button
+          type="submit"
+          className="button"
+          onClick={() => window.location.reload()}
+        >
           Volver a cargar
-        </button>
+        </Button>
       </div>,
     )
   })

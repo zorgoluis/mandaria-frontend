@@ -1,3 +1,4 @@
+import { Button } from '../components/ui'
 import { useEffect, useRef, useState } from 'react'
 import { HistoricalOperationsNotice } from '../verification/legacy'
 import { NavLink, Outlet, Link } from 'react-router-dom'
@@ -163,7 +164,9 @@ export function AdminLayout() {
   return (
     <div className="admin-app">
       {open && (
-        <button
+        <Button
+          type="submit"
+          variant="ghost"
           className="sidebar-scrim"
           aria-label="Cerrar navegación"
           onClick={() => setOpen(false)}
@@ -180,13 +183,15 @@ export function AdminLayout() {
           />
           mandaria<span className="brand-period">.</span>
         </Link>
-        <button
+        <Button
+          type="submit"
+          variant="ghost"
           className="icon-button mobile-close"
           aria-label="Cerrar menú"
           onClick={() => setOpen(false)}
         >
           <X />
-        </button>
+        </Button>
         <span className="nav-label">ESPACIO DE TRABAJO</span>
         <nav aria-label="Navegación principal">
           {links.map(({ to, label, icon: Icon }) => (
@@ -210,18 +215,22 @@ export function AdminLayout() {
       <div className="workspace">
         <header className="topbar">
           <div className="workspace-label">
-            <button
+            <Button
+              type="submit"
+              variant="ghost"
               className="icon-button mobile-menu"
               aria-label="Abrir menú"
               aria-expanded={open}
               onClick={() => setOpen(!open)}
             >
               <Menu />
-            </button>
+            </Button>
             <span className="workspace-dot" /> Panel administrativo
           </div>
           <div className="user-menu">
-            <button
+            <Button
+              type="submit"
+              variant="ghost"
               className="user-trigger"
               onClick={() => setMenu(!menu)}
               aria-expanded={menu}
@@ -234,14 +243,16 @@ export function AdminLayout() {
                 <small>{labels[user?.role ?? ''] ?? 'Usuario'}</small>
               </span>
               <ChevronDown size={15} />
-            </button>
+            </Button>
             {menu && (
               <div className="user-dropdown">
                 <Link to="/profile" onClick={() => setMenu(false)}>
                   <UserRound size={16} />
                   Mi perfil
                 </Link>
-                <button
+                <Button
+                  type="submit"
+                  variant="ghost"
                   onClick={() => {
                     setMenu(false)
                     void logout().catch((err: unknown) =>
@@ -254,7 +265,7 @@ export function AdminLayout() {
                 >
                   <LogOut size={16} />
                   Cerrar sesión
-                </button>
+                </Button>
               </div>
             )}
           </div>

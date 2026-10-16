@@ -1,7 +1,7 @@
+import { ButtonLink, Input, Button, ActionForm, Field } from '../components/ui'
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { CheckCircle2, CircleAlert, Eye, EyeOff } from 'lucide-react'
-import { ActionForm, Field } from '../components/ui'
 import { ApiError } from '../services/errors'
 import { accounts } from '../invitations/service'
 import {
@@ -91,9 +91,9 @@ export function ActivateAccount() {
             {result.email} ya puede iniciar sesión como{' '}
             {(labels[result.role] ?? 'usuario').toLowerCase()}.
           </p>
-          <Link className="button" to="/login" replace>
+          <ButtonLink className="button" to="/login" replace>
             Ir a iniciar sesión
-          </Link>
+          </ButtonLink>
         </div>
       </Shell>
     )
@@ -104,9 +104,9 @@ export function ActivateAccount() {
           <CircleAlert size={34} />
           <h1>{ended.title}</h1>
           <p>{ended.text}</p>
-          <Link className="button secondary" to="/login" replace>
+          <ButtonLink className="button secondary" to="/login" replace>
             Ir a iniciar sesión
-          </Link>
+          </ButtonLink>
         </div>
       </Shell>
     )
@@ -156,7 +156,7 @@ export function ActivateAccount() {
           label="Crear contraseña"
           hint={`Entre ${PASSWORD_MIN_LENGTH} y ${PASSWORD_MAX_LENGTH} caracteres. Puedes usar una frase fácil de recordar.`}
         >
-          <input
+          <Input
             name="password"
             type={visible ? 'text' : 'password'}
             autoComplete="new-password"
@@ -165,7 +165,7 @@ export function ActivateAccount() {
           />
         </Field>
         <Field label="Confirmar contraseña">
-          <input
+          <Input
             name="confirmation"
             type={visible ? 'text' : 'password'}
             autoComplete="new-password"
@@ -173,14 +173,15 @@ export function ActivateAccount() {
             maxLength={PASSWORD_MAX_LENGTH}
           />
         </Field>
-        <button
+        <Button
+          variant="ghost"
           type="button"
           className="text-button"
           onClick={() => setVisible(!visible)}
         >
           {visible ? <EyeOff size={16} /> : <Eye size={16} />}{' '}
           {visible ? 'Ocultar contraseñas' : 'Mostrar contraseñas'}
-        </button>
+        </Button>
       </ActionForm>
     </Shell>
   )

@@ -1,6 +1,5 @@
+import { Button, ErrorState, InfoGrid, Loading } from '../components/ui'
 import { useState } from 'react'
-import { RefreshCw } from 'lucide-react'
-import { ErrorState, InfoGrid, Loading } from '../components/ui'
 import { date } from '../utils/format'
 import type { ProviderDispatch } from '../dispatch/types'
 import { vehicleLabel } from './format'
@@ -78,38 +77,42 @@ export function AssignmentPanel({
           </p>
         </div>
         <div className="row-actions">
-          <button
+          <Button
+            loading={assignments.isFetching}
+            type="submit"
             className="button secondary small"
             disabled={assignments.isFetching}
             onClick={() => {
               void assignments.refetch()
             }}
           >
-            <RefreshCw
-              size={14}
-              className={assignments.isFetching ? 'spin' : ''}
-            />
             Actualizar
-          </button>
+          </Button>
           {delivered || !ordinary ? null : active ? (
             <>
-              <button
+              <Button
+                type="submit"
                 className="button secondary destructive small"
                 onClick={() => setCancelling(true)}
               >
                 CANCELAR ASIGNACIÓN
-              </button>
-              <button
+              </Button>
+              <Button
+                type="submit"
                 className="button small"
                 onClick={() => setReassigning(true)}
               >
                 REASIGNAR
-              </button>
+              </Button>
             </>
           ) : (
-            <button className="button small" onClick={() => setAssigning(true)}>
+            <Button
+              type="submit"
+              className="button small"
+              onClick={() => setAssigning(true)}
+            >
               ASIGNAR
-            </button>
+            </Button>
           )}
         </div>
       </div>

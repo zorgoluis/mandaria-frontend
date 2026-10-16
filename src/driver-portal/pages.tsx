@@ -1,3 +1,21 @@
+import {
+  ButtonLink,
+  Button,
+  Select,
+  Input,
+  Textarea,
+  ActionForm,
+  Badge,
+  EmptyState,
+  ErrorPage,
+  ErrorState,
+  Field,
+  InfoGrid,
+  Loading,
+  Modal,
+  PageHeader,
+  Pagination,
+} from '../components/ui'
 import { SearchStatus } from '../dispatch/SearchStatus'
 import { searchAllowsTake, dispatchPollInterval } from '../dispatch/search'
 import { useNow } from '../dispatch/use-now'
@@ -11,27 +29,7 @@ import type { CollectionInstructions } from '../collection-instructions/types'
 import { useState, type ReactNode } from 'react'
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import {
-  AlertTriangle,
-  Bike,
-  PackageSearch,
-  Coins,
-  RefreshCw,
-  Wallet,
-} from 'lucide-react'
-import {
-  ActionForm,
-  Badge,
-  Empty,
-  ErrorPage,
-  ErrorState,
-  Field,
-  InfoGrid,
-  Loading,
-  Modal,
-  PageTitle,
-  Pagination,
-} from '../components/ui'
+import { AlertTriangle, Bike, PackageSearch, Coins, Wallet } from 'lucide-react'
 import { useFeedback } from '../components/feedback-context'
 import { useAuth } from '../auth/context'
 import { ApiError, errorMessage } from '../services/errors'
@@ -115,7 +113,7 @@ export function DriverPortal({
               : undefined
           }
         />
-        <Empty
+        <EmptyState
           title="Todavía no puedes tomar servicios"
           description={blocked}
         />
@@ -267,12 +265,12 @@ function ServiceCard({ dispatch }: { dispatch: DriverDispatch }) {
           </p>
         )}
       <CollectionInstructionsBlock value={dispatch.collectionInstructions} />
-      <Link
+      <ButtonLink
         className="button"
         to={`/driver/services/${encodeURIComponent(dispatch.id)}`}
       >
         VER SERVICIO
-      </Link>
+      </ButtonLink>
     </article>
   )
 }
@@ -291,20 +289,20 @@ function AvailableServices({ me }: { me: DriverSelf }) {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Servicios disponibles"
         description="Tómalos por tu cuenta, con tus propios vehículos."
       />
       <PortalTabs />
       {busy ? (
         <div className="panel">
-          <Empty
+          <EmptyState
             title="Ya tienes un servicio en curso"
             description="Termina o libera tu servicio actual antes de tomar otro."
             action={
-              <Link className="button" to="/driver/my-service">
+              <ButtonLink className="button" to="/driver/my-service">
                 Ver mi servicio
-              </Link>
+              </ButtonLink>
             }
           />
         </div>
@@ -315,16 +313,17 @@ function AvailableServices({ me }: { me: DriverSelf }) {
               <h2>Cerca de ti</h2>
               <p>Ordenados por vencimiento</p>
             </div>
-            <button
+            <Button
+              loading={query.isFetching}
+              type="submit"
               className="button secondary small"
               disabled={query.isFetching}
               onClick={() => {
                 void query.refetch()
               }}
             >
-              <RefreshCw size={14} className={query.isFetching ? 'spin' : ''} />
               Actualizar
-            </button>
+            </Button>
           </div>
           {query.isPending ? (
             <Loading />
@@ -350,7 +349,7 @@ function AvailableServices({ me }: { me: DriverSelf }) {
               />
             </>
           ) : (
-            <Empty
+            <EmptyState
               title="No hay servicios disponibles"
               description="Cuando Mandaria publique un servicio que puedas tomar, aparecerá aquí."
             />
@@ -385,15 +384,15 @@ function ServiceRecord({ me, id }: { me: DriverSelf; id: string }) {
   if (query.error instanceof ApiError && query.error.status === 404)
     return (
       <>
-        <PageTitle title="Servicio" back="/driver/services" />
+        <PageHeader title="Servicio" back="/driver/services" />
         <div className="panel">
-          <Empty
+          <EmptyState
             title="Este servicio ya no está disponible."
             description="Otro repartidor o proveedor lo tomó antes, o ya no está publicado."
             action={
-              <Link className="button" to="/driver/services">
+              <ButtonLink className="button" to="/driver/services">
                 Ver otros servicios
-              </Link>
+              </ButtonLink>
             }
           />
         </div>
@@ -402,7 +401,7 @@ function ServiceRecord({ me, id }: { me: DriverSelf; id: string }) {
   if (query.isPending || query.isError)
     return (
       <>
-        <PageTitle title="Servicio" back="/driver/services" />
+        <PageHeader title="Servicio" back="/driver/services" />
         {query.isPending ? (
           <Loading />
         ) : (
@@ -436,13 +435,14 @@ function ServiceContent({
   const gone = !mine && dispatch.status !== 'OPEN'
   return (
     <>
-      <PageTitle
+      <PageHeader
         title={service.deliveryRequestPublicId ?? 'Servicio'}
         description={dispatch.serviceZone.name}
         back={mine ? '/driver/my-service' : '/driver/services'}
         action={
           mine ? undefined : gone ? undefined : (
-            <button
+            <Button
+              type="submit"
               className="button"
               disabled={
                 busyElsewhere ||
@@ -452,20 +452,20 @@ function ServiceContent({
               onClick={() => setTaking(true)}
             >
               TOMAR SERVICIO
-            </button>
+            </Button>
           )
         }
       />
       <SearchStatus search={dispatch.search} />
       {gone && !dispatch.search && (
         <div className="panel">
-          <Empty
+          <EmptyState
             title="Este servicio ya no está disponible."
             description="Otro repartidor o proveedor lo tomó antes."
             action={
-              <Link className="button" to="/driver/services">
+              <ButtonLink className="button" to="/driver/services">
                 Ver otros servicios
-              </Link>
+              </ButtonLink>
             }
           />
         </div>
@@ -635,9 +635,9 @@ function TakeDialog({
       {waiting ? (
         <>
           <p role="status">{waiting}</p>
-          <button className="button" onClick={onClose}>
+          <Button type="submit" className="button" onClick={onClose}>
             Volver al servicio
-          </button>
+          </Button>
         </>
       ) : gone ? (
         <>
@@ -645,7 +645,8 @@ function TakeDialog({
             Este servicio ya no está disponible.
           </p>
           <div className="form-actions">
-            <button
+            <Button
+              type="submit"
               className="button"
               onClick={() => {
                 onClose()
@@ -653,7 +654,7 @@ function TakeDialog({
               }}
             >
               Ver otros servicios
-            </button>
+            </Button>
           </div>
         </>
       ) : (
@@ -731,7 +732,7 @@ function TakeDialog({
                 label="Vehículo"
                 hint="Sólo tus vehículos activos. Mandaria vuelve a comprobarlo."
               >
-                <select
+                <Select
                   value={vehicleId}
                   onChange={(event) => setVehicleId(event.target.value)}
                 >
@@ -741,10 +742,10 @@ function TakeDialog({
                       {vehicleLabel(vehicle)}
                     </option>
                   ))}
-                </select>
+                </Select>
               </Field>
             ) : (
-              <Empty
+              <EmptyState
                 title="No tienes vehículos activos"
                 description="Pide a Mandaria que registre o active un vehículo tuyo para poder tomar servicios."
               />
@@ -784,7 +785,7 @@ function MyService({ me }: { me: DriverSelf }) {
   const [delivering, setDelivering] = useState(false)
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Mi servicio"
         description="El servicio que estás ejecutando ahora."
       />
@@ -797,13 +798,13 @@ function MyService({ me }: { me: DriverSelf }) {
       )}
       {!active ? (
         <div className="panel">
-          <Empty
+          <EmptyState
             title="No tienes un servicio en curso"
             description="Toma uno de los servicios disponibles para empezar."
             action={
-              <Link className="button" to="/driver/services">
+              <ButtonLink className="button" to="/driver/services">
                 Ver servicios disponibles
-              </Link>
+              </ButtonLink>
             }
           />
         </div>
@@ -897,13 +898,14 @@ function MyService({ me }: { me: DriverSelf }) {
             </div>
             <div className="panel-body driver-service-actions">
               {legacyDeliverable && (
-                <button
+                <Button
+                  type="submit"
                   className="button full"
                   disabled={busy || query.isFetching}
                   onClick={() => setDelivering(true)}
                 >
                   MARCAR COMO ENTREGADO
-                </button>
+                </Button>
               )}
               {(legacyProjection(query.data) ||
                 (query.data.trackingMode === 'DETAILED' &&
@@ -913,13 +915,14 @@ function MyService({ me }: { me: DriverSelf }) {
                   ) &&
                   !query.data.execution.openIncidentId &&
                   query.data.execution.activeAssignmentId === active.id)) && (
-                <button
+                <Button
+                  type="submit"
                   className="button secondary destructive full"
                   disabled={busy || query.isFetching}
                   onClick={() => setReleasing(true)}
                 >
                   LIBERAR SERVICIO
-                </button>
+                </Button>
               )}
             </div>
             <p className="panel-note">
@@ -1056,7 +1059,7 @@ function ReleaseDialog({
           <legend>Motivo</legend>
           {releaseReasons.map((value) => (
             <label key={value}>
-              <input
+              <Input
                 type="radio"
                 name="releaseReason"
                 value={value}
@@ -1072,7 +1075,7 @@ function ReleaseDialog({
             label="Describe el motivo"
             hint={`Entre ${REASON_DETAIL_MIN} y ${REASON_DETAIL_MAX} caracteres. No incluyas datos personales.`}
           >
-            <textarea
+            <Textarea
               name="reasonDetail"
               required
               maxLength={REASON_DETAIL_MAX}
@@ -1095,7 +1098,7 @@ function DriverVehicles() {
   })
   return (
     <>
-      <PageTitle
+      <PageHeader
         title="Mis vehículos"
         description="Los tuyos, no los de tu proveedor."
       />
@@ -1126,7 +1129,7 @@ function DriverVehicles() {
             ))}
           </ul>
         ) : (
-          <Empty
+          <EmptyState
             title="No tienes vehículos registrados"
             description="Mandaria registra los vehículos de los repartidores independientes. Pide que agreguen el tuyo."
           />
