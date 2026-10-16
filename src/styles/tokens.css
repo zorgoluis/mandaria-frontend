@@ -1,0 +1,227 @@
+/* Mandaria design tokens — source of truth (AGENTS.md).
+ * Existing sizes/spacing/weights are preserved for this migration: do not round
+ * the scale or change layout while replacing literals. Unitless zero, percentages,
+ * fr and viewport units remain structural CSS values.
+ * Native CSS variables cannot be used in @media conditions. Existing breakpoints
+ * remain literal in the two consuming stylesheets: 600, 640, 720, 760, 850,
+ * 1024, 1200 and 1500px. Do not replace them with var() without a build transform.
+ * White is restricted to text on filled actions. Status meaning also uses text.
+ * Circular radii are only for status dots, never cards, buttons or inputs.
+ * 2/4px route/emphasis strokes retain existing geometry; ordinary borders use 1px.
+ */
+:root {
+  /* Palette and semantic colours */
+  --color-background: #f2f2f0;
+  --color-ink: #1e1c1a;
+  --color-accent: #137a6a;
+  --color-notice: #e6f1ee;
+  --color-text-secondary: #5a5854;
+  --color-on-action: #ffffff;
+  --color-surface: var(--color-background);
+  --color-border: var(--color-ink);
+  --color-action-hover: var(--color-ink);
+  --color-danger: var(--color-ink);
+  --color-overlay: color-mix(in srgb, var(--color-ink) 40%, transparent);
+
+  /* Typography */
+  --font-family-sans: Inter, 'Segoe UI', Arial, sans-serif;
+  --font-family-code: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Shape and effects */
+  --radius-none: 0;
+  --radius-circle: 50%;
+  --shadow-none: none;
+  --backdrop-filter-none: none;
+
+  /* Borders and focus */
+  --border-width: 1px;
+  --border-style: solid;
+  --border-style-route: dashed;
+  --focus-width-3: 3px;
+  --focus-offset-3: 3px;
+  --focus-offset-2: 2px;
+  --border-width-2: 2px;
+  --focus-width-2: 2px;
+  --border-width-4: 4px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-spin: 1s;
+  --ease-standard: ease;
+  --ease-linear: linear;
+
+  /* Dimensions and offsets (existing layout) */
+  --size-320: 320px;
+  --size-42: 42px;
+  --size-34: 34px;
+  --size-35: 35px;
+  --size-240: 240px;
+  --size-36: 36px;
+  --size-83: 83px;
+  --size-7: 7px;
+  --size-51: 51px;
+  --size-205: 205px;
+  --size-1600: 1600px;
+  --size-800: 800px;
+  --size-150: 150px;
+  --size-220: 220px;
+  --size-100: 100px;
+  --size-5: 5px;
+  --size-180: 180px;
+  --size-200: 200px;
+  --size-550: 550px;
+  --size-28: 28px;
+  --size-430: 430px;
+  --size-25: 25px;
+  --size-500: 500px;
+  --size-90: 90px;
+  --size-60: 60px;
+  --size-290: 290px;
+  --size-330: 330px;
+  --size-54: 54px;
+  --size-365: 365px;
+  --size-46: 46px;
+  --size-6: 6px;
+  --size-235: 235px;
+  --size-215: 215px;
+  --size-70: 70px;
+  --size-195: 195px;
+  --size-245: 245px;
+  --size-10: 10px;
+  --size-80: 80px;
+  --size-68: 68px;
+  --size-81: 81px;
+  --size-16: 16px;
+  --size-190: 190px;
+  --size-140: 140px;
+  --size-260: 260px;
+  --size-40: 40px;
+  --size-460: 460px;
+  --size-56: 56px;
+  --size-48: 48px;
+  --size-44: 44px;
+  --size-1440: 1440px;
+  --size-24: 24px;
+  --size-980: 980px;
+  --size-700: 700px;
+  --size-32: 32px;
+  --size-20: 20px;
+  --size-170: 170px;
+  --size-2: 2px;
+  --size-1100: 1100px;
+  --size-720: 720px;
+  --size-480: 480px;
+  --size-600: 600px;
+
+  /* Opacity (existing disabled states) */
+  --opacity-0-5: 0.5;
+  --opacity-0-55: 0.55;
+
+  /* Typography sizes (existing scale) */
+  --font-size-30: 30px;
+  --font-size-17: 17px;
+  --font-size-15: 15px;
+  --font-size-12: 12px;
+  --font-size-13: 13px;
+  --font-size-27: 27px;
+  --font-size-9: 9px;
+  --font-size-11: 11px;
+  --font-size-10: 10px;
+  --font-size-14: 14px;
+  --font-size-20: 20px;
+  --font-size-76: 76px;
+  --font-size-34: 34px;
+  --font-size-42: 42px;
+  --font-size-70: 70px;
+  --font-size-28: 28px;
+  --font-size-23: 23px;
+  --font-size-26: 26px;
+  --font-size-44: 44px;
+  --font-size-25: 25px;
+  --font-size-31: 31px;
+  --font-size-24: 24px;
+  --font-size-18: 18px;
+  --font-size-16: 16px;
+  --font-size-46: 46px;
+
+  /* Typography tracking (existing metrics) */
+  --tracking-minus-1px: -1px;
+  --tracking-minus-0-3px: -0.3px;
+  --tracking-1-5px: 1.5px;
+  --tracking-1px: 1px;
+  --tracking-minus-5px: -5px;
+  --tracking-1-7px: 1.7px;
+  --tracking-minus-0-8px: -0.8px;
+  --tracking-minus-2-8px: -2.8px;
+  --tracking-0-04em: 0.04em;
+  --tracking-0-02em: 0.02em;
+  --tracking-0-12em: 0.12em;
+
+  /* Typography leading (existing metrics) */
+  --leading-1-2: 1.2;
+  --leading-1-6: 1.6;
+  --leading-1-7: 1.7;
+  --leading-1-5: 1.5;
+  --leading-1-3: 1.3;
+  --leading-1-13: 1.13;
+  --leading-1-9: 1.9;
+  --leading-1-25: 1.25;
+  --leading-1-45: 1.45;
+  --leading-1-18: 1.18;
+
+  /* Spacing (existing scale, no layout rounding) */
+  --space-9: 9px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-16: 16px;
+  --space-7: 7px;
+  --space-12: 12px;
+  --space-6: 6px;
+  --space-31: 31px;
+  --space-22: 22px;
+  --space-20: 20px;
+  --space-5: 5px;
+  --space-45: 45px;
+  --space-13: 13px;
+  --space-15: 15px;
+  --space-14: 14px;
+  --space-28: 28px;
+  --space-25: 25px;
+  --space-18: 18px;
+  --space-4: 4px;
+  --space-240: 240px;
+  --space-37: 37px;
+  --space-11: 11px;
+  --space-35: 35px;
+  --space-27: 27px;
+  --space-23: 23px;
+  --space-24: 24px;
+  --space-21: 21px;
+  --space-26: 26px;
+  --space-17: 17px;
+  --space-32: 32px;
+  --space-19: 19px;
+  --space-30: 30px;
+  --space-55: 55px;
+  --space-65: 65px;
+  --space-50: 50px;
+  --space-33: 33px;
+  --space-42: 42px;
+  --space-43: 43px;
+  --space-215: 215px;
+  --space-40: 40px;
+  --space-195: 195px;
+  --space-2: 2px;
+  --space-3: 3px;
+  --space-1: 1px;
+  --space-36: 36px;
+
+  /* Typography weights (existing metrics) */
+  --font-weight-600: 600;
+  --font-weight-750: 750;
+  --font-weight-700: 700;
+  --font-weight-550: 550;
+  --font-weight-650: 650;
+  --font-weight-400: 400;
+}

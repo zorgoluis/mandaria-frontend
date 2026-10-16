@@ -1,20 +1,20 @@
 .verification-area {
-  max-width: 1100px;
+  max-width: var(--size-1100);
   margin: auto;
   overflow-wrap: anywhere;
 }
 .verification-area .panel {
-  margin: 20px 0;
+  margin: var(--space-20) 0;
 }
 .verification-public {
-  max-width: 720px;
-  margin: 32px auto;
-  padding: 24px;
+  max-width: var(--size-720);
+  margin: var(--space-32) auto;
+  padding: var(--space-24);
 }
 .verification-form {
   display: grid;
-  gap: 16px;
-  margin: 16px 0;
+  gap: var(--space-16);
+  margin: var(--space-16) 0;
 }
 .verification-form input:not([type='checkbox']),
 .verification-form textarea,
@@ -31,76 +31,76 @@
 }
 .verification-terms {
   white-space: pre-wrap;
-  max-height: 480px;
+  max-height: var(--size-480);
   overflow: auto;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
-  line-height: 1.7;
+  border: var(--border-width) var(--border-style) var(--color-border);
+  border-radius: var(--radius-none);
+  padding: var(--space-20);
+  line-height: var(--leading-1-7);
   overflow-wrap: anywhere;
 }
 .verification-check {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin: 12px 0;
+  gap: var(--space-12);
+  margin: var(--space-12) 0;
 }
 .verification-check input {
   flex-shrink: 0;
-  margin-top: 5px;
+  margin-top: var(--space-5);
 }
 .verification-files {
-  padding-left: 20px;
+  padding-left: var(--space-20);
 }
 .verification-files li {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
+  padding: var(--space-12) 0;
+  border-bottom: var(--border-width) var(--border-style) var(--color-border);
 }
 .verification-files button {
-  margin: 8px;
+  margin: var(--space-8);
 }
 .verification-preview {
   max-width: 100%;
-  max-height: 600px;
+  max-height: var(--size-600);
   object-fit: contain;
 }
 .verification-area dl div {
-  margin: 12px 0;
+  margin: var(--space-12) 0;
 }
 .verification-area dd {
   margin-left: 0;
 }
 .verification-area button:focus-visible,
 .verification-terms:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 3px;
+  outline: var(--focus-width-2) solid var(--color-accent);
+  outline-offset: var(--focus-offset-3);
 }
 @media (max-width: 600px) {
   .verification-public {
     margin: 0;
-    padding: 16px;
+    padding: var(--space-16);
   }
   .verification-area .panel-body {
-    padding: 16px;
+    padding: var(--space-16);
   }
   .verification-area figure {
     margin: 0;
   }
   .verification-terms {
-    padding: 12px;
+    padding: var(--space-12);
   }
 }
 
 .verification-area button:not(.button):not(.icon-button) {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 12px;
-  background: white;
-  color: var(--brand);
+  border: var(--border-width) var(--border-style) var(--color-border);
+  border-radius: var(--radius-none);
+  padding: var(--space-8) var(--space-12);
+  background: var(--color-surface);
+  color: var(--color-accent);
   font: inherit;
   cursor: pointer;
 }
 .verification-area button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: var(--opacity-0-55);
 }
