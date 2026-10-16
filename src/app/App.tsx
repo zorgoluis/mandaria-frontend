@@ -1,5 +1,13 @@
+import {
+  VerificationLayout,
+  DriverOnboarding,
+  ProviderVerification,
+  AdminVerification,
+  CaseDetail,
+  ReceiptPage,
+} from '../verification/pages'
+import { Register, RegistrationConfirm } from '../verification/identity'
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
-import { IncidentsPage, IncidentPage } from '../execution/incidents'
 import { Component, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/context'
@@ -59,6 +67,7 @@ import {
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
+  const route = useLocation()
   if (auth.loading) return <Loading />
   if (auth.error)
     return (
@@ -69,7 +78,19 @@ export function Protected({ roles }: { roles?: Role[] }) {
         }}
       />
     )
-  if (!auth.user) return <Navigate to="/login" replace />
+  if (!auth.user)
+    return (
+      <Navigate
+        to={
+          /^\/(driver\/onboarding|provider\/verification|admin\/verification-cases|verification\/)/.test(
+            route.pathname,
+          )
+            ? '/login?next=onboarding'
+            : '/login'
+        }
+        replace
+      />
+    )
   if (roles && !roles.includes(auth.user.role)) return <ErrorPage code={403} />
   return <Outlet />
 }
@@ -80,11 +101,51 @@ export function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/driver/register" element={<Register />} />
+      <Route path="/driver/verify" element={<RegistrationConfirm />} />
       {/* Public: invited people have no session yet. */}
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route element={<VerificationLayout />}>
+            <Route element={<Protected roles={['DRIVER']} />}>
+              <Route path="driver/onboarding" element={<DriverOnboarding />} />
+            </Route>
+            <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
+              <Route
+                path="provider/verification"
+                element={<ProviderVerification />}
+              />
+            </Route>
+            <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+              <Route
+                path="admin/verification-cases"
+                element={<AdminVerification />}
+              />
+            </Route>
+            <Route path="verification/cases/:id" element={<CaseDetail />} />
+            <Route
+              path="verification/acceptances/:id"
+              element={<ReceiptPage />}
+            />
+          </Route>
+
+          <Route
+            path="verification-entry"
+            element={
+              <Navigate
+                to={
+                  auth.user?.role === 'DRIVER'
+                    ? '/driver/onboarding'
+                    : auth.user?.role === 'PROVIDER_ADMIN'
+                      ? '/provider/verification'
+                      : '/admin/verification-cases'
+                }
+                replace
+              />
+            }
+          />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route
@@ -145,10 +206,24 @@ export function App() {
               element={<QuoteDetail key={location.pathname} />}
             />
             <Route path="dispatches" element={<AdminDispatchesPage />} />
-            <Route path="custody-incidents" element={<IncidentsPage />} />
+            <Route
+              path="custody-incidents"
+              element={
+                <p>
+                  La ejecución detallada no está disponible en este backend
+                  main. Conserva los intentos pendientes y consulta el entorno
+                  donde se iniciaron.
+                </p>
+              }
+            />
             <Route
               path="custody-incidents/:dispatchId/:incidentId"
-              element={<IncidentPage key={location.pathname} />}
+              element={
+                <p>
+                  Incidencia detallada no disponible en este backend main. No se
+                  cerró ni repitió ningún intento.
+                </p>
+              }
             />
             <Route
               path="dispatches/:id"

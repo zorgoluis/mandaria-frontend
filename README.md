@@ -1,5 +1,19 @@
 # Mandaria Web — V1.11-B
 
+## Verificación documental de prueba — 2026-10-13
+
+Implementada desde main en `feature/driver-verification`, sin integrar QA ni activar backend. Incluye registro independiente sin proveedor, correo/términos LOCAL_TEST, expedientes y unidades, archivos privados JPEG/PNG, bandeja SUPER_ADMIN y recuperación mínima ante respuesta perdida. No apto para producción ni documentos reales.
+
+- DRIVER: `/driver/register` → `/driver/verify` → `/login?next=onboarding` → `/driver/onboarding`.
+- PROVIDER_ADMIN: `/provider/verification`, proveedor autorizado y aceptación del representante separada de la personal del conductor.
+- SUPER_ADMIN: `/admin/verification-cases`; revisión explícita, nunca aprobación por sólo cargar archivos.
+- Detalle: `/verification/cases/:id`; comprobante histórico: `/verification/acceptances/:id`.
+
+[Implementación, contratos, privacidad, recuperación y handoffs](docs/DRIVER-VERIFICATION-WEB.md) · [Compatibilidad main e historial](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md) · [Verificación y límites](VERIFICATION.md).
+
+No se agregaron dependencias ni se cambiaron configuración o versión. El cliente existente añade `/api/v1`; para una futura prueba real usar únicamente un origen local identificado según configuración vigente. No habilitar flags con estas instrucciones. La revisión reproducible `node scripts/verify-documentary-web.mjs` es sintética, no lee .env y detiene su Vite temporal; no acredita backend/PostgreSQL/Spaces reales.
+
+
 ## Búsqueda automática de repartidor — 2026-10-10
 
 Integrado el campo opcional search del handoff AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md y docs/openapi.json del checkout local mandaria-backend. La Web muestra el intento confirmado (hasta 5), el contador de windowExpiresAt y los estados SEARCHING, RETRY_PENDING, EXECUTOR_FOUND, CANCELLED, EXHAUSTED y STOPPED en listas/detalles de proveedor, independiente y administración. Desde una solicitud se enlaza al listado de despachos filtrado por MDR; el contrato administrativo de solicitudes no incorpora search, por lo que no se inventa ese campo ni se usa la ruta B2B con sesión humana.

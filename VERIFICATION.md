@@ -1,3 +1,65 @@
+## 2026-10-13 — Onboarding y verificación documental desde main
+
+### Referencias y alcance
+
+Frontend worktree `C:/Users/zorgl/.codex/worktrees/driver-verification-web/mandaria-frontend`, rama `feature/driver-verification`, base/HEAD `06d976619322d9811b5325fc73cd16d15e00d829`. Backend read-only `feature/driver-verification` HEAD `90b72433f8a5476ece5fda4437dc15a0a6a314f2` **más working tree sin commit**. Huellas SHA-256, mapeo de pantallas/endpoints, privacidad y procedimiento de recuperación en [DRIVER-VERIFICATION-WEB.md](docs/DRIVER-VERIFICATION-WEB.md). El análisis anterior se conserva con actualización en [compatibilidad](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md).
+
+QA principal y sus cuatro cambios documentales previos preservados. No existe AGENTS.md ni BITACORA.md en la base main seleccionada; se crea BITACORA de esta rama. No se copió implementación QA ni se modificó backend, App, Landing, .env, nginx, versiones, flags, cobros, créditos o cinco intentos.
+
+### Comandos ejecutados y resultados
+
+- `npm ci --offline --ignore-scripts`: dependencias existentes instaladas, 345 paquetes, auditoría reportó 0 vulnerabilidades. Ninguna dependencia añadida; no equivale a auditoría integral de seguridad.
+- `npx vitest run src/test/verification-recovery.test.ts src/test/verification-service.test.ts`: primera ejecución24/24; ampliaciones posteriores indicadas abajo, no se suman duplicados.
+- `npx vitest run src/test/verification-pages.test.tsx src/test/api.test.ts src/test/driver-portal.test.tsx src/test/independent-drivers-api.test.ts src/test/delivery-completion.test.tsx`: los cuatro archivos existentes pasaron completos (111 casos); páginas tuvo una espera defectuosa en el fixture de notificación, corregida y repetida como archivo completo.
+- `npx vitest run src/test/verification-pages.test.tsx src/test/verification-recovery.test.ts src/test/verification-service.test.ts`: 45/45 en ese estado; ampliado posteriormente.
+- `npx vitest run src/test/verification-service.test.ts src/test/api.test.ts`: 41/41 finales (20 documentales +21 HTTP centralizado).
+- `npx vitest run src/test/verification-pages.test.tsx src/test/driver-portal.test.tsx`: driver38/38 con dos nuevas regresiones; se corrigió constructor FormData de dos fixtures, sin modificar semántica de producto para aprobar.
+- `npx vitest run src/test/verification-pages.test.tsx`: 27/27 finales, incluido PUT fallido/éxito y confirmación explícita de adjunto incompleto. Archivo repetido íntegro también tras protección adicional de respuesta tardía:27/27.
+- `npx vitest run src/test/flows.test.tsx src/test/verification-recovery.test.ts`: 58/58 finales (45 flujos +13 recuperación). Expectativas de navegación actualizadas a Verificación documental por rol; fallos previos de expectativas no se acreditan.
+- Regresión adicional HTTP408 en `npx vitest run src/test/verification-recovery.test.ts`: 14/14; conserva marcador y no trata timeout HTTP como fracaso confirmado.
+- Consolidado de casos únicos finales: **219/219 en8 archivos completos afectados**, de los cuales61 en los tres archivos documentales nuevos. No es ejecución de suite general ni un único run simultáneo. No hubo aborto del runner; fallos ordinarios de desarrollo y aserciones fueron corregidos y sus archivos completos reejecutados.
+- `npm run typecheck:test`: PASS (TypeScript tests). `npm run build`: PASS, ejecuta `tsc -b && vite build`; 2307 módulos, aviso de chunk Root aproximadamente643kB >500kB, sin silenciarlo ni modificar bundling/configuración.
+- `npx eslint src/verification src/test/verification-fixtures.ts src/test/verification-pages.test.tsx src/test/verification-recovery.test.ts src/test/verification-service.test.ts src/services/api.ts src/services/errors.ts src/app/App.tsx src/auth/Login.tsx src/layouts/AdminLayout.tsx src/driver-portal/types.ts src/driver-portal/pages.tsx src/independent-drivers/types.ts scripts/verify-documentary-web.mjs`: PASS. Revisión final incluye además los dos archivos modificados de regresión driver-portal/flows.
+- `node scripts/verify-documentary-web.mjs`: PASS, 9 comprobaciones de navegador, 0 errores de consola/render, ninguna llamada QA ni red externa; servidor y navegador temporales cerrados.
+- `git diff --check`: PASS. Sin commit, push o despliegue.
+
+### Cobertura y nivel de evidencia
+
+| Escenario | Evidencia nueva |
+| --- | --- |
+| Independiente sin proveedor, correo/registro/login de retorno seguro, rol pendiente | Componentes/servicios simulados, navegación real de React; no correo real. |
+| Términos completos, checkbox desmarcado, versión/hash, separación FLEET/DRIVER, respuesta perdida | Unitarias de componentes/recuperación y navegador fixture con teclado. Representante no tiene botón de aceptación personal. |
+| Identidad/licencia y propia/rentada/prestada | DTOs exactos en pruebas; no se fabrica licencia o aprobación. |
+| JPEG/PNG, PDF/tipos rechazados, tamaño, URL vencida, PUT fallido, completar carga | Fetch/almacenamiento **simulados**; no Spaces, no normalización real acreditada. |
+| Privacidad, acceso autenticado PNG, revocación objectURL, salida de pantalla | Pruebas de ausencia en cache/storage y respuesta tardía; PUT sin Authorization/referrer Mandaria. |
+| Presentar/retirar explícitos, corrección en nuevo recurso, decisión sólo SUPER_ADMIN, conflicto | Mocks fieles a expectedVersion/códigos; sin transacciones PostgreSQL reales. |
+| Notificación fallida no revierte APPROVED | Fixture de decisión/aviso separados. |
+| ABSENT, APPLIED histórico con estado vigente distinto, CLOSED_NO_EFFECTS, timeout cierre | Mocks de recibos; no acreditan carrera de locks en backend. Clave/cuerpo no se reenvían automáticamente. |
+| Cambio de cuenta, marcador mínimo, recarga sin cuerpo y almacenamiento dañado | Unitarias de store y guard; consulta/cierre ajenos bloqueados, ningún cuerpo sensible persistido. |
+| Restricción de nuevas asignaciones / servicio comprometido legacy | DriverPortal38 casos y traducciones de errores reales del contrato. Dos nuevas regresiones: pendiente sin proveedor y revisión vencida con servicio INDEPENDENT ya comprometido. Backend sigue siendo autoridad. |
+| Flotilla y navegación | ProviderScope existente con recursos autorizados simulados; claves/remontaje por proveedor y roles. Aislamiento real de memberships/DB pendiente. |
+
+### Revisión visual nueva (fixtures exclusivamente)
+
+Vite temporal en loopback4198, con envDir deshabilitado; APIs interceptadas con fixtures **intencionalmente** y PNG generado con texto «EVIDENCIA SINTÉTICA — NO DOCUMENTO». Sin claves, tokens reales, documentos personales, correo, storage real, HAR ni sesiones persistidas. Capturas locales ignoradas por Git:
+
+- `test-results/documentary-web/registration-desktop.png`
+- `test-results/documentary-web/onboarding-desktop.png`
+- `test-results/documentary-web/onboarding-mobile.png`
+- `test-results/documentary-web/identity-mobile.png`
+- `test-results/documentary-web/fleet-desktop.png`
+- `test-results/documentary-web/review-desktop.png`
+- `test-results/documentary-web/review-mobile.png`
+- `test-results/documentary-web/report.json`
+
+1440×1000 escritorio /390×844 emulación móvil. Lectura visual de capturas y aserción de ausencia de desbordamiento horizontal; captura con animaciones finalizadas para no confundir transición del drawer con contenido superpuesto. Tab desde texto completo a checkbox, Space y Tab/Enter aceptan explícitamente; antes no había mutación. Checklist administrativo inicialmente desmarcado; cierre de evidencia con teclado retira imagen. No se acredita dispositivo físico, lector de pantalla, VM, hosting o CSP desplegados.
+
+### Integración real y pendientes
+
+**No ejecutada** nueva integración Web→backend HTTP→PostgreSQL. El backend reporta su clúster temporal de pruebas detenido; no se identificó entorno activo seguro ni se conectó una base desconocida. Sus pruebas HTTP/SQL anteriores son evidencia histórica backend, no resultado de esta Web. Spaces y correo reales tampoco fueron usados. Requisitos de infraestructura sintética, endpoints incompletamente tipados en OpenAPI, privacidad/baja/purga/producción y handoffs Landing/App están separados en el informe de implementación. No declarar activación ni cierre productivo.
+
+---
+
 ## 2026-10-11 — Compatibilidad visual con backend patches
 
 **Resultado:** recorridos focalizados aprobados; ningún defecto frontend demostrado ni cambio de código de producto. No se fuerza LEGACY ni se modifica el bloqueo defensivo.
@@ -946,3 +1008,32 @@ V1.4 no se implementa aquí. Sus módulos de repartidores y vehículos podrán a
 - Comparación de archivos publicables y assets compilados contra los secretos reales del backend: ninguna coincidencia, sin imprimir valores.
 - Capturas responsive regeneradas después de completar las transiciones del drawer; cierre con Escape verificado.
 - Prueba adicional de respuesta HTTP tardía tras logout: evita afectar sesiones posteriores.
+
+
+## 2026-10-13 — W-01: selección posterior durante carga documental
+
+Worktree `driver-verification-web/mandaria-frontend`, rama `feature/driver-verification`, HEAD `06d976619322d9811b5325fc73cd16d15e00d829`. Se conservaron los cambios previos sin cambiar de rama. No hay AGENTS.md aplicable encontrado en este worktree. Referencia backend de sólo lectura: `driver-verification/mandaria-backend/docs/DRIVER-VERIFICATION-INTEGRATION.md`, W-01; no se editó ese informe.
+
+### Causa comprobada y corrección
+
+`Form` esperaba el submit completo (crear ticket, PUT, completar y refetch), y después vaciaba indiscriminadamente los inputs file actuales. La operación capturaba A en FormData, pero su limpieza borraba B seleccionada durante la espera. La regresión previa al cambio de producto falló exactamente con `input.files[0] === undefined` en rostro, licencia y unidad. Son archivos distintos con mismo nombre, tamaño y lastModified: la corrección no depende de esos metadatos.
+
+`src/verification/common.tsx` captura por input la generación de selección al iniciar; sólo limpia si no llegó otro evento de selección. Mantiene lock, captura de FormData y envío explícito. Muestra el nombre de la carga en curso/confirmada/fallida separado de la selección pendiente. Protege callbacks tras desmontaje. Contraseñas conservan la limpieza previa. `src/verification/evidence.tsx` separa el ciclo de vida por actor/expediente mediante key; una respuesta del anterior no toca la selección, preview ni ocupación del nuevo. La interrupción no anuncia carga confirmada. No se cambió contrato, permisos, formatos, recuperación ni almacenamiento persistente. La previsualización existente corresponde al adjunto leído por API, no a una nueva selección local; no se añadió preview local de B.
+
+### Verificaciones nuevas (no integración real)
+
+- Antes del cambio: `npx vitest run src/test/verification-upload.test.tsx --reporter=dot`: **4 FAIL / 1 PASS**, sin aborto. Tres pérdidas reproducidas de B y error de A sin identificación; éxito sin nueva selección aprobado. Antes de esta reproducción se corrigió el arnés: userEvent/FileList no activaba validación nativa de submit en jsdom; ahora dispara submit y captura el File real del input en FormData. Esos ensayos iniciales no acreditan el defecto.
+- Después: `npx vitest run src/test/verification-upload.test.tsx src/test/verification-pages.test.tsx --reporter=dot`: **35/35 PASS**, dos archivos completos (8 nuevos +27 existentes). Promesas controladas, sin sleeps: identidad/licencia/unidad, A/B idénticos en metadata pero diferentes objetos, recurso/categoría capturados, PUT/confirmación únicos, doble submit bloqueado, B enviado sólo explícitamente, error A conserva B, éxito sin B limpia, cambio de expediente con operación nueva pendiente, preview atrasada y revocación al desmontar, cancelación sin falso éxito. Consumidores compartidos registro/términos/formularios existentes cubiertos por el archivo pages completo.
+- `npm run typecheck:test`: PASS. Se completaron bytes/mime/hash de un fixture que inicialmente provocó un error de tipos; no se alteró el contrato para aprobarlo.
+- `npx eslint src/verification/common.tsx src/verification/evidence.tsx src/test/verification-upload.test.tsx scripts/verify-documentary-upload.mjs`: PASS.
+- `npm run build`: PASS (`tsc -b && vite build`), 2307 módulos; permanece advertencia histórica de chunk Root >500kB, sin cambiar configuración.
+- `node scripts/verify-documentary-upload.mjs`: PASS, cinco comprobaciones focalizadas de Chromium con HTTP **interceptado deliberadamente**, PNG sintéticos y confirmación A retenida por promesa. Se contrastaron bytes de ambos PUT, sólo dos CREATE_UPLOAD y dos COMPLETE_UPLOAD. Cero pageerror/errores de consola. Vite usa envDir:false y loopback4199; no lee claves/.env. Navegador y servidor propios detenidos en finally.
+- Revisión efectiva de capturas escritorio1280 y viewport móvil390, nombre B, mensaje A, preview A, controles. Teclado Enter para cerrar preview y enviar B. No acredita móvil físico ni auditoría accesible exhaustiva.
+
+Evidencia local ignorada: `test-results/documentary-upload/{A-pending-B-selected,A-confirmed-B-pending-desktop,A-confirmed-B-pending-mobile,B-confirmed-mobile}.png` y `report.json`. El script reproducible nuevo es `scripts/verify-documentary-upload.mjs`. No se arrancaron backend/PostgreSQL ni servicios externos: **no se acredita integración real ni almacenamiento/normalización real**. Tampoco se repitieron las suites generales ni pendientes de toma independiente, cambio de términos o cierre ABSENT. No hubo aborto nativo del runner.
+
+### Handoff para repetir integración real W-01
+
+En el entorno aislado ya identificado por backend, abrir borrador propio y elegir PNG/JPEG sintético A; retrasar de forma controlada la respuesta de confirmación/refetch, iniciar carga y seleccionar B mientras A sigue ocupada. Liberar la respuesta: A debe figurar confirmada en su expediente, B seguir visible y ningún PUT de B haberse ejecutado. Abrir preview de A, cerrarla y enviar B explícitamente: verificar bytes/objeto B y una sola confirmación por archivo. Repetir con mismo nombre/tamaño/fecha, fallo de PUT de A y cambio de expediente. No usar documentos reales ni borrar marcadores para eludir incertidumbre. W-01 corregido y acreditado en Web con mocks; **repetición integrada pendiente del responsable backend**.
+
+Archivos de esta corrección: `src/verification/common.tsx`, `src/verification/evidence.tsx`, `src/test/verification-upload.test.tsx`, `scripts/verify-documentary-upload.mjs`, BITACORA.md, VERIFICATION.md y docs/DRIVER-VERIFICATION-WEB.md. Sin backend/App/Landing, QA, .env/configuración/versiones, commit, push o despliegue.

@@ -1033,3 +1033,56 @@ describe('automatic search in independent services', () => {
     expect(screen.queryByRole('button', { name: 'TOMAR SERVICIO' })).toBeNull()
   })
 })
+
+it('documentary pending without provider keeps onboarding accessible and cannot take', async () => {
+  vi.mocked(driverPortal.me).mockResolvedValue(
+    me({
+      provider: null,
+      status: 'PENDING',
+      independent: {
+        ...me().independent!,
+        status: 'PENDING',
+        canTakeServices: false,
+      },
+    }),
+  )
+  mount('/driver/services')
+  expect(
+    await screen.findByRole('link', {
+      name: 'Continuar mi verificación documental',
+    }),
+  ).toHaveAttribute('href', '/driver/onboarding')
+  expect(driverPortal.available).not.toHaveBeenCalled()
+  expect(driverPortal.take).not.toHaveBeenCalled()
+})
+it('documentary lapse preserves committed independent legacy service without QA reads', async () => {
+  vi.mocked(driverPortal.me).mockResolvedValue(
+    me({
+      provider: null,
+      independent: {
+        ...me().independent!,
+        status: 'SUSPENDED',
+        canTakeServices: false,
+      },
+      verification: {
+        identityStatus: 'EXPIRED',
+        environment: 'LOCAL_TEST',
+        policyVersion: 'LOCAL-TEST-1',
+        canAdmitIdentity: false,
+        blockingReasons: ['VERIFICATION_EXPIRED'],
+      },
+      activeDeliveryAssignment: {
+        id: 'assignment-1',
+        mode: 'INDEPENDENT',
+        dispatchId: DISPATCH,
+      },
+    }),
+  )
+  vi.mocked(driverPortal.get).mockResolvedValue(taken)
+  mount('/driver/my-service')
+  expect(await section('Servicio actual')).toBeDefined()
+  expect(
+    screen.getByText(/El servicio comprometido mantiene/),
+  ).toBeInTheDocument()
+  expect(driverPortal.take).not.toHaveBeenCalled()
+})

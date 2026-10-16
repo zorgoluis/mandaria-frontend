@@ -35,6 +35,24 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    VERIFICATION_REVIEW_REQUIRED:
+      'La identidad o unidad requiere revisión documental antes de una nueva asignación. Consulta Verificación documental.',
+    VERIFICATION_REVALIDATION_REQUIRED:
+      'Los datos cambiaron desde la aprobación. Presenta una nueva revisión documental antes de asignar.',
+    VERIFICATION_EXPIRED:
+      'La aprobación documental venció. Renueva el expediente correspondiente.',
+    VERIFICATION_TEST_RECEIPT_NOT_OPERATIONAL:
+      'El comprobante es de prueba y no habilita operaciones en este entorno.',
+    TERMS_ACCEPTANCE_REQUIRED:
+      'Falta aceptación vigente del conductor o representante. Cada persona debe aceptar con su propia cuenta en Verificación documental.',
+    VERIFICATION_VEHICLE_CLASSIFICATION_REQUIRED:
+      'La unidad requiere clasificación antes de su aprobación y asignación.',
+    LICENSE_REQUIRED:
+      'Falta una licencia aprobada del conductor para esta unidad motorizada.',
+    LICENSE_EXPIRED:
+      'La licencia venció. Presenta una nueva revisión de identidad y licencia.',
+    LICENSE_CATEGORY_MISMATCH:
+      'La licencia aprobada no cubre este tipo de vehículo. Revisa el expediente del conductor.',
     EXECUTION_CONFLICT:
       'La asignación o revisión cambió. Consulta el progreso vigente.',
     EXECUTION_TRANSITION_INVALID:
