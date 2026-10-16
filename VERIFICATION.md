@@ -1,3 +1,13 @@
+## 2026-10-13 — Compatibilidad documental Driver/Vehicle sobre backend main
+
+Estado actual: análisis finalizado, implementación no iniciada. Web QA `e303739`, checkout principal limpio al inicio; backend feature/driver-verification/main `1fa2cb1` con 32 migraciones, QA `9ad39b9` con 46, comparados sólo lectura. Referencias locales sin fetch. [Informe completo](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md).
+
+Cierre: avance concurrente backend documental a `90b7243` y QA a `674e172`; diff de código/prisma y OpenAPI comparado vacío respecto a las referencias iniciales. Matriz contractual sin cambio; backend limpio al cierre. No se hicieron esos commits desde esta tarea.
+
+Solicitud: contrastar contratos y diseñar registro/revisión de independientes y flotillas sin integrar QA. Cambios: sólo informe, BITACORA, README y VERIFICATION. Recomendación futura: Web main `06d9766` con adaptación explícita de rutas DETAILED/recuperación aún presentes; no compatibilidad integral acreditada. Bloqueos: provider null/alta DRIVER, expediente privado versionado por identidad/unidad, notificación durable, recuperación propia y decisiones de transición/purga. Existentes, servicios comprometidos y cinco intentos preservados.
+
+Verificaciones NUEVAS: Git refs/status/diff/tree, controladores/DTO/proyecciones y OpenAPI main/QA, consumidores/rutas/guards; revisión documental. No pruebas funcionales, HTTP/DB, navegador, suites, tipos/lint/build, instalaciones ni servicios. Evidencia histórica siguiente no acredita onboarding nuevo. Sin cambios backend/app/configuración, merge, commit/push/despliegue ni mensajes a agentes.
+
 ## 2026-10-12 — Aprobación manual de cuenta Negocio: implementación Web
 
 ## 2026-10-13 — Presentación del cierre de ejecución

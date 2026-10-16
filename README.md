@@ -1,5 +1,10 @@
 # Mandaria Web — V1.11-B
 
+
+## Diseño: validación documental de repartidores y unidades (2026-10-13)
+
+[Compatibilidad Web con backend main y propuesta por etapas](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md). Sólo análisis: registro independiente sin proveedor, expedientes privados de identidad/unidad y revisión exclusiva SUPER_ADMIN aún requieren contrato backend. Para una futura rama se recomienda Web main `06d9766` con ajustes explícitos de capacidades; también contiene superficies DETAILED incompatibles con backend main, por lo que no se acredita compatibilidad general. QA se conserva sin integrar ni modificar producto. Referencias, límites y continuidad en BITACORA/VERIFICATION.
+
 ## Cuenta Negocio: aprobación manual (2026-10-12)
 
 Implementación local sobre backend QA `9ad39b9`: registro/anexión Personal, solicitud comercial propia, revisión exclusiva SUPER_ADMIN, revocación/readmisión y recuperación comercial durable. Ruta estable para Landing: **`/customer/business`**; visitante pasa por login y vuelve a esa ruta, sin perfil se orienta a anexión/verificación, con pendiente o restricción se muestran los límites reales. No implica despliegue ni activación.
