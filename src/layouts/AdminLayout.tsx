@@ -1,7 +1,8 @@
-import { Button } from '../components/ui'
+import { Button, ButtonLink, Modal } from '../components/ui'
 import { useEffect, useRef, useState } from 'react'
 import { HistoricalOperationsNotice } from '../verification/legacy'
-import { NavLink, Outlet, Link } from 'react-router-dom'
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
+import './layout.css'
 import {
   LayoutDashboard,
   PlugZap,
@@ -12,10 +13,8 @@ import {
   Settings2,
   UserRound,
   Menu,
-  X,
   LogOut,
   ChevronDown,
-  ArrowUpRight,
   Bike,
   Truck,
   PackageSearch,
@@ -29,40 +28,52 @@ import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
 import { useFeedback } from '../components/feedback-context'
 import { errorMessage } from '../services/errors'
+
 export function AdminLayout() {
   const { user, logout } = useAuth()
   const notify = useFeedback()
-  const [open, setOpen] = useState(false)
-  const [menu, setMenu] = useState(false)
-  const sidebar = useRef<HTMLElement>(null)
+  const location = useLocation()
+  const [drawerAt, setDrawerAt] = useState<string | null>(null)
+  const [accountAt, setAccountAt] = useState<string | null>(null)
+  const open = drawerAt === location.key
+  const menu = accountAt === location.key
+  const account = useRef<HTMLDivElement>(null)
+  const accountButton = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const desktop = window.matchMedia?.('(min-width: 1025px)')
+    if (!desktop) return
+    const resize = () => {
+      if (desktop.matches) setDrawerAt(null)
+    }
+    desktop.addEventListener('change', resize)
+    return () => desktop.removeEventListener('change', resize)
+  }, [])
   useEffect(() => {
     if (!open) return
-    const previous = document.activeElement
-    const focusable = () =>
-      Array.from(
-        sidebar.current?.querySelectorAll<HTMLElement>('a, button') ?? [],
-      ).filter((element) => element.getClientRects().length > 0)
-    focusable()[0]?.focus()
-    const keyboard = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-      if (event.key !== 'Tab') return
-      const nodes = focusable()
-      const first = nodes[0]
-      const last = nodes.at(-1)
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last?.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first?.focus()
-      }
-    }
-    document.addEventListener('keydown', keyboard)
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     return () => {
-      document.removeEventListener('keydown', keyboard)
-      if (previous instanceof HTMLElement) previous.focus()
+      document.body.style.overflow = overflow
     }
   }, [open])
+  useEffect(() => {
+    if (!menu) return
+    const outside = (event: PointerEvent) => {
+      if (!account.current?.contains(event.target as Node)) setAccountAt(null)
+    }
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setAccountAt(null)
+        accountButton.current?.focus()
+      }
+    }
+    document.addEventListener('pointerdown', outside)
+    document.addEventListener('keydown', escape)
+    return () => {
+      document.removeEventListener('pointerdown', outside)
+      document.removeEventListener('keydown', escape)
+    }
+  }, [menu])
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -161,100 +172,174 @@ export function AdminLayout() {
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
       : []),
   ]
-  return (
-    <div className="admin-app">
-      {open && (
-        <Button
-          type="submit"
-          variant="ghost"
-          className="sidebar-scrim"
-          aria-label="Cerrar navegación"
-          onClick={() => setOpen(false)}
-        />
+
+  const section =
+    links
+      .filter(
+        ({ to }) =>
+          location.pathname === to || location.pathname.startsWith(to + '/'),
+      )
+      .sort((a, b) => b.to.length - a.to.length)[0]?.label ??
+    'Espacio de trabajo'
+  const workspace = admin
+    ? 'Administración'
+    : user?.role === 'DRIVER'
+      ? 'Mi operación'
+      : 'Mi proveedor'
+  const groupFor = (to: string) => {
+    if (
+      [
+        '/profile',
+        '/settings',
+        '/provider/profile',
+        '/provider/verification',
+        '/driver/onboarding',
+      ].includes(to)
+    )
+      return 'Cuenta'
+    if (
+      [
+        '/drivers',
+        '/vehicles',
+        '/providers',
+        '/independent-drivers',
+        '/admin/partner-applications',
+        '/admin/verification-cases',
+      ].includes(to)
+    )
+      return 'Red logística'
+    if (
+      [
+        '/integrations',
+        '/users',
+        '/invitations',
+        '/credit-policies',
+        '/service-zones',
+      ].includes(to)
+    )
+      return 'Administración'
+    return 'Operación'
+  }
+  const navigation = () => (
+    <nav className="shell-navigation" aria-label="Navegación principal">
+      {['Operación', 'Red logística', 'Administración', 'Cuenta'].map(
+        (group) => {
+          const items = links.filter((link) => groupFor(link.to) === group)
+          return items.length ? (
+            <section className="shell-nav-group" key={group} aria-label={group}>
+              <h2>{group}</h2>
+              {items.map(({ to, label, icon: Icon }) => (
+                <NavLink key={to} to={to} onClick={() => setDrawerAt(null)}>
+                  <Icon className="ui-icon" aria-hidden="true" />
+                  <span>{label}</span>
+                </NavLink>
+              ))}
+            </section>
+          ) : null
+        },
       )}
-      <aside ref={sidebar} className={`sidebar ${open ? 'open' : ''}`}>
-        <Link to="/dashboard" className="brand">
-          <img
-            className="brand-mark"
-            src="/mandaria.svg"
-            alt=""
-            width={35}
-            height={35}
-          />
-          mandaria<span className="brand-period">.</span>
-        </Link>
-        <Button
-          type="submit"
-          variant="ghost"
-          className="icon-button mobile-close"
-          aria-label="Cerrar menú"
-          onClick={() => setOpen(false)}
-        >
-          <X />
-        </Button>
-        <span className="nav-label">ESPACIO DE TRABAJO</span>
-        <nav aria-label="Navegación principal">
-          {links.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} onClick={() => setOpen(false)}>
-              <Icon size={19} />
-              <span>{label}</span>
-            </NavLink>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <span className="sidebar-emblem">
-            <ArrowUpRight size={22} />
-          </span>
-          <strong>Una operación conectada.</strong>
-          <p>La base de lo que viene.</p>
-          <div className="version">
-            MANDARIA WEB <span>V1.10</span>
-          </div>
+    </nav>
+  )
+  const brand = (
+    <Link
+      to="/dashboard"
+      className="brand"
+      onClick={() => setDrawerAt(null)}
+      aria-label="Mandaria — inicio"
+    >
+      <img className="brand-mark" src="/mandaria.svg" alt="" />
+      mandaria<span className="brand-period">.</span>
+    </Link>
+  )
+  return (
+    <div className="admin-app mandaria-shell">
+      <a className="shell-skip" href="#main-content">
+        Saltar al contenido
+      </a>
+      <aside className="shell-sidebar" aria-label="Espacio de trabajo">
+        <div className="shell-brand">
+          {brand}
+          <p>Sin vueltas.</p>
+        </div>
+        {navigation()}
+        <div className="shell-sidebar-end">
+          <span>Mandaria Web</span>
+          <strong>{workspace}</strong>
         </div>
       </aside>
+      {open && (
+        <Modal
+          className="shell-drawer"
+          title="Navegación"
+          onClose={() => setDrawerAt(null)}
+        >
+          <div className="shell-brand">{brand}</div>
+          {navigation()}
+          <p className="shell-drawer-end">Mandaria. Sin vueltas.</p>
+        </Modal>
+      )}
       <div className="workspace">
         <header className="topbar">
-          <div className="workspace-label">
+          <div className="shell-context">
             <Button
-              type="submit"
               variant="ghost"
-              className="icon-button mobile-menu"
+              className="icon-button shell-menu-toggle"
               aria-label="Abrir menú"
+              aria-haspopup="dialog"
               aria-expanded={open}
-              onClick={() => setOpen(!open)}
+              onClick={() => {
+                setAccountAt(null)
+                setDrawerAt(location.key)
+              }}
             >
-              <Menu />
+              <Menu className="ui-icon" aria-hidden="true" />
             </Button>
-            <span className="workspace-dot" /> Panel administrativo
+            <div>
+              <span className="shell-workspace">{workspace}</span>
+              <span className="shell-section">{section}</span>
+            </div>
           </div>
-          <div className="user-menu">
+          <div
+            className="user-menu"
+            ref={account}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                setAccountAt(null)
+            }}
+          >
             <Button
-              type="submit"
+              ref={accountButton}
               variant="ghost"
               className="user-trigger"
-              onClick={() => setMenu(!menu)}
+              aria-label={`Opciones de cuenta: ${user?.email ?? 'Usuario'}`}
               aria-expanded={menu}
+              aria-controls="account-options"
+              onClick={() => setAccountAt(menu ? null : location.key)}
             >
-              <span className="avatar">
+              <span className="avatar" aria-hidden="true">
                 {user?.email.slice(0, 2).toUpperCase()}
               </span>
               <span className="user-info">
                 <strong>{user?.email}</strong>
                 <small>{labels[user?.role ?? ''] ?? 'Usuario'}</small>
               </span>
-              <ChevronDown size={15} />
+              <ChevronDown className="ui-icon" aria-hidden="true" />
             </Button>
             {menu && (
-              <div className="user-dropdown">
-                <Link to="/profile" onClick={() => setMenu(false)}>
-                  <UserRound size={16} />
+              <div className="user-dropdown" id="account-options">
+                <p className="shell-account-email">{user?.email}</p>
+                <ButtonLink
+                  variant="ghost"
+                  to="/profile"
+                  onClick={() => setAccountAt(null)}
+                >
+                  <UserRound className="ui-icon" aria-hidden="true" />
                   Mi perfil
-                </Link>
+                </ButtonLink>
                 <Button
-                  type="submit"
                   variant="ghost"
                   onClick={() => {
-                    setMenu(false)
+                    setAccountAt(null)
                     void logout().catch((err: unknown) =>
                       notify(
                         `${errorMessage(err)} Se cerró la sesión local; no se confirmó la revocación remota.`,
@@ -263,20 +348,22 @@ export function AdminLayout() {
                     )
                   }}
                 >
-                  <LogOut size={16} />
+                  <LogOut className="ui-icon" aria-hidden="true" />
                   Cerrar sesión
                 </Button>
               </div>
             )}
           </div>
         </header>
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <HistoricalOperationsNotice />
           <Outlet />
         </main>
         <footer className="app-footer">
-          <span>Mandaria · Administración</span>
-          <span>Logística que avanza contigo.</span>
+          <strong>
+            Mandaria. <span>Sin vueltas.</span>
+          </strong>
+          <span>Mandados · Fletes · Viajes · Mudanzas</span>
         </footer>
       </div>
     </div>

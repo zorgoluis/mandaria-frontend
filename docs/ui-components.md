@@ -39,3 +39,52 @@ Las rutas, llamadas al servidor y condiciones de autorización se conservan.
   sombras ni iconos emoji decorativos.
 
 Las capturas y la muestra local están en `test-results/` (ignorado por Git).
+
+## Layout compartido
+
+`AdminLayout` utiliza `Button`, `ButtonLink` y `Modal`. La navegación se agrupa
+en Operación, Red logística, Administración y Cuenta conservando los accesos de
+cada rol. El header muestra el espacio de trabajo y la sección activa; el footer
+usa la firma de Mandaria. Los estilos están acotados en `src/layouts/layout.css`.
+
+- Más de 1024 px: sidebar fija con navegación desplazable y header sticky.
+- Hasta 1024 px: navegación en diálogo lateral; foco contenido, Escape, cierre al
+  navegar y bloqueo de scroll. Se cierra al cambiar a escritorio.
+- Hasta 640 px: cuenta compacta y footer apilado. El correo completo permanece
+  disponible en las opciones de cuenta.
+- Enlace para saltar al contenido, estado activo mediante `aria-current` y
+  controles con nombre accesible. Las opciones de cuenta se cierran con Escape,
+  al salir con el foco o al pulsar fuera.
+
+Validación del layout: cinco pruebas de roles e interacción, además de las nueve
+de componentes. Chrome a 320, 390, 768, 1024 y 1440 px, incluyendo navegación con
+teclado y cambio de tamaño con el diálogo abierto. Capturas en
+`test-results/layout-*.png`. El linter de la skill no encontró patrones prohibidos;
+las recomendaciones de composición de landing del inspector no se aplican al
+contenedor operativo.
+
+## Login
+
+`/login` compone `PageHeader`, `Input`, `Field`, `Button`, `ButtonLink`,
+`ActionForm` y `RouteProgress`. `src/auth/login.css` solo organiza esos componentes
+con los tokens existentes. Mantiene la familia y los colores de AGENTS.md.
+
+La única acción primaria es iniciar sesión. El estado inicial explica qué correo
+usar y cómo activar una cuenta invitada; el registro independiente de prueba
+conserva su ruta y su carácter secundario. No hay una colección de datos que
+requiera un estado vacío artificial.
+
+La validación conserva las restricciones HTML originales, presenta errores en
+español junto al campo y enfoca el primero inválido. No cambia las credenciales
+enviadas ni las llamadas o destinos de autenticación. Carga bloquea los controles;
+el error permite corregir y reintentar sin borrar los datos. Se conserva el aviso
+de sesión expirada y el control para mostrar u ocultar contraseña.
+
+`ActionForm` acepta `loadingLabel`, `trackChanges`, `onInvalidCapture` y
+`getErrorMessage`; sus valores por defecto mantienen el comportamiento anterior.
+Login usa «Iniciando sesión…» y no trata las credenciales como cambios de edición
+pendientes de guardar.
+
+Validación: seis pruebas específicas de campos, carga, error, visibilidad y
+destinos. Revisión en Chrome de 320 a 1440 px con respuesta 401 interceptada, sin
+enviar credenciales al backend; capturas `test-results/login-*.png`.

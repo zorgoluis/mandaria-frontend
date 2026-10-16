@@ -10,6 +10,12 @@
  * 2/4px route/emphasis strokes retain existing geometry; ordinary borders use 1px.
  */
 :root {
+  /* Shared shell: tablet/mobile navigation becomes a modal drawer at 1024px. */
+  --shell-sidebar-width: 280px;
+  --shell-header-height: 80px;
+  --shell-layer-header: 20;
+  --shell-layer-sidebar: 30;
+  --shell-layer-skip: 110;
   /* Shared UI contracts. Density stays appropriate for operational screens. */
   --control-height: 44px;
   --control-padding-block: var(--space-10);

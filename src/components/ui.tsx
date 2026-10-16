@@ -210,11 +210,13 @@ export function Modal({
   children,
   onClose,
   busy = false,
+  className = '',
 }: {
   title: string
   children: ReactNode
   onClose: () => void
   busy?: boolean
+  className?: string
 }) {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
@@ -229,7 +231,7 @@ export function Modal({
   }, [])
   return (
     <dialog
-      className="ui-modal"
+      className={`ui-modal ${className}`}
       ref={ref}
       aria-labelledby={titleId}
       onKeyDown={(event) => {
@@ -285,6 +287,10 @@ export function ActionForm({
   onCancel,
   cancelLabel = 'Cancelar',
   initialDirty = false,
+  loadingLabel = 'Guardando…',
+  trackChanges = true,
+  onInvalidCapture,
+  getErrorMessage = errorMessage,
 }: {
   children: ReactNode
   onSubmit: (data: FormData) => Promise<void>
@@ -292,6 +298,10 @@ export function ActionForm({
   onCancel?: () => void
   cancelLabel?: string
   initialDirty?: boolean
+  loadingLabel?: string
+  trackChanges?: boolean
+  onInvalidCapture?: (event: FormEvent<HTMLFormElement>) => void
+  getErrorMessage?: (error: unknown) => string
 }) {
   const [busy, setBusy] = useState(false)
   // initialDirty only enables submitting untouched forms (login, confirmations). The
@@ -328,14 +338,18 @@ export function ActionForm({
       onSubmit={(event) => {
         void submit(event)
       }}
-      onChange={() => setDirty(true)}
+      onChange={() => {
+        if (trackChanges) setDirty(true)
+      }}
+      onInvalidCapture={onInvalidCapture}
+      aria-busy={busy || undefined}
     >
       <fieldset disabled={busy} className="form-fields">
         {children}
       </fieldset>
       {!!error && (
         <p className="inline-error" role="alert">
-          {errorMessage(error)}
+          {getErrorMessage(error)}
         </p>
       )}
       <div className="form-actions">
@@ -355,7 +369,7 @@ export function ActionForm({
           disabled={busy || !(dirty || initialDirty)}
           type="submit"
           loading={busy}
-          loadingLabel="Guardando…"
+          loadingLabel={loadingLabel}
         >
           {submitLabel}
         </Button>

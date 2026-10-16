@@ -1,14 +1,32 @@
 import {
   Input,
   Button,
+  ButtonLink,
   ActionForm,
   Field,
+  PageHeader,
   RouteProgress,
 } from '../components/ui'
-import { useState } from 'react'
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { Eye, EyeOff, ShieldCheck } from 'lucide-react'
+import { useState, type FormEvent } from 'react'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from './context'
+import { ApiError, errorMessage } from '../services/errors'
+import './login.css'
+
+type LoginField = 'email' | 'password'
+function validationMessage(input: HTMLInputElement) {
+  if (input.validity.valueMissing)
+    return input.name === 'email'
+      ? 'Escribe tu correo electrónico.'
+      : 'Escribe tu contraseña.'
+  if (input.validity.typeMismatch)
+    return 'Escribe un correo válido, por ejemplo nombre@empresa.com.'
+  if (input.validity.tooLong)
+    return `Usa como máximo ${input.maxLength} caracteres.`
+  return ''
+}
+
 export function Login() {
   const auth = useAuth()
   const navigate = useNavigate()
@@ -16,47 +34,68 @@ export function Login() {
   const destination =
     params.get('next') === 'onboarding' ? '/verification-entry' : '/dashboard'
   const [visible, setVisible] = useState(false)
+  const [errors, setErrors] = useState<Partial<Record<LoginField, string>>>({})
+  function validate(input: HTMLInputElement) {
+    setErrors((previous) => ({
+      ...previous,
+      [input.name]: validationMessage(input),
+    }))
+  }
+  function invalid(event: FormEvent<HTMLFormElement>) {
+    const input = event.target
+    if (!(input instanceof HTMLInputElement)) return
+    event.preventDefault()
+    validate(input)
+    // Keep native constraints, but explain them inline in Spanish and focus the first error.
+    const first = Array.from(
+      event.currentTarget.querySelectorAll('input'),
+    ).find((field) => field.willValidate && !field.validity.valid)
+    if (first === input) queueMicrotask(() => input.focus())
+  }
   if (auth.user) return <Navigate to={destination} replace />
   return (
-    <div className="login-page">
-      <section className="login-story">
+    <div className="auth-login">
+      <header className="auth-login-brand">
         <div className="brand">
-          <img
-            className="brand-mark"
-            src="/mandaria.svg"
-            alt=""
-            width={35}
-            height={35}
-          />
+          <img className="brand-mark" src="/mandaria.svg" alt="" />
           mandaria<span className="brand-period">.</span>
         </div>
-        <div className="story-content">
-          <span className="eyebrow">CONECTAMOS TU OPERACIÓN</span>
-          <h1>
-            Todo en orden.
-            <br />
-            Siempre en
-            <br />
-            <em>movimiento.</em>
-          </h1>
-          <p>
-            El punto de encuentro entre tus proveedores, integraciones y equipo.
-          </p>
-          <RouteProgress
-            label="Tu operación en Mandaria"
-            steps={[
-              { id: 'origin', label: 'Conecta tu operación', state: 'current' },
-              { id: 'destination', label: 'Sigue cada entrega' },
-            ]}
+        <span>Sin vueltas.</span>
+      </header>
+      <aside className="auth-login-story" aria-label="Mandaria">
+        <p className="auth-login-statement">
+          Tu operación.
+          <br />
+          <span>En movimiento.</span>
+        </p>
+        <p>
+          Mandados, fletes, viajes y mudanzas. Un solo lugar para seguir tu
+          operación.
+        </p>
+        <RouteProgress
+          label="Pasos de acceso"
+          steps={[
+            {
+              id: 'account',
+              label: 'Inicia sesión',
+              description: 'Usa los datos de tu cuenta.',
+              state: 'current',
+            },
+            {
+              id: 'workspace',
+              label: 'Continúa con tu operación',
+              description: 'Accede a tus herramientas y servicios.',
+            },
+          ]}
+        />
+      </aside>
+      <main className="auth-login-main" id="login-content">
+        <div className="auth-login-form">
+          <PageHeader
+            eyebrow="Acceso a Mandaria"
+            title="Iniciar sesión"
+            description="Ingresa con el correo y la contraseña de tu cuenta."
           />
-        </div>
-        <small>MANDARIA WEB · PLATAFORMA ADMINISTRATIVA</small>
-      </section>
-      <section className="login-panel">
-        <div className="login-form">
-          <span className="eyebrow">BIENVENIDO A MANDARIA</span>
-          <h2>Tu operación empieza aquí.</h2>
-          <p>Ingresa con tu cuenta administrativa.</p>
           {auth.expired && (
             <p className="notice" role="status">
               Tu sesión expiró. Inicia sesión nuevamente.
@@ -64,7 +103,15 @@ export function Login() {
           )}
           <ActionForm
             submitLabel="Iniciar sesión"
+            loadingLabel="Iniciando sesión…"
             initialDirty
+            trackChanges={false}
+            onInvalidCapture={invalid}
+            getErrorMessage={(error) =>
+              error instanceof ApiError && error.status === 401
+                ? 'El correo o la contraseña son incorrectos. Revisa tus datos e inténtalo de nuevo.'
+                : errorMessage(error)
+            }
             onSubmit={async (data) => {
               await auth.login(
                 String(data.get('email')),
@@ -73,54 +120,77 @@ export function Login() {
               navigate(destination, { replace: true })
             }}
           >
-            <Field label="Correo electrónico">
-              <Input
-                name="email"
-                type="email"
-                autoComplete="username"
-                placeholder="nombre@empresa.com"
-                required
-                maxLength={254}
-              />
-            </Field>
-            <Field label="Contraseña">
-              <span className="password-field">
+            <Input
+              label="Correo electrónico"
+              help="Usa el correo con el que activaste tu cuenta."
+              error={errors.email}
+              name="email"
+              type="email"
+              autoComplete="username"
+              inputMode="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              placeholder="nombre@empresa.com"
+              required
+              maxLength={254}
+              onBlur={(event) => validate(event.currentTarget)}
+              onChange={(event) => {
+                if (errors.email) validate(event.currentTarget)
+              }}
+            />
+            <Field label="Contraseña" error={errors.password}>
+              <span className="auth-login-password">
                 <Input
                   name="password"
                   type={visible ? 'text' : 'password'}
                   autoComplete="current-password"
-                  placeholder="Ingresa tu contraseña"
                   required
                   maxLength={128}
+                  onBlur={(event) => validate(event.currentTarget)}
+                  onChange={(event) => {
+                    if (errors.password) validate(event.currentTarget)
+                  }}
                 />
                 <Button
                   variant="ghost"
                   className="icon-button"
-                  type="button"
                   aria-label={
                     visible ? 'Ocultar contraseña' : 'Mostrar contraseña'
                   }
+                  aria-pressed={visible}
                   onClick={() => setVisible(!visible)}
                 >
-                  {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {visible ? (
+                    <EyeOff className="ui-icon" aria-hidden="true" />
+                  ) : (
+                    <Eye className="ui-icon" aria-hidden="true" />
+                  )}
                 </Button>
               </span>
             </Field>
           </ActionForm>
-          <p className="muted login-invitation">
-            ¿Recibiste una invitación? Activa tu cuenta desde el enlace del
-            correo antes de iniciar sesión.
-          </p>
-          <p>
-            <Link to="/driver/register">Registro independiente de prueba</Link>
-          </p>
-          <div className="login-security">
-            <ShieldCheck size={18} />
-            <span>Acceso para cuentas autorizadas.</span>
-          </div>
+          <section
+            className="auth-login-help"
+            aria-labelledby="login-first-time"
+          >
+            <h2 id="login-first-time">¿Primera vez aquí?</h2>
+            <p>
+              Si recibiste una invitación, activa tu cuenta desde el enlace del
+              correo antes de iniciar sesión.
+            </p>
+            <p>
+              Si eres repartidor independiente, puedes solicitar tu registro.
+            </p>
+            <ButtonLink variant="ghost" to="/driver/register">
+              Registro independiente de prueba
+            </ButtonLink>
+          </section>
         </div>
-        <small>Mandaria · Logística independiente</small>
-      </section>
+      </main>
+      <footer className="auth-login-footer">
+        <span>Mandaria · Logística independiente</span>
+        <span>Mandados · Fletes · Viajes · Mudanzas</span>
+      </footer>
     </div>
   )
 }
