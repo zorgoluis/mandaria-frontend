@@ -20,15 +20,13 @@ vi.mock('../webhooks/service', () => ({
     summary: vi
       .fn()
       .mockResolvedValue({ events: 0, pending: 0, delivered: 0, exhausted: 0 }),
-    events: vi
-      .fn()
-      .mockResolvedValue({
-        items: [],
-        total: 0,
-        totalPages: 0,
-        page: 1,
-        pageSize: 20,
-      }),
+    events: vi.fn().mockResolvedValue({
+      items: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      pageSize: 20,
+    }),
   },
 }))
 vi.mock('../invitations/service', () => ({
@@ -244,6 +242,7 @@ describe('auth and permissions UX', () => {
     ).toEqual([
       'Dashboard',
       'Mi proveedor',
+      'Verificación documental',
       'Servicios',
       'Créditos',
       'Repartidores',
@@ -289,7 +288,7 @@ describe('auth and permissions UX', () => {
       'Cotizaciones',
       'Zonas de servicio',
       'Despachos',
-      'Incidencias de custodia',
+      'Revisión documental',
       'Independientes',
       'Políticas de créditos',
       'Mi perfil',

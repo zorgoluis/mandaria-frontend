@@ -1,13 +1,16 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowUpRight, Eye, EyeOff, ShieldCheck, Route } from 'lucide-react'
 import { useAuth } from './context'
 import { ActionForm, Field } from '../components/ui'
 export function Login() {
   const auth = useAuth()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const destination =
+    params.get('next') === 'onboarding' ? '/verification-entry' : '/dashboard'
   const [visible, setVisible] = useState(false)
-  if (auth.user) return <Navigate to="/dashboard" replace />
+  if (auth.user) return <Navigate to={destination} replace />
   return (
     <div className="login-page">
       <section className="login-story">
@@ -63,7 +66,7 @@ export function Login() {
                 String(data.get('email')),
                 String(data.get('password')),
               )
-              navigate('/dashboard', { replace: true })
+              navigate(destination, { replace: true })
             }}
           >
             <Field label="Correo electrónico">
@@ -103,9 +106,12 @@ export function Login() {
             ¿Recibiste una invitación? Activa tu cuenta desde el enlace del
             correo antes de iniciar sesión.
           </p>
+          <p>
+            <Link to="/driver/register">Registro independiente de prueba</Link>
+          </p>
           <div className="login-security">
             <ShieldCheck size={18} />
-            <span>Acceso exclusivo para administradores autorizados.</span>
+            <span>Acceso para cuentas autorizadas.</span>
           </div>
         </div>
         <small>Mandaria · Logística independiente</small>

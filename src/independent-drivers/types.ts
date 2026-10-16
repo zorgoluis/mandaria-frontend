@@ -20,7 +20,7 @@ export interface IndependentDriverRef {
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'
   availability: 'OFFLINE' | 'AVAILABLE' | 'BUSY'
   /** The V1.4 provider the Driver belongs to. Grants nothing in the independent context. */
-  providerId: string
+  providerId: string | null
 }
 export interface IndependentDriverProfile {
   id: string

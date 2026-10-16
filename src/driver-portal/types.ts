@@ -40,7 +40,14 @@ export interface DriverSelf {
   name: string
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'
   availability: 'OFFLINE' | 'AVAILABLE' | 'BUSY'
-  provider: { id: string; name: string; code: string; status: string }
+  provider: { id: string; name: string; code: string; status: string } | null
+  verification?: {
+    identityStatus: string
+    policyVersion: string
+    environment: string
+    canAdmitIdentity: boolean
+    blockingReasons: string[]
+  }
   currentAssignment: unknown | null
   /**
    * The ACTIVE delivery assignment in either model. V1.13-D adds collection instructions;

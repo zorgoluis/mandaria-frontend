@@ -92,15 +92,14 @@ export function DriverPortal({
       />
     )
   const blocked = portalBlock(query.data.independent)
-  if (
-    blocked &&
-    !(
-      query.data.activeDeliveryAssignment?.mode === 'INDEPENDENT' &&
-      query.data.activeDeliveryAssignment.execution
-    )
-  )
+  if (blocked && !(query.data.activeDeliveryAssignment?.mode === 'INDEPENDENT'))
     return (
       <div className="panel">
+        <p>
+          <Link to="/driver/onboarding">
+            Continuar mi verificación documental
+          </Link>
+        </p>
         {query.data.activeDeliveryAssignment?.execution && (
           <ExecutionProgress
             execution={query.data.activeDeliveryAssignment.execution}
@@ -126,7 +125,18 @@ export function DriverPortal({
         </p>
       </div>
     )
-  return <>{children(query.data)}</>
+  return (
+    <>
+      {query.data.verification && !query.data.verification.canAdmitIdentity && (
+        <p className="notice">
+          La identidad requiere revisión para nuevas asignaciones.{' '}
+          <Link to="/driver/onboarding">Consultar verificación</Link>. El
+          servicio comprometido mantiene sus acciones autorizadas.
+        </p>
+      )}
+      {children(query.data)}
+    </>
+  )
 }
 
 const tabs = [
