@@ -115,8 +115,21 @@ it('private evidence uses authenticated PNG proxy and refreshes centrally', asyn
           refreshToken: 'synthetic-refresh',
         }),
       )
-    if (String(url).endsWith('/auth/me'))
-      return new Response(JSON.stringify({ id: actor }))
+    if (String(url).endsWith('/auth/me?projection=session'))
+      return new Response(
+        JSON.stringify({
+          accessMode: 'STANDARD',
+          identity: {
+            id: actor,
+            email: 'synthetic@example.test',
+            role: 'DRIVER',
+            active: true,
+            emailVerifiedAt: null,
+            createdAt: '2026-10-17T00:00:00Z',
+            updatedAt: '2026-10-17T00:00:00Z',
+          },
+        }),
+      )
     if (access++ === 0) return new Response('{}', { status: 401 })
     return new Response(new Uint8Array([1, 2]), {
       headers: { 'Content-Type': 'image/png' },

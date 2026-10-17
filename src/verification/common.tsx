@@ -17,7 +17,9 @@ export function Warning() {
     <p className="notice" role="note">
       <strong>PRUEBA LOCAL — SIN VIGENCIA CONTRACTUAL.</strong> Sólo datos e
       imágenes sintéticas. No apto para producción. Aceptar términos o cargar
-      archivos no aprueba la operación. No hay baja/purga implementada.
+      archivos no aprueba la operación. La baja documental tiene seguimiento
+      separado; no acredita eliminación real de Spaces.{' '}
+      <Link to="/privacy/deletion">Baja y privacidad</Link>
     </p>
   )
 }
