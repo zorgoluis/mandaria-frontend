@@ -1,0 +1,532 @@
+{
+  "date": "2026-10-17",
+  "status": "PARTIAL",
+  "scenarios": {
+    "purgedReceipt": {
+      "status": "PASS",
+      "commandsBefore": 1,
+      "commandsAfter": 0,
+      "eventsAfter": 0,
+      "gateCount": 1,
+      "accountActive": false,
+      "requestStatus": "PURGED",
+      "auditWindowDays": 30,
+      "beforeExpiryPreserved": true,
+      "repeatMaintenanceIdempotent": true,
+      "absenceCode": "COMMAND_RECEIPT_UNAVAILABLE",
+      "browserMessage": "El recibo no está disponible. Puede no haberse registrado todavía o haber sido depurado; el resultado sigue siendo desconocido. No envíes otra mutación.",
+      "browser": {
+        "status": "PASS",
+        "adminPosts": 1,
+        "markerPreserved": true,
+        "sessionPreserved": true
+      }
+    },
+    "restrictedLegacyDelivery": {
+      "status": "BLOCKED",
+      "reason": "Harness expected login after ACCOUNT closure, but projection returned200 and login was absent. No product defect inferred.",
+      "uiActions": [
+        "Login enabled driver",
+        "Open committed service",
+        "Submit ACCOUNT deletion through confirmation dialog"
+      ],
+      "requestsObserved": [
+        "POST privacy/deletion-requests202",
+        "GET auth/me?projection=session200"
+      ],
+      "deliverPosts": 0,
+      "reloadAndRestrictedDelivery": "NOT RUN"
+    }
+  },
+  "environment": {
+    "status": "PASS",
+    "cluster": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\test-results\\deletion-isolated\\1792223093288/pgdata",
+    "database": "deletion_final_1792223093288_test",
+    "port": 55444,
+    "identityBeforeMigration": {
+      "database": "postgres",
+      "host": "127.0.0.1",
+      "port": 55444,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/deletion-isolated/1792223093288/pgdata"
+    }
+  },
+  "readOnlyDatabase": {
+    "mode": "READ_ONLY",
+    "status": "PASS",
+    "identityVerified": true,
+    "requests": [
+      {
+        "scope": "ACCOUNT",
+        "status": "PURGED",
+        "closedAt": "2026-10-17T07:45:05.168Z",
+        "deadline": "2026-10-24T07:45:05.168Z",
+        "confirmedAt": "2026-10-17T07:45:05.168Z"
+      },
+      {
+        "scope": "ACCOUNT",
+        "status": "INVENTORY",
+        "closedAt": null,
+        "deadline": "2026-10-24T07:45:18.794Z",
+        "confirmedAt": "2026-10-17T07:45:18.794Z"
+      }
+    ],
+    "assignments": [
+      {
+        "_count": 1,
+        "status": "ACTIVE"
+      }
+    ],
+    "dispatches": [
+      {
+        "_count": 1,
+        "status": "OPEN"
+      },
+      {
+        "_count": 1,
+        "status": "CLAIMED"
+      }
+    ],
+    "completionEvents": 0,
+    "awards": 1,
+    "refunds": 0,
+    "activeUserGates": 2,
+    "migrations": [
+      {
+        "applied": 42
+      }
+    ],
+    "stopped": true
+  },
+  "runtime": {
+    "realAppModule": true,
+    "realGuards": true,
+    "realMigrations": 42,
+    "realBrowser": true,
+    "email": "captured in memory",
+    "storage": "DeletionStorageDouble",
+    "routing": "fixed local provider",
+    "clock": "injected DELETION_CLOCK; system time unchanged",
+    "worker": "timer disabled only; real finalize/maintenance called for C1",
+    "docker43000": "untouched"
+  },
+  "fixtures": [
+    "Synthetic users/provider/independent profile/vehicle and credit policies seeded; documentary policy default preserved",
+    "Pricing, B2B request/quote/accept and independent take via real HTTP",
+    "No manual command deletion or retention date changes",
+    "C1 assisted ACCOUNT request seeded by HTTP; admin identity verification performed in Web",
+    "C2 provider/driver/vehicle/document reference seeded; B2B quote acceptance and independent take real HTTP; ACCOUNT closure performed in Web"
+  ],
+  "attempts": [
+    {
+      "stage": "utility creation",
+      "status": "FAILED_PREPARATION",
+      "detail": "Python alias unavailable; utility generated with Node before environment was started."
+    },
+    {
+      "directory": "test-results/deletion-isolated/1792222938899",
+      "status": "FAIL",
+      "detail": "Health URL assertion404; no business mutations; cluster stopped."
+    },
+    {
+      "directory": "test-results/deletion-isolated/1792223000348",
+      "status": "ABORTED",
+      "detail": "Unhandled recovery response timeout; wrong UI route. No final report. Partial screenshot only; not counted PASS. Owned cluster identified and stopped."
+    },
+    {
+      "directory": "test-results/deletion-isolated/1792223093288",
+      "status": "PARTIAL",
+      "detail": "Single additional browser diagnostic; C1 PASS, C2 stopped at login expectation; final report and cleanup present."
+    }
+  ],
+  "browserRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/work-items",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/replacements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/tasks",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+      "status": 502
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/dispatches/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/privacy/deletion-requests",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    }
+  ],
+  "httpAuxiliaryRequests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/privacy/deletion-requests",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/admin/drivers/:uuid/independent",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/admin/service-zones",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/admin/service-zones/:uuid/activate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/admin/rate-plans",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/admin/rate-plans/:uuid/activate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/admin/providers/:uuid/service-coverages",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/admin/integrations",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/admin/integrations/:uuid/credentials",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/token",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-requests",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-requests/MDR-000001/quotes",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-quotes/MQ-000001/accept",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-requests",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-requests/MDR-000002/quotes",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/delivery-quotes/MQ-000002/accept",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/driver/dispatches/:uuid/take",
+      "status": 200
+    }
+  ],
+  "screenshots": [
+    "test-results/deletion-isolated/1792223093288/admin-response-lost.png",
+    "test-results/deletion-isolated/1792223093288/purged-receipt-desktop.png",
+    "test-results/deletion-isolated/1792223093288/purged-receipt-mobile.png",
+    "test-results/deletion-isolated/1792223093288/committed-before-closure.png"
+  ],
+  "screenshotReview": [
+    "admin-response-lost (prior partial attempt)",
+    "purged-receipt-mobile",
+    "purged-receipt-desktop",
+    "committed-before-closure"
+  ],
+  "keyboard": "C1 confirm and recovery buttons focused and activated with Enter",
+  "mobile": "C1 390x844 screenshot and horizontal overflow assertion PASS; C2 restricted states NOT RUN",
+  "failure": {
+    "stage": "browser-account-closure",
+    "type": "Error",
+    "message": "expect(locator).toBeVisible() failed\n\nLocator: getByLabel('Correo electrónico')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByLabel('Correo electrónico') with timeout 5000ms\n  - waiting for getByLabel('Correo electrónico')\n"
+  },
+  "cleanup": {
+    "postgresStopped": true,
+    "browserClosed": true,
+    "backendClosed": true,
+    "allThreeClustersStopped": true,
+    "ownedPortsFree": [
+      4217,
+      4218,
+      55444
+    ]
+  },
+  "backendUnchanged": true,
+  "backendHashes": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff"
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4"
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0"
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547"
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda"
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "sha256": "d407c1b5c2188ef7de51128e8e9a6368f2bbfa1c3c7b2b4a37a5520a3396f3e6"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add"
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d"
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605"
+    }
+  ],
+  "webHashes": [
+    {
+      "file": "src/deletion/ActiveService.tsx",
+      "sha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    }
+  ],
+  "harnessHashes": [
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "sha256": "6b4f0f339ec69ce4f8b4eefecf8924297f0fcd2b4b2f58991a6a227568f51f38"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "8b1fdf5a6746c2260833d478fde66b54398aad2e93974b41e5c843d8232d9759"
+    },
+    {
+      "file": "scripts/verify-deletion-isolated.mjs",
+      "sha256": "f9acef454e7a8e55c3cae91a2884d04d0951a263699d1fda9b6b0f72609e6337"
+    },
+    {
+      "file": "scripts/inspect-deletion-isolated.mjs",
+      "sha256": "80d78fa6ac3a15bf880d5a55671749918cc009750acd071256edc5504d8bff38"
+    }
+  ],
+  "validation": {
+    "browser": "C1 PASS; C2 BLOCKED",
+    "readOnlyCheck": "PASS after receivedAt/createdAt query correction; no mutations",
+    "syntax": "PASS",
+    "productTests": "NOT RUN - no product modifications",
+    "build": "NOT RUN - no product modifications",
+    "diffCheck": "PASS"
+  },
+  "limitations": [
+    "No delivered/completed state or final completion event accredited for C2",
+    "No new backend product defect",
+    "No real Spaces/email, QA, commit, push or deployment",
+    "Historical failures and prior reports preserved"
+  ],
+  "backendUnchangedAtFinalClose": true
+}

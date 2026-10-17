@@ -417,3 +417,33 @@ docker run --rm -p 8080:80 mandaria-web:v1.4
 V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. V1.6.1-B incorpora administradores y repartidores reales mediante invitación segura, sin acceso al servidor. V1.7-B abre la visibilidad de despachos y la toma de servicios, V1.8-B asigna repartidor y vehículo, V1.9 incorpora al repartidor independiente y su portal, y V1.10-F administra los créditos Mandaria que cuesta adjudicarse un servicio. No se implementaron pasarela de pago, compra de créditos, wallet en pesos, sockets, GPS, tracking, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
 
 Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.
+
+## Baja y eliminación documental — prueba local (2026-10-16)
+
+Solicitud por alcance, seguimiento, recuperación por clave, constancias parciales
+y revisión SUPER_ADMIN en `/privacy/deletion` y `/admin/privacy/deletion`.
+`/privacy/deletion-access` permite consultar con la capacidad privada real expedida
+por backend, sin inventar una sesión posterior a la baja. Una solicitud aceptada
+no equivale a eliminación; H sólo acredita el alcance operativo y los respaldos
+siguen sin acreditación. El drenaje real de Spaces continúa pendiente.
+
+[Contrato, permisos, rutas, límites y futura integración aislada](docs/DOCUMENT-DELETION-WEB.md).
+[Pruebas y capturas sintéticas](VERIFICATION.md). No se ha ejecutado integración
+real de esta baja, ni modificado backend, integrado QA, hecho commit/push o desplegado.
+
+### Actualización 2026-10-17 — sesión y recuperación compatibles
+
+La sesión usa `auth/me?projection=session`, conservando identidad restringida sin
+inventar roles ni habilitar operación general. Los comandos administrativos de
+baja se recuperan por GET con su clave original después de recargar. Recibos
+históricos y estado actual permanecen separados; 404 no autoriza otra mutación.
+
+Los recorridos de sesión restringida y pérdida de respuesta **después del commit**
+se validaron con navegador, backend real y PostgreSQL sintético aislado. Un comando,
+un efecto original y recuperación denegada al otro administrador. Esto actualiza
+el pendiente de integración de esos dos recorridos, no acredita todo el workflow
+ni Spaces. [Cambios, evidencia y límites](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md).
+
+### Estado revisado para publicación — 2026-10-17
+
+La baja admite seguimiento y constancias parciales; la sesión restringida usa projection=session y la recuperación administrativa usa GET sin repetir la mutación. La entrega LEGACY restringida y el recibo realmente depurado tienen evidencia de navegador/backend/PostgreSQL aislados en [el informe de compatibilidad](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md). Las afirmaciones anteriores fechadas sobre integración pendiente son históricas. Drenaje real en Spaces pendiente: no se acredita eliminación total ni aptitud productiva. Publicación de código en feature/driver-verification no equivale a activación o despliegue.

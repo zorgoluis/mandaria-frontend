@@ -1,0 +1,343 @@
+{
+  "date": "2026-10-17",
+  "repository": "mandaria-frontend",
+  "branch": "feature/driver-verification",
+  "initialHead": "56c7bad0524cbbf05b45fa687a8ec625694a6ca0",
+  "remote": "https://github.com/zorgoluis/mandaria-frontend.git",
+  "initialAhead": 0,
+  "initialBehind": 0,
+  "previouslyPublished": "56c7bad includes documentary verification and W-01",
+  "productChangedDuringReview": false,
+  "scope": "Document deletion, tracking, restricted session, recovery, tests, harnesses and sanitized documentation",
+  "historicalEvidence": [
+    {
+      "report": "docs/deletion-delivery-resume-evidence.json",
+      "matches": [
+        {
+          "file": "src/deletion/ActiveService.tsx",
+          "match": true
+        },
+        {
+          "file": "src/deletion/pages.tsx",
+          "match": true
+        },
+        {
+          "file": "src/deletion/pending.ts",
+          "match": true
+        },
+        {
+          "file": "src/deletion/service.ts",
+          "match": true
+        },
+        {
+          "file": "src/auth/session.ts",
+          "match": true
+        },
+        {
+          "file": "src/services/api.ts",
+          "match": true
+        },
+        {
+          "file": "src/app/App.tsx",
+          "match": true
+        },
+        {
+          "file": "scripts/verify-deletion-delivery-resume.mjs",
+          "match": true
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "match": false,
+          "equivalence": "Only trailing blank lines removed after successful hash audit; see whitespaceReconciliation"
+        },
+        {
+          "file": "scripts/deletion-session-check.mjs",
+          "match": true
+        },
+        {
+          "file": "scripts/deletion-session-check.test.mjs",
+          "match": true
+        }
+      ],
+      "rerun": false
+    },
+    {
+      "report": "docs/deletion-receipt-only-evidence.json",
+      "matches": [
+        {
+          "file": "src/deletion/ActiveService.tsx",
+          "match": true
+        },
+        {
+          "file": "src/deletion/pages.tsx",
+          "match": true
+        },
+        {
+          "file": "src/deletion/pending.ts",
+          "match": true
+        },
+        {
+          "file": "src/deletion/service.ts",
+          "match": true
+        },
+        {
+          "file": "src/auth/session.ts",
+          "match": true
+        },
+        {
+          "file": "src/services/api.ts",
+          "match": true
+        },
+        {
+          "file": "src/app/App.tsx",
+          "match": true
+        },
+        {
+          "file": "scripts/verify-deletion-receipt-only.mjs",
+          "match": true
+        },
+        {
+          "file": "scripts/deletion-isolated-environment.mjs",
+          "match": true
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "match": false,
+          "equivalence": "Only trailing blank lines removed after successful hash audit; see whitespaceReconciliation"
+        },
+        {
+          "file": "scripts/deletion-session-check.mjs",
+          "match": true
+        }
+      ],
+      "rerun": false
+    }
+  ],
+  "sourceFiles": [
+    {
+      "file": "src/app/App.tsx",
+      "bytes": 13725,
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    },
+    {
+      "file": "src/auth/AuthProvider.tsx",
+      "bytes": 3063,
+      "sha256": "4921ca52bbf317d7655ef4a387c44c5c86b2b6972dfa3bcf4b3a58e9b9ce8a99"
+    },
+    {
+      "file": "src/auth/Login.tsx",
+      "bytes": 4540,
+      "sha256": "fd86315033dbfa469d52fe9f36b04f8f9c5f4d7cb22566defe0b7b6f9b88731e"
+    },
+    {
+      "file": "src/auth/context.ts",
+      "bytes": 784,
+      "sha256": "3be613be530769d1d1fde4b5a5904df1897c4a620dc2f75fdce207a331f71be0"
+    },
+    {
+      "file": "src/layouts/AdminLayout.tsx",
+      "bytes": 9097,
+      "sha256": "856dd2dafd9cbdf194cad69b72f9602ccf8251eb220efabb831a943baa13c0a1"
+    },
+    {
+      "file": "src/services/api.ts",
+      "bytes": 7484,
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/services/errors.ts",
+      "bytes": 19185,
+      "sha256": "0f34a45aa90167d6048c5d5b29369b938bf9d8eddf84801e630544084581c0c2"
+    },
+    {
+      "file": "src/test/api.test.ts",
+      "bytes": 13628,
+      "sha256": "908e22e876bb97398fef42934951740098214bdc4355c70615202612276925bc"
+    },
+    {
+      "file": "src/test/invitations-api.test.ts",
+      "bytes": 7103,
+      "sha256": "cfeda6c583faedfb21d35fce13c5321a6d92551bc0eb12381acfa22d4cc2f780"
+    },
+    {
+      "file": "src/test/verification-service.test.ts",
+      "bytes": 5848,
+      "sha256": "59bb2fa48b6a434d481aca50ffff7ad67d952574289d9a2dd3e4dc0fd805548a"
+    },
+    {
+      "file": "src/verification/common.tsx",
+      "bytes": 7094,
+      "sha256": "c14edd51b5d7fb49390492ed7491481f2a187a215ed9f4b94b0ea6da46b89123"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "bytes": 8603,
+      "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+    },
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "bytes": 4563,
+      "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+    },
+    {
+      "file": "scripts/deletion-session-check.mjs",
+      "bytes": 532,
+      "sha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423"
+    },
+    {
+      "file": "scripts/deletion-session-check.test.mjs",
+      "bytes": 1154,
+      "sha256": "5ae42c3d2bd795c4659c5921a7d589a79de949cb930018e83ea60cb20380e0dc"
+    },
+    {
+      "file": "scripts/inspect-deletion-isolated.mjs",
+      "bytes": 2969,
+      "sha256": "80d78fa6ac3a15bf880d5a55671749918cc009750acd071256edc5504d8bff38"
+    },
+    {
+      "file": "scripts/verify-deletion-browser-smoke.mjs",
+      "bytes": 2364,
+      "sha256": "8996f7b50152e2da8a6101eb249fd8c80682c823847d2eb7ca409bc80b6aa5f1"
+    },
+    {
+      "file": "scripts/verify-deletion-compatibility.mjs",
+      "bytes": 22597,
+      "sha256": "d7230ea396993bdcd3294c16ced2404dbedffbe9bd313af41399343cb844083b"
+    },
+    {
+      "file": "scripts/verify-deletion-delivery-resume.mjs",
+      "bytes": 14184,
+      "sha256": "a28c383694d7fd2f3e1dab6e5041ebb9853867ae504961ce63493dca7f349c38"
+    },
+    {
+      "file": "scripts/verify-deletion-isolated.mjs",
+      "bytes": 22908,
+      "sha256": "f9acef454e7a8e55c3cae91a2884d04d0951a263699d1fda9b6b0f72609e6337"
+    },
+    {
+      "file": "scripts/verify-deletion-receipt-only.mjs",
+      "bytes": 16253,
+      "sha256": "73f8f9380153b649b7f35b691415d92df0bac334d6912358b20e60d48bfd8318"
+    },
+    {
+      "file": "scripts/verify-deletion-web.mjs",
+      "bytes": 9285,
+      "sha256": "d954270d98a2a602615c2575daf47fd22e600186fd61b6c36fd80bd27a6c1f4a"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "bytes": 1740,
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/deletion/ActiveService.tsx",
+      "bytes": 6570,
+      "sha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c"
+    },
+    {
+      "file": "src/deletion/contract.ts",
+      "bytes": 9799,
+      "sha256": "3eef6df82c8d82961965fa37fcfc1522c754eb4e12d5ae025edb971d5ae9a00e"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "bytes": 3223,
+      "sha256": "5ca5ea02acf5cb6a24482e32a0eec975f2d7904f6409f5cb0c9a6b9aea92824e"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "bytes": 35826,
+      "sha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "bytes": 2857,
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/privacy.css",
+      "bytes": 709,
+      "sha256": "721e43e57023ffec7f4364b254bc887b7c40af1b1add9c91b191c5d06e898d89"
+    },
+    {
+      "file": "src/deletion/receipt.ts",
+      "bytes": 2423,
+      "sha256": "725d6dcef5c6e64efb87cb35b4877be98496aaec037222c706bde5ffd37be645"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "bytes": 16415,
+      "sha256": "b5d39d2a8b4148e73ceab9e942a13b7d57499c9961e0b37370d8f7c7fb41b673"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "bytes": 3689,
+      "sha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7"
+    },
+    {
+      "file": "src/test/deletion-fixtures.ts",
+      "bytes": 965,
+      "sha256": "292a5c136d1f68bef2c9cd4a008668ac25f68fb22d8b62d9c1543e0f1f4839ee"
+    },
+    {
+      "file": "src/test/deletion-pages.test.tsx",
+      "bytes": 18951,
+      "sha256": "7169fee856c0f269ecd2244b638ab96e4ecadc15f3c3c2efa47f79bb9fd96047"
+    },
+    {
+      "file": "src/test/deletion-service.test.ts",
+      "bytes": 7927,
+      "sha256": "cc41fc1522cd90e34373830c2236e85bdda72d66dd2d67e4f5632f492081503d"
+    },
+    {
+      "file": "src/test/session-compatibility.test.tsx",
+      "bytes": 4632,
+      "sha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141"
+    }
+  ],
+  "validation": {
+    "focalTests": {
+      "files": 7,
+      "passed": 152,
+      "failed": 0
+    },
+    "sessionHarnessTests": {
+      "passed": 4,
+      "failed": 0
+    },
+    "testTypes": "PASS",
+    "targetedEslint": "PASS",
+    "build": "PASS",
+    "buildWarning": "Root chunk 695.31 kB exceeds 500 kB",
+    "harnessSyntax": "PASS",
+    "jsonParse": "PASS",
+    "diffCheck": "PASS"
+  },
+  "safety": {
+    "automatedSecretPatterns": 0,
+    "foreignChangesIdentified": 0,
+    "rawArtifactsExcluded": true,
+    "backendUntouched": true,
+    "dockerUntouched": true,
+    "noMergeOrRebase": true,
+    "noDeployment": true
+  },
+  "publication": {
+    "status": "PREPARED",
+    "refspec": "refs/heads/feature/driver-verification:refs/heads/feature/driver-verification",
+    "force": false
+  },
+  "limitations": [
+    "Partial receipts remain possible",
+    "Real Spaces draining pending",
+    "Not total erasure or production readiness",
+    "Raw screenshots and synthetic clusters remain local and ignored"
+  ],
+  "whitespaceReconciliation": {
+    "file": "scripts/deletion-isolated-browser.mjs",
+    "executedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+    "publishedSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+    "change": "Remove surplus blank lines at EOF only; all executable content byte-identical",
+    "functionalChange": false
+  }
+}

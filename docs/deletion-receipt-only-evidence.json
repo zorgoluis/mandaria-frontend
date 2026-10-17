@@ -1,0 +1,354 @@
+{
+  "scenarios": {
+    "purge": {
+      "status": "PASS",
+      "commandsBefore": 1,
+      "commandsAfter": 0,
+      "eventsAfter": 0,
+      "gateCount": 1,
+      "accountActive": false,
+      "requestStatus": "PURGED",
+      "auditWindowDays": 30,
+      "beforeExpiryPreserved": true,
+      "repeatMaintenanceIdempotent": true,
+      "absenceCode": "COMMAND_RECEIPT_UNAVAILABLE",
+      "browserMessage": "El recibo no está disponible. Puede no haberse registrado todavía o haber sido depurado; el resultado sigue siendo desconocido. No envíes otra mutación.",
+      "browser": {
+        "status": "PASS",
+        "adminPosts": 1,
+        "markerPreserved": true,
+        "sessionPreserved": true
+      }
+    }
+  },
+  "hashes": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff"
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4"
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0"
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547"
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda"
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "sha256": "d407c1b5c2188ef7de51128e8e9a6368f2bbfa1c3c7b2b4a37a5520a3396f3e6"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add"
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d"
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605"
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/privacy/deletion-requests",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    }
+  ],
+  "fixtures": [
+    "Synthetic administrators and subject seeded; assisted ACCOUNT request created through auxiliary HTTP",
+    "Identity decision exclusively through Web; no service or delivery fixtures",
+    "No manual command deletion or retention date changes"
+  ],
+  "externalServices": {
+    "mail": "captured in memory",
+    "storage": "DeletionStorageDouble",
+    "routing": "fixed local double",
+    "docker43000": "not accessed"
+  },
+  "productChanges": false,
+  "stage": "receipt-real-maintenance",
+  "database": "deletion_final_1792223822827_test",
+  "cluster": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/deletion-isolated/1792223822827/pgdata",
+  "backend": {
+    "head": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+    "branch": "feature/driver-verification",
+    "uncommitted": true
+  },
+  "web": {
+    "head": "56c7bad0524cbbf05b45fa687a8ec625694a6ca0",
+    "uncommitted": true
+  },
+  "harnessHashes": [
+    {
+      "file": "scripts/verify-deletion-receipt-only.mjs",
+      "sha256": "73f8f9380153b649b7f35b691415d92df0bac334d6912358b20e60d48bfd8318"
+    },
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab"
+    },
+    {
+      "file": "scripts/deletion-session-check.mjs",
+      "sha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423"
+    }
+  ],
+  "webHashes": [
+    {
+      "file": "src/deletion/ActiveService.tsx",
+      "sha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    }
+  ],
+  "browserRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/replacements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/tasks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/work-items",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+      "status": 502
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "admin-response-lost.png",
+    "purged-receipt-desktop.png",
+    "purged-receipt-mobile.png"
+  ],
+  "browserSmoke": {
+    "status": "PASS",
+    "login": true,
+    "backendHealth": 200
+  },
+  "postCommit": {
+    "verifiedBeforeDrop": true,
+    "commands": 1
+  },
+  "originalEffect": {
+    "commands": 1,
+    "decisionEvents": 1,
+    "restrictionEvents": 1,
+    "userGates": 1,
+    "confirmed": true,
+    "postCount": 1
+  },
+  "clock": {
+    "mechanism": "injected DELETION_CLOCK",
+    "closedAt": "2026-10-17T07:57:14.032Z",
+    "auditUntil": "2026-11-16T07:57:14.032Z",
+    "beforeExpiry": "2026-11-16T07:57:14.031Z",
+    "atExpiry": "2026-11-16T07:57:14.032Z",
+    "sqlDateUpdates": false,
+    "systemClockChanged": false
+  },
+  "postsBeforeReload": 1,
+  "recovery": {
+    "method": "GET",
+    "status": 404,
+    "code": "COMMAND_RECEIPT_UNAVAILABLE",
+    "originalKey": true,
+    "originalActor": true,
+    "originalOperation": "resolve",
+    "sameRequest": true
+  },
+  "postsAfterReload": 1,
+  "deliveryNotRun": true,
+  "currentStateUnchangedByRecovery": true,
+  "status": "PASS",
+  "cleanup": {
+    "postgresStopped": true,
+    "browserClosed": true,
+    "backendClosed": true
+  },
+  "backendUnchanged": true,
+  "webUnchanged": true,
+  "date": "2026-10-17",
+  "scope": "Exclusive purged administrative receipt browser journey; delivery not run",
+  "environment": {
+    "status": "PASS",
+    "cluster": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\test-results\\deletion-isolated\\1792223822827/pgdata",
+    "database": "deletion_final_1792223822827_test",
+    "port": 55444,
+    "identityBeforeMigration": {
+      "database": "postgres",
+      "host": "127.0.0.1",
+      "port": 55444,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/deletion-isolated/1792223822827/pgdata"
+    },
+    "targetIdentityBeforeMigration": {
+      "database": "deletion_final_1792223822827_test",
+      "host": "127.0.0.1",
+      "port": 55444,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/deletion-isolated/1792223822827/pgdata"
+    }
+  },
+  "artifactDirectory": "test-results/deletion-isolated/1792223822827",
+  "validation": {
+    "integration": {
+      "command": "node C:/Users/zorgl/Documents/mandaria-backend/node_modules/tsx/dist/cli.mjs scripts/verify-deletion-receipt-only.mjs",
+      "exitCode": 0,
+      "attempts": 1,
+      "aborts": 0
+    },
+    "syntax": "PASS",
+    "screenshotsReviewed": [
+      "purged-receipt-desktop.png",
+      "purged-receipt-mobile.png"
+    ],
+    "viewports": [
+      "1280x800",
+      "390x844"
+    ],
+    "horizontalOverflow": false,
+    "keyboard": "Confirm and recover via focused button + Enter; Tab leaves recovery button",
+    "actions": "Recovery remains enabled; no retry/cancel/technical closure buttons",
+    "productTests": "NOT RUN - no product changes",
+    "build": "NOT RUN - no product changes"
+  },
+  "limitations": [
+    "No real Spaces or email deletion/delivery accreditation.",
+    "One empty documentary scope and one administrative action (IDENTITY_AND_AUTHORITY_VERIFIED).",
+    "404 does not distinguish absent, foreign or purged receipt; UI correctly retains uncertainty.",
+    "No historical evidence counted as a new result; previous delivery untouched."
+  ]
+}

@@ -96,3 +96,35 @@ Resultados y comandos completos: [VERIFICATION](../VERIFICATION.md). Historial: 
 Corregida la selección de B mientras A está cargándose: limpieza sólo de la generación enviada, mensajes asociados a A, B pendiente sin autoenvío y estado local ligado a actor/expediente. A/B con metadata idéntica quedan diferenciados por evento de selección, no por nombre. No se deshabilitó el selector. Cancelación no comunica éxito; archivos/preview siguen sólo en memoria. Reglas, API y reconciliación sin cambios.
 
 Prueba previa falló reproduciendo W-01; resultado nuevo35/35 tests, tipos/lint/build y cinco verificaciones sintéticas de navegador. [Evidencia y handoff de repetición integrada](../VERIFICATION.md#2026-10-13--w-01-selección-posterior-durante-carga-documental). Este cierre Web no acredita una repetición contra backend real ni altera el informe backend/historial anterior.
+
+## 2026-10-16 — Baja documental y constancias parciales
+
+La afirmación histórica de ausencia de baja se sustituye, para este checkout, por
+el módulo documentado en [DOCUMENT-DELETION-WEB](DOCUMENT-DELETION-WEB.md). No cambia
+W-01 ni sus contratos de carga: las sustituciones no reabren expedientes bloqueados.
+El nuevo módulo usa exclusivamente el contrato de eliminación implementado y
+separa acuse, restricciones, constancia parcial y cierre operativo H.
+
+Base Web 56c7bad, backend leído b300c250 más cambios locales, huellas nuevas
+separadas en deletion-backend-contract.json; no se reinterpretan las huellas ni
+pruebas históricas de este informe. [Validación actual](../VERIFICATION.md) con
+fixtures y Chromium; integración real, acceso mínimo tras `/auth/me` restringido
+y drenaje real de Spaces siguen sujetos a los límites explícitos del informe.
+
+## 2026-10-17 — Correcciones de compatibilidad de baja
+
+La proyección mínima de sesión ya permite conservar identidad restringida; el GET
+administrativo de recibos permite recuperación después de recargar sin repetir
+comandos. Las afirmaciones anteriores de ausencia de esos contratos son históricas.
+No se amplían roles, autorización documental ni asignaciones. Cancelación y
+assisted-access permanecen fuera del nuevo GET. W-01 y carga de evidencias no se
+modifican en esta adaptación.
+
+[Informe actual](DOCUMENT-DELETION-COMPATIBILITY-WEB.md): dos recorridos Web con
+backend real aislado aprobados, fuentes/artefactos identificados por hash, datos
+sintéticos conservados y servicios temporales detenidos. No acredita entrega real
+de un servicio comprometido, eliminación remota de Spaces ni producción.
+
+## Revisión para publicación — 2026-10-17
+
+El estado vigente de sesión restringida, entrega LEGACY y recibo realmente depurado está acreditado en [compatibilidad](DOCUMENT-DELETION-COMPATIBILITY-WEB.md) y sus evidencias. Los bloqueos y procedimientos fechados de este documento se conservan como historia, no sustituyen al contrato actual. Constancias parciales, drenaje real de Spaces pendiente; sin garantía de eliminación total ni aptitud productiva.

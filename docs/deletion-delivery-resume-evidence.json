@@ -1,0 +1,324 @@
+{
+  "scenarios": {
+    "service": {
+      "status": "PASS",
+      "browserDeliverPosts": 1,
+      "dispatch": "DELIVERED",
+      "assignment": "COMPLETED",
+      "completionEvents": 1,
+      "awardCount": 1,
+      "refundCount": 0,
+      "ledgerUnchanged": true,
+      "gatesUnchanged": true,
+      "deadlineUnchanged": true,
+      "closureH": null,
+      "sessionRestricted": true,
+      "finalUi": "No active resolution; no explicit delivery-history receipt after reload",
+      "receiptScenarioRepeated": false
+    }
+  },
+  "hashes": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff"
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4"
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0"
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547"
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda"
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "sha256": "d407c1b5c2188ef7de51128e8e9a6368f2bbfa1c3c7b2b4a37a5520a3396f3e6"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add"
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d"
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605"
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/driver/dispatches/:uuid/take",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/driver/dispatches/:uuid/deliver",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/verification-cases/:uuid/attachments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/driver/dispatches/:uuid/take",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/verification-cases/:uuid/attachments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/privacy/deletion-requests/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/privacy/deletion-requests/:uuid/receipt",
+      "status": 409
+    }
+  ],
+  "fixtures": [
+    "Resume existing synthetic active assignment and ACCOUNT closure; no new service, deletion request or receipt test",
+    "Temporary synthetic driver password hash rotation for UI login, restored on cleanup; no persisted password"
+  ],
+  "externalServices": false,
+  "productChanges": false,
+  "stage": "browser-delivery",
+  "databaseIdentity": {
+    "db": "deletion_final_1792223093288_test",
+    "host": "127.0.0.1",
+    "port": 55444,
+    "dir": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/deletion-isolated/1792223093288/pgdata"
+  },
+  "webHashes": [
+    {
+      "file": "src/deletion/ActiveService.tsx",
+      "sha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    }
+  ],
+  "harnessHashes": [
+    {
+      "file": "scripts/verify-deletion-delivery-resume.mjs",
+      "sha256": "a28c383694d7fd2f3e1dab6e5041ebb9853867ae504961ce63493dca7f349c38"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab"
+    },
+    {
+      "file": "scripts/deletion-session-check.mjs",
+      "sha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423"
+    },
+    {
+      "file": "scripts/deletion-session-check.test.mjs",
+      "sha256": "5ae42c3d2bd795c4659c5921a7d589a79de949cb930018e83ea60cb20380e0dc"
+    }
+  ],
+  "browserRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/dispatches/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/dispatches/:uuid/deliver",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me?projection=session",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/privacy/deletion-requests/:uuid",
+      "status": 200
+    }
+  ],
+  "screenshots": [
+    "restricted-active-service-desktop.png",
+    "restricted-active-service-mobile.png",
+    "service-after-reload-desktop.png",
+    "service-after-reload-mobile.png",
+    "follow-up-after-delivery-desktop.png",
+    "follow-up-after-delivery-mobile.png"
+  ],
+  "browserSmoke": {
+    "status": "PASS",
+    "login": true,
+    "backendHealth": 200
+  },
+  "sessionDecision": "CONTINUED_RESTRICTED",
+  "deliverResponse": {
+    "status": 200,
+    "dispatch": "DELIVERED"
+  },
+  "visibleAfterReload": "Mis solicitudes\nCanal privado sin sesión\nCerrar sesión\n\nPrueba local, sólo datos sintéticos. Una solicitud aceptada no acredita eliminación. El drenaje real de Spaces sigue pendiente; no se garantiza borrado de respaldos.\n\nIdentidad autenticada con acceso restringido por baja. Sólo seguimiento y resolución del servicio comprometido cuando el servidor la autoriza. No habilita nuevas asignaciones ni expedientes.\n\nNo hay resolución activa informada. Actualiza la identidad antes de continuar.",
+  "status": "PASS",
+  "cleanup": {
+    "browserClosed": true,
+    "backendClosed": true,
+    "passwordFixtureRestored": true,
+    "postgresStopped": true
+  },
+  "backendUnchanged": true,
+  "date": "2026-10-17",
+  "scope": "C2 only: resume existing committed service; C1 not repeated",
+  "artifactDirectory": "test-results/deletion-isolated/1792223093288/delivery-resume-1792223525761",
+  "validation": {
+    "sessionHarnessTests": {
+      "command": "node --test scripts/deletion-session-check.test.mjs",
+      "passed": 4,
+      "failed": 0
+    },
+    "integration": {
+      "command": "node C:/Users/zorgl/Documents/mandaria-backend/node_modules/tsx/dist/cli.mjs scripts/verify-deletion-delivery-resume.mjs",
+      "exitCode": 0
+    },
+    "syntax": "PASS",
+    "productTests": "NOT RUN - no product changes",
+    "build": "NOT RUN - no product changes",
+    "viewportChecks": [
+      "1280x800",
+      "390x844"
+    ],
+    "keyboard": "Confirm resolution focused and activated by Enter",
+    "screenshotsReviewed": [
+      "restricted-active-service-mobile",
+      "service-after-reload-desktop",
+      "follow-up-after-delivery-mobile"
+    ]
+  },
+  "limitations": [
+    "After reload UI says no active resolution; it does not offer an explicit historical delivery receipt. DELIVERED is verified by actual response and PostgreSQL, not invented from the absence of an active service.",
+    "Auxiliary forbidden take/foreign deliver/document requests are HTTP checks, not browser clicks.",
+    "Synthetic password hash temporarily rotated for UI login and restored; no new deletion, assignment, migrations or receipt purge.",
+    "No real Spaces/email, Docker43000, backend changes, QA, commit, push or deployment."
+  ],
+  "webUnchanged": true
+}
