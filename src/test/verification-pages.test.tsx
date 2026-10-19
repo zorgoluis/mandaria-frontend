@@ -350,9 +350,7 @@ it('registration and confirmation never authenticate or approve automatically', 
   fireEvent.click(
     screen.getByRole('button', { name: 'Solicitar correo de registro' }),
   )
-  expect(
-    await screen.findByText(/Revisa el correo de pruebas/),
-  ).toBeInTheDocument()
+  expect(await screen.findByText(/Revisa tu correo/)).toBeInTheDocument()
   expect(verification.command).not.toHaveBeenCalled()
 })
 it('confirmation uses token in body and returns to safe login', async () => {
@@ -415,7 +413,7 @@ it('PNG preview is revoked on unmount and never stored in query cache', async ()
     />,
   )
   fireEvent.click(screen.getByRole('button', { name: 'Ver evidencia' }))
-  expect(await screen.findByAltText(/Evidencia sintética/)).toBeInTheDocument()
+  expect(await screen.findByAltText(/Evidencia privada/)).toBeInTheDocument()
   expect(JSON.stringify(view.client.getQueryCache().getAll())).not.toContain(
     'blob:',
   )
@@ -474,7 +472,9 @@ it('documentary frame is isolated by route and user', () => {
     </Routes>,
   )
   expect(screen.getByText('Ámbito sintético')).toBeInTheDocument()
-  expect(screen.getByText(/SIN VIGENCIA CONTRACTUAL/)).toBeInTheDocument()
+  expect(
+    screen.getByText(/La procedencia de prueba no habilita producción/),
+  ).toBeInTheDocument()
 })
 
 it('submit and withdraw require confirmation and current revision', async () => {
@@ -531,7 +531,9 @@ it('version conflict refreshes the dossier and announces it without another deci
   expect(
     await screen.findByRole('heading', { name: 'Identidad · Aprobado' }),
   ).toBeInTheDocument()
-  expect(screen.getByText(/El expediente cambió/)).toBeInTheDocument()
+  expect(
+    screen.getByText(/El expediente o la política cambió/),
+  ).toBeInTheDocument()
   expect(verification.command).toHaveBeenCalledOnce()
   expect(
     screen.queryByRole('button', { name: 'Registrar decisión explícita' }),

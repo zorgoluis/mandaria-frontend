@@ -44,13 +44,31 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  VERIFICATION_PUBLICATION_REQUIRED:
+    'No hay una publicación vigente para este ámbito. Puedes consultar tu historial; solicita al administrador la publicación autorizada antes de continuar.',
+  VERIFICATION_PUBLICATION_ENVIRONMENT_REQUIRED:
+    'La publicación requiere el entorno de alta productiva configurado por backend. No cambies la procedencia de los datos.',
+  VERIFICATION_PUBLICATION_INVALID:
+    'Revisa ámbito, versiones, textos completos, consentimientos únicos y autorización de publicación.',
+  VERIFICATION_VERSION_EXISTS:
+    'Esa versión ya existe y es inmutable. No puede sobrescribirse; consulta la política vigente.',
+  PRIVACY_VERSION_CONFLICT:
+    'La versión del aviso ya identifica otro texto. No puede reutilizarse para un contenido distinto.',
+  PRIVACY_ACKNOWLEDGMENT_REQUIRED:
+    'Consulta el aviso vigente y confirma su lectura por separado.',
+  SPECIFIC_CONSENT_REQUIRED:
+    'Revisa y confirma cada consentimiento específico de la publicación vigente por separado.',
+  REGISTRATION_ENVIRONMENT_MISMATCH:
+    'Este código pertenece a otro entorno. Solicita un nuevo correo de registro; no se modifica la cuenta anterior.',
+  VERIFICATION_EVIDENCE_RENEWAL_REQUIRED:
+    'Este expediente es histórico o de otro entorno. Requiere aceptaciones vigentes, un nuevo expediente, nuevas evidencias y revisión; no se copian archivos ni aprobaciones.',
   TERMS_ACCEPTANCE_REQUIRED:
     'Falta aceptación vigente del conductor o de un representante de la flotilla. Cada persona debe aceptar con su cuenta.',
   VERIFICATION_EMAIL_REQUIRED: 'Confirma primero el correo de esta cuenta.',
   VERIFICATION_LOCAL_DISABLED:
-    'Esta capacidad sólo está disponible en el entorno local de pruebas habilitado por backend.',
+    'El alta documental no está habilitada por backend en este entorno.',
   VERIFICATION_VERSION_CONFLICT:
-    'El expediente cambió. Revisa la versión actual antes de preparar otra acción.',
+    'El expediente o la política cambió. Revisa la versión actual antes de preparar otra acción.',
   TERMS_VERSION_CONFLICT:
     'Los términos cambiaron. Lee la versión vigente y vuelve a marcar la casilla.',
   VERIFICATION_UPLOAD_EXPIRED:

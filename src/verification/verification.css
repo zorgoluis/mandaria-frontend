@@ -28,6 +28,8 @@
 }
 .verification-form .button {
   justify-self: start;
+  max-width: 100%;
+  white-space: normal;
 }
 .verification-terms {
   white-space: pre-wrap;

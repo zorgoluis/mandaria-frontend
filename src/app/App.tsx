@@ -7,6 +7,7 @@ import {
   ReceiptPage,
 } from '../verification/pages'
 import { Register, RegistrationConfirm } from '../verification/identity'
+import { PublicationPage } from '../verification/publications'
 import {
   PrivacyLayout,
   DeletionHome,
@@ -177,6 +178,10 @@ export function App() {
               />
             </Route>
             <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+              <Route
+                path="admin/verification-publications"
+                element={<PublicationPage />}
+              />
               <Route
                 path="admin/verification-cases"
                 element={<AdminVerification />}

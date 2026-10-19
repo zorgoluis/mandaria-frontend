@@ -11,13 +11,13 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Confirm } from '../components/ui'
 import { reconcile, useMarkers } from './pending'
-import type { Marker } from './types'
+import type { Marker, PublicationReceipt } from './types'
 export function Warning() {
   return (
     <p className="notice" role="note">
-      <strong>PRUEBA LOCAL — SIN VIGENCIA CONTRACTUAL.</strong> Sólo datos e
-      imágenes sintéticas. No apto para producción. Aceptar términos o cargar
-      archivos no aprueba la operación. La baja documental tiene seguimiento
+      <strong>Verificación documental.</strong> Aceptar términos o cargar
+      archivos no aprueba el expediente ni habilita operaciones. La procedencia
+      de prueba no habilita producción. La baja documental tiene seguimiento
       separado; no acredita eliminación real de Spaces.{' '}
       <Link to="/privacy/deletion">Baja y privacidad</Link>
     </p>
@@ -136,6 +136,10 @@ export function Recovery() {
   const [closing, setClosing] = useState<Marker | null>(null)
   const [busy, setBusy] = useState(false)
   const [text, setText] = useState('')
+  const [publication, setPublication] = useState<{
+    actor: string
+    receipt: PublicationReceipt
+  } | null>(null)
   const lock = useRef(false)
   const current = useRef(user?.id)
   useEffect(() => {
@@ -149,7 +153,10 @@ export function Recovery() {
     lock.current = true
     setBusy(true)
     try {
-      const state = await reconcile(m, user.id, refresh, close)
+      const state = await reconcile(m, user.id, refresh, close, (receipt) => {
+        if (current.current === user.id)
+          setPublication({ actor: user.id, receipt })
+      })
       if (current.current === user.id)
         setText(
           state === 'ABSENT'
@@ -198,6 +205,17 @@ export function Recovery() {
           </section>
         ))}
       {text && <p role="status">{text}</p>}
+      {publication?.actor === user?.id && publication && (
+        <section className="notice">
+          <h2>Publicación recuperada · fotografía histórica</h2>
+          <p>
+            {publication.receipt.scope} · {publication.receipt.version} ·
+            revisión {publication.receipt.policyRevision}. Puede existir una
+            publicación vigente posterior. No acredita aprobación jurídica ni
+            activación.
+          </p>
+        </section>
+      )}
       {closing && (
         <Confirm
           title="Cerrar intento técnico"

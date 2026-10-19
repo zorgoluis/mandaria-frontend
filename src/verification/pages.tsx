@@ -21,6 +21,8 @@ import { useCommand } from './hooks'
 import { EmailVerification, TermsPanel } from './identity'
 import { CaseForm, NewUnit } from './forms'
 import { Evidence } from './evidence'
+import { TermsDocuments } from './terms'
+import { provenance } from './terms-contract'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
 export function VerificationLayout() {
@@ -71,12 +73,42 @@ export function DriverOnboarding() {
           <p>
             Control de nuevas asignaciones:{' '}
             {q.data.enforcementEnabled
-              ? 'activo en backend local, sin gracia para recursos existentes'
+              ? 'activo en backend, sin gracia para recursos existentes'
               : 'no activado para recursos legacy; los nuevos sin proveedor requieren revisión'}
             . La aceptación no acredita licencia, vehículo ni crédito. Consulta
             el servicio ya comprometido en{' '}
             <Link to="/driver/my-service">Mi servicio</Link>.
           </p>
+          <p>
+            {provenance(q.data.environment)}. Las aceptaciones y aprobaciones
+            LOCAL_TEST se conservan como historia; no habilitan admisión
+            productiva.
+          </p>
+          {q.data.terms.blockingReason && (
+            <p role="alert">
+              Falta una publicación vigente para este ámbito. Consulta al
+              administrador antes de iniciar nuevas evidencias.
+            </p>
+          )}
+          {!q.data.terms.acceptance && (
+            <p role="status">
+              Pendiente: consulta y acepta los términos vigentes antes de
+              preparar evidencias. Después se requiere presentación y revisión
+              manual.
+            </p>
+          )}
+          {q.data.environment === 'PRODUCTION' &&
+            q.data.subjects.some((s) =>
+              s.cases.some((c) => c.environment !== 'PRODUCTION'),
+            ) && (
+              <p role="status">
+                Tu historial incluye expedientes sin procedencia productiva.
+                Necesitas las aceptaciones vigentes, un nuevo expediente, nuevas
+                cargas y revisión; no se copian documentos ni aprobaciones. Si
+                hay un borrador histórico abierto, retíralo mediante la acción
+                autorizada para preparar uno nuevo.
+              </p>
+            )}
           {q.data.terms.acceptance && (
             <p>
               Comprobante personal vigente:{' '}
@@ -94,6 +126,9 @@ export function DriverOnboarding() {
                 subjectType="DRIVER_IDENTITY"
                 resourceId={q.data.driver.id}
                 label="Preparar expediente de identidad independiente"
+                disabled={
+                  !q.data.terms.acceptance || !!q.data.terms.blockingReason
+                }
               />
               <NewUnit />
               <h2>Unidades independientes</h2>
@@ -108,6 +143,9 @@ export function DriverOnboarding() {
                     subjectType="VEHICLE"
                     resourceId={v.id}
                     label="Preparar expediente de esta unidad"
+                    disabled={
+                      !q.data.terms.acceptance || !!q.data.terms.blockingReason
+                    }
                   />
                 </section>
               ))}
@@ -130,18 +168,20 @@ export function CreateCase({
   subjectType,
   resourceId,
   label,
+  disabled = false,
 }: {
   area: 'driver' | 'provider'
   subjectType: SubjectType
   resourceId: string
   label: string
+  disabled?: boolean
 }) {
   const command = useCommand()
   const navigate = useNavigate()
   return (
     <Form
       label={label}
-      disabled={command.blocked || command.busy || !resourceId}
+      disabled={disabled || command.blocked || command.busy || !resourceId}
       onSubmit={async () => {
         const r = await command.send(
           'CREATE_CASE',
@@ -257,6 +297,11 @@ export function AdminVerification() {
   return (
     <>
       <h1>Revisión documental</h1>
+      <p>
+        <Link to="/admin/verification-publications">
+          Publicación de términos y privacidad
+        </Link>
+      </p>
       <p>
         Decisiones exclusivas SUPER_ADMIN. Identidad y unidades se revisan por
         separado.
@@ -452,11 +497,27 @@ function CaseContent({
   const canWrite =
     user?.role === 'PROVIDER_ADMIN' ||
     (user?.role === 'DRIVER' && record.scope.providerId === null)
+  const currentEvidence =
+    ['LOCAL_TEST', 'PRODUCTION'].includes(record.environment) &&
+    record.environment === requirements.environment &&
+    record.policyVersion === requirements.policyVersion
   return (
     <>
       <h1>
         {labels[record.subjectType]} · {labels[record.status]}
       </h1>
+      <p>
+        {provenance(record.environment)} · Checklist {record.policyVersion}.
+      </p>
+      {!currentEvidence && (
+        <p role="alert">
+          Expediente histórico o sin procedencia vigente acreditada. Para
+          continuar se requieren aceptaciones vigentes, un nuevo expediente,
+          nuevas evidencias y revisión. No se copian ni borran documentos
+          históricos. Puedes retirar un borrador abierto mediante la acción
+          autorizada.
+        </p>
+      )}
       <p>
         Revisión {record.revision}. Estado documental:{' '}
         {labels[record.verificationStatus] || record.verificationStatus}.{' '}
@@ -475,7 +536,7 @@ function CaseContent({
       {user?.role === 'SUPER_ADMIN' && record.internalNote && (
         <p>Nota interna: {record.internalNote}</p>
       )}
-      {canWrite && record.status === 'DRAFT' ? (
+      {canWrite && currentEvidence && record.status === 'DRAFT' ? (
         <CaseForm key={record.id + ':' + record.revision} record={record} />
       ) : (
         <section className="panel panel-body">
@@ -516,11 +577,11 @@ function CaseContent({
       <Evidence
         record={record}
         requirements={requirements}
-        canWrite={canWrite}
+        canWrite={canWrite && currentEvidence}
       />
       {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
         <section className="panel panel-body">
-          {record.status === 'DRAFT' && (
+          {currentEvidence && record.status === 'DRAFT' && (
             <button
               disabled={command.blocked || command.busy}
               onClick={() => setConfirm('SUBMIT')}
@@ -544,13 +605,15 @@ function CaseContent({
           label="Preparar nueva corrección"
         />
       )}
-      {user?.role === 'SUPER_ADMIN' && record.status === 'SUBMITTED' && (
-        <Decision
-          key={record.revision}
-          record={record}
-          requirements={requirements}
-        />
-      )}
+      {user?.role === 'SUPER_ADMIN' &&
+        currentEvidence &&
+        record.status === 'SUBMITTED' && (
+          <Decision
+            key={record.revision}
+            record={record}
+            requirements={requirements}
+          />
+        )}
       <section className="panel panel-body">
         <h2>Historial del expediente</h2>
         <ul>
@@ -692,7 +755,7 @@ export function ReceiptPage() {
   })
   return (
     <>
-      <h1>Comprobante histórico de prueba</h1>
+      <h1>Comprobante histórico de aceptación</h1>
       {q.isPending ? (
         <Loading />
       ) : q.isError ? (
@@ -701,9 +764,26 @@ export function ReceiptPage() {
         <>
           <p>
             Versión {q.data.terms.version}, aceptada {date(q.data.acceptedAt)}.
-            Sin efecto contractual; no reemplaza términos vigentes.
+            No reemplaza términos vigentes ni acredita aprobación documental u
+            operación.
           </p>
-          <div className="verification-terms">{q.data.terms?.text}</div>
+          <p>
+            {q.data.productionApplicable === true &&
+            q.data.environment === 'PRODUCTION'
+              ? 'Aceptación de publicación productiva registrada; no es dictamen jurídico.'
+              : 'No se acredita aceptación productiva. La evidencia de prueba no habilita producción.'}
+          </p>
+          <TermsDocuments terms={q.data.terms} />
+          <p>
+            Aviso reconocido:{' '}
+            {q.data.privacyVersion || 'No registrado en este recibo histórico'}.
+          </p>
+          <p>
+            Consentimientos registrados:{' '}
+            {q.data.specificConsents?.map((c) => c.id).join(', ') ||
+              'Ninguno registrado'}
+            . Consultar el aviso no equivale a otorgarlos todos.
+          </p>
         </>
       )}
     </>

@@ -1,4 +1,5 @@
-// Human, LOCAL_TEST contract: backend verification.dto/responses/service, 2026-10-13.
+// Human documentary contract: backend DTO/controllers/service, 2026-10-19.
+export type EvidenceEnvironment = 'LOCAL_TEST' | 'PRODUCTION'
 export type Area = 'driver' | 'provider' | 'admin'
 export type SubjectType = 'DRIVER_IDENTITY' | 'VEHICLE'
 export type CaseStatus =
@@ -33,11 +34,48 @@ export interface UnitData {
 export interface Terms {
   version: string
   scope: 'DRIVER' | 'FLEET'
-  environment: 'LOCAL_TEST'
+  environment: EvidenceEnvironment
   text: string
   hash: string
   createdAt: string
+  privacyVersion?: string | null
+  privacyText?: string | null
+  privacyHash?: string | null
+  publishedAt?: string | null
+  specificConsents?: { id: string; text: string; hash: string }[]
 }
+export interface VerificationPolicy {
+  revision: number
+  enabled: boolean
+  environment: EvidenceEnvironment
+  driverTermsVersion: string
+  fleetTermsVersion: string
+  productionDriverTermsVersion: string | null
+  productionFleetTermsVersion: string | null
+}
+export interface Publication {
+  expectedVersion: number
+  scope: 'DRIVER' | 'FLEET'
+  version: string
+  text: string
+  privacyVersion: string
+  privacyText: string
+  specificConsents: { id: string; text: string }[]
+  approvalReference: string
+  publicationAuthorized: true
+}
+export interface PublicationReceipt {
+  version: string
+  hash: string
+  scope: 'DRIVER' | 'FLEET'
+  environment: 'PRODUCTION'
+  publishedAt: string
+  policyRevision: number
+  enforcementEnabled: boolean
+}
+export type CommandResult<O extends Operation> = O extends 'PUBLISH_TERMS'
+  ? PublicationReceipt
+  : Receipt
 export interface Receipt {
   id: string
   status: string
@@ -45,6 +83,7 @@ export interface Receipt {
   version?: string
   acceptedAt?: string
   environment?: string
+  productionApplicable?: boolean
   contractuallyEffective?: false
   expiresAt?: string
   uploadUrl?: string
@@ -57,6 +96,11 @@ export interface Acceptance {
   providerId: string | null
   acceptedAt?: string
   contractuallyEffective: false
+  environment?: EvidenceEnvironment
+  productionApplicable?: boolean
+  privacyVersion?: string | null
+  privacyHash?: string | null
+  specificConsents?: { id: string; hash: string }[]
   terms: Terms
 }
 export interface Attachment {
@@ -80,7 +124,7 @@ export interface CaseSummary {
 export interface VerificationCase extends CaseSummary {
   resourceId: string
   subjectType: SubjectType
-  environment: 'LOCAL_TEST'
+  environment: EvidenceEnvironment
   policyVersion: string
   data: Partial<IdentityData & UnitData>
   scope: { providerId: string | null; independentProfileId: string | null }
@@ -95,7 +139,7 @@ export interface VerificationCase extends CaseSummary {
 }
 export interface Requirements {
   policyVersion: string
-  environment: 'LOCAL_TEST'
+  environment: EvidenceEnvironment
   formats: string[]
   maxBytes: number
   maxPixels: number
@@ -133,14 +177,20 @@ export interface Onboarding {
     id: string
     driverId: string | null
     vehicleId: string | null
-    cases: { id: string; status: CaseStatus; revision: number }[]
+    cases: {
+      id: string
+      status: CaseStatus
+      revision: number
+      environment?: EvidenceEnvironment
+    }[]
   }[]
   terms: {
-    requiredVersion: string
+    requiredVersion: string | null
+    blockingReason?: string | null
     acceptance: { id: string; version: string; acceptedAt: string } | null
   }
   enforcementEnabled: boolean
-  environment: 'LOCAL_TEST'
+  environment: EvidenceEnvironment
   contractuallyEffective: false
   productionReady: false
 }
@@ -156,6 +206,7 @@ export interface Notice {
   }
 }
 export const operations = [
+  'PUBLISH_TERMS',
   'ACCEPT_TERMS',
   'CREATE_CASE',
   'CREATE_VEHICLE',
@@ -176,5 +227,5 @@ export interface Marker {
 }
 export interface Attempt {
   state: 'ABSENT' | 'APPLIED' | 'CLOSED_NO_EFFECTS'
-  result?: Receipt
+  result?: Receipt | PublicationReceipt
 }

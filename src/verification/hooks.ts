@@ -25,8 +25,8 @@ export function useCommand() {
     busy,
     blocked: markers.unavailable || markers.items.length > 0,
     refresh,
-    send: async (
-      operation: Operation,
+    send: async <O extends Operation>(
+      operation: O,
       target: string,
       path: string,
       body: unknown,

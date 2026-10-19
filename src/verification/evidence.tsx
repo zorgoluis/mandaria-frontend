@@ -71,7 +71,11 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
       </p>
       {canWrite && record.status === 'DRAFT' && (
         <Form
-          label="Cargar imagen sintética"
+          label={
+            record.environment === 'LOCAL_TEST'
+              ? 'Cargar imagen sintética'
+              : 'Cargar imagen'
+          }
           disabled={command.blocked || command.busy || busy}
           onSubmit={async (d) => {
             const file = d.get('file')
@@ -142,7 +146,13 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
               ))}
             </select>
           </Field>
-          <Field label="Imagen sintética *">
+          <Field
+            label={
+              record.environment === 'LOCAL_TEST'
+                ? 'Imagen sintética *'
+                : 'Imagen *'
+            }
+          >
             <input
               name="file"
               type="file"
@@ -242,7 +252,7 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
           <img
             className="verification-preview"
             src={preview.url}
-            alt="Evidencia sintética privada del expediente"
+            alt="Evidencia privada del expediente"
           />
           <figcaption>
             Imagen normalizada recibida por proxy autenticado.
