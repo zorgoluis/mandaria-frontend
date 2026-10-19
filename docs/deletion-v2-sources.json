@@ -1,0 +1,50 @@
+{
+  "backendHead": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+  "workingTree": true,
+  "files": [
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "b6ca480b4388f6a91d224ac3dcfc3bccd441929fff7deea37a9b34504d7db331"
+    },
+    {
+      "file": "src/verification/deletion.dto.ts",
+      "sha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d"
+    },
+    {
+      "file": "src/verification/deletion.responses.ts",
+      "sha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414"
+    },
+    {
+      "file": "src/verification/deletion.controller.ts",
+      "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "file": "src/verification/operational-cleanup.ts",
+      "sha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81"
+    },
+    {
+      "file": "test/operational-cleanup.e2e-spec.ts",
+      "sha256": "642c7662c2f9ae02cfbdf5b4befe7defb5bbe77eebb0f21eccbf94fc6c6b9078"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "eea6afd0ba7d38d44440c7409dd78b29e0da97bb0deb20c3c8a638d199982522"
+    },
+    {
+      "file": "docs/DOCUMENT-DELETION-OPERATIONAL-IMPLEMENTATION.md",
+      "sha256": "eadad841f399e09caa7148b5d504b44bf03dbd7e943f249838da762379bbf65e"
+    },
+    {
+      "file": "docs/DRIVER-VERIFICATION-DELETION-DESIGN.md",
+      "sha256": "1bed1ef6d72659536e50cacecf6e966ce5df4d83496a19b653cb7ff95595c85b"
+    },
+    {
+      "file": "docs/DOCUMENTARY-RECOVERY-FORMAT.md",
+      "sha256": "19e4dd6ec066d4d3a7e50c0059c60b73f9a9a49cd2980650e314594b6aae3609"
+    }
+  ]
+}

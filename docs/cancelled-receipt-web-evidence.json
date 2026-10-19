@@ -1,0 +1,821 @@
+{
+  "date": "2026-10-18",
+  "timezone": "America/Mexico_City",
+  "status": "RECOVERY_PASS_WITH_CURRENT_MESSAGE_DEFECT",
+  "branch": "feature/driver-verification",
+  "webHead": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+  "backendHead": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+  "uncommittedChanges": true,
+  "baseline": "docs/cancelled-receipt-web-sources.json",
+  "runs": [
+    {
+      "path": "test-results/deletion-isolated/1792379339151/cancelled-receipt-result.json",
+      "sha256": "122261640c3d6cae4e16ddff4360c9a5269418cac0600fef5dfb5ce271340d80",
+      "purpose": "preflight",
+      "status": "PREFLIGHT_PASS",
+      "stage": "isolated-preflight",
+      "failure": null,
+      "cleanup": {
+        "postgresStopped": true,
+        "browserClosed": true,
+        "backendClosed": true
+      },
+      "harnessHashes": [
+        {
+          "file": "scripts/verify-cancelled-receipt-web.mjs",
+          "sha256": "6309b38ae14caada053a6514c92595aace610a2def16b34dd3c5f2b0f63103b1"
+        },
+        {
+          "file": "scripts/deletion-isolated-environment.mjs",
+          "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+        }
+      ]
+    },
+    {
+      "path": "test-results/deletion-isolated/1792379401491/cancelled-receipt-result.json",
+      "sha256": "3de6bdaeb7c1aafb266e746b3aec56662d7ca0be6572f529daf4eb354c5e31b7",
+      "purpose": "initial-complete-precondition-failure",
+      "status": "FAIL",
+      "stage": "synthetic-preconditions",
+      "failure": {
+        "stage": "synthetic-preconditions",
+        "type": "AssertionError",
+        "message": "POST /admin/privacy/deletion-requests/:uuid/resolve status (ACTIVE_REQUEST_EXISTS)\n\n409 !== 200\n"
+      },
+      "cleanup": {
+        "postgresStopped": true,
+        "browserClosed": true,
+        "backendClosed": true
+      },
+      "harnessHashes": [
+        {
+          "file": "scripts/verify-cancelled-receipt-web.mjs",
+          "sha256": "6309b38ae14caada053a6514c92595aace610a2def16b34dd3c5f2b0f63103b1"
+        },
+        {
+          "file": "scripts/deletion-isolated-environment.mjs",
+          "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+        }
+      ]
+    },
+    {
+      "path": "test-results/deletion-isolated/1792379629311/cancelled-receipt-result.json",
+      "sha256": "a1f9512ee75eeee35cb4c91e34b903cece323d1944cbeb39d5379170f7d9fc63",
+      "purpose": "corrected-complete",
+      "status": "PASS",
+      "stage": "block-post-commit-loss",
+      "failure": null,
+      "cleanup": {
+        "postgresStopped": true,
+        "browserClosed": true,
+        "backendClosed": true
+      },
+      "harnessHashes": [
+        {
+          "file": "scripts/verify-cancelled-receipt-web.mjs",
+          "sha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b"
+        },
+        {
+          "file": "scripts/deletion-isolated-environment.mjs",
+          "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+        }
+      ]
+    }
+  ],
+  "isolation": {
+    "host": "127.0.0.1",
+    "postgresPort": 55444,
+    "apiPort": 4217,
+    "webPort": 4218,
+    "cluster": "test-results/deletion-isolated/1792379629311/pgdata",
+    "database": "deletion_final_1792379629311_test",
+    "sqlIdentityBeforeMigration": true,
+    "sqlIdentityBeforeSeed": true,
+    "existingEnvRead": false,
+    "storage": "DeletionStorageDouble in-memory",
+    "mail": "in-memory capture",
+    "timerDisabled": true,
+    "realApi": true,
+    "fixtureGetResponses": false,
+    "externalServices": false
+  },
+  "preflight": {
+    "status": "PASS",
+    "sqlIdentity": true,
+    "health": 200,
+    "webLogin": true,
+    "realApi": true
+  },
+  "preconditions": [
+    "Two synthetic admins; subject seeded inactive before business actions",
+    "Synthetic FLEET driver, dossier and two storage-double objects; no real bytes/services",
+    "Assisted ACCOUNT creation, identity confirmation and personal cancellation via auxiliary real HTTP only to prepare CANCELLED",
+    "Second synthetic inactive subject has an independently confirmed ACCOUNT request; same-resource overlapping confirmation is rejected by backend",
+    "No manual updates to requests, gates, events, commands, dates or budgets; no worker/finalize/maintenance, delivery or restore"
+  ],
+  "scenarios": [
+    {
+      "name": "assignment",
+      "action": "ACKNOWLEDGE_TASK",
+      "status": "PASS",
+      "postCommitVerified": true,
+      "postCount": 1,
+      "browserResponse": 502,
+      "commandsAdded": 1,
+      "eventsAdded": 1,
+      "recovery": {
+        "method": "GET",
+        "status": 200,
+        "command": "APPLIED",
+        "historicalStatus": "CANCELLED",
+        "historicalRevision": 5,
+        "originalKey": true
+      },
+      "repeatedGetsNoEffects": true,
+      "foreignAdminStatus": 404,
+      "markerAccepted": true,
+      "sessionPreserved": true,
+      "independentRestrictionsUnchanged": true,
+      "accountActive": false,
+      "datesUnchanged": true,
+      "budgetsUnchanged": true,
+      "currentRevision": 5
+    },
+    {
+      "name": "keep",
+      "action": "REVIEW_RESTRICTION",
+      "status": "PASS",
+      "postCommitVerified": true,
+      "postCount": 1,
+      "browserResponse": 502,
+      "commandsAdded": 1,
+      "eventsAdded": 1,
+      "recovery": {
+        "method": "GET",
+        "status": 200,
+        "command": "APPLIED",
+        "historicalStatus": "CANCELLED",
+        "historicalRevision": 6,
+        "originalKey": true
+      },
+      "repeatedGetsNoEffects": true,
+      "foreignAdminStatus": 404,
+      "markerAccepted": true,
+      "sessionPreserved": true,
+      "independentRestrictionsUnchanged": true,
+      "accountActive": false,
+      "datesUnchanged": true,
+      "budgetsUnchanged": true,
+      "currentRevision": 6
+    },
+    {
+      "name": "release",
+      "action": "REVIEW_RESTRICTION",
+      "status": "PASS",
+      "postCommitVerified": true,
+      "postCount": 1,
+      "browserResponse": 502,
+      "commandsAdded": 1,
+      "eventsAdded": 1,
+      "recovery": {
+        "method": "GET",
+        "status": 200,
+        "command": "APPLIED",
+        "historicalStatus": "CANCELLED",
+        "historicalRevision": 7,
+        "originalKey": true
+      },
+      "repeatedGetsNoEffects": true,
+      "foreignAdminStatus": 404,
+      "markerAccepted": true,
+      "sessionPreserved": true,
+      "independentRestrictionsUnchanged": true,
+      "accountActive": false,
+      "datesUnchanged": true,
+      "budgetsUnchanged": true,
+      "currentRevision": 7
+    },
+    {
+      "name": "block-authorization",
+      "action": "BLOCK_CLEANUP_AUTHORIZATION",
+      "status": "PASS",
+      "postCommitVerified": true,
+      "postCount": 1,
+      "browserResponse": 502,
+      "commandsAdded": 1,
+      "eventsAdded": 1,
+      "recovery": {
+        "method": "GET",
+        "status": 200,
+        "command": "APPLIED",
+        "historicalStatus": "CANCELLED",
+        "historicalRevision": 8,
+        "originalKey": true
+      },
+      "repeatedGetsNoEffects": true,
+      "foreignAdminStatus": 404,
+      "markerAccepted": true,
+      "sessionPreserved": true,
+      "independentRestrictionsUnchanged": true,
+      "accountActive": false,
+      "datesUnchanged": true,
+      "budgetsUnchanged": true,
+      "currentRevision": 8
+    }
+  ],
+  "postCommitBoundary": [
+    {
+      "scenario": "assignment",
+      "independentConnection": true,
+      "commands": 1,
+      "events": 1,
+      "storedOperation": "RESOLVE",
+      "receiptVersion": 1,
+      "resultStatus": "CANCELLED"
+    },
+    {
+      "scenario": "keep",
+      "independentConnection": true,
+      "commands": 1,
+      "events": 1,
+      "storedOperation": "RESOLVE",
+      "receiptVersion": 1,
+      "resultStatus": "CANCELLED"
+    },
+    {
+      "scenario": "release",
+      "independentConnection": true,
+      "commands": 1,
+      "events": 1,
+      "storedOperation": "RESOLVE",
+      "receiptVersion": 1,
+      "resultStatus": "CANCELLED"
+    },
+    {
+      "scenario": "block-authorization",
+      "independentConnection": true,
+      "commands": 1,
+      "events": 1,
+      "storedOperation": "RESOLVE",
+      "receiptVersion": 1,
+      "resultStatus": "CANCELLED"
+    }
+  ],
+  "historicalCurrent": {
+    "status": "PASS",
+    "historicalRevision": 5,
+    "currentRevision": 6,
+    "transition": "Real REVIEW_RESTRICTION KEEP",
+    "receiptUnchanged": true,
+    "currentNotOverwritten": true
+  },
+  "observed": {
+    "browserDecisionPosts": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+        "status": 502
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+        "status": 502
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+        "status": 502
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/resolve",
+        "status": 502
+      }
+    ],
+    "browserReceiptGets": [
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      }
+    ],
+    "auxiliaryReceiptGets": [
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/admin/privacy/deletion-requests/:uuid/commands/by-key/:uuid",
+        "status": 404
+      }
+    ],
+    "commandsAdded": 4,
+    "eventsAdded": 4,
+    "noMutationReplay": true
+  },
+  "initial": {
+    "status": "CANCELLED",
+    "authorization": "TERMINATED",
+    "accountActive": false,
+    "ownGates": 3,
+    "independentGates": 1,
+    "objects": 2,
+    "attempts": [
+      0,
+      0
+    ],
+    "dates": {
+      "receivedAt": "2026-10-19T03:13:50.184Z",
+      "confirmedAt": "2026-10-19T03:13:50.184Z",
+      "deadline": "2026-10-26T03:13:50.184Z",
+      "replacementDeadline": "2026-10-24T03:13:50.184Z",
+      "closedAt": null,
+      "auditUntil": null,
+      "contactUntil": null
+    }
+  },
+  "final": {
+    "status": "CANCELLED",
+    "authorization": "BLOCKED",
+    "errorCode": "AUTHORIZATION_UNDER_REVIEW",
+    "accountActive": false,
+    "activeOwnGates": 2,
+    "activeIndependentGates": 1,
+    "attempts": [
+      0,
+      0
+    ]
+  },
+  "deliveryAssignments": 0,
+  "runtimeErrors": [],
+  "screenshots": [
+    {
+      "file": "test-results/deletion-isolated/1792379629311/assignment-confirmation-1280.png",
+      "sha256": "203306d367c3ffe60476b24a5f335d65a439825a1d56d4d02c47d17c0551b663"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/assignment-confirmation-320.png",
+      "sha256": "0b5ff64b66876c9e6a91a02d7359e5bff806398f54c7b7fae590d6e75a552749"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/assignment-recovered-1280.png",
+      "sha256": "5491008d4a3ad4c90e86e44406695cddf04c56800c1faa8a38aa815f64353ca9"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/assignment-recovered-320.png",
+      "sha256": "69e90ccd29778153ec9d40cae8f77e999d84d707367137a0d84baa200d2b00e3"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/keep-confirmation-1280.png",
+      "sha256": "bcfd0f6d217f38cd109682e869bbd268b43c24d72a6997fb9e7768dd02fbf803"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/keep-confirmation-320.png",
+      "sha256": "b6eabcf86795e70e68c4ea789d36388e8c248a97ad04988b632f4c72eed305da"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/keep-recovered-1280.png",
+      "sha256": "4d8f11fd75ca07cc26d80cc7001ad10c4f1e5d56450685c51205c852e7e035e4"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/keep-recovered-320.png",
+      "sha256": "738597f07048d961db623a8f50d10a1c8db10a435f25266da798c10d668e3f03"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/historical-versus-current-1280.png",
+      "sha256": "2bccbcc25450f1a0a7c9afd9773283d2753dc6657e01544aaeb9505217f00061"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/historical-versus-current-320.png",
+      "sha256": "720127ab295d6f0e8fac92326ff7e76a2fd2b8b8959f4f5973059a0d62bd9f9e"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/release-confirmation-1280.png",
+      "sha256": "4965e7fad8ea8c886263adcb6348b99fc480d8439df8868658ee88611bffbbbb"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/release-confirmation-320.png",
+      "sha256": "00b1cd37c66a017c211da05d18811e3b6fb2408b21074646b22e2e89d1d10cea"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/release-recovered-1280.png",
+      "sha256": "b0b864cdc1f0bae37b4100a8a38d5313089313fb090c35db4d984e30741f25ac"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/release-recovered-320.png",
+      "sha256": "38d0353a5cefea8a3f014921d726a1f20d93ca594b8b1be52dbfaec43c7c90d4"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/block-authorization-confirmation-1280.png",
+      "sha256": "d4614c5c79f3449ffa0aaa8f348d76419c60a3654e41c04e035362c64b192263"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/block-authorization-confirmation-320.png",
+      "sha256": "521dbdecf96f2145ab178560e651efcb2d2aab93dd223183ddb8a08a06618f32"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/block-authorization-recovered-1280.png",
+      "sha256": "1ebc9beac98f60291821241acf77b6975c655c5ddfe037a812faf7753e79cf4f"
+    },
+    {
+      "file": "test-results/deletion-isolated/1792379629311/block-authorization-recovered-320.png",
+      "sha256": "4dba6ab594540578331b7562d160de9c9b9eeafc41643f5eb2c8ab98a8272b36"
+    }
+  ],
+  "visualReview": {
+    "widths": [
+      1280,
+      320
+    ],
+    "horizontalOverflow": false,
+    "modalFocus": true,
+    "keyboard": [
+      "Space confirmation checkbox",
+      "Enter submit",
+      "Enter recovery"
+    ],
+    "representativeImagesInspected": [
+      "block-authorization-recovered-1280.png",
+      "keep-confirmation-320.png"
+    ],
+    "currentMessage": "FAIL",
+    "receiptMessage": "PASS"
+  },
+  "findings": [
+    {
+      "id": "CANCELLED-CURRENT-MESSAGE",
+      "status": "OPEN",
+      "observed": "CANCELLED/BLOCKED/AUTHORIZATION_UNDER_REVIEW with two own gates still active; current message says restriction review completed",
+      "source": "Backend DocumentDeletionService.view() and Web operationalMessage() prioritize CANCELLED, only RESTRICTIONS_UNDER_REVIEW selects pending text",
+      "impact": "Incorrect current-state presentation; administrative receipt recovery still succeeded",
+      "reproduction": "Real sequence assignment -> KEEP USER -> RELEASE USER -> global authorization block; no manual business-row changes",
+      "backendModified": false
+    },
+    {
+      "id": "DRIVER-GATE-LABEL",
+      "status": "OPEN_PREEXISTING",
+      "observed": "DRIVER gate shown as unknown scope; gate retained"
+    }
+  ],
+  "checks": {
+    "affectedFiles": {
+      "src/test/deletion-service.test.ts": 22,
+      "src/test/deletion-pages.test.tsx": 32,
+      "src/test/deletion-v2.test.tsx": 33
+    },
+    "uniqueTestsPassed": 87,
+    "finalPagesRerun": 32,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "buildWarning": "Root712.66kB >500kB",
+    "harnessSyntax": "PASS",
+    "productChangedAfterBrowser": false,
+    "gitDiffCheck": "PASS",
+    "initialJointRunPassed": 86,
+    "testHistory": "Preserved four restore-policy failure cases and added resolve404; final pages file32 passed. No unique-case inflation from reruns."
+  },
+  "backend": {
+    "head": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+    "hashes": [
+      {
+        "file": "src/verification/deletion-command-receipt.ts",
+        "sha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e"
+      },
+      {
+        "file": "src/verification/deletion.service.ts",
+        "sha256": "3a044f15ae31ee5adc277464186afdb4ac8f89cd94632b0f5f24270c0c50b691"
+      },
+      {
+        "file": "src/verification/deletion.responses.ts",
+        "sha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414"
+      },
+      {
+        "file": "src/verification/deletion.controller.ts",
+        "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+      },
+      {
+        "file": "src/verification/deletion.dto.ts",
+        "sha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d"
+      },
+      {
+        "file": "src/verification/operational-cleanup.ts",
+        "sha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81"
+      },
+      {
+        "file": "dist/verification/deletion-command-receipt.js",
+        "sha256": "34c75ffc1ddd85bc723de38eab4900c7ad0d0a38aca58ecb66fbefb100f5f500"
+      },
+      {
+        "file": "dist/verification/deletion.service.js",
+        "sha256": "e1db4aaa105952f6fbad02c9b3ddc197301200eecb25733f31ff940e7f62b270"
+      },
+      {
+        "file": "dist/app.module.js",
+        "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f"
+      },
+      {
+        "file": "dist/setup.js",
+        "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3"
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35"
+      },
+      {
+        "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+        "sha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6"
+      },
+      {
+        "file": "docs/checks/cancelled-command-receipt-local.json",
+        "sha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b"
+      },
+      {
+        "file": "test/cancelled-command-receipt.e2e-spec.ts",
+        "sha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa"
+      },
+      {
+        "file": "test/helpers/deletion-storage-double.ts",
+        "sha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1"
+      }
+    ]
+  },
+  "webExecuted": {
+    "head": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+    "hashes": [
+      {
+        "file": "src/deletion/receipt.ts",
+        "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b"
+      },
+      {
+        "file": "src/deletion/review.tsx",
+        "sha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966"
+      },
+      {
+        "file": "src/deletion/operational-review.tsx",
+        "sha256": "ca7e6268562c4d6a40e3504ffcfde2d8a8b934e8e9cf61337c222a4b43169a3a"
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+      },
+      {
+        "file": "src/deletion/hooks.ts",
+        "sha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e"
+      },
+      {
+        "file": "src/deletion/pending.ts",
+        "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+      },
+      {
+        "file": "src/auth/session.ts",
+        "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+      },
+      {
+        "file": "src/services/api.ts",
+        "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+      },
+      {
+        "file": "src/app/App.tsx",
+        "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+      }
+    ]
+  },
+  "harnessExecuted": [
+    {
+      "file": "scripts/verify-cancelled-receipt-web.mjs",
+      "sha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b"
+    },
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+    }
+  ],
+  "finalHashes": [
+    {
+      "file": "src/deletion/receipt.ts",
+      "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "sha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966"
+    },
+    {
+      "file": "src/deletion/operational-review.tsx",
+      "sha256": "ca7e6268562c4d6a40e3504ffcfde2d8a8b934e8e9cf61337c222a4b43169a3a"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "sha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    },
+    {
+      "file": "src/deletion/contract.ts",
+      "sha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f"
+    },
+    {
+      "file": "src/deletion/operational.tsx",
+      "sha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff"
+    },
+    {
+      "file": "src/deletion/operational-contract.ts",
+      "sha256": "3340df74493f2c82f2f12451412a2971be0a673e01b8a9063910c27ee21adbd5"
+    },
+    {
+      "file": "src/test/deletion-v2-fixtures.ts",
+      "sha256": "60da968e62ab3f58c94f12f4aa40ba8b40c8e07172b0ebcffacd36807cc5b714"
+    },
+    {
+      "file": "src/test/deletion-v2.test.tsx",
+      "sha256": "26a1ed4305f721201fa3c15f2d0746fe5b33c2caa8e8475c5d6b2ff6d04561e3"
+    },
+    {
+      "file": "src/test/deletion-service.test.ts",
+      "sha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78"
+    },
+    {
+      "file": "src/test/deletion-pages.test.tsx",
+      "sha256": "d7424e3119fec347ab424e4d8d5b7f820b03ede968ecfccba488c137b9f67cb2"
+    },
+    {
+      "file": "src/test/session-compatibility.test.tsx",
+      "sha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141"
+    },
+    {
+      "file": "scripts/verify-deletion-v2-web.mjs",
+      "sha256": "a59d9c54b628102306feb0ca4f4ce43684abb6a3aa5f29c2bd713a6301fa79dc"
+    },
+    {
+      "file": "scripts/verify-cancelled-receipt-web.mjs",
+      "sha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b"
+    },
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+    }
+  ],
+  "preservedHistoricalEvidence": [
+    {
+      "file": "docs/deletion-v2-web-evidence.json",
+      "sha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c"
+    },
+    {
+      "file": "docs/deletion-delivery-resume-evidence.json",
+      "sha256": "48b12aea76a4dc42c39e1ac3c60e1f081be276d7ffbd87ed0ef1588ed40f5687"
+    },
+    {
+      "file": "docs/deletion-receipt-only-evidence.json",
+      "sha256": "6acf672ff266915415057ba26bcbc3da2c9da87fd16a8b8d0c814a2fd671743e"
+    }
+  ],
+  "cleanup": {
+    "postgresStopped": true,
+    "browserClosed": true,
+    "backendClosed": true,
+    "ownPortsVerifiedFree": [
+      4217,
+      4218,
+      55444
+    ],
+    "foreignServicesContacted": false
+  },
+  "backendUnchanged": true,
+  "webUnchangedDuringRun": true,
+  "limitations": [
+    "Current-state message defect remains open",
+    "Only exact hashed backend/Web combination verified; mixed deployment and downgrade untested",
+    "Old ambiguous receipts may return404; no replay authorized",
+    "Independent request belongs to another synthetic subject; other gates of the tested subject also unchanged",
+    "Subject seeded inactive; no new deactivation asserted",
+    "Storage real Spaces drainage pending; partial attestations only; no total erasure or production readiness",
+    "No delivery, purge or restoration rerun; no backend edits, QA, commit, push or deployment"
+  ],
+  "versions": {
+    "node": "v24.15.0",
+    "react": "19.3.0",
+    "vite": "8.3.0",
+    "playwright": "1.63.0",
+    "nest": "11.2.4",
+    "prisma": "6.19.3",
+    "postgresqlMajor": 18
+  }
+}

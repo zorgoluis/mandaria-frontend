@@ -1,0 +1,418 @@
+{
+  "date": "2026-10-18",
+  "repository": "mandaria-frontend",
+  "branch": "feature/driver-verification",
+  "initialHead": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+  "remote": "https://github.com/zorgoluis/mandaria-frontend.git",
+  "initialAhead": 0,
+  "initialBehind": 0,
+  "initialStagedEmpty": true,
+  "productChangedDuringReview": false,
+  "scope": "Pending Web V2, historical CANCELLED decisions/recovery, restriction messages and Conductor label, tests, harnesses and sanitized evidence",
+  "previouslyPublished": [
+    "56c7bad: documentary verification and W-01",
+    "121cdd6: deletion, tracking, restricted identity and recovery",
+    "a87081c: isolated delivery and purged-receipt evidence"
+  ],
+  "candidateFiles": [
+    {
+      "file": "BITACORA.md",
+      "bytes": 26554,
+      "sha256": "7fb9fd0e14eedee22c480a8b417dc953e0592537ca97802e17fb78163e6fc3f4"
+    },
+    {
+      "file": "VERIFICATION.md",
+      "bytes": 172379,
+      "sha256": "9471683dc7ace2bbbad031146d550221c07810d6f0f5cdc31c672472d49e4ae5"
+    },
+    {
+      "file": "docs/CANCELLED-COMMAND-RECEIPT-WEB.md",
+      "bytes": 14086,
+      "sha256": "35011d544faa0ee220d96b3a58f056a615d19d05f1cf57839c5a3e0a9009f8f2"
+    },
+    {
+      "file": "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+      "bytes": 36527,
+      "sha256": "8ec078e173dc1a7bc3afb9950ae83ac6cfa4d8d82651874ab25a946fa9cd86d2"
+    },
+    {
+      "file": "docs/DOCUMENT-DELETION-V2-WEB.md",
+      "bytes": 14810,
+      "sha256": "5ed6dbca212e0abb02cd429a37f99b6a11589cba5b48fb5489b06e4636b9b39d"
+    },
+    {
+      "file": "docs/DOCUMENT-DELETION-WEB.md",
+      "bytes": 16434,
+      "sha256": "18d8ea426146a6d24b0eb0b15c587d7b7e79c55a74dc15d148fcb5df2b940f59"
+    },
+    {
+      "file": "docs/RESTRICTION-REVIEW-WEB.md",
+      "bytes": 8869,
+      "sha256": "ba8f5f9dba6de5c461e625b84ad48c341c0522b4a51f2933a7e1f4010c6cc93a"
+    },
+    {
+      "file": "docs/cancelled-receipt-web-evidence.json",
+      "bytes": 27564,
+      "sha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4"
+    },
+    {
+      "file": "docs/cancelled-receipt-web-sources.json",
+      "bytes": 4462,
+      "sha256": "2defdce7fa542df5e20407a5060535d637e40fcb7b38604b24932141750b4afe"
+    },
+    {
+      "file": "docs/deletion-v2-sources.json",
+      "bytes": 1769,
+      "sha256": "1621c63a0dcee6e10bdde394e7ada9554824558a9819d50f790c3a5bc959827e"
+    },
+    {
+      "file": "docs/deletion-v2-web-evidence.json",
+      "bytes": 11416,
+      "sha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c"
+    },
+    {
+      "file": "docs/restriction-review-web-evidence.json",
+      "bytes": 18262,
+      "sha256": "bb11a0c71daeda354db1217697f80a9a4b0d98a79632017b497efe268f37222c"
+    },
+    {
+      "file": "docs/restriction-review-web-sources.json",
+      "bytes": 6363,
+      "sha256": "ef488d366cfbe8bf8bb2fba69e8d8eece9d18fbe445f8ec913538abd2ef3aafc"
+    },
+    {
+      "file": "scripts/verify-cancelled-receipt-web.mjs",
+      "bytes": 26140,
+      "sha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b"
+    },
+    {
+      "file": "scripts/verify-deletion-v2-web.mjs",
+      "bytes": 10302,
+      "sha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f"
+    },
+    {
+      "file": "scripts/verify-restriction-review-web.mjs",
+      "bytes": 8979,
+      "sha256": "aefc5cb2fb7aea252158e52b05b463793c21e8889a9888d22a42b9950cc2909e"
+    },
+    {
+      "file": "src/deletion/contract.ts",
+      "bytes": 12876,
+      "sha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "bytes": 4543,
+      "sha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e"
+    },
+    {
+      "file": "src/deletion/operational-contract.ts",
+      "bytes": 2683,
+      "sha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f"
+    },
+    {
+      "file": "src/deletion/operational-review.tsx",
+      "bytes": 15539,
+      "sha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf"
+    },
+    {
+      "file": "src/deletion/operational.tsx",
+      "bytes": 5631,
+      "sha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "bytes": 36270,
+      "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+    },
+    {
+      "file": "src/deletion/receipt.ts",
+      "bytes": 2897,
+      "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "bytes": 18095,
+      "sha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "bytes": 4519,
+      "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+    },
+    {
+      "file": "src/test/deletion-pages.test.tsx",
+      "bytes": 22990,
+      "sha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916"
+    },
+    {
+      "file": "src/test/deletion-service.test.ts",
+      "bytes": 12208,
+      "sha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78"
+    },
+    {
+      "file": "src/test/deletion-v2-fixtures.ts",
+      "bytes": 2943,
+      "sha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a"
+    },
+    {
+      "file": "src/test/deletion-v2.test.tsx",
+      "bytes": 25511,
+      "sha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a"
+    }
+  ],
+  "historicalEvidence": [
+    {
+      "report": "docs/deletion-delivery-resume-evidence.json",
+      "web": {
+        "compared": 7,
+        "exact": 5,
+        "differences": [
+          {
+            "file": "src/deletion/pages.tsx",
+            "recordedSha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68",
+            "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+          },
+          {
+            "file": "src/deletion/service.ts",
+            "recordedSha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7",
+            "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+          }
+        ]
+      },
+      "harness": {
+        "compared": 4,
+        "exact": 3,
+        "differences": [
+          {
+            "file": "scripts/deletion-isolated-browser.mjs",
+            "recordedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+            "currentSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+          }
+        ]
+      },
+      "rerun": false,
+      "coverage": "pages/service V2 projection and administrative changes covered by later complete tests; ActiveService, session, HTTP, App and pending-marker files unchanged. Browser helper whitespace reconciliation already published."
+    },
+    {
+      "report": "docs/deletion-receipt-only-evidence.json",
+      "web": {
+        "compared": 7,
+        "exact": 5,
+        "differences": [
+          {
+            "file": "src/deletion/pages.tsx",
+            "recordedSha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68",
+            "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+          },
+          {
+            "file": "src/deletion/service.ts",
+            "recordedSha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7",
+            "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+          }
+        ]
+      },
+      "harness": {
+        "compared": 4,
+        "exact": 3,
+        "differences": [
+          {
+            "file": "scripts/deletion-isolated-browser.mjs",
+            "recordedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+            "currentSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+          }
+        ]
+      },
+      "rerun": false,
+      "coverage": "pages/service V2 projection and administrative changes covered by later complete tests; ActiveService, session, HTTP, App and pending-marker files unchanged. Browser helper whitespace reconciliation already published."
+    },
+    {
+      "report": "docs/cancelled-receipt-web-evidence.json",
+      "webExecuted": {
+        "compared": 10,
+        "exact": 9,
+        "differences": [
+          {
+            "file": "src/deletion/operational-review.tsx",
+            "recordedSha256": "ca7e6268562c4d6a40e3504ffcfde2d8a8b934e8e9cf61337c222a4b43169a3a",
+            "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf"
+          }
+        ]
+      },
+      "harnessExecuted": {
+        "compared": 3,
+        "exact": 3,
+        "differences": []
+      },
+      "finalSources": {
+        "compared": 22,
+        "exact": 16,
+        "differences": [
+          {
+            "file": "src/deletion/operational-review.tsx",
+            "recordedSha256": "ca7e6268562c4d6a40e3504ffcfde2d8a8b934e8e9cf61337c222a4b43169a3a",
+            "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf"
+          },
+          {
+            "file": "src/deletion/operational-contract.ts",
+            "recordedSha256": "3340df74493f2c82f2f12451412a2971be0a673e01b8a9063910c27ee21adbd5",
+            "currentSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f"
+          },
+          {
+            "file": "src/test/deletion-v2-fixtures.ts",
+            "recordedSha256": "60da968e62ab3f58c94f12f4aa40ba8b40c8e07172b0ebcffacd36807cc5b714",
+            "currentSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a"
+          },
+          {
+            "file": "src/test/deletion-v2.test.tsx",
+            "recordedSha256": "26a1ed4305f721201fa3c15f2d0746fe5b33c2caa8e8475c5d6b2ff6d04561e3",
+            "currentSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a"
+          },
+          {
+            "file": "src/test/deletion-pages.test.tsx",
+            "recordedSha256": "d7424e3119fec347ab424e4d8d5b7f820b03ede968ecfccba488c137b9f67cb2",
+            "currentSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916"
+          },
+          {
+            "file": "scripts/verify-deletion-v2-web.mjs",
+            "recordedSha256": "a59d9c54b628102306feb0ca4f4ce43684abb6a3aa5f29c2bd713a6301fa79dc",
+            "currentSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f"
+          }
+        ]
+      },
+      "rerun": false,
+      "coverage": "Later presentation changes covered by 89 tests and synthetic browser review. Actions, permissions, form, mutation and recovery unchanged per recorded source comparison. Historical backend run is not new integration of presentation changes."
+    },
+    {
+      "report": "docs/deletion-v2-web-evidence.json",
+      "sources": {
+        "compared": 14,
+        "exact": 5,
+        "differences": [
+          {
+            "file": "src/deletion/pages.tsx",
+            "recordedSha256": "bae0220f7fcf158d012b3fb0e3016876147c61c0306191be02ffac007a3c0bd3",
+            "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+          },
+          {
+            "file": "src/deletion/review.tsx",
+            "recordedSha256": "a0c84349fa2c52ec09841261871c9d95638e20859923e1abe75639e683b0103b",
+            "currentSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966"
+          },
+          {
+            "file": "src/deletion/operational-contract.ts",
+            "recordedSha256": "3340df74493f2c82f2f12451412a2971be0a673e01b8a9063910c27ee21adbd5",
+            "currentSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f"
+          },
+          {
+            "file": "src/deletion/operational-review.tsx",
+            "recordedSha256": "0559340b75b14df3afc732e5eb43cc3374e191aac77786fc5e34001c43ed3723",
+            "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf"
+          },
+          {
+            "file": "src/test/deletion-v2-fixtures.ts",
+            "recordedSha256": "60da968e62ab3f58c94f12f4aa40ba8b40c8e07172b0ebcffacd36807cc5b714",
+            "currentSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a"
+          },
+          {
+            "file": "src/test/deletion-v2.test.tsx",
+            "recordedSha256": "bb3a51bf282f6189a55d61205746919ce63abc92e58585852260bf827ab434be",
+            "currentSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a"
+          },
+          {
+            "file": "src/test/deletion-service.test.ts",
+            "recordedSha256": "6ba608eb7448f4a6001f4a16dee596b8b6946b990046cd4a1e4ffa3063bd96af",
+            "currentSha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78"
+          },
+          {
+            "file": "src/test/deletion-pages.test.tsx",
+            "recordedSha256": "9b3d246cb560183b943c4e1a12c8a659f0a40c3e0596390025407c25db881e20",
+            "currentSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916"
+          },
+          {
+            "file": "scripts/verify-deletion-v2-web.mjs",
+            "recordedSha256": "66515008f71565310fe87ca2de75766c71b4af2a59122c6d78370d450b2a1d9b",
+            "currentSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f"
+          }
+        ]
+      },
+      "rerun": false,
+      "coverage": "Superseded by CANCELLED and restriction presentation evidence; not represented as current broad V2 integration."
+    }
+  ],
+  "latestEvidence": {
+    "report": "docs/restriction-review-web-evidence.json",
+    "comparisons": 38,
+    "allExact": true,
+    "groups": {
+      "unchanged": 20,
+      "finalChanged": 6,
+      "browser": 12
+    }
+  },
+  "helperWhitespaceReconciliation": {
+    "source": "docs/deletion-publication-review.json",
+    "file": "scripts/deletion-isolated-browser.mjs",
+    "executedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+    "publishedSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+    "change": "Remove surplus blank lines at EOF only; all executable content byte-identical",
+    "functionalChange": false,
+    "currentMatchesPublished": true
+  },
+  "newChecks": {
+    "jsonParsed": 6,
+    "relativeMarkdownLinks": 112,
+    "relativeImports": 98,
+    "localArtifactsSha256Verified": 54,
+    "harnessSyntax": "3 PASS",
+    "secretPatternFindings": 0,
+    "diffCheck": "PASS",
+    "scopeReview": "29 pending files, all within scope; no unrelated files identified"
+  },
+  "validationReuse": {
+    "newTestsExecuted": false,
+    "newBuildTypecheckLintExecuted": false,
+    "browserScenariosRerun": false,
+    "latestPresentation": "89 PASS (57 V2 + 32 pages), typecheck/lint/build PASS; synthetic browser 14 screenshots",
+    "service": "22 PASS from preceding CANCELLED validation; unchanged",
+    "buildWarning": "Root chunk 714.49 kB exceeds 500 kB",
+    "distinction": "Historical results remain historical; no new integration claim"
+  },
+  "excludedPreserved": [
+    ".env",
+    "node_modules/",
+    "dist/",
+    "test-results/ including raw reports, screenshots and browser profiles"
+  ],
+  "publication": {
+    "status": "BLOCKED_APPROVAL_REVIEW_SERVICE_CAPACITY",
+    "staging": "NOT_EXECUTED; index remains empty",
+    "refspec": "refs/heads/feature/driver-verification:refs/heads/feature/driver-verification",
+    "force": false,
+    "refreshRemoteBeforePush": true,
+    "verifyRemoteShaAfterPush": true,
+    "approvalAttempts": 2,
+    "blockReason": "Automatic approval review could not complete: selected model at capacity. Tool confirmed action was not executed; not a determination that the action is unsafe.",
+    "userAuthorization": "Already granted; no additional permission requested",
+    "newCommits": 0,
+    "pushExecuted": false,
+    "finalHead": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+    "remoteShaAfterPush": null,
+    "resume": [
+      "Stage explicit reviewed files and review staged diff",
+      "Create and review coherent commits and complete outgoing history",
+      "Fetch target branch again and check for divergence",
+      "Push only explicit authorized branch refspec without force",
+      "Verify remote SHA and local state"
+    ]
+  },
+  "limitations": [
+    "Web requires compatible backend V2 contract and CANCELLED fix; backend HEAD alone is insufficient for locally modified versions",
+    "Synthetic visual review is not real backend integration",
+    "Partial receipts do not guarantee total erasure",
+    "Real Spaces draining remains pending",
+    "Backend RESOLVED task reopening remains separate and is not compensated in Web",
+    "Publishing this branch does not deploy or establish production readiness",
+    "No merge, rebase, QA integration, backend/App/Landing changes or deployment"
+  ]
+}

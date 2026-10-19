@@ -20,7 +20,13 @@ const local = (s?: string) =>
         .toISOString()
         .slice(0, 16)
     : ''
-export function CaseForm({ record }: { record: VerificationCase }) {
+export function CaseForm({
+  record,
+  disabled = false,
+}: {
+  record: VerificationCase
+  disabled?: boolean
+}) {
   const command = useCommand()
   const [license, setLicense] = useState(!!record.data.license)
   const [ownership, setOwnership] = useState<Ownership>(
@@ -32,7 +38,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
       <h2>Datos del borrador</h2>
       <Form
         label="Guardar datos"
-        disabled={command.blocked || command.busy}
+        disabled={disabled || command.blocked || command.busy}
         onSubmit={async (d) => {
           const data: IdentityData | UnitData = identity
             ? {
@@ -224,7 +230,7 @@ export function CaseForm({ record }: { record: VerificationCase }) {
     </section>
   )
 }
-export function NewUnit() {
+export function NewUnit({ disabled = false }: { disabled?: boolean }) {
   const command = useCommand()
   const [done, setDone] = useState(false)
   return (
@@ -232,7 +238,7 @@ export function NewUnit() {
       <summary>Registrar unidad independiente</summary>
       <Form
         label="Crear unidad pendiente"
-        disabled={command.blocked || command.busy}
+        disabled={disabled || command.blocked || command.busy}
         onSubmit={async (d) => {
           await command.send(
             'CREATE_VEHICLE',

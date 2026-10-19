@@ -159,7 +159,7 @@ try {
     page.getByRole('button', { name: 'Aceptar personalmente (prueba)' }),
   ).toBeFocused()
   await page.keyboard.press('Enter')
-  await expect(page.getByText('Comprobante de prueba recibido.')).toBeVisible()
+  await expect(page.getByText(/Comprobante recibido/)).toBeVisible()
   checks.push('terms-keyboard-explicit-only')
   await page
     .getByText('Registrar unidad independiente', { exact: true })

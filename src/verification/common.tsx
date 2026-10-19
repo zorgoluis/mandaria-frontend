@@ -11,14 +11,42 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Confirm } from '../components/ui'
 import { reconcile, useMarkers } from './pending'
-import type { Marker } from './types'
+import type { Marker, PublicationReceipt } from './types'
+import { documentaryAvailability } from './availability'
+import { useRequirements } from './use-availability'
 export function Warning() {
+  const { user } = useAuth()
+  const runtime = useRequirements()
+  const state = user ? documentaryAvailability(runtime) : null
   return (
-    <p className="notice" role="note">
-      <strong>PRUEBA LOCAL — SIN VIGENCIA CONTRACTUAL.</strong> Sólo datos e
-      imágenes sintéticas. No apto para producción. Aceptar términos o cargar
-      archivos no aprueba la operación. No hay baja/purga implementada.
-    </p>
+    <aside className="notice" aria-label="Aviso de verificación documental">
+      {state?.text && (
+        <p
+          role={
+            state.kind === 'error' || state.kind === 'disabled'
+              ? 'alert'
+              : 'status'
+          }
+        >
+          {state.text}
+        </p>
+      )}
+      {state && !state.canProceed && (
+        <button
+          type="button"
+          disabled={runtime.isFetching}
+          onClick={() => void runtime.refetch()}
+        >
+          Consultar disponibilidad
+        </button>
+      )}
+      <p>
+        <strong>Verificación documental.</strong> Aceptar términos o cargar
+        archivos no aprueba el expediente ni habilita operaciones. La baja y sus
+        constancias tienen alcance limitado y seguimiento independiente.{' '}
+        <Link to="/privacy/deletion">Baja y privacidad</Link>
+      </p>
+    </aside>
   )
 }
 export function Form({
@@ -134,6 +162,10 @@ export function Recovery() {
   const [closing, setClosing] = useState<Marker | null>(null)
   const [busy, setBusy] = useState(false)
   const [text, setText] = useState('')
+  const [publication, setPublication] = useState<{
+    actor: string
+    receipt: PublicationReceipt
+  } | null>(null)
   const lock = useRef(false)
   const current = useRef(user?.id)
   useEffect(() => {
@@ -147,7 +179,10 @@ export function Recovery() {
     lock.current = true
     setBusy(true)
     try {
-      const state = await reconcile(m, user.id, refresh, close)
+      const state = await reconcile(m, user.id, refresh, close, (receipt) => {
+        if (current.current === user.id)
+          setPublication({ actor: user.id, receipt })
+      })
       if (current.current === user.id)
         setText(
           state === 'ABSENT'
@@ -196,6 +231,17 @@ export function Recovery() {
           </section>
         ))}
       {text && <p role="status">{text}</p>}
+      {publication?.actor === user?.id && publication && (
+        <section className="notice">
+          <h2>Publicación recuperada · fotografía histórica</h2>
+          <p>
+            {publication.receipt.scope} · {publication.receipt.version} ·
+            revisión {publication.receipt.policyRevision}. Puede existir una
+            publicación vigente posterior. No acredita aprobación jurídica ni
+            activación.
+          </p>
+        </section>
+      )}
       {closing && (
         <Confirm
           title="Cerrar intento técnico"

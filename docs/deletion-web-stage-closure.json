@@ -1,0 +1,2000 @@
+{
+  "date": "2026-10-18",
+  "mode": "READ_ONLY_COMPARISON_AND_WEB_DOCUMENTATION",
+  "web": {
+    "branch": "feature/driver-verification",
+    "head": "ef3df330cdd4c25a9d8416e16656287c50631b85",
+    "parent": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+    "manualCommitSubject": "feat: actualizar baja documental V2 y recuperación administrativa",
+    "initialStatus": "",
+    "remoteConfigured": "https://github.com/zorgoluis/mandaria-frontend.git",
+    "storedRemoteReference": "ef3df330cdd4c25a9d8416e16656287c50631b85",
+    "freshRemoteConfirmation": "PENDING_NOT_QUERIED",
+    "publicationReportedByUser": true,
+    "inventory": [
+      "BITACORA.md",
+      "VERIFICATION.md",
+      "docs/CANCELLED-COMMAND-RECEIPT-WEB.md",
+      "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+      "docs/DOCUMENT-DELETION-V2-WEB.md",
+      "docs/DOCUMENT-DELETION-WEB.md",
+      "docs/RESTRICTION-REVIEW-WEB.md",
+      "docs/cancelled-receipt-web-evidence.json",
+      "docs/cancelled-receipt-web-sources.json",
+      "docs/deletion-v2-publication-review.json",
+      "docs/deletion-v2-sources.json",
+      "docs/deletion-v2-web-evidence.json",
+      "docs/restriction-review-web-evidence.json",
+      "docs/restriction-review-web-sources.json",
+      "scripts/verify-cancelled-receipt-web.mjs",
+      "scripts/verify-deletion-v2-web.mjs",
+      "scripts/verify-restriction-review-web.mjs",
+      "src/deletion/contract.ts",
+      "src/deletion/hooks.ts",
+      "src/deletion/operational-contract.ts",
+      "src/deletion/operational-review.tsx",
+      "src/deletion/operational.tsx",
+      "src/deletion/pages.tsx",
+      "src/deletion/receipt.ts",
+      "src/deletion/review.tsx",
+      "src/deletion/service.ts",
+      "src/test/deletion-pages.test.tsx",
+      "src/test/deletion-service.test.ts",
+      "src/test/deletion-v2-fixtures.ts",
+      "src/test/deletion-v2.test.tsx"
+    ],
+    "candidates": [
+      {
+        "file": "BITACORA.md",
+        "recordedSha256": "7fb9fd0e14eedee22c480a8b417dc953e0592537ca97802e17fb78163e6fc3f4",
+        "currentSha256": "7fb9fd0e14eedee22c480a8b417dc953e0592537ca97802e17fb78163e6fc3f4",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "VERIFICATION.md",
+        "recordedSha256": "9471683dc7ace2bbbad031146d550221c07810d6f0f5cdc31c672472d49e4ae5",
+        "currentSha256": "9471683dc7ace2bbbad031146d550221c07810d6f0f5cdc31c672472d49e4ae5",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/CANCELLED-COMMAND-RECEIPT-WEB.md",
+        "recordedSha256": "35011d544faa0ee220d96b3a58f056a615d19d05f1cf57839c5a3e0a9009f8f2",
+        "currentSha256": "35011d544faa0ee220d96b3a58f056a615d19d05f1cf57839c5a3e0a9009f8f2",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+        "recordedSha256": "8ec078e173dc1a7bc3afb9950ae83ac6cfa4d8d82651874ab25a946fa9cd86d2",
+        "currentSha256": "8ec078e173dc1a7bc3afb9950ae83ac6cfa4d8d82651874ab25a946fa9cd86d2",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-V2-WEB.md",
+        "recordedSha256": "5ed6dbca212e0abb02cd429a37f99b6a11589cba5b48fb5489b06e4636b9b39d",
+        "currentSha256": "5ed6dbca212e0abb02cd429a37f99b6a11589cba5b48fb5489b06e4636b9b39d",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-WEB.md",
+        "recordedSha256": "18d8ea426146a6d24b0eb0b15c587d7b7e79c55a74dc15d148fcb5df2b940f59",
+        "currentSha256": "18d8ea426146a6d24b0eb0b15c587d7b7e79c55a74dc15d148fcb5df2b940f59",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/RESTRICTION-REVIEW-WEB.md",
+        "recordedSha256": "ba8f5f9dba6de5c461e625b84ad48c341c0522b4a51f2933a7e1f4010c6cc93a",
+        "currentSha256": "ba8f5f9dba6de5c461e625b84ad48c341c0522b4a51f2933a7e1f4010c6cc93a",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/cancelled-receipt-web-evidence.json",
+        "recordedSha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4",
+        "currentSha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/cancelled-receipt-web-sources.json",
+        "recordedSha256": "2defdce7fa542df5e20407a5060535d637e40fcb7b38604b24932141750b4afe",
+        "currentSha256": "2defdce7fa542df5e20407a5060535d637e40fcb7b38604b24932141750b4afe",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/deletion-v2-sources.json",
+        "recordedSha256": "1621c63a0dcee6e10bdde394e7ada9554824558a9819d50f790c3a5bc959827e",
+        "currentSha256": "1621c63a0dcee6e10bdde394e7ada9554824558a9819d50f790c3a5bc959827e",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/deletion-v2-web-evidence.json",
+        "recordedSha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c",
+        "currentSha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/restriction-review-web-evidence.json",
+        "recordedSha256": "bb11a0c71daeda354db1217697f80a9a4b0d98a79632017b497efe268f37222c",
+        "currentSha256": "bb11a0c71daeda354db1217697f80a9a4b0d98a79632017b497efe268f37222c",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/restriction-review-web-sources.json",
+        "recordedSha256": "ef488d366cfbe8bf8bb2fba69e8d8eece9d18fbe445f8ec913538abd2ef3aafc",
+        "currentSha256": "ef488d366cfbe8bf8bb2fba69e8d8eece9d18fbe445f8ec913538abd2ef3aafc",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-cancelled-receipt-web.mjs",
+        "recordedSha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b",
+        "currentSha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-deletion-v2-web.mjs",
+        "recordedSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f",
+        "currentSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-restriction-review-web.mjs",
+        "recordedSha256": "aefc5cb2fb7aea252158e52b05b463793c21e8889a9888d22a42b9950cc2909e",
+        "currentSha256": "aefc5cb2fb7aea252158e52b05b463793c21e8889a9888d22a42b9950cc2909e",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/contract.ts",
+        "recordedSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "currentSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/hooks.ts",
+        "recordedSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "currentSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-contract.ts",
+        "recordedSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "currentSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-review.tsx",
+        "recordedSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational.tsx",
+        "recordedSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "currentSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "recordedSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/receipt.ts",
+        "recordedSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "currentSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/review.tsx",
+        "recordedSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "currentSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "recordedSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-pages.test.tsx",
+        "recordedSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916",
+        "currentSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-service.test.ts",
+        "recordedSha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78",
+        "currentSha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-v2-fixtures.ts",
+        "recordedSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "currentSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "matchesReview": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-v2.test.tsx",
+        "recordedSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a",
+        "currentSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a",
+        "matchesReview": true,
+        "matchesCommit": true
+      }
+    ],
+    "latestEvidence": [
+      {
+        "file": "src/deletion/receipt.ts",
+        "recordedSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "currentSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/review.tsx",
+        "recordedSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "currentSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "recordedSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/hooks.ts",
+        "recordedSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "currentSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/pending.ts",
+        "recordedSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+        "currentSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "recordedSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/session.ts",
+        "recordedSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+        "currentSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/services/api.ts",
+        "recordedSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+        "currentSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/app/App.tsx",
+        "recordedSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+        "currentSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/contract.ts",
+        "recordedSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "currentSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational.tsx",
+        "recordedSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "currentSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-service.test.ts",
+        "recordedSha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78",
+        "currentSha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/session-compatibility.test.tsx",
+        "recordedSha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141",
+        "currentSha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-cancelled-receipt-web.mjs",
+        "recordedSha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b",
+        "currentSha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/deletion-isolated-environment.mjs",
+        "recordedSha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a",
+        "currentSha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/deletion-isolated-browser.mjs",
+        "recordedSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+        "currentSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/cancelled-receipt-web-evidence.json",
+        "recordedSha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4",
+        "currentSha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/deletion-v2-web-evidence.json",
+        "recordedSha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c",
+        "currentSha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/privacy.css",
+        "recordedSha256": "721e43e57023ffec7f4364b254bc887b7c40af1b1add9c91b191c5d06e898d89",
+        "currentSha256": "721e43e57023ffec7f4364b254bc887b7c40af1b1add9c91b191c5d06e898d89",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/utils/format.ts",
+        "recordedSha256": "deaa028904315b169b9ff7c5097b3d08918b923b71b7dae00f38b376ceba1465",
+        "currentSha256": "deaa028904315b169b9ff7c5097b3d08918b923b71b7dae00f38b376ceba1465",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-review.tsx",
+        "recordedSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-contract.ts",
+        "recordedSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "currentSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-v2-fixtures.ts",
+        "recordedSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "currentSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-v2.test.tsx",
+        "recordedSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a",
+        "currentSha256": "0da9340f02ab00538d2c7f90591309c5b215fbbf689ae7563b781c931459173a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-pages.test.tsx",
+        "recordedSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916",
+        "currentSha256": "9fcca626daf0a505780a613b72ec9e0fb6a9e21efdbc7a8b45ddc7213f764916",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-deletion-v2-web.mjs",
+        "recordedSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f",
+        "currentSha256": "5261ae7bd65f2f94851dc740f36422dcb707bad85f4f839dc0e163f132cfc45f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-contract.ts",
+        "recordedSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "currentSha256": "7858ce0b56d40337065cd789a43eebf805abbd2df152e40d3344a3aca69e443f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational-review.tsx",
+        "recordedSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "currentSha256": "611cf4bc3ca0c8880cfca3dfddd6b1d4fbf50e2144054920e3835af8259f2dcf",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/operational.tsx",
+        "recordedSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "currentSha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "recordedSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/review.tsx",
+        "recordedSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "currentSha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/contract.ts",
+        "recordedSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "currentSha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "recordedSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/hooks.ts",
+        "recordedSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "currentSha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/pending.ts",
+        "recordedSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+        "currentSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/deletion/receipt.ts",
+        "recordedSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "currentSha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/test/deletion-v2-fixtures.ts",
+        "recordedSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "currentSha256": "cc5ea2e0620d53d5620d99d4fb5645b4efec891ebefaea500bdc41f500bc2e0a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-restriction-review-web.mjs",
+        "recordedSha256": "aefc5cb2fb7aea252158e52b05b463793c21e8889a9888d22a42b9950cc2909e",
+        "currentSha256": "aefc5cb2fb7aea252158e52b05b463793c21e8889a9888d22a42b9950cc2909e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      }
+    ]
+  },
+  "backend": {
+    "path": "C:/Users/zorgl/Documents/mandaria-backend",
+    "head": "5907bca3555d06b0f981f61cd3c3d179f49a66e4",
+    "storedRemoteReference": "5907bca3555d06b0f981f61cd3c3d179f49a66e4",
+    "freshRemoteConfirmation": "PENDING_NOT_QUERIED",
+    "productCommit": "0bdc0978136245a9c18c8ac03f6e34c94b3d89d0",
+    "headIsDocumentationOnly": true,
+    "publishedSources": [
+      {
+        "file": "prisma/migrations/20261016000100_document_deletion/migration.sql",
+        "recordedSha256": "65d15770b7bd8d95a1db2083fb966840da2bbd91e4be9b2cb238971352ef462f",
+        "currentSha256": "65d15770b7bd8d95a1db2083fb966840da2bbd91e4be9b2cb238971352ef462f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000200_document_deletion_hardening/migration.sql",
+        "recordedSha256": "57df6d33f22513a59526fe706c401b9e3e409fc529ae66f9e1f73c93e5fe34bd",
+        "currentSha256": "57df6d33f22513a59526fe706c401b9e3e409fc529ae66f9e1f73c93e5fe34bd",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000300_document_replacement/migration.sql",
+        "recordedSha256": "165ce0e18fb3e133b992ef0898e9eca723684c1dd7e378a81ea968e82881d695",
+        "currentSha256": "165ce0e18fb3e133b992ef0898e9eca723684c1dd7e378a81ea968e82881d695",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000400_document_deletion_subscopes/migration.sql",
+        "recordedSha256": "488b00ddeff139603a521dac664025c3591cda429f0b1ec2dcd3c009ac3d7c87",
+        "currentSha256": "488b00ddeff139603a521dac664025c3591cda429f0b1ec2dcd3c009ac3d7c87",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000500_document_deletion_tasks/migration.sql",
+        "recordedSha256": "405a2a20f2d397da9ec572de38b6b125cc644250f0cd06ed08404bfae345b84b",
+        "currentSha256": "405a2a20f2d397da9ec572de38b6b125cc644250f0cd06ed08404bfae345b84b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000600_document_deletion_calendar/migration.sql",
+        "recordedSha256": "81e6e5b035ea15fdc801e7f3f9b18ceba08a05c868bb799bee32051caf775a8e",
+        "currentSha256": "81e6e5b035ea15fdc801e7f3f9b18ceba08a05c868bb799bee32051caf775a8e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000700_document_shared_minimization/migration.sql",
+        "recordedSha256": "a5c786010dfc3ff659c43fa1656ced606114cf6feef28148defa2e32db494200",
+        "currentSha256": "a5c786010dfc3ff659c43fa1656ced606114cf6feef28148defa2e32db494200",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000800_document_recovery_fence/migration.sql",
+        "recordedSha256": "d32d4933eba4b00bf49f5cfc596ff6485c080a6f277506721a6b829c4c8549d5",
+        "currentSha256": "d32d4933eba4b00bf49f5cfc596ff6485c080a6f277506721a6b829c4c8549d5",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261016000900_document_restore_floor/migration.sql",
+        "recordedSha256": "7c30559763e2fe3b3c1d7686027b63f1f9cd1faf5c11cfcfbb648ce6bf634f92",
+        "currentSha256": "7c30559763e2fe3b3c1d7686027b63f1f9cd1faf5c11cfcfbb648ce6bf634f92",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/migrations/20261017000100_operational_document_cleanup/migration.sql",
+        "recordedSha256": "b7d227dd17ffade38bc25a1ad8e422810bdf294a2da85eca8d61d395cae145f2",
+        "currentSha256": "b7d227dd17ffade38bc25a1ad8e422810bdf294a2da85eca8d61d395cae145f2",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "recordedSha256": "a307b4c085a0e8b7a006c3dd9885e452136ceddf5c3728f654b7b2dfc22a2e73",
+        "currentSha256": "a307b4c085a0e8b7a006c3dd9885e452136ceddf5c3728f654b7b2dfc22a2e73",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/backup-documentary-local.mjs",
+        "recordedSha256": "7f9d52a36ad64ccd3eaf8990377b97ae1f7268d591680947e19961f42c984e0e",
+        "currentSha256": "7f9d52a36ad64ccd3eaf8990377b97ae1f7268d591680947e19961f42c984e0e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/fixtures/document-deletion-upgrade.mjs",
+        "recordedSha256": "79c9763127e236300eeafea7f2e40c1f5b4d7de360e87047e7611f4de35cf06e",
+        "currentSha256": "79c9763127e236300eeafea7f2e40c1f5b4d7de360e87047e7611f4de35cf06e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/restore-documentary-local.mjs",
+        "recordedSha256": "5fabcd84bf5991eb76e26e22edd61643cf5628e5e7d20585358ba7d1b2bddfab",
+        "currentSha256": "5fabcd84bf5991eb76e26e22edd61643cf5628e5e7d20585358ba7d1b2bddfab",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-deletion-final-browser.mjs",
+        "recordedSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+        "currentSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-deletion-final-contract.mjs",
+        "recordedSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+        "currentSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-document-deletion-migrations.mjs",
+        "recordedSha256": "97dddecfea766b14c2a6236a64b62a728f74d6935411c343440e05d2d2a82511",
+        "currentSha256": "97dddecfea766b14c2a6236a64b62a728f74d6935411c343440e05d2d2a82511",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-document-recovery-migrations.mjs",
+        "recordedSha256": "f17c53cbd9196711870b0b97dfc27da8471cb2fa3fe662d20de72de073346a97",
+        "currentSha256": "f17c53cbd9196711870b0b97dfc27da8471cb2fa3fe662d20de72de073346a97",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "scripts/verify-operational-cleanup-migrations.mjs",
+        "recordedSha256": "ed5bc0452c13151a04dab38b02912ff136c9e9d616a57bca94b7332322e5dd52",
+        "currentSha256": "ed5bc0452c13151a04dab38b02912ff136c9e9d616a57bca94b7332322e5dd52",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/app.module.ts",
+        "recordedSha256": "77740973edb88aa85f15fe83e28de9a72315b20c33e99b06603b66be69d1a471",
+        "currentSha256": "77740973edb88aa85f15fe83e28de9a72315b20c33e99b06603b66be69d1a471",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/assignments/assignments.service.ts",
+        "recordedSha256": "9e5d13bc88b9363d0578332355b916e0f6cd67b273506a36101235b9345ade43",
+        "currentSha256": "9e5d13bc88b9363d0578332355b916e0f6cd67b273506a36101235b9345ade43",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/auth.controller.ts",
+        "recordedSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+        "currentSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/auth.dto.ts",
+        "recordedSha256": "0971bcfa14f414a568fde8e0d498ea3592b241c518e0761fca624a7c8d6f7848",
+        "currentSha256": "0971bcfa14f414a568fde8e0d498ea3592b241c518e0761fca624a7c8d6f7848",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/auth.guards.ts",
+        "recordedSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+        "currentSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/auth.responses.ts",
+        "recordedSha256": "23b11dffc91a26ef4403cab91c3b0b2d530ad52ee4b98374a4ec4b792955bd25",
+        "currentSha256": "23b11dffc91a26ef4403cab91c3b0b2d530ad52ee4b98374a4ec4b792955bd25",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/auth/auth.service.ts",
+        "recordedSha256": "d3f72f8d56db09fdd0d492eb405f240fb5f66bfd0e5b2687268c3db426fac84f",
+        "currentSha256": "d3f72f8d56db09fdd0d492eb405f240fb5f66bfd0e5b2687268c3db426fac84f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/config/environment.ts",
+        "recordedSha256": "72353637ca719d35999b16594666b61013ccaa5840aa81319f1e7170aa56a98f",
+        "currentSha256": "72353637ca719d35999b16594666b61013ccaa5840aa81319f1e7170aa56a98f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/delivery-assignments/delivery-assignments.service.ts",
+        "recordedSha256": "de1713cf16950565cd9e29d7199432646dab5e28e2d86d82b1ff8bb4fc70d292",
+        "currentSha256": "de1713cf16950565cd9e29d7199432646dab5e28e2d86d82b1ff8bb4fc70d292",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/dispatch/dispatch.service.ts",
+        "recordedSha256": "e8eb612705839e84b9d3bd5d981da0d46a1437ddb4b46a76af18d0bf6ebf0621",
+        "currentSha256": "e8eb612705839e84b9d3bd5d981da0d46a1437ddb4b46a76af18d0bf6ebf0621",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/independent-drivers/independent-dispatches.service.ts",
+        "recordedSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+        "currentSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/mail/local-outbox-mail.provider.ts",
+        "recordedSha256": "c0e60a64c164ff91a4c4c58d1102825882720d224fe377652e80c03a55d05187",
+        "currentSha256": "c0e60a64c164ff91a4c4c58d1102825882720d224fe377652e80c03a55d05187",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/mail/mail.types.ts",
+        "recordedSha256": "27e0223721e3b1ffdf0ed2fa4ebe3cd34be7c7e691b1f8e63b3952dfa56598f0",
+        "currentSha256": "27e0223721e3b1ffdf0ed2fa4ebe3cd34be7c7e691b1f8e63b3952dfa56598f0",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/main.ts",
+        "recordedSha256": "f280ba7c2d4d4098ef6bee095040a452195711e39c56ac9e7215380102d01ccc",
+        "currentSha256": "f280ba7c2d4d4098ef6bee095040a452195711e39c56ac9e7215380102d01ccc",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/users/users.service.ts",
+        "recordedSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+        "currentSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion-command-receipt.ts",
+        "recordedSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "currentSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion-policy.ts",
+        "recordedSha256": "2741bf7cc0c0b46b2341a0a8f74654d2820a498b8daad8737db749f1f4a8783d",
+        "currentSha256": "2741bf7cc0c0b46b2341a0a8f74654d2820a498b8daad8737db749f1f4a8783d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion-storage.ts",
+        "recordedSha256": "f9891f00cc53cd10f21d56c627ffedf206737f0fe0a2b4ab11a75d52fd6b34fc",
+        "currentSha256": "f9891f00cc53cd10f21d56c627ffedf206737f0fe0a2b4ab11a75d52fd6b34fc",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion-worker.ts",
+        "recordedSha256": "f57e1eb8025f873f9b5b3808ee22b737cede836bc6724d3da5e2b6cce950c968",
+        "currentSha256": "f57e1eb8025f873f9b5b3808ee22b737cede836bc6724d3da5e2b6cce950c968",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.controller.ts",
+        "recordedSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "currentSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.dto.ts",
+        "recordedSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "currentSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.responses.ts",
+        "recordedSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "currentSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.service.ts",
+        "recordedSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+        "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/document-recovery.ts",
+        "recordedSha256": "0aa5247a8df96040b644ad427902b7d6b84729925aa0b8835179be43aacb21d0",
+        "currentSha256": "0aa5247a8df96040b644ad427902b7d6b84729925aa0b8835179be43aacb21d0",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/operational-cleanup.ts",
+        "recordedSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "currentSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/recovery-access.ts",
+        "recordedSha256": "de18e7e52e71c46b842358bc69d7d5947a7fb70b3562f52dfe6bdfeff1351f23",
+        "currentSha256": "de18e7e52e71c46b842358bc69d7d5947a7fb70b3562f52dfe6bdfeff1351f23",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/recovery-v2.ts",
+        "recordedSha256": "69ee1ceee8ad06d7d70cce0cc9a6575f0106311bf9775b00cf69d5b1cc66107b",
+        "currentSha256": "69ee1ceee8ad06d7d70cce0cc9a6575f0106311bf9775b00cf69d5b1cc66107b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/verification-storage.ts",
+        "recordedSha256": "437605aff4f346129addf0801ea16ff22593647ed44656629f69dae6a9a4921d",
+        "currentSha256": "437605aff4f346129addf0801ea16ff22593647ed44656629f69dae6a9a4921d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/verification.module.ts",
+        "recordedSha256": "3aa936f1f9f1f3be5335bc95813fc756a69673d4f0bfd52d0e27a64b28b4047f",
+        "currentSha256": "3aa936f1f9f1f3be5335bc95813fc756a69673d4f0bfd52d0e27a64b28b4047f",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "recordedSha256": "18be71ade18bc1c000c5ec7bf697f417a184b4b93d3ed3b7a2aba8719c5ccab7",
+        "currentSha256": "18be71ade18bc1c000c5ec7bf697f417a184b4b93d3ed3b7a2aba8719c5ccab7",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/cancelled-command-receipt.e2e-spec.ts",
+        "recordedSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "currentSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/deletion-command-receipt.spec.ts",
+        "recordedSha256": "2130cb78f68f6f5c3fd4c0106ac54d06a3ffc9db083b177298548952b587885e",
+        "currentSha256": "2130cb78f68f6f5c3fd4c0106ac54d06a3ffc9db083b177298548952b587885e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/deletion-message-projection.spec.ts",
+        "recordedSha256": "8dfc05183f83ca54678cd1dee04adfa90b1da36db6e4a5fb9b9ea766c3e22174",
+        "currentSha256": "8dfc05183f83ca54678cd1dee04adfa90b1da36db6e4a5fb9b9ea766c3e22174",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/dispatch.spec.ts",
+        "recordedSha256": "996b39e5aac72042ea5b6712cfe1b11b0f1c2e577ea5c2cbd99b5d96db6150a2",
+        "currentSha256": "996b39e5aac72042ea5b6712cfe1b11b0f1c2e577ea5c2cbd99b5d96db6150a2",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/document-deletion-compatibility.e2e-spec.ts",
+        "recordedSha256": "92d1fe93ee897faa1b04aa9d4d05e7e5a5beb58c620bea0023284d29f8b18c8c",
+        "currentSha256": "92d1fe93ee897faa1b04aa9d4d05e7e5a5beb58c620bea0023284d29f8b18c8c",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/document-deletion.e2e-spec.ts",
+        "recordedSha256": "b3770b44e36f7a739c18cba409b9e50fc0dc5565e0ed575374c392bb764c4748",
+        "currentSha256": "b3770b44e36f7a739c18cba409b9e50fc0dc5565e0ed575374c392bb764c4748",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/document-deletion.spec.ts",
+        "recordedSha256": "0db44a8b7191a3526fab047223e35ff45385cf335e502a989877fb873cb48c97",
+        "currentSha256": "0db44a8b7191a3526fab047223e35ff45385cf335e502a989877fb873cb48c97",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/document-recovery.e2e-spec.ts",
+        "recordedSha256": "102318f2807e518205ab72b329c11e929a0fc5925b0d5990477dfc0d5ca9920d",
+        "currentSha256": "102318f2807e518205ab72b329c11e929a0fc5925b0d5990477dfc0d5ca9920d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/deletion-active-fixture.ts",
+        "recordedSha256": "d8db85d419cd160a0a24021d88e02bcf043b893d26843c1d4e0a0d7cf08e1c1e",
+        "currentSha256": "d8db85d419cd160a0a24021d88e02bcf043b893d26843c1d4e0a0d7cf08e1c1e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/deletion-storage-double.ts",
+        "recordedSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "currentSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/ignore-local-env.ts",
+        "recordedSha256": "a99c06172b1d72d4ba35933ebbc5948478408150704272fabcb1993d506aec2e",
+        "currentSha256": "a99c06172b1d72d4ba35933ebbc5948478408150704272fabcb1993d506aec2e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/legacy-deletion-client.ts",
+        "recordedSha256": "f2ac1d2ae78b034219450a2a104edb643b826b349a611a1188f5ce572e9dee23",
+        "currentSha256": "f2ac1d2ae78b034219450a2a104edb643b826b349a611a1188f5ce572e9dee23",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/operational-cleanup.e2e-spec.ts",
+        "recordedSha256": "642c7662c2f9ae02cfbdf5b4befe7defb5bbe77eebb0f21eccbf94fc6c6b9078",
+        "currentSha256": "642c7662c2f9ae02cfbdf5b4befe7defb5bbe77eebb0f21eccbf94fc6c6b9078",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/recovery-v2.e2e-spec.ts",
+        "recordedSha256": "33512180eb57eeb08dda75e1690b2f2dd87162781c441a48b5cfa6eab4146e1e",
+        "currentSha256": "33512180eb57eeb08dda75e1690b2f2dd87162781c441a48b5cfa6eab4146e1e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/services.spec.ts",
+        "recordedSha256": "665193171cc52151cca5da601ea809425427bdf4d08a75c07567cb4e2333a86a",
+        "currentSha256": "665193171cc52151cca5da601ea809425427bdf4d08a75c07567cb4e2333a86a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.cancelled-receipt.ts",
+        "recordedSha256": "d9927d28009e5e9a5a4fc8776e91cd4368e579d7401959e97a3ef8945e0289da",
+        "currentSha256": "d9927d28009e5e9a5a4fc8776e91cd4368e579d7401959e97a3ef8945e0289da",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.deletion-compatibility.ts",
+        "recordedSha256": "2f55f56c767a5f9e51bab8973f599adeb7945ec113bab8e317eeeb06d0008374",
+        "currentSha256": "2f55f56c767a5f9e51bab8973f599adeb7945ec113bab8e317eeeb06d0008374",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.document-deletion.ts",
+        "recordedSha256": "d4d0d97373e501c952ff1223bf1489559abf6ddb40ab34e71665d081a9abe9e7",
+        "currentSha256": "d4d0d97373e501c952ff1223bf1489559abf6ddb40ab34e71665d081a9abe9e7",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.document-recovery.ts",
+        "recordedSha256": "d56103c2bf400077ae240cd838eca4334bc5b05ae35c8879b2baefeaefde33a8",
+        "currentSha256": "d56103c2bf400077ae240cd838eca4334bc5b05ae35c8879b2baefeaefde33a8",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.operational-cleanup.ts",
+        "recordedSha256": "9ea240ffec8257114076f6eb68ffb75816d5e47ae8bb4f624ddbf0b556ea2bb6",
+        "currentSha256": "9ea240ffec8257114076f6eb68ffb75816d5e47ae8bb4f624ddbf0b556ea2bb6",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.operational-logistics.ts",
+        "recordedSha256": "3b5ea9d57fc55075463e71ef30f10fc9930940d51e6fe2977bb2ca281813889e",
+        "currentSha256": "3b5ea9d57fc55075463e71ef30f10fc9930940d51e6fe2977bb2ca281813889e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "vitest.config.recovery-v2.ts",
+        "recordedSha256": "eba866674c7b376591e558f29421482a05559bef095d481ae18a80b4385a7d4c",
+        "currentSha256": "eba866674c7b376591e558f29421482a05559bef095d481ae18a80b4385a7d4c",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      }
+    ],
+    "latestWebReferences": [
+      {
+        "file": "src/verification/deletion-command-receipt.ts",
+        "recordedSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "currentSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.service.ts",
+        "recordedSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+        "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.responses.ts",
+        "recordedSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "currentSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.controller.ts",
+        "recordedSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "currentSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.dto.ts",
+        "recordedSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "currentSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/operational-cleanup.ts",
+        "recordedSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "currentSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/openapi.json",
+        "recordedSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+        "currentSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+        "recordedSha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6",
+        "currentSha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/checks/cancelled-command-receipt-local.json",
+        "recordedSha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b",
+        "currentSha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/cancelled-command-receipt.e2e-spec.ts",
+        "recordedSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "currentSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/deletion-storage-double.ts",
+        "recordedSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "currentSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/RESTRICTION-REVIEW-MESSAGE-ANALYSIS.md",
+        "recordedSha256": "c71dc633be712d5ca736899db09c6ed6a6b5bf4816f16cf1b689fda303b4403a",
+        "currentSha256": "c71dc633be712d5ca736899db09c6ed6a6b5bf4816f16cf1b689fda303b4403a",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      }
+    ],
+    "cancelledHistoricalReferences": [
+      {
+        "file": "src/verification/deletion-command-receipt.ts",
+        "recordedSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "currentSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.service.ts",
+        "recordedSha256": "3a044f15ae31ee5adc277464186afdb4ac8f89cd94632b0f5f24270c0c50b691",
+        "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+        "matchesRecorded": false,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.responses.ts",
+        "recordedSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "currentSha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.controller.ts",
+        "recordedSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "currentSha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/deletion.dto.ts",
+        "recordedSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "currentSha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "src/verification/operational-cleanup.ts",
+        "recordedSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "currentSha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/openapi.json",
+        "recordedSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+        "currentSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+        "recordedSha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6",
+        "currentSha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "docs/checks/cancelled-command-receipt-local.json",
+        "recordedSha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b",
+        "currentSha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/cancelled-command-receipt.e2e-spec.ts",
+        "recordedSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "currentSha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      },
+      {
+        "file": "test/helpers/deletion-storage-double.ts",
+        "recordedSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "currentSha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1",
+        "matchesRecorded": true,
+        "matchesCommit": true
+      }
+    ],
+    "trackedContentCompared": 1019,
+    "localTrackedContentDifferences": [
+      {
+        "file": "BITACORA.md",
+        "sha256": "de9e3d0038118d1c7cd7cfae4f91655cfdd8351572803a3c319bbc3a99d6ba15"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "sha256": "5e9caaf4d623c77997ad8335f14a96afde22047de38e3eadc1f04e7464575e99"
+      }
+    ],
+    "unreadableTracked": [],
+    "localUnpublishedDocuments": [
+      {
+        "file": "docs/DRIVER-VERIFICATION-STAGE-CLOSURE.md",
+        "inCommit": false,
+        "sha256": "0fe25312d3feed1b8838a932d173d3534ef88a41fb12bfc994f56f27bb3c5c55"
+      },
+      {
+        "file": "docs/checks/documentary-stage-closure.json",
+        "inCommit": false,
+        "sha256": "a61718fc8623e345a7ae1781df2c53e24bd289072cc12d0693f095acad2ba03f"
+      }
+    ],
+    "gitStatusLimitation": "Git status of backend worktree unavailable in current execution environment; tracked files compared read-only against Git blob IDs instead. No full untracked inventory claimed.",
+    "readHashesBefore": [
+      {
+        "file": "prisma/migrations/20261016000100_document_deletion/migration.sql",
+        "sha256": "65d15770b7bd8d95a1db2083fb966840da2bbd91e4be9b2cb238971352ef462f"
+      },
+      {
+        "file": "prisma/migrations/20261016000200_document_deletion_hardening/migration.sql",
+        "sha256": "57df6d33f22513a59526fe706c401b9e3e409fc529ae66f9e1f73c93e5fe34bd"
+      },
+      {
+        "file": "prisma/migrations/20261016000300_document_replacement/migration.sql",
+        "sha256": "165ce0e18fb3e133b992ef0898e9eca723684c1dd7e378a81ea968e82881d695"
+      },
+      {
+        "file": "prisma/migrations/20261016000400_document_deletion_subscopes/migration.sql",
+        "sha256": "488b00ddeff139603a521dac664025c3591cda429f0b1ec2dcd3c009ac3d7c87"
+      },
+      {
+        "file": "prisma/migrations/20261016000500_document_deletion_tasks/migration.sql",
+        "sha256": "405a2a20f2d397da9ec572de38b6b125cc644250f0cd06ed08404bfae345b84b"
+      },
+      {
+        "file": "prisma/migrations/20261016000600_document_deletion_calendar/migration.sql",
+        "sha256": "81e6e5b035ea15fdc801e7f3f9b18ceba08a05c868bb799bee32051caf775a8e"
+      },
+      {
+        "file": "prisma/migrations/20261016000700_document_shared_minimization/migration.sql",
+        "sha256": "a5c786010dfc3ff659c43fa1656ced606114cf6feef28148defa2e32db494200"
+      },
+      {
+        "file": "prisma/migrations/20261016000800_document_recovery_fence/migration.sql",
+        "sha256": "d32d4933eba4b00bf49f5cfc596ff6485c080a6f277506721a6b829c4c8549d5"
+      },
+      {
+        "file": "prisma/migrations/20261016000900_document_restore_floor/migration.sql",
+        "sha256": "7c30559763e2fe3b3c1d7686027b63f1f9cd1faf5c11cfcfbb648ce6bf634f92"
+      },
+      {
+        "file": "prisma/migrations/20261017000100_operational_document_cleanup/migration.sql",
+        "sha256": "b7d227dd17ffade38bc25a1ad8e422810bdf294a2da85eca8d61d395cae145f2"
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "sha256": "a307b4c085a0e8b7a006c3dd9885e452136ceddf5c3728f654b7b2dfc22a2e73"
+      },
+      {
+        "file": "scripts/backup-documentary-local.mjs",
+        "sha256": "7f9d52a36ad64ccd3eaf8990377b97ae1f7268d591680947e19961f42c984e0e"
+      },
+      {
+        "file": "scripts/fixtures/document-deletion-upgrade.mjs",
+        "sha256": "79c9763127e236300eeafea7f2e40c1f5b4d7de360e87047e7611f4de35cf06e"
+      },
+      {
+        "file": "scripts/restore-documentary-local.mjs",
+        "sha256": "5fabcd84bf5991eb76e26e22edd61643cf5628e5e7d20585358ba7d1b2bddfab"
+      },
+      {
+        "file": "scripts/verify-deletion-final-browser.mjs",
+        "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605"
+      },
+      {
+        "file": "scripts/verify-deletion-final-contract.mjs",
+        "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d"
+      },
+      {
+        "file": "scripts/verify-document-deletion-migrations.mjs",
+        "sha256": "97dddecfea766b14c2a6236a64b62a728f74d6935411c343440e05d2d2a82511"
+      },
+      {
+        "file": "scripts/verify-document-recovery-migrations.mjs",
+        "sha256": "f17c53cbd9196711870b0b97dfc27da8471cb2fa3fe662d20de72de073346a97"
+      },
+      {
+        "file": "scripts/verify-operational-cleanup-migrations.mjs",
+        "sha256": "ed5bc0452c13151a04dab38b02912ff136c9e9d616a57bca94b7332322e5dd52"
+      },
+      {
+        "file": "src/app.module.ts",
+        "sha256": "77740973edb88aa85f15fe83e28de9a72315b20c33e99b06603b66be69d1a471"
+      },
+      {
+        "file": "src/assignments/assignments.service.ts",
+        "sha256": "9e5d13bc88b9363d0578332355b916e0f6cd67b273506a36101235b9345ade43"
+      },
+      {
+        "file": "src/auth/auth.controller.ts",
+        "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+      },
+      {
+        "file": "src/auth/auth.dto.ts",
+        "sha256": "0971bcfa14f414a568fde8e0d498ea3592b241c518e0761fca624a7c8d6f7848"
+      },
+      {
+        "file": "src/auth/auth.guards.ts",
+        "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+      },
+      {
+        "file": "src/auth/auth.responses.ts",
+        "sha256": "23b11dffc91a26ef4403cab91c3b0b2d530ad52ee4b98374a4ec4b792955bd25"
+      },
+      {
+        "file": "src/auth/auth.service.ts",
+        "sha256": "d3f72f8d56db09fdd0d492eb405f240fb5f66bfd0e5b2687268c3db426fac84f"
+      },
+      {
+        "file": "src/config/environment.ts",
+        "sha256": "72353637ca719d35999b16594666b61013ccaa5840aa81319f1e7170aa56a98f"
+      },
+      {
+        "file": "src/delivery-assignments/delivery-assignments.service.ts",
+        "sha256": "de1713cf16950565cd9e29d7199432646dab5e28e2d86d82b1ff8bb4fc70d292"
+      },
+      {
+        "file": "src/dispatch/dispatch.service.ts",
+        "sha256": "e8eb612705839e84b9d3bd5d981da0d46a1437ddb4b46a76af18d0bf6ebf0621"
+      },
+      {
+        "file": "src/independent-drivers/independent-dispatches.service.ts",
+        "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4"
+      },
+      {
+        "file": "src/mail/local-outbox-mail.provider.ts",
+        "sha256": "c0e60a64c164ff91a4c4c58d1102825882720d224fe377652e80c03a55d05187"
+      },
+      {
+        "file": "src/mail/mail.types.ts",
+        "sha256": "27e0223721e3b1ffdf0ed2fa4ebe3cd34be7c7e691b1f8e63b3952dfa56598f0"
+      },
+      {
+        "file": "src/main.ts",
+        "sha256": "f280ba7c2d4d4098ef6bee095040a452195711e39c56ac9e7215380102d01ccc"
+      },
+      {
+        "file": "src/users/users.service.ts",
+        "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d"
+      },
+      {
+        "file": "src/verification/deletion-command-receipt.ts",
+        "sha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e"
+      },
+      {
+        "file": "src/verification/deletion-policy.ts",
+        "sha256": "2741bf7cc0c0b46b2341a0a8f74654d2820a498b8daad8737db749f1f4a8783d"
+      },
+      {
+        "file": "src/verification/deletion-storage.ts",
+        "sha256": "f9891f00cc53cd10f21d56c627ffedf206737f0fe0a2b4ab11a75d52fd6b34fc"
+      },
+      {
+        "file": "src/verification/deletion-worker.ts",
+        "sha256": "f57e1eb8025f873f9b5b3808ee22b737cede836bc6724d3da5e2b6cce950c968"
+      },
+      {
+        "file": "src/verification/deletion.controller.ts",
+        "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+      },
+      {
+        "file": "src/verification/deletion.dto.ts",
+        "sha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d"
+      },
+      {
+        "file": "src/verification/deletion.responses.ts",
+        "sha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414"
+      },
+      {
+        "file": "src/verification/deletion.service.ts",
+        "sha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc"
+      },
+      {
+        "file": "src/verification/document-recovery.ts",
+        "sha256": "0aa5247a8df96040b644ad427902b7d6b84729925aa0b8835179be43aacb21d0"
+      },
+      {
+        "file": "src/verification/operational-cleanup.ts",
+        "sha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81"
+      },
+      {
+        "file": "src/verification/recovery-access.ts",
+        "sha256": "de18e7e52e71c46b842358bc69d7d5947a7fb70b3562f52dfe6bdfeff1351f23"
+      },
+      {
+        "file": "src/verification/recovery-v2.ts",
+        "sha256": "69ee1ceee8ad06d7d70cce0cc9a6575f0106311bf9775b00cf69d5b1cc66107b"
+      },
+      {
+        "file": "src/verification/verification-storage.ts",
+        "sha256": "437605aff4f346129addf0801ea16ff22593647ed44656629f69dae6a9a4921d"
+      },
+      {
+        "file": "src/verification/verification.module.ts",
+        "sha256": "3aa936f1f9f1f3be5335bc95813fc756a69673d4f0bfd52d0e27a64b28b4047f"
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "sha256": "18be71ade18bc1c000c5ec7bf697f417a184b4b93d3ed3b7a2aba8719c5ccab7"
+      },
+      {
+        "file": "test/cancelled-command-receipt.e2e-spec.ts",
+        "sha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa"
+      },
+      {
+        "file": "test/deletion-command-receipt.spec.ts",
+        "sha256": "2130cb78f68f6f5c3fd4c0106ac54d06a3ffc9db083b177298548952b587885e"
+      },
+      {
+        "file": "test/deletion-message-projection.spec.ts",
+        "sha256": "8dfc05183f83ca54678cd1dee04adfa90b1da36db6e4a5fb9b9ea766c3e22174"
+      },
+      {
+        "file": "test/dispatch.spec.ts",
+        "sha256": "996b39e5aac72042ea5b6712cfe1b11b0f1c2e577ea5c2cbd99b5d96db6150a2"
+      },
+      {
+        "file": "test/document-deletion-compatibility.e2e-spec.ts",
+        "sha256": "92d1fe93ee897faa1b04aa9d4d05e7e5a5beb58c620bea0023284d29f8b18c8c"
+      },
+      {
+        "file": "test/document-deletion.e2e-spec.ts",
+        "sha256": "b3770b44e36f7a739c18cba409b9e50fc0dc5565e0ed575374c392bb764c4748"
+      },
+      {
+        "file": "test/document-deletion.spec.ts",
+        "sha256": "0db44a8b7191a3526fab047223e35ff45385cf335e502a989877fb873cb48c97"
+      },
+      {
+        "file": "test/document-recovery.e2e-spec.ts",
+        "sha256": "102318f2807e518205ab72b329c11e929a0fc5925b0d5990477dfc0d5ca9920d"
+      },
+      {
+        "file": "test/helpers/deletion-active-fixture.ts",
+        "sha256": "d8db85d419cd160a0a24021d88e02bcf043b893d26843c1d4e0a0d7cf08e1c1e"
+      },
+      {
+        "file": "test/helpers/deletion-storage-double.ts",
+        "sha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1"
+      },
+      {
+        "file": "test/helpers/ignore-local-env.ts",
+        "sha256": "a99c06172b1d72d4ba35933ebbc5948478408150704272fabcb1993d506aec2e"
+      },
+      {
+        "file": "test/helpers/legacy-deletion-client.ts",
+        "sha256": "f2ac1d2ae78b034219450a2a104edb643b826b349a611a1188f5ce572e9dee23"
+      },
+      {
+        "file": "test/operational-cleanup.e2e-spec.ts",
+        "sha256": "642c7662c2f9ae02cfbdf5b4befe7defb5bbe77eebb0f21eccbf94fc6c6b9078"
+      },
+      {
+        "file": "test/recovery-v2.e2e-spec.ts",
+        "sha256": "33512180eb57eeb08dda75e1690b2f2dd87162781c441a48b5cfa6eab4146e1e"
+      },
+      {
+        "file": "test/services.spec.ts",
+        "sha256": "665193171cc52151cca5da601ea809425427bdf4d08a75c07567cb4e2333a86a"
+      },
+      {
+        "file": "vitest.config.cancelled-receipt.ts",
+        "sha256": "d9927d28009e5e9a5a4fc8776e91cd4368e579d7401959e97a3ef8945e0289da"
+      },
+      {
+        "file": "vitest.config.deletion-compatibility.ts",
+        "sha256": "2f55f56c767a5f9e51bab8973f599adeb7945ec113bab8e317eeeb06d0008374"
+      },
+      {
+        "file": "vitest.config.document-deletion.ts",
+        "sha256": "d4d0d97373e501c952ff1223bf1489559abf6ddb40ab34e71665d081a9abe9e7"
+      },
+      {
+        "file": "vitest.config.document-recovery.ts",
+        "sha256": "d56103c2bf400077ae240cd838eca4334bc5b05ae35c8879b2baefeaefde33a8"
+      },
+      {
+        "file": "vitest.config.operational-cleanup.ts",
+        "sha256": "9ea240ffec8257114076f6eb68ffb75816d5e47ae8bb4f624ddbf0b556ea2bb6"
+      },
+      {
+        "file": "vitest.config.operational-logistics.ts",
+        "sha256": "3b5ea9d57fc55075463e71ef30f10fc9930940d51e6fe2977bb2ca281813889e"
+      },
+      {
+        "file": "vitest.config.recovery-v2.ts",
+        "sha256": "eba866674c7b376591e558f29421482a05559bef095d481ae18a80b4385a7d4c"
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35"
+      },
+      {
+        "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+        "sha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6"
+      },
+      {
+        "file": "docs/checks/cancelled-command-receipt-local.json",
+        "sha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b"
+      },
+      {
+        "file": "docs/RESTRICTION-REVIEW-MESSAGE-ANALYSIS.md",
+        "sha256": "c71dc633be712d5ca736899db09c6ed6a6b5bf4816f16cf1b689fda303b4403a"
+      },
+      {
+        "file": "src/deliveries/delivery-completion.ts",
+        "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0"
+      },
+      {
+        "file": "src/drivers/drivers.service.ts",
+        "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547"
+      },
+      {
+        "file": "docs/DRIVER-VERIFICATION-STAGE-CLOSURE.md",
+        "inCommit": false,
+        "sha256": "0fe25312d3feed1b8838a932d173d3534ef88a41fb12bfc994f56f27bb3c5c55"
+      },
+      {
+        "file": "docs/checks/documentary-stage-closure.json",
+        "inCommit": false,
+        "sha256": "a61718fc8623e345a7ae1781df2c53e24bd289072cc12d0693f095acad2ba03f"
+      }
+    ],
+    "messageDelta": {
+      "historicalCopySha256": "3a044f15ae31ee5adc277464186afdb4ac8f89cd94632b0f5f24270c0c50b691",
+      "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+      "oldMatchesIntegratedCancelledEvidence": true,
+      "onlyCurrentMessageFieldChanged": true,
+      "normalization": "CRLF/LF only",
+      "historicalUnitProjectionReport": {
+        "report": ".tmp/restriction-message-fix/tests.json",
+        "sha256": "6815d79b3200434606fd4d9774d2b1311ddddc76cc9165a0cefff786c4adc452",
+        "passed": 15
+      },
+      "historicalReportHashMatches": true
+    },
+    "readFilesUnchangedAtEnd": {
+      "comparisons": 81,
+      "allMatch": true
+    }
+  },
+  "historicalBrowserEvidence": [
+    {
+      "report": "docs/deletion-delivery-resume-evidence.json",
+      "web": [
+        {
+          "file": "src/deletion/ActiveService.tsx",
+          "recordedSha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c",
+          "currentSha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/pages.tsx",
+          "recordedSha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68",
+          "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/pending.ts",
+          "recordedSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+          "currentSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/service.ts",
+          "recordedSha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7",
+          "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/auth/session.ts",
+          "recordedSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+          "currentSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/services/api.ts",
+          "recordedSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+          "currentSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/app/App.tsx",
+          "recordedSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+          "currentSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ],
+      "harness": [
+        {
+          "file": "scripts/verify-deletion-delivery-resume.mjs",
+          "recordedSha256": "a28c383694d7fd2f3e1dab6e5041ebb9853867ae504961ce63493dca7f349c38",
+          "currentSha256": "a28c383694d7fd2f3e1dab6e5041ebb9853867ae504961ce63493dca7f349c38",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "recordedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+          "currentSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-session-check.mjs",
+          "recordedSha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423",
+          "currentSha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-session-check.test.mjs",
+          "recordedSha256": "5ae42c3d2bd795c4659c5921a7d589a79de949cb930018e83ea60cb20380e0dc",
+          "currentSha256": "5ae42c3d2bd795c4659c5921a7d589a79de949cb930018e83ea60cb20380e0dc",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ],
+      "backend": [
+        {
+          "file": "src/auth/auth.guards.ts",
+          "recordedSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+          "currentSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/auth/auth.controller.ts",
+          "recordedSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+          "currentSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/users/users.service.ts",
+          "recordedSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+          "currentSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/verification/deletion.service.ts",
+          "recordedSha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff",
+          "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/verification/deletion-command-receipt.ts",
+          "recordedSha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6",
+          "currentSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/independent-drivers/independent-dispatches.service.ts",
+          "recordedSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+          "currentSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deliveries/delivery-completion.ts",
+          "recordedSha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0",
+          "currentSha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/drivers/drivers.service.ts",
+          "recordedSha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547",
+          "currentSha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "docs/openapi.json",
+          "recordedSha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add",
+          "currentSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/verify-deletion-final-contract.mjs",
+          "recordedSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+          "currentSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/verify-deletion-final-browser.mjs",
+          "recordedSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+          "currentSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "report": "docs/deletion-receipt-only-evidence.json",
+      "web": [
+        {
+          "file": "src/deletion/ActiveService.tsx",
+          "recordedSha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c",
+          "currentSha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/pages.tsx",
+          "recordedSha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68",
+          "currentSha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/pending.ts",
+          "recordedSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+          "currentSha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deletion/service.ts",
+          "recordedSha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7",
+          "currentSha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/auth/session.ts",
+          "recordedSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+          "currentSha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/services/api.ts",
+          "recordedSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+          "currentSha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/app/App.tsx",
+          "recordedSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+          "currentSha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ],
+      "harness": [
+        {
+          "file": "scripts/verify-deletion-receipt-only.mjs",
+          "recordedSha256": "73f8f9380153b649b7f35b691415d92df0bac334d6912358b20e60d48bfd8318",
+          "currentSha256": "73f8f9380153b649b7f35b691415d92df0bac334d6912358b20e60d48bfd8318",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-isolated-environment.mjs",
+          "recordedSha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a",
+          "currentSha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-isolated-browser.mjs",
+          "recordedSha256": "5e34750effa958609278a2d1e427ecd7dbb347d73ddc1c8ed93c2912145297ab",
+          "currentSha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/deletion-session-check.mjs",
+          "recordedSha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423",
+          "currentSha256": "e6cce633d6318e7d444e0663fa13b306af11181ad6766a7601640251da000423",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ],
+      "backend": [
+        {
+          "file": "src/auth/auth.guards.ts",
+          "recordedSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+          "currentSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/auth/auth.controller.ts",
+          "recordedSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+          "currentSha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/users/users.service.ts",
+          "recordedSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+          "currentSha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/verification/deletion.service.ts",
+          "recordedSha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff",
+          "currentSha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/verification/deletion-command-receipt.ts",
+          "recordedSha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6",
+          "currentSha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/independent-drivers/independent-dispatches.service.ts",
+          "recordedSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+          "currentSha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/deliveries/delivery-completion.ts",
+          "recordedSha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0",
+          "currentSha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "src/drivers/drivers.service.ts",
+          "recordedSha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547",
+          "currentSha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "docs/openapi.json",
+          "recordedSha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add",
+          "currentSha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35",
+          "matchesRecorded": false,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/verify-deletion-final-contract.mjs",
+          "recordedSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+          "currentSha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        },
+        {
+          "file": "scripts/verify-deletion-final-browser.mjs",
+          "recordedSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+          "currentSha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+          "matchesRecorded": true,
+          "matchesCommit": true
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "relativeImportsChecked": 98,
+    "missingImports": []
+  },
+  "historicalReuse": "No suites, browser journeys, build, types or lint run. Earlier results remain historical; current checks establish content correspondence only.",
+  "newProductTests": 0,
+  "newDatabaseOrStorageAccess": 0,
+  "documentationUncommitted": true,
+  "documentationChecks": {
+    "publishedDocuments": 8,
+    "publishedRelativeLinks": 150,
+    "brokenLinks": [],
+    "linksOutsidePublishedTree": [
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/desktop-confirmation.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/mobile-320-confirmation.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/mobile-320-pending-drain.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/mobile-320-partial-receipt.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/tablet-partial-receipt.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/desktop-admin-exhausted.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/desktop-private-receipt.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/desktop-unknown-recovery-404.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-web/report.json"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-compatibility/restricted-followup-320.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-compatibility/admin-recovered-after-reload.png"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "test-results/deletion-compatibility/restricted-desktop.png"
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+        "target": "../test-results/deletion-compatibility/restricted-desktop.png"
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+        "target": "../test-results/deletion-compatibility/restricted-followup-320.png"
+      },
+      {
+        "file": "docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md",
+        "target": "../test-results/deletion-compatibility/admin-recovered-after-reload.png"
+      }
+    ],
+    "anchors": [
+      {
+        "file": "BITACORA.md",
+        "target": "VERIFICATION.md",
+        "anchor": "2026-10-13--w-01-selección-posterior-durante-carga-documental"
+      },
+      {
+        "file": "VERIFICATION.md",
+        "target": "docs/DOCUMENT-DELETION-WEB.md",
+        "anchor": "procedimiento-de-futura-integración-aislada-no-ejecutado"
+      }
+    ],
+    "anchorTargetsVerified": 2,
+    "finalClosureAndContinuityLinks": 97,
+    "finalBrokenLinks": [],
+    "jsonParsed": 15,
+    "diffCheck": "PASS",
+    "newFileWhitespace": "PASS",
+    "highConfidenceSecretPatternFindings": 0,
+    "stagedEmpty": true,
+    "localFiles": [
+      "BITACORA.md",
+      "VERIFICATION.md",
+      "docs/DOCUMENT-DELETION-WEB-STAGE-CLOSURE.md",
+      "docs/deletion-web-stage-closure.json"
+    ]
+  },
+  "comparisonSnapshot": "Before the documentation edits of this closure; candidate hashes identify the already committed content. Continuity edits made afterward are documentation only.",
+  "status": {
+    "localDocumentaryClosure": "COMPLETE_IN_REQUESTED_SCOPE",
+    "implementation": "COMMITTED_CONTENT_MATCHES_REVIEW",
+    "evidence": "HISTORICAL_CORRESPONDENCE_NOT_NEW_INTEGRATION",
+    "publication": "USER_REPORTED_AND_STORED_REFS_ONLY; CURRENT_REMOTE_CONFIRMATION_PENDING",
+    "production": "NOT_ATTESTED; REMAINING_PREREQUISITES"
+  },
+  "remaining": [
+    "Current remote confirmation (separate from local closure)",
+    "Real Spaces V2 cleanup",
+    "Backend RESOLVED task lifecycle",
+    "Terms, privacy, custody and operational readiness",
+    "Remaining V2 integration and compatible backend rollout before operational Web publication",
+    "Independent backend historical fingerprint reconciliation",
+    "No deployment or activation attested; Android/GPS outside scope"
+  ]
+}

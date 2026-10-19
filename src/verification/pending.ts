@@ -1,8 +1,14 @@
 import { useSyncExternalStore } from 'react'
 import { env } from '../config/env'
 import { ApiError } from '../services/errors'
-import { verification } from './service'
-import { operations, type Marker, type Operation, type Receipt } from './types'
+import { verification, isPublicationReceipt } from './service'
+import {
+  operations,
+  type Marker,
+  type Operation,
+  type CommandResult,
+  type PublicationReceipt,
+} from './types'
 const storageKey = 'mandaria.verification.pending:' + env.apiUrl
 const event = 'verification-pending-change'
 const busy = new Set<string>()
@@ -37,6 +43,7 @@ export function readMarkers(raw = snapshot()): Marker[] {
         !(
           uuid.test(m.target) ||
           m.target === 'SELF' ||
+          (m.target === 'POLICY' && m.operation === 'PUBLISH_TERMS') ||
           m.target === 'DRIVER' ||
           (/^FLEET:/.test(m.target) && uuid.test(m.target.slice(6)))
         ),
@@ -62,15 +69,15 @@ export function useMarkers() {
 export function forgetMarker(m: Marker) {
   write(readMarkers().filter((x) => x.key !== m.key || x.actor !== m.actor))
 }
-export async function runVerification(
+export async function runVerification<O extends Operation>(
   actor: string,
-  operation: Operation,
+  operation: O,
   target: string,
   path: string,
   body: unknown,
   refresh: () => Promise<unknown>,
   method = 'POST',
-): Promise<Receipt> {
+): Promise<CommandResult<O>> {
   const items = readMarkers()
   // One unresolved command per origin. Other accounts cannot bypass it or see its details.
   if (items.length || busy.size)
@@ -81,7 +88,7 @@ export async function runVerification(
   busy.add(m.key)
   try {
     write([...items, m])
-    let receipt: Receipt
+    let receipt: CommandResult<O>
     try {
       receipt = await verification.command(m, path, body, method)
     } catch (e) {
@@ -112,6 +119,7 @@ export async function reconcile(
   actor: string,
   refresh: () => Promise<unknown>,
   close = false,
+  onPublication?: (receipt: PublicationReceipt) => void,
 ) {
   if (
     m.actor !== actor ||
@@ -126,52 +134,71 @@ export async function reconcile(
     const result = await verification.attempt(m, close)
     if (result.state === 'APPLIED') {
       const r = result.result
-      if (!r?.id || !r.status)
-        throw new Error('Comprobante incompleto; se conserva el bloqueo.')
-      if (m.operation === 'ACCEPT_TERMS') {
-        const acceptance = await verification.acceptance(r.id)
+      if (m.operation === 'PUBLISH_TERMS') {
+        if (m.target !== 'POLICY' || !isPublicationReceipt(r))
+          throw new Error(
+            'Comprobante de publicación incompleto; se conserva el bloqueo.',
+          )
+        // Current pointers may already refer to a newer publication. Never overwrite them.
+        const policy = await verification.policy()
         if (
-          acceptance.id !== r.id ||
-          acceptance.userId !== actor ||
-          (acceptance.scope === 'DRIVER'
-            ? 'DRIVER'
-            : 'FLEET:' + acceptance.providerId) !== m.target
+          !Number.isSafeInteger(policy.revision) ||
+          policy.revision < r.policyRevision
         )
           throw new Error(
-            'El comprobante no corresponde al firmante o ámbito original.',
+            'No se confirmó la política vigente; conserva el bloqueo.',
           )
-      } else if (m.operation === 'CREATE_VEHICLE') {
-        const current = await verification.onboarding()
-        if (
-          !current.driver.independentProfile?.vehicles.some(
-            (v) => v.id === r.id,
-          )
-        )
-          throw new Error(
-            'No se confirmó el recurso actual; conserva el bloqueo.',
-          )
+        onPublication?.(r)
       } else {
-        const current = await verification.get(
-          m.operation === 'CREATE_CASE' ? r.id : m.target,
-        )
-        if (m.operation === 'CREATE_CASE' && current.resourceId !== m.target)
-          throw new Error('El comprobante no corresponde al recurso original.')
-        if (
-          ['UPDATE_CASE', 'SUBMIT', 'WITHDRAW', 'DECIDE'].includes(
-            m.operation,
-          ) &&
-          r.id !== m.target
-        )
-          throw new Error('El comprobante no corresponde al expediente.')
-        if (
-          ['CREATE_UPLOAD', 'COMPLETE_UPLOAD', 'REMOVE_ATTACHMENT'].includes(
-            m.operation,
-          ) &&
-          !current.attachments.some((a) => a.id === r.id)
-        )
-          throw new Error(
-            'No se pudo confirmar el adjunto; conserva el bloqueo.',
+        if (!r || !('id' in r) || !r.id || !r.status)
+          throw new Error('Comprobante incompleto; se conserva el bloqueo.')
+        if (m.operation === 'ACCEPT_TERMS') {
+          const acceptance = await verification.acceptance(r.id)
+          if (
+            acceptance.id !== r.id ||
+            acceptance.userId !== actor ||
+            (acceptance.scope === 'DRIVER'
+              ? 'DRIVER'
+              : 'FLEET:' + acceptance.providerId) !== m.target
           )
+            throw new Error(
+              'El comprobante no corresponde al firmante o ámbito original.',
+            )
+        } else if (m.operation === 'CREATE_VEHICLE') {
+          const current = await verification.onboarding()
+          if (
+            !current.driver.independentProfile?.vehicles.some(
+              (v) => v.id === r.id,
+            )
+          )
+            throw new Error(
+              'No se confirmó el recurso actual; conserva el bloqueo.',
+            )
+        } else {
+          const current = await verification.get(
+            m.operation === 'CREATE_CASE' ? r.id : m.target,
+          )
+          if (m.operation === 'CREATE_CASE' && current.resourceId !== m.target)
+            throw new Error(
+              'El comprobante no corresponde al recurso original.',
+            )
+          if (
+            ['UPDATE_CASE', 'SUBMIT', 'WITHDRAW', 'DECIDE'].includes(
+              m.operation,
+            ) &&
+            r.id !== m.target
+          )
+            throw new Error('El comprobante no corresponde al expediente.')
+          if (
+            ['CREATE_UPLOAD', 'COMPLETE_UPLOAD', 'REMOVE_ATTACHMENT'].includes(
+              m.operation,
+            ) &&
+            !current.attachments.some((a) => a.id === r.id)
+          )
+            throw new Error(
+              'No se pudo confirmar el adjunto; conserva el bloqueo.',
+            )
+        }
       }
       await refresh()
       forgetMarker(m)

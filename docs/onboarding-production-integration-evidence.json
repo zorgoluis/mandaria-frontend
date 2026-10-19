@@ -1,0 +1,1677 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "runId": "1792397072142",
+  "startedAt": "2026-10-19T08:04:32.143Z",
+  "finishedAt": "2026-10-19T08:04:58.674Z",
+  "branch": "feature/driver-verification",
+  "webHead": "fcc81e98e23b569723c78304caa6098e64b01963",
+  "backendBase": "06457dedd9b2f533862a0477b04b36b69e1990f0",
+  "checkout": "Existing uncommitted onboarding implementation retained; only Web harness and documentation changed in this validation task. Index empty. No commit/push/backend edits.",
+  "approval": {
+    "requestedVia": "Normal require_escalated approval for the existing runner",
+    "result": "ALLOWED",
+    "launchesThisTask": 1,
+    "exitCode": 0,
+    "previousRejection": "Previous task rejected an additional launch for diagnostic limit; no bypass. New task explicitly requested one normal approval after diagnosis."
+  },
+  "diagnosis": "Previous runner expected Este expediente es histórico, while the actual UI says Expediente histórico o sin procedencia; corrected selector is already present. No product failure was established. Prior run stopped its own PostgreSQL.",
+  "harnessCorrections": [
+    "incremental report and independent checkpoints",
+    "one Web publication with response dropped only after actual APPLIED commit",
+    "GET recovery tied to original key, unchanged row/event/command/revision counts",
+    "Web identity and bicycle dossier, JPEG+PNG, authenticated evidence previews and explicit review",
+    "bounded failures without functional response fixtures or automatic reruns",
+    "clean libpq environment for both identity queries"
+  ],
+  "matrix": [
+    {
+      "id": "A",
+      "status": "PASS",
+      "checkpoints": [
+        "A"
+      ],
+      "via": "Web SUPER_ADMIN",
+      "result": "One synthetic DRIVER publication POST; real 201/APPLIED persisted before its response was dropped."
+    },
+    {
+      "id": "B",
+      "status": "PASS",
+      "checkpoints": [
+        "B"
+      ],
+      "via": "Web reload and Consultar intento",
+      "result": "Real GET for original key, PUBLISH_TERMS/POLICY; no repeated POST; marker cleared after recovery and current policy query."
+    },
+    {
+      "id": "C",
+      "status": "PASS",
+      "checkpoints": [
+        "C"
+      ],
+      "via": "Web public register, confirmation and login",
+      "result": "Independent without provider; confirmation token read only from captured real email request. No automatic login."
+    },
+    {
+      "id": "D",
+      "status": "PASS",
+      "checkpoints": [
+        "D"
+      ],
+      "via": "Web DRIVER",
+      "result": "Three initially unchecked controls; terms plus privacy alone insufficient; separate specific consent; one personal acceptance."
+    },
+    {
+      "id": "E",
+      "status": "PASS",
+      "checkpoints": [
+        "E_IDENTITY",
+        "E_UNIT"
+      ],
+      "via": "Web DRIVER",
+      "result": "Identity and bicycle cases created/edited/uploaded/completed/submitted through UI; five PNG/JPEG uploads VALIDATED by real server."
+    },
+    {
+      "id": "F",
+      "status": "PASS",
+      "checkpoints": [
+        "F_IDENTITY",
+        "F_UNIT"
+      ],
+      "via": "Web SUPER_ADMIN",
+      "result": "Five authenticated private evidence previews; explicit checklist decisions; two APPROVED/PRODUCTION/DOCUMENTARY-1 cases."
+    },
+    {
+      "id": "G",
+      "status": "PASS",
+      "checkpoints": [
+        "G"
+      ],
+      "via": "Post-acceptance database assertions and Web feedback",
+      "result": "Before dossier creation: driver PENDING/OFFLINE, independent profile PENDING, cases=0, enforcement=false."
+    },
+    {
+      "id": "H",
+      "status": "PASS",
+      "checkpoints": [
+        "H",
+        "H_FINAL"
+      ],
+      "via": "Web historical detail plus before/after database assertions",
+      "result": "Seeded LOCAL_TEST DRAFT history visible; row snapshot unchanged after all checkpoints; no automatic conversion or copied acceptance."
+    }
+  ],
+  "checkpoints": {
+    "SETUP": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:32.149Z",
+      "finishedAt": "2026-10-19T08:04:46.300Z"
+    },
+    "H": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:46.314Z",
+      "detail": {
+        "seededHistory": true,
+        "environment": "LOCAL_TEST",
+        "autoConversion": false
+      },
+      "finishedAt": "2026-10-19T08:04:47.453Z"
+    },
+    "A": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:47.457Z",
+      "finishedAt": "2026-10-19T08:04:48.358Z"
+    },
+    "B": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:48.361Z",
+      "finishedAt": "2026-10-19T08:04:48.899Z"
+    },
+    "C": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:48.904Z",
+      "detail": {
+        "browserRegistration": true,
+        "confirmationFromCapturedMail": true,
+        "automaticLogin": false,
+        "providerId": null,
+        "driver": "PENDING",
+        "profile": "PENDING"
+      },
+      "finishedAt": "2026-10-19T08:04:50.205Z"
+    },
+    "D": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:50.221Z",
+      "detail": {
+        "separateCheckboxes": 3,
+        "acceptanceCount": 1,
+        "scope": "DRIVER",
+        "privacySeparate": true,
+        "consents": 1
+      },
+      "finishedAt": "2026-10-19T08:04:50.888Z"
+    },
+    "G": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:50.892Z",
+      "detail": {
+        "driver": "PENDING",
+        "availability": "OFFLINE",
+        "profile": "PENDING",
+        "cases": 0,
+        "enforcement": false
+      },
+      "finishedAt": "2026-10-19T08:04:50.907Z"
+    },
+    "E_IDENTITY": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:50.911Z",
+      "detail": {
+        "environment": "PRODUCTION",
+        "checklist": "DOCUMENTARY-1",
+        "createdVia": "Web"
+      },
+      "uploads": [
+        {
+          "category": "FACE_PHOTO",
+          "input": "PNG",
+          "normalized": "image/png",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "INE_FRONT",
+          "input": "JPEG",
+          "normalized": "image/png",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "INE_BACK",
+          "input": "PNG",
+          "normalized": "image/png",
+          "status": "VALIDATED"
+        }
+      ],
+      "finishedAt": "2026-10-19T08:04:52.230Z"
+    },
+    "E_UNIT": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:52.234Z",
+      "detail": {
+        "environment": "PRODUCTION",
+        "checklist": "DOCUMENTARY-1",
+        "createdVia": "Web"
+      },
+      "uploads": [
+        {
+          "category": "REGISTRATION_CARD",
+          "input": "JPEG",
+          "normalized": "image/png",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "OWNERSHIP_PROOF",
+          "input": "JPEG",
+          "normalized": "image/png",
+          "status": "VALIDATED"
+        }
+      ],
+      "finishedAt": "2026-10-19T08:04:53.746Z"
+    },
+    "F_IDENTITY": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:53.751Z",
+      "detail": {
+        "previewsViaAuthenticatedWeb": 3,
+        "decision": "APPROVED",
+        "checklist": "DOCUMENTARY-1",
+        "environment": "PRODUCTION"
+      },
+      "finishedAt": "2026-10-19T08:04:54.683Z"
+    },
+    "F_UNIT": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:54.689Z",
+      "detail": {
+        "previewsViaAuthenticatedWeb": 2,
+        "decision": "APPROVED",
+        "checklist": "DOCUMENTARY-1",
+        "environment": "PRODUCTION"
+      },
+      "finishedAt": "2026-10-19T08:04:55.590Z"
+    },
+    "H_FINAL": {
+      "status": "PASS",
+      "startedAt": "2026-10-19T08:04:55.597Z",
+      "detail": {
+        "historicalRowUnchanged": true,
+        "oldActorAcceptances": 0,
+        "enforcement": false
+      },
+      "finishedAt": "2026-10-19T08:04:55.611Z"
+    }
+  },
+  "seeds": [
+    "SUPER_ADMIN account with confirmed email",
+    "historical DRIVER/PENDING/OFFLINE with independent PENDING profile",
+    "LOCAL_TEST/DRAFT subject and case with no copied production evidence"
+  ],
+  "preparationBoundary": "Only confirmed SUPER_ADMIN and historical LOCAL_TEST account/profile/subject/case seeded. New driver, policy, acceptance, unit, cases, uploads, submissions and decisions were created through Web. Synthetic PNG/JPEG bytes generated in memory; no real documents.",
+  "isolation": {
+    "temporaryDatabaseIdentity": true,
+    "envFilesRead": false,
+    "docker": false,
+    "externalMailOrStorage": false,
+    "realActivation": false,
+    "postgres": {
+      "host": "127.0.0.1",
+      "port": 55459,
+      "database": "onboarding_web_1792397072142_test",
+      "dataDirectory": "test-results/onboarding-production-isolated/1792397072142/pgdata",
+      "clusterIdentityVerifiedBeforeMigration": true,
+      "targetIdentityVerifiedBeforeMigration": true,
+      "environmentReportSha256": "a32c66de5cb7b63480b62c5bdcde28e2ef65964ecc8c5f7d7831e25647875b35"
+    },
+    "apiPort": 4227,
+    "webPort": 4228,
+    "functionalResponses": "Real application responses; no fixtures. Only publication response deliberately dropped after real commit; storage PUT and SDK/mail transports simulated.",
+    "runtime": "Existing backend dist and real AppModule/Prisma/auth/verification controllers with ephemeral configuration; production documentary mode in isolated database, policy enforcement false."
+  },
+  "counts": {
+    "publicationPosts": 1,
+    "acceptancePosts": 1,
+    "storagePuts": 5,
+    "mailCaptured": 1,
+    "storageSdkCalls": 15
+  },
+  "recovery": {
+    "before": {
+      "versions": 0,
+      "commands": 0,
+      "events": 0,
+      "revision": 1,
+      "enforcement": false
+    },
+    "afterCommit": {
+      "versions": 1,
+      "commands": 1,
+      "events": 1,
+      "revision": 2,
+      "enforcement": false
+    },
+    "markerKeyHash": "9fe12e0b0b926345eab4976b6a1a7f1295958a2d90248973e82530b2a5736c68",
+    "afterGet": {
+      "versions": 1,
+      "commands": 1,
+      "events": 1,
+      "revision": 2,
+      "enforcement": false
+    },
+    "getStatus": 200,
+    "sameOriginalKey": true,
+    "duplicateEffects": 0
+  },
+  "sanitizedHttp": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "request": {
+        "fields": [
+          "email",
+          "password"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/partner-applications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/providers",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/providers",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/providers",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "request": {
+        "fields": [
+          "email",
+          "password"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/verification-policy",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/verification-terms/publications",
+      "status": 201,
+      "request": {
+        "fields": [
+          "approvalReference",
+          "expectedVersion",
+          "privacyText",
+          "privacyVersion",
+          "publicationAuthorized",
+          "scope",
+          "specificConsents",
+          "text",
+          "version"
+        ],
+        "scope": "DRIVER",
+        "version": "SYNTHETIC-DRIVER-1",
+        "privacyVersion": "SYNTHETIC-PRIVACY-1",
+        "expectedVersion": 1,
+        "publicationAuthorized": true,
+        "text": {
+          "length": 3090,
+          "sha256": "d678232f96b95018c6cc6f37d263d897fb7ba27b7be645c28b52ba661b58e1a3"
+        },
+        "privacyText": {
+          "length": 3137,
+          "sha256": "96b1168d1be47ef1ee8b19f9d705efb9c9cc8aa4cf222db0ecf4781839666932"
+        },
+        "specificConsents": [
+          {
+            "id": "synthetic-purpose",
+            "hasHash": false
+          }
+        ]
+      },
+      "transport": "Response dropped after real backend commit"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/verification-policy",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-command-attempts/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/verification-policy",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/verification-policy",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/independent-driver-registrations",
+      "status": 202,
+      "request": {
+        "fields": [
+          "email"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/independent-driver-registrations/confirm",
+      "status": 200,
+      "request": {
+        "fields": [
+          "name",
+          "password",
+          "token"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "request": {
+        "fields": [
+          "email",
+          "password"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-terms/accept",
+      "status": 200,
+      "request": {
+        "fields": [
+          "accepted",
+          "hash",
+          "method",
+          "privacyAcknowledged",
+          "privacyHash",
+          "privacyVersion",
+          "scope",
+          "specificConsents",
+          "version"
+        ],
+        "scope": "DRIVER",
+        "version": "SYNTHETIC-DRIVER-1",
+        "privacyVersion": "SYNTHETIC-PRIVACY-1",
+        "accepted": true,
+        "privacyAcknowledged": true,
+        "method": "WEB_CHECKBOX_BUTTON",
+        "specificConsents": [
+          {
+            "id": "synthetic-purpose",
+            "accepted": true,
+            "hasHash": true
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201,
+      "request": {
+        "fields": [
+          "subjectId",
+          "subjectType"
+        ],
+        "subjectType": "DRIVER_IDENTITY"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200,
+      "request": {
+        "fields": [
+          "data",
+          "expectedVersion"
+        ],
+        "expectedVersion": 1
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads",
+      "status": 201,
+      "request": {
+        "fields": [
+          "category",
+          "expectedVersion"
+        ],
+        "expectedVersion": 2,
+        "category": "FACE_PHOTO"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads/:uuid/complete",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads",
+      "status": 201,
+      "request": {
+        "fields": [
+          "category",
+          "expectedVersion"
+        ],
+        "expectedVersion": 4,
+        "category": "INE_FRONT"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads/:uuid/complete",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 5
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads",
+      "status": 201,
+      "request": {
+        "fields": [
+          "category",
+          "expectedVersion"
+        ],
+        "expectedVersion": 6,
+        "category": "INE_BACK"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads/:uuid/complete",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 7
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/submit",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 8
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/onboarding/vehicles",
+      "status": 201,
+      "request": {
+        "fields": [
+          "identifier",
+          "type"
+        ],
+        "type": "BICYCLE"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201,
+      "request": {
+        "fields": [
+          "subjectId",
+          "subjectType"
+        ],
+        "subjectType": "VEHICLE"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200,
+      "request": {
+        "fields": [
+          "data",
+          "expectedVersion"
+        ],
+        "expectedVersion": 1
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads",
+      "status": 201,
+      "request": {
+        "fields": [
+          "category",
+          "expectedVersion"
+        ],
+        "expectedVersion": 2,
+        "category": "REGISTRATION_CARD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads/:uuid/complete",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads",
+      "status": 201,
+      "request": {
+        "fields": [
+          "category",
+          "expectedVersion"
+        ],
+        "expectedVersion": 4,
+        "category": "OWNERSHIP_PROOF"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/uploads/:uuid/complete",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 5
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/submit",
+      "status": 200,
+      "request": {
+        "fields": [
+          "expectedVersion"
+        ],
+        "expectedVersion": 6
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/attachments/:uuid/access",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/attachments/:uuid/access",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/attachments/:uuid/access",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/verification-cases/:uuid/decision",
+      "status": 200,
+      "request": {
+        "fields": [
+          "checklistVersion",
+          "decision",
+          "expectedVersion",
+          "passedChecks"
+        ],
+        "expectedVersion": 9,
+        "decision": "APPROVE",
+        "checklistVersion": "DOCUMENTARY-1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "request": {
+        "fields": [
+          "refreshToken"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/attachments/:uuid/access",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/:uuid/attachments/:uuid/access",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/verification-cases/:uuid/decision",
+      "status": 200,
+      "request": {
+        "fields": [
+          "checklistVersion",
+          "decision",
+          "expectedVersion",
+          "passedChecks"
+        ],
+        "expectedVersion": 7,
+        "decision": "APPROVE",
+        "checklistVersion": "DOCUMENTARY-1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/:uuid",
+      "status": 200
+    }
+  ],
+  "transportFailures": [],
+  "hashes": {
+    "web": [
+      {
+        "file": "src/app/App.tsx",
+        "sha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b"
+      },
+      {
+        "file": "src/verification/common.tsx",
+        "sha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa"
+      },
+      {
+        "file": "src/verification/evidence.tsx",
+        "sha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09"
+      },
+      {
+        "file": "src/verification/format.ts",
+        "sha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845"
+      },
+      {
+        "file": "src/verification/forms.tsx",
+        "sha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1"
+      },
+      {
+        "file": "src/verification/hooks.ts",
+        "sha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb"
+      },
+      {
+        "file": "src/verification/identity.tsx",
+        "sha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb"
+      },
+      {
+        "file": "src/verification/legacy.tsx",
+        "sha256": "e3f85aff081d5b4bd703faef841bfbae5d3471aa758085743b7baa743b3d6444"
+      },
+      {
+        "file": "src/verification/pages.tsx",
+        "sha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5"
+      },
+      {
+        "file": "src/verification/pending.ts",
+        "sha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669"
+      },
+      {
+        "file": "src/verification/publications.tsx",
+        "sha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c"
+      },
+      {
+        "file": "src/verification/service.ts",
+        "sha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935"
+      },
+      {
+        "file": "src/verification/terms-contract.ts",
+        "sha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc"
+      },
+      {
+        "file": "src/verification/terms.tsx",
+        "sha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a"
+      },
+      {
+        "file": "src/verification/types.ts",
+        "sha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675"
+      },
+      {
+        "file": "src/verification/verification.css",
+        "sha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186"
+      },
+      {
+        "file": "src/test/onboarding-production.test.tsx",
+        "sha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681"
+      },
+      {
+        "file": "src/test/verification-pages.test.tsx",
+        "sha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7"
+      },
+      {
+        "file": "src/test/verification-service.test.ts",
+        "sha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7"
+      },
+      {
+        "file": "src/test/verification-recovery.test.ts",
+        "sha256": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a"
+      },
+      {
+        "file": "src/test/verification-upload.test.tsx",
+        "sha256": "653c945f917a177d97ced7de8052af8a9ff41861dfddf16f10632f1d4f02715a"
+      },
+      {
+        "file": "src/test/verification-fixtures.ts",
+        "sha256": "6dba52be238b00476e33cc42f033027313253a035d97efcf09ef15993d0c15b3"
+      },
+      {
+        "file": "scripts/verify-documentary-web.mjs",
+        "sha256": "623774c4e431ebca08747edcefde571318b2e0491c224ff6be563a890ca10bf3"
+      },
+      {
+        "file": "scripts/onboarding-isolated-environment.mjs",
+        "sha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953"
+      },
+      {
+        "file": "scripts/onboarding-isolated-backend.mjs",
+        "sha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65"
+      },
+      {
+        "file": "scripts/verify-onboarding-production-web.mjs",
+        "sha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2"
+      },
+      {
+        "file": "scripts/verify-onboarding-production-visual.mjs",
+        "sha256": "e388c2373482b211636d4da7cc87fa93c26c11fd7b38d379fd116c62a7c2d828"
+      }
+    ],
+    "backend": [
+      {
+        "file": "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-PREPARATION.md",
+        "sha256": "502017af0b28d34187e36df27684a7bac83d01dc07ff47a32e3af7be56d183f9"
+      },
+      {
+        "file": "docs/checks/documentary-onboarding-production.json",
+        "sha256": "96c0c350b47634de1056b6651e79b4c3fd135fa1c50a97f84df95fd4a636d4ff"
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "028fb9f6e44d5d3417e31643ef3685ab3a64d35c46f46b5fb46b7c11a7361571"
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "sha256": "0e252f68b047f436a1e3186995e37caf41203baa46f1a1b74315b415dae5c9ff"
+      },
+      {
+        "file": "src/verification/verification.controller.ts",
+        "sha256": "bfb2de54d95a339bdf39fb574846e9ad28b50a49ffa8828b157db0098701de6b"
+      },
+      {
+        "file": "src/verification/verification.dto.ts",
+        "sha256": "a7fa2bafef890a9d763306a07db0e9f67b1d2d8135ab4834e932c7dd3479a76b"
+      },
+      {
+        "file": "src/verification/verification.responses.ts",
+        "sha256": "67687b24d3f550dc7727b1905016991a82d31be7f4d3c7bd3b5f7cba1754f142"
+      },
+      {
+        "file": "src/verification/verification-terms.ts",
+        "sha256": "7137f38755b6e5eb4a51697529d33fa7e3a93e7f34b0d6e6f5feceb1cb34bb85"
+      },
+      {
+        "file": "src/verification/verification-policy.ts",
+        "sha256": "afa0e761cfad32afe0eec57de41bfda96734f26248e484042f66d3cd88ecbe06"
+      },
+      {
+        "file": "src/verification/verification-rules.ts",
+        "sha256": "d26f0ffe3fa8bd21b2679be546daaa7daf7f4e3a8cc633da05172245d16d1ccf"
+      },
+      {
+        "file": "src/auth/auth.guards.ts",
+        "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+      },
+      {
+        "file": "test/onboarding-production.e2e-spec.ts",
+        "sha256": "dd60f127d4a214c61d23aa08769f17016658fbaa8ca16370fb5a74791b310eed"
+      },
+      {
+        "file": "scripts/verify-onboarding-production.mjs",
+        "sha256": "ee9bedba082630fc9fca76e400afc5b8aecb74a5b6d19eedf988a532728ecd5d"
+      },
+      {
+        "file": "prisma/migrations/20261019000100_documentary_production/migration.sql",
+        "sha256": "d3c1ca9f85e5ee65cb7180250ad15e106578e59b623fdb592db975fccb34265d"
+      },
+      {
+        "file": "dist/app.module.js",
+        "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f"
+      },
+      {
+        "file": "dist/setup.js",
+        "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3"
+      },
+      {
+        "file": "dist/verification/verification.service.js",
+        "sha256": "35b1037339ea260ab532c4e2ebadedf0c885647403068d367ff694b3582d4f8d"
+      },
+      {
+        "file": "dist/verification/verification.controller.js",
+        "sha256": "98d47b4a407caaf7f3df57cbe96f96ae8686b1e11a80259b0123d4893417c960"
+      },
+      {
+        "file": "dist/verification/verification.dto.js",
+        "sha256": "98bcd371163ca996094e2fcceff4d4cd6aa0f0f19bf3a40e7458e06f0653de86"
+      },
+      {
+        "file": "dist/verification/verification-policy.js",
+        "sha256": "79e59d3487dc0dfc0876b518ab0a33b223b946d8c89d5a2aa04058ddc7098afd"
+      },
+      {
+        "file": "dist/verification/verification-terms.js",
+        "sha256": "d852616dac33d41878f81d22c4640300b08bb7addfb80f8690ca0ec253d4ee84"
+      },
+      {
+        "file": "dist/verification/verification-storage.js",
+        "sha256": "c1601496e137cb59b6217fe2bf632fbc6b371b96d65a3f31364c9580b5f0c2ed"
+      },
+      {
+        "file": "dist/auth/auth.guards.js",
+        "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+      }
+    ],
+    "backendHead": "06457dedd9b2f533862a0477b04b36b69e1990f0",
+    "webHead": "fcc81e98e23b569723c78304caa6098e64b01963"
+  },
+  "harness": [
+    {
+      "file": "scripts/verify-onboarding-production-web.mjs",
+      "sha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2"
+    },
+    {
+      "file": "scripts/onboarding-isolated-backend.mjs",
+      "sha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65"
+    },
+    {
+      "file": "scripts/onboarding-isolated-environment.mjs",
+      "sha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953"
+    }
+  ],
+  "correspondence": {
+    "webCompared": 27,
+    "webChangedSinceStart": [
+      "scripts/onboarding-isolated-environment.mjs",
+      "scripts/onboarding-isolated-backend.mjs",
+      "scripts/verify-onboarding-production-web.mjs"
+    ],
+    "webProductChanges": [],
+    "backendCompared": 23,
+    "backendChangedSinceStart": [],
+    "runWebMismatchesAtClosure": [],
+    "runBackendMismatchesAtClosure": []
+  },
+  "historicalEvidence": {
+    "file": "docs/onboarding-production-web-evidence.json",
+    "sha256": "2a682ec15561a89ed8c5346b79d895ad06ef0421a595d7e2872466559bd48367",
+    "fixtureTests": 98,
+    "reexecuted": false,
+    "typesLintBuild": "Historical PASS, not rerun because product/test sources unchanged",
+    "visual": "Previous fixture-based 1280/320 keyboard/focus/long-text checks preserved; not repeated or counted as real backend execution",
+    "priorIntegratedRun": "1792395222480 remains FAIL/partial; this run is separate"
+  },
+  "screenshots": [
+    {
+      "file": "docs/onboarding-integration-visual/historical-local-test.png",
+      "sha256": "738a669fad2fc64c10f74302056e07298e07ebf27e9046a7dc92ee0357a37977",
+      "reviewed": true,
+      "viewport": "1280x900",
+      "type": "real Web and backend; synthetic data; mail/storage simulated"
+    },
+    {
+      "file": "docs/onboarding-integration-visual/publication-recovered.png",
+      "sha256": "00cc93eaf24c23d94273b13d10f7d6121771619dde6a3c24a6f6bd28e90e7279",
+      "reviewed": true,
+      "viewport": "1280x900",
+      "type": "real Web and backend; synthetic data; mail/storage simulated"
+    },
+    {
+      "file": "docs/onboarding-integration-visual/personal-acceptance.png",
+      "sha256": "10ddeff22c3deefde7d363579ff8caaf2885c84c68296a8e9d945006489196ba",
+      "reviewed": true,
+      "viewport": "1280x900",
+      "type": "real Web and backend; synthetic data; mail/storage simulated"
+    }
+  ],
+  "otherLocalCaptures": [
+    {
+      "file": "publication-response-lost.png",
+      "sha256": "61687622370fc50af376b88b2844ee57268444ae42173b57846ad7b374650adb"
+    },
+    {
+      "file": "e_identity-submitted.png",
+      "sha256": "3a1a90c1ca0182d7950cd7c9f8d5c2d2b7eeb78aa771d8a06c30389ede024b04"
+    },
+    {
+      "file": "e_unit-submitted.png",
+      "sha256": "7a4a682928405cf71b6aa0c4ca3548040a9550b2cbab0249d71a623999fc9f3c"
+    },
+    {
+      "file": "f_identity.png",
+      "sha256": "13e1e1ebb0ffdb98952010e0c0206f37ad44f7fba8ed40eefc705b1d8ff8b8f4"
+    },
+    {
+      "file": "f_unit.png",
+      "sha256": "4d8a8f373f595e9768662e14b663340dda257b218fe4487b89aa2b14d407af02"
+    }
+  ],
+  "rawLocalArtifacts": {
+    "directory": "test-results/onboarding-production-isolated/1792397072142",
+    "reportSha256": "1b3088638cfacac2a0f62dec7f4ac924d8befeb2218d0fc17913bda652fb8008",
+    "publishedRawLogs": false,
+    "excludedFromGit": true
+  },
+  "cleanup": {
+    "browser": "STOPPED",
+    "vite": "STOPPED",
+    "backend": "STOPPED",
+    "database": "STOPPED",
+    "ownPostmasterPidAbsent": true,
+    "postgresShutdownRecorded": true
+  },
+  "limits": [
+    "PASS applies only to requested A-H synthetic isolated flow; not general production readiness.",
+    "Backend base SHA alone is insufficient: requires uncommitted productive onboarding contract, migration and runtime hashes listed here.",
+    "One captured registration email; no claim of real inbox or decision-email delivery.",
+    "Real remote Spaces/CORS/HTTPS and operational environment not validated; no activation or real document processing.",
+    "FLEET representative flow and lost-response acceptance recovery not rerun in this minimal integration; existing fixture evidence remains historical.",
+    "Approved legal DRIVER/FLEET texts, privacy/consents, publication authority and operational preparation remain required.",
+    "Deletion Spaces V2, backend RESOLVED lifecycle and Android/GPS are outside this validation."
+  ],
+  "documentation": "Local and uncommitted; historical evidence retained unchanged.",
+  "documentationChecks": {
+    "at": "2026-10-19T08:12:33.827Z",
+    "documents": 4,
+    "historyPreserved": true,
+    "relativeLinksPresent": 148,
+    "jsonValid": 4,
+    "capturesMatching": 3,
+    "webHashesMatching": 27,
+    "backendHashesMatching": 23,
+    "harnessSyntax": "PASS",
+    "sensitiveValuePatterns": 0,
+    "backendHead": "06457dedd9b2f533862a0477b04b36b69e1990f0",
+    "diffCheck": "PASS"
+  }
+}

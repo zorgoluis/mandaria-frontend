@@ -1,0 +1,255 @@
+{
+  "date": "2026-10-17",
+  "status": "BLOCKED",
+  "web": {
+    "branch": "feature/driver-verification",
+    "head": "56c7bad0524cbbf05b45fa687a8ec625694a6ca0",
+    "uncommitted": true
+  },
+  "backend": {
+    "head": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+    "uncommitted": true,
+    "access": "read-only"
+  },
+  "scenarios": {
+    "purgedReceipt": {
+      "status": "BLOCKED",
+      "uiActions": [],
+      "databaseEffects": null
+    },
+    "restrictedLegacyDelivery": {
+      "status": "BLOCKED",
+      "uiActions": [],
+      "databaseEffects": null
+    }
+  },
+  "preflight": {
+    "smoke": {
+      "status": "BLOCKED",
+      "stage": "browser-launch",
+      "backendStarted": false,
+      "errorType": "TimeoutError",
+      "errorCode": null
+    },
+    "diagnostic": {
+      "status": "BLOCKED",
+      "stage": "login-render",
+      "backendStarted": false,
+      "errorType": "TimeoutError",
+      "errorCode": null,
+      "diagnostic": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Iniciar sesión', exact: true }) to be visible\n"
+    },
+    "attempts": 2,
+    "additionalDiagnostics": 1,
+    "chromiumLaunched": true,
+    "navigationCompleted": true,
+    "loginRendered": false,
+    "staticFinding": "Smoke disables envDir but omits VITE_API_URL; src/config/env.ts requires it. No pageerror trace was collected, so the runtime exception itself is not accredited.",
+    "productDefectAccredited": false
+  },
+  "backendHashes": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff"
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4"
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0"
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547"
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda"
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "sha256": "d407c1b5c2188ef7de51128e8e9a6368f2bbfa1c3c7b2b4a37a5520a3396f3e6"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add"
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d"
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605"
+    }
+  ],
+  "backendComparison": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "docs/openapi.json",
+      "matchesHistoricalFingerprint": true
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "matchesHistoricalFingerprint": false
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "matchesHistoricalFingerprint": true
+    }
+  ],
+  "webHashes": [
+    {
+      "file": "src/config/env.ts",
+      "sha256": "1769604c2796d5b154b2595e96b0da62b60adfabc869c083841020e34db27709"
+    },
+    {
+      "file": "src/auth/AuthProvider.tsx",
+      "sha256": "4921ca52bbf317d7655ef4a387c44c5c86b2b6972dfa3bcf4b3a58e9b9ce8a99"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/auth/Login.tsx",
+      "sha256": "fd86315033dbfa469d52fe9f36b04f8f9c5f4d7cb22566defe0b7b6f9b88731e"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/deletion/ActiveService.tsx",
+      "sha256": "5614be57276842af294f0f01658878f43a84fff40a74f3df4cd37cdfa4f8721c"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "678a1c75ec77f66d1eda7b0853c24eabbf2f1f029d38e959d647056df2471b68"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "sha256": "5ca5ea02acf5cb6a24482e32a0eec975f2d7904f6409f5cb0c9a6b9aea92824e"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "69f03666b6c3036c3407e626739a7a689466f6f766b06ab3ea7169492e929eb7"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "sha256": "b5d39d2a8b4148e73ceab9e942a13b7d57499c9961e0b37370d8f7c7fb41b673"
+    },
+    {
+      "file": "src/deletion/receipt.ts",
+      "sha256": "725d6dcef5c6e64efb87cb35b4877be98496aaec037222c706bde5ffd37be645"
+    }
+  ],
+  "harness": {
+    "file": "scripts/verify-deletion-browser-smoke.mjs",
+    "sha256": "469c8141489f160209ccd29cae5dd126ae7fe666da892151f2bc51a2aee9911e"
+  },
+  "validation": {
+    "syntax": "PASS",
+    "desktopJourneys": "NOT RUN",
+    "mobile": "NOT RUN",
+    "keyboardFocusErrors": "NOT RUN",
+    "productTests": "NOT RUN (no product changes)",
+    "build": "NOT RUN (no product changes)",
+    "diffCheck": "PASS"
+  },
+  "cleanup": {
+    "viteClosed": true,
+    "chromiumClosed": true,
+    "port4208Listener": false,
+    "backendStarted": false,
+    "postgresStarted": false,
+    "seededData": false,
+    "resourcesRetained": [
+      "test-results/deletion-browser-final/smoke.json",
+      "test-results/deletion-browser-final/smoke-diagnostic.json",
+      "test-results/deletion-browser-final/vite-cache"
+    ]
+  },
+  "limitations": [
+    "No new HTTP/PostgreSQL evidence; historical backend figures not reused.",
+    "No screenshot or functional trace generated.",
+    "No backend change, .env, QA, Spaces, email, commit, push or deployment.",
+    "Prior backend attempts remain historical; no cause attributed to them."
+  ],
+  "backendUnchangedAtClose": true,
+  "userEnvironmentNote": "Docker backend on port43000 reported by user; not accessed, isolation not established.",
+  "backendComparisonNote": "Parent backend harness differs from historical JSON; final-contract document records its final fingerprint. This task made no backend writes."
+}

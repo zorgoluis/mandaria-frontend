@@ -40,6 +40,48 @@ it('consultation query and close body follow documentary contract', async () => 
     body: JSON.stringify({ operation: 'SUBMIT', target: caseId }),
   })
 })
+it('publication returns its own receipt without a case id and recovers through documentary attempts', async () => {
+  const receipt = {
+    version: 'SYNTHETIC-1',
+    hash: 'a'.repeat(64),
+    scope: 'DRIVER',
+    environment: 'PRODUCTION',
+    publishedAt: '2026-10-19T00:00:00Z',
+    policyRevision: 2,
+    enforcementEnabled: false,
+  }
+  const f = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(Response.json(receipt))
+    .mockResolvedValue(Response.json({ state: 'ABSENT' }))
+  const marker = { ...m, operation: 'PUBLISH_TERMS' as const, target: 'POLICY' }
+  await expect(
+    verification.command(marker, '/admin/verification-terms/publications', {}),
+  ).resolves.toEqual(receipt)
+  await verification.attempt(marker)
+  await verification.attempt(marker, true)
+  expect(String(f.mock.calls[1][0])).toContain(
+    '/verification-command-attempts/' +
+      resource +
+      '?operation=PUBLISH_TERMS&target=POLICY',
+  )
+  expect(f.mock.calls[2][1]?.body).toBe(
+    JSON.stringify({ operation: 'PUBLISH_TERMS', target: 'POLICY' }),
+  )
+  expect(JSON.stringify(f.mock.calls)).not.toContain('/privacy/')
+})
+it('malformed publication response is uncertain, never an ordinary case receipt', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+    Response.json({ id: resource, status: 'ACCEPTED' }),
+  )
+  await expect(
+    verification.command(
+      { ...m, operation: 'PUBLISH_TERMS', target: 'POLICY' },
+      '/admin/verification-terms/publications',
+      {},
+    ),
+  ).rejects.toMatchObject({ status: 0 })
+})
 it.each(['application/pdf', 'image/svg+xml', 'text/html'])(
   'rejects %s locally',
   (type) => {
@@ -115,8 +157,21 @@ it('private evidence uses authenticated PNG proxy and refreshes centrally', asyn
           refreshToken: 'synthetic-refresh',
         }),
       )
-    if (String(url).endsWith('/auth/me'))
-      return new Response(JSON.stringify({ id: actor }))
+    if (String(url).endsWith('/auth/me?projection=session'))
+      return new Response(
+        JSON.stringify({
+          accessMode: 'STANDARD',
+          identity: {
+            id: actor,
+            email: 'synthetic@example.test',
+            role: 'DRIVER',
+            active: true,
+            emailVerifiedAt: null,
+            createdAt: '2026-10-17T00:00:00Z',
+            updatedAt: '2026-10-17T00:00:00Z',
+          },
+        }),
+      )
     if (access++ === 0) return new Response('{}', { status: 401 })
     return new Response(new Uint8Array([1, 2]), {
       headers: { 'Content-Type': 'image/png' },

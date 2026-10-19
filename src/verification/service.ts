@@ -14,9 +14,20 @@ import type {
   Receipt,
   Attempt,
   Acceptance,
+  Operation,
+  CommandResult,
+  PublicationReceipt,
+  VerificationPolicy,
 } from './types'
 const enc = encodeURIComponent
 export const verification = {
+  policy: (signal?: AbortSignal) =>
+    api<VerificationPolicy>(
+      '/admin/verification-policy',
+      'GET',
+      undefined,
+      signal,
+    ),
   register: (email: string, resend = false) =>
     publicApi<{ status: string }>(
       '/independent-driver-registrations' + (resend ? '/resend' : ''),
@@ -105,21 +116,54 @@ export const verification = {
       close ? 'POST' : 'GET',
       close ? { operation: m.operation, target: m.target } : undefined,
     ),
-  command: async (m: Marker, path: string, body: unknown, method = 'POST') => {
-    const receipt = await apiOnce<Receipt>(path, method, body, undefined, {
-      'Idempotency-Key': m.key,
-    })
+  command: async <O extends Operation>(
+    m: Marker & { operation: O },
+    path: string,
+    body: unknown,
+    method = 'POST',
+  ): Promise<CommandResult<O>> => {
+    const receipt = await apiOnce<Receipt | PublicationReceipt>(
+      path,
+      method,
+      body,
+      undefined,
+      {
+        'Idempotency-Key': m.key,
+      },
+    )
     if (
-      !receipt ||
-      typeof receipt.id !== 'string' ||
-      typeof receipt.status !== 'string'
+      m.operation === 'PUBLISH_TERMS'
+        ? !isPublicationReceipt(receipt)
+        : !receipt ||
+          !('id' in receipt) ||
+          typeof receipt.id !== 'string' ||
+          typeof receipt.status !== 'string'
     )
       throw new ApiError(
         0,
         'No se recibió el comprobante completo. Consulta el intento pendiente.',
       )
-    return receipt
+    return receipt as CommandResult<O>
   },
+}
+export function isPublicationReceipt(
+  value: unknown,
+): value is PublicationReceipt {
+  const r = value as PublicationReceipt | null
+  return (
+    !!r &&
+    typeof r.version === 'string' &&
+    !!r.version &&
+    typeof r.hash === 'string' &&
+    /^[a-f0-9]{64}$/.test(r.hash) &&
+    ['DRIVER', 'FLEET'].includes(r.scope) &&
+    r.environment === 'PRODUCTION' &&
+    typeof r.publishedAt === 'string' &&
+    Number.isFinite(Date.parse(r.publishedAt)) &&
+    Number.isSafeInteger(r.policyRevision) &&
+    r.policyRevision > 0 &&
+    typeof r.enforcementEnabled === 'boolean'
+  )
 }
 /** Only a backend-issued PUT URL; never Mandaria auth, cookies, referrer or redirect. */
 export async function putEvidence(

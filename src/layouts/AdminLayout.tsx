@@ -197,6 +197,7 @@ export function AdminLayout() {
           ))}
         </nav>
         <div className="sidebar-bottom">
+          <Link to="/privacy/deletion">Baja y privacidad</Link>
           <span className="sidebar-emblem">
             <ArrowUpRight size={22} />
           </span>

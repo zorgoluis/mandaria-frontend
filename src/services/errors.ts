@@ -221,6 +221,10 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // Never reflect arbitrary backend messages, SQL, request paths or values into the UI.
   const safe: Record<string, string> = {
+    REAUTH_REQUIRED:
+      'La restricción requiere un nuevo inicio de sesión. Refrescar el token no sustituye la verificación de identidad.',
+    ACCOUNT_CLOSING:
+      'Tu identidad sigue autenticada, pero esta operación está restringida por una baja. Consulta el seguimiento de privacidad.',
     'User must be active with global role DRIVER':
       'El usuario debe estar activo y tener rol de repartidor.',
     'User already has a driver profile':

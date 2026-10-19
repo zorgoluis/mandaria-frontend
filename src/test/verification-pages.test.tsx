@@ -314,6 +314,11 @@ it('terminal rejection offers new case, never edits reviewed snapshot', async ()
   )
   await screen.findByText(/Motivo de decisión/)
   expect(screen.queryByRole('button', { name: 'Guardar datos' })).toBeNull()
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', { name: 'Preparar nueva corrección' }),
+    ).toBeEnabled(),
+  )
   fireEvent.click(
     screen.getByRole('button', { name: 'Preparar nueva corrección' }),
   )
@@ -350,9 +355,7 @@ it('registration and confirmation never authenticate or approve automatically', 
   fireEvent.click(
     screen.getByRole('button', { name: 'Solicitar correo de registro' }),
   )
-  expect(
-    await screen.findByText(/Revisa el correo de pruebas/),
-  ).toBeInTheDocument()
+  expect(await screen.findByText(/Revisa tu correo/)).toBeInTheDocument()
   expect(verification.command).not.toHaveBeenCalled()
 })
 it('confirmation uses token in body and returns to safe login', async () => {
@@ -415,7 +418,7 @@ it('PNG preview is revoked on unmount and never stored in query cache', async ()
     />,
   )
   fireEvent.click(screen.getByRole('button', { name: 'Ver evidencia' }))
-  expect(await screen.findByAltText(/Evidencia sintética/)).toBeInTheDocument()
+  expect(await screen.findByAltText(/Evidencia privada/)).toBeInTheDocument()
   expect(JSON.stringify(view.client.getQueryCache().getAll())).not.toContain(
     'blob:',
   )
@@ -465,7 +468,7 @@ it('main incident route never calls QA API', async () => {
     await screen.findByText(/ejecución detallada no está disponible/),
   ).toBeInTheDocument()
 })
-it('documentary frame is isolated by route and user', () => {
+it('documentary frame is isolated by route and user', async () => {
   mount(
     <Routes>
       <Route element={<VerificationLayout />}>
@@ -474,7 +477,9 @@ it('documentary frame is isolated by route and user', () => {
     </Routes>,
   )
   expect(screen.getByText('Ámbito sintético')).toBeInTheDocument()
-  expect(screen.getByText(/SIN VIGENCIA CONTRACTUAL/)).toBeInTheDocument()
+  expect(
+    await screen.findByText(/Modo de prueba. Usa exclusivamente/),
+  ).toBeInTheDocument()
 })
 
 it('submit and withdraw require confirmation and current revision', async () => {
@@ -485,9 +490,11 @@ it('submit and withdraw require confirmation and current revision', async () => 
     'DRIVER',
     '/verification/cases/' + caseId,
   )
-  fireEvent.click(
-    await screen.findByRole('button', { name: 'Presentar para revisión' }),
-  )
+  const submit = await screen.findByRole('button', {
+    name: 'Presentar para revisión',
+  })
+  await waitFor(() => expect(submit).toBeEnabled())
+  fireEvent.click(submit)
   expect(verification.command).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
@@ -495,6 +502,11 @@ it('submit and withdraw require confirmation and current revision', async () => 
     expectedVersion: 3,
   })
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', { name: 'Retirar expediente' }),
+    ).toBeEnabled(),
+  )
   fireEvent.click(screen.getByRole('button', { name: 'Retirar expediente' }))
   expect(verification.command).toHaveBeenCalledOnce()
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
@@ -531,7 +543,9 @@ it('version conflict refreshes the dossier and announces it without another deci
   expect(
     await screen.findByRole('heading', { name: 'Identidad · Aprobado' }),
   ).toBeInTheDocument()
-  expect(screen.getByText(/El expediente cambió/)).toBeInTheDocument()
+  expect(
+    screen.getByText(/El expediente o la política cambió/),
+  ).toBeInTheDocument()
   expect(verification.command).toHaveBeenCalledOnce()
   expect(
     screen.queryByRole('button', { name: 'Registrar decisión explícita' }),

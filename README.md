@@ -1,5 +1,18 @@
 # Mandaria Web — V1.11-B
 
+## Publicación de la rama documental — revisión del 2026-10-19
+
+La adaptación de alta documental, sus pruebas y el ensayo A–H se revisan para publicar exclusivamente `feature/driver-verification`. [Inventario y correspondencia previa al commit](docs/onboarding-production-publication-review.json). Se conserva el PASS histórico del recorrido aislado y de las 98 pruebas: no se ejecutaron de nuevo. El backend compatible se identifica por contrato, migración y huellas probadas; su commit final no se ha confirmado en esta revisión. Publicar esta rama no despliega Web ni activa operaciones. Las entradas siguientes conservan las etapas anteriores.
+
+## Alta documental: ensayo integrado completado — 2026-10-19
+
+PASS en el recorrido A–H solicitado: publicación SUPER_ADMIN y recuperación tras respuesta perdida sin duplicados, registro independiente/correo capturado, consentimientos separados, JPEG/PNG, presentación y revisión de identidad y unidad. Aceptar no aprobó ni habilitó; LOCAL_TEST conservó su historia. Una ejecución autorizada con Web/backend reales y PostgreSQL temporal identificado, correo/almacenamiento simulados. [Informe y pendientes actuales](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md), [evidencia integrada](docs/onboarding-production-integration-evidence.json). No se repitieron 98 pruebas con fixtures. Se requiere el backend compatible con sus cambios locales y migración, textos aprobados y preparación operativa; no acredita aptitud productiva general. Sin cambios de producto/backend, QA, commit, push, despliegue o activación. La entrada inmediatamente inferior conserva el estado histórico anterior a este cierre.
+
+## Alta documental: contrato productivo — 2026-10-19
+
+Web adaptada localmente a publicaciones inmutables SUPER_ADMIN, términos/privacidad/consentimientos separados y transición de historia LOCAL_TEST. La publicación no activa la admisión ni aprueba expedientes. Requiere el backend con el contrato productivo aún sin commit; no basta su SHA base. [Informe, pruebas y límites](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md). 98 casos únicos focalizados aprobados, tipos/lint/build y revisión visual 1280/320. Integración real parcial: composición y política ausente comprobadas; recorrido completo pendiente por el límite de ejecución del arnés. Sin backend modificado, QA, commit, push, despliegue o activación. La entrada LOCAL_TEST inferior se conserva como historial.
+
+
 ## Verificación documental de prueba — 2026-10-13
 
 Implementada desde main en `feature/driver-verification`, sin integrar QA ni activar backend. Incluye registro independiente sin proveedor, correo/términos LOCAL_TEST, expedientes y unidades, archivos privados JPEG/PNG, bandeja SUPER_ADMIN y recuperación mínima ante respuesta perdida. No apto para producción ni documentos reales.
@@ -417,3 +430,33 @@ docker run --rm -p 8080:80 mandaria-web:v1.4
 V1.4-B administra quién puede transportar y con qué vehículo. V1.5-B administra y observa qué se solicitó transportar. V1.6-B administra dónde puede operar Mandaria y cuánto cuesta una entrega local. V1.6.1-B incorpora administradores y repartidores reales mediante invitación segura, sin acceso al servidor. V1.7-B abre la visibilidad de despachos y la toma de servicios, V1.8-B asigna repartidor y vehículo, V1.9 incorpora al repartidor independiente y su portal, y V1.10-F administra los créditos Mandaria que cuesta adjudicarse un servicio. No se implementaron pasarela de pago, compra de créditos, wallet en pesos, sockets, GPS, tracking, viajes intercity, fletes, scheduling ni aplicaciones Driver/Customer.
 
 Pendientes: ejecución Docker en un motor funcional, eventual paginación servidor de integraciones/usuarios, gestión de cuentas cuando exista API y migración de refresh a cookies seguras. La validación real de PROVIDER_ADMIN y su membership ya está completada; Docker continúa pendiente para el cierre total de la entrega original.
+
+## Baja y eliminación documental — prueba local (2026-10-16)
+
+Solicitud por alcance, seguimiento, recuperación por clave, constancias parciales
+y revisión SUPER_ADMIN en `/privacy/deletion` y `/admin/privacy/deletion`.
+`/privacy/deletion-access` permite consultar con la capacidad privada real expedida
+por backend, sin inventar una sesión posterior a la baja. Una solicitud aceptada
+no equivale a eliminación; H sólo acredita el alcance operativo y los respaldos
+siguen sin acreditación. El drenaje real de Spaces continúa pendiente.
+
+[Contrato, permisos, rutas, límites y futura integración aislada](docs/DOCUMENT-DELETION-WEB.md).
+[Pruebas y capturas sintéticas](VERIFICATION.md). No se ha ejecutado integración
+real de esta baja, ni modificado backend, integrado QA, hecho commit/push o desplegado.
+
+### Actualización 2026-10-17 — sesión y recuperación compatibles
+
+La sesión usa `auth/me?projection=session`, conservando identidad restringida sin
+inventar roles ni habilitar operación general. Los comandos administrativos de
+baja se recuperan por GET con su clave original después de recargar. Recibos
+históricos y estado actual permanecen separados; 404 no autoriza otra mutación.
+
+Los recorridos de sesión restringida y pérdida de respuesta **después del commit**
+se validaron con navegador, backend real y PostgreSQL sintético aislado. Un comando,
+un efecto original y recuperación denegada al otro administrador. Esto actualiza
+el pendiente de integración de esos dos recorridos, no acredita todo el workflow
+ni Spaces. [Cambios, evidencia y límites](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md).
+
+### Estado revisado para publicación — 2026-10-17
+
+La baja admite seguimiento y constancias parciales; la sesión restringida usa projection=session y la recuperación administrativa usa GET sin repetir la mutación. La entrega LEGACY restringida y el recibo realmente depurado tienen evidencia de navegador/backend/PostgreSQL aislados en [el informe de compatibilidad](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md). Las afirmaciones anteriores fechadas sobre integración pendiente son históricas. Drenaje real en Spaces pendiente: no se acredita eliminación total ni aptitud productiva. Publicación de código en feature/driver-verification no equivale a activación o despliegue.

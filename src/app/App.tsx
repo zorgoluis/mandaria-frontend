@@ -7,11 +7,28 @@ import {
   ReceiptPage,
 } from '../verification/pages'
 import { Register, RegistrationConfirm } from '../verification/identity'
+import { PublicationPage } from '../verification/publications'
+import {
+  PrivacyLayout,
+  DeletionHome,
+  NewDeletion,
+  DeletionDetail,
+  AdminDeletionList,
+  PrivateDeletion,
+} from '../deletion/pages'
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
 import { Component, type ReactNode } from 'react'
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import {
+  Link,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Login } from '../auth/Login'
+import { RestrictedActiveService } from '../deletion/ActiveService'
 import { AdminLayout } from '../layouts/AdminLayout'
 import { ErrorPage, ErrorState, Loading } from '../components/ui'
 import { Dashboard } from '../dashboard/Dashboard'
@@ -69,14 +86,28 @@ export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
   const route = useLocation()
   if (auth.loading) return <Loading />
+  if (auth.restricted) {
+    if (
+      !roles &&
+      (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
+        route.pathname === '/privacy/active-service')
+    )
+      return <Outlet />
+    return <Navigate to="/privacy/deletion" replace />
+  }
   if (auth.error)
     return (
-      <ErrorState
-        error={auth.error}
-        retry={() => {
-          void auth.restore()
-        }}
-      />
+      <>
+        <Link to="/privacy/deletion-access">
+          Seguimiento privado de baja sin sesión operativa
+        </Link>
+        <ErrorState
+          error={auth.error}
+          retry={() => {
+            void auth.restore()
+          }}
+        />
+      </>
     )
   if (!auth.user)
     return (
@@ -97,15 +128,43 @@ export function Protected({ roles }: { roles?: Role[] }) {
 export function App() {
   const location = useLocation()
   const auth = useAuth()
-  if (auth.loading) return <Loading />
+  if (auth.loading && location.pathname !== '/privacy/deletion-access')
+    return <Loading />
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route
+        path="/privacy/deletion-access"
+        element={
+          <PrivateDeletion
+            key={auth.user?.id ?? auth.restricted?.identity.id ?? 'private'}
+          />
+        }
+      />
       <Route path="/driver/register" element={<Register />} />
       <Route path="/driver/verify" element={<RegistrationConfirm />} />
       {/* Public: invited people have no session yet. */}
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
+        <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/active-service"
+            element={<RestrictedActiveService />}
+          />
+          <Route path="/privacy/deletion" element={<DeletionHome />} />
+          <Route path="/privacy/deletion/new" element={<NewDeletion />} />
+          <Route path="/privacy/deletion/:id" element={<DeletionDetail />} />
+          <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+            <Route
+              path="/admin/privacy/deletion"
+              element={<AdminDeletionList />}
+            />
+            <Route
+              path="/admin/privacy/deletion/:id"
+              element={<DeletionDetail admin />}
+            />
+          </Route>
+        </Route>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route element={<VerificationLayout />}>
@@ -119,6 +178,10 @@ export function App() {
               />
             </Route>
             <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+              <Route
+                path="admin/verification-publications"
+                element={<PublicationPage />}
+              />
               <Route
                 path="admin/verification-cases"
                 element={<AdminVerification />}

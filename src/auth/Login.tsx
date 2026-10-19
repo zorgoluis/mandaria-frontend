@@ -10,6 +10,7 @@ export function Login() {
   const destination =
     params.get('next') === 'onboarding' ? '/verification-entry' : '/dashboard'
   const [visible, setVisible] = useState(false)
+  if (auth.restricted) return <Navigate to="/privacy/deletion" replace />
   if (auth.user) return <Navigate to={destination} replace />
   return (
     <div className="login-page">
@@ -110,6 +111,9 @@ export function Login() {
             <Link to="/driver/register">Registro independiente de prueba</Link>
           </p>
           <div className="login-security">
+            <Link to="/privacy/deletion-access">
+              Seguimiento privado de baja
+            </Link>
             <ShieldCheck size={18} />
             <span>Acceso para cuentas autorizadas.</span>
           </div>

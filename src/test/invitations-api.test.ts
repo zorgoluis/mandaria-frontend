@@ -135,7 +135,18 @@ it('activates publicly without session headers even while logged in', async () =
       ),
     )
     .mockResolvedValueOnce(
-      ok({ id: 'u', email: 'admin@example.test', role: 'SUPER_ADMIN' }),
+      ok({
+        accessMode: 'STANDARD',
+        identity: {
+          id: provider,
+          email: 'admin@example.test',
+          role: 'SUPER_ADMIN',
+          active: true,
+          emailVerifiedAt: null,
+          createdAt: '2026-10-17T00:00:00Z',
+          updatedAt: '2026-10-17T00:00:00Z',
+        },
+      }),
     )
     .mockResolvedValueOnce(
       ok({
