@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-19T08:04:06.531Z",
+  "status": "READY_FOR_ONE_CONTROLLED_APPROVAL_REQUEST",
+  "branch": "feature/driver-verification",
+  "head": "fcc81e98e23b569723c78304caa6098e64b01963",
+  "priorRun": "1792395222480",
+  "diagnosis": "Previous runner expected Este expediente es histórico, while the actual UI says Expediente histórico o sin procedencia; corrected selector is already present. No product failure was established. Prior run stopped its own PostgreSQL.",
+  "priorBackendChanges": [],
+  "productUnchanged": true,
+  "changes": [
+    "incremental report and independent checkpoints",
+    "one Web publication with response dropped only after actual APPLIED commit",
+    "GET recovery tied to original key, unchanged row/event/command/revision counts",
+    "Web identity and bicycle dossier, JPEG+PNG, authenticated evidence previews and explicit review",
+    "bounded failures without functional response fixtures or automatic reruns",
+    "clean libpq environment for both identity queries"
+  ],
+  "seeds": [
+    "SUPER_ADMIN account",
+    "historical LOCAL_TEST driver/profile/subject/case"
+  ],
+  "syntax": "PASS",
+  "harness": [
+    {
+      "file": "scripts/verify-onboarding-production-web.mjs",
+      "sha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2"
+    },
+    {
+      "file": "scripts/onboarding-isolated-backend.mjs",
+      "sha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65"
+    },
+    {
+      "file": "scripts/onboarding-isolated-environment.mjs",
+      "sha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953"
+    }
+  ]
+}

@@ -1,5 +1,18 @@
 # Mandaria Web — V1.11-B
 
+## Publicación de la rama documental — revisión del 2026-10-19
+
+La adaptación de alta documental, sus pruebas y el ensayo A–H se revisan para publicar exclusivamente `feature/driver-verification`. [Inventario y correspondencia previa al commit](docs/onboarding-production-publication-review.json). Se conserva el PASS histórico del recorrido aislado y de las 98 pruebas: no se ejecutaron de nuevo. El backend compatible se identifica por contrato, migración y huellas probadas; su commit final no se ha confirmado en esta revisión. Publicar esta rama no despliega Web ni activa operaciones. Las entradas siguientes conservan las etapas anteriores.
+
+## Alta documental: ensayo integrado completado — 2026-10-19
+
+PASS en el recorrido A–H solicitado: publicación SUPER_ADMIN y recuperación tras respuesta perdida sin duplicados, registro independiente/correo capturado, consentimientos separados, JPEG/PNG, presentación y revisión de identidad y unidad. Aceptar no aprobó ni habilitó; LOCAL_TEST conservó su historia. Una ejecución autorizada con Web/backend reales y PostgreSQL temporal identificado, correo/almacenamiento simulados. [Informe y pendientes actuales](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md), [evidencia integrada](docs/onboarding-production-integration-evidence.json). No se repitieron 98 pruebas con fixtures. Se requiere el backend compatible con sus cambios locales y migración, textos aprobados y preparación operativa; no acredita aptitud productiva general. Sin cambios de producto/backend, QA, commit, push, despliegue o activación. La entrada inmediatamente inferior conserva el estado histórico anterior a este cierre.
+
+## Alta documental: contrato productivo — 2026-10-19
+
+Web adaptada localmente a publicaciones inmutables SUPER_ADMIN, términos/privacidad/consentimientos separados y transición de historia LOCAL_TEST. La publicación no activa la admisión ni aprueba expedientes. Requiere el backend con el contrato productivo aún sin commit; no basta su SHA base. [Informe, pruebas y límites](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md). 98 casos únicos focalizados aprobados, tipos/lint/build y revisión visual 1280/320. Integración real parcial: composición y política ausente comprobadas; recorrido completo pendiente por el límite de ejecución del arnés. Sin backend modificado, QA, commit, push, despliegue o activación. La entrada LOCAL_TEST inferior se conserva como historial.
+
+
 ## Verificación documental de prueba — 2026-10-13
 
 Implementada desde main en `feature/driver-verification`, sin integrar QA ni activar backend. Incluye registro independiente sin proveedor, correo/términos LOCAL_TEST, expedientes y unidades, archivos privados JPEG/PNG, bandeja SUPER_ADMIN y recuperación mínima ante respuesta perdida. No apto para producción ni documentos reales.
