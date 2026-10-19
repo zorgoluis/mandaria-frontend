@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-19T21:16:43.310Z",
+  "status": "REVIEWED_BEFORE_SELECTIVE_STAGING",
+  "branch": "feature/driver-verification",
+  "initialHead": "e657e715cadb1d6727fbde55a9202b6deaa2fdb9",
+  "origin": "https://github.com/zorgoluis/mandaria-frontend.git",
+  "fetchedRemoteHead": "e657e715cadb1d6727fbde55a9202b6deaa2fdb9",
+  "ahead": 0,
+  "behind": 0,
+  "indexInitiallyEmpty": true,
+  "scope": "Private fleet representative dossier and privacy requery file-selection correction; tests, harness, sanitized evidence and continuity",
+  "inventory": [
+    {
+      "file": "BITACORA.md",
+      "sha256": "add6cb5f7a4992d3518bf98e460abc6e7569444a1e02c9c0224023dc42d2fd82",
+      "sha256Lf": "f7608552a26e8b62f3cc71746ee794af56bf8085d5459123f30b7c4eb8ae89f8"
+    },
+    {
+      "file": "README.md",
+      "sha256": "689a1088958616bd72b66925f7feceee18827029496a23b9ae11b17d8a50f13e",
+      "sha256Lf": "88ff58910dc89255d5221c3a67159d5e6dbd80782a4222149ebbc2d98536dbec"
+    },
+    {
+      "file": "VERIFICATION.md",
+      "sha256": "a6d65ff02aa6f9340ae388448a1eea44c458214574089932d56a29ed3654939c",
+      "sha256Lf": "8b46512545f9d3f902d9b2bbefac509e5d040cd9e84c4c502cfedbfe395d4b31"
+    },
+    {
+      "file": "docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md",
+      "sha256": "1f3755f445fbeae29afd71b4a6d28aafb90897a0b6f36058de63c3112c3dab93",
+      "sha256Lf": "1f3755f445fbeae29afd71b4a6d28aafb90897a0b6f36058de63c3112c3dab93"
+    },
+    {
+      "file": "docs/FLEET-REPRESENTATIVE-WEB.md",
+      "sha256": "e6318bbf757c7d3783ec587e49c3f165ace31e9188435963f562dae61de50bb5",
+      "sha256Lf": "e6318bbf757c7d3783ec587e49c3f165ace31e9188435963f562dae61de50bb5"
+    },
+    {
+      "file": "docs/fleet-representative-contract-before.json",
+      "sha256": "eab6e955ed27c4d0bbe9fa0a8a15f36713ba255775c3806999677458e2f68e6f",
+      "sha256Lf": "eab6e955ed27c4d0bbe9fa0a8a15f36713ba255775c3806999677458e2f68e6f"
+    },
+    {
+      "file": "docs/fleet-representative-integration-evidence.json",
+      "sha256": "7ff6d562c469f3d83ab0912075287528a4b6d150ee53ba6b6f4b6ae833280955",
+      "sha256Lf": "7ff6d562c469f3d83ab0912075287528a4b6d150ee53ba6b6f4b6ae833280955"
+    },
+    {
+      "file": "docs/fleet-representative-web-evidence.json",
+      "sha256": "73937a00325f707bee874941b5d149167096f4ea75d9efa9e0c9a7f1e5564ac5",
+      "sha256Lf": "73937a00325f707bee874941b5d149167096f4ea75d9efa9e0c9a7f1e5564ac5"
+    },
+    {
+      "file": "docs/images/fleet-representative/approved-mobile.png",
+      "sha256": "bb85b9627592ec4a27cae4770593c93d3caadc395d9d8f9b25a1c7a1d6f6138f",
+      "sha256Lf": "bb85b9627592ec4a27cae4770593c93d3caadc395d9d8f9b25a1c7a1d6f6138f"
+    },
+    {
+      "file": "docs/images/fleet-representative/dossier-desktop.png",
+      "sha256": "8077da3fe0e3fedcc2b2fccb7cfc4bc4ec31967da58fabf77216c88a2c8d1d61",
+      "sha256Lf": "8077da3fe0e3fedcc2b2fccb7cfc4bc4ec31967da58fabf77216c88a2c8d1d61"
+    },
+    {
+      "file": "docs/images/fleet-representative/fleet-mobile.png",
+      "sha256": "dc0aec03dd27340d8bd6a56b27a8229de97461f8081ae57b2efeb835ab2968ef",
+      "sha256Lf": "dc0aec03dd27340d8bd6a56b27a8229de97461f8081ae57b2efeb835ab2968ef"
+    },
+    {
+      "file": "docs/images/fleet-representative/receipt-mobile.png",
+      "sha256": "830dbf84d809b23a80f26d3b9d7d3918250914a386a15b856d65622e9fc06741",
+      "sha256Lf": "830dbf84d809b23a80f26d3b9d7d3918250914a386a15b856d65622e9fc06741"
+    },
+    {
+      "file": "docs/images/fleet-representative/recovery-desktop.png",
+      "sha256": "7f374eb1f8738a8b5e58f08de7e411c2ccab556c731975da4c298d120e71440f",
+      "sha256Lf": "7f374eb1f8738a8b5e58f08de7e411c2ccab556c731975da4c298d120e71440f"
+    },
+    {
+      "file": "docs/images/fleet-representative/restricted-mobile.png",
+      "sha256": "d1e2888161c1afcc39d7b58a42a2babf4713cd645233656f5d834f3958d1297b",
+      "sha256Lf": "d1e2888161c1afcc39d7b58a42a2babf4713cd645233656f5d834f3958d1297b"
+    },
+    {
+      "file": "docs/images/fleet-representative/review-desktop.png",
+      "sha256": "541b1798e939d627b48e8f06744774dfb5eb5d5ecd10838ed7d1794ddcf0a036",
+      "sha256Lf": "541b1798e939d627b48e8f06744774dfb5eb5d5ecd10838ed7d1794ddcf0a036"
+    },
+    {
+      "file": "scripts/representative-browser.mjs",
+      "sha256": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5",
+      "sha256Lf": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5"
+    },
+    {
+      "file": "scripts/representative-contract-snapshot.mjs",
+      "sha256": "e2176a449ee5d308440f2e6f099411fcbe8b5cdfcfaa6932fc9222b9fb38d75a",
+      "sha256Lf": "e2176a449ee5d308440f2e6f099411fcbe8b5cdfcfaa6932fc9222b9fb38d75a"
+    },
+    {
+      "file": "scripts/representative-isolated-backend.mjs",
+      "sha256": "afdcfe278722728bfda0db2181628d4f7d38c6f8f46b37820b5b2a24abe2868f",
+      "sha256Lf": "a99395ea17bdf892b4d5d859037a7fffb26a7f30c333d9e6d9d9de05907f15e0"
+    },
+    {
+      "file": "scripts/representative-isolated-environment.mjs",
+      "sha256": "2c879936a040369a2e6f30ce2c31e17a4fd004324b0dc91fd5f65740dc785588",
+      "sha256Lf": "504684b93976d951ae197b44082a86e17574e32e15ecfb0e2755afa70ee399e6"
+    },
+    {
+      "file": "scripts/verify-representative-browser.mjs",
+      "sha256": "a6cead9a218e83bbd8204bb33957541fd8790f6fd9418c276ffc57dcc329da27",
+      "sha256Lf": "a6cead9a218e83bbd8204bb33957541fd8790f6fd9418c276ffc57dcc329da27"
+    },
+    {
+      "file": "scripts/verify-representative-web.mjs",
+      "sha256": "b173af54b0e2e76e1232dda81c6a81401e73b114646a9b361a0d16615b77e59c",
+      "sha256Lf": "b173af54b0e2e76e1232dda81c6a81401e73b114646a9b361a0d16615b77e59c"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "83b9c18495b6e6088670cc859aa78306bb90bc9811cc25bc14b659399e862274",
+      "sha256Lf": "16808d3f8f40c5094b6a27eaedbc62ffe251bbed985192ec2379d70af9621d99"
+    },
+    {
+      "file": "src/layouts/AdminLayout.tsx",
+      "sha256": "8d5ea2577c94db842125ebdf6a2ac5b650cd1674898b97baccaf8aad75b62caf",
+      "sha256Lf": "8c2ad959be7bf32b8bd7a50532c9aae1ca8a55eeff8d0f4498021584437efbe5"
+    },
+    {
+      "file": "src/test/representative-fixtures.ts",
+      "sha256": "3786977b31ec20f44e2764e8b3f7384e41fe513f78c95790ffcac4d8b7a12b12",
+      "sha256Lf": "3786977b31ec20f44e2764e8b3f7384e41fe513f78c95790ffcac4d8b7a12b12"
+    },
+    {
+      "file": "src/test/representatives.test.tsx",
+      "sha256": "a6985344095d9a89e5f620a7975a7e5380cd8e5775c2b8ce22ada309919ec9b6",
+      "sha256Lf": "a6985344095d9a89e5f620a7975a7e5380cd8e5775c2b8ce22ada309919ec9b6"
+    },
+    {
+      "file": "src/test/verification-upload.test.tsx",
+      "sha256": "ea4bcd3f8c1aaa177461637d265752d159213e0d8005584b556b0d3f317e03d9",
+      "sha256Lf": "24a760c84e253c6cb7e448745cfc46985818e578004df466f50ecd275608ea3e"
+    },
+    {
+      "file": "src/verification/common.tsx",
+      "sha256": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+      "sha256Lf": "89966b981e16cd98dd1d05d82accf7a4965e1521b13b0664a56fc69e5cb1ad3c"
+    },
+    {
+      "file": "src/verification/evidence.tsx",
+      "sha256": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+      "sha256Lf": "93cae9922d9456e71c82ac2c78755ee57f8264868c2d92f50ddccfc5554def8f"
+    },
+    {
+      "file": "src/verification/format.ts",
+      "sha256": "b5599ad40467476d034f0fb106406d8d14ec71fb77e4bb9130aa2219fc5626b5",
+      "sha256Lf": "42dbb60b0f9134ddbfc45a8eab5dc619ab0080a7021a7bbc525a4fcc7106b1b7"
+    },
+    {
+      "file": "src/verification/pages.tsx",
+      "sha256": "036ba6574482c793c927908eddf9342cded975977bffc8502b77acaf37a9f452",
+      "sha256Lf": "ad35402bd4fba97a20f05e448c20780c8534abbdf57cacdd94078d51718ae715"
+    },
+    {
+      "file": "src/verification/pending.ts",
+      "sha256": "8475fef1a0edc0d053223cf905ae80db0ccb7867b84f157e0784ffa7b2dd9362",
+      "sha256Lf": "d13f3e4d0666c81e1f61e6823f9474449fe58a47d2972a69eef07bd70e268abe"
+    },
+    {
+      "file": "src/verification/representative-form.tsx",
+      "sha256": "587138c087b598b0bba4f65686d69a3f718acc41709cb320c4b22f30c9342d19",
+      "sha256Lf": "587138c087b598b0bba4f65686d69a3f718acc41709cb320c4b22f30c9342d19"
+    },
+    {
+      "file": "src/verification/representatives.tsx",
+      "sha256": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41",
+      "sha256Lf": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41"
+    },
+    {
+      "file": "src/verification/service.ts",
+      "sha256": "db87a386b5a6ba22ab1854d8f578c69aedbba4977378a0b471ab7e0da3139285",
+      "sha256Lf": "4ee9740cec2418e9b18363d155ae1fc4c46fa82626d3134cd3c51cec92e1b8b4"
+    },
+    {
+      "file": "src/verification/terms.tsx",
+      "sha256": "70504b18dcd9ae86ff17fc4b9623cae25a029009d90aadaf289fdc654f18122a",
+      "sha256Lf": "0b08cd5e1178591d59108f6cef65fcb0dfb3a93cfaed33cbd346ceee00e573ac"
+    },
+    {
+      "file": "src/verification/types.ts",
+      "sha256": "27a97bf2dd2b474e993685c6db235626528e4801c36bec73d3a576384c0262cd",
+      "sha256Lf": "3229108467526c512b164983d43dfca91f0120df91258bbf8b69f64555cac030"
+    }
+  ],
+  "inventoryCount": 36,
+  "self": "docs/fleet-representative-publication-review.json",
+  "selfHashExcluded": true,
+  "totalFilesToStage": 37,
+  "evidence": {
+    "file": "docs/fleet-representative-integration-evidence.json",
+    "sha256": "7ff6d562c469f3d83ab0912075287528a4b6d150ee53ba6b6f4b6ae833280955",
+    "webHarnessMatches": 33,
+    "backendMatches": 26,
+    "captureMatches": 7,
+    "segmentReportMatches": 6,
+    "finalTestReportMatches": 2,
+    "matrix": {
+      "A": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 PRIVACY_RECOVERY + DOSSIER: no personal inputs/files before acknowledgment, real upload/confirmation/submission"
+      },
+      "B": {
+        "status": "PASS",
+        "evidence": "Decision via Web in resume-1792439402312; result recovered by GET and current case displayed in resume-1792439557453; no duplicate decision",
+        "otherCasesApproved": false,
+        "automaticFleetAcceptance": false,
+        "admissionEnabled": false
+      },
+      "C": {
+        "status": "PASS",
+        "evidence": "resume-1792439557453 FLEET via Web, receipt/current authority separate",
+        "driverAcceptanceCreated": false,
+        "localTestHistoryUnchanged": true,
+        "admissionEnabled": false
+      },
+      "D": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 original key after lost committed response",
+        "before": {
+          "acceptances": 0,
+          "commands": 0
+        },
+        "afterCommit": {
+          "acceptances": 1,
+          "commands": 1
+        },
+        "afterGet": {
+          "acceptances": 1,
+          "commands": 1
+        },
+        "originalKeyPreserved": true,
+        "markerFields": [
+          "actor",
+          "key",
+          "operation",
+          "target"
+        ],
+        "postCount": 1
+      },
+      "E": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 same-fleet coordinator and other-fleet account: link/case/private bytes denied with no private UI fields",
+        "privateAccessBeforeRestriction": 404
+      },
+      "F": {
+        "status": "PASS",
+        "evidence": "Existing request prepared through authenticated API, not deletion UI; final resume-1792439761412 tests current restriction and account change",
+        "accessUploadComplete": {
+          "status": 409,
+          "code": "DELETION_RESTRICTED"
+        },
+        "foreignCaseAfterRestriction": {
+          "status": 409,
+          "code": "DELETION_RESTRICTED"
+        },
+        "contextAndAccountCleared": true,
+        "requestRepeated": false,
+        "livePollTimeoutHistoryPreserved": true
+      }
+    },
+    "reusedTests": 40,
+    "historical130NotRerun": true,
+    "newTestsExecuted": 0,
+    "typecheckApp": "REUSED_PASS",
+    "typecheckTests": "REUSED_PASS",
+    "lint": "REUSED_PASS",
+    "build": "REUSED_PASS",
+    "buildWarning": "Root 758.88 kB >500 kB",
+    "visual": "REUSED_PASS_1280_320_KEYBOARD_FOCUS",
+    "browser": "Chrome 155.0.8059.82",
+    "originalSpawnUnknownCause": "UNDETERMINED"
+  },
+  "backend": {
+    "branch": "codex/fleet-representative-verification",
+    "baseHead": "0fd7e2d058ba2c73c30f5edc21e229c11eefabdd",
+    "finalImplementationCommit": null,
+    "uncommitted": true,
+    "hashes": {
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md": "1a2ac2b47cd847c86efeff2a39a5e8cffb4d064e0af5c6ad61ab4646d0364f7b",
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-DESIGN.md": "4f0fba136b9a27162b0067b2d48df02095f5df5e5101c62d10bddc283e3b8542",
+      "docs/DOCUMENTARY-TEXTS-OWNER-REVIEW-2026-10-19.md": "67d45a7c4776af37cb63b6fb068736d5c92d5ac640283a13f70e3051fc544fc9",
+      "docs/checks/fleet-representative-evidence.json": "d5cd84b8eb8532174e1b37279e934c91fd322d88b41ac6e1715284999f85e214",
+      "docs/openapi.json": "bec7be1173019c13b647cb82a564c7f9bf01fa2514f384e25de637fecdf798fc",
+      "prisma/schema.prisma": "60878216ef1b244303cffd2c41db4c31db28f4410579a11327b7c06da505dcaf",
+      "prisma/migrations/20261019000200_fleet_representative_verification/migration.sql": "ae2f62a108ca25686d2642214c6f63d677b9abb58c7378027c21bf384872e321",
+      "src/verification/representative.dto.ts": "15e10a800f31e56580efabd14e1a3a55aa4b5eaa0849f9226d312123c55c920e",
+      "src/verification/representative-rules.ts": "416efb5425fbcbabfe62f51db6884a5878c1c753b856512c412003165e6673c3",
+      "src/verification/representative-retention.ts": "5f47daee38ba7c8675e2f6ccd44db926a278993aba388295d39fbab82d7b85de",
+      "src/verification/verification.controller.ts": "46969d94f2b4ab998f7717cb9a9a1ba3f91e02d9abc3e3b428aaa1a4948b4bb5",
+      "src/verification/verification.dto.ts": "d594042b201444cc678a2f16847a24c3ab3c9b0e2bf72c1fbda7ad94acfacd4c",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/verification.service.ts": "d5085232c70cff7de68a1653c9fd3c378900f02b0c4084df1912f6328df1d448",
+      "src/verification/verification-rules.ts": "c7a394d9f94f3cae8d03b641d9d0036c6e0920abbc18c3c68ae2cf136fc3368f",
+      "src/verification/verification-storage.ts": "d52a88ede8973cbec0d159b43df443ac0cb2a88fd4f3352bb2d1e1702aa4ee5f",
+      "src/verification/deletion.service.ts": "7ab8c6bcf22dd55aad0f3a1a0b0c4bd19c8dcb1997e43ebe5648c911b45e92f1",
+      "src/verification/document-recovery.ts": "cb8d65286e591e02f2093cb81f89ba5daccb468fac7a22e52c6e37606598a0f0",
+      "src/verification/recovery-v2.ts": "108bc15ae94595f91053c94a41e62a12bef88cac2b6b39a705b5bdff635f3e98",
+      "test/fleet-representative.e2e-spec.ts": "17ecf7af8fcb7bac2c723a6bfdbc76a775629090c6e2813062cac37e9d74d1a1",
+      "test/representative-recovery.e2e-spec.ts": "49bb7d430b5e0bb550acc04291f36d4b355dae7dca5c8279132a5c64290ed41a",
+      "scripts/verify-fleet-representative.mjs": "2987970902ab12b81bbee5674e2e1bbe53c4fbd77ec546778f94a943813f1587",
+      "dist/verification/verification.service.js": "ba4e54ea846473c31e2ff7635656174d6c060f25147f9bd26b9aa942695440a8",
+      "dist/verification/verification.controller.js": "f20b900f2cb3f0c67bf70461ca6d6bfc77c6875e60da7da2e9149f4105e70403",
+      "dist/verification/representative-rules.js": "ad9b2dd9477491c4e5aee15ef880e4f06ec6d86da5277596f2118a66a1a5655c",
+      "dist/verification/representative.dto.js": "c97abcf230678c56d402443f13bea0c34b7c07b6b41031929d73b1e721080a61"
+    },
+    "contract": "FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md; migration 20261019000200_fleet_representative_verification; recovery format 3",
+    "testedBaseShaPair": false,
+    "readOnly": true
+  },
+  "checks": {
+    "json": 3,
+    "reportLinks": 51,
+    "relativeImports": 141,
+    "harnessSyntax": 6,
+    "sensitivePatterns": 0,
+    "capturesInspected": 7,
+    "diffCheck": "PASS_BEFORE_DOCUMENTARY_ADDITIONS",
+    "stagedReview": "REQUIRED_NEXT",
+    "newSuitesOrIntegration": false,
+    "lineEndings": "Raw local SHA256 plus LF-normalized SHA256; core.autocrlf=true; staged bytes to be compared with normalized content"
+  },
+  "preserved": {
+    "primaryHead": "763b7f5397320b1872fbbfc32ffd37a91b5411ec",
+    "primaryChanges": [
+      "BITACORA.md",
+      "README.md",
+      "VERIFICATION.md",
+      "docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md"
+    ],
+    "otherWorktrees": true,
+    "excluded": [
+      ".env and secrets",
+      "signed URLs and personal documents",
+      "node_modules",
+      "dist",
+      "test-results including databases/browser profiles/raw logs and traces",
+      "temporary artifacts"
+    ],
+    "deleted": false
+  },
+  "limits": [
+    "Compatible backend implementation commit pending; hashes and migration required",
+    "Real private storage/CORS/custody and operational readiness pending",
+    "Authorized legal texts, declaration and publication pending; no draft or LOCAL_TEST conversion",
+    "Recovery after link revocation remains contract-limited",
+    "Partial certificates are not a guarantee of total deletion",
+    "Real V2 Spaces cleanup, RESOLVED and Android/GPS remain separate",
+    "No backend/App/Landing change, QA, merge, rebase, deployment, real reception or activation"
+  ],
+  "publication": {
+    "commit": "NOT_YET_CREATED_AT_REVIEW",
+    "push": "NOT_YET_EXECUTED_AT_REVIEW",
+    "allowedRefspec": "refs/heads/feature/driver-verification:refs/heads/feature/driver-verification",
+    "force": false,
+    "remoteShaMustBeCheckedAfterPush": true
+  }
+}

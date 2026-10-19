@@ -1,5 +1,19 @@
 # Mandaria Web — V1.11-B
 
+## 2026-10-19 — Revisión para publicar el expediente del representante
+
+Expediente privado, recuperación y corrección de selección durante reconsulta de privacidad revisados para publicar sólo la rama autorizada. [Inventario y comprobaciones](docs/fleet-representative-publication-review.json), [informe A–F](docs/FLEET-REPRESENTATIVE-WEB.md). Evidencia existente reutilizada, sin repetir suites. Requiere el backend compatible todavía sin commit, sus huellas/migración y textos autorizados. Publicar la rama no despliega ni activa recepción. Las entradas siguientes son historia de los ensayos.
+
+## Representación privada: integración A–F cerrada — 2026-10-19
+
+A–F completos en un ensayo reanudado sobre la misma base sintética: expediente privado, revisión SUPER_ADMIN, FLEET separado, recuperación sin duplicados, aislamiento y restricciones. Google Chrome 155 instalado sustituyó el launcher que fallaba; la causa raíz de `spawn UNKNOWN` del Chromium anterior sigue sin determinarse. Una corrección mínima conserva el archivo pendiente durante la reconsulta de privacidad, manteniendo los envíos bloqueados hasta terminar. 40 pruebas focalizadas ejecutadas, tipos/lint/build PASS; las 130 anteriores no se repitieron en bloque. Escritorio/320 px y teclado comprobados. [Informe, fallos preservados y límites](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia integrada](docs/fleet-representative-integration-evidence.json). Procesos propios detenidos, base sintética conservada; sin backend modificado, QA, commit, push, despliegue ni activación. Requiere backend compatible, textos autorizados y preparación operativa antes de recepción real. Las entradas inferiores son históricas.
+
+## Expediente privado de representación — 2026-10-19
+
+Implementación local en `feature/driver-verification`, worktree `C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend`, base `e657e715cadb1d6727fbde55a9202b6deaa2fdb9`. El checkout principal permanece en main y conserva su documentación previa. Entrada propia `/verification/representatives`, detalle documental existente y administración SUPER_ADMIN `/admin/fleet-representatives`. Privacidad previa, evidencias privadas, revisión y aceptación FLEET permanecen separadas de admisión y servicios.
+
+[Informe contractual, rutas y reproducción](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia saneada](docs/fleet-representative-web-evidence.json). 130 pruebas focalizadas PASS, tipos/lint/build PASS. Integración y visual pendientes: Chromium abortó con `spawn UNKNOWN`; el único diagnóstico adicional reprodujo el fallo sin backend/base. El entorno aislado se preparó y cerró; ningún recorrido de navegador se acredita. Requiere el backend local de representación aún sin commit, sus huellas/migración y revisión autorizada de textos. Sin recepción real, admisión, QA, cambios backend, commit, push ni despliegue. Las entradas siguientes conservan el historial.
+
 ## Publicación de la rama documental — revisión del 2026-10-19
 
 La adaptación de alta documental, sus pruebas y el ensayo A–H se revisan para publicar exclusivamente `feature/driver-verification`. [Inventario y correspondencia previa al commit](docs/onboarding-production-publication-review.json). Se conserva el PASS histórico del recorrido aislado y de las 98 pruebas: no se ejecutaron de nuevo. El backend compatible se identifica por contrato, migración y huellas probadas; su commit final no se ha confirmado en esta revisión. Publicar esta rama no despliega Web ni activa operaciones. Las entradas siguientes conservan las etapas anteriores.

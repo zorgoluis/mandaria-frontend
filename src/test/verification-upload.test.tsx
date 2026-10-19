@@ -16,6 +16,7 @@ import {
   requirements,
 } from './verification-fixtures'
 import type { Role } from '../types/api'
+import { repRequirements, repCase } from './representative-fixtures'
 vi.mock('../verification/service', async (original) => ({
   ...(await original<typeof import('../verification/service')>()),
   putEvidence: vi.fn(),
@@ -89,7 +90,14 @@ beforeEach(() => {
     return data
   })
 })
-it.each(['FACE_PHOTO', 'LICENSE', 'REGISTRATION_CARD'])(
+it.each([
+  'FACE_PHOTO',
+  'LICENSE',
+  'REGISTRATION_CARD',
+  'REPRESENTATIVE_INE_FRONT',
+  'REPRESENTATIVE_INE_BACK',
+  'REPRESENTATION_AUTHORITY_PAGE',
+])(
   '%s: A completes once, preserves B and uploads B only on explicit submit',
   async (category) => {
     const user = userEvent.setup()
@@ -102,8 +110,9 @@ it.each(['FACE_PHOTO', 'LICENSE', 'REGISTRATION_CARD'])(
         ? completion.promise
         : normal(...args),
     )
-    const record =
-      category === 'REGISTRATION_CARD'
+    const record = category.startsWith('REPRESENT')
+      ? { ...repCase, environment: 'LOCAL_TEST' as const }
+      : category === 'REGISTRATION_CARD'
         ? { ...caseFixture, subjectType: 'VEHICLE' as const }
         : {
             ...caseFixture,
@@ -118,7 +127,13 @@ it.each(['FACE_PHOTO', 'LICENSE', 'REGISTRATION_CARD'])(
             },
           }
     const view = mount(
-      <Evidence record={record} requirements={requirements} canWrite />,
+      <Evidence
+        record={record}
+        requirements={
+          category.startsWith('REPRESENT') ? repRequirements : requirements
+        }
+        canWrite
+      />,
     )
     const input = screen.getByLabelText(
       'Imagen sintética *',

@@ -27,6 +27,7 @@ import { documentaryAvailability, consultationError } from './availability'
 import { useRequirements, useTermsQuery } from './use-availability'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
+import { RepresentativeCase } from './representatives'
 export function VerificationLayout() {
   const { user } = useAuth()
   const location = useLocation()
@@ -229,6 +230,16 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
   return (
     <>
       <TermsPanel providerId={scope.providerId} providerName={scope.name} />
+      <p>
+        <Link
+          to={
+            '/verification/representatives?providerId=' +
+            encodeURIComponent(scope.providerId)
+          }
+        >
+          Mi representación legal en esta flotilla
+        </Link>
+      </p>
       <section className="panel panel-body">
         <h2>Preparar expediente</h2>
         <p>
@@ -311,8 +322,13 @@ export function AdminVerification() {
         </Link>
       </p>
       <p>
+        <Link to="/admin/fleet-representatives">
+          Vínculos de representación legal
+        </Link>
+      </p>
+      <p>
         Decisiones exclusivas SUPER_ADMIN. Identidad y unidades se revisan por
-        separado.
+        separado de representación legal.
       </p>
       <CaseList area="admin" />
     </>
@@ -474,11 +490,27 @@ export function CaseDetail() {
     retry: false,
     gcTime: 0,
     staleTime: 0,
+    refetchInterval: (query) =>
+      query.state.data?.subjectType === 'REPRESENTATIVE' ? 10000 : false,
   })
   const r = useRequirements()
   if (q.isPending || r.isPending) return <Loading />
-  if (q.isError || r.isError)
-    return <p role="alert">{consultationError(q.error || r.error)}</p>
+  if (q.isError)
+    return (
+      <>
+        <p role="alert">{message(q.error)}</p>
+        <Link to="/privacy/deletion">Seguimiento de baja y privacidad</Link>
+      </>
+    )
+  if (r.isError) return <p role="alert">{consultationError(r.error)}</p>
+  if (q.data.subjectType === 'REPRESENTATIVE')
+    return (
+      <RepresentativeCase
+        key={user!.id + ':' + id}
+        record={q.data}
+        requirements={r.data}
+      />
+    )
   return (
     <CaseContent
       key={user!.id + ':' + q.data.id}
@@ -687,7 +719,7 @@ function CaseContent({
     </>
   )
 }
-function Decision({
+export function Decision({
   record,
   requirements,
   disabled,
@@ -698,8 +730,14 @@ function Decision({
 }) {
   const command = useCommand()
   const [decision, setDecision] = useState('APPROVE')
-  const required =
-    record.subjectType === 'VEHICLE'
+  const representative = record.subjectType === 'REPRESENTATIVE'
+  const [confirmation, setConfirmation] = useState<Record<
+    string,
+    unknown
+  > | null>(null)
+  const required = representative
+    ? requirements.representative?.checks || []
+    : record.subjectType === 'VEHICLE'
       ? requirements.vehicle.checks
       : requirements.identity.checks.filter(
           (c) => record.data.license || !c.startsWith('LICENSE_'),
@@ -710,7 +748,7 @@ function Decision({
       <Form
         label="Registrar decisión explícita"
         disabled={disabled || command.blocked || command.busy}
-        onSubmit={(d) => {
+        onSubmit={async (d) => {
           const passedChecks = required.filter((c) =>
             d.getAll('check').includes(c),
           )
@@ -718,6 +756,28 @@ function Decision({
             throw new Error(
               'Confirma cada comprobación después de revisar las evidencias.',
             )
+          if (representative) {
+            if (!String(d.get('publicReason') || '').trim())
+              throw new Error('Indica un motivo público de la decisión.')
+            if (
+              decision === 'APPROVE' &&
+              (!required.length || record.data.jointSignatureRequired)
+            )
+              throw new Error(
+                'No se puede aprobar una firma conjunta pendiente ni sin checklist vigente.',
+              )
+            setConfirmation({
+              expectedVersion: record.revision,
+              decision,
+              checklistVersion: requirements.policyVersion,
+              passedChecks,
+              publicReason: String(d.get('publicReason')).trim(),
+              ...(d.get('internalNote')
+                ? { internalNote: String(d.get('internalNote')) }
+                : {}),
+            })
+            return
+          }
           return command.send(
             'DECIDE',
             record.id,
@@ -754,11 +814,15 @@ function Decision({
             </label>
           ))}
         <Field
-          label={decision === 'REJECT' ? 'Motivo público *' : 'Motivo público'}
+          label={
+            representative || decision === 'REJECT'
+              ? 'Motivo público *'
+              : 'Motivo público'
+          }
         >
           <textarea
             name="publicReason"
-            required={decision === 'REJECT'}
+            required={representative || decision === 'REJECT'}
             maxLength={2000}
           />
         </Field>
@@ -766,6 +830,23 @@ function Decision({
           <textarea name="internalNote" maxLength={4000} />
         </Field>
       </Form>
+      {confirmation && (
+        <Confirm
+          title="Confirmar decisión de representación"
+          description={`Revisión ${record.revision}: ${confirmation.decision === 'APPROVE' ? 'acreditar representación' : 'rechazar con motivo'}. No acepta FLEET, no aprueba conductor/unidad ni activa admisión.`}
+          onClose={() => setConfirmation(null)}
+          onConfirm={() =>
+            command
+              .send(
+                'DECIDE',
+                record.id,
+                `/admin/verification-cases/${record.id}/decision`,
+                confirmation,
+              )
+              .then(() => undefined)
+          }
+        />
+      )}
       <p>
         Se decide sobre la revisión {record.revision}. Un conflicto exige
         revisar de nuevo; no se reenvía automáticamente.
@@ -803,6 +884,14 @@ export function ReceiptPage() {
               : 'No se acredita aceptación productiva. La evidencia de prueba no habilita producción.'}
           </p>
           <TermsDocuments terms={q.data.terms} />
+          {q.data.scope === 'FLEET' && (
+            <p>
+              {q.data.representationEvidence === 'ACCREDITED_AT_ACCEPTANCE'
+                ? 'La aceptación estuvo vinculada a un expediente acreditado al registrarse.'
+                : 'Aceptación histórica sin acreditación de facultades asociada.'}{' '}
+              Este comprobante no demuestra facultades vigentes.
+            </p>
+          )}
           <p>
             Aviso reconocido:{' '}
             {q.data.privacyVersion || 'No registrado en este recibo histórico'}.

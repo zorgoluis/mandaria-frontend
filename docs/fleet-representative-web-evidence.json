@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-19T19:31:52.620Z",
+  "scope": "Local Web representative private dossier; synthetic validation. No publication or activation.",
+  "web": {
+    "branch": "feature/driver-verification",
+    "base": "e657e715cadb1d6727fbde55a9202b6deaa2fdb9",
+    "worktree": "C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend",
+    "uncommitted": true,
+    "remoteQueried": false,
+    "sourceHashes": {
+      "src/app/App.tsx": "83b9c18495b6e6088670cc859aa78306bb90bc9811cc25bc14b659399e862274",
+      "src/layouts/AdminLayout.tsx": "8d5ea2577c94db842125ebdf6a2ac5b650cd1674898b97baccaf8aad75b62caf",
+      "src/verification/representatives.tsx": "d093678acd8e18d6515c4b99162a1570a772fe6d4c35329d1b11274f92385733",
+      "src/verification/representative-form.tsx": "587138c087b598b0bba4f65686d69a3f718acc41709cb320c4b22f30c9342d19",
+      "src/verification/types.ts": "27a97bf2dd2b474e993685c6db235626528e4801c36bec73d3a576384c0262cd",
+      "src/verification/service.ts": "db87a386b5a6ba22ab1854d8f578c69aedbba4977378a0b471ab7e0da3139285",
+      "src/verification/pending.ts": "8475fef1a0edc0d053223cf905ae80db0ccb7867b84f157e0784ffa7b2dd9362",
+      "src/verification/common.tsx": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+      "src/verification/evidence.tsx": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+      "src/verification/format.ts": "b5599ad40467476d034f0fb106406d8d14ec71fb77e4bb9130aa2219fc5626b5",
+      "src/verification/pages.tsx": "036ba6574482c793c927908eddf9342cded975977bffc8502b77acaf37a9f452",
+      "src/verification/terms.tsx": "70504b18dcd9ae86ff17fc4b9623cae25a029009d90aadaf289fdc654f18122a",
+      "src/verification/hooks.ts": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+      "src/verification/terms-contract.ts": "eace7f116b9f56f01dff353c7ccc7708ac2f022b32a31daaca6e46a083c2aab8",
+      "src/verification/availability.ts": "29fb561262e6e236327943f9078cda3cecc7b166359926b2c0fd3908f3723d19",
+      "src/verification/use-availability.ts": "3d18e99b7a7a5329206e151af8e859890853e4dfb58a1a446e505b0740c46585",
+      "src/test/representatives.test.tsx": "8248915d26437bd1d29259c5a15f292683d1dab05fb3b68ed8fd98ee5c0cb413",
+      "src/test/verification-upload.test.tsx": "ea4bcd3f8c1aaa177461637d265752d159213e0d8005584b556b0d3f317e03d9",
+      "src/test/verification-pages.test.tsx": "c2e8bfcf441acb7b6c0cb098bf9fab5947d2a0da958ba5de03487e615439a6ec",
+      "src/test/verification-recovery.test.ts": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a",
+      "src/test/onboarding-production.test.tsx": "0876b9d9492941fba33a2d84b586207a322a17f68e59637a1ed6d2c19220c005",
+      "src/test/representative-fixtures.ts": "3786977b31ec20f44e2764e8b3f7384e41fe513f78c95790ffcac4d8b7a12b12",
+      "src/auth/session.ts": "2ad65c298212340568584528c1a039fc29fa3abcb70999858c06ac776730fe8b",
+      "src/services/api.ts": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+      "src/components/ui.tsx": "16a4bce10374d9fd1e81f7db75b17c6a199d0fdd06f574abc7309d41457be3b0",
+      "src/index.css": "8049f7d1944e21c4dd83bf0c912dc9b35c7d5edec4ba4579bfae99bc9d9abcad",
+      "src/test/verification-service.test.ts": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7"
+    }
+  },
+  "preserved": {
+    "primaryBranch": "main",
+    "primaryHead": "763b7f5397320b1872fbbfc32ffd37a91b5411ec",
+    "primaryChanges": [
+      "BITACORA.md",
+      "README.md",
+      "VERIFICATION.md",
+      "docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md"
+    ],
+    "otherWorktreesUnchanged": true
+  },
+  "backend": {
+    "branch": "codex/fleet-representative-verification",
+    "base": "0fd7e2d058ba2c73c30f5edc21e229c11eefabdd",
+    "uncommitted": true,
+    "root": "C:/Users/zorgl/Documents/mandaria-backend",
+    "migration": "20261019000200_fleet_representative_verification",
+    "hashes": {
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md": "1a2ac2b47cd847c86efeff2a39a5e8cffb4d064e0af5c6ad61ab4646d0364f7b",
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-DESIGN.md": "4f0fba136b9a27162b0067b2d48df02095f5df5e5101c62d10bddc283e3b8542",
+      "docs/DOCUMENTARY-TEXTS-OWNER-REVIEW-2026-10-19.md": "67d45a7c4776af37cb63b6fb068736d5c92d5ac640283a13f70e3051fc544fc9",
+      "docs/checks/fleet-representative-evidence.json": "d5cd84b8eb8532174e1b37279e934c91fd322d88b41ac6e1715284999f85e214",
+      "docs/openapi.json": "bec7be1173019c13b647cb82a564c7f9bf01fa2514f384e25de637fecdf798fc",
+      "prisma/schema.prisma": "60878216ef1b244303cffd2c41db4c31db28f4410579a11327b7c06da505dcaf",
+      "prisma/migrations/20261019000200_fleet_representative_verification/migration.sql": "ae2f62a108ca25686d2642214c6f63d677b9abb58c7378027c21bf384872e321",
+      "src/verification/representative.dto.ts": "15e10a800f31e56580efabd14e1a3a55aa4b5eaa0849f9226d312123c55c920e",
+      "src/verification/representative-rules.ts": "416efb5425fbcbabfe62f51db6884a5878c1c753b856512c412003165e6673c3",
+      "src/verification/representative-retention.ts": "5f47daee38ba7c8675e2f6ccd44db926a278993aba388295d39fbab82d7b85de",
+      "src/verification/verification.controller.ts": "46969d94f2b4ab998f7717cb9a9a1ba3f91e02d9abc3e3b428aaa1a4948b4bb5",
+      "src/verification/verification.dto.ts": "d594042b201444cc678a2f16847a24c3ab3c9b0e2bf72c1fbda7ad94acfacd4c",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/verification.service.ts": "d5085232c70cff7de68a1653c9fd3c378900f02b0c4084df1912f6328df1d448",
+      "src/verification/verification-rules.ts": "c7a394d9f94f3cae8d03b641d9d0036c6e0920abbc18c3c68ae2cf136fc3368f",
+      "src/verification/verification-storage.ts": "d52a88ede8973cbec0d159b43df443ac0cb2a88fd4f3352bb2d1e1702aa4ee5f",
+      "src/verification/deletion.service.ts": "7ab8c6bcf22dd55aad0f3a1a0b0c4bd19c8dcb1997e43ebe5648c911b45e92f1",
+      "src/verification/document-recovery.ts": "cb8d65286e591e02f2093cb81f89ba5daccb468fac7a22e52c6e37606598a0f0",
+      "src/verification/recovery-v2.ts": "108bc15ae94595f91053c94a41e62a12bef88cac2b6b39a705b5bdff635f3e98",
+      "test/fleet-representative.e2e-spec.ts": "17ecf7af8fcb7bac2c723a6bfdbc76a775629090c6e2813062cac37e9d74d1a1",
+      "test/representative-recovery.e2e-spec.ts": "49bb7d430b5e0bb550acc04291f36d4b355dae7dca5c8279132a5c64290ed41a",
+      "scripts/verify-fleet-representative.mjs": "2987970902ab12b81bbee5674e2e1bbe53c4fbd77ec546778f94a943813f1587",
+      "dist/verification/verification.service.js": "ba4e54ea846473c31e2ff7635656174d6c060f25147f9bd26b9aa942695440a8",
+      "dist/verification/verification.controller.js": "f20b900f2cb3f0c67bf70461ca6d6bfc77c6875e60da7da2e9149f4105e70403",
+      "dist/verification/representative-rules.js": "ad9b2dd9477491c4e5aee15ef880e4f06ec6d86da5277596f2118a66a1a5655c",
+      "dist/verification/representative.dto.js": "c97abcf230678c56d402443f13bea0c34b7c07b6b41031929d73b1e721080a61"
+    },
+    "comparedFiles": 26,
+    "beforeMatchesRunBefore": true,
+    "beforeMatchesRunAfter": true,
+    "beforeMatchesClosure": true,
+    "changesByThisTask": [],
+    "historicalTests": {
+      "e2e": 64,
+      "unit": 38,
+      "b2b": 33,
+      "newRunsByThisTask": 0
+    },
+    "integratedShaPairClaimed": false
+  },
+  "tests": {
+    "kind": "faithful synthetic fixtures",
+    "uniqueTests": 130,
+    "passed": 130,
+    "files": {
+      "representatives.test.tsx": 28,
+      "verification-upload.test.tsx": 11,
+      "verification-pages.test.tsx": 27,
+      "verification-recovery.test.ts": 14,
+      "onboarding-production.test.tsx": 28,
+      "verification-service.test.ts": 22
+    },
+    "counting": "Latest complete result per file, reruns not added. All six files completed in this task; final service regression adds 22 without rerunning the earlier 108.",
+    "finalBatch": {
+      "passed": 55,
+      "total": 55,
+      "files": [
+        "representatives.test.tsx",
+        "verification-pages.test.tsx"
+      ],
+      "localReport": "test-results/representative-final-tests.json",
+      "reportSha256": "53b99464f03836aa44e27b8e825e9fb6d235c7ae4d73c49377fba5bff4298f96"
+    },
+    "typecheckApp": "PASS",
+    "typecheckTests": "PASS",
+    "lintAffected": "PASS",
+    "build": "PASS",
+    "buildEnvironment": "Programmatic Vite, configFile=false, envDir=false, React plugin, synthetic loopback API",
+    "buildWarning": "Root chunk exceeds 500 kB",
+    "firstFailure": "Ambiguous test selector for form/toast message corrected; full affected file subsequently passed",
+    "historicalAHOrDeletionRerun": false,
+    "closingServiceBatch": {
+      "passed": 22,
+      "total": 22,
+      "localReport": "test-results/representative-service-tests.json",
+      "reportSha256": "52d65fa395a025f38687abf807342ff6865974feaf54673a21721e95466d785c",
+      "environment": "Synthetic fixtures, envDir=false, no backend/browser"
+    }
+  },
+  "integration": {
+    "run": "1792437444597",
+    "startedAt": "2026-10-19T19:17:24.597Z",
+    "finishedAt": "2026-10-19T19:17:37.162Z",
+    "status": "BLOCKED",
+    "runnerStatus": "FAIL",
+    "preparation": "PASS: isolated PostgreSQL identity, migrations, real backend composition, synthetic seed and Vite",
+    "browserError": "browserType.launch: spawn UNKNOWN",
+    "cause": "UNDETERMINED; not attributed to product",
+    "launches": 1,
+    "additionalDiagnostics": 1,
+    "diagnostic": "Installed Chromium standalone without API/database reproduced spawn UNKNOWN; no further launches.",
+    "approval": "Both launches allowed through normal mechanism; no rejection bypassed.",
+    "checkpoints": {
+      "SETUP": {
+        "status": "FAIL",
+        "reason": "browserType.launch: spawn UNKNOWN"
+      },
+      "LINK": {
+        "status": "BLOCKED",
+        "reason": "Dependency: SETUP"
+      },
+      "PRIVACY_RECOVERY": {
+        "status": "BLOCKED",
+        "reason": "Dependency: LINK"
+      },
+      "DOSSIER": {
+        "status": "BLOCKED",
+        "reason": "Dependency: PRIVACY_RECOVERY"
+      },
+      "REVIEW": {
+        "status": "BLOCKED",
+        "reason": "Dependency: DOSSIER"
+      },
+      "FLEET": {
+        "status": "BLOCKED",
+        "reason": "Dependency: REVIEW"
+      },
+      "FOREIGN_ACCESS": {
+        "status": "BLOCKED",
+        "reason": "Dependency: DOSSIER"
+      },
+      "RESTRICTION": {
+        "status": "BLOCKED",
+        "reason": "Dependency: FLEET"
+      },
+      "VISUAL": {
+        "status": "BLOCKED",
+        "reason": "Dependency: SETUP"
+      }
+    },
+    "browserJourneysExecuted": 0,
+    "captures": 0,
+    "visualChecks": 0,
+    "counts": {
+      "privacyPosts": 0,
+      "storagePuts": 0
+    },
+    "recoveryEffectCounts": null,
+    "recoveryAssertionPrepared": "0 -> 1 -> 1; NOT EXECUTED",
+    "seeds": [
+      "confirmed SUPER_ADMIN and historical LOCAL_TEST driver/case from reused helper",
+      "confirmed representative without operational membership",
+      "coordinator with ADMIN membership in same synthetic fleet",
+      "synthetic FLEET policy via real backend service, not Web; no real legal publication"
+    ],
+    "isolation": {
+      "docker": false,
+      "envFiles": false,
+      "shared43000": false,
+      "realMail": false,
+      "realSpaces": false,
+      "temporaryIdentity": true
+    },
+    "environmentIdentity": {
+      "database": "representative_web_1792437444597_test",
+      "host": "127.0.0.1",
+      "port": 55469,
+      "directory": "C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend/test-results/representative-isolated/1792437444597/pgdata"
+    },
+    "ports": {
+      "postgresql": 55469,
+      "api": 4237,
+      "web": 4238
+    },
+    "cleanup": {
+      "browser": true,
+      "web": true,
+      "backend": true,
+      "postgresql": true
+    },
+    "closureCheck": {
+      "postgresql": "no server running",
+      "ownPortListeners": 0
+    },
+    "rawLocalReport": {
+      "path": "test-results/representative-isolated/1792437444597/report.json",
+      "sha256": "958b64045bb67932f0b009afa8cd45602bd7046ce193e6071ecb4780ad0c54f7",
+      "included": false
+    },
+    "rawEnvironmentReport": {
+      "sha256": "18617e0255c0bd4cac1e12f302808a4b11051fd19b8c763dfc9fde38fc33925c",
+      "included": false
+    }
+  },
+  "harness": {
+    "closureHashes": {
+      "scripts/verify-representative-web.mjs": "3c700d5ba149a7ef2b0c2b0a0b41dd564fa58c46fcc7563df65d98a3d14d9208",
+      "scripts/representative-isolated-environment.mjs": "e87d8d4901f1d6ed9981f4dd062f9765cd173b1cc8d976bf8770005915448822",
+      "scripts/representative-isolated-backend.mjs": "72780a17ce450ea92b621a7c6b00ccdd2cced3e8c74f6a36d825f25d09b3cc2a",
+      "scripts/representative-contract-snapshot.mjs": "e2176a449ee5d308440f2e6f099411fcbe8b5cdfcfaa6932fc9222b9fb38d75a"
+    },
+    "syntax": "PASS",
+    "note": "Formatted after the failed run: hashes identify syntax-checked closure content, not a successful integrated execution.",
+    "command": "node scripts/verify-representative-web.mjs"
+  },
+  "pending": [
+    "Resolve Chromium startup and complete six integrated journeys plus desktop/320px keyboard/focus/overflow under a new authorized bounded run.",
+    "Current backend authority prevents privacy/create-case recovery after revocation; preserve marker and uncertainty.",
+    "Compatible backend implementation/migration, authorized privacy/legal texts and private storage/operational readiness before real reception."
+  ],
+  "limits": [
+    "No general production readiness claim.",
+    "Historical receipt is not current authority or admission.",
+    "Partial deletion certificates do not guarantee total deletion.",
+    "Real V2 Spaces cleanup, RESOLVED and Android/GPS remain separate.",
+    "No backend edits, .env, Docker, shared 43000, real Spaces/mail, QA, commit, push, merge or deployment."
+  ],
+  "documentationChecks": {
+    "jsonFiles": 2,
+    "newDocumentLinksResolved": 50,
+    "historyPreserved": true,
+    "proposalOnlyBackendLinksRelocated": true,
+    "diffCheck": "PASS",
+    "staticHelperCorrections": [
+      "Recovery test extension .ts, not .tsx",
+      "Extra parenthesis in ephemeral documentation checker"
+    ],
+    "integratedRunnerRelaunched": false
+  }
+}

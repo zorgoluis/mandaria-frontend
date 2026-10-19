@@ -61,9 +61,11 @@ export function TermsDocuments({ terms }: { terms: Terms }) {
 export function TermsPanel({
   providerId,
   providerName,
+  fleetAuthority = false,
 }: {
   providerId?: string
   providerName?: string
+  fleetAuthority?: boolean
 }) {
   const { user } = useAuth()
   const scope = providerId ? 'FLEET' : 'DRIVER'
@@ -101,8 +103,17 @@ export function TermsPanel({
           terms={q.data}
           providerId={providerId}
           refresh={() => q.refetch()}
-          disabled={!state.canProceed}
+          disabled={!state.canProceed || (!!providerId && !fleetAuthority)}
         />
+      )}
+      {providerId && !fleetAuthority && (
+        <p>
+          Para aceptar por la flotilla necesitas representación acreditada
+          vigente.{' '}
+          <Link to="/verification/representatives">
+            Consultar mi representación
+          </Link>
+        </p>
       )}
     </section>
   )

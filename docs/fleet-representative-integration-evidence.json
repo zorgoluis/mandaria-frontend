@@ -1,0 +1,694 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-19T19:59:03.065Z",
+  "result": "PASS_CONSOLIDATED_RESUMED",
+  "notAnUninterruptedGreenRun": true,
+  "web": {
+    "branch": "feature/driver-verification",
+    "base": "e657e715cadb1d6727fbde55a9202b6deaa2fdb9",
+    "uncommitted": true,
+    "worktree": "C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend",
+    "hashes": {
+      "src/app/App.tsx": "83b9c18495b6e6088670cc859aa78306bb90bc9811cc25bc14b659399e862274",
+      "src/layouts/AdminLayout.tsx": "8d5ea2577c94db842125ebdf6a2ac5b650cd1674898b97baccaf8aad75b62caf",
+      "src/verification/representatives.tsx": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41",
+      "src/verification/representative-form.tsx": "587138c087b598b0bba4f65686d69a3f718acc41709cb320c4b22f30c9342d19",
+      "src/verification/types.ts": "27a97bf2dd2b474e993685c6db235626528e4801c36bec73d3a576384c0262cd",
+      "src/verification/service.ts": "db87a386b5a6ba22ab1854d8f578c69aedbba4977378a0b471ab7e0da3139285",
+      "src/verification/pending.ts": "8475fef1a0edc0d053223cf905ae80db0ccb7867b84f157e0784ffa7b2dd9362",
+      "src/verification/common.tsx": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+      "src/verification/evidence.tsx": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+      "src/verification/format.ts": "b5599ad40467476d034f0fb106406d8d14ec71fb77e4bb9130aa2219fc5626b5",
+      "src/verification/pages.tsx": "036ba6574482c793c927908eddf9342cded975977bffc8502b77acaf37a9f452",
+      "src/verification/terms.tsx": "70504b18dcd9ae86ff17fc4b9623cae25a029009d90aadaf289fdc654f18122a",
+      "src/verification/hooks.ts": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+      "src/verification/terms-contract.ts": "eace7f116b9f56f01dff353c7ccc7708ac2f022b32a31daaca6e46a083c2aab8",
+      "src/verification/availability.ts": "29fb561262e6e236327943f9078cda3cecc7b166359926b2c0fd3908f3723d19",
+      "src/verification/use-availability.ts": "3d18e99b7a7a5329206e151af8e859890853e4dfb58a1a446e505b0740c46585",
+      "src/test/representatives.test.tsx": "a6985344095d9a89e5f620a7975a7e5380cd8e5775c2b8ce22ada309919ec9b6",
+      "src/test/verification-upload.test.tsx": "ea4bcd3f8c1aaa177461637d265752d159213e0d8005584b556b0d3f317e03d9",
+      "src/test/verification-pages.test.tsx": "c2e8bfcf441acb7b6c0cb098bf9fab5947d2a0da958ba5de03487e615439a6ec",
+      "src/test/verification-recovery.test.ts": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a",
+      "src/test/onboarding-production.test.tsx": "0876b9d9492941fba33a2d84b586207a322a17f68e59637a1ed6d2c19220c005",
+      "src/test/representative-fixtures.ts": "3786977b31ec20f44e2764e8b3f7384e41fe513f78c95790ffcac4d8b7a12b12",
+      "src/auth/session.ts": "2ad65c298212340568584528c1a039fc29fa3abcb70999858c06ac776730fe8b",
+      "src/services/api.ts": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+      "src/components/ui.tsx": "16a4bce10374d9fd1e81f7db75b17c6a199d0fdd06f574abc7309d41457be3b0",
+      "src/index.css": "8049f7d1944e21c4dd83bf0c912dc9b35c7d5edec4ba4579bfae99bc9d9abcad",
+      "src/test/verification-service.test.ts": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7",
+      "scripts/verify-representative-web.mjs": "b173af54b0e2e76e1232dda81c6a81401e73b114646a9b361a0d16615b77e59c",
+      "scripts/representative-isolated-environment.mjs": "2c879936a040369a2e6f30ce2c31e17a4fd004324b0dc91fd5f65740dc785588",
+      "scripts/representative-isolated-backend.mjs": "afdcfe278722728bfda0db2181628d4f7d38c6f8f46b37820b5b2a24abe2868f",
+      "scripts/representative-contract-snapshot.mjs": "e2176a449ee5d308440f2e6f099411fcbe8b5cdfcfaa6932fc9222b9fb38d75a",
+      "scripts/representative-browser.mjs": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5",
+      "scripts/verify-representative-browser.mjs": "a6cead9a218e83bbd8204bb33957541fd8790f6fd9418c276ffc57dcc329da27"
+    },
+    "productDifferencesFromHistorical": [
+      "src/test/representatives.test.tsx",
+      "src/verification/representatives.tsx"
+    ]
+  },
+  "backend": {
+    "branch": "codex/fleet-representative-verification",
+    "base": "0fd7e2d058ba2c73c30f5edc21e229c11eefabdd",
+    "uncommitted": true,
+    "hashes": {
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md": "1a2ac2b47cd847c86efeff2a39a5e8cffb4d064e0af5c6ad61ab4646d0364f7b",
+      "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-DESIGN.md": "4f0fba136b9a27162b0067b2d48df02095f5df5e5101c62d10bddc283e3b8542",
+      "docs/DOCUMENTARY-TEXTS-OWNER-REVIEW-2026-10-19.md": "67d45a7c4776af37cb63b6fb068736d5c92d5ac640283a13f70e3051fc544fc9",
+      "docs/checks/fleet-representative-evidence.json": "d5cd84b8eb8532174e1b37279e934c91fd322d88b41ac6e1715284999f85e214",
+      "docs/openapi.json": "bec7be1173019c13b647cb82a564c7f9bf01fa2514f384e25de637fecdf798fc",
+      "prisma/schema.prisma": "60878216ef1b244303cffd2c41db4c31db28f4410579a11327b7c06da505dcaf",
+      "prisma/migrations/20261019000200_fleet_representative_verification/migration.sql": "ae2f62a108ca25686d2642214c6f63d677b9abb58c7378027c21bf384872e321",
+      "src/verification/representative.dto.ts": "15e10a800f31e56580efabd14e1a3a55aa4b5eaa0849f9226d312123c55c920e",
+      "src/verification/representative-rules.ts": "416efb5425fbcbabfe62f51db6884a5878c1c753b856512c412003165e6673c3",
+      "src/verification/representative-retention.ts": "5f47daee38ba7c8675e2f6ccd44db926a278993aba388295d39fbab82d7b85de",
+      "src/verification/verification.controller.ts": "46969d94f2b4ab998f7717cb9a9a1ba3f91e02d9abc3e3b428aaa1a4948b4bb5",
+      "src/verification/verification.dto.ts": "d594042b201444cc678a2f16847a24c3ab3c9b0e2bf72c1fbda7ad94acfacd4c",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/verification.service.ts": "d5085232c70cff7de68a1653c9fd3c378900f02b0c4084df1912f6328df1d448",
+      "src/verification/verification-rules.ts": "c7a394d9f94f3cae8d03b641d9d0036c6e0920abbc18c3c68ae2cf136fc3368f",
+      "src/verification/verification-storage.ts": "d52a88ede8973cbec0d159b43df443ac0cb2a88fd4f3352bb2d1e1702aa4ee5f",
+      "src/verification/deletion.service.ts": "7ab8c6bcf22dd55aad0f3a1a0b0c4bd19c8dcb1997e43ebe5648c911b45e92f1",
+      "src/verification/document-recovery.ts": "cb8d65286e591e02f2093cb81f89ba5daccb468fac7a22e52c6e37606598a0f0",
+      "src/verification/recovery-v2.ts": "108bc15ae94595f91053c94a41e62a12bef88cac2b6b39a705b5bdff635f3e98",
+      "test/fleet-representative.e2e-spec.ts": "17ecf7af8fcb7bac2c723a6bfdbc76a775629090c6e2813062cac37e9d74d1a1",
+      "test/representative-recovery.e2e-spec.ts": "49bb7d430b5e0bb550acc04291f36d4b355dae7dca5c8279132a5c64290ed41a",
+      "scripts/verify-fleet-representative.mjs": "2987970902ab12b81bbee5674e2e1bbe53c4fbd77ec546778f94a943813f1587",
+      "dist/verification/verification.service.js": "ba4e54ea846473c31e2ff7635656174d6c060f25147f9bd26b9aa942695440a8",
+      "dist/verification/verification.controller.js": "f20b900f2cb3f0c67bf70461ca6d6bfc77c6875e60da7da2e9149f4105e70403",
+      "dist/verification/representative-rules.js": "ad9b2dd9477491c4e5aee15ef880e4f06ec6d86da5277596f2118a66a1a5655c",
+      "dist/verification/representative.dto.js": "c97abcf230678c56d402443f13bea0c34b7c07b6b41031929d73b1e721080a61"
+    },
+    "filesCompared": 26,
+    "allSegmentsBeforeAfterMatch": true,
+    "modifiedByThisTask": false,
+    "compatibleContract": "FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md; migration 20261019000200_fleet_representative_verification; recovery format 3",
+    "baseShasAloneAreNotTestedContent": true
+  },
+  "launcher": {
+    "original": {
+      "path": "C:/Users/zorgl/AppData/Local/ms-playwright/chromium-1243/chrome-win64/chrome.exe",
+      "fileVersion": "153.0.8010.12",
+      "size": 4508160,
+      "priorFailure": "spawn UNKNOWN",
+      "rootCause": "UNDETERMINED",
+      "newAttemptsWithOriginal": 0
+    },
+    "selected": {
+      "path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "version": "155.0.8059.82",
+      "runtime": {
+        "node": "v24.15.0",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "headless": true,
+      "chromiumSandbox": true,
+      "temporaryProfile": true
+    },
+    "minimalProbe": {
+      "status": "PASS",
+      "localPage": "PASS",
+      "keyboard": "PASS",
+      "backend": false,
+      "database": false,
+      "cleanup": {
+        "browser": true,
+        "localServer": true
+      },
+      "reportSha256": "6b10ece6bacb52c5cd1d4701466ae41a252807d1033959069669a33e52503689"
+    },
+    "conclusion": "Installed Chrome plus explicit owned temporary directory works through normal approvals. Does not isolate the original failure to one OS/browser cause. No system protection disabled, global installation, dependency update or personal profile."
+  },
+  "integration": {
+    "resourceRun": "1792438944140",
+    "finalAttempt": "resume-1792439761412",
+    "environment": {
+      "status": "PASS",
+      "cluster": "C:\\Users\\zorgl\\.codex\\worktrees\\fleet-representative-web\\mandaria-frontend\\test-results\\representative-isolated\\1792438944140/pgdata",
+      "database": "representative_web_1792438944140_test",
+      "port": 55469,
+      "identityBeforeMigration": {
+        "database": "postgres",
+        "host": "127.0.0.1",
+        "port": 55469,
+        "directory": "C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend/test-results/representative-isolated/1792438944140/pgdata"
+      },
+      "targetIdentityBeforeMigration": {
+        "database": "representative_web_1792438944140_test",
+        "host": "127.0.0.1",
+        "port": 55469,
+        "directory": "C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend/test-results/representative-isolated/1792438944140/pgdata"
+      }
+    },
+    "segments": [
+      {
+        "id": "initial",
+        "status": "FAIL",
+        "startedAt": "2026-10-19T19:42:24.141Z",
+        "finishedAt": "2026-10-19T19:42:43.792Z",
+        "reportSha256": "1c97d8ac44bef1e361247421a290af983c44b9d5fb9e670bfca2499ccdbc1ba7",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "FAIL"
+          },
+          "DOSSIER": {
+            "status": "BLOCKED"
+          },
+          "REVIEW": {
+            "status": "BLOCKED"
+          },
+          "FLEET": {
+            "status": "BLOCKED"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "BLOCKED"
+          },
+          "RESTRICTION": {
+            "status": "BLOCKED"
+          },
+          "VISUAL": {
+            "status": "FAIL"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      },
+      {
+        "id": "resume-1792439224118",
+        "status": "FAIL",
+        "startedAt": "2026-10-19T19:47:04.120Z",
+        "finishedAt": "2026-10-19T19:47:34.899Z",
+        "reportSha256": "54084141af9ddf3182925d7ed0e0bc3d53668ba2f82411a10fdfbf1b95d09275",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "PASS"
+          },
+          "DOSSIER": {
+            "status": "PASS"
+          },
+          "REVIEW": {
+            "status": "FAIL"
+          },
+          "FLEET": {
+            "status": "BLOCKED"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "PASS"
+          },
+          "RESTRICTION": {
+            "status": "BLOCKED"
+          },
+          "VISUAL": {
+            "status": "FAIL"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      },
+      {
+        "id": "resume-1792439402312",
+        "status": "FAIL",
+        "startedAt": "2026-10-19T19:50:02.314Z",
+        "finishedAt": "2026-10-19T19:50:18.141Z",
+        "reportSha256": "7473c1a0697d593ea0b2edd07655600dd4371a6f6fa0d25ad93f8c5734297912",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439224118"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439224118"
+          },
+          "DOSSIER": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439224118"
+          },
+          "REVIEW": {
+            "status": "FAIL"
+          },
+          "FLEET": {
+            "status": "BLOCKED"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439224118"
+          },
+          "RESTRICTION": {
+            "status": "BLOCKED"
+          },
+          "VISUAL": {
+            "status": "FAIL"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      },
+      {
+        "id": "resume-1792439557453",
+        "status": "FAIL",
+        "startedAt": "2026-10-19T19:52:37.455Z",
+        "finishedAt": "2026-10-19T19:52:56.915Z",
+        "reportSha256": "5a651eb97bf7407f876c1c398edb3d30876a1d96bd816e91b51f8f161b9a5799",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439402312"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439402312"
+          },
+          "DOSSIER": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439402312"
+          },
+          "REVIEW": {
+            "status": "PASS"
+          },
+          "FLEET": {
+            "status": "PASS"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439402312"
+          },
+          "RESTRICTION": {
+            "status": "FAIL"
+          },
+          "VISUAL": {
+            "status": "FAIL"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      },
+      {
+        "id": "resume-1792439661306",
+        "status": "FAIL",
+        "startedAt": "2026-10-19T19:54:21.308Z",
+        "finishedAt": "2026-10-19T19:54:36.827Z",
+        "reportSha256": "bf0678c91ccc834667a48a3301429a1e65526baefab1fcbb6d722bb6d46367fd",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "DOSSIER": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "REVIEW": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "FLEET": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439557453"
+          },
+          "RESTRICTION": {
+            "status": "FAIL"
+          },
+          "VISUAL": {
+            "status": "PASS"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      },
+      {
+        "id": "resume-1792439761412",
+        "status": "PASS",
+        "startedAt": "2026-10-19T19:56:01.414Z",
+        "finishedAt": "2026-10-19T19:56:12.042Z",
+        "reportSha256": "466ac0e66aaee0bb1873ceecce8f4118f8e35be9eef79c0df1fbe1ac1745e7b8",
+        "checkpoints": {
+          "SETUP": {
+            "status": "PASS"
+          },
+          "LINK": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "PRIVACY_RECOVERY": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "DOSSIER": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "REVIEW": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "FLEET": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "FOREIGN_ACCESS": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          },
+          "RESTRICTION": {
+            "status": "PASS"
+          },
+          "VISUAL": {
+            "status": "PASS",
+            "reusedFrom": "resume-1792439661306"
+          }
+        },
+        "cleanup": {
+          "browser": true,
+          "web": true,
+          "backend": true,
+          "postgresql": true
+        },
+        "backendUnchanged": true,
+        "webUnchangedDuringSegment": true
+      }
+    ],
+    "seeds": [
+      "confirmed SUPER_ADMIN and historical LOCAL_TEST driver/case from reused helper",
+      "confirmed representative without operational membership",
+      "coordinator with ADMIN membership in same synthetic fleet",
+      "separate account with ADMIN membership in another synthetic fleet",
+      "synthetic FLEET policy via real backend service, not Web; no real legal publication"
+    ],
+    "seedsRepeated": false,
+    "storagePreparation": "Three synthetic fixtures regenerated in memory; source and normalized SHA256 match persisted attachment hashes. No upload, confirmation or case mutation repeated.",
+    "transports": "Real application and normalization; storage and mail transports simulated; functional API responses not replaced",
+    "matrix": {
+      "A": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 PRIVACY_RECOVERY + DOSSIER: no personal inputs/files before acknowledgment, real upload/confirmation/submission"
+      },
+      "B": {
+        "status": "PASS",
+        "evidence": "Decision via Web in resume-1792439402312; result recovered by GET and current case displayed in resume-1792439557453; no duplicate decision",
+        "otherCasesApproved": false,
+        "automaticFleetAcceptance": false,
+        "admissionEnabled": false
+      },
+      "C": {
+        "status": "PASS",
+        "evidence": "resume-1792439557453 FLEET via Web, receipt/current authority separate",
+        "driverAcceptanceCreated": false,
+        "localTestHistoryUnchanged": true,
+        "admissionEnabled": false
+      },
+      "D": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 original key after lost committed response",
+        "before": {
+          "acceptances": 0,
+          "commands": 0
+        },
+        "afterCommit": {
+          "acceptances": 1,
+          "commands": 1
+        },
+        "afterGet": {
+          "acceptances": 1,
+          "commands": 1
+        },
+        "originalKeyPreserved": true,
+        "markerFields": [
+          "actor",
+          "key",
+          "operation",
+          "target"
+        ],
+        "postCount": 1
+      },
+      "E": {
+        "status": "PASS",
+        "evidence": "resume-1792439224118 same-fleet coordinator and other-fleet account: link/case/private bytes denied with no private UI fields",
+        "privateAccessBeforeRestriction": 404
+      },
+      "F": {
+        "status": "PASS",
+        "evidence": "Existing request prepared through authenticated API, not deletion UI; final resume-1792439761412 tests current restriction and account change",
+        "accessUploadComplete": {
+          "status": 409,
+          "code": "DELETION_RESTRICTED"
+        },
+        "foreignCaseAfterRestriction": {
+          "status": 409,
+          "code": "DELETION_RESTRICTED"
+        },
+        "contextAndAccountCleared": true,
+        "requestRepeated": false,
+        "livePollTimeoutHistoryPreserved": true
+      }
+    },
+    "uploadAB": {
+      "afterA": {
+        "selected": "B",
+        "puts": 1,
+        "attachments": 1
+      },
+      "automaticB": false,
+      "afterExplicitB": {
+        "puts": 2,
+        "attachments": 2
+      }
+    },
+    "cumulativeCounts": {
+      "privacyPosts": 1,
+      "storagePuts": 3
+    },
+    "effects": {
+      "privacyCommands": 1,
+      "privacyAcceptances": 1,
+      "representativeCases": 1,
+      "validatedAttachments": 3,
+      "decisions": 1,
+      "fleetAcceptances": 1,
+      "confirmedRestrictionRequests": 1
+    },
+    "cleanup": {
+      "browser": true,
+      "web": true,
+      "backend": true,
+      "postgresql": true
+    },
+    "ownPorts": [
+      55469,
+      4237,
+      4238
+    ],
+    "originalFailedRunPreserved": true
+  },
+  "corrections": [
+    {
+      "kind": "harness",
+      "issue": "Immediate assertion after PageDown",
+      "fix": "Conditioned poll for actual scrollTop > 0, same assertion"
+    },
+    {
+      "kind": "Web",
+      "issue": "Privacy revalidation unmounted pending file input on same confirmed version",
+      "fix": "Keep confirmed-version collection mounted; disable mutations during query; remove collection for new version/error/lost authority",
+      "regression": "Fails before fix, passes after; version change still blocks"
+    },
+    {
+      "kind": "harness",
+      "issue": "Non-waiting all() enumeration before admin form loaded",
+      "fix": "Wait for heading, exact server checklist count and three evidence controls"
+    },
+    {
+      "kind": "harness",
+      "issue": "Resumed representative was on dashboard",
+      "fix": "Explicit case navigation; GET original persisted decision instead of repeated POST"
+    },
+    {
+      "kind": "harness",
+      "issue": "5s expectation shorter than actual 10s query polling",
+      "fix": "Conditioned assertion bounded at 15s; reuse persisted restriction without another request"
+    },
+    {
+      "kind": "harness",
+      "issue": "Expected pre-restriction 404 after subject gate active",
+      "fix": "Assert exact 409 DELETION_RESTRICTED, matching backend authorize gate-before-ownership; still require no private data"
+    }
+  ],
+  "tests": {
+    "newUniquePassed": 40,
+    "files": {
+      "src/test/representatives.test.tsx": 29,
+      "src/test/verification-upload.test.tsx": 11
+    },
+    "newRegressionCount": 1,
+    "historical130NotRerunWholesale": true,
+    "historicalUnaffectedFilesReused": 91,
+    "finalRepresentativeReportSha256": "75a5e24579d7e6a0e3dc79f9387e0bd0fc278b6c2be0680017de7414219b13ba",
+    "uploadBatchReportSha256": "c78e3e70f44df3e0c7b29b1df2b9be0606852cb5bb08ebb46419a5beb0474fda",
+    "initialRegressionFailed": true,
+    "typecheckApp": "PASS",
+    "typecheckTests": "PASS",
+    "lintAffected": "PASS",
+    "build": "PASS",
+    "buildRootKb": 758.88,
+    "buildWarning": "Root >500 kB; no .env read",
+    "testTypeCorrection": "Testing Library selector uses anchored name, not Playwright exact option"
+  },
+  "visual": {
+    "status": "PASS_WITH_REUSED_SEGMENTS",
+    "viewports": [
+      1280,
+      320
+    ],
+    "states": [
+      "privacy",
+      "pending-recovery",
+      "dossier",
+      "submitted",
+      "denied",
+      "review",
+      "approved",
+      "fleet-before-acceptance",
+      "fleet-receipt",
+      "restricted"
+    ],
+    "horizontalOverflow": false,
+    "keyboardNoticeScroll": true,
+    "modalFocus": true,
+    "mobileNavigationEscapeFocusReturn": true,
+    "captures": [
+      {
+        "file": "docs/images/fleet-representative/dossier-desktop.png",
+        "sha256": "8077da3fe0e3fedcc2b2fccb7cfc4bc4ec31967da58fabf77216c88a2c8d1d61",
+        "sourceAttempt": "resume-1792439224118",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/recovery-desktop.png",
+        "sha256": "7f374eb1f8738a8b5e58f08de7e411c2ccab556c731975da4c298d120e71440f",
+        "sourceAttempt": "resume-1792439224118",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/review-desktop.png",
+        "sha256": "541b1798e939d627b48e8f06744774dfb5eb5d5ecd10838ed7d1794ddcf0a036",
+        "sourceAttempt": "resume-1792439557453",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/approved-mobile.png",
+        "sha256": "bb85b9627592ec4a27cae4770593c93d3caadc395d9d8f9b25a1c7a1d6f6138f",
+        "sourceAttempt": "resume-1792439557453",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/fleet-mobile.png",
+        "sha256": "dc0aec03dd27340d8bd6a56b27a8229de97461f8081ae57b2efeb835ab2968ef",
+        "sourceAttempt": "resume-1792439557453",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/receipt-mobile.png",
+        "sha256": "830dbf84d809b23a80f26d3b9d7d3918250914a386a15b856d65622e9fc06741",
+        "sourceAttempt": "resume-1792439557453",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      },
+      {
+        "file": "docs/images/fleet-representative/restricted-mobile.png",
+        "sha256": "d1e2888161c1afcc39d7b58a42a2babf4713cd645233656f5d834f3958d1297b",
+        "sourceAttempt": "resume-1792439761412",
+        "syntheticOnly": true,
+        "visuallyInspected": true
+      }
+    ],
+    "rawScreenshotsNotAllPublished": true,
+    "earlyMobileCaptureNote": "Early resize captures may include menu transition; retained locally. Selected mobile closure captures use settled sidebar and disabled finite screenshot animations."
+  },
+  "limits": [
+    "Synthetic texts are not legally approved policies.",
+    "No real reception, operational admission, production readiness, QA, backend edit, commit, push, merge or deployment.",
+    "No Docker, .env, VM, shared 43000, real Spaces or mail.",
+    "Backend version requires uncommitted compatible implementation and migration, not base SHA alone.",
+    "Post-revocation recovery remains contract-limited. Partial deletion certificates do not prove total deletion.",
+    "Real V2 Spaces cleanup, RESOLVED and Android/GPS remain separate."
+  ],
+  "closureChecks": {
+    "jsonFiles": 3,
+    "newAndCurrentDocumentLinks": 16,
+    "webHarnessHashes": 33,
+    "backendHashes": 26,
+    "selectedCaptureHashes": 7,
+    "gitDiffCheck": "PASS",
+    "indexEmpty": true,
+    "postgresql": "no server running",
+    "ownPortListeners": 0,
+    "primaryCheckoutChangesPreserved": true,
+    "sensitivePatternMatches": 0
+  }
+}

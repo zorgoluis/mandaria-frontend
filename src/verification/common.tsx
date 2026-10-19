@@ -14,6 +14,8 @@ import { reconcile, useMarkers } from './pending'
 import type { Marker, PublicationReceipt } from './types'
 import { documentaryAvailability } from './availability'
 import { useRequirements } from './use-availability'
+import { useQueryClient } from '@tanstack/react-query'
+import { vkey } from './format'
 export function Warning() {
   const { user } = useAuth()
   const runtime = useRequirements()
@@ -156,6 +158,7 @@ export function Form({
 }
 
 export function Recovery() {
+  const client = useQueryClient()
   const { user } = useAuth()
   const { items, unavailable } = useMarkers()
   const { refresh } = useCommand()
@@ -179,16 +182,33 @@ export function Recovery() {
     lock.current = true
     setBusy(true)
     try {
-      const state = await reconcile(m, user.id, refresh, close, (receipt) => {
-        if (current.current === user.id)
-          setPublication({ actor: user.id, receipt })
-      })
+      const state = await reconcile(
+        m,
+        user.id,
+        refresh,
+        close,
+        (receipt) => {
+          if (current.current === user.id)
+            setPublication({ actor: user.id, receipt })
+        },
+        (receipt) => {
+          if (current.current === user.id)
+            client.setQueryData(
+              vkey(user.id, 'representative-privacy-ack', receipt.subjectId),
+              receipt,
+            )
+        },
+      )
       if (current.current === user.id)
         setText(
           state === 'ABSENT'
             ? 'Pendiente de reconciliación: ABSENT no demuestra fracaso. Puedes consultar o cerrar explícitamente.'
             : state === 'APPLIED'
-              ? 'Comprobante histórico recuperado; estado vigente consultado. No se repitió la operación.'
+              ? ['LINK_REPRESENTATIVE', 'REVOKE_REPRESENTATIVE'].includes(
+                  m.operation,
+                )
+                ? 'Comprobante histórico recuperado. Las vistas autorizadas se actualizaron; el recibo no acredita facultades vigentes.'
+                : 'Comprobante histórico recuperado; estado vigente consultado. No se repitió la operación.'
               : 'Intento técnico cerrado sin efectos. Puedes preparar otra intención explícitamente.',
         )
     } catch (e) {
