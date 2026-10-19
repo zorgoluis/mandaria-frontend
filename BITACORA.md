@@ -1,6 +1,18 @@
 # Bitácora — Mandaria Web
 
-## Estado actual — revisión para publicación de V2, 2026-10-18
+## Estado actual — cierre local tras publicación manual, 2026-10-18
+
+Completado el cierre documental local solicitado: [informe](docs/DOCUMENT-DELETION-WEB-STAGE-CLOSURE.md) y [correspondencia](docs/deletion-web-stage-closure.json). Web `feature/driver-verification`, HEAD `ef3df330cdd4c25a9d8416e16656287c50631b85`; commit manual único sobre a87081c, 30 archivos dentro del alcance revisado. Checkout inicialmente limpio; 29/29 candidatos y 38/38 comparaciones de evidencia vigentes, sin faltantes en 98 importaciones relativas. No se repiten suites ni recorridos.
+
+Backend leído en `5907bca3555d06b0f981f61cd3c3d179f49a66e4`: 71/71 huellas del índice de publicación y 12/12 referencias de la última revisión Web coinciden con contenido local y blobs Git. Contratos de sesión, GET por clave, CANCELLED, V2, constancias, restricciones y mensajes compatibles en lectura. El delta backend frente a CANCELLED integrado se limita a currentMessage y tiene evidencia posterior de proyección. No es una ejecución integrada nueva de esta pareja de SHA ni valida versiones mezcladas. Su BITACORA/VERIFICATION y dos informes locales posteriores se preservan sin modificar; no se confunden con contenido del commit.
+
+El usuario reportó publicación manual. Origin almacenado Web coincide con ef3df33 y backend con5907bca; **confirmación remota actual pendiente**. No se ejecutaron fetch/ls-remote ni se condicionó el cierre local al servicio de aprobación. Los fallos anteriores por capacidad son incidentes de herramienta, no rechazos de seguridad ni defectos de producto. El informe bloqueado anterior conserva su carácter histórico.
+
+Pendientes: limpieza V2 real en Spaces, lifecycle RESOLVED separado, términos/privacidad y preparación operativa, integración restante V2/restore y coordinación del backend compatible antes de servir Web. Se conserva la brecha histórica de cinco huellas backend sin convertirla en una regresión Web. No se reabren entrega restringida, recibo depurado ni recuperación CANCELLED acreditados. Constancias de alcance acreditado, sin garantía de eliminación total; sin despliegue ni activación. Android/GPS fuera del cierre.
+
+Historial de esta tarea: lecturas y contraste local de commits/huellas/contratos; revisión de dependencias y referencias; creación del informe/JSON y actualización de continuidad. En los ocho documentos publicados se revisan150 enlaces relativos:135 versionados y15 artefactos locales excluidos, todos existentes localmente; dos anclas válidas. Sólo cuatro archivos documentales Web locales **sin commit**, sin cambios de producto, backend, main/QA, otros worktrees, bases, Docker o Spaces.
+
+## Historial — revisión para publicación de V2, 2026-10-18
 
 Publicación autorizada exclusivamente en `feature/driver-verification`, remoto `origin` de Mandaria Web. HEAD inicial `a87081c6b6c91d8feef5598ec33db734ec7592e5`; fetch inicial sin divergencia (0/0). Checkout principal contiene los cambios vigentes y los arneses; otros worktrees y referencias main/QA preservados. Verificación documental/W-01, baja inicial, sesión restringida y los recorridos de entrega/recibo depurado ya estaban publicados.
 
