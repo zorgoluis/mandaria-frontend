@@ -1,5 +1,17 @@
 # Baja documental: contrato Web y límites
 
+Actualización de presentación posterior: [mensajes de revisión y etiqueta Conductor](RESTRICTION-REVIEW-WEB.md) corrige los hallazgos Web citados en el historial siguiente, sin cambios de permisos, mutaciones o recuperación. Validación nueva con fixtures, sin integración real adicional.
+
+Actualización posterior 2026-10-18: [decisiones CANCELLED recuperables](CANCELLED-COMMAND-RECEIPT-WEB.md). Cuatro decisiones Web verificadas con Nest/PostgreSQL aislados y pérdida de respuesta después del commit; GET original sin nuevo POST. Supera el bloqueo de recuperación de la adaptación V2 inicial. Defecto pendiente: mensaje de revisión completada tras bloqueo global pese a restricciones activas. Constancias parciales y límites productivos permanecen.
+
+Historial de la adaptación inicial:
+
+Actualización 2026-10-18: [adaptación operativa V2](DOCUMENT-DELETION-V2-WEB.md),
+con matriz previa, revisiones, H histórico/incidencia actual, constancias y
+restricciones individuales. Validación Web sintética; no integración V2 real.
+La recuperación de decisiones sobre CANCELLED sigue bloqueada por el contrato
+backend. Las entradas siguientes conservan sus fechas e historia.
+
 Actualización 2026-10-17: los bloqueos históricos 1 (identidad restringida) y 4
 (recibo administrativo tras recarga, salvo cancelación) tienen contrato y adaptación
 nuevos. Véase [compatibilidad Web](DOCUMENT-DELETION-COMPATIBILITY-WEB.md), con

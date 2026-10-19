@@ -1,5 +1,9 @@
 # Compatibilidad de sesión y recibos de baja — 2026-10-17
 
+Actualización de presentación posterior: el mensaje vigente incorrecto citado abajo y la etiqueta DRIVER están corregidos en Web; [detalle y validación focalizada](RESTRICTION-REVIEW-WEB.md). La recuperación, marcadores y sesiones permanecen intactos; su evidencia integrada anterior no se repitió.
+
+Actualización 2026-10-18: [fix y recuperación CANCELLED desde Web](CANCELLED-COMMAND-RECEIPT-WEB.md), [evidencia nueva](cancelled-receipt-web-evidence.json). APPLIED con result.status=CANCELLED ya se acepta cuando el endpoint backend acredita RESOLVE. No cambia el HTTP público ni se admite el sobre interno como fallback. Asignación, KEEP/RELEASE y bloqueo global pasaron pérdida después de commit y GET real tras recarga; un mensaje vigente incorrecto tras bloqueo queda documentado aparte. Backend completo con fix antes de Web; despliegues mixtos no acreditados. Las restricciones y rechazos CANCELLED del informe original siguiente son históricos y quedan sustituidos sólo para ese contrato. Cancelación personal, entrega y restauración no se amplían ni se vuelven a ensayar.
+
 ## Continuidad y fuentes reales
 
 Web: `feature/driver-verification`, HEAD `56c7bad0524cbbf05b45fa687a8ec625694a6ca0`
@@ -290,3 +294,19 @@ Se preparan dos commits coherentes: producto/pruebas de baja y sesión; arneses/
 Límites vigentes: constancias parciales; drenaje real en Spaces pendiente, sin eliminación total ni aptitud productiva. Tras entregar, UI informa que no hay resolución activa, sin constancia histórica explícita de entrega. Revisión y manifiesto de huellas: [deletion-publication-review.json](deletion-publication-review.json).
 
 Revisión final del índice: diff --cached --check detectó líneas vacías sobrantes al final de deletion-isolated-browser.mjs. Se retiraron únicamente esas líneas; contenido ejecutable idéntico. Huellas original/publicable reconciliadas en deletion-publication-review.json, sin reescribir evidencia histórica. Sintaxis y cuatro pruebas del helper comprobadas; no repetición de entrega/recibo por ausencia de cambio funcional.
+# Actualización operativa V2 — 2026-10-18
+
+Adaptación vigente documentada en [handoff V2](DOCUMENT-DELETION-V2-WEB.md).
+Mantiene projection=session, 403 sin cierre indiscriminado, canal privado,
+servicio comprometido LEGACY, marcadores mínimos y recuperación administrativa
+GET original. Recibos históricos no sustituyen situación vigente. Las mutaciones
+V2 recuperables usan resolve; no se repite POST ante pérdida. CANCELLED no está
+en commandSnapshot backend: decisiones administrativas de esa solicitud quedan
+en lectura hasta disponer de recuperación segura. No se inventa soporte.
+
+91 pruebas Web focalizadas nuevas del snapshot actual; navegador sintético en
+1280/320, tipos, lint y build. Detalle y ejecuciones históricas diferenciadas en
+VERIFICATION y `deletion-v2-web-evidence.json`. No se repitieron la entrega real
+restringida ni la depuración real del recibo; sus evidencias quedan intactas.
+No backend/DB/Docker43000, QA, commit, push ni despliegue. Constancias parciales,
+Spaces real pendiente y sin aptitud productiva.

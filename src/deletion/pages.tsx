@@ -26,6 +26,7 @@ import { useMarkers, accept } from './pending'
 import type { CommandReceipt } from './receipt'
 import { date as receiptDate } from '../utils/format'
 import { AdminActions } from './review'
+import { OperationalStatus } from './operational'
 import './privacy.css'
 
 export function PrivacyForm({
@@ -160,6 +161,7 @@ export function Status({
             : 'Constancia no reconocida; requiere revisión'
           : 'Seguimiento'}
       </h2>
+      <OperationalStatus data={s} receipt={receipt} />
       <dl>
         <dt>Folio</dt>
         <dd>{s.id}</dd>
@@ -416,6 +418,8 @@ function References() {
             <p>
               Revisión histórica: {historical.result.revision}. Estado
               histórico: {label(states, historical.result.status)}.
+              {historical.result.status === 'CANCELLED' &&
+                ' La decisión administrativa fue aplicada; CANCELLED describe la solicitud histórica, no un fallo o cancelación del comando.'}
             </p>
           ) : 'recorded' in historical.result ? (
             <p>Excepción registrada.</p>
@@ -798,6 +802,7 @@ export function DeletionDetail({ admin = false }: { admin?: boolean }) {
       return found
     },
     allowed,
+    true,
   )
   const receipt = useRead(
       'receipt-' + id,
@@ -828,7 +833,7 @@ export function DeletionDetail({ admin = false }: { admin?: boolean }) {
       {q.data && (
         <>
           <Status data={q.data} />
-          {!q.isError && !q.isFetching && known(q.data) && (
+          {!q.isError && known(q.data) && (
             <>
               {!admin && (
                 <button
@@ -854,7 +859,13 @@ export function DeletionDetail({ admin = false }: { admin?: boolean }) {
                     Solicitar cancelación antes de efectos irreversibles
                   </button>
                 )}
-              {admin && <AdminActions key={user!.id + id} data={q.data} />}
+              {admin && (
+                <AdminActions
+                  key={user!.id + id}
+                  data={q.data}
+                  refreshing={q.isFetching}
+                />
+              )}
             </>
           )}
           {cancel && (

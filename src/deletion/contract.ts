@@ -43,6 +43,8 @@ export const reasons: Record<string, string> = {
   UNKNOWN: 'El resultado de almacenamiento sigue sin comprobarse.',
 }
 export const tasks: Record<string, string> = {
+  RESTRICTION_REVIEW: 'Revisión selectiva de restricciones',
+  CLEANUP_INCIDENT: 'Incidencia de limpieza pendiente',
   IDENTITY_REVIEW: 'Revisión de identidad y facultades',
   MISSING_IDENTITY_FOLLOWUP: 'Seguimiento de información de identidad faltante',
   IDENTITY_DECISION: 'Decisión sobre evidencia de identidad',
@@ -57,6 +59,15 @@ export const tasks: Record<string, string> = {
   MANUAL_ATTENTION: 'Intervención requerida',
 }
 export interface Snapshot {
+  cleanupPolicy?: string
+  authorizationState?: string
+  authorizationGeneration?: number
+  incidentPending?: boolean
+  complianceOverdue?: boolean
+  currentMessage?: string | null
+  lastReviewAt?: string | null
+  nextReviewAt?: string | null
+  surveillanceEndsAt?: string | null
   id: string
   scope: string
   status: string
@@ -85,6 +96,14 @@ export interface CreateBody {
   acknowledgment: true
 }
 export interface WorkItem {
+  baselineAt?: string | null
+  reviewStep?: number
+  nextReviewAt?: string | null
+  lastReviewedAt?: string | null
+  finalVerifiedAt?: string | null
+  watchUntil?: string | null
+  incidentCode?: string | null
+  incidentAt?: string | null
   id: string
   attachmentId: string | null
   caseId: string | null
@@ -95,10 +114,22 @@ export interface WorkItem {
   errorCode: string | null
 }
 export interface Task {
+  objectId?: string
+  ownerId?: string | null
+  deputyId?: string | null
+  restrictions?: Restriction[]
   id: string
   kind: string
   status: string
   dueAt: string | null
+}
+export interface Restriction {
+  id: string
+  kind: string
+  active: boolean
+  reviewReason: string | null
+  reviewedAt: string | null
+  reviewDueAt: string | null
 }
 export interface Replacement {
   newCaseId: string
@@ -109,6 +140,16 @@ export interface Replacement {
 export function snapshot(raw: unknown, minimumRevision = 0): Snapshot {
   const r = raw as Snapshot
   if (
+    (r?.cleanupPolicy !== undefined &&
+      (typeof r.cleanupPolicy !== 'string' ||
+        typeof r.authorizationState !== 'string' ||
+        !Number.isInteger(r.authorizationGeneration) ||
+        typeof r.incidentPending !== 'boolean' ||
+        typeof r.complianceOverdue !== 'boolean')) ||
+    [r?.lastReviewAt, r?.nextReviewAt, r?.surveillanceEndsAt].some(
+      (v) =>
+        v != null && (typeof v !== 'string' || !Number.isFinite(Date.parse(v))),
+    ) ||
     !r ||
     !uuid.test(r.id) ||
     typeof r.scope !== 'string' ||
@@ -152,6 +193,19 @@ export function snapshot(raw: unknown, minimumRevision = 0): Snapshot {
     )
   // Explicit projection: never persist/render transport internals or third-party data.
   return {
+    ...(r.cleanupPolicy === undefined
+      ? {}
+      : {
+          cleanupPolicy: r.cleanupPolicy,
+          authorizationState: r.authorizationState,
+          authorizationGeneration: r.authorizationGeneration,
+          incidentPending: r.incidentPending,
+          complianceOverdue: r.complianceOverdue,
+          // Text is mapped locally from implemented codes, never transport prose.
+          lastReviewAt: r.lastReviewAt,
+          nextReviewAt: r.nextReviewAt,
+          surveillanceEndsAt: r.surveillanceEndsAt,
+        }),
     id: r.id,
     scope: r.scope,
     status: r.status,
@@ -188,6 +242,20 @@ export function newer(old: Snapshot | undefined, next: Snapshot) {
   return old && old.id === next.id && old.revision > next.revision ? old : next
 }
 const messages: Record<string, string> = {
+  INVALID_AUTHORIZATION_REVIEW:
+    'Selecciona un alcance válido y un motivo de hasta 300 caracteres.',
+  RESTRICTION_REVIEW_REQUIRED:
+    'La decisión requiere una restricción de esta solicitud y su responsable o suplente autorizado. Actualiza la consulta.',
+  RESTRICTION_STILL_REQUIRED:
+    'La restricción sigue siendo necesaria para otras partes legítimas. No se retiró.',
+  BOUNDED_REVIEW_REQUIRED:
+    'Indica una revisión futura dentro de los próximos 30 días; el servidor valida el límite.',
+  POINT_CLEANUP_NOT_AUTHORIZED:
+    'No se autorizó la actuación puntual. Se requiere inventario acreditado, alcance válido y saldo original disponible.',
+  POLICY_TRANSITION_NOT_ALLOWED:
+    'La solicitud no admite esta transición de política. Conserva su historia y actualiza.',
+  INVALID_ATTENTION_ASSIGNMENT:
+    'Responsable y suplente deben ser administradores actuales distintos.',
   COMMAND_RECEIPT_UNAVAILABLE:
     'El recibo no está disponible. Puede no haberse registrado todavía o haber sido depurado; el resultado sigue siendo desconocido. No envíes otra mutación.',
   FORM_RESPONSIBLES:
@@ -242,4 +310,12 @@ export function message(e: unknown) {
 export const terminal = (s: Snapshot) =>
   ['CLOSED', 'CANCELLED', 'PURGED'].includes(s.status)
 export const known = (s: Snapshot) =>
-  Object.hasOwn(states, s.status) && Object.hasOwn(scopes, s.scope)
+  Object.hasOwn(states, s.status) &&
+  Object.hasOwn(scopes, s.scope) &&
+  (s.cleanupPolicy === undefined ||
+    (['STRONG_WRITE_SEAL_V1', 'OPERATIONAL_RECONCILIATION_V2'].includes(
+      s.cleanupPolicy,
+    ) &&
+      ['UNCONFIRMED', 'ACTIVE', 'BLOCKED', 'TERMINATED'].includes(
+        s.authorizationState ?? '',
+      )))

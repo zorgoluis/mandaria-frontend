@@ -12,9 +12,129 @@ import { ApiError } from '../services/errors'
 import { commandReceipt } from '../deletion/receipt'
 import { actor, resource, caseId } from './verification-fixtures'
 import { deletionFixture as fixture } from './deletion-fixtures'
+import {
+  operationalFixture,
+  operationalItem,
+  restrictionTask,
+} from './deletion-v2-fixtures'
+
+it('V2 own and private status project operational fields without admin data', async () => {
+  const f = vi.spyOn(globalThis, 'fetch').mockImplementation(
+    async () =>
+      new Response(
+        JSON.stringify({
+          ...operationalFixture,
+          restrictions: [restrictionTask],
+          bucket: 'synthetic-hidden',
+        }),
+      ),
+  )
+  for (const data of [
+    await deletion.get(caseId),
+    await deletion.privateStatus('synthetic-private-test'),
+  ]) {
+    expect(data).toMatchObject({
+      cleanupPolicy: 'OPERATIONAL_RECONCILIATION_V2',
+      nextReviewAt: operationalFixture.nextReviewAt,
+    })
+    expect(data).not.toHaveProperty('restrictions')
+    expect(data).not.toHaveProperty('bucket')
+  }
+  expect(f.mock.calls[1][1]?.body).toBe(
+    JSON.stringify({ token: 'synthetic-private-test' }),
+  )
+})
+it('V2 administrative projections preserve partial task target, safe gate and real review dates only', async () => {
+  vi.spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify([
+          {
+            ...restrictionTask,
+            kind: 'RESTRICTION_REVIEW:' + resource,
+            token: 'hidden',
+          },
+        ]),
+      ),
+    )
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify([
+          { ...operationalItem, bucket: 'hidden', key: 'hidden' },
+        ]),
+      ),
+    )
+  const tasks = await deletion.tasks(caseId),
+    items = await deletion.items(caseId)
+  expect(tasks[0]).toMatchObject({
+    objectId: resource,
+    ownerId: actor,
+    restrictions: restrictionTask.restrictions,
+  })
+  expect(tasks[0]).not.toHaveProperty('token')
+  expect(items[0]).toMatchObject({
+    baselineAt: operationalItem.baselineAt,
+    reviewStep: 1,
+  })
+  expect(items[0]).not.toHaveProperty('key')
+  expect(items[0]).not.toHaveProperty('bucket')
+})
+it('V2 resolve recovery uses original GET; 404 neither retries POST nor removes uncertainty', async () => {
+  const marker = begin(actor, 'resolve', caseId)
+  const f = vi
+    .spyOn(globalThis, 'fetch')
+    .mockRejectedValueOnce(new TypeError('synthetic lost response'))
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          status: 'APPLIED',
+          requestId: caseId,
+          key: marker.key,
+          recordedAt: fixture.receivedAt,
+          result: operationalFixture,
+        }),
+      ),
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ code: 'COMMAND_RECEIPT_UNAVAILABLE' }), {
+        status: 404,
+      }),
+    )
+  await expect(
+    deletion.command(marker.key, caseId, 'resolve', {
+      action: 'REVIEW_RESTRICTION',
+      gateId: resource,
+      gateDecision: 'RELEASE',
+      expectedRevision: 3,
+      reason: 'Synthetic reason',
+      evidenceRef: resource,
+    }),
+  ).rejects.toThrow()
+  expect((await deletion.commandReceipt(caseId, marker.key)).status).toBe(
+    'APPLIED',
+  )
+  await expect(
+    deletion.commandReceipt(caseId, marker.key),
+  ).rejects.toMatchObject({ status: 404 })
+  expect(f.mock.calls.map((c) => c[1]?.method)).toEqual(['POST', 'GET', 'GET'])
+  expect(readMarkers()).toEqual([marker])
+})
 beforeEach(() => {
   localStorage.clear()
   sessionStorage.clear()
+})
+it('admin list never interprets array position as a minimum request revision', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+    new Response(
+      JSON.stringify(
+        Array.from({ length: 5 }, () => ({
+          ...operationalFixture,
+          revision: 1,
+        })),
+      ),
+    ),
+  )
+  expect(await deletion.list()).toHaveLength(5)
 })
 it('administrative receipt GET binds resource/key and never sends body or mutation header', async () => {
   const receipt = {
@@ -42,6 +162,7 @@ it.each([
   { recorded: true },
   { restoreBlocked: true, externalRestoreScriptsProtected: false },
   { ...fixture, revision: 0 },
+  { ...fixture, status: 'CANCELLED', revision: 4 },
 ])(
   'projects each historical receipt union independently from live state',
   (result) => {
@@ -59,9 +180,18 @@ it.each([
     expect(() => commandReceipt(raw, caseId, actor)).toThrow()
   },
 )
-it('cancelled or unknown receipt cannot authorize a new decision', () => {
+it('unknown results and private persistence envelopes are not an HTTP fallback', () => {
   for (const result of [
-    { ...fixture, status: 'CANCELLED' },
+    { ...fixture, status: 'FUTURE_STATE' },
+    {
+      receiptVersion: 1,
+      operation: 'RESOLVE',
+      result: { ...fixture, status: 'CANCELLED' },
+    },
+    { receiptVersion: 2, operation: 'RESOLVE', result: fixture },
+    'CANCELLED',
+    null,
+    [],
     { recorded: false },
     { restoreBlocked: true, externalRestoreScriptsProtected: true },
   ])
@@ -78,6 +208,20 @@ it('cancelled or unknown receipt cannot authorize a new decision', () => {
         resource,
       ),
     ).toThrow()
+})
+it('request status CANCELLED alone is never an applied administrative receipt', () => {
+  const result = { ...fixture, status: 'CANCELLED' }
+  for (const raw of [
+    result,
+    {
+      status: 'CANCELLED',
+      requestId: caseId,
+      key: resource,
+      recordedAt: fixture.receivedAt,
+      result,
+    },
+  ])
+    expect(() => commandReceipt(raw, caseId, resource)).toThrow()
 })
 it('sends exact create DTO and original UUID once; no automatic replay on lost response', async () => {
   const fetcher = vi

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { Field, Modal } from '../components/ui'
 import { deletion } from './service'
-import { useRead, useSend } from './hooks'
+import { useRead, useSend, dkey } from './hooks'
 import {
   message,
   label,
@@ -9,10 +10,15 @@ import {
   tasks,
   terminal,
   uuid,
+  known,
   type Snapshot,
 } from './contract'
 import { PrivacyForm } from './pages'
 import { ApiError } from '../services/errors'
+import { ObjectReviews } from './operational'
+import { v2 } from './operational-contract'
+import { OperationalReview } from './operational-review'
+import { useAuth } from '../auth/context'
 
 const labels: Record<string, string> = {
   IDENTITY_AND_AUTHORITY_VERIFIED: 'Acreditar identidad y facultades',
@@ -41,15 +47,48 @@ const names: Record<string, string> = {
   ownerId: 'UUID del responsable',
   deputyId: 'UUID del suplente',
 }
-export function AdminActions({ data: s }: { data: Snapshot }) {
-  const items = useRead('items-' + s.id, (signal) =>
-      deletion.items(s.id, signal),
+export function AdminActions({
+  data: s,
+  refreshing = false,
+}: {
+  data: Snapshot
+  refreshing?: boolean
+}) {
+  const { user } = useAuth()
+  const client = useQueryClient()
+  const observation = useRef(0)
+  const authorized = user?.role === 'SUPER_ADMIN' && known(s)
+  const items = useRead(
+      'items-' + s.id,
+      (signal) => deletion.items(s.id, signal),
+      authorized,
+      v2(s),
     ),
-    todo = useRead('tasks-' + s.id, (signal) => deletion.tasks(s.id, signal)),
-    replacement = useRead('replacements-' + s.id, (signal) =>
-      deletion.replacements(s.id, signal),
+    todo = useRead(
+      'tasks-' + s.id,
+      (signal) => deletion.tasks(s.id, signal),
+      authorized,
+      v2(s),
+    ),
+    replacement = useRead(
+      'replacements-' + s.id,
+      (signal) => deletion.replacements(s.id, signal),
+      authorized,
     ),
     send = useSend()
+  useEffect(() => {
+    // Worker observations may change without incrementing request.revision.
+    // Refresh the summary after an observed object refresh, never from a receipt.
+    if (
+      observation.current &&
+      items.dataUpdatedAt !== observation.current &&
+      user?.id
+    )
+      void client.invalidateQueries({
+        queryKey: dkey(user.id, 'detail-admin-' + s.id),
+      })
+    observation.current = items.dataUpdatedAt
+  }, [items.dataUpdatedAt, user?.id, s.id, client])
   const [action, setAction] = useState(''),
     [draft, setDraft] = useState<{
       op: string
@@ -62,7 +101,7 @@ export function AdminActions({ data: s }: { data: Snapshot }) {
       'IDENTITY_EVIDENCE_RECEIVED',
       'IDENTITY_AND_AUTHORITY_VERIFIED',
     )
-  if (!terminal(s)) {
+  if (!terminal(s) && s.authorizationState !== 'BLOCKED') {
     if (
       items.data?.some(
         (i) =>
@@ -84,17 +123,24 @@ export function AdminActions({ data: s }: { data: Snapshot }) {
       options.push('SUBSTITUTE_VERIFIED')
     if (s.scope === 'REPRESENTATIVE') options.push('REPLACE_REPRESENTATIVE')
     if (
+      !v2(s) &&
       items.data?.some((i) => i.status === 'MANUAL_REQUIRED' && i.attempts < 8)
     )
       options.push('RESUME')
     options.push('retention')
   }
   if (
-    todo.data?.some((t) => t.status === 'OPEN' || t.status === 'ACKNOWLEDGED')
+    todo.data?.some((t) =>
+      ['OPEN', 'PENDING', 'ACKNOWLEDGED'].includes(t.status),
+    )
   )
     options.push('ACKNOWLEDGE_TASK')
-  if (s.confirmedAt && s.status !== 'PURGED') options.push('restore')
+  if (s.confirmedAt && !['PURGED', 'CANCELLED'].includes(s.status))
+    options.push('restore')
   const stale =
+    refreshing ||
+    !known(s) ||
+    user?.role !== 'SUPER_ADMIN' ||
     items.isError ||
     todo.isError ||
     replacement.isError ||
@@ -117,6 +163,15 @@ export function AdminActions({ data: s }: { data: Snapshot }) {
             {message(e)}
           </p>
         ))}
+      {s.cleanupPolicy && (
+        <OperationalReview
+          data={s}
+          tasks={todo.data ?? []}
+          items={items.data ?? []}
+          stale={stale}
+        />
+      )}
+      {v2(s) && <ObjectReviews items={items.data ?? []} />}
       <h3>Objetos del alcance</h3>
       <ul>
         {items.data?.map((i) => (
@@ -378,7 +433,12 @@ export function AdminActions({ data: s }: { data: Snapshot }) {
           </dl>
           <PrivacyForm
             label="Confirmar decisión"
-            disabled={send.blocked}
+            disabled={
+              stale ||
+              send.blocked ||
+              (draft.body.expectedRevision !== undefined &&
+                draft.body.expectedRevision !== s.revision)
+            }
             onSubmit={async () => {
               await send.send(draft.op, s.id, (key) =>
                 deletion.command(key, s.id, draft.op, draft.body),

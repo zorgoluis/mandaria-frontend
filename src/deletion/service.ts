@@ -37,8 +37,10 @@ export const deletion = {
   receipt: (id: string, signal?: AbortSignal) =>
     read(`${base}/${enc(id)}/receipt`, signal),
   list: async (signal?: AbortSignal) =>
-    (await apiOnce<unknown[]>(admin, 'GET', undefined, signal)).map(snapshot),
-  tasks: async (id: string, signal?: AbortSignal) =>
+    (await apiOnce<unknown[]>(admin, 'GET', undefined, signal)).map((r) =>
+      snapshot(r),
+    ),
+  tasks: async (id: string, signal?: AbortSignal): Promise<Task[]> =>
     (
       await apiOnce<Task[]>(
         `${admin}/${enc(id)}/tasks`,
@@ -46,13 +48,28 @@ export const deletion = {
         undefined,
         signal,
       )
-    ).map(({ id, kind, status, dueAt }) => ({
+    ).map(({ id, kind, status, dueAt, ownerId, deputyId, restrictions }) => ({
       id,
       kind: kind.split(':')[0],
       status,
       dueAt,
+      ownerId,
+      deputyId,
+      ...(kind.startsWith('RESTRICTION_REVIEW:')
+        ? { objectId: kind.split(':')[1] }
+        : {}),
+      restrictions: restrictions?.map(
+        ({ id, kind, active, reviewReason, reviewedAt, reviewDueAt }) => ({
+          id,
+          kind,
+          active,
+          reviewReason,
+          reviewedAt,
+          reviewDueAt,
+        }),
+      ),
     })),
-  items: async (id: string, signal?: AbortSignal) =>
+  items: async (id: string, signal?: AbortSignal): Promise<WorkItem[]> =>
     (
       await apiOnce<WorkItem[]>(
         `${admin}/${enc(id)}/work-items`,
@@ -70,6 +87,14 @@ export const deletion = {
         attempts,
         retryAt,
         errorCode,
+        baselineAt,
+        reviewStep,
+        nextReviewAt,
+        lastReviewedAt,
+        finalVerifiedAt,
+        watchUntil,
+        incidentCode,
+        incidentAt,
       }) => ({
         id,
         attachmentId,
@@ -79,6 +104,14 @@ export const deletion = {
         attempts,
         retryAt,
         errorCode,
+        baselineAt,
+        reviewStep,
+        nextReviewAt,
+        lastReviewedAt,
+        finalVerifiedAt,
+        watchUntil,
+        incidentCode,
+        incidentAt,
       }),
     ),
   replacements: async (id: string, signal?: AbortSignal) =>

@@ -1,0 +1,178 @@
+{
+  "webHead": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+  "backendHead": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+  "workingTrees": true,
+  "baselineCopies": "test-results/restriction-review-baseline-1792381501565",
+  "webBefore": [
+    {
+      "file": "src/deletion/receipt.ts",
+      "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "sha256": "9551becdc8e6d01a289109b3bb3b43fd6db3a96e42ac78db6de27bc9bfa5b966"
+    },
+    {
+      "file": "src/deletion/operational-review.tsx",
+      "sha256": "ca7e6268562c4d6a40e3504ffcfde2d8a8b934e8e9cf61337c222a4b43169a3a"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "sha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e"
+    },
+    {
+      "file": "src/deletion/pending.ts",
+      "sha256": "6d59e13b9ce2fe3ba36ab64e4cdad18fbec0c3875bc152b4364e05996eb74a96"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+    },
+    {
+      "file": "src/auth/session.ts",
+      "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62"
+    },
+    {
+      "file": "src/services/api.ts",
+      "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "031d3eabffe470f5ca4a0a33a01fcca35337491311d63445231767d24330e7c5"
+    },
+    {
+      "file": "src/deletion/contract.ts",
+      "sha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f"
+    },
+    {
+      "file": "src/deletion/operational.tsx",
+      "sha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff"
+    },
+    {
+      "file": "src/deletion/operational-contract.ts",
+      "sha256": "3340df74493f2c82f2f12451412a2971be0a673e01b8a9063910c27ee21adbd5"
+    },
+    {
+      "file": "src/test/deletion-v2-fixtures.ts",
+      "sha256": "60da968e62ab3f58c94f12f4aa40ba8b40c8e07172b0ebcffacd36807cc5b714"
+    },
+    {
+      "file": "src/test/deletion-v2.test.tsx",
+      "sha256": "26a1ed4305f721201fa3c15f2d0746fe5b33c2caa8e8475c5d6b2ff6d04561e3"
+    },
+    {
+      "file": "src/test/deletion-service.test.ts",
+      "sha256": "b6efe133931bb0963571d08b1db993eb1885a5c1fd4923d5a6255cc604d42d78"
+    },
+    {
+      "file": "src/test/deletion-pages.test.tsx",
+      "sha256": "d7424e3119fec347ab424e4d8d5b7f820b03ede968ecfccba488c137b9f67cb2"
+    },
+    {
+      "file": "src/test/session-compatibility.test.tsx",
+      "sha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141"
+    },
+    {
+      "file": "scripts/verify-deletion-v2-web.mjs",
+      "sha256": "a59d9c54b628102306feb0ca4f4ce43684abb6a3aa5f29c2bd713a6301fa79dc"
+    },
+    {
+      "file": "scripts/verify-cancelled-receipt-web.mjs",
+      "sha256": "c5d40a12f88f55bbd80df34543b4fae4a71dea05b5ec120ea8abd7067b43a64b"
+    },
+    {
+      "file": "scripts/deletion-isolated-environment.mjs",
+      "sha256": "f57cf4fea9aa0b62716e04164dfd3870a489123bb9ce3ce43f05f8157cb33d7a"
+    },
+    {
+      "file": "scripts/deletion-isolated-browser.mjs",
+      "sha256": "3fa08b093d3d1fef046294d8afc800098c4795221a2fe7c151e598d409b7f8ce"
+    },
+    {
+      "file": "docs/cancelled-receipt-web-evidence.json",
+      "sha256": "477fda795ff4836cf4a7d7d2bba13c6fb80a28b814f8f57d4a2ebc7e5fb8fce4"
+    },
+    {
+      "file": "docs/deletion-v2-web-evidence.json",
+      "sha256": "09ac1e190b35dc4937cdac8615fea7a881dc11d95c2961b09c42eaf1f912567c"
+    },
+    {
+      "file": "src/deletion/privacy.css",
+      "sha256": "721e43e57023ffec7f4364b254bc887b7c40af1b1add9c91b191c5d06e898d89"
+    },
+    {
+      "file": "src/utils/format.ts",
+      "sha256": "deaa028904315b169b9ff7c5097b3d08918b923b71b7dae00f38b376ceba1465"
+    }
+  ],
+  "backend": [
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "0d2f829515b736e20b08cbfc364bdf351e78977660e2c12bdb8bd7a4cce341dc"
+    },
+    {
+      "file": "src/verification/deletion.responses.ts",
+      "sha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414"
+    },
+    {
+      "file": "src/verification/deletion.controller.ts",
+      "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+    },
+    {
+      "file": "src/verification/deletion.dto.ts",
+      "sha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d"
+    },
+    {
+      "file": "src/verification/operational-cleanup.ts",
+      "sha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81"
+    },
+    {
+      "file": "dist/verification/deletion-command-receipt.js",
+      "sha256": "34c75ffc1ddd85bc723de38eab4900c7ad0d0a38aca58ecb66fbefb100f5f500"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "bccd0a261ae659a0ac508620d0d3f830e7398f7da9cb54e3d92545371a2041fc"
+    },
+    {
+      "file": "dist/app.module.js",
+      "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f"
+    },
+    {
+      "file": "dist/setup.js",
+      "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35"
+    },
+    {
+      "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+      "sha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6"
+    },
+    {
+      "file": "docs/checks/cancelled-command-receipt-local.json",
+      "sha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b"
+    },
+    {
+      "file": "test/cancelled-command-receipt.e2e-spec.ts",
+      "sha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa"
+    },
+    {
+      "file": "test/helpers/deletion-storage-double.ts",
+      "sha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1"
+    },
+    {
+      "file": "docs/RESTRICTION-REVIEW-MESSAGE-ANALYSIS.md",
+      "sha256": "9559bd169a6b173dc2f54ce3adc547ca3c1ac2a624e0ee1332c8dc85865fba63"
+    }
+  ]
+}

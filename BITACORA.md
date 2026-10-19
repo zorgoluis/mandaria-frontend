@@ -1,5 +1,51 @@
 # Bitácora — Mandaria Web
 
+## Estado actual — revisión para publicación de V2, 2026-10-18
+
+Publicación autorizada exclusivamente en `feature/driver-verification`, remoto `origin` de Mandaria Web. HEAD inicial `a87081c6b6c91d8feef5598ec33db734ec7592e5`; fetch inicial sin divergencia (0/0). Checkout principal contiene los cambios vigentes y los arneses; otros worktrees y referencias main/QA preservados. Verificación documental/W-01, baja inicial, sesión restringida y los recorridos de entrega/recibo depurado ya estaban publicados.
+
+Revisión de los 29 archivos pendientes de V2, decisiones CANCELLED y presentación de restricciones: código, pruebas, arneses, documentación y evidencia sintética. Sin cambios de producto durante esta revisión. Se añade sólo continuidad y [registro de publicación](docs/deletion-v2-publication-review.json). Exclusiones conservadas localmente: `.env`, dependencias, build y `test-results` con capturas/reportes crudos; ningún archivo ajeno eliminado.
+
+Las 38 comparaciones de huellas de la evidencia final de restricciones coinciden. Las diferencias frente a evidencia histórica anterior están identificadas y cubiertas por las validaciones posteriores; el helper de navegador mantiene la reconciliación de líneas vacías ya publicada. Se reutilizan los resultados históricos de pruebas completas, tipos, lint, build y navegador, sin presentarlos como ejecuciones nuevas. No se repiten CANCELLED, entrega restringida ni recibo depurado. Nuevas comprobaciones: integridad de evidencia, enlaces, dependencias locales, sintaxis de tres arneses, revisión de secretos y `git diff --check`.
+
+Publicación bloqueada por infraestructura de permisos: dos intentos de `git add` con los 13 archivos explícitos de producto/pruebas no llegaron a ejecutarse porque el revisor automático informó falta de capacidad del modelo. No fue una evaluación de inseguridad. Staged continúa vacío y HEAD permanece en el SHA inicial; cero commits nuevos y sin push. La autorización del usuario sigue vigente. Pendientes al restablecerse el servicio: staging/revisión de diff, commits de implementación/pruebas y de arneses/documentación, nuevo fetch, comprobación de avance seguro, push con refspec exclusivo y verificación de SHA remoto.
+
+Web requiere contrato backend V2 y fix CANCELLED compatibles; un SHA backend por sí solo no identifica los cambios locales usados en las pruebas. Reapertura de tareas RESOLVED sigue pendiente backend. Revisión visual sintética no equivale a integración real; constancias parciales no garantizan eliminación total y el drenaje real en Spaces sigue pendiente. Publicar esta rama no despliega la aplicación ni acredita aptitud productiva. Sin merge, rebase, integración QA ni cambios backend/App/Landing.
+
+## Historial — presentación de restricciones, 2026-10-18
+
+Solicitud: corregir mensajes CANCELLED, detalle administrativo y etiqueta DRIVER con el contrato actual, sin tocar permisos, mutaciones ni recuperación. Rama feature/driver-verification y HEAD a87081c6b6c91d8feef5598ec33db734ec7592e5 conservados;25 archivos pendientes anteriores preservados. Lecturas y huellas previas antes de editar. Backend sólo leído; su servicio ya contenía una corrección separada al tomar huellas y el análisis se actualizó durante esta tarea. Ese trabajo no se atribuye a Web.
+
+CANCELLED prioriza BLOCKED; después RESTRICTIONS_UNDER_REVIEW; otros motivos/null/desconocido piden consultar restricciones, sin «revisión completada». OperationalReview separa tarea, active, última decisión/fecha/motivo y próxima revisión. KEEP vencido sigue activo y decidido, fecha ausente no se inventa y datos insuficientes/contradictorios permanecen neutrales. DRIVER=Conductor sólo en este mapa, sin inferir modalidad. Reapertura de tarea RESOLVED permanece pendiente backend; no se compensa en Web.
+
+89/89 pruebas en dos archivos completos (57+32), tipos/lint/build y sintaxis PASS. Comparación de lógica de acciones, formulario completo, validación temporal y mensajes de otros objetos: idénticos. Hashes de recuperación/HTTP/sesión/contratos conservados. Navegador sintético final PASS con14 capturas1280/320, foco y sin overflow; cero mutaciones o GET de recibo, backend no iniciado. Primera revisión visual PASS; final añade captura de tarea y ajuste de fixture, sin duplicar conteos. Chunk Root714.49kB mantiene advertencia existente.
+
+[Handoff](docs/RESTRICTION-REVIEW-WEB.md), [evidencia](docs/restriction-review-web-evidence.json), [fuentes](docs/restriction-review-web-sources.json). Hallazgos Web anteriores corregidos; evidencia real de recuperación permanece histórica. No se repiten entrega/depuración/restauración/Spaces ni cuatro pérdidas. Vite/Chromium propios cerrados; sin backend, datos reales, .env, Docker, QA, commit, push o despliegue. Constancias parciales, drenaje real pendiente; sin aptitud productiva acreditada.
+
+## Historial — recuperación CANCELLED, 2026-10-18
+
+Rama y HEAD conservados: feature/driver-verification, a87081c6b6c91d8feef5598ec33db734ec7592e5. Se preservan los 20 archivos pendientes V2 anteriores. Backend b300c25 más fix local CANCELLED consultado/ejecutado sin modificar; 15 huellas fuente/compilado/contrato verificadas antes y después. Sin staging, commit, push, QA o despliegue.
+
+Lector único de recibos admite APPLIED/CANCELLED validado por backend y mantiene fotografía histórica explícita. Habilitados ACKNOWLEDGE_TASK, REVIEW_RESTRICTION KEEP/RELEASE y bloqueo global, con permisos/asignación/revisión/motivo/evidencia/confirmación existentes. Restauración, adopción cancelada y actuación puntual sin autorización no se abren. Sin cambios en sesión, HTTP ni marcadores. Recibo no disponible conserva incertidumbre y clave; nunca autoriza nuevo POST.
+
+Validación nueva: consolidado final87 casos únicos en tres archivos completos (22+32+33); tipos, lint, build y sintaxis PASS. Preflight real PASS. Primer recorrido completo FAIL en precondición solapada409, diagnosticado y corregido sólo en el arnés; siguiente ejecución PASS con reporte. Cuatro decisiones desde Web con commit comprobado por otra conexión antes de cortar respuesta, recarga y GET original APPLIED/CANCELLED. Cuatro comandos/eventos, sin POST extra; GET repetidos sin efectos y otro administrador404. Recibo histórico5 separado de detalle6 por KEEP real. Cuenta permanece inactiva, plazos/presupuestos intactos y gates independientes conservados.18 capturas en1280/320, teclado/foco y ausencia de overflow.
+
+Revisión visual: defecto CANCELLED-CURRENT-MESSAGE después de bloqueo global, estado BLOCKED/AUTHORIZATION_UNDER_REVIEW con dos gates activos pero mensaje «revisión completada». Backend y traducción Web comparten la prioridad problemática; documentado sin corrección backend. La clase DRIVER tiene etiqueta genérica previa. Estos pendientes impiden declarar toda la presentación aprobada, aunque los cuatro recibos se recuperaron correctamente.
+
+[Handoff y reproducción](docs/CANCELLED-COMMAND-RECEIPT-WEB.md), [evidencia saneada](docs/cancelled-receipt-web-evidence.json), [fuentes](docs/cancelled-receipt-web-sources.json). Servicios/PG propios detenidos, backend sin cambios, Docker43000/Spaces/servicios ajenos no usados. Entrega, recibo depurado, restauración y suites generales V2 no se repiten. Backend completo con fix antes de Web; despliegue mixto no probado. Constancias parciales, drenaje Spaces pendiente, sin eliminación total ni aptitud productiva acreditada.
+
+## Historial — adaptación Web al contrato operativo V2, 2026-10-18
+
+Rama `feature/driver-verification`, base y HEAD conservado `a87081c6b6c91d8feef5598ec33db734ec7592e5`. Árbol inicialmente limpio; implementación vigente localizada en checkout principal, sin tocar otros worktrees. AGENTS.md ausente en Web; continuidad y fuentes backend leídas. Backend read-only b300c25 más cambios locales V2; once huellas registradas y sin cambio al cierre.
+
+Solicitud: revisiones de residuos, incidencias posteriores a H y revisión selectiva de restricciones. Matriz previa y límites en [handoff V2](docs/DOCUMENT-DELETION-V2-WEB.md). Implementados seguimiento propio/privado/constancias con proyección segura, revisión por objeto y acciones reales con confirmación, asignación, motivo y fecha según contrato. H histórico permanece separado; sin reactivación ni restauración implícita. Sondeo opt-in30s con parada en error/permiso/desmontaje; worker sin incremento de revisión refresca resumen desde work-items. Las decisiones CANCELLED quedan bloqueadas por falta de proyección recuperable backend.
+
+Verificación final: 91/91 pruebas en cuatro archivos completos; tipos, lint y build PASS. Navegador sintético en1280/320 con teclado/foco, campos inválidos, conflicto sin reenvío y otra restricción intacta. Evidencia saneada, capturas locales y hashes en [deletion-v2-web-evidence.json](docs/deletion-v2-web-evidence.json). Reportes de desarrollo conservados; fallo inicial de selector del arnés corregido, sin aborto nativo ni resultados sin reporte. Chunk Root712.72kB sigue sobre500kB, advertencia conservada.
+
+Historial de esta tarea: preparación/lecturas y matriz antes de código; proyecciones V2 y formularios; regresiones y arnés sintético; ajuste visual para situar incidencia al inicio; documentación y comprobación final. Corrección mínima del listado: callback explícito impide pasar índice como revisión mínima. No cambios en sesión/HTTP, entrega, marcadores o proyector de recibos. Entrega restringida/recibo depurado permanecen históricos, no se repitieron ni se presentan como nueva integración V2.
+
+Pendiente: contrato recuperable para decisiones sobre canceladas, historia de observaciones/incidencias no expuesta, integración V2 en base nueva aislada. Constancias parciales, drenaje real en Spaces pendiente; no acredita eliminación total ni aptitud productiva. Sin backend, .env, Docker43000, QA, commit, push o despliegue. Cambios anteriores y temporales ajenos conservados.
+
 ## 2026-10-13 — Verificación documental local desde main
 
 Creada esta continuidad en el worktree nuevo porque main no tenía BITACORA.md. Se conserva íntegro el historial de README/VERIFICATION y se trae únicamente el análisis documental previo con una actualización que distingue su fotografía histórica del working tree implementado actual. No se copiaron módulos QA.

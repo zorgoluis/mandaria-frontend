@@ -10,17 +10,27 @@ import {
   useMarkers,
   type Marker,
 } from './pending'
-import { type Snapshot, newer } from './contract'
+import { type Snapshot, newer, known, terminal } from './contract'
 export const dkey = (actor: string, ...parts: string[]) => [
   'document-deletion',
   env.apiUrl,
   actor,
   ...parts,
 ]
+// Informational clock only: never completes steps or grants business authority.
+export function useLocalNow() {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 30000)
+    return () => window.clearInterval(timer)
+  }, [])
+  return now
+}
 export function useRead<T>(
   part: string,
   fn: (signal: AbortSignal) => Promise<T>,
   enabled = true,
+  poll = false,
 ) {
   const actor = useActorId()
   return useQuery({
@@ -31,6 +41,33 @@ export function useRead<T>(
     gcTime: 0,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    refetchInterval: (query) => {
+      if (!poll || query.state.error) return false
+      if (Array.isArray(query.state.data))
+        return query.state.data.some(
+          (item: {
+            nextReviewAt?: string
+            watchUntil?: string
+            status?: string
+            incidentCode?: string
+          }) =>
+            item.incidentCode ||
+            (item.nextReviewAt &&
+              (!item.watchUntil || Date.parse(item.watchUntil) > Date.now())) ||
+            ['OPEN', 'PENDING', 'ACKNOWLEDGED'].includes(item.status ?? ''),
+        )
+          ? 30000
+          : false
+      const s = query.state.data as Snapshot | undefined
+      if (!s || !known(s) || !s.cleanupPolicy) return false
+      return !terminal(s) ||
+        s.incidentPending ||
+        (s.surveillanceEndsAt &&
+          Date.parse(s.surveillanceEndsAt) > Date.now()) ||
+        s.blockingReason === 'RESTRICTIONS_UNDER_REVIEW'
+        ? 30000
+        : false
+    },
     structuralSharing: (old, next) => {
       const a = old as Snapshot | undefined,
         b = next as Snapshot

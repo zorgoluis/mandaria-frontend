@@ -1,0 +1,126 @@
+{
+  "webHead": "a87081c6b6c91d8feef5598ec33db734ec7592e5",
+  "backendHead": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+  "workingTrees": true,
+  "backend": [
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "bb97574d0dd56ca7f8d477fb41f798b34e4fbfa858879fe389b409e9d29abb6e"
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "3a044f15ae31ee5adc277464186afdb4ac8f89cd94632b0f5f24270c0c50b691"
+    },
+    {
+      "file": "src/verification/deletion.responses.ts",
+      "sha256": "50ace13035767ddb1c6ffe9928dbea7ce07527f7ce3dc8a5659f2838c98b1414"
+    },
+    {
+      "file": "src/verification/deletion.controller.ts",
+      "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+    },
+    {
+      "file": "src/verification/deletion.dto.ts",
+      "sha256": "35ea567ce39bb01733dc21c9b4c73406dfad616206e897fdc332b073e314bb6d"
+    },
+    {
+      "file": "src/verification/operational-cleanup.ts",
+      "sha256": "7fead50737d8a485d87742c5fd0628f794332bec4a67a950ddd8155a3f985b81"
+    },
+    {
+      "file": "dist/verification/deletion-command-receipt.js",
+      "sha256": "34c75ffc1ddd85bc723de38eab4900c7ad0d0a38aca58ecb66fbefb100f5f500"
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "e1db4aaa105952f6fbad02c9b3ddc197301200eecb25733f31ff940e7f62b270"
+    },
+    {
+      "file": "dist/app.module.js",
+      "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f"
+    },
+    {
+      "file": "dist/setup.js",
+      "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3"
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "8cd9a467cac4ef6b985d7fed899b65982a665d4eb2813ac0ca2c48ece44fbc35"
+    },
+    {
+      "file": "docs/CANCELLED-COMMAND-RECEIPT-FIX.md",
+      "sha256": "e7078112f19e9f578f414135d22940395f5967983bf6dc4d982af19682148da6"
+    },
+    {
+      "file": "docs/checks/cancelled-command-receipt-local.json",
+      "sha256": "32b54380560a13b0885897f78af5210ac38a9eefe2648047337fd953891f1a1b"
+    },
+    {
+      "file": "test/cancelled-command-receipt.e2e-spec.ts",
+      "sha256": "3c93463cf0c2e2f2db0e3d11985231873ab32e8ddbd86d441ecd9437640541fa"
+    },
+    {
+      "file": "test/helpers/deletion-storage-double.ts",
+      "sha256": "adbbb15a3068b8caac1a851acd26dc826b5ff9c7e54943d032e7155d801e28a1"
+    }
+  ],
+  "webBefore": [
+    {
+      "file": "src/deletion/contract.ts",
+      "sha256": "e755b1b1a83b001f5436c4042d1196017eb312e0653c2a73cda4ab3640eb813f"
+    },
+    {
+      "file": "src/deletion/hooks.ts",
+      "sha256": "88b3c9507824ecf36c65d1c50cf8801f2129697b1e9f1618aa6ba0918be5539e"
+    },
+    {
+      "file": "src/deletion/pages.tsx",
+      "sha256": "bae0220f7fcf158d012b3fb0e3016876147c61c0306191be02ffac007a3c0bd3"
+    },
+    {
+      "file": "src/deletion/review.tsx",
+      "sha256": "a0c84349fa2c52ec09841261871c9d95638e20859923e1abe75639e683b0103b"
+    },
+    {
+      "file": "src/deletion/service.ts",
+      "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802"
+    },
+    {
+      "file": "src/deletion/operational.tsx",
+      "sha256": "69d93af65a65373e51b9e137d2843ec3e96247769d5119b5f191f80edb9296ff"
+    },
+    {
+      "file": "src/deletion/operational-contract.ts",
+      "sha256": "3340df74493f2c82f2f12451412a2971be0a673e01b8a9063910c27ee21adbd5"
+    },
+    {
+      "file": "src/deletion/operational-review.tsx",
+      "sha256": "0559340b75b14df3afc732e5eb43cc3374e191aac77786fc5e34001c43ed3723"
+    },
+    {
+      "file": "src/test/deletion-v2-fixtures.ts",
+      "sha256": "60da968e62ab3f58c94f12f4aa40ba8b40c8e07172b0ebcffacd36807cc5b714"
+    },
+    {
+      "file": "src/test/deletion-v2.test.tsx",
+      "sha256": "bb3a51bf282f6189a55d61205746919ce63abc92e58585852260bf827ab434be"
+    },
+    {
+      "file": "src/test/deletion-service.test.ts",
+      "sha256": "6ba608eb7448f4a6001f4a16dee596b8b6946b990046cd4a1e4ffa3063bd96af"
+    },
+    {
+      "file": "src/test/deletion-pages.test.tsx",
+      "sha256": "9b3d246cb560183b943c4e1a12c8a659f0a40c3e0596390025407c25db881e20"
+    },
+    {
+      "file": "src/test/session-compatibility.test.tsx",
+      "sha256": "8d6fe92566439f5bdab61e723d74c9242324444571607f69db6c054592867141"
+    },
+    {
+      "file": "scripts/verify-deletion-v2-web.mjs",
+      "sha256": "66515008f71565310fe87ca2de75766c71b4af2a59122c6d78370d450b2a1d9b"
+    }
+  ],
+  "previousChangesPreserved": true
+}

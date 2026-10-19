@@ -1,12 +1,32 @@
 import { ApiError } from '../services/errors'
 import { snapshot, scopes, states, type Snapshot } from './contract'
+// Public historical projection. The backend alone validates RESOLVE provenance;
+// its private persistence envelope is not an alternative HTTP format.
+type HistoricalSnapshot = Pick<
+  Snapshot,
+  | 'id'
+  | 'scope'
+  | 'status'
+  | 'revision'
+  | 'receivedAt'
+  | 'confirmedAt'
+  | 'deadline'
+  | 'replacementDeadline'
+  | 'closedAt'
+  | 'auditUntil'
+  | 'contactUntil'
+  | 'irreversibleStarted'
+  | 'providerBackups'
+  | 'productionReady'
+  | 'completedDocumentaryScopes'
+>
 export type CommandReceipt = {
   status: 'APPLIED'
   requestId: string
   key: string
   recordedAt: string
   result:
-    | Omit<Snapshot, 'blockingReason' | 'pendingActions'>
+    | HistoricalSnapshot
     | { recorded: true }
     | { restoreBlocked: true; externalRestoreScriptsProtected: false }
 }
@@ -26,7 +46,9 @@ export function commandReceipt(
     r.key !== key ||
     typeof r.recordedAt !== 'string' ||
     !Number.isFinite(Date.parse(r.recordedAt)) ||
-    !r.result
+    !r.result ||
+    typeof r.result !== 'object' ||
+    Array.isArray(r.result)
   )
     return invalid()
   const result = r.result
@@ -49,7 +71,6 @@ export function commandReceipt(
     result.id === id &&
     Object.hasOwn(scopes, result.scope) &&
     Object.hasOwn(states, result.status) &&
-    result.status !== 'CANCELLED' &&
     result.providerBackups === 'NOT_ATTESTED' &&
     result.productionReady === false
   ) {

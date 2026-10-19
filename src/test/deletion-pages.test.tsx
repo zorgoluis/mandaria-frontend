@@ -22,6 +22,7 @@ import { readMarkers, begin } from '../deletion/pending'
 import { ApiError } from '../services/errors'
 import { actor, resource, caseId, onboarding } from './verification-fixtures'
 import { deletionFixture as fixture, partialFixture } from './deletion-fixtures'
+import { operationalFixture, restrictionTask } from './deletion-v2-fixtures'
 vi.mock('../deletion/service', () => ({
   deletion: {
     create: vi.fn(),
@@ -100,6 +101,36 @@ beforeEach(() => {
     total: 0,
     totalPages: 0,
   })
+})
+it('restriction task assignment requires distinct current administrators and evidence', async () => {
+  vi.mocked(deletion.tasks).mockResolvedValue([
+    { ...restrictionTask, status: 'PENDING', ownerId: null, deputyId: null },
+  ])
+  mount(<AdminActions data={operationalFixture} />, 'SUPER_ADMIN')
+  await screen.findByRole('option', { name: 'Asignar responsable y suplente' })
+  fireEvent.change(screen.getByLabelText('Acción administrativa'), {
+    target: { value: 'ACKNOWLEDGE_TASK' },
+  })
+  const owner = screen.getByLabelText('UUID del responsable'),
+    deputy = screen.getByLabelText('UUID del suplente')
+  expect(owner).toBeRequired()
+  expect(deputy).toBeRequired()
+  fireEvent.change(owner, { target: { value: actor } })
+  fireEvent.change(deputy, { target: { value: actor } })
+  fireEvent.change(
+    screen.getByLabelText('Referencia UUID de evidencia custodiada'),
+    { target: { value: resource } },
+  )
+  fireEvent.change(screen.getByLabelText('Tarea pendiente'), {
+    target: { value: restrictionTask.id },
+  })
+  fireEvent.click(screen.getByRole('button', { name: 'Revisar decisión' }))
+  expect(
+    await screen.findByText(
+      'El responsable y el suplente deben ser personas distintas.',
+    ),
+  ).toBeInTheDocument()
+  expect(deletion.command).not.toHaveBeenCalled()
 })
 it('scopes depend on actual driver links; personal closure differs from unlinking', async () => {
   vi.mocked(verification.onboarding).mockResolvedValue({
@@ -242,10 +273,77 @@ it('a new client instance recovers admin intent with GET only and separates hist
     }),
   ).toHaveAttribute('href', '/admin/privacy/deletion/' + caseId)
 })
-it.each([404, 401, 403, 500])(
-  'unavailable or purged receipt (%s) stays unknown and never retries POST',
-  async (status) => {
-    begin(actor, 'restore-policy', caseId)
+it('CANCELLED administrative recovery confirms command, refreshes current data and preserves historical revision', async () => {
+  const m = begin(actor, 'resolve', caseId)
+  vi.mocked(deletion.commandReceipt).mockResolvedValue({
+    status: 'APPLIED',
+    requestId: caseId,
+    key: m.key,
+    recordedAt: fixture.receivedAt,
+    result: { ...fixture, status: 'CANCELLED', revision: 4 },
+  })
+  vi.mocked(deletion.list).mockResolvedValue([
+    {
+      ...operationalFixture,
+      status: 'CANCELLED',
+      revision: 6,
+      authorizationState: 'BLOCKED',
+      blockingReason: 'AUTHORIZATION_UNDER_REVIEW',
+    },
+  ])
+  const { client } = mount(
+    <DeletionDetail admin />,
+    'SUPER_ADMIN',
+    actor,
+    '/' + caseId,
+  )
+  const invalidate = vi.spyOn(client, 'invalidateQueries')
+  await screen.findByText('6')
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Consultar recibo administrativo' }),
+  )
+  await screen.findByText(/La decisión administrativa fue aplicada/)
+  expect(screen.getByText(/Revisión histórica: 4/)).toBeInTheDocument()
+  expect(screen.getByText('6')).toBeInTheDocument()
+  expect(
+    screen.getByText('Limpieza cancelada; autorización de limpieza bloqueada'),
+  ).toBeInTheDocument()
+  await waitFor(() => expect(invalidate).toHaveBeenCalled())
+  expect(readMarkers()[0]).toMatchObject({ ...m, accepted: true })
+  expect(deletion.command).not.toHaveBeenCalled()
+})
+it('cancelled task assignment is enabled without enabling restoration or personal cancel', async () => {
+  vi.mocked(deletion.tasks).mockResolvedValue([restrictionTask])
+  mount(
+    <AdminActions
+      data={{
+        ...operationalFixture,
+        status: 'CANCELLED',
+        authorizationState: 'TERMINATED',
+      }}
+    />,
+    'SUPER_ADMIN',
+  )
+  await screen.findByRole('option', { name: 'Asignar responsable y suplente' })
+  await waitFor(() =>
+    expect(screen.getByLabelText('Acción administrativa')).toBeEnabled(),
+  )
+  expect(
+    screen.queryByRole('option', {
+      name: 'Registrar responsabilidad de recuperación',
+    }),
+  ).not.toBeInTheDocument()
+})
+it.each([
+  [404, 'resolve'],
+  [404, 'restore-policy'],
+  [401, 'restore-policy'],
+  [403, 'restore-policy'],
+  [500, 'restore-policy'],
+] as const)(
+  'unavailable or purged receipt (%s, %s) stays unknown and never retries POST',
+  async (status, op) => {
+    const marker = begin(actor, op, caseId)
     vi.mocked(deletion.commandReceipt).mockRejectedValue(
       new ApiError(
         status,
@@ -257,8 +355,21 @@ it.each([404, 401, 403, 500])(
     fireEvent.click(
       screen.getByRole('button', { name: 'Consultar recibo administrativo' }),
     )
-    await screen.findByRole('alert')
-    expect(readMarkers()[0].accepted).toBeUndefined()
+    const alert = await screen.findByRole('alert')
+    if (status === 404)
+      expect(alert).toHaveTextContent('el resultado sigue siendo desconocido')
+    expect(readMarkers()).toEqual([marker])
+    expect(deletion.commandReceipt).toHaveBeenCalledTimes(1)
+    expect(deletion.commandReceipt).toHaveBeenCalledWith(
+      caseId,
+      marker.key,
+      expect.any(AbortSignal),
+    )
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Comando aplicado: recibo histórico',
+      }),
+    ).not.toBeInTheDocument()
     expect(deletion.command).not.toHaveBeenCalled()
   },
 )
