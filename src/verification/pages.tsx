@@ -23,6 +23,8 @@ import { CaseForm, NewUnit } from './forms'
 import { Evidence } from './evidence'
 import { TermsDocuments } from './terms'
 import { provenance } from './terms-contract'
+import { documentaryAvailability, consultationError } from './availability'
+import { useRequirements, useTermsQuery } from './use-availability'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
 export function VerificationLayout() {
@@ -38,12 +40,25 @@ export function VerificationLayout() {
 }
 export function DriverOnboarding() {
   const { user } = useAuth()
+  const runtime = useRequirements()
+  const terms = useTermsQuery()
   const q = useQuery({
     queryKey: vkey(user!.id, 'onboarding'),
     queryFn: ({ signal }) => verification.onboarding(signal),
     retry: false,
     gcTime: 0,
   })
+  const state = documentaryAvailability(runtime, terms)
+  const onboardingState = documentaryAvailability(runtime, {
+    ...q,
+    data: q.data ? { blockingReason: q.data.terms.blockingReason } : undefined,
+  })
+  const currentAcceptance =
+    !!q.data?.terms.acceptance &&
+    q.data.terms.acceptance.version === terms.data?.version &&
+    q.data.terms.requiredVersion === terms.data?.version
+  const blocked =
+    !state.canProceed || !onboardingState.canProceed || !currentAcceptance
   return (
     <>
       <h1>Mi verificación documental</h1>
@@ -56,7 +71,7 @@ export function DriverOnboarding() {
       {q.isPending ? (
         <Loading />
       ) : q.isError ? (
-        <p role="alert">{message(q.error)}</p>
+        <p role="alert">{consultationError(q.error)}</p>
       ) : (
         <>
           <p>
@@ -73,31 +88,24 @@ export function DriverOnboarding() {
           <p>
             Control de nuevas asignaciones:{' '}
             {q.data.enforcementEnabled
-              ? 'activo en backend, sin gracia para recursos existentes'
-              : 'no activado para recursos legacy; los nuevos sin proveedor requieren revisión'}
+              ? 'activo; los recursos existentes también deben cumplir los requisitos'
+              : 'sin activar para recursos existentes; los nuevos independientes requieren revisión'}
             . La aceptación no acredita licencia, vehículo ni crédito. Consulta
             el servicio ya comprometido en{' '}
             <Link to="/driver/my-service">Mi servicio</Link>.
           </p>
-          <p>
-            {provenance(q.data.environment)}. Las aceptaciones y aprobaciones
-            LOCAL_TEST se conservan como historia; no habilitan admisión
-            productiva.
-          </p>
-          {q.data.terms.blockingReason && (
-            <p role="alert">
-              Falta una publicación vigente para este ámbito. Consulta al
-              administrador antes de iniciar nuevas evidencias.
-            </p>
-          )}
-          {!q.data.terms.acceptance && (
+          {onboardingState.kind === 'missing_policy' &&
+            state.kind !== 'missing_policy' && (
+              <p role="alert">{onboardingState.text}</p>
+            )}
+          {!currentAcceptance && (
             <p role="status">
               Pendiente: consulta y acepta los términos vigentes antes de
               preparar evidencias. Después se requiere presentación y revisión
               manual.
             </p>
           )}
-          {q.data.environment === 'PRODUCTION' &&
+          {state.mode === 'PRODUCTION' &&
             q.data.subjects.some((s) =>
               s.cases.some((c) => c.environment !== 'PRODUCTION'),
             ) && (
@@ -111,7 +119,7 @@ export function DriverOnboarding() {
             )}
           {q.data.terms.acceptance && (
             <p>
-              Comprobante personal vigente:{' '}
+              Comprobante personal {currentAcceptance ? 'vigente' : 'anterior'}:{' '}
               <Link
                 to={'/verification/acceptances/' + q.data.terms.acceptance.id}
               >
@@ -126,11 +134,9 @@ export function DriverOnboarding() {
                 subjectType="DRIVER_IDENTITY"
                 resourceId={q.data.driver.id}
                 label="Preparar expediente de identidad independiente"
-                disabled={
-                  !q.data.terms.acceptance || !!q.data.terms.blockingReason
-                }
+                disabled={blocked}
               />
-              <NewUnit />
+              <NewUnit disabled={blocked} />
               <h2>Unidades independientes</h2>
               {q.data.driver.independentProfile.vehicles.map((v) => (
                 <section className="panel panel-body" key={v.id}>
@@ -143,9 +149,7 @@ export function DriverOnboarding() {
                     subjectType="VEHICLE"
                     resourceId={v.id}
                     label="Preparar expediente de esta unidad"
-                    disabled={
-                      !q.data.terms.acceptance || !!q.data.terms.blockingReason
-                    }
+                    disabled={blocked}
                   />
                 </section>
               ))}
@@ -207,6 +211,9 @@ export function ProviderVerification() {
 }
 function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
   const { user } = useAuth()
+  const runtime = useRequirements()
+  const terms = useTermsQuery(scope.providerId)
+  const state = documentaryAvailability(runtime, terms)
   const [kind, setKind] = useState<SubjectType>('DRIVER_IDENTITY')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState('')
@@ -277,6 +284,7 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
           subjectType={kind}
           resourceId={selected}
           label="Crear borrador de flotilla"
+          disabled={!state.canProceed}
         />
         <p>
           <Link to={'/drivers/new?providerId=' + scope.providerId}>
@@ -467,29 +475,27 @@ export function CaseDetail() {
     gcTime: 0,
     staleTime: 0,
   })
-  const r = useQuery({
-    queryKey: vkey(user!.id, 'requirements'),
-    queryFn: ({ signal }) => verification.requirements(signal),
-    retry: false,
-    gcTime: 0,
-  })
+  const r = useRequirements()
   if (q.isPending || r.isPending) return <Loading />
   if (q.isError || r.isError)
-    return <p role="alert">{message(q.error || r.error)}</p>
+    return <p role="alert">{consultationError(q.error || r.error)}</p>
   return (
     <CaseContent
       key={user!.id + ':' + q.data.id}
       record={q.data}
       requirements={r.data}
+      runtimeReady={documentaryAvailability(r).canProceed}
     />
   )
 }
 function CaseContent({
   record,
   requirements,
+  runtimeReady,
 }: {
   record: VerificationCase
   requirements: Requirements
+  runtimeReady: boolean
 }) {
   const { user } = useAuth()
   const command = useCommand()
@@ -497,6 +503,12 @@ function CaseContent({
   const canWrite =
     user?.role === 'PROVIDER_ADMIN' ||
     (user?.role === 'DRIVER' && record.scope.providerId === null)
+  const terms = useTermsQuery(record.scope.providerId || undefined, canWrite)
+  const state = documentaryAvailability(
+    { data: requirements },
+    canWrite ? terms : undefined,
+  )
+  const blocked = !runtimeReady || !state.canProceed
   const currentEvidence =
     ['LOCAL_TEST', 'PRODUCTION'].includes(record.environment) &&
     record.environment === requirements.environment &&
@@ -533,11 +545,18 @@ function CaseContent({
       {record.publicReason && (
         <p role="status">Motivo de decisión: {record.publicReason}</p>
       )}
+      {canWrite && !state.canProceed && (
+        <p role={state.kind === 'loading' ? 'status' : 'alert'}>{state.text}</p>
+      )}
       {user?.role === 'SUPER_ADMIN' && record.internalNote && (
         <p>Nota interna: {record.internalNote}</p>
       )}
       {canWrite && currentEvidence && record.status === 'DRAFT' ? (
-        <CaseForm key={record.id + ':' + record.revision} record={record} />
+        <CaseForm
+          key={record.id + ':' + record.revision}
+          record={record}
+          disabled={blocked}
+        />
       ) : (
         <section className="panel panel-body">
           <h2>Datos presentados</h2>
@@ -578,19 +597,21 @@ function CaseContent({
         record={record}
         requirements={requirements}
         canWrite={canWrite && currentEvidence}
+        disabled={blocked}
+        removalDisabled={!runtimeReady}
       />
       {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
         <section className="panel panel-body">
           {currentEvidence && record.status === 'DRAFT' && (
             <button
-              disabled={command.blocked || command.busy}
+              disabled={blocked || command.blocked || command.busy}
               onClick={() => setConfirm('SUBMIT')}
             >
               Presentar para revisión
             </button>
           )}{' '}
           <button
-            disabled={command.blocked || command.busy}
+            disabled={!runtimeReady || command.blocked || command.busy}
             onClick={() => setConfirm('WITHDRAW')}
           >
             Retirar expediente
@@ -603,6 +624,7 @@ function CaseContent({
           subjectType={record.subjectType}
           resourceId={record.resourceId}
           label="Preparar nueva corrección"
+          disabled={blocked}
         />
       )}
       {user?.role === 'SUPER_ADMIN' &&
@@ -612,6 +634,7 @@ function CaseContent({
             key={record.revision}
             record={record}
             requirements={requirements}
+            disabled={!runtimeReady}
           />
         )}
       <section className="panel panel-body">
@@ -648,6 +671,10 @@ function CaseContent({
           }
           onClose={() => setConfirm(null)}
           onConfirm={async () => {
+            if (!runtimeReady || (confirm === 'SUBMIT' && blocked))
+              throw new Error(
+                'Consulta los requisitos vigentes antes de continuar.',
+              )
             await command.send(
               confirm,
               record.id,
@@ -663,9 +690,11 @@ function CaseContent({
 function Decision({
   record,
   requirements,
+  disabled,
 }: {
   record: VerificationCase
   requirements: Requirements
+  disabled: boolean
 }) {
   const command = useCommand()
   const [decision, setDecision] = useState('APPROVE')
@@ -680,7 +709,7 @@ function Decision({
       <h2>Decisión SUPER_ADMIN</h2>
       <Form
         label="Registrar decisión explícita"
-        disabled={command.blocked || command.busy}
+        disabled={disabled || command.blocked || command.busy}
         onSubmit={(d) => {
           const passedChecks = required.filter((c) =>
             d.getAll('check').includes(c),

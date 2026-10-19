@@ -245,7 +245,7 @@ it('missing publication preserves onboarding/history and blocks new case prepara
   })
   mount(<DriverOnboarding />)
   expect(
-    await screen.findByText(/No hay una publicación vigente/),
+    await screen.findByText(/Falta publicar la política aplicable/),
   ).toBeInTheDocument()
   expect(
     screen.getByRole('button', {
@@ -385,7 +385,7 @@ it.each([
 it('SUPER_ADMIN cannot publish when backend runtime is LOCAL_TEST, irrespective of policy pointers', async () => {
   vi.mocked(verification.requirements).mockResolvedValue(requirements)
   mount(<PublicationPage />, 'SUPER_ADMIN')
-  await screen.findByText(/La publicación requiere el entorno productivo/)
+  await screen.findByText(/La publicación no está disponible en modo de prueba/)
   expect(
     screen.queryByRole('button', { name: 'Revisar publicación' }),
   ).toBeNull()
@@ -562,4 +562,38 @@ it('historical receipt with missing productive provenance never claims productio
     screen.getByText(/Aviso reconocido: No registrado/),
   ).toBeInTheDocument()
   expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('400 editorial rejection preserves exact draft markers for deliberate correction without republishing', async () => {
+  vi.mocked(verification.command).mockRejectedValue(
+    new ApiError(
+      400,
+      'internal editorial check',
+      'VERIFICATION_PUBLICATION_INVALID',
+    ),
+  )
+  await preparePublication()
+  fireEvent.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+  const draft = 'BORRADOR PARA REVISIÓN. [PENDIENTE: texto autorizado]'
+  fireEvent.change(screen.getByLabelText('Texto completo de términos'), {
+    target: { value: draft },
+  })
+  fireEvent.click(screen.getByRole('button', { name: 'Revisar publicación' }))
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Publicar versión autorizada' }),
+  )
+  await waitFor(() =>
+    expect(
+      screen.getAllByText(/notas ni marcadores de borrador/).length,
+    ).toBeGreaterThan(0),
+  )
+  expect(screen.getByLabelText('Texto completo de términos')).toHaveValue(draft)
+  expect(
+    screen.getByRole('region', { name: 'Términos a publicar' }),
+  ).toHaveTextContent(draft)
+  expect(verification.command).toHaveBeenCalledOnce()
+  expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
+    text: draft,
+  })
+  expect(screen.queryByText('Comprobante histórico de publicación')).toBeNull()
 })

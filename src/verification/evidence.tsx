@@ -10,13 +10,21 @@ type EvidenceProps = {
   record: VerificationCase
   requirements: Requirements
   canWrite: boolean
+  disabled?: boolean
+  removalDisabled?: boolean
 }
 export function Evidence(props: EvidenceProps) {
   const { user } = useAuth()
   // A different actor/case owns a different selection and async lifecycle.
   return <EvidenceSession key={user?.id + ':' + props.record.id} {...props} />
 }
-function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
+function EvidenceSession({
+  record,
+  requirements,
+  canWrite,
+  disabled = false,
+  removalDisabled = disabled,
+}: EvidenceProps) {
   const command = useCommand()
   const { user } = useAuth()
   const scope = user?.id + ':' + record.id
@@ -76,7 +84,7 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
               ? 'Cargar imagen sintética'
               : 'Cargar imagen'
           }
-          disabled={command.blocked || command.busy || busy}
+          disabled={disabled || command.blocked || command.busy || busy}
           onSubmit={async (d) => {
             const file = d.get('file')
             if (!(file instanceof File))
@@ -214,7 +222,7 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
               a.status === 'CREATED' && (
                 <Form
                   label="Consultar y completar carga"
-                  disabled={command.blocked || command.busy}
+                  disabled={disabled || command.blocked || command.busy}
                   onSubmit={async () => {
                     const latest = await verification.get(record.id)
                     await command.send(
@@ -231,7 +239,7 @@ function EvidenceSession({ record, requirements, canWrite }: EvidenceProps) {
               a.status !== 'REMOVED' && (
                 <Form
                   label="Retirar referencia del borrador"
-                  disabled={command.blocked || command.busy}
+                  disabled={removalDisabled || command.blocked || command.busy}
                   onSubmit={() =>
                     command.send(
                       'REMOVE_ATTACHMENT',

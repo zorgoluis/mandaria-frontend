@@ -9,6 +9,15 @@ import {
   confirmedRejection,
 } from '../deletion/pending'
 import { ApiError } from '../services/errors'
+
+it('disabled privacy workflow is unavailable, never evidence of local-test mode or completed deletion', () => {
+  const text = message(
+    new ApiError(503, 'private detail', 'PRIVACY_WORKFLOW_UNAVAILABLE'),
+  )
+  expect(text).toContain('La baja documental no está disponible')
+  expect(text).toContain('Conserva el folio y los intentos pendientes')
+  expect(text).not.toMatch(/prueba local|private detail|eliminación completada/)
+})
 import { commandReceipt } from '../deletion/receipt'
 import { actor, resource, caseId } from './verification-fixtures'
 import { deletionFixture as fixture } from './deletion-fixtures'

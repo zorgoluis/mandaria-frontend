@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../auth/context'
 import { Loading } from '../components/ui'
 import { Form } from './common'
 import { useCommand } from './hooks'
-import { message, vkey } from './format'
-import { verification } from './service'
+import { documentaryAvailability } from './availability'
+import { useRequirements, useTermsQuery } from './use-availability'
 import type { Terms } from './types'
 import { provenance, termsKey, completeTerms } from './terms-contract'
 
@@ -68,13 +67,9 @@ export function TermsPanel({
 }) {
   const { user } = useAuth()
   const scope = providerId ? 'FLEET' : 'DRIVER'
-  const q = useQuery({
-    queryKey: vkey(user!.id, 'terms', scope, providerId),
-    queryFn: ({ signal }) => verification.terms(scope, providerId, signal),
-    retry: false,
-    gcTime: 0,
-    staleTime: 0,
-  })
+  const runtime = useRequirements()
+  const q = useTermsQuery(providerId)
+  const state = documentaryAvailability(runtime, q)
   return (
     <section className="panel panel-body">
       <h2>
@@ -82,19 +77,31 @@ export function TermsPanel({
           ? `Términos de la flotilla — ${providerName}`
           : 'Términos personales vigentes'}
       </h2>
-      {q.isPending ? (
-        <Loading />
-      ) : q.isError ? (
+      {!state.canProceed && (
         <>
-          <p role="alert">{message(q.error)}</p>
-          <button onClick={() => void q.refetch()}>Consultar términos</button>
+          <p role={state.kind === 'loading' ? 'status' : 'alert'}>
+            {state.text}
+          </p>
+          <button
+            disabled={runtime.isFetching || q.isFetching}
+            onClick={() => {
+              void runtime.refetch().then((r) => {
+                if (documentaryAvailability(r).canProceed) void q.refetch()
+              })
+            }}
+          >
+            Consultar términos
+          </button>
         </>
-      ) : (
+      )}
+      {q.isPending && state.kind === 'loading' && <Loading />}
+      {q.data && (
         <TermsForm
           key={user!.id + ':' + scope + ':' + providerId}
           terms={q.data}
           providerId={providerId}
           refresh={() => q.refetch()}
+          disabled={!state.canProceed}
         />
       )}
     </section>
@@ -104,6 +111,7 @@ export function TermsForm(props: {
   terms: Terms
   providerId?: string
   refresh: () => Promise<unknown>
+  disabled?: boolean
 }) {
   return (
     <AcceptanceForm
@@ -116,10 +124,12 @@ function AcceptanceForm({
   terms,
   providerId,
   refresh,
+  disabled = false,
 }: {
   terms: Terms
   providerId?: string
   refresh: () => Promise<unknown>
+  disabled?: boolean
 }) {
   const command = useCommand()
   const [checked, setChecked] = useState(false)
@@ -149,6 +159,7 @@ function AcceptanceForm({
           (terms.environment === 'LOCAL_TEST' ? ' (prueba)' : '')
         }
         disabled={
+          disabled ||
           !ready ||
           !checked ||
           (production &&

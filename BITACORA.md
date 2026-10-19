@@ -1,5 +1,21 @@
 # Bitácora — Mandaria Web
 
+## 2026-10-19 — Revisión de publicación de avisos y bloqueos
+
+Autorizado commit y push sólo en feature/driver-verification. Origin confirmado como https://github.com/zorgoluis/mandaria-frontend.git; fetch acotado con base local/remota 1d4486e1b0c6fbd987ad846213de7bfdb05e8c1d, sin divergencia ni historia previa pendiente. Índice vacío. Se revisan 25 archivos propios, sin cambios ajenos detectados; otros worktrees y artefactos excluidos preservados. [Revisión y alcance](docs/DOCUMENTARY-AVAILABILITY-WEB.md).
+
+16/16 huellas de fuentes/arnés, 9/9 protegidas, 27/27 entradas de correspondencia histórica, 4/4 capturas y 5/5 reportes locales vigentes. Se reutilizan 129 pruebas, tipos/lint/build y visual sintética; sin nuevas suites, A–H o baja. Se seleccionarán rutas explícitas y se revisará el índice antes del commit, con nueva consulta remota antes del push y comprobación de SHA después. Registro previo a esos pasos; no anticipa éxito. Backend compatible por contrato/huellas, sin nueva integración ni aptitud productiva general. Sin cambios backend, merge, QA o despliegue. Las entradas inferiores conservan el cierre anterior sin commit.
+
+## 2026-10-19 — Avisos y bloqueos según disponibilidad documental vigente
+
+Rama feature/driver-verification, HEAD 1d4486e1b0c6fbd987ad846213de7bfdb05e8c1d, inicio limpio e índice vacío. README/continuidad leídos; AGENTS.md no encontrado en checkout/ascendientes. Otros worktrees y archivos excluidos conservados. [Informe](docs/DOCUMENTARY-AVAILABILITY-WEB.md) y [evidencia](docs/documentary-availability-evidence.json).
+
+Mapeo central de requisitos: prueba sólo por LOCAL_TEST; 503 desactivado sin etiqueta de prueba; política ausente bloquea pasos dependientes; PRODUCTION con requisitos permite flujo sujeto a aceptación/permisos; red/401/403/otros no deducen modo. Consultas por actor/ámbito/proveedor/entorno, respuestas tardías canceladas; aceptación anterior no habilita nueva versión. Se preservan aviso/consentimientos, revisión documental, historial, servicios y recuperación. Baja desactivada ya no se describe como exclusiva de ensayo. Rechazo editorial se explica sin limpiar ni publicar borradores automáticamente.
+
+129 casos únicos PASS en seis archivos completos; tipos app/test, lint, build y visual sintética de seis estados a 1280/320 PASS. Dos esperas de pruebas y dos selectores visuales corregidos; incidencias de entorno documentadas, sin fallo de producto inferido. Root 732.80 kB conserva aviso de tamaño. No integración real nueva, A–H o baja repetidos. 17/27 huellas Web A–H iguales; diez diferencias cubiertas por esta validación con fixtures. Nueve fuentes Web protegidas y nueve referencias backend de entrada sin cambios. SHA backend tomado del handoff; Git backend no consultable por sandbox, sin atribuir confirmación nueva.
+
+Pendientes de uso real: backend compatible y combinación del destino, textos/privacidad/autorizaciones finales y preparación operativa. No se acredita activación ni aptitud productiva. Spaces V2 real, RESOLVED y Android/GPS fuera. Documentación y código quedan **sin commit**. Sin cambios backend/.env/QA/VM/políticas, push, merge o despliegue; no se alteró el historial inferior.
+
 ## 2026-10-19 — Revisión para publicar alta documental y evidencia A–H
 
 Autorizados commits y push exclusivamente de feature/driver-verification. Repositorio principal Mandaria Web, HEAD inicial fcc81e98e23b569723c78304caa6098e64b01963; origin https://github.com/zorgoluis/mandaria-frontend.git confirmado. Fetch limitado a la rama: local/remoto 0/0, sin divergencia ni commits locales anteriores pendientes. Índice inicialmente vacío. Otros tres worktrees y main/QA preservados; no se encontró AGENTS.md en este checkout ni en sus directorios ascendentes. Continuidad e informes leídos.

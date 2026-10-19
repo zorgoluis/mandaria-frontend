@@ -12,15 +12,41 @@ import { useAuth } from '../auth/context'
 import { Confirm } from '../components/ui'
 import { reconcile, useMarkers } from './pending'
 import type { Marker, PublicationReceipt } from './types'
+import { documentaryAvailability } from './availability'
+import { useRequirements } from './use-availability'
 export function Warning() {
+  const { user } = useAuth()
+  const runtime = useRequirements()
+  const state = user ? documentaryAvailability(runtime) : null
   return (
-    <p className="notice" role="note">
-      <strong>Verificación documental.</strong> Aceptar términos o cargar
-      archivos no aprueba el expediente ni habilita operaciones. La procedencia
-      de prueba no habilita producción. La baja documental tiene seguimiento
-      separado; no acredita eliminación real de Spaces.{' '}
-      <Link to="/privacy/deletion">Baja y privacidad</Link>
-    </p>
+    <aside className="notice" aria-label="Aviso de verificación documental">
+      {state?.text && (
+        <p
+          role={
+            state.kind === 'error' || state.kind === 'disabled'
+              ? 'alert'
+              : 'status'
+          }
+        >
+          {state.text}
+        </p>
+      )}
+      {state && !state.canProceed && (
+        <button
+          type="button"
+          disabled={runtime.isFetching}
+          onClick={() => void runtime.refetch()}
+        >
+          Consultar disponibilidad
+        </button>
+      )}
+      <p>
+        <strong>Verificación documental.</strong> Aceptar términos o cargar
+        archivos no aprueba el expediente ni habilita operaciones. La baja y sus
+        constancias tienen alcance limitado y seguimiento independiente.{' '}
+        <Link to="/privacy/deletion">Baja y privacidad</Link>
+      </p>
+    </aside>
   )
 }
 export function Form({

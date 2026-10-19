@@ -264,7 +264,7 @@ const messages: Record<string, string> = {
   FORM_DATE:
     'Usa fechas ISO 8601 válidas con zona horaria en los campos de revisión y vencimiento.',
   PRIVACY_WORKFLOW_UNAVAILABLE:
-    'Este procedimiento sólo está habilitado en el entorno de prueba local autorizado.',
+    'La baja documental no está disponible en este momento. Conserva el folio y los intentos pendientes para consultar más tarde.',
   REAUTH_REQUIRED:
     'Se requiere verificar nuevamente tu identidad. La sesión puede haber sido restringida; utiliza el canal privado si no puedes volver a entrar.',
   AUTH_REQUIRED:

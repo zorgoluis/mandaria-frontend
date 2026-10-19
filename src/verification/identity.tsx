@@ -5,9 +5,11 @@ import { Field } from '../components/ui'
 import { useAuth } from '../auth/context'
 import { Form, Warning } from './common'
 import { verification } from './service'
+import { registrationUnavailable } from './availability'
 export function Register() {
   const [sent, setSent] = useState(false)
   const [resend, setResend] = useState(false)
+  const [unavailable, setUnavailable] = useState(false)
   return (
     <main className="verification-public">
       <Link to="/login">
@@ -21,8 +23,14 @@ export function Register() {
       </p>
       <Form
         label={resend ? 'Reenviar correo' : 'Solicitar correo de registro'}
+        disabled={unavailable}
         onSubmit={async (d) => {
-          const r = await verification.register(String(d.get('email')), resend)
+          const r = await verification
+            .register(String(d.get('email')), resend)
+            .catch((error: unknown) => {
+              setUnavailable(registrationUnavailable(error))
+              throw error
+            })
           if (r?.status !== 'CHECK_EMAIL')
             throw new Error('Respuesta no confirmada.')
           setSent(true)
@@ -46,6 +54,7 @@ export function Register() {
 }
 export function RegistrationConfirm() {
   const navigate = useNavigate()
+  const [unavailable, setUnavailable] = useState(false)
   return (
     <main className="verification-public">
       <h1>Confirmar registro</h1>
@@ -53,12 +62,18 @@ export function RegistrationConfirm() {
       <p>Introduce el código del correo. No lo guardamos en el navegador.</p>
       <Form
         label="Confirmar y continuar a login"
+        disabled={unavailable}
         onSubmit={async (d) => {
-          const r = await verification.confirm({
-            token: String(d.get('token')),
-            password: String(d.get('password')),
-            name: String(d.get('name')),
-          })
+          const r = await verification
+            .confirm({
+              token: String(d.get('token')),
+              password: String(d.get('password')),
+              name: String(d.get('name')),
+            })
+            .catch((error: unknown) => {
+              setUnavailable(registrationUnavailable(error))
+              throw error
+            })
           if (r?.status !== 'CONFIRMED_LOGIN_REQUIRED')
             throw new Error('No se confirmó el registro.')
           navigate('/login?next=onboarding', { replace: true })

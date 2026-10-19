@@ -1,5 +1,9 @@
 # Alta documental: adaptación Web al contrato productivo
 
+## Avisos y bloqueos vigentes — 2026-10-19
+
+Se ajustó la disponibilidad al contrato actual, sin reabrir diseño ni cambiar permisos: [informe de estados y validación](DOCUMENTARY-AVAILABILITY-WEB.md), [huellas y evidencia sintética](documentary-availability-evidence.json). LOCAL_TEST, alta desactivada, política ausente, PRODUCTION con requisitos y errores de consulta se distinguen explícitamente; `productionReady` y capabilities no deciden el modo. 129/129 casos únicos de seis archivos completos, tipos, lint, build y revisión visual 1280/320 PASS. Backend leído sin modificar. Esta tarea cambia diez huellas Web de A–H, cubiertas con fixtures; no representa otra integración real. Los resultados siguientes conservan su carácter histórico. Cambios actuales locales, sin commit/push/despliegue/activación.
+
 ## Revisión de publicación — 2026-10-19
 
 Se revisan los cambios propios pendientes para commits y push exclusivamente a `feature/driver-verification`; [inventario y correspondencia](onboarding-production-publication-review.json). Base local y remota consultada: `fcc81e98e23b569723c78304caa6098e64b01963`, sin divergencia. Las 27 huellas Web y 23 backend del ensayo siguen correspondiendo; no se repiten A–H ni las 98 pruebas. Los registros inferiores conservan su estado histórico anterior a esta publicación.

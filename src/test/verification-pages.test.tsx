@@ -314,6 +314,11 @@ it('terminal rejection offers new case, never edits reviewed snapshot', async ()
   )
   await screen.findByText(/Motivo de decisión/)
   expect(screen.queryByRole('button', { name: 'Guardar datos' })).toBeNull()
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', { name: 'Preparar nueva corrección' }),
+    ).toBeEnabled(),
+  )
   fireEvent.click(
     screen.getByRole('button', { name: 'Preparar nueva corrección' }),
   )
@@ -463,7 +468,7 @@ it('main incident route never calls QA API', async () => {
     await screen.findByText(/ejecución detallada no está disponible/),
   ).toBeInTheDocument()
 })
-it('documentary frame is isolated by route and user', () => {
+it('documentary frame is isolated by route and user', async () => {
   mount(
     <Routes>
       <Route element={<VerificationLayout />}>
@@ -473,7 +478,7 @@ it('documentary frame is isolated by route and user', () => {
   )
   expect(screen.getByText('Ámbito sintético')).toBeInTheDocument()
   expect(
-    screen.getByText(/La procedencia de prueba no habilita producción/),
+    await screen.findByText(/Modo de prueba. Usa exclusivamente/),
   ).toBeInTheDocument()
 })
 
@@ -485,9 +490,11 @@ it('submit and withdraw require confirmation and current revision', async () => 
     'DRIVER',
     '/verification/cases/' + caseId,
   )
-  fireEvent.click(
-    await screen.findByRole('button', { name: 'Presentar para revisión' }),
-  )
+  const submit = await screen.findByRole('button', {
+    name: 'Presentar para revisión',
+  })
+  await waitFor(() => expect(submit).toBeEnabled())
+  fireEvent.click(submit)
   expect(verification.command).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
@@ -495,6 +502,11 @@ it('submit and withdraw require confirmation and current revision', async () => 
     expectedVersion: 3,
   })
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', { name: 'Retirar expediente' }),
+    ).toBeEnabled(),
+  )
   fireEvent.click(screen.getByRole('button', { name: 'Retirar expediente' }))
   expect(verification.command).toHaveBeenCalledOnce()
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))

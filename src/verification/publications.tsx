@@ -4,10 +4,12 @@ import { useAuth } from '../auth/context'
 import { Field, Loading, Modal } from '../components/ui'
 import { Form } from './common'
 import { useCommand } from './hooks'
-import { message, vkey } from './format'
+import { vkey } from './format'
 import { verification } from './service'
 import { LegalText } from './terms'
 import type { Publication, PublicationReceipt } from './types'
+import { documentaryAvailability, consultationError } from './availability'
+import { useRequirements } from './use-availability'
 
 export function PublicationPage() {
   const { user } = useAuth()
@@ -26,12 +28,8 @@ function PublicationWorkspace() {
     retry: false,
     gcTime: 0,
   })
-  const runtime = useQuery({
-    queryKey: vkey(user!.id, 'requirements'),
-    queryFn: ({ signal }) => verification.requirements(signal),
-    retry: false,
-    gcTime: 0,
-  })
+  const runtime = useRequirements()
+  const state = documentaryAvailability(runtime)
   return (
     <>
       <h1>Publicación de términos y privacidad</h1>
@@ -57,9 +55,9 @@ function PublicationWorkspace() {
       )}
       {q.isPending || runtime.isPending ? (
         <Loading />
-      ) : q.isError || runtime.isError ? (
+      ) : !q.data || !runtime.data ? (
         <>
-          <p role="alert">{message(q.error || runtime.error)}</p>
+          <p role="alert">{consultationError(q.error || runtime.error)}</p>
           <button
             onClick={() => {
               void q.refetch()
@@ -71,6 +69,9 @@ function PublicationWorkspace() {
         </>
       ) : (
         <>
+          {(q.isError || runtime.isError) && (
+            <p role="alert">{consultationError(q.error || runtime.error)}</p>
+          )}
           <section className="panel panel-body">
             <h2>Política vigente · revisión {q.data.revision}</h2>
             <p>
@@ -90,14 +91,16 @@ function PublicationWorkspace() {
           </section>
           {runtime.data.environment !== 'PRODUCTION' ? (
             <p role="alert">
-              La publicación requiere el entorno productivo de alta configurado
-              por backend. El catálogo de prueba conserva su historia.
+              {state.kind === 'ready'
+                ? 'La publicación no está disponible en modo de prueba. El catálogo de prueba conserva su historia.'
+                : state.text}
             </p>
           ) : (
             <PublicationForm
               key={q.data.revision}
               revision={q.data.revision}
               onPublished={setReceipt}
+              disabled={!state.canProceed || q.isFetching || q.isError}
             />
           )}
         </>
@@ -108,9 +111,11 @@ function PublicationWorkspace() {
 function PublicationForm({
   revision,
   onPublished,
+  disabled,
 }: {
   revision: number
   onPublished: (r: PublicationReceipt) => void
+  disabled: boolean
 }) {
   const command = useCommand()
   const [consents, setConsents] = useState<
@@ -124,7 +129,7 @@ function PublicationForm({
       <h2>Nueva publicación inmutable</h2>
       <Form
         label="Revisar publicación"
-        disabled={!authorized || command.busy || command.blocked}
+        disabled={disabled || !authorized || command.busy || command.blocked}
         onSubmit={async (d) => {
           const value = (name: string) => String(d.get(name) || '')
           if (
@@ -287,7 +292,7 @@ function PublicationForm({
           <p>Autorización: {pending.approvalReference}</p>
           <Form
             label="Publicar versión autorizada"
-            disabled={command.busy || command.blocked}
+            disabled={disabled || command.busy || command.blocked}
             onSubmit={async () => {
               const r = await command.send(
                 'PUBLISH_TERMS',

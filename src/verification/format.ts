@@ -1,4 +1,5 @@
 import { ApiError } from '../services/errors'
+import { availabilityError } from './availability'
 export const vkey = (actor: string, ...parts: unknown[]) => [
   'verification',
   actor,
@@ -44,12 +45,8 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
-  VERIFICATION_PUBLICATION_REQUIRED:
-    'No hay una publicación vigente para este ámbito. Puedes consultar tu historial; solicita al administrador la publicación autorizada antes de continuar.',
   VERIFICATION_PUBLICATION_ENVIRONMENT_REQUIRED:
-    'La publicación requiere el entorno de alta productiva configurado por backend. No cambies la procedencia de los datos.',
-  VERIFICATION_PUBLICATION_INVALID:
-    'Revisa ámbito, versiones, textos completos, consentimientos únicos y autorización de publicación.',
+    'La publicación no está disponible en este modo. Conserva el borrador y consulta con la administración.',
   VERIFICATION_VERSION_EXISTS:
     'Esa versión ya existe y es inmutable. No puede sobrescribirse; consulta la política vigente.',
   PRIVACY_VERSION_CONFLICT:
@@ -65,8 +62,6 @@ const errors: Record<string, string> = {
   TERMS_ACCEPTANCE_REQUIRED:
     'Falta aceptación vigente del conductor o de un representante de la flotilla. Cada persona debe aceptar con su cuenta.',
   VERIFICATION_EMAIL_REQUIRED: 'Confirma primero el correo de esta cuenta.',
-  VERIFICATION_LOCAL_DISABLED:
-    'El alta documental no está habilitada por backend en este entorno.',
   VERIFICATION_VERSION_CONFLICT:
     'El expediente o la política cambió. Revisa la versión actual antes de preparar otra acción.',
   TERMS_VERSION_CONFLICT:
@@ -89,18 +84,21 @@ const errors: Record<string, string> = {
 }
 export function message(e: unknown) {
   return e instanceof ApiError
-    ? errors[e.code || ''] ||
+    ? availabilityError(e) ||
+        errors[e.code || ''] ||
         (e.status === 0
           ? 'Respuesta no confirmada. Consulta la operación pendiente; no crees otra clave.'
           : e.status === 409
             ? 'El recurso cambió o no cumple un requisito. Revisa su estado actual.'
-            : e.status === 403
-              ? 'Sin permiso para esta acción.'
-              : e.status === 404
-                ? 'Recurso no disponible. No se deduce ausencia de soporte.'
-                : e.status === 429
-                  ? 'Demasiadas solicitudes. Espera antes de volver a consultar.'
-                  : 'No fue posible completar la solicitud.')
+            : e.status === 401
+              ? 'No se pudo verificar tu sesión. Revisa tu acceso antes de continuar.'
+              : e.status === 403
+                ? 'Sin permiso para esta acción.'
+                : e.status === 404
+                  ? 'Recurso no disponible. No se deduce ausencia de soporte.'
+                  : e.status === 429
+                    ? 'Demasiadas solicitudes. Espera antes de volver a consultar.'
+                    : 'No fue posible completar la solicitud.')
     : e instanceof Error
       ? e.message
       : 'No fue posible completar la solicitud.'
