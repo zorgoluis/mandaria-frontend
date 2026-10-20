@@ -1,4 +1,31 @@
+## 2026-10-20 — Revisión para publicación de conservación Web
+
+Commit/push autorizados sólo para feature/driver-verification. Base 97850b8c447c71d6ae245bc8df3ce46413650da2; fetch inicial 0/0. Producto y arneses coinciden con las huellas vigentes; se reutilizan los resultados históricos sin ejecutar suites o integración. Se añaden únicamente resumen portable, referencias y extracto de evidencia. Backend requerido aún incluye cambios sin commit sobre 2c458fc955f699ce958dabf5fe89dcc58892a031; no se declara una pareja publicada probada. Otros worktrees y cambios ajenos conservados. [Revisión, comprobaciones y límites](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). El resultado remoto se comprueba al terminar; no hay merge, despliegue ni activación.
+
+## Estado actual e historial — cierre conjunto de conservación, 2026-10-20
+
+Solicitud: cerrar en una tarea las dependencias Backend/Web/Landing. Cierre conjunto completado en feature/driver-verification, HEAD 97850b8c447c71d6ae245bc8df3ce46413650da2 conservado, worktree fleet-representative-web. Contrato backend nuevo consumido en expediente y seguimiento: fechas desconocidas/no accesibles, excepciones con revisión/vigencia, historia depurada e incidencia posterior. Se preservan recuperación, caché y acciones.
+
+Nuevas: 183 pruebas únicas en seis archivos completos; tipos producto/pruebas, build/lint PASS. Integración final CALENDAR/UNKNOWN/NOTICE/EXCEPTION/INCIDENT/PERMISSIONS PASS consolidada; PostgreSQL, backend y Web reales locales, correo/storage simulados, reloj controlado, escritorio/320. A–F y recuperación con un POST/0→1→1 siguen históricos. Correcciones finales de lectura cubiertas por 44 pruebas de los dos archivos completos; capturas anteriores no acreditan rótulos posteriores.
+
+Pendientes exclusivamente externos: configuración efectiva/ensayo operativo de VM, avisos/calendario reales, copias/horizonte/custodia y cobertura efectiva de responsables ya designados. Decisiones sobre saldo/devoluciones y autorización final de textos siguen pendientes; no bloquean artificialmente el cierre del código. RESOLVED y GPS/App fuera de alcance. Trabajo previo/ajeno e historia conservados; procesos propios detenidos y bases sintéticas retenidas. Sin .env modificado, servicios reales, Docker, QA, commit, push, merge, despliegue, políticas publicadas ni activación.
+
+[Informe canónico, matriz y pendientes](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). Documentación y cambios locales sin commit.
+
 # Bitácora — Mandaria Web
+
+## 2026-10-20 — Conservación de imágenes a 30 días, cierre local
+
+Implementación propia en feature/driver-verification, worktree fleet-representative-web, HEAD 97850b8c447c71d6ae245bc8df3ce46413650da2 sin cambios; sin commit/push. Calendario por folio, distinción proveedor/entrega, excepción IMAGE_ATTACHMENT, declaración de copias/restauración y confirmación SUPER_ADMIN con recuperación original. No se encontró AGENTS.md ni propuesta previa; matriz creada desde DTO/OpenAPI/servicio actuales. Otros worktrees y trabajo previo conservados.
+
+A–F PASS completo en ensayo 1792525812779: Web/backend reales, PostgreSQL propio identificado antes de migrar, reloj inyectado y correo/storage simulados. Primer 1792525715228 falló sólo por seed REJECTED directo; corregido según transiciones backend y un único lanzamiento adicional. Recuperación: un POST, comandos/planes 0→1→1. B dos objetos sin residuos en simulador; C aviso fallido sin borrado/renovación; D excepción por Web conserva dos objetos; F cuenta ajena denegada y sin reapertura. Procesos propios detenidos y ambas bases conservadas.
+
+33 pruebas nuevas + 215 regresiones afectadas distintas (248 casos); tipos producto/pruebas, lint/build finales PASS. Primer registro focalizado global exit 1 por selector nuevo y error posterior del wrapper; no se acredita globalmente PASS, aunque los ocho archivos de regresión terminaron completos. Archivos finales corregidos PASS. Chrome 155.0.8059.85, escritorio/320, teclado/foco/errores/texto largo, sin overflow. Tras revisión visual sólo cambió rótulo de INVENTORY sin confirmación y zona horaria, con regresión; A–F no repetido. Huellas integradas/actuales separadas: capturas históricas anteriores a ese texto.
+
+Backend 2c458fc955f699ce958dabf5fe89dcc58892a031 + retención sin commit, migración 20261020000100_document_image_retention y formato 4. 27 huellas iguales antes/después; 16 también coinciden con evidencia backend histórica. Sus 123/53/33 no son pruebas nuevas ni pareja de SHA publicada probada. No GET titular por expediente ni detalle completo de excepciones: no inferir fechas/vigencia. Constancias limitadas; pendiente Spaces real, textos B/C/D/I, historia y capacidad operativa de Luis Fernando Salgado Gonzalez/Carlos Bryan Corado Suarez, ya designados. RESOLVED y Android/GPS separados. Sin backend/App/Landing, .env, políticas, QA, merge, despliegue o activación.
+
+[Informe](docs/DOCUMENTARY-RETENTION-30D-WEB.md) · [Matriz](docs/DOCUMENTARY-RETENTION-30D-WEB-PROPOSAL.md) · [Evidencia](docs/retention-30d-web-evidence.json). Documentación local sin commit.
+
 
 ## 2026-10-20 — Cierre de publicación y referencia backend confirmada
 

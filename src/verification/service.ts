@@ -1,4 +1,5 @@
 import { api, apiOnce, publicApi, apiBlob } from '../services/api'
+import { uuid } from '../deletion/contract'
 import { ApiError } from '../services/errors'
 import { queryString } from '../services/query'
 import type { Page } from '../types/api'
@@ -160,10 +161,16 @@ export const verification = {
         ? !isPublicationReceipt(receipt)
         : m.operation === 'REPRESENTATIVE_PRIVACY'
           ? !isPrivacyReceipt(receipt, m.target)
-          : !receipt ||
-            !('id' in receipt) ||
-            typeof receipt.id !== 'string' ||
-            typeof receipt.status !== 'string'
+          : m.operation === 'FINAL_REJECTION'
+            ? !receipt ||
+              !('id' in receipt) ||
+              !uuid.test(receipt.id) ||
+              !Number.isInteger(receipt.revision) ||
+              receipt.status !== 'INVENTORY'
+            : !receipt ||
+              !('id' in receipt) ||
+              typeof receipt.id !== 'string' ||
+              typeof receipt.status !== 'string'
     )
       throw new ApiError(
         0,

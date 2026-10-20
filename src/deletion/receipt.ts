@@ -1,5 +1,5 @@
 import { ApiError } from '../services/errors'
-import { snapshot, scopes, states, type Snapshot } from './contract'
+import { snapshot, scopeLabels, states, type Snapshot } from './contract'
 // Public historical projection. The backend alone validates RESOLVE provenance;
 // its private persistence envelope is not an alternative HTTP format.
 type HistoricalSnapshot = Pick<
@@ -69,7 +69,7 @@ export function commandReceipt(
   else if (
     'id' in result &&
     result.id === id &&
-    Object.hasOwn(scopes, result.scope) &&
+    Object.hasOwn(scopeLabels, result.scope) &&
     Object.hasOwn(states, result.status) &&
     result.providerBackups === 'NOT_ATTESTED' &&
     result.productionReady === false

@@ -242,6 +242,15 @@ export function AdminActions({
             for (const [key, value] of form.entries()) {
               if (key !== 'confirm' && String(value)) body[key] = String(value)
             }
+            if (action === 'restore')
+              body.copiesStillRequired = body.copiesStillRequired !== 'false'
+            if (
+              action === 'retention' &&
+              body.category === 'IMAGE_ATTACHMENT' &&
+              (!uuid.test(String(body.attachmentId)) ||
+                !uuid.test(String(body.evidenceRef)))
+            )
+              throw new ApiError(400, '', 'INVALID_IMAGE_RETENTION_EXCEPTION')
             if (body.ownerId && body.ownerId === body.deputyId)
               throw new ApiError(400, '', 'FORM_RESPONSIBLES')
             if (
@@ -339,6 +348,11 @@ export function AdminActions({
               <Field label="Categoría concreta">
                 <select name="category">
                   <option value="OBJECT">Objeto</option>
+                  {s.scope === 'IMAGE_RETENTION' && !s.confirmedAt && (
+                    <option value="IMAGE_ATTACHMENT">
+                      Imagen de este expediente antes del inventario
+                    </option>
+                  )}
                   <option value="CONTRACT">Aceptación contractual</option>
                   <option value="DATA_CONSENT">Consentimiento de datos</option>
                   <option value="AUDIT">Auditoría</option>
@@ -355,6 +369,21 @@ export function AdminActions({
                   ))}
                 </select>
               </Field>
+              {s.scope === 'IMAGE_RETENTION' && !s.confirmedAt && (
+                <>
+                  <Field label="UUID del adjunto (obligatorio para excepción de imagen)">
+                    <input name="attachmentId" pattern={uuid.source} />
+                  </Field>
+                  <Field label="UUID de evidencia (obligatorio para excepción de imagen)">
+                    <input name="evidenceRef" pattern={uuid.source} />
+                  </Field>
+                  <p>
+                    Usa sólo una referencia del expediente autorizado. Esta
+                    consulta muestra las excepciones registradas y su revisión;
+                    registrar no acredita su vigencia futura.
+                  </p>
+                </>
+              )}
               <Field label="Finalidad concreta">
                 <textarea
                   name="purpose"
@@ -384,9 +413,24 @@ export function AdminActions({
             </Field>
           )}
           {action === 'restore' && (
-            <Field label="Fin del horizonte comprobado (ISO 8601; omite si desconocido)">
-              <input name="horizonEndsAt" />
-            </Field>
+            <>
+              <Field label="¿Siguen siendo necesarias copias restaurables?">
+                <select name="copiesStillRequired" defaultValue="true">
+                  <option value="true">
+                    Sí o no se ha acreditado lo contrario
+                  </option>
+                  <option value="false">No: existe evidencia verificada</option>
+                </select>
+              </Field>
+              <p>
+                Declaración administrativa con evidencia y responsables
+                vigentes. No acredita una inspección de respaldos ni elimina
+                supresiones desde Web.
+              </p>
+              <Field label="Fin del horizonte comprobado (ISO 8601; omite si desconocido)">
+                <input name="horizonEndsAt" />
+              </Field>
+            </>
           )}
         </PrivacyForm>
       )}
@@ -424,6 +468,8 @@ export function AdminActions({
                           reviewAt: 'Próxima revisión',
                           expiresAt: 'Vencimiento',
                           horizonEndsAt: 'Fin del horizonte',
+                          copiesStillRequired:
+                            'Copias restaurables todavía necesarias',
                         } as Record<string, string>
                       )[key]}
                   </dt>
