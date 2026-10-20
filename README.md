@@ -1,5 +1,9 @@
 # Mandaria Web — V1.11-B
 
+## 2026-10-20 — Cierre de publicación y referencia backend confirmada
+
+Expediente y evidencia A–F publicados en Web `6bdeda4021bf01d822746b97189759ba0cf07d7a`, remoto comprobado. Backend compatible identificado localmente en `2c458fc955f699ce958dabf5fe89dcc58892a031` por correspondencia de fuentes/contrato/migración con las huellas del ensayo; no una prueba nueva de la pareja de SHA. [Cierre y pendientes](docs/FLEET-REPRESENTATIVE-WEB.md). Textos autorizados, entorno real y preparación operativa pendientes; sin despliegue, recepción real ni activación. Los apartados inferiores conservan el estado histórico, incluido el SHA backend antes pendiente.
+
 ## 2026-10-19 — Revisión para publicar el expediente del representante
 
 Expediente privado, recuperación y corrección de selección durante reconsulta de privacidad revisados para publicar sólo la rama autorizada. [Inventario y comprobaciones](docs/fleet-representative-publication-review.json), [informe A–F](docs/FLEET-REPRESENTATIVE-WEB.md). Evidencia existente reutilizada, sin repetir suites. Requiere el backend compatible todavía sin commit, sus huellas/migración y textos autorizados. Publicar la rama no despliega ni activa recepción. Las entradas siguientes son historia de los ensayos.

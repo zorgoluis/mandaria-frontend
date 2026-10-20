@@ -1,5 +1,17 @@
 # Expediente privado de representación legal — Web
 
+## 2026-10-20 — Cierre de publicación y referencia backend confirmada
+
+Web publicó `6bdeda4021bf01d822746b97189759ba0cf07d7a` en `origin/feature/driver-verification`, desde `e657e715cadb1d6727fbde55a9202b6deaa2fdb9`, con 37 archivos propios. Consulta `ls-remote` satisfactoria: SHA remoto igual al local, 0/0 e índice/checkout limpios. Al continuar, fetch acotado confirma la misma referencia. Otros worktrees y cambios ajenos conservados. Este cierre añade sólo documentación; no cambia producto ni evidencia del ensayo.
+
+El backend recibió concurrentemente el commit local `2c458fc955f699ce958dabf5fe89dcc58892a031`, rama `codex/fleet-representative-verification`. Ya no queda pendiente identificar su commit de implementación. Contraste en lectura: de las 26 referencias A–F, 19 archivos publicados conservan la huella probada y coinciden con los blobs del commit al normalizar LF; cuatro archivos dist y el borrador legal local también conservan sus bytes, pero no están publicados en ese commit. Los dos informes de diseño/implementación cambiaron editorialmente para registrar la revisión y excluir el enlace al borrador ajeno. Sus bytes publicados coinciden con la documentación local actual; no se presenta su huella antigua como vigente. Además, las 26 huellas de producto/contrato/arnés del informe backend coinciden con sus archivos y blobs publicados. No se consultó su remoto ni se modificó backend.
+
+Dependencia concreta: ese contenido backend, migración `20261019000200_fleet_representative_verification` y recuperación formato 3. Es correspondencia de contenido con A–F histórico, no una ejecución nueva de la pareja de SHA ni validación de versiones mezcladas. Los informes backend aún mencionan Web pendiente desde su propio corte; no reabren A–F, acreditado en el informe Web. Se reutilizan las 40 focalizadas, tipos/lint/build y visual Chrome **155.0.8059.82**; las 130 anteriores siguen históricas y `spawn UNKNOWN` original sin causa determinada. Sin nuevas suites o servicios.
+
+Pendientes reales: integración/despliegue coordinados futuros del backend compatible y su migración, textos/avisos/declaración aprobados y publicación autorizada, destino privado/CORS/custodia y preparación operativa. Recuperación posterior a revocación sigue limitada. No recepción real, activación, políticas publicadas ni LOCAL_TEST convertido; constancias parciales no garantizan eliminación total. V2 real en Spaces, RESOLVED y Android/GPS separados. Este cierre no ejecuta merge/rebase, QA, despliegue ni cambios backend/App/Landing.
+
+[Contraste de cierre y revisión histórica](fleet-representative-publication-review.json). Las entradas inferiores conservan su fecha y estado anterior.
+
 ## 2026-10-19 — Revisión para publicar el expediente del representante
 
 Revisión autorizada exclusivamente en `feature/driver-verification`, worktree `C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend`. HEAD inicial y origin tras fetch acotado: `e657e715cadb1d6727fbde55a9202b6deaa2fdb9`; 0 commits por delante y 0 por detrás, índice inicialmente vacío. Origin confirmado: https://github.com/zorgoluis/mandaria-frontend.git. Se revisan 36 archivos propios más el registro de publicación; no hay hunks ajenos detectados en este checkout. Los otros worktrees y los cuatro documentos pendientes del checkout principal se conservan.

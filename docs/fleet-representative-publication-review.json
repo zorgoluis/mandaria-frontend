@@ -363,5 +363,64 @@
     "allowedRefspec": "refs/heads/feature/driver-verification:refs/heads/feature/driver-verification",
     "force": false,
     "remoteShaMustBeCheckedAfterPush": true
+  },
+  "closure": {
+    "date": "2026-10-20",
+    "webPublishedCommit": "6bdeda4021bf01d822746b97189759ba0cf07d7a",
+    "webRemoteConfirmedBy": "Successful git ls-remote after push; bounded fetch on continuation",
+    "localAndRemoteMatch": true,
+    "workingTreeCleanBeforeDocumentaryClosure": true,
+    "originalInventoryAppliesToCommit": "6bdeda4021bf01d822746b97189759ba0cf07d7a",
+    "backend": {
+      "localCommit": "2c458fc955f699ce958dabf5fe89dcc58892a031",
+      "branch": "codex/fleet-representative-verification",
+      "remoteQueried": false,
+      "ownPublicationReport": "docs/FLEET-REPRESENTATIVE-PUBLICATION-REVIEW.md",
+      "ownProductHarnessHashesMatchingCommittedContent": 26,
+      "historicalWebReferencesMatchingCommittedContent": 19,
+      "localRuntimeHashesStillMatching": 4,
+      "localLegalDraftStillMatchingButExcluded": 1,
+      "changedEditorialReports": [
+        {
+          "file": "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-IMPLEMENTATION.md",
+          "historicalSha256": "1a2ac2b47cd847c86efeff2a39a5e8cffb4d064e0af5c6ad61ab4646d0364f7b",
+          "currentLocalSha256": "5f7c14f6b2fe75d43a417ead184c23d892259c940e6d178fd7f512f9f57467a7",
+          "committedSha256Lf": "5f7c14f6b2fe75d43a417ead184c23d892259c940e6d178fd7f512f9f57467a7",
+          "note": "Publication framing and explicit exclusion of local legal draft; historical hash not represented as current"
+        },
+        {
+          "file": "docs/FLEET-REPRESENTATIVE-PRIVATE-DOCUMENTS-DESIGN.md",
+          "historicalSha256": "4f0fba136b9a27162b0067b2d48df02095f5df5e5101c62d10bddc283e3b8542",
+          "currentLocalSha256": "c835bd36840fbe90e59e621aa85bddeb8daf49969bb9328309d925c1d478ce7c",
+          "committedSha256Lf": "c835bd36840fbe90e59e621aa85bddeb8daf49969bb9328309d925c1d478ce7c",
+          "note": "Publication framing and explicit exclusion of local legal draft; historical hash not represented as current"
+        }
+      ],
+      "finalImplementationCommitNoLongerPending": true,
+      "requiredMigration": "20261019000200_fleet_representative_verification",
+      "recoveryFormat": 3
+    },
+    "newIntegratedShaPairTested": false,
+    "webProductOrHarnessChanged": false,
+    "newSuitesExecuted": 0,
+    "historicalEvidenceUnmodified": true,
+    "browser": "Chrome 155.0.8059.82",
+    "spawnUnknownCause": "UNDETERMINED",
+    "documentaryFollowUpFiles": [
+      "BITACORA.md",
+      "README.md",
+      "VERIFICATION.md",
+      "docs/FLEET-REPRESENTATIVE-WEB.md",
+      "docs/fleet-representative-publication-review.json"
+    ],
+    "checks": "Blobs and hashes compared read-only; JSON, references, diff and staged review required before documentary commit",
+    "limits": [
+      "Backend remote publication not independently queried",
+      "No new integrated execution of committed SHA pair",
+      "Compatible backend and migration must be coordinated before any real release",
+      "Authorized texts, private storage/CORS/custody and operational preparation remain pending",
+      "No deployment, activation, real reception or policy publication",
+      "Partial certificates and post-revocation recovery limits unchanged; V2 real, RESOLVED and Android/GPS separate"
+    ]
   }
 }
