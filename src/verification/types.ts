@@ -1,3 +1,4 @@
+import type { Snapshot } from '../deletion/contract'
 // Human documentary contract: backend DTO/controllers/service, 2026-10-19.
 export type EvidenceEnvironment = 'LOCAL_TEST' | 'PRODUCTION'
 export type Area = 'driver' | 'provider' | 'admin'
@@ -176,6 +177,18 @@ export interface CaseSummary {
   publicReason: string | null
 }
 export interface VerificationCase extends CaseSummary {
+  retention?: {
+    executionEnabled: boolean
+    eligibility:
+      | 'RECORDED_CALENDAR'
+      | 'NO_RELIABLE_ANCHOR'
+      | 'FINAL_REJECTION_UNCONFIRMED'
+      | 'NOT_ELIGIBLE'
+      | 'HISTORICAL_ONLY'
+      | 'NOT_DISCLOSED'
+    historyTruncated: boolean
+    plans: Snapshot[]
+  }
   resourceId: string
   subjectType: SubjectType
   environment: EvidenceEnvironment
@@ -281,6 +294,7 @@ export const operations = [
   'SUBMIT',
   'WITHDRAW',
   'DECIDE',
+  'FINAL_REJECTION',
 ] as const
 export type Operation = (typeof operations)[number]
 export interface Marker {

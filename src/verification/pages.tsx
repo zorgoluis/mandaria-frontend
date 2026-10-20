@@ -1,3 +1,4 @@
+import { CaseRetention, CaseRetentionLookup } from './retention'
 import { useState } from 'react'
 import {
   Link,
@@ -499,25 +500,40 @@ export function CaseDetail() {
     return (
       <>
         <p role="alert">{message(q.error)}</p>
+        <CaseRetentionLookup key={user!.id + ':' + id} caseId={id} />
         <Link to="/privacy/deletion">Seguimiento de baja y privacidad</Link>
       </>
     )
   if (r.isError) return <p role="alert">{consultationError(r.error)}</p>
   if (q.data.subjectType === 'REPRESENTATIVE')
     return (
-      <RepresentativeCase
-        key={user!.id + ':' + id}
-        record={q.data}
-        requirements={r.data}
-      />
+      <>
+        <CaseRetention
+          key={user!.id + ':' + id + ':retention'}
+          record={q.data}
+          refreshing={q.isFetching}
+        />
+        <RepresentativeCase
+          key={user!.id + ':' + id}
+          record={q.data}
+          requirements={r.data}
+        />
+      </>
     )
   return (
-    <CaseContent
-      key={user!.id + ':' + q.data.id}
-      record={q.data}
-      requirements={r.data}
-      runtimeReady={documentaryAvailability(r).canProceed}
-    />
+    <>
+      <CaseRetention
+        key={user!.id + ':' + id + ':retention'}
+        record={q.data}
+        refreshing={q.isFetching}
+      />
+      <CaseContent
+        key={user!.id + ':' + q.data.id}
+        record={q.data}
+        requirements={r.data}
+        runtimeReady={documentaryAvailability(r).canProceed}
+      />
+    </>
   )
 }
 function CaseContent({

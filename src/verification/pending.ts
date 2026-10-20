@@ -1,3 +1,4 @@
+import { deletion } from '../deletion/service'
 import { useSyncExternalStore } from 'react'
 import { env } from '../config/env'
 import { ApiError } from '../services/errors'
@@ -190,6 +191,25 @@ export async function reconcile(
           )
             throw new Error(
               'El comprobante no corresponde al firmante o ámbito original.',
+            )
+        } else if (m.operation === 'FINAL_REJECTION') {
+          if (
+            !uuid.test(r.id) ||
+            !('revision' in r) ||
+            !Number.isInteger(r.revision)
+          )
+            throw new Error(
+              'Recibo de rechazo definitivo incompleto; conserva el intento.',
+            )
+          // The receipt id is a deletion plan, not the case. Current state is a separate GET.
+          const current = (await deletion.list()).find((s) => s.id === r.id)
+          if (
+            !current ||
+            current.scope !== 'IMAGE_RETENTION' ||
+            current.imageRetention?.caseId !== m.target
+          )
+            throw new Error(
+              'No se confirmó el plan actual del expediente; conserva el intento.',
             )
         } else if (m.operation === 'CREATE_VEHICLE') {
           const current = await verification.onboarding()

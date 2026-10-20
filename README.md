@@ -1,3 +1,5 @@
+> **2026-10-20 — cierre local de conservación:** Cierre conjunto completado en feature/driver-verification, HEAD 97850b8c447c71d6ae245bc8df3ce46413650da2 conservado, worktree fleet-representative-web. Contrato backend nuevo consumido en expediente y seguimiento: fechas desconocidas/no accesibles, excepciones con revisión/vigencia, historia depurada e incidencia posterior. Se preservan recuperación, caché y acciones. [Matriz y evidencia](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). Configuración productiva y publicación no ejecutadas.
+
 # Mandaria Web — V1.11-B
 
 ## 2026-10-20 — Cierre de publicación y referencia backend confirmada

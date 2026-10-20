@@ -58,6 +58,14 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  IMAGE_RETENTION_DISABLED:
+    'La confirmación de rechazo definitivo no está disponible en este momento.',
+  IMAGE_RETENTION_EVIDENCE_REQUIRED:
+    'Indica la referencia de evidencia que acredita el cierre de revisión o apelación.',
+  IMAGE_RETENTION_CASE_NOT_ELIGIBLE:
+    'Este expediente no admite confirmar rechazo definitivo. Actualiza su estado.',
+  DOCUMENT_DELETION_RESTRICTED:
+    'El expediente está restringido por eliminación. No se reabre ni se restauran archivos al consultar.',
   DELETION_RESTRICTED:
     'Este alcance documental está restringido. Consulta el seguimiento de baja; una constancia histórica no restablece permisos.',
   REPRESENTATIVE_APPLICANT_INVALID:
