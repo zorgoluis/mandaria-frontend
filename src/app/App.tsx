@@ -9,6 +9,10 @@ import {
 import { Register, RegistrationConfirm } from '../verification/identity'
 import { PublicationPage } from '../verification/publications'
 import {
+  RepresentativesPage,
+  AdminRepresentatives,
+} from '../verification/representatives'
+import {
   PrivacyLayout,
   DeletionHome,
   NewDeletion,
@@ -168,6 +172,16 @@ export function App() {
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route element={<VerificationLayout />}>
+            <Route element={<Protected roles={['DRIVER', 'PROVIDER_ADMIN']} />}>
+              <Route
+                path="verification/representatives"
+                element={<RepresentativesPage />}
+              />
+              <Route
+                path="verification/representatives/:subjectId"
+                element={<RepresentativesPage />}
+              />
+            </Route>
             <Route element={<Protected roles={['DRIVER']} />}>
               <Route path="driver/onboarding" element={<DriverOnboarding />} />
             </Route>
@@ -178,6 +192,10 @@ export function App() {
               />
             </Route>
             <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+              <Route
+                path="admin/fleet-representatives"
+                element={<AdminRepresentatives />}
+              />
               <Route
                 path="admin/verification-publications"
                 element={<PublicationPage />}

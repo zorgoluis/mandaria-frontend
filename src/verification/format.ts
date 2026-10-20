@@ -6,6 +6,19 @@ export const vkey = (actor: string, ...parts: unknown[]) => [
   ...parts,
 ]
 export const labels: Record<string, string> = {
+  REPRESENTATIVE: 'Representación legal',
+  SELF: 'Titular persona física por derecho propio',
+  APPOINTMENT: 'Representación por nombramiento',
+  POWER: 'Representación por poder',
+  REPRESENTATIVE_INE_FRONT: 'INE del representante: frente',
+  REPRESENTATIVE_INE_BACK: 'INE del representante: reverso',
+  REPRESENTATION_AUTHORITY_PAGE: 'Página de nombramiento o poder',
+  IDENTITY_VALIDITY: 'INE vigente',
+  REPRESENTED_PERSON_MATCH: 'Persona representada concordante',
+  AUTHORITY_SUFFICIENT: 'Facultades suficientes para este contrato',
+  AUTHORITY_CURRENT: 'Facultades vigentes',
+  LIMITS_REVIEWED: 'Límites revisados',
+  INDIVIDUAL_SIGNATURE_SUFFICIENT: 'Firma individual suficiente',
   DRAFT: 'Borrador',
   SUBMITTED: 'En revisión',
   APPROVED: 'Aprobado',
@@ -45,6 +58,35 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  DELETION_RESTRICTED:
+    'Este alcance documental está restringido. Consulta el seguimiento de baja; una constancia histórica no restablece permisos.',
+  REPRESENTATIVE_APPLICANT_INVALID:
+    'La cuenta solicitante debe estar activa, tener correo confirmado y no ser SUPER_ADMIN.',
+  REPRESENTATIVE_LINK_EXISTS:
+    'Ya existe un vínculo activo para esa cuenta y flotilla.',
+  REPRESENTATIVE_LINK_REVOKED:
+    'El vínculo fue revocado. No se restablece al consultar un recibo histórico.',
+  REPRESENTATIVE_PRIVACY_UNAVAILABLE:
+    'Falta un aviso personal aplicable. No se puede recoger información ni cargar documentos.',
+  REPRESENTATIVE_ACCREDITATION_REQUIRED:
+    'Se requiere representación acreditada vigente y privacidad confirmada para aceptar por esta flotilla.',
+  REPRESENTATIVE_PAGE_ORDER_REQUIRED:
+    'Revisa y guarda el orden de todas las páginas de facultades confirmadas.',
+  REPRESENTATIVE_REVIEW_REASON_REQUIRED:
+    'Indica el motivo comunicable de la decisión.',
+  REPRESENTATIVE_JOINT_SIGNATURE_UNRESOLVED:
+    'La firma conjunta sigue sin resolver. No se puede acreditar una firma individual.',
+  REPRESENTATIVE_AUTHORITY_NOT_CURRENT:
+    'Las facultades declaradas todavía no están vigentes.',
+  VERIFICATION_EXPIRED:
+    'La vigencia documental terminó. Consulta los requisitos para un nuevo expediente.',
+  DOCUMENT_RESOURCE_RESTRICTED:
+    'Este alcance documental está restringido. Consulta el seguimiento de baja; una constancia histórica no restablece permisos.',
+  VERIFICATION_DATA_INVALID:
+    'Revisa los datos, fechas y forma de actuación del expediente.',
+  VERIFICATION_CATEGORY_INVALID: 'Esta categoría no corresponde al expediente.',
+  VERIFICATION_FILE_LIMIT:
+    'Se alcanzó el límite de archivos. Solicita orientación sin omitir páginas indispensables.',
   VERIFICATION_PUBLICATION_ENVIRONMENT_REQUIRED:
     'La publicación no está disponible en este modo. Conserva el borrador y consulta con la administración.',
   VERIFICATION_VERSION_EXISTS:
