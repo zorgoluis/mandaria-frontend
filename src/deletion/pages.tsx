@@ -1,3 +1,5 @@
+import { ImageRetentionStatus } from './ImageRetentionStatus'
+import { scopeLabels } from './contract'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { useAuth, useActorId } from '../auth/context'
@@ -161,19 +163,30 @@ export function Status({
             : 'Constancia no reconocida; requiere revisión'
           : 'Seguimiento'}
       </h2>
+      {s.scope === 'IMAGE_RETENTION' && (
+        <p>
+          Calendario en UTC. Las demás fechas del seguimiento se muestran en la
+          zona {Intl.DateTimeFormat('es-MX').resolvedOptions().timeZone}.
+        </p>
+      )}
       <OperationalStatus data={s} receipt={receipt} />
+      <ImageRetentionStatus data={s} receipt={receipt} />
       <dl>
         <dt>Folio</dt>
         <dd>{s.id}</dd>
         <dt>Alcance</dt>
         <dd>
-          {label(scopes, s.scope) ??
+          {label(scopeLabels, s.scope) ??
             'Alcance no reconocido; sin acciones habilitadas'}
         </dd>
         <dt>Estado</dt>
         <dd>
-          {label(states, s.status) ??
-            'Estado no reconocido. Se conserva el resultado; actualiza o utiliza el canal asistido disponible.'}
+          {s.scope === 'IMAGE_RETENTION' &&
+          s.status === 'INVENTORY' &&
+          !s.confirmedAt
+            ? 'Calendario registrado; inventario todavía pendiente'
+            : (label(states, s.status) ??
+              'Estado no reconocido. Se conserva el resultado; actualiza o utiliza el canal asistido disponible.')}
         </dd>
         <dt>Revisión</dt>
         <dd>{s.revision}</dd>
@@ -848,6 +861,7 @@ export function DeletionDetail({ admin = false }: { admin?: boolean }) {
                 </button>
               )}
               {!admin &&
+                q.data.scope !== 'IMAGE_RETENTION' &&
                 !terminal(q.data) &&
                 !q.data.irreversibleStarted &&
                 !q.data.closedAt && (

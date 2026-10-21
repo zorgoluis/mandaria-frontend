@@ -31,6 +31,15 @@ export const deletion = {
     snapshot(
       await apiOnce(base, 'POST', body, undefined, { 'Idempotency-Key': key }),
     ),
+  byCase: async (id: string, signal?: AbortSignal) =>
+    (
+      await apiOnce<unknown[]>(
+        base + '/by-case/' + enc(id),
+        'GET',
+        undefined,
+        signal,
+      )
+    ).map((r) => snapshot(r)),
   get: (id: string, signal?: AbortSignal) => read(`${base}/${enc(id)}`, signal),
   byKey: (key: string, signal?: AbortSignal) =>
     read(`${base}/by-key/${enc(key)}`, signal),

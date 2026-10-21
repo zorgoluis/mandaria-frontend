@@ -544,7 +544,7 @@ it('version conflict refreshes the dossier and announces it without another deci
     await screen.findByRole('heading', { name: 'Identidad · Aprobado' }),
   ).toBeInTheDocument()
   expect(
-    screen.getByText(/El expediente o la política cambió/),
+    await screen.findByText(/El expediente o la política cambió/),
   ).toBeInTheDocument()
   expect(verification.command).toHaveBeenCalledOnce()
   expect(

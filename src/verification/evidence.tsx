@@ -57,17 +57,23 @@ function EvidenceSession({
     [scope],
   )
   const categories =
-    record.subjectType === 'DRIVER_IDENTITY'
-      ? [
-          ...requirements.identity.required,
-          ...(record.data.license
-            ? [requirements.identity.motorizedLicense]
-            : []),
-        ]
-      : [
-          ...requirements.vehicle.required,
-          requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
-        ]
+    record.subjectType === 'REPRESENTATIVE'
+      ? (requirements.representative?.categories || []).filter(
+          (c) =>
+            record.data.capacity !== 'SELF' ||
+            c !== 'REPRESENTATION_AUTHORITY_PAGE',
+        )
+      : record.subjectType === 'DRIVER_IDENTITY'
+        ? [
+            ...requirements.identity.required,
+            ...(record.data.license
+              ? [requirements.identity.motorizedLicense]
+              : []),
+          ]
+        : [
+            ...requirements.vehicle.required,
+            requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
+          ]
   return (
     <section className="panel panel-body">
       <h2>Evidencias privadas</h2>
@@ -92,7 +98,7 @@ function EvidenceSession({
             validateFile(file, requirements)
             if (record.attachments.length >= requirements.maxFiles)
               throw new Error(
-                'Se alcanzó el límite de intentos de archivo. Retira el borrador y prepara uno nuevo si corresponde.',
+                'Se alcanzó el límite de archivos. Solicita orientación; no omitas páginas indispensables ni reduzcas su legibilidad.',
               )
             const controller = new AbortController()
             request.current = controller

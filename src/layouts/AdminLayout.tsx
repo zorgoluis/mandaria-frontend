@@ -65,6 +65,15 @@ export function AdminLayout() {
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    ...(['DRIVER', 'PROVIDER_ADMIN'].includes(user?.role || '')
+      ? [
+          {
+            to: '/verification/representatives',
+            label: 'Representación legal',
+            icon: BadgeCheck,
+          },
+        ]
+      : []),
     ...(admin
       ? [
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },

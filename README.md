@@ -1,4 +1,24 @@
+> **2026-10-20 — cierre local de conservación:** Cierre conjunto completado en feature/driver-verification, HEAD 97850b8c447c71d6ae245bc8df3ce46413650da2 conservado, worktree fleet-representative-web. Contrato backend nuevo consumido en expediente y seguimiento: fechas desconocidas/no accesibles, excepciones con revisión/vigencia, historia depurada e incidencia posterior. Se preservan recuperación, caché y acciones. [Matriz y evidencia](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). Configuración productiva y publicación no ejecutadas.
+
 # Mandaria Web — V1.11-B
+
+## 2026-10-20 — Cierre de publicación y referencia backend confirmada
+
+Expediente y evidencia A–F publicados en Web `6bdeda4021bf01d822746b97189759ba0cf07d7a`, remoto comprobado. Backend compatible identificado localmente en `2c458fc955f699ce958dabf5fe89dcc58892a031` por correspondencia de fuentes/contrato/migración con las huellas del ensayo; no una prueba nueva de la pareja de SHA. [Cierre y pendientes](docs/FLEET-REPRESENTATIVE-WEB.md). Textos autorizados, entorno real y preparación operativa pendientes; sin despliegue, recepción real ni activación. Los apartados inferiores conservan el estado histórico, incluido el SHA backend antes pendiente.
+
+## 2026-10-19 — Revisión para publicar el expediente del representante
+
+Expediente privado, recuperación y corrección de selección durante reconsulta de privacidad revisados para publicar sólo la rama autorizada. [Inventario y comprobaciones](docs/fleet-representative-publication-review.json), [informe A–F](docs/FLEET-REPRESENTATIVE-WEB.md). Evidencia existente reutilizada, sin repetir suites. Requiere el backend compatible todavía sin commit, sus huellas/migración y textos autorizados. Publicar la rama no despliega ni activa recepción. Las entradas siguientes son historia de los ensayos.
+
+## Representación privada: integración A–F cerrada — 2026-10-19
+
+A–F completos en un ensayo reanudado sobre la misma base sintética: expediente privado, revisión SUPER_ADMIN, FLEET separado, recuperación sin duplicados, aislamiento y restricciones. Google Chrome 155 instalado sustituyó el launcher que fallaba; la causa raíz de `spawn UNKNOWN` del Chromium anterior sigue sin determinarse. Una corrección mínima conserva el archivo pendiente durante la reconsulta de privacidad, manteniendo los envíos bloqueados hasta terminar. 40 pruebas focalizadas ejecutadas, tipos/lint/build PASS; las 130 anteriores no se repitieron en bloque. Escritorio/320 px y teclado comprobados. [Informe, fallos preservados y límites](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia integrada](docs/fleet-representative-integration-evidence.json). Procesos propios detenidos, base sintética conservada; sin backend modificado, QA, commit, push, despliegue ni activación. Requiere backend compatible, textos autorizados y preparación operativa antes de recepción real. Las entradas inferiores son históricas.
+
+## Expediente privado de representación — 2026-10-19
+
+Implementación local en `feature/driver-verification`, worktree `C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend`, base `e657e715cadb1d6727fbde55a9202b6deaa2fdb9`. El checkout principal permanece en main y conserva su documentación previa. Entrada propia `/verification/representatives`, detalle documental existente y administración SUPER_ADMIN `/admin/fleet-representatives`. Privacidad previa, evidencias privadas, revisión y aceptación FLEET permanecen separadas de admisión y servicios.
+
+[Informe contractual, rutas y reproducción](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia saneada](docs/fleet-representative-web-evidence.json). 130 pruebas focalizadas PASS, tipos/lint/build PASS. Integración y visual pendientes: Chromium abortó con `spawn UNKNOWN`; el único diagnóstico adicional reprodujo el fallo sin backend/base. El entorno aislado se preparó y cerró; ningún recorrido de navegador se acredita. Requiere el backend local de representación aún sin commit, sus huellas/migración y revisión autorizada de textos. Sin recepción real, admisión, QA, cambios backend, commit, push ni despliegue. Las entradas siguientes conservan el historial.
 
 ## Representación legal de flotilla — propuesta documental, 2026-10-19
 

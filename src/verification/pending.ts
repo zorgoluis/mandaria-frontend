@@ -1,13 +1,15 @@
+import { deletion } from '../deletion/service'
 import { useSyncExternalStore } from 'react'
 import { env } from '../config/env'
 import { ApiError } from '../services/errors'
-import { verification, isPublicationReceipt } from './service'
+import { verification, isPublicationReceipt, isPrivacyReceipt } from './service'
 import {
   operations,
   type Marker,
   type Operation,
   type CommandResult,
   type PublicationReceipt,
+  type PrivacyReceipt,
 } from './types'
 const storageKey = 'mandaria.verification.pending:' + env.apiUrl
 const event = 'verification-pending-change'
@@ -120,6 +122,7 @@ export async function reconcile(
   refresh: () => Promise<unknown>,
   close = false,
   onPublication?: (receipt: PublicationReceipt) => void,
+  onPrivacy?: (receipt: PrivacyReceipt) => void,
 ) {
   if (
     m.actor !== actor ||
@@ -152,7 +155,32 @@ export async function reconcile(
       } else {
         if (!r || !('id' in r) || !r.id || !r.status)
           throw new Error('Comprobante incompleto; se conserva el bloqueo.')
-        if (m.operation === 'ACCEPT_TERMS') {
+        if (m.operation === 'REPRESENTATIVE_PRIVACY') {
+          const receipt = await verification.privacyReceipt(r.id)
+          if (
+            !isPrivacyReceipt(r, m.target) ||
+            receipt.id !== r.id ||
+            receipt.scope !== r.scope ||
+            receipt.version !== r.version ||
+            receipt.privacyVersion !== r.privacyVersion ||
+            receipt.privacyHash !== r.privacyHash ||
+            receipt.acceptsFleetContract !== false
+          )
+            throw new Error(
+              'No se confirmó el reconocimiento personal original; conserva el intento.',
+            )
+          onPrivacy?.(r)
+        } else if (
+          ['LINK_REPRESENTATIVE', 'REVOKE_REPRESENTATIVE'].includes(m.operation)
+        ) {
+          if (
+            (m.operation === 'REVOKE_REPRESENTATIVE' &&
+              (r.id !== m.target || r.status !== 'REVOKED')) ||
+            (m.operation === 'LINK_REPRESENTATIVE' && r.status !== 'LINKED')
+          )
+            throw new Error('El recibo no corresponde al vínculo original.')
+          // No administrative GET of links exists. Refresh authorized case lists; never infer current authority from this receipt.
+        } else if (m.operation === 'ACCEPT_TERMS') {
           const acceptance = await verification.acceptance(r.id)
           if (
             acceptance.id !== r.id ||
@@ -163,6 +191,25 @@ export async function reconcile(
           )
             throw new Error(
               'El comprobante no corresponde al firmante o ámbito original.',
+            )
+        } else if (m.operation === 'FINAL_REJECTION') {
+          if (
+            !uuid.test(r.id) ||
+            !('revision' in r) ||
+            !Number.isInteger(r.revision)
+          )
+            throw new Error(
+              'Recibo de rechazo definitivo incompleto; conserva el intento.',
+            )
+          // The receipt id is a deletion plan, not the case. Current state is a separate GET.
+          const current = (await deletion.list()).find((s) => s.id === r.id)
+          if (
+            !current ||
+            current.scope !== 'IMAGE_RETENTION' ||
+            current.imageRetention?.caseId !== m.target
+          )
+            throw new Error(
+              'No se confirmó el plan actual del expediente; conserva el intento.',
             )
         } else if (m.operation === 'CREATE_VEHICLE') {
           const current = await verification.onboarding()

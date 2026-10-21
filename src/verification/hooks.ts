@@ -1,3 +1,4 @@
+import { dkey } from '../deletion/hooks'
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
@@ -19,6 +20,7 @@ export function useCommand() {
       { queryKey: ['verification', user?.id], type: 'active', stale: true },
       { throwOnError: true },
     )
+    if (user) await client.invalidateQueries({ queryKey: dkey(user.id) })
     await client.invalidateQueries({ queryKey: ['driver-portal'] })
   }
   return {

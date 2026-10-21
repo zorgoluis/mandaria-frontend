@@ -1,7 +1,8 @@
+import type { Snapshot } from '../deletion/contract'
 // Human documentary contract: backend DTO/controllers/service, 2026-10-19.
 export type EvidenceEnvironment = 'LOCAL_TEST' | 'PRODUCTION'
 export type Area = 'driver' | 'provider' | 'admin'
-export type SubjectType = 'DRIVER_IDENTITY' | 'VEHICLE'
+export type SubjectType = 'DRIVER_IDENTITY' | 'VEHICLE' | 'REPRESENTATIVE'
 export type CaseStatus =
   'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN'
 export type MotorType = 'MOTORCYCLE' | 'CAR' | 'PICKUP' | 'VAN' | 'TRUCK'
@@ -30,6 +31,56 @@ export interface UnitData {
   serialNumber: string
   ownershipEvidenceType: Ownership
   authorizationExpiresAt?: string
+}
+export interface RepresentativeData {
+  fullName: string
+  representedName: string
+  capacity: 'SELF' | 'APPOINTMENT' | 'POWER'
+  representedPersonType: 'NATURAL_PERSON' | 'LEGAL_PERSON'
+  declarationCurrent: true
+  identityValidUntil: string
+  authorityValidFrom: string
+  authorityValidUntil?: string
+  limits: string
+  jointSignatureRequired: boolean
+  authorityPages: string[]
+}
+export interface RepresentativeLink {
+  id: string
+  providerId: string
+  status: 'LINKED' | 'REVOKED'
+  revision: number
+  restricted: boolean
+  approvedCaseId: string | null
+  canAcceptFleet: boolean
+  environment: EvidenceEnvironment
+  cases: {
+    id: string
+    status: CaseStatus
+    revision: number
+    environment: EvidenceEnvironment
+  }[]
+}
+export interface RepresentativePrivacy {
+  subjectId: string
+  scope: 'REPRESENTATIVE_PRIVACY'
+  version: string
+  environment: EvidenceEnvironment
+  privacyVersion: string
+  privacyText: string
+  privacyHash: string
+  specificConsents: { id: string; text: string; hash: string }[]
+  acceptsFleetContract: false
+}
+export interface PrivacyReceipt {
+  id: string
+  subjectId: string
+  scope: 'REPRESENTATIVE_PRIVACY'
+  status: 'ACKNOWLEDGED'
+  version: string
+  privacyVersion: string
+  privacyHash: string
+  acceptsFleetContract: false
 }
 export interface Terms {
   version: string
@@ -75,7 +126,9 @@ export interface PublicationReceipt {
 }
 export type CommandResult<O extends Operation> = O extends 'PUBLISH_TERMS'
   ? PublicationReceipt
-  : Receipt
+  : O extends 'REPRESENTATIVE_PRIVACY'
+    ? PrivacyReceipt
+    : Receipt
 export interface Receipt {
   id: string
   status: string
@@ -102,6 +155,8 @@ export interface Acceptance {
   privacyHash?: string | null
   specificConsents?: { id: string; hash: string }[]
   terms: Terms
+  representationEvidence?:
+    'ACCREDITED_AT_ACCEPTANCE' | 'HISTORICAL_UNACCREDITED'
 }
 export interface Attachment {
   id: string
@@ -122,11 +177,23 @@ export interface CaseSummary {
   publicReason: string | null
 }
 export interface VerificationCase extends CaseSummary {
+  retention?: {
+    executionEnabled: boolean
+    eligibility:
+      | 'RECORDED_CALENDAR'
+      | 'NO_RELIABLE_ANCHOR'
+      | 'FINAL_REJECTION_UNCONFIRMED'
+      | 'NOT_ELIGIBLE'
+      | 'HISTORICAL_ONLY'
+      | 'NOT_DISCLOSED'
+    historyTruncated: boolean
+    plans: Snapshot[]
+  }
   resourceId: string
   subjectType: SubjectType
   environment: EvidenceEnvironment
   policyVersion: string
-  data: Partial<IdentityData & UnitData>
+  data: Partial<IdentityData & UnitData & RepresentativeData>
   scope: { providerId: string | null; independentProfileId: string | null }
   verificationStatus: string
   attachments: Attachment[]
@@ -155,6 +222,13 @@ export interface Requirements {
     checks: string[]
   }
   productionReady: false
+  representative?: {
+    categories: string[]
+    checks: string[]
+    priorPersonalPrivacyRequired: true
+    accreditedBeforeFleetAcceptance: true
+    pagesField: 'authorityPages'
+  }
 }
 export interface Onboarding {
   driver: {
@@ -206,6 +280,9 @@ export interface Notice {
   }
 }
 export const operations = [
+  'LINK_REPRESENTATIVE',
+  'REVOKE_REPRESENTATIVE',
+  'REPRESENTATIVE_PRIVACY',
   'PUBLISH_TERMS',
   'ACCEPT_TERMS',
   'CREATE_CASE',
@@ -217,6 +294,7 @@ export const operations = [
   'SUBMIT',
   'WITHDRAW',
   'DECIDE',
+  'FINAL_REJECTION',
 ] as const
 export type Operation = (typeof operations)[number]
 export interface Marker {
@@ -227,5 +305,5 @@ export interface Marker {
 }
 export interface Attempt {
   state: 'ABSENT' | 'APPLIED' | 'CLOSED_NO_EFFECTS'
-  result?: Receipt | PublicationReceipt
+  result?: Receipt | PublicationReceipt | PrivacyReceipt
 }

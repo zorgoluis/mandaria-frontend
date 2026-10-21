@@ -1,4 +1,5 @@
 import { api, apiOnce, publicApi, apiBlob } from '../services/api'
+import { uuid } from '../deletion/contract'
 import { ApiError } from '../services/errors'
 import { queryString } from '../services/query'
 import type { Page } from '../types/api'
@@ -18,9 +19,33 @@ import type {
   CommandResult,
   PublicationReceipt,
   VerificationPolicy,
+  RepresentativeLink,
+  RepresentativePrivacy,
+  PrivacyReceipt,
 } from './types'
 const enc = encodeURIComponent
 export const verification = {
+  representatives: (signal?: AbortSignal) =>
+    api<{ items: RepresentativeLink[] }>(
+      '/fleet-representatives/mine',
+      'GET',
+      undefined,
+      signal,
+    ),
+  representativePrivacy: (id: string, signal?: AbortSignal) =>
+    api<RepresentativePrivacy>(
+      '/fleet-representatives/' + enc(id) + '/privacy',
+      'GET',
+      undefined,
+      signal,
+    ),
+  privacyReceipt: (id: string, signal?: AbortSignal) =>
+    api<Omit<PrivacyReceipt, 'status' | 'subjectId'>>(
+      '/verification-terms/acceptances/' + enc(id),
+      'GET',
+      undefined,
+      signal,
+    ),
   policy: (signal?: AbortSignal) =>
     api<VerificationPolicy>(
       '/admin/verification-policy',
@@ -134,10 +159,18 @@ export const verification = {
     if (
       m.operation === 'PUBLISH_TERMS'
         ? !isPublicationReceipt(receipt)
-        : !receipt ||
-          !('id' in receipt) ||
-          typeof receipt.id !== 'string' ||
-          typeof receipt.status !== 'string'
+        : m.operation === 'REPRESENTATIVE_PRIVACY'
+          ? !isPrivacyReceipt(receipt, m.target)
+          : m.operation === 'FINAL_REJECTION'
+            ? !receipt ||
+              !('id' in receipt) ||
+              !uuid.test(receipt.id) ||
+              !Number.isInteger(receipt.revision) ||
+              receipt.status !== 'INVENTORY'
+            : !receipt ||
+              !('id' in receipt) ||
+              typeof receipt.id !== 'string' ||
+              typeof receipt.status !== 'string'
     )
       throw new ApiError(
         0,
@@ -145,6 +178,23 @@ export const verification = {
       )
     return receipt as CommandResult<O>
   },
+}
+export function isPrivacyReceipt(
+  value: unknown,
+  subjectId: string,
+): value is PrivacyReceipt {
+  const r = value as PrivacyReceipt | null
+  return (
+    !!r &&
+    typeof r.id === 'string' &&
+    r.subjectId === subjectId &&
+    r.scope === 'REPRESENTATIVE_PRIVACY' &&
+    r.status === 'ACKNOWLEDGED' &&
+    typeof r.version === 'string' &&
+    typeof r.privacyVersion === 'string' &&
+    /^[a-f0-9]{64}$/.test(r.privacyHash) &&
+    r.acceptsFleetContract === false
+  )
 }
 export function isPublicationReceipt(
   value: unknown,

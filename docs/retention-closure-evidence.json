@@ -1,0 +1,454 @@
+{
+  "date": "2026-10-20",
+  "canonical": "C:/Users/zorgl/Documents/mandaria-backend/docs/checks/retention-cross-project-closure.json",
+  "canonicalSha256": "7d1dfc694beca436be311a2a125a146e62d7d6775b63481022568c0c21c08c41",
+  "head": "97850b8c447c71d6ae245bc8df3ce46413650da2",
+  "productFingerprint": "2aab3f2d5eb5dc1451ba12410f97e7dd12586467dedd7ea478f2acd47cb343f0",
+  "files": {
+    "BITACORA.md": {
+      "sha256": "5a2b4d03865cfd631ea51033613b5eed7023078eab2da443484a949a22c22614",
+      "change": "modified-during-this-task"
+    },
+    "docs/DOCUMENTARY-RETENTION-30D-WEB.md": {
+      "sha256": "e2305ff33476f922e24e9f5aaacbbe4382cf5cf8abacd3dcae36990bd71c4e0a",
+      "change": "modified-during-this-task"
+    },
+    "README.md": {
+      "sha256": "1d9c31fddc7410c302b9a4dd54e4be73c22d45db6bc61af11ea8a4e003ed9fae",
+      "change": "modified-during-this-task"
+    },
+    "scripts/verify-retention-closure.mjs": {
+      "sha256": "81e1d8bb73a4dfa19eefcdd0ef8f5e2244aa9f5df1e508a753acbf8743ec31a4",
+      "change": "new-during-this-task"
+    },
+    "src/deletion/contract.ts": {
+      "sha256": "8628e2c5dcf2ab5a505dcba043d84bc2e4673b1bcb00c96fa30e382c9a653e6a",
+      "change": "modified-during-this-task"
+    },
+    "src/deletion/ImageRetentionStatus.tsx": {
+      "sha256": "f2e111ec9a1d4623f2a2758188855192bcb64dd0330e94754a689d1f1a461dd4",
+      "change": "modified-during-this-task"
+    },
+    "src/deletion/retention-details.ts": {
+      "sha256": "578f47579b3f8eff501d46a6cd346767e65f22ade2fd1bebc7a0375c46234beb",
+      "change": "new-during-this-task"
+    },
+    "src/deletion/RetentionDetails.tsx": {
+      "sha256": "774404f1aa0782982ace6dba4a25aee2d0f6987ff4ed347a6da9aa923b220966",
+      "change": "new-during-this-task"
+    },
+    "src/deletion/review.tsx": {
+      "sha256": "87219d4aa75276f79e7da961237d41a7bf37db11cc6d881a920ff3cf597f5132",
+      "change": "modified-during-this-task"
+    },
+    "src/deletion/service.ts": {
+      "sha256": "f0d2811bdff9185cd6972ab0207abe76069bbca2a5f9bd2aec97879e07dd1a9e",
+      "change": "modified-during-this-task"
+    },
+    "src/test/image-retention.test.tsx": {
+      "sha256": "059d81af499a5893ea31fe167f01fab3dae0c65e0fe3621ce13d4e3b13191684",
+      "change": "modified-during-this-task"
+    },
+    "src/test/retention-projection.test.tsx": {
+      "sha256": "3a07ac6483ff83040cf3f756c78de098e05ef043053f2be0d6a52e491c6fbeb2",
+      "change": "new-during-this-task"
+    },
+    "src/test/verification-pages.test.tsx": {
+      "sha256": "98edf20707ecedb945ec9c0efc3e7b3ea7dd585fbfff37340e916ef56f84af0c",
+      "change": "modified-during-this-task"
+    },
+    "src/verification/pages.tsx": {
+      "sha256": "7f2258fbd36a9836ac1432da5774b8a6071152eaca2b4cb49ca918654a17b821",
+      "change": "modified-during-this-task"
+    },
+    "src/verification/retention.tsx": {
+      "sha256": "01163d94138ec659f65c21fb25e1ed6404b7d3b1b036e106fe6a7998d5a73b0e",
+      "change": "modified-during-this-task"
+    },
+    "src/verification/types.ts": {
+      "sha256": "974e4b2b608dab3db6c1cb86c87d3a1633091ab11bd2764285d81b15b7b9d1d0",
+      "change": "modified-during-this-task"
+    },
+    "VERIFICATION.md": {
+      "sha256": "bdca46107f86abc0c2f91d8006ad7ad950d8ae9a8863d788e09fc416b9aa79f8",
+      "change": "modified-during-this-task"
+    }
+  },
+  "newTests": 183,
+  "integratedScenarios": {
+    "CALENDAR": "1792530245564",
+    "UNKNOWN": "1792530245564",
+    "NOTICE": "1792530245564",
+    "EXCEPTION": "1792530337220",
+    "INCIDENT": "1792530245564",
+    "PERMISSIONS": "1792530245564"
+  },
+  "historical": "docs/retention-30d-web-evidence.json",
+  "draft": true,
+  "productionValidated": false,
+  "publicationReview": {
+    "date": "2026-10-20",
+    "branch": "feature/driver-verification",
+    "initialHead": "97850b8c447c71d6ae245bc8df3ce46413650da2",
+    "remote": "https://github.com/zorgoluis/mandaria-frontend.git",
+    "initialFetchAhead": 0,
+    "initialFetchBehind": 0,
+    "sourceReview": {
+      "webFiles": {
+        "src/deletion/image-retention.ts": "dccaefe3be59f902623ca2c53b686330a0d686924e4147138cc674c5288f2470",
+        "src/deletion/ImageRetentionStatus.tsx": "f2e111ec9a1d4623f2a2758188855192bcb64dd0330e94754a689d1f1a461dd4",
+        "src/deletion/contract.ts": "8628e2c5dcf2ab5a505dcba043d84bc2e4673b1bcb00c96fa30e382c9a653e6a",
+        "src/deletion/pages.tsx": "7546ec593e00be312117fde3861901cbc28165ca80177846c3234da32a1136a6",
+        "src/deletion/review.tsx": "87219d4aa75276f79e7da961237d41a7bf37db11cc6d881a920ff3cf597f5132",
+        "src/deletion/receipt.ts": "e6b5091d6da54131a9e4a875e129fc391f48ca47681c02cc4ace96511291d9d4",
+        "src/deletion/hooks.ts": "b0bd1c2804aa8a4f4334f9caa2c1212eb075236d7b650a1df0b87f4a9baf0c1b",
+        "src/deletion/service.ts": "f0d2811bdff9185cd6972ab0207abe76069bbca2a5f9bd2aec97879e07dd1a9e",
+        "src/verification/retention.tsx": "01163d94138ec659f65c21fb25e1ed6404b7d3b1b036e106fe6a7998d5a73b0e",
+        "src/verification/pending.ts": "023e352de4b5ae066f553c25367cd99f52658d287fc0a12239e4dec151e3f799",
+        "src/verification/types.ts": "974e4b2b608dab3db6c1cb86c87d3a1633091ab11bd2764285d81b15b7b9d1d0",
+        "src/verification/service.ts": "615759ddb7806c30d927497ed43ba2bbb59e00c30d931f8315cf25dc93db73de",
+        "src/verification/hooks.ts": "659ba34e411e9a29e2f9e6600704544e36f3c5e02a74ab64c1bc316cf5a2e086",
+        "src/verification/pages.tsx": "7f2258fbd36a9836ac1432da5774b8a6071152eaca2b4cb49ca918654a17b821",
+        "src/verification/format.ts": "d0b795e43430a0234cee302b7861d78fb47eac3890073e7a96bbf9a4100e656d",
+        "src/verification/common.tsx": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+        "src/verification/representatives.tsx": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41",
+        "src/verification/evidence.tsx": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+        "src/test/image-retention.test.tsx": "059d81af499a5893ea31fe167f01fab3dae0c65e0fe3621ce13d4e3b13191684",
+        "scripts/verify-retention-web.mjs": "0f20c5077c3256d94344ca5423a4475608cfc8a48afb61b254a7552c7e835e3c",
+        "scripts/retention-isolated-backend.mjs": "8bb7878cf72ab38bf0cffb3646b779d44699c32845f9bd6ce99f78ce5e9233a6",
+        "scripts/retention-isolated-environment.mjs": "cc2a9e7354e7d3b9ffd8dfe2ac693f89255352a554612a0e9abe32aebd8cb382",
+        "scripts/retention-contract-snapshot.mjs": "2efac345f81a2541201532252f213123e7dbcef7d8cf5ea1cdfde8d4b5ff921d",
+        "scripts/representative-browser.mjs": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5",
+        "BITACORA.md": "5a2b4d03865cfd631ea51033613b5eed7023078eab2da443484a949a22c22614",
+        "docs/DOCUMENTARY-RETENTION-30D-WEB.md": "e2305ff33476f922e24e9f5aaacbbe4382cf5cf8abacd3dcae36990bd71c4e0a",
+        "README.md": "1d9c31fddc7410c302b9a4dd54e4be73c22d45db6bc61af11ea8a4e003ed9fae",
+        "scripts/verify-retention-closure.mjs": "81e1d8bb73a4dfa19eefcdd0ef8f5e2244aa9f5df1e508a753acbf8743ec31a4",
+        "src/deletion/retention-details.ts": "578f47579b3f8eff501d46a6cd346767e65f22ade2fd1bebc7a0375c46234beb",
+        "src/deletion/RetentionDetails.tsx": "774404f1aa0782982ace6dba4a25aee2d0f6987ff4ed347a6da9aa923b220966",
+        "src/test/retention-projection.test.tsx": "3a07ac6483ff83040cf3f756c78de098e05ef043053f2be0d6a52e491c6fbeb2",
+        "src/test/verification-pages.test.tsx": "98edf20707ecedb945ec9c0efc3e7b3ea7dd585fbfff37340e916ef56f84af0c",
+        "VERIFICATION.md": "bdca46107f86abc0c2f91d8006ad7ad950d8ae9a8863d788e09fc416b9aa79f8"
+      },
+      "matchingFiles": 33,
+      "canonicalHashMatched": true
+    },
+    "backend": {
+      "head": "2c458fc955f699ce958dabf5fe89dcc58892a031",
+      "implementationUncommitted": true,
+      "requiredMigration": "20261020000100_document_image_retention",
+      "recoveryFormat": 4,
+      "files": {
+        "docs/openapi.json": "06bacbd3d0804221cb9ae3de5f6f894e2d0b5a6775aa64a39c4efba8e585b5de",
+        "prisma/schema.prisma": "3555f17c162f2241939dd2d91da10dbdd0360da35fafa11b6cb05aaaf8cbbae6",
+        "prisma/migrations/20261020000100_document_image_retention/migration.sql": "093f2f752fde34e89113a0aca7f1cb5f1aa4b9c189f9fd2ede4e5a8e8bc4cc65",
+        "src/config/environment.ts": "6ed64902fa0fa8e05e80f2d65c564c1c3641f89c47dc0b27636e79d8ebf12869",
+        "src/verification/image-retention.ts": "cea79a6eb4ff1a45422983bea457c732c44f7c05f7f3b92fd34ea7a35e1ca5d7",
+        "src/verification/verification.service.ts": "59142145dbb4e0e0bafb173d2e675bd15919b29dec768f2b0f92845bc7aca663",
+        "src/verification/verification.controller.ts": "337f97be3eac106ea9b70472da8efe9dfb9fb0e0d5f83739f0689912a08e8b41",
+        "src/verification/verification.dto.ts": "9650c39249d209cde1fdff712d9235914bc056962328529e40297e9b961d2ab0",
+        "src/verification/verification.responses.ts": "eb140825e9431b8647ddac5b5969255762b220d5737bab8a241d6b7cac51d0e2",
+        "src/verification/deletion.service.ts": "0951b75bbaeac28f32466ad4f1b653f990004a2eeb241a82232343a223a18d42",
+        "src/verification/deletion.controller.ts": "8b397a421fa3b12ebcdd097ab13ff0d8fe45b033229e9d9b3ff555a883dc5773",
+        "src/verification/deletion.dto.ts": "392db142de2dffed4e573c50ae1d0207b6255c00e4627119117bf08d7e7407fb",
+        "src/verification/deletion.responses.ts": "0039daff538b37c47b4cf7da0e999c7b01715a635ed01fb4b740ff8fb85147bc",
+        "src/verification/deletion-command-receipt.ts": "82bb49d7eac7d2a4dcb0430b0aecb0cdfdd8331729d25fbe27c7b32f731cd75f",
+        "src/verification/deletion-worker.ts": "48aa294257271be144438cc53c9d3234076dcf915a46778dc6ef55ac8e53736f",
+        "src/verification/recovery-v2.ts": "70913d773ec8e16b2a1d72af824e93ca19103f449ecec9393e60a5306ce85179",
+        "src/mail/mail-templates.ts": "cc38d0e86ad47745b84e4033e9ad4602a07f98cad50d82e9a737a25c5a0bebfb",
+        "test/image-retention.e2e-spec.ts": "774833becdd4863c6062e29475d00a4070cb41240eff1350d850e463c54dd881",
+        "dist/verification/image-retention.js": "523b0700d7fc625b1891ed29e112c993df2fe7c0a0701f12946f9c3fdb06e49d",
+        "dist/verification/verification.service.js": "243f2cd291e9ea26fe5f174473f916d8e0c8b7d092acb8918d06e9194e32716e",
+        "dist/verification/verification.controller.js": "94c416df8f043910486d924277c522ef9c600b9bdf0c711a8ce7c9f39497f9f1",
+        "dist/verification/deletion.service.js": "65abefd67453ee7dd5ca28acd59c27410433a7e65bfa0be6acfe2e5cab7a6293",
+        "dist/verification/deletion.dto.js": "af4c837477761f61c56d6e41fcf24639b989fece858b86b4cffd65bde0ae9d64",
+        "dist/verification/deletion-worker.js": "be52813ab1b58224d92d359b701170c3502f244b2e250697858afd83d5f03fe3",
+        "dist/mail/mail-templates.js": "2d86b2d28799ece223748f89a46527215a60ed6702c30a6d3a83bf86a96c7818",
+        "src/verification/retention-projection.ts": "0c42ff92f286d298247b274c518c9367b5a638613005408290847b266234a485",
+        "test/retention-projection.spec.ts": "b086b4897054caf417b017b3a7bd62b2aef3598a2b014d269a3d687d69203436"
+      },
+      "pairedPublishedShasTested": false
+    },
+    "historicalValidation": {
+      "tests": {
+        "webInitial": {
+          "file": "test-results/retention-closure-unit.json",
+          "sha256": "ccca410a7acfc5b8cd3eb5952005d9247982b478a31eefa2d50cde5d0fc0be17",
+          "passed": 178,
+          "failed": 1,
+          "files": [
+            {
+              "file": "deletion-pages.test.tsx",
+              "status": "passed",
+              "passed": 32,
+              "failed": 0
+            },
+            {
+              "file": "deletion-service.test.ts",
+              "status": "passed",
+              "passed": 23,
+              "failed": 0
+            },
+            {
+              "file": "deletion-v2.test.tsx",
+              "status": "passed",
+              "passed": 57,
+              "failed": 0
+            },
+            {
+              "file": "image-retention.test.tsx",
+              "status": "passed",
+              "passed": 33,
+              "failed": 0
+            },
+            {
+              "file": "retention-projection.test.tsx",
+              "status": "passed",
+              "passed": 7,
+              "failed": 0
+            },
+            {
+              "file": "verification-pages.test.tsx",
+              "status": "failed",
+              "passed": 26,
+              "failed": 1
+            }
+          ]
+        },
+        "webPagesFinal": {
+          "file": "test-results/retention-closure-pages-final.json",
+          "sha256": "4ab1a2724bc0653ee892819ae8989caea2ed86c777b6008d1c56cf49580bbf0d",
+          "passed": 27,
+          "failed": 0,
+          "files": [
+            {
+              "file": "verification-pages.test.tsx",
+              "status": "passed",
+              "passed": 27,
+              "failed": 0
+            }
+          ]
+        },
+        "webProjectionFinal": {
+          "file": "test-results/retention-closure-final.json",
+          "sha256": "a7f3ad3309994a18e07af470d10467c560ba9b1e365a33a2ea0625bfe710024f",
+          "passed": 44,
+          "failed": 0,
+          "files": [
+            {
+              "file": "image-retention.test.tsx",
+              "status": "passed",
+              "passed": 36,
+              "failed": 0
+            },
+            {
+              "file": "retention-projection.test.tsx",
+              "status": "passed",
+              "passed": 8,
+              "failed": 0
+            }
+          ]
+        }
+      },
+      "uniqueWebTests": 183,
+      "integration": [
+        {
+          "id": "1792530190804",
+          "reportSha256": "91ba7e764c00d2e00f4e4b52be88f6a7cd249222fe3b8dbbd34797942f7ada88",
+          "status": "INCOMPLETE",
+          "checkpoints": {
+            "SETUP": {
+              "status": "FAIL",
+              "reason": "PrismaClientValidationError: "
+            },
+            "CALENDAR": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            },
+            "UNKNOWN": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            },
+            "NOTICE": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            },
+            "EXCEPTION": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            },
+            "INCIDENT": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            },
+            "PERMISSIONS": {
+              "status": "BLOCKED",
+              "reason": "Not started"
+            }
+          },
+          "cleanup": {
+            "browserClosed": true,
+            "viteClosed": true,
+            "backendClosed": true,
+            "databaseStopped": true
+          },
+          "browser": {
+            "name": "Chrome",
+            "version": "155.0.8059.85",
+            "temporaryProfile": true
+          }
+        },
+        {
+          "id": "1792530245564",
+          "reportSha256": "ea1b1c99af05004f9f1cbbf4ff8b2ce952f209aeb714b1b36dbe45aac7b76775",
+          "status": "INCOMPLETE",
+          "checkpoints": {
+            "SETUP": {
+              "status": "PASS"
+            },
+            "CALENDAR": {
+              "status": "PASS"
+            },
+            "UNKNOWN": {
+              "status": "PASS"
+            },
+            "NOTICE": {
+              "status": "PASS",
+              "effects": {
+                "noticeAttempts": 5,
+                "deleteEffects": 0,
+                "originalDatesPreserved": true
+              }
+            },
+            "EXCEPTION": {
+              "status": "FAIL",
+              "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+            },
+            "INCIDENT": {
+              "status": "PASS",
+              "effects": {
+                "objects": 2,
+                "allVersionsAndUploadsAbsent": true,
+                "casePreserved": true,
+                "accountActive": true,
+                "mail": "provider accepted; not delivery or reading"
+              }
+            },
+            "PERMISSIONS": {
+              "status": "PASS"
+            }
+          },
+          "cleanup": {
+            "browserClosed": true,
+            "viteClosed": true,
+            "backendClosed": true,
+            "databaseStopped": true
+          },
+          "browser": {
+            "name": "Chrome",
+            "version": "155.0.8059.85",
+            "temporaryProfile": true
+          }
+        },
+        {
+          "id": "1792530337220",
+          "reportSha256": "60b38ff7579e3377a360cf5b0ee4cfc2b1c89375b737eaa0a728e738bc018fcd",
+          "status": "PASS",
+          "checkpoints": {
+            "SETUP": {
+              "status": "PASS"
+            },
+            "CALENDAR": {
+              "status": "REUSED_FROM_PRIOR_ATTEMPT"
+            },
+            "UNKNOWN": {
+              "status": "REUSED_FROM_PRIOR_ATTEMPT"
+            },
+            "NOTICE": {
+              "status": "REUSED_FROM_PRIOR_ATTEMPT"
+            },
+            "EXCEPTION": {
+              "status": "PASS"
+            },
+            "INCIDENT": {
+              "status": "REUSED_FROM_PRIOR_ATTEMPT"
+            },
+            "PERMISSIONS": {
+              "status": "REUSED_FROM_PRIOR_ATTEMPT"
+            }
+          },
+          "cleanup": {
+            "browserClosed": true,
+            "viteClosed": true,
+            "backendClosed": true,
+            "databaseStopped": true
+          },
+          "browser": {
+            "name": "Chrome",
+            "version": "155.0.8059.85",
+            "temporaryProfile": true
+          }
+        }
+      ],
+      "consolidated": {
+        "CALENDAR": "1792530245564",
+        "UNKNOWN": "1792530245564",
+        "NOTICE": "1792530245564",
+        "EXCEPTION": "1792530337220",
+        "INCIDENT": "1792530245564",
+        "PERMISSIONS": "1792530245564"
+      },
+      "postRunChanges": "NOT_DISCLOSED distinguishes another presenter plan; minimized plan rendering and H label; covered by final full projection test files. OpenAPI response metadata corrected; no execution/authorization change. Do not label prior screenshots as these final labels.",
+      "checks": {
+        "backendTypes": "PASS",
+        "backendBuild": "PASS",
+        "backendLint": "PASS",
+        "webTypes": "PASS",
+        "webBuild": "PASS",
+        "webLint": "PASS",
+        "landingTypesBuildLint": "PASS",
+        "openapi": "PASS",
+        "migration": "No new migration; prior 46-chain installation used in isolated scenarios. Upgrade/drift evidence historical.",
+        "diffCheck": "PASS",
+        "schemaUnchanged": true,
+        "migrationUnchanged": true,
+        "allHistoricalMigrationsUnchanged": true,
+        "stoppedClusters": true
+      },
+      "historicalAF": "1792525812779",
+      "historicalRecovery": {
+        "postCount": 1,
+        "before": {
+          "commands": 0,
+          "plans": 0
+        },
+        "afterLost": {
+          "commands": 1,
+          "plans": 1
+        },
+        "afterRecovery": {
+          "commands": 1,
+          "plans": 1
+        },
+        "sameKey": true,
+        "markerCleared": true
+      }
+    },
+    "newValidation": {
+      "suitesExecuted": 0,
+      "integrationExecuted": false,
+      "scriptSyntaxFiles": 5,
+      "captureHashMatches": 6,
+      "secretPatternFindings": 0
+    },
+    "documentationDelta": "Publication summary, portable links and a self-contained Web/backend evidence extract only. Prior document hashes remain historical; product/test/harness bytes unchanged.",
+    "exclusions": [
+      ".env and credentials",
+      "test-results raw reports, logs and temporary databases",
+      "browser profiles",
+      "node_modules and dist",
+      "other worktrees",
+      "backend, Landing and App changes"
+    ],
+    "productionValidated": false
+  }
+}

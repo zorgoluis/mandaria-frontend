@@ -1,3 +1,8 @@
+import {
+  retentionDetails,
+  type RetentionDetailsData,
+} from './retention-details'
+import { imageRetention, type ImageRetention } from './image-retention'
 import { ApiError } from '../services/errors'
 export const uuid =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -12,6 +17,10 @@ export const scopes = {
   ORGANIZATION: 'Dar de baja la flotilla',
   REPRESENTATIVE: 'Dejar de representar a la flotilla',
 }
+export const scopeLabels = {
+  ...scopes,
+  IMAGE_RETENTION: 'Conservación de imágenes del expediente',
+}
 export type Scope = keyof typeof scopes
 export const states: Record<string, string> = {
   IDENTITY_REQUIRED: 'Identidad o facultades pendientes',
@@ -24,6 +33,20 @@ export const states: Record<string, string> = {
   PURGED: 'Depuración registrada',
 }
 export const reasons: Record<string, string> = {
+  IMAGE_NOTICE_NOT_ACCEPTED_IN_WINDOW:
+    'El aviso no tiene aceptación acreditada en plazo. La eliminación automática está bloqueada, sin renovar fechas.',
+  IMAGE_INITIAL_DELETION_OVERDUE:
+    'La eliminación inicial no se acreditó en su fecha original; requiere seguimiento.',
+  IMAGE_RETENTION_ELIGIBILITY_ENDED:
+    'Este plan dejó de ser aplicable; no acredita eliminación.',
+  IMAGE_CLEANUP_OWNED_BY_EXISTING_REQUEST:
+    'El alcance ya tiene otro seguimiento con su calendario original.',
+  IMAGE_RETENTION_POLICY_REVIEW_REQUIRED:
+    'Este plan de conservación requiere revisión autorizada; no admite cancelación general.',
+  INVALID_IMAGE_RETENTION_EXCEPTION:
+    'Revisa el adjunto y la evidencia: deben pertenecer a este expediente y no haber iniciado inventario.',
+  INVALID_RETENTION:
+    'La revisión debe ser futura y dentro de 30 días; el vencimiento informado debe ser futuro.',
   WRITER_QUIESCENCE_NOT_VERIFIED:
     'La eliminación sigue pendiente porque aún no se ha podido confirmar que todas las cargas anteriores terminaron.',
   ACTIVE_SERVICE_MINIMIZATION_REQUIRED:
@@ -43,6 +66,12 @@ export const reasons: Record<string, string> = {
   UNKNOWN: 'El resultado de almacenamiento sigue sin comprobarse.',
 }
 export const tasks: Record<string, string> = {
+  IMAGE_NOTICE_REVIEW: 'Revisión del aviso sin aceptación acreditada',
+  IMAGE_INITIAL_DELETION_OVERDUE:
+    'Eliminación inicial fuera del plazo original',
+  IMAGE_CLEANUP_DEPENDENCY: 'Limpieza vinculada a otro seguimiento',
+  SUPPRESSION_PURGE_OVERDUE:
+    'Depuración de supresiones pendiente después del plazo acreditado',
   RESTRICTION_REVIEW: 'Revisión selectiva de restricciones',
   CLEANUP_INCIDENT: 'Incidencia de limpieza pendiente',
   IDENTITY_REVIEW: 'Revisión de identidad y facultades',
@@ -59,6 +88,8 @@ export const tasks: Record<string, string> = {
   MANUAL_ATTENTION: 'Intervención requerida',
 }
 export interface Snapshot {
+  retentionDetails?: RetentionDetailsData
+  imageRetention?: ImageRetention
   cleanupPolicy?: string
   authorizationState?: string
   authorizationGeneration?: number
@@ -191,8 +222,12 @@ export function snapshot(raw: unknown, minimumRevision = 0): Snapshot {
       0,
       'Respuesta incompleta; conserva la referencia para recuperar la solicitud.',
     )
+  if (r.retentionDetails !== undefined) retentionDetails(r.retentionDetails)
   // Explicit projection: never persist/render transport internals or third-party data.
   return {
+    ...(r.retentionDetails === undefined
+      ? {}
+      : { retentionDetails: retentionDetails(r.retentionDetails) }),
     ...(r.cleanupPolicy === undefined
       ? {}
       : {
@@ -206,6 +241,9 @@ export function snapshot(raw: unknown, minimumRevision = 0): Snapshot {
           nextReviewAt: r.nextReviewAt,
           surveillanceEndsAt: r.surveillanceEndsAt,
         }),
+    ...(r.imageRetention === undefined
+      ? {}
+      : { imageRetention: imageRetention(r.imageRetention) }),
     id: r.id,
     scope: r.scope,
     status: r.status,
@@ -311,7 +349,7 @@ export const terminal = (s: Snapshot) =>
   ['CLOSED', 'CANCELLED', 'PURGED'].includes(s.status)
 export const known = (s: Snapshot) =>
   Object.hasOwn(states, s.status) &&
-  Object.hasOwn(scopes, s.scope) &&
+  Object.hasOwn(scopeLabels, s.scope) &&
   (s.cleanupPolicy === undefined ||
     (['STRONG_WRITE_SEAL_V1', 'OPERATIONAL_RECONCILIATION_V2'].includes(
       s.cleanupPolicy,
