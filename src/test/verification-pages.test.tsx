@@ -716,3 +716,69 @@ it.each(['DRIVER', 'SUPER_ADMIN'] as const)(
     expect(revoke).toHaveBeenCalledWith('blob:failed')
   },
 )
+
+it.each([false, true, undefined, null])(
+  'vehicle evidence follows backend registration requirement %s',
+  (required) => {
+    const record = {
+      ...caseFixture,
+      subjectType: 'VEHICLE' as const,
+      registrationCardRequired: required,
+      data: {
+        declaredOwnerName: 'Synthetic',
+        serialNumber: 'SYNTHETIC',
+        ownershipEvidenceType: 'BORROWED' as const,
+      },
+      attachments: [],
+    }
+    mount(
+      <>
+        <CaseForm record={record} />
+        <Evidence record={record} requirements={requirements} canWrite />
+      </>,
+    )
+    if (required === false)
+      expect(
+        screen.queryByRole('option', { name: 'Tarjeta de circulación' }),
+      ).not.toBeInTheDocument()
+    else
+      expect(
+        screen.getByRole('option', { name: 'Tarjeta de circulación' }),
+      ).toBeInTheDocument()
+    expect(
+      screen.getByRole('option', { name: 'Autorización del titular' }),
+    ).toBeInTheDocument()
+    if (required === false)
+      expect(
+        screen.getByText(/Bicicleta: no requiere tarjeta/),
+      ).toBeInTheDocument()
+  },
+)
+it('keeps historical registration attachments visible on bicycle', () => {
+  mount(
+    <Evidence
+      record={{
+        ...caseFixture,
+        subjectType: 'VEHICLE',
+        registrationCardRequired: false,
+        attachments: [
+          {
+            id: attachmentId,
+            category: 'REGISTRATION_CARD',
+            status: 'VALIDATED',
+            mime: 'image/png',
+            bytes: 10,
+            hash: 'synthetic',
+            createdAt: terms.createdAt,
+          },
+        ],
+      }}
+      requirements={requirements}
+      canWrite={false}
+    />,
+  )
+  expect(screen.getByText('Tarjeta de circulación')).toBeInTheDocument()
+  expect(
+    screen.getByRole('button', { name: 'Ver evidencia' }),
+  ).toBeInTheDocument()
+})

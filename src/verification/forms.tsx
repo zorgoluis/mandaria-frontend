@@ -212,7 +212,10 @@ export function CaseForm({
               />
             </Field>
             <p>
-              Tarjeta de circulación y{' '}
+              {record.registrationCardRequired !== false &&
+                'Tarjeta de circulación y '}
+              {record.registrationCardRequired === false &&
+                'Bicicleta: no requiere tarjeta de circulación. Requiere '}
               {
                 labels[
                   ownership === 'OWNED'

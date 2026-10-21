@@ -178,6 +178,7 @@ export interface CaseSummary {
   publicReason: string | null
 }
 export interface VerificationCase extends CaseSummary {
+  registrationCardRequired?: boolean | null
   retention?: {
     executionEnabled: boolean
     eligibility:

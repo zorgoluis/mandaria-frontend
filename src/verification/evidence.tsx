@@ -73,7 +73,11 @@ function EvidenceSession({
               : []),
           ]
         : [
-            ...requirements.vehicle.required,
+            ...requirements.vehicle.required.filter(
+              (category) =>
+                category !== 'REGISTRATION_CARD' ||
+                record.registrationCardRequired !== false,
+            ),
             requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
           ]
   return (
