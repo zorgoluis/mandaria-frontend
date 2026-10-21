@@ -1,3 +1,17 @@
+## 2026-10-20 — Revisión de commit/push autorizados a main
+
+Fetch nuevo, main 950eca7 coincide con origin/main (0/0); índice vacío al comenzar. Selección exclusiva del ajuste administrativo sin alta, regresiones, informe/evidencia y continuidad. Cinco huellas coincidentes con validación final; no se repiten suites. Evidencia reutilizada: 57 Web y backend 27 unitarias/17 E2E. No se acredita navegador integrado. Commit/push autorizados; se verificará SHA remoto. Sin publicación de términos, cambios de configuración, activación, merge, VM ni despliegue.
+
+## 2026-10-20 — Verificación final del layout de publicación
+
+Corregida consulta residual de Warning exclusivamente en publicaciones SUPER_ADMIN; los otros flujos conservan sus controles. Recuperación y publicación probadas bajo VerificationLayout real. **57/57 únicos PASS** en dos archivos completos, sustituyendo las 30 anteriores; build/tipos/lint finales correctos. Huellas actualizadas; sin navegador real, commit/push/publicación/despliegue/activación.
+
+## 2026-10-20 — Publicación sin habilitar alta
+
+Implementado ajuste mínimo autorizado en main: pantalla administrativa consume runtimeEnvironment de policy, sin consultar requirements; entorno ausente/test bloqueado. Permisos, confirmaciones y recuperación intactos. [Informe](docs/PUBLICATION-WITHOUT-INTAKE.md).
+
+Verificación nueva: 30/30 pruebas del archivo completo de onboarding production, build, tipos de pruebas, ESLint focalizado y diff PASS. Backend aparte 17 E2E PostgreSQL y 27 unitarias; no se acredita navegador integrado. Warning de bundle previo persiste. Sin publicar textos reales, cambiar flags, admisión, commit/push/despliegue. Cambios previos conservados.
+
 ## 2026-10-20 — Revisión para publicación de conservación Web
 
 Commit/push autorizados sólo para feature/driver-verification. Base 97850b8c447c71d6ae245bc8df3ce46413650da2; fetch inicial 0/0. Producto y arneses coinciden con las huellas vigentes; se reutilizan los resultados históricos sin ejecutar suites o integración. Se añaden únicamente resumen portable, referencias y extracto de evidencia. Backend requerido aún incluye cambios sin commit sobre 2c458fc955f699ce958dabf5fe89dcc58892a031; no se declara una pareja publicada probada. Otros worktrees y cambios ajenos conservados. [Revisión, comprobaciones y límites](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). El resultado remoto se comprueba al terminar; no hay merge, despliegue ni activación.

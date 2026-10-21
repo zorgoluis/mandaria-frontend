@@ -96,6 +96,7 @@ export interface Terms {
   specificConsents?: { id: string; text: string; hash: string }[]
 }
 export interface VerificationPolicy {
+  runtimeEnvironment?: EvidenceEnvironment
   revision: number
   enabled: boolean
   environment: EvidenceEnvironment

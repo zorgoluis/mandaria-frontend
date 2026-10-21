@@ -9,10 +9,10 @@ import { TermsForm, TermsPanel } from '../verification/terms'
 import { PublicationPage } from '../verification/publications'
 import {
   CaseDetail,
+  VerificationLayout,
   DriverOnboarding,
   ReceiptPage,
 } from '../verification/pages'
-import { Recovery } from '../verification/common'
 import { verification } from '../verification/service'
 import {
   readMarkers,
@@ -59,6 +59,7 @@ export const productionTerms: Terms = {
   ],
 }
 const policy: VerificationPolicy = {
+  runtimeEnvironment: 'PRODUCTION',
   revision: 3,
   enabled: false,
   environment: 'LOCAL_TEST',
@@ -289,7 +290,18 @@ it.each(['DRIVER', 'PROVIDER_ADMIN'] as const)(
   },
 )
 async function preparePublication() {
-  mount(<PublicationPage />, 'SUPER_ADMIN')
+  mount(
+    <Routes>
+      <Route element={<VerificationLayout />}>
+        <Route
+          path="/admin/verification-publications"
+          element={<PublicationPage />}
+        />
+      </Route>
+    </Routes>,
+    'SUPER_ADMIN',
+    '/admin/verification-publications',
+  )
   await screen.findByText(/Política vigente · revisión 3/)
   fireEvent.change(screen.getByLabelText('Versión de términos'), {
     target: { value: 'SYNTHETIC-DRIVER-2' },
@@ -383,7 +395,10 @@ it.each([
   },
 )
 it('SUPER_ADMIN cannot publish when backend runtime is LOCAL_TEST, irrespective of policy pointers', async () => {
-  vi.mocked(verification.requirements).mockResolvedValue(requirements)
+  vi.mocked(verification.policy).mockResolvedValue({
+    ...policy,
+    runtimeEnvironment: 'LOCAL_TEST',
+  })
   mount(<PublicationPage />, 'SUPER_ADMIN')
   await screen.findByText(/La publicación no está disponible en modo de prueba/)
   expect(
@@ -440,9 +455,25 @@ it('lost publication persists only minimal marker; GET historical result and new
     revision: 7,
     productionDriverTermsVersion: 'SYNTHETIC-NEWER',
   })
-  mount(<Recovery />, 'SUPER_ADMIN')
+  vi.mocked(verification.requirements).mockRejectedValue(
+    new ApiError(503, 'disabled', 'VERIFICATION_LOCAL_DISABLED'),
+  )
+  mount(
+    <Routes>
+      <Route element={<VerificationLayout />}>
+        <Route
+          path="/admin/verification-publications"
+          element={<PublicationPage />}
+        />
+      </Route>
+    </Routes>,
+    'SUPER_ADMIN',
+    '/admin/verification-publications',
+  )
+  await screen.findByText(/Política vigente · revisión 7/)
   fireEvent.click(screen.getByRole('button', { name: 'Consultar intento' }))
   await screen.findByText(/Publicación recuperada · fotografía histórica/)
+  expect(verification.requirements).not.toHaveBeenCalled()
   expect(screen.getByText(/revisión 4.*Puede existir/)).toBeInTheDocument()
   expect(verification.attempt).toHaveBeenCalledWith(marker, false)
   expect(verification.command).toHaveBeenCalledOnce()
@@ -596,4 +627,37 @@ it('400 editorial rejection preserves exact draft markers for deliberate correct
     text: draft,
   })
   expect(screen.queryByText('Comprobante histórico de publicación')).toBeNull()
+})
+
+it('publishes with intake disabled without querying requirements or activating admission', async () => {
+  vi.mocked(verification.requirements).mockRejectedValue(
+    new ApiError(503, 'disabled', 'VERIFICATION_LOCAL_DISABLED'),
+  )
+  vi.mocked(verification.command).mockResolvedValue(publication)
+  await preparePublication()
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Publicar versión autorizada' }),
+  )
+  await screen.findByText('Comprobante histórico de publicación')
+  expect(verification.requirements).not.toHaveBeenCalled()
+  expect(verification.command).toHaveBeenCalledOnce()
+  expect(vi.mocked(verification.command).mock.calls[0][0].operation).toBe(
+    'PUBLISH_TERMS',
+  )
+  expect(
+    screen.getByText(/Control de admisión: no activado/),
+  ).toBeInTheDocument()
+})
+it('does not infer production from durable policy when runtime metadata is absent', async () => {
+  vi.mocked(verification.policy).mockResolvedValue({
+    ...policy,
+    environment: 'PRODUCTION',
+    runtimeEnvironment: undefined,
+  })
+  mount(<PublicationPage />, 'SUPER_ADMIN')
+  await screen.findByText(/No se confirmó el entorno de publicación/)
+  expect(
+    screen.queryByRole('button', { name: 'Revisar publicación' }),
+  ).toBeNull()
+  expect(verification.command).not.toHaveBeenCalled()
 })

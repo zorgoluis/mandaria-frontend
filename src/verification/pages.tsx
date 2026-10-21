@@ -34,7 +34,15 @@ export function VerificationLayout() {
   const location = useLocation()
   return (
     <div className="verification-area" key={user?.id}>
-      <Warning />
+      {user?.role === 'SUPER_ADMIN' &&
+      location.pathname === '/admin/verification-publications' ? (
+        <aside className="notice">
+          La publicación administrativa es independiente del alta documental y
+          no activa la admisión.
+        </aside>
+      ) : (
+        <Warning />
+      )}
       <Recovery />
       <Outlet key={user?.id + ':' + location.pathname + location.search} />
     </div>

@@ -8,8 +8,7 @@ import { vkey } from './format'
 import { verification } from './service'
 import { LegalText } from './terms'
 import type { Publication, PublicationReceipt } from './types'
-import { documentaryAvailability, consultationError } from './availability'
-import { useRequirements } from './use-availability'
+import { consultationError } from './availability'
 
 export function PublicationPage() {
   const { user } = useAuth()
@@ -28,8 +27,6 @@ function PublicationWorkspace() {
     retry: false,
     gcTime: 0,
   })
-  const runtime = useRequirements()
-  const state = documentaryAvailability(runtime)
   return (
     <>
       <h1>Publicación de términos y privacidad</h1>
@@ -53,15 +50,14 @@ function PublicationWorkspace() {
           </p>
         </section>
       )}
-      {q.isPending || runtime.isPending ? (
+      {q.isPending ? (
         <Loading />
-      ) : !q.data || !runtime.data ? (
+      ) : !q.data ? (
         <>
-          <p role="alert">{consultationError(q.error || runtime.error)}</p>
+          <p role="alert">{consultationError(q.error)}</p>
           <button
             onClick={() => {
               void q.refetch()
-              void runtime.refetch()
             }}
           >
             Consultar política vigente
@@ -69,9 +65,7 @@ function PublicationWorkspace() {
         </>
       ) : (
         <>
-          {(q.isError || runtime.isError) && (
-            <p role="alert">{consultationError(q.error || runtime.error)}</p>
-          )}
+          {q.isError && <p role="alert">{consultationError(q.error)}</p>}
           <section className="panel panel-body">
             <h2>Política vigente · revisión {q.data.revision}</h2>
             <p>
@@ -89,18 +83,18 @@ function PublicationWorkspace() {
               {q.data.enabled ? 'activado por backend' : 'no activado'}.
             </p>
           </section>
-          {runtime.data.environment !== 'PRODUCTION' ? (
+          {q.data.runtimeEnvironment !== 'PRODUCTION' ? (
             <p role="alert">
-              {state.kind === 'ready'
+              {q.data.runtimeEnvironment === 'LOCAL_TEST'
                 ? 'La publicación no está disponible en modo de prueba. El catálogo de prueba conserva su historia.'
-                : state.text}
+                : 'No se confirmó el entorno de publicación. Actualiza el backend compatible y vuelve a consultar.'}
             </p>
           ) : (
             <PublicationForm
               key={q.data.revision}
               revision={q.data.revision}
               onPublished={setReceipt}
-              disabled={!state.canProceed || q.isFetching || q.isError}
+              disabled={q.isFetching || q.isError}
             />
           )}
         </>
