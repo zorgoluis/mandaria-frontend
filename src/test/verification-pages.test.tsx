@@ -835,3 +835,61 @@ it('keeps historical registration attachments visible on bicycle', () => {
     screen.getByRole('button', { name: 'Ver evidencia' }),
   ).toBeInTheDocument()
 })
+
+it('links historical V1 while V2 remains pending without accepting or unlocking', async () => {
+  vi.mocked(verification.terms).mockResolvedValue({ ...terms, version: 'V2' })
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    terms: {
+      requiredVersion: 'V2',
+      acceptance: null,
+      latestAcceptance: {
+        id: resource,
+        version: 'V1',
+        acceptedAt: '2026-10-20T00:00:00Z',
+      },
+    },
+  })
+  mount(<DriverOnboarding />)
+  expect(await screen.findByRole('link', { name: 'V1' })).toHaveAttribute(
+    'href',
+    '/verification/acceptances/' + resource,
+  )
+  expect(screen.getByText(/No sustituye la aceptación/)).toBeInTheDocument()
+  expect(
+    screen.getByRole('button', {
+      name: 'Preparar expediente de identidad independiente',
+    }),
+  ).toBeDisabled()
+  expect(await screen.findByRole('checkbox')).not.toBeChecked()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it.each([undefined, null])(
+  'does not invent a historical receipt when unavailable: %s',
+  async (latestAcceptance) => {
+    vi.mocked(verification.onboarding).mockResolvedValue({
+      ...onboarding,
+      terms: { ...onboarding.terms, latestAcceptance },
+    })
+    mount(<DriverOnboarding />)
+    await screen.findByText(/Independiente sin proveedor/)
+    expect(screen.queryByText(/Comprobante personal/)).toBeNull()
+    expect(verification.command).not.toHaveBeenCalled()
+  },
+)
+it('prefers current acceptance over historical metadata', async () => {
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    terms: {
+      requiredVersion: terms.version,
+      acceptance: { id: caseId, version: terms.version, acceptedAt: '' },
+      latestAcceptance: { id: resource, version: 'V1', acceptedAt: '' },
+    },
+  })
+  mount(<DriverOnboarding />)
+  expect(
+    await screen.findByRole('link', { name: terms.version }),
+  ).toHaveAttribute('href', '/verification/acceptances/' + caseId)
+  expect(screen.queryByRole('link', { name: 'V1' })).toBeNull()
+  expect(verification.command).not.toHaveBeenCalled()
+})

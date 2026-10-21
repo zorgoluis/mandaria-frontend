@@ -264,6 +264,11 @@ export interface Onboarding {
     requiredVersion: string | null
     blockingReason?: string | null
     acceptance: { id: string; version: string; acceptedAt: string } | null
+    latestAcceptance?: {
+      id: string
+      version: string
+      acceptedAt: string
+    } | null
   }
   enforcementEnabled: boolean
   environment: EvidenceEnvironment

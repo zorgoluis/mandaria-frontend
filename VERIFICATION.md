@@ -1,3 +1,13 @@
+## 2026-10-21 — Revisión para commit/push del enlace histórico
+
+Autorizado publicar en main. Fetch nuevo: 0/0, índice vacío; cinco archivos propios revisados, sin cambios ajenos en este checkout. Se reutilizan 41 pruebas Web y 24 E2E backend, tipos/build/lint de la tarea anterior; no se repiten suites. Backend compatible requerido para recibir latestAcceptance. Diff e índice revisados; SHA remoto se confirmará tras push normal. Sin despliegue, aceptación de términos ni activación.
+## 2026-10-21 — Enlace a aceptación histórica con versión vigente pendiente
+
+Solicitud implementada en main base a97cec1e, inicialmente limpio. DriverOnboarding usa terms.acceptance vigente y, en su ausencia, terms.latestAcceptance como comprobante anterior con aclaración de que no sustituye términos vigentes. El campo es opcional: backend antiguo o valor null no generan enlace inventado. Mantiene bloqueos, casillas sin marcar y ausencia de envío automático. Backend compatible añade sólo referencia personal de lectura; sin migración.
+
+Validación nueva: 41/41 en archivo completo verification-pages.test.tsx (cuatro casos nuevos), typecheck:test, ESLint focalizado, build y diff correctos. Build mantiene advertencia previa de chunk >500 kB. Backend validó 24/24 E2E con PostgreSQL aislado, conservando V1 antes/después de aceptación V2; no se ejecutó navegador ni VM para esta corrección. Fallos intermedios por inserción fuera del componente, aclaración ausente y consulta asíncrona corregidos y excluidos del resultado final.
+
+Archivos: src/verification/pages.tsx, types.ts, src/test/verification-pages.test.tsx y estas bitácoras. Backend expone GET /api/v1/driver/onboarding -> terms.latestAcceptance {id,version,acceptedAt}|null, limitado a DRIVER personal del actor, orden fecha/id descendente. No cambia permisos, recuperación ni aceptaciones. Pendiente despliegue manual y verificación VM; no constituye historial completo. Sin activación, documentos reales, commit, push ni despliegue.
 ## 2026-10-21 — Revisión para publicar corrección del mensaje en main
 
 Autorización explícita de commit/push sólo Web. Fetch nuevo: main a468d1e61897c573fde47e19a9a5dca74f53b196 sincronizada 0/0 e índice vacío. Revisados seis archivos propios: dos traductores, pruebas de páginas, informe y continuidad. Sin cambios ajenos en este checkout. Se reutiliza la validación anterior de 51 pruebas, tipos, lint y build; no se repiten suites. Diff sin errores. Push normal a origin/main; confirmación del SHA remoto se entregará al propietario. Los términos V2 permanecen exclusivamente como propuestas del repositorio backend. Sin publicación de textos, admisión ni despliegue.

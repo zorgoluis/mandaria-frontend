@@ -67,6 +67,7 @@ export function DriverOnboarding() {
     !!q.data?.terms.acceptance &&
     q.data.terms.acceptance.version === terms.data?.version &&
     q.data.terms.requiredVersion === terms.data?.version
+  const receipt = q.data?.terms.acceptance ?? q.data?.terms.latestAcceptance
   const blocked =
     !state.canProceed || !onboardingState.canProceed || !currentAcceptance
   return (
@@ -127,14 +128,14 @@ export function DriverOnboarding() {
                 autorizada para preparar uno nuevo.
               </p>
             )}
-          {q.data.terms.acceptance && (
+          {receipt && (
             <p>
               Comprobante personal {currentAcceptance ? 'vigente' : 'anterior'}:{' '}
-              <Link
-                to={'/verification/acceptances/' + q.data.terms.acceptance.id}
-              >
-                {q.data.terms.acceptance.version}
+              <Link to={'/verification/acceptances/' + receipt.id}>
+                {receipt.version}
               </Link>
+              {!currentAcceptance &&
+                ' · No sustituye la aceptación de los términos vigentes.'}
             </p>
           )}
           {q.data.driver.independentProfile ? (
@@ -564,6 +565,7 @@ function CaseContent({
     { data: requirements },
     canWrite ? terms : undefined,
   )
+
   const blocked = !runtimeReady || !state.canProceed
   const currentEvidence =
     ['LOCAL_TEST', 'PRODUCTION'].includes(record.environment) &&
