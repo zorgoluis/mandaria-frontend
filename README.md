@@ -1,5 +1,9 @@
 # Mandaria Web — V1.11-B
 
+## Representación legal de flotilla — propuesta documental, 2026-10-19
+
+[Inventario, wireframes A–F y handoff de implementación](docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md). Diseño de acceso por vínculo, privacidad personal antes de archivos, acreditación SUPER_ADMIN y aceptación FLEET posterior, separado de conductor/unidad y coordinación operativa. Depende del contrato final backend: se inspeccionó código candidato en curso, todavía distinto de OpenAPI, sin informe final ni publicación acreditada. El handoff delimita recuperación postrevocación y otras confirmaciones necesarias. No hay componentes, rutas, fixtures ni pruebas Web nuevas; no recibir poderes mediante los expedientes actuales. Sólo inspección estática y documentación local, sin publicación o activación. Las evidencias históricas siguientes no acreditan este flujo.
+
 ## Publicación de la rama documental — revisión del 2026-10-19
 
 La adaptación de alta documental, sus pruebas y el ensayo A–H se revisan para publicar exclusivamente `feature/driver-verification`. [Inventario y correspondencia previa al commit](docs/onboarding-production-publication-review.json). Se conserva el PASS histórico del recorrido aislado y de las 98 pruebas: no se ejecutaron de nuevo. El backend compatible se identifica por contrato, migración y huellas probadas; su commit final no se ha confirmado en esta revisión. Publicar esta rama no despliega Web ni activa operaciones. Las entradas siguientes conservan las etapas anteriores.

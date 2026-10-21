@@ -1,5 +1,13 @@
 # Bitácora — Mandaria Web
 
+## 2026-10-19 — Propuesta Web del representante legal de flotilla
+
+Sólo documentación: [wireframes y handoff](docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md). Checkout encontrado en main, HEAD 763b7f5397320b1872fbbfc32ffd37a91b5411ec, limpio e índice vacío; no se cambió de rama ni integró nada. Tres worktrees previos y artefactos excluidos conservados. AGENTS.md no localizado en checkout/ascendientes; continuidad leída.
+
+Se distinguen procedimiento manual aprobado del apartado H, diseño y código candidato de contrato final/publicación. Durante la tarea cambiaron seis referencias backend; una segunda lectura con corte 18:18:32 UTC sí identifica vínculo propio, privacidad previa, expediente y acreditación antes de FLEET. Se registran ambas lecturas y dos fuentes adicionales (doce referencias). OpenAPI 1.12.0 sigue sin rutas/categorías nuevas y no se localizó informe final. Recuperación tras revocación requiere respuesta contractual mínima: el código candidato exige vínculo antes de leer ciertos comandos aplicados. No se atribuye ejecución ni fallo de producto comprobado. Consulta Git backend no disponible por permisos del sandbox, sin inventar SHA o publicación.
+
+Propuesta de entrada, preparación/privacidad personal previa, documentos ordenados, envío/seguimiento, revisión SUPER_ADMIN, aceptación FLEET posterior y sustitución. Incluye matriz de actores, recuperación/concurrencia, accesibilidad, casos futuros y once preguntas para el contrato final. Se evita aceptar FLEET antes de acreditar facultades, no se heredan imágenes ni autoridad por rol y no se infieren bloqueos de servicios. Sólo enlaces, referencias, coherencia documental y diff; ninguna prueba de producto o integración nueva. Sin componentes/rutas/fixtures, backend, QA, Landing, Android, commit, push, despliegue, publicación o activación. Cuatro documentos locales; historial inferior conservado.
+
 ## 2026-10-19 — Revisión de publicación de avisos y bloqueos
 
 Autorizado commit y push sólo en feature/driver-verification. Origin confirmado como https://github.com/zorgoluis/mandaria-frontend.git; fetch acotado con base local/remota 1d4486e1b0c6fbd987ad846213de7bfdb05e8c1d, sin divergencia ni historia previa pendiente. Índice vacío. Se revisan 25 archivos propios, sin cambios ajenos detectados; otros worktrees y artefactos excluidos preservados. [Revisión y alcance](docs/DOCUMENTARY-AVAILABILITY-WEB.md).
