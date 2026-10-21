@@ -35,6 +35,8 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    VERIFICATION_DOCUMENTS_PENDING:
+      'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
     VERIFICATION_REVIEW_REQUIRED:
       'La identidad o unidad requiere revisión documental antes de una nueva asignación. Consulta Verificación documental.',
     VERIFICATION_REVALIDATION_REQUIRED:

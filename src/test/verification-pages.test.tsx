@@ -32,7 +32,7 @@ import {
   onboarding,
   emptyPage,
 } from './verification-fixtures'
-import { ApiError } from '../services/errors'
+import { ApiError, normalizeError } from '../services/errors'
 import type { Role } from '../types/api'
 vi.mock('../verification/service', async (original) => ({
   ...(await original<typeof import('../verification/service')>()),
@@ -514,6 +514,59 @@ it('submit and withdraw require confirmation and current revision', async () => 
   expect(vi.mocked(verification.command).mock.calls[1][1]).toBe(
     '/verification-cases/' + caseId + '/withdraw',
   )
+})
+it.each(['DRIVER_IDENTITY', 'VEHICLE'] as const)(
+  'missing documents in %s remain readable inside confirmation without another command',
+  async (subjectType) => {
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      subjectType,
+    })
+    vi.mocked(verification.command).mockRejectedValue(
+      normalizeError(409, {
+        code: 'VERIFICATION_DOCUMENTS_PENDING',
+        message: 'PRIVATE_BACKEND_DETAIL',
+      }),
+    )
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      'DRIVER',
+      '/verification/cases/' + caseId,
+    )
+    const submit = await screen.findByRole('button', {
+      name: 'Presentar para revisión',
+    })
+    await waitFor(() => expect(submit).toBeEnabled())
+    fireEvent.click(submit)
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+    const dialog = screen.getByRole('dialog')
+    await waitFor(() =>
+      expect(dialog).toHaveTextContent(
+        'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
+      ),
+    )
+    expect(dialog).not.toHaveTextContent('PRIVATE_BACKEND_DETAIL')
+    expect(dialog).not.toHaveTextContent('La operación entra en conflicto')
+    expect(verification.command).toHaveBeenCalledOnce()
+    expect(vi.mocked(verification.command).mock.calls[0][2]).toEqual({
+      expectedVersion: 3,
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(verification.command).toHaveBeenCalledOnce()
+  },
+)
+
+it('unknown conflicts keep the generic message and do not invent missing documents', () => {
+  const error = normalizeError(409, {
+    code: 'UNKNOWN_CONFLICT',
+    message: 'PRIVATE_BACKEND_DETAIL',
+  })
+  expect(error.message).toContain('La operación entra en conflicto')
+  expect(error.message).not.toContain('documentos requeridos')
+  expect(error.message).not.toContain('PRIVATE_BACKEND_DETAIL')
 })
 it('version conflict refreshes the dossier and announces it without another decision', async () => {
   vi.mocked(verification.get).mockResolvedValue({

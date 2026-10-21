@@ -119,7 +119,7 @@ const errors: Record<string, string> = {
   VERIFICATION_UPLOAD_EXPIRED:
     'La carga caducó. Consulta su estado y retira la referencia incompleta antes de preparar otra carga explícita.',
   VERIFICATION_DOCUMENTS_PENDING:
-    'Faltan evidencias validadas de las categorías requeridas antes de presentar.',
+    'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
   VERIFICATION_OPEN_CASE_EXISTS:
     'Ya existe un expediente abierto para este recurso. Continúa desde el listado.',
   STORAGE_UNAVAILABLE:

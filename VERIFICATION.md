@@ -1,3 +1,13 @@
+## 2026-10-21 — Revisión para publicar corrección del mensaje en main
+
+Autorización explícita de commit/push sólo Web. Fetch nuevo: main a468d1e61897c573fde47e19a9a5dca74f53b196 sincronizada 0/0 e índice vacío. Revisados seis archivos propios: dos traductores, pruebas de páginas, informe y continuidad. Sin cambios ajenos en este checkout. Se reutiliza la validación anterior de 51 pruebas, tipos, lint y build; no se repiten suites. Diff sin errores. Push normal a origin/main; confirmación del SHA remoto se entregará al propietario. Los términos V2 permanecen exclusivamente como propuestas del repositorio backend. Sin publicación de textos, admisión ni despliegue.
+## 2026-10-21 — Mensaje de documentos faltantes en confirmación
+
+Main base a468d1e, checkout inicialmente limpio. Causa comprobada: useCommand notificaba con format.message, pero Confirm/ActionForm mostraba ApiError.message del normalizador general, sin traducción de VERIFICATION_DOCUMENTS_PENDING. Se añadió sólo ese código a normalizeError y se alineó la traducción documental: Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes. No se inventa qué documento falta; backend no expone esa lista. Conflictos desconocidos conservan mensaje genérico y no se muestran cuerpos crudos.
+
+Regresión nueva: identidad y unidad fallaron antes con el mensaje genérico; después pasan dentro del diálogo, un solo comando, misma revisión y cancelación sin reenvío. Validación final: 51/51 en archivos completos verification-pages.test.tsx (37) y verification-recovery.test.ts (14); typecheck:test, ESLint focalizado, build y diff correctos. Advertencia previa de chunk >500 kB permanece. Datos simulados; no nueva prueba de navegador, HTTP/VM o PostgreSQL.
+
+No se modificaron permisos, recepción de archivos, comandos, marcadores, recuperación ni backend. Textos V2 de bicicletas preparados separadamente en backend/docs/legal-review-2026-10-21-bicycles, sin tocar las V1 publicadas. Sin publicación, admisión, commit, push o despliegue. Ver docs/DOCUMENTARY-MISSING-REQUIREMENTS-MESSAGE.md.
 ## 2026-10-20 — Publicación de excepción de bicicletas a main
 
 Commit/push autorizados, sin despliegue ni admisión. Fetch nuevo: main base 62a4fcb sincronizada 0/0. Seis archivos propios revisados; no cambios ajenos en checkout. Evidencia reutilizada: 45 pruebas Web, build/tipos/lint de tarea anterior; no se repiten suites. Revisión nueva de diff, índice y remoto. Requiere backend que exponga registrationCardRequired; ausencia mantiene requisito conservador. SHA remoto se comprobará después del push normal.
