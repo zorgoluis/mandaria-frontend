@@ -39,6 +39,7 @@ function EvidenceSession({
     null,
   )
   const [error, setError] = useState('')
+  const [previewLoaded, setPreviewLoaded] = useState(false)
   const [busy, setBusy] = useState(false)
   const request = useRef<AbortController | null>(null)
   const urlRef = useRef<string | null>(null)
@@ -47,6 +48,7 @@ function EvidenceSession({
     if (urlRef.current) URL.revokeObjectURL(urlRef.current)
     urlRef.current = null
     setPreview(null)
+    setPreviewLoaded(false)
   }
   useEffect(
     () => () => {
@@ -267,9 +269,18 @@ function EvidenceSession({
             className="verification-preview"
             src={preview.url}
             alt="Evidencia privada del expediente"
+            onLoad={() => setPreviewLoaded(true)}
+            onError={() => {
+              clear()
+              setError(
+                'No se pudo mostrar la imagen. Consulta de nuevo; si persiste, informa a soporte.',
+              )
+            }}
           />
           <figcaption>
-            Imagen normalizada recibida por proxy autenticado.
+            {previewLoaded
+              ? 'Imagen normalizada recibida por proxy autenticado.'
+              : 'Cargando vista previa...'}
           </figcaption>
           <button onClick={clear}>Cerrar evidencia</button>
         </figure>

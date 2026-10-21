@@ -1,3 +1,16 @@
+## 2026-10-20 — Revisión para publicar corrección del visor en main
+
+Autorización del propietario: commit/push exclusivamente Web, sin despliegue ni admisión. Fetch nuevo de origin/main: 0/0 respecto a base 0e290ed180afd3aa3be08189bc20786d5d47cbd6. Siete archivos propios revisados: nginx.conf, evidence.tsx, verification-pages.test.tsx, arnés, informe y continuidad BITACORA/VERIFICATION. No había cambios ajenos en este checkout. Se reutiliza validación de la tarea anterior (40 pruebas, tipos, build, lint y navegador sintético para ambos roles); no se repiten suites ni se presenta como ejecución nueva. Revisión nueva: diff y contenido, remoto, índice y sintaxis del arnés. Publicación por push normal; SHA y resultado se confirmarán contra remoto. VM pendiente del despliegue manual del propietario; no cambios backend, secretos, admisión ni configuración efectiva.
+## 2026-10-20 — Visor privado: CSP blob y errores de renderizado
+
+Solicitud: corregir visor para conductor/SUPER_ADMIN sin activar admision ni desplegar. Base main 0e290ed180afd3aa3be08189bc20786d5d47cbd6, checkout inicialmente limpio. nginx img-src omitia blob:, utilizado por Evidence tras recuperar el archivo autenticado. Se permite blob: solo en img-src; no cambia acceso, proxy, caché, permisos ni otras directivas. Evidence confirma visualizacion solo tras onLoad; onError informa fallo y revoca URL. Cierre/desmontaje conservan revocacion.
+
+Verificacion nueva: 40/40 en archivos completos verification-pages y verification-upload (incluye dos regresiones por rol), build, typecheck:test y ESLint focalizado PASS. Build mantiene advertencia de chunk >500 kB. Navegador local con componente compilado y CSP extraida de nginx: politica antigua reproduce fallo; corregida renderiza PNG sintetico 800x500 para DRIVER y SUPER_ADMIN; cierre elimina vista. Transporte simulado, sin backend/VM/Spaces ni prueba nueva de permisos HTTP. Capturas viewer-fixed-driver.png y viewer-fixed-admin.png en visualizaciones/documentary-synthetic. Arnes reproducible scripts/serve-evidence-csp.mjs recibe ruta PNG sintetica. No utilizar documentos reales.
+
+Incidencias del desarrollo: primer script de edicion fallo por encoding y solo ejecuto 38 pruebas anteriores; corregido con UTF-8 y repetidos archivos completos: 40. Primer arranque de arnes sin VITE_API_URL mostro error; corregido con URL loopback explicita, sin leer .env. Ambos resultados incompletos excluidos de validacion final.
+
+Pendiente: tras despliegue autorizado comprobar cabecera efectiva, visor con cuentas reales de prueba y capas proxy que puedan imponer otra CSP. No se ejecuta nginx/Docker. No cambia estado documental ni admision, sin commit/push/despliegue. Ver docs/EVIDENCE-VIEWER-CSP-FIX.md.
+
 ## 2026-10-20 — Revisión de commit/push autorizados a main
 
 Fetch nuevo, main 950eca7 coincide con origin/main (0/0); índice vacío al comenzar. Selección exclusiva del ajuste administrativo sin alta, regresiones, informe/evidencia y continuidad. Cinco huellas coincidentes con validación final; no se repiten suites. Evidencia reutilizada: 57 Web y backend 27 unitarias/17 E2E. No se acredita navegador integrado. Commit/push autorizados; se verificará SHA remoto. Sin publicación de términos, cambios de configuración, activación, merge, VM ni despliegue.

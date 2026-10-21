@@ -660,3 +660,59 @@ it.each([false, true])(
     }
   },
 )
+
+it.each(['DRIVER', 'SUPER_ADMIN'] as const)(
+  'reports decode failure and revokes preview for %s',
+  async (role) => {
+    const revoke = vi.fn()
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: vi.fn(() => 'blob:failed'),
+    })
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      configurable: true,
+      value: revoke,
+    })
+    vi.mocked(verification.access).mockResolvedValue(
+      new Blob(['invalid'], { type: 'image/png' }),
+    )
+    mount(
+      <Evidence
+        record={{
+          ...caseFixture,
+          attachments: [
+            {
+              id: attachmentId,
+              category: 'FACE_PHOTO',
+              status: 'VALIDATED',
+              mime: 'image/png',
+              bytes: 7,
+              hash: 'synthetic',
+              createdAt: terms.createdAt,
+            },
+          ],
+        }}
+        requirements={requirements}
+        canWrite={false}
+      />,
+      role,
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Ver evidencia' }))
+    const image = await screen.findByAltText('Evidencia privada del expediente')
+    expect(
+      screen.queryByText('Imagen normalizada recibida por proxy autenticado.'),
+    ).not.toBeInTheDocument()
+    fireEvent.load(image)
+    expect(
+      screen.getByText('Imagen normalizada recibida por proxy autenticado.'),
+    ).toBeInTheDocument()
+    fireEvent.error(image)
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'No se pudo mostrar la imagen',
+    )
+    expect(
+      screen.queryByAltText('Evidencia privada del expediente'),
+    ).not.toBeInTheDocument()
+    expect(revoke).toHaveBeenCalledWith('blob:failed')
+  },
+)
