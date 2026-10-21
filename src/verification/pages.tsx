@@ -1,3 +1,4 @@
+import { AcceptanceHistory } from './acceptance-history'
 import { CaseRetention, CaseRetentionLookup } from './retention'
 import { useState } from 'react'
 import {
@@ -173,6 +174,10 @@ export function DriverOnboarding() {
           )}
         </>
       )}
+      <AcceptanceHistory
+        key={user!.id}
+        currentId={currentAcceptance ? q.data?.terms.acceptance?.id : undefined}
+      />
       <CaseList area="driver" />
       <Notices area="driver" />
     </>

@@ -1,3 +1,15 @@
+## 2026-10-21 — Revisión para publicar historial en main
+
+Commit/push autorizados. Fetch nuevo 0/0 e índice vacío; seis archivos propios revisados, sin cambios ajenos en este checkout. Se reutilizan 104 pruebas Web y 25 E2E backend de la tarea anterior, tipos/build/lint; no se repiten suites. Backend compatible requerido para la nueva consulta paginada. SHA remoto se comprobará tras push normal. Sin despliegue ni activación.
+## 2026-10-21 — Historial de aceptaciones personales
+
+Implementado en main base 7f4356b, inicialmente limpio. Nueva sección en onboarding con enlaces por ID/version/fecha, identificación vigente por receipt actual, paginación 20, estado vacío y fallo con reintento. Caché por actor/página, gcTime 0; desmontaje y cambio de página no muestran datos anteriores. No se almacenan URLs ni se envían aceptaciones. La lectura no modifica bloqueos de V2 ni admisión.
+
+Requiere GET /api/v1/driver/verification-acceptances, implementado localmente en backend, sólo DRIVER personal autenticado. Respuesta paginada estándar, campos mínimos; máximo 100. Sin migraciones. Fallo del endpoint se muestra como error, nunca como pérdida del historial. Historial FLEET fuera de alcance.
+
+Validación nueva: 104 pruebas PASS en archivos completos verification-pages (45), documentary-availability y onboarding-production (59); nuevos casos para V1/V2, paginación/carga, error/reintento y descarte de caché al desmontar. typecheck:test, ESLint focalizado, build y diff PASS. Advertencia previa chunk >500 kB. Backend: 25 E2E HTTP/PostgreSQL aislados, incluidos paginación, acceso propio, aislamiento ajeno y ningún cambio de aceptaciones. No navegador/VM nuevos; no acreditar integración desplegada. Evidencia anterior conservada.
+
+Archivos propios: src/verification/acceptance-history.tsx (nuevo), pages.tsx, service.ts, src/test/verification-pages.test.tsx y continuidad. Sin activación, aceptación, aprobación sintética, commit, push ni despliegue. Pendiente desplegar backend/Web compatibles y comprobar navegación real.
 ## 2026-10-21 — Revisión para commit/push del enlace histórico
 
 Autorizado publicar en main. Fetch nuevo: 0/0, índice vacío; cinco archivos propios revisados, sin cambios ajenos en este checkout. Se reutilizan 41 pruebas Web y 24 E2E backend, tipos/build/lint de la tarea anterior; no se repiten suites. Backend compatible requerido para recibir latestAcceptance. Diff e índice revisados; SHA remoto se confirmará tras push normal. Sin despliegue, aceptación de términos ni activación.

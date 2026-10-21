@@ -1,3 +1,4 @@
+import { AcceptanceHistory } from '../verification/acceptance-history'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -46,6 +47,7 @@ vi.mock('../verification/service', async (original) => ({
     get: vi.fn(),
     list: vi.fn(),
     onboarding: vi.fn(),
+    acceptanceHistory: vi.fn(),
     notices: vi.fn(),
     access: vi.fn(),
     attempt: vi.fn(),
@@ -94,6 +96,7 @@ beforeEach(() => {
   vi.mocked(verification.requirements).mockResolvedValue(requirements)
   vi.mocked(verification.get).mockResolvedValue(caseFixture)
   vi.mocked(verification.list).mockResolvedValue(emptyPage)
+  vi.mocked(verification.acceptanceHistory).mockResolvedValue(emptyPage)
   vi.mocked(verification.onboarding).mockResolvedValue(onboarding)
   vi.mocked(verification.terms).mockResolvedValue(terms)
   vi.mocked(verification.notices).mockResolvedValue([])
@@ -892,4 +895,93 @@ it('prefers current acceptance over historical metadata', async () => {
   ).toHaveAttribute('href', '/verification/acceptances/' + caseId)
   expect(screen.queryByRole('link', { name: 'V1' })).toBeNull()
   expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('history lists V2 and V1 with independent receipt links and no command', async () => {
+  vi.mocked(verification.acceptanceHistory).mockResolvedValue({
+    ...emptyPage,
+    total: 2,
+    totalPages: 1,
+    items: [
+      { id: resource, version: 'V2', acceptedAt: '2026-10-21T06:47:00Z' },
+      { id: caseId, version: 'V1', acceptedAt: '2026-10-21T04:55:00Z' },
+    ],
+  })
+  mount(<AcceptanceHistory currentId={resource} />)
+  expect(await screen.findByRole('link', { name: 'V1' })).toHaveAttribute(
+    'href',
+    '/verification/acceptances/' + caseId,
+  )
+  expect(screen.getByRole('link', { name: 'V2' })).toHaveAttribute(
+    'href',
+    '/verification/acceptances/' + resource,
+  )
+  expect(screen.getByText(/Aceptación vigente/)).toBeInTheDocument()
+  expect(screen.getByText(/Comprobante histórico/)).toBeInTheDocument()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it('history paginates without retaining the previous page while loading', async () => {
+  let release!: (v: typeof emptyPage) => void
+  vi.mocked(verification.acceptanceHistory)
+    .mockResolvedValueOnce({
+      ...emptyPage,
+      total: 21,
+      totalPages: 2,
+      items: [{ id: resource, version: 'V2', acceptedAt: '' }],
+    })
+    .mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve
+        }),
+    )
+  mount(<AcceptanceHistory />)
+  await screen.findByRole('link', { name: 'V2' })
+  fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }))
+  await waitFor(() =>
+    expect(verification.acceptanceHistory).toHaveBeenLastCalledWith(
+      2,
+      expect.any(AbortSignal),
+    ),
+  )
+  expect(screen.queryByRole('link', { name: 'V2' })).toBeNull()
+  await act(async () =>
+    release({ ...emptyPage, page: 2, total: 21, totalPages: 2 }),
+  )
+  expect(
+    await screen.findByText('No hay aceptaciones en esta página.'),
+  ).toBeInTheDocument()
+})
+it('history failure is distinct from empty history and supports explicit retry', async () => {
+  vi.mocked(verification.acceptanceHistory)
+    .mockRejectedValueOnce(new Error('offline'))
+    .mockResolvedValueOnce(emptyPage)
+  mount(<AcceptanceHistory />)
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'No se pudo consultar el historial',
+  )
+  expect(screen.queryByText('No hay aceptaciones en esta página.')).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Reintentar historial' }))
+  expect(
+    await screen.findByText('No hay aceptaciones en esta página.'),
+  ).toBeInTheDocument()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it('history query is actor-scoped and removed after unmount', async () => {
+  const view = mount(<AcceptanceHistory />)
+  await screen.findByText('No hay aceptaciones en esta página.')
+  expect(
+    view.client.getQueryData(['verification', actor, 'acceptance-history', 1]),
+  ).toEqual(emptyPage)
+  view.unmount()
+  await waitFor(() =>
+    expect(
+      view.client.getQueryData([
+        'verification',
+        actor,
+        'acceptance-history',
+        1,
+      ]),
+    ).toBeUndefined(),
+  )
 })

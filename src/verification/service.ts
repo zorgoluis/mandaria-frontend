@@ -91,6 +91,13 @@ export const verification = {
       undefined,
       signal,
     ),
+  acceptanceHistory: (page: number, signal?: AbortSignal) =>
+    api<Page<{ id: string; version: string; acceptedAt: string }>>(
+      '/driver/verification-acceptances?' + queryString({ page, pageSize: 20 }),
+      'GET',
+      undefined,
+      signal,
+    ),
   onboarding: (signal?: AbortSignal) =>
     api<Onboarding>('/driver/onboarding', 'GET', undefined, signal),
   list: (
