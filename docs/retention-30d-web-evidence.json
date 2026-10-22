@@ -1,0 +1,555 @@
+{
+  "date": "2026-10-20T19:56:23.147Z",
+  "branch": "feature/driver-verification",
+  "webHead": "97850b8c447c71d6ae245bc8df3ce46413650da2",
+  "backendHead": "2c458fc955f699ce958dabf5fe89dcc58892a031",
+  "backendImplementationUncommitted": true,
+  "commitPushDeploymentActivation": false,
+  "status": "PASS_A_F_WITH_DOCUMENTED_POST_RUN_PRESENTATION_CORRECTION",
+  "integratedRun": {
+    "id": "1792525812779",
+    "rawReportSha256": "d4fb13deb6085d840724b96b7982d744d5109f3b9c3a5436de68bca356adb126",
+    "startedAt": "2026-10-20T19:50:12.780Z",
+    "finishedAt": "2026-10-20T19:50:37.116Z",
+    "checkpoints": {
+      "SETUP": {
+        "status": "PASS"
+      },
+      "A": {
+        "status": "PASS",
+        "source": "Browser GET of real calendar; seed explicitly declared"
+      },
+      "B": {
+        "status": "PASS",
+        "effects": {
+          "objects": 2,
+          "allVersionsAndUploadsAbsent": true,
+          "casePreserved": true,
+          "accountActive": true,
+          "mail": "provider accepted; not delivery or reading"
+        }
+      },
+      "C": {
+        "status": "PASS",
+        "effects": {
+          "noticeAttempts": 5,
+          "deleteEffects": 0,
+          "originalDatesPreserved": true
+        }
+      },
+      "D": {
+        "status": "PASS",
+        "effects": {
+          "explicitWebDecision": 1,
+          "objectsRetained": 2,
+          "deleteEffects": 0,
+          "privateReasonNotProjected": true,
+          "exceptionValidityDetail": "not exposed by GET; no inference"
+        }
+      },
+      "E": {
+        "status": "PASS"
+      },
+      "F": {
+        "status": "PASS",
+        "effects": {
+          "caseRetained": true,
+          "noReopening": true,
+          "foreignAccessDenied": true,
+          "accountStillActive": true
+        }
+      },
+      "VISUAL": {
+        "status": "PASS",
+        "checks": [
+          "desktop and 320 no horizontal overflow",
+          "keyboard Enter opens confirmation; focus contained in modal",
+          "long synthetic public reason and error surfaces",
+          "synthetic screenshots only"
+        ]
+      }
+    },
+    "recovery": {
+      "postCount": 1,
+      "before": {
+        "commands": 0,
+        "plans": 0
+      },
+      "afterLost": {
+        "commands": 1,
+        "plans": 1
+      },
+      "afterRecovery": {
+        "commands": 1,
+        "plans": 1
+      },
+      "sameKey": true,
+      "markerCleared": true
+    },
+    "browser": {
+      "name": "Chrome",
+      "version": "155.0.8059.85",
+      "temporaryProfile": true
+    },
+    "isolation": {
+      "docker": false,
+      "envFiles": false,
+      "shared43000": false,
+      "realMail": false,
+      "realStorage": false,
+      "systemClockChanged": false
+    },
+    "cleanup": {
+      "browserClosed": true,
+      "viteClosed": true,
+      "backendClosed": true,
+      "databaseStopped": true
+    },
+    "seeds": [
+      "Four synthetic independent users/drivers/subjects/cases and private synthetic storage objects prepared through Prisma; not registration/upload UI evidence.",
+      "Three DRAFT calendars prepared through the real scheduleImages function under documentary lock.",
+      "Ordinary REJECTED case and long communicable reason seeded for explicit Web finality; not an ordinary review UI test.",
+      "Technical administrator and historical LOCAL_TEST driver from reused isolated bootstrap. No policy publication."
+    ],
+    "database": {
+      "name": "retention_web_1792525812779_test",
+      "port": 55470,
+      "relativeCluster": "test-results/retention-isolated/1792525812779/pgdata",
+      "identityBeforeMigrationVerified": true,
+      "preserved": true
+    }
+  },
+  "firstPreparation": {
+    "id": "1792525715228",
+    "status": "FAIL_SETUP",
+    "code": "VERIFICATION_CASE_MUST_START_DRAFT",
+    "cause": "Harness created REJECTED directly. Corrected preparation to DRAFT, SUBMITTED, REJECTED with revisions/reviewer, following existing backend fixture. No product fault inferred.",
+    "rawReportSha256": "5f3329c71e3ca10fb1b5e8b8c6985ceac9af97a78d432e8902c1d537134325c7",
+    "scenarioEffects": 0,
+    "cleanup": {
+      "browserClosed": true,
+      "viteClosed": true,
+      "backendClosed": true,
+      "databaseStopped": true
+    },
+    "relativeCluster": "test-results/retention-isolated/1792525715228/pgdata",
+    "preserved": true,
+    "additionalDiagnosisAndLaunches": 1
+  },
+  "backend": {
+    "before": {
+      "docs/DOCUMENTARY-IMAGE-RETENTION-IMPLEMENTATION.md": "d3d09e0e6631094c42cba098cd65c98f5a78bec2d4069fd9da31971c79dd19c1",
+      "docs/checks/image-retention-evidence.json": "15dcac30a7867de2c50c65555277848e3f15eaab6f7180c403f50c26e476ab97",
+      "docs/openapi.json": "b1e58317af952837ecba26678d561580ef921136f44618e2c2e6c98dbe160705",
+      "prisma/schema.prisma": "3555f17c162f2241939dd2d91da10dbdd0360da35fafa11b6cb05aaaf8cbbae6",
+      "prisma/migrations/20261020000100_document_image_retention/migration.sql": "093f2f752fde34e89113a0aca7f1cb5f1aa4b9c189f9fd2ede4e5a8e8bc4cc65",
+      "src/config/environment.ts": "6ed64902fa0fa8e05e80f2d65c564c1c3641f89c47dc0b27636e79d8ebf12869",
+      "src/verification/image-retention.ts": "cea79a6eb4ff1a45422983bea457c732c44f7c05f7f3b92fd34ea7a35e1ca5d7",
+      "src/verification/verification.service.ts": "c37f0d4130c9cb998907128907b95e24d8f63bf5c7eeffc0e7bbe5ab270e98c0",
+      "src/verification/verification.controller.ts": "337f97be3eac106ea9b70472da8efe9dfb9fb0e0d5f83739f0689912a08e8b41",
+      "src/verification/verification.dto.ts": "9650c39249d209cde1fdff712d9235914bc056962328529e40297e9b961d2ab0",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/deletion.service.ts": "f71d952273f36ce5089cc05b394dce108d9a72526bf7f496ce16a149c5f233b8",
+      "src/verification/deletion.controller.ts": "65ade9ada259658eb8e8053009b92c94239455c9e2bfa6dac39ff255dc7bd4f4",
+      "src/verification/deletion.dto.ts": "392db142de2dffed4e573c50ae1d0207b6255c00e4627119117bf08d7e7407fb",
+      "src/verification/deletion.responses.ts": "e2c30d5908b5e93dd1ece511b92bdcbd5ab0e82e6d6d8888d691bf0d845ece0b",
+      "src/verification/deletion-command-receipt.ts": "82bb49d7eac7d2a4dcb0430b0aecb0cdfdd8331729d25fbe27c7b32f731cd75f",
+      "src/verification/deletion-worker.ts": "48aa294257271be144438cc53c9d3234076dcf915a46778dc6ef55ac8e53736f",
+      "src/verification/recovery-v2.ts": "70913d773ec8e16b2a1d72af824e93ca19103f449ecec9393e60a5306ce85179",
+      "src/mail/mail-templates.ts": "cc38d0e86ad47745b84e4033e9ad4602a07f98cad50d82e9a737a25c5a0bebfb",
+      "test/image-retention.e2e-spec.ts": "774833becdd4863c6062e29475d00a4070cb41240eff1350d850e463c54dd881",
+      "dist/verification/image-retention.js": "523b0700d7fc625b1891ed29e112c993df2fe7c0a0701f12946f9c3fdb06e49d",
+      "dist/verification/verification.service.js": "401a607e9bba26f1944d66e2a9bed119648b3b8e579de57d335280eecaebddc6",
+      "dist/verification/verification.controller.js": "94c416df8f043910486d924277c522ef9c600b9bdf0c711a8ce7c9f39497f9f1",
+      "dist/verification/deletion.service.js": "0dc19f4225b625220595074119c0439ae9e63bc3e02296bc4a9f56de37bcc8c4",
+      "dist/verification/deletion.dto.js": "af4c837477761f61c56d6e41fcf24639b989fece858b86b4cffd65bde0ae9d64",
+      "dist/verification/deletion-worker.js": "be52813ab1b58224d92d359b701170c3502f244b2e250697858afd83d5f03fe3",
+      "dist/mail/mail-templates.js": "2d86b2d28799ece223748f89a46527215a60ed6702c30a6d3a83bf86a96c7818"
+    },
+    "after": {
+      "docs/DOCUMENTARY-IMAGE-RETENTION-IMPLEMENTATION.md": "d3d09e0e6631094c42cba098cd65c98f5a78bec2d4069fd9da31971c79dd19c1",
+      "docs/checks/image-retention-evidence.json": "15dcac30a7867de2c50c65555277848e3f15eaab6f7180c403f50c26e476ab97",
+      "docs/openapi.json": "b1e58317af952837ecba26678d561580ef921136f44618e2c2e6c98dbe160705",
+      "prisma/schema.prisma": "3555f17c162f2241939dd2d91da10dbdd0360da35fafa11b6cb05aaaf8cbbae6",
+      "prisma/migrations/20261020000100_document_image_retention/migration.sql": "093f2f752fde34e89113a0aca7f1cb5f1aa4b9c189f9fd2ede4e5a8e8bc4cc65",
+      "src/config/environment.ts": "6ed64902fa0fa8e05e80f2d65c564c1c3641f89c47dc0b27636e79d8ebf12869",
+      "src/verification/image-retention.ts": "cea79a6eb4ff1a45422983bea457c732c44f7c05f7f3b92fd34ea7a35e1ca5d7",
+      "src/verification/verification.service.ts": "c37f0d4130c9cb998907128907b95e24d8f63bf5c7eeffc0e7bbe5ab270e98c0",
+      "src/verification/verification.controller.ts": "337f97be3eac106ea9b70472da8efe9dfb9fb0e0d5f83739f0689912a08e8b41",
+      "src/verification/verification.dto.ts": "9650c39249d209cde1fdff712d9235914bc056962328529e40297e9b961d2ab0",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/deletion.service.ts": "f71d952273f36ce5089cc05b394dce108d9a72526bf7f496ce16a149c5f233b8",
+      "src/verification/deletion.controller.ts": "65ade9ada259658eb8e8053009b92c94239455c9e2bfa6dac39ff255dc7bd4f4",
+      "src/verification/deletion.dto.ts": "392db142de2dffed4e573c50ae1d0207b6255c00e4627119117bf08d7e7407fb",
+      "src/verification/deletion.responses.ts": "e2c30d5908b5e93dd1ece511b92bdcbd5ab0e82e6d6d8888d691bf0d845ece0b",
+      "src/verification/deletion-command-receipt.ts": "82bb49d7eac7d2a4dcb0430b0aecb0cdfdd8331729d25fbe27c7b32f731cd75f",
+      "src/verification/deletion-worker.ts": "48aa294257271be144438cc53c9d3234076dcf915a46778dc6ef55ac8e53736f",
+      "src/verification/recovery-v2.ts": "70913d773ec8e16b2a1d72af824e93ca19103f449ecec9393e60a5306ce85179",
+      "src/mail/mail-templates.ts": "cc38d0e86ad47745b84e4033e9ad4602a07f98cad50d82e9a737a25c5a0bebfb",
+      "test/image-retention.e2e-spec.ts": "774833becdd4863c6062e29475d00a4070cb41240eff1350d850e463c54dd881",
+      "dist/verification/image-retention.js": "523b0700d7fc625b1891ed29e112c993df2fe7c0a0701f12946f9c3fdb06e49d",
+      "dist/verification/verification.service.js": "401a607e9bba26f1944d66e2a9bed119648b3b8e579de57d335280eecaebddc6",
+      "dist/verification/verification.controller.js": "94c416df8f043910486d924277c522ef9c600b9bdf0c711a8ce7c9f39497f9f1",
+      "dist/verification/deletion.service.js": "0dc19f4225b625220595074119c0439ae9e63bc3e02296bc4a9f56de37bcc8c4",
+      "dist/verification/deletion.dto.js": "af4c837477761f61c56d6e41fcf24639b989fece858b86b4cffd65bde0ae9d64",
+      "dist/verification/deletion-worker.js": "be52813ab1b58224d92d359b701170c3502f244b2e250697858afd83d5f03fe3",
+      "dist/mail/mail-templates.js": "2d86b2d28799ece223748f89a46527215a60ed6702c30a6d3a83bf86a96c7818"
+    },
+    "current": {
+      "docs/DOCUMENTARY-IMAGE-RETENTION-IMPLEMENTATION.md": "d3d09e0e6631094c42cba098cd65c98f5a78bec2d4069fd9da31971c79dd19c1",
+      "docs/checks/image-retention-evidence.json": "15dcac30a7867de2c50c65555277848e3f15eaab6f7180c403f50c26e476ab97",
+      "docs/openapi.json": "b1e58317af952837ecba26678d561580ef921136f44618e2c2e6c98dbe160705",
+      "prisma/schema.prisma": "3555f17c162f2241939dd2d91da10dbdd0360da35fafa11b6cb05aaaf8cbbae6",
+      "prisma/migrations/20261020000100_document_image_retention/migration.sql": "093f2f752fde34e89113a0aca7f1cb5f1aa4b9c189f9fd2ede4e5a8e8bc4cc65",
+      "src/config/environment.ts": "6ed64902fa0fa8e05e80f2d65c564c1c3641f89c47dc0b27636e79d8ebf12869",
+      "src/verification/image-retention.ts": "cea79a6eb4ff1a45422983bea457c732c44f7c05f7f3b92fd34ea7a35e1ca5d7",
+      "src/verification/verification.service.ts": "c37f0d4130c9cb998907128907b95e24d8f63bf5c7eeffc0e7bbe5ab270e98c0",
+      "src/verification/verification.controller.ts": "337f97be3eac106ea9b70472da8efe9dfb9fb0e0d5f83739f0689912a08e8b41",
+      "src/verification/verification.dto.ts": "9650c39249d209cde1fdff712d9235914bc056962328529e40297e9b961d2ab0",
+      "src/verification/verification.responses.ts": "ea01cff84d9b98010414759963dc7cdfbfbfa0b5454788c94ea4bdbb492b7f20",
+      "src/verification/deletion.service.ts": "f71d952273f36ce5089cc05b394dce108d9a72526bf7f496ce16a149c5f233b8",
+      "src/verification/deletion.controller.ts": "65ade9ada259658eb8e8053009b92c94239455c9e2bfa6dac39ff255dc7bd4f4",
+      "src/verification/deletion.dto.ts": "392db142de2dffed4e573c50ae1d0207b6255c00e4627119117bf08d7e7407fb",
+      "src/verification/deletion.responses.ts": "e2c30d5908b5e93dd1ece511b92bdcbd5ab0e82e6d6d8888d691bf0d845ece0b",
+      "src/verification/deletion-command-receipt.ts": "82bb49d7eac7d2a4dcb0430b0aecb0cdfdd8331729d25fbe27c7b32f731cd75f",
+      "src/verification/deletion-worker.ts": "48aa294257271be144438cc53c9d3234076dcf915a46778dc6ef55ac8e53736f",
+      "src/verification/recovery-v2.ts": "70913d773ec8e16b2a1d72af824e93ca19103f449ecec9393e60a5306ce85179",
+      "src/mail/mail-templates.ts": "cc38d0e86ad47745b84e4033e9ad4602a07f98cad50d82e9a737a25c5a0bebfb",
+      "test/image-retention.e2e-spec.ts": "774833becdd4863c6062e29475d00a4070cb41240eff1350d850e463c54dd881",
+      "dist/verification/image-retention.js": "523b0700d7fc625b1891ed29e112c993df2fe7c0a0701f12946f9c3fdb06e49d",
+      "dist/verification/verification.service.js": "401a607e9bba26f1944d66e2a9bed119648b3b8e579de57d335280eecaebddc6",
+      "dist/verification/verification.controller.js": "94c416df8f043910486d924277c522ef9c600b9bdf0c711a8ce7c9f39497f9f1",
+      "dist/verification/deletion.service.js": "0dc19f4225b625220595074119c0439ae9e63bc3e02296bc4a9f56de37bcc8c4",
+      "dist/verification/deletion.dto.js": "af4c837477761f61c56d6e41fcf24639b989fece858b86b4cffd65bde0ae9d64",
+      "dist/verification/deletion-worker.js": "be52813ab1b58224d92d359b701170c3502f244b2e250697858afd83d5f03fe3",
+      "dist/mail/mail-templates.js": "2d86b2d28799ece223748f89a46527215a60ed6702c30a6d3a83bf86a96c7818"
+    },
+    "unchanged": true,
+    "historicalMatchingSources": [
+      "docs/openapi.json",
+      "prisma/schema.prisma",
+      "prisma/migrations/20261020000100_document_image_retention/migration.sql",
+      "src/config/environment.ts",
+      "src/verification/image-retention.ts",
+      "src/verification/verification.service.ts",
+      "src/verification/verification.controller.ts",
+      "src/verification/verification.dto.ts",
+      "src/verification/deletion.service.ts",
+      "src/verification/deletion.dto.ts",
+      "src/verification/deletion.responses.ts",
+      "src/verification/deletion-command-receipt.ts",
+      "src/verification/deletion-worker.ts",
+      "src/verification/recovery-v2.ts",
+      "src/mail/mail-templates.ts",
+      "test/image-retention.e2e-spec.ts"
+    ],
+    "historicalTests": {
+      "unit": 123,
+      "e2e": 53,
+      "b2b": 33,
+      "rerun": false
+    },
+    "dependency": "Uncommitted image-retention implementation, migration 20261020000100_document_image_retention, runtime matching these hashes, restore format 4. HEAD alone does not contain this feature."
+  },
+  "web": {
+    "integratedHashes": {
+      "src/deletion/image-retention.ts": "dccaefe3be59f902623ca2c53b686330a0d686924e4147138cc674c5288f2470",
+      "src/deletion/ImageRetentionStatus.tsx": "4f2f735f9dff4a473b9293d9e76729556c7b885506334b96e888c10df2fcf473",
+      "src/deletion/contract.ts": "1defd05ece02600dbb855efdf8aff5c6b9b26217c2b958b1072eadbcd5f541a4",
+      "src/deletion/pages.tsx": "e6bc5f9a9cd7a24e48671a167bd3465cc0b75c68eff7697a8d9f32d89805123c",
+      "src/deletion/review.tsx": "e3ec8ddd01da65bbd4d080e90b2cd6f7cf8464368688d66582aedf7b6b4c6560",
+      "src/deletion/receipt.ts": "e6b5091d6da54131a9e4a875e129fc391f48ca47681c02cc4ace96511291d9d4",
+      "src/deletion/hooks.ts": "b0bd1c2804aa8a4f4334f9caa2c1212eb075236d7b650a1df0b87f4a9baf0c1b",
+      "src/deletion/service.ts": "d1e3fe1ec5e75280f4e11ac164fc7701f804974873f6dda19ad7747e1f1e3559",
+      "src/verification/retention.tsx": "9458573f36b142923d80f22a6ec7000fe33e122c06e726afed40c0ef8f32d9a4",
+      "src/verification/pending.ts": "023e352de4b5ae066f553c25367cd99f52658d287fc0a12239e4dec151e3f799",
+      "src/verification/types.ts": "6c52ffd8ad03346043f3a87dd1d6a4d8dbc3f3e7279842d67c29764c6102ae12",
+      "src/verification/service.ts": "615759ddb7806c30d927497ed43ba2bbb59e00c30d931f8315cf25dc93db73de",
+      "src/verification/hooks.ts": "659ba34e411e9a29e2f9e6600704544e36f3c5e02a74ab64c1bc316cf5a2e086",
+      "src/verification/pages.tsx": "487dd773d618431d97bf941def6baac20f3daa663b77e012fe2e9625178027af",
+      "src/verification/format.ts": "d0b795e43430a0234cee302b7861d78fb47eac3890073e7a96bbf9a4100e656d",
+      "src/verification/common.tsx": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+      "src/verification/representatives.tsx": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41",
+      "src/verification/evidence.tsx": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+      "src/test/image-retention.test.tsx": "910d9fbaa6ba3e6e35630041e77181674d872cb428df55912eb5faf36b17099b",
+      "scripts/verify-retention-web.mjs": "0f20c5077c3256d94344ca5423a4475608cfc8a48afb61b254a7552c7e835e3c",
+      "scripts/retention-isolated-backend.mjs": "8bb7878cf72ab38bf0cffb3646b779d44699c32845f9bd6ce99f78ce5e9233a6",
+      "scripts/retention-isolated-environment.mjs": "cc2a9e7354e7d3b9ffd8dfe2ac693f89255352a554612a0e9abe32aebd8cb382",
+      "scripts/retention-contract-snapshot.mjs": "2efac345f81a2541201532252f213123e7dbcef7d8cf5ea1cdfde8d4b5ff921d",
+      "scripts/representative-browser.mjs": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5"
+    },
+    "currentHashes": {
+      "src/deletion/image-retention.ts": "dccaefe3be59f902623ca2c53b686330a0d686924e4147138cc674c5288f2470",
+      "src/deletion/ImageRetentionStatus.tsx": "4f2f735f9dff4a473b9293d9e76729556c7b885506334b96e888c10df2fcf473",
+      "src/deletion/contract.ts": "1defd05ece02600dbb855efdf8aff5c6b9b26217c2b958b1072eadbcd5f541a4",
+      "src/deletion/pages.tsx": "7546ec593e00be312117fde3861901cbc28165ca80177846c3234da32a1136a6",
+      "src/deletion/review.tsx": "e3ec8ddd01da65bbd4d080e90b2cd6f7cf8464368688d66582aedf7b6b4c6560",
+      "src/deletion/receipt.ts": "e6b5091d6da54131a9e4a875e129fc391f48ca47681c02cc4ace96511291d9d4",
+      "src/deletion/hooks.ts": "b0bd1c2804aa8a4f4334f9caa2c1212eb075236d7b650a1df0b87f4a9baf0c1b",
+      "src/deletion/service.ts": "d1e3fe1ec5e75280f4e11ac164fc7701f804974873f6dda19ad7747e1f1e3559",
+      "src/verification/retention.tsx": "9458573f36b142923d80f22a6ec7000fe33e122c06e726afed40c0ef8f32d9a4",
+      "src/verification/pending.ts": "023e352de4b5ae066f553c25367cd99f52658d287fc0a12239e4dec151e3f799",
+      "src/verification/types.ts": "6c52ffd8ad03346043f3a87dd1d6a4d8dbc3f3e7279842d67c29764c6102ae12",
+      "src/verification/service.ts": "615759ddb7806c30d927497ed43ba2bbb59e00c30d931f8315cf25dc93db73de",
+      "src/verification/hooks.ts": "659ba34e411e9a29e2f9e6600704544e36f3c5e02a74ab64c1bc316cf5a2e086",
+      "src/verification/pages.tsx": "487dd773d618431d97bf941def6baac20f3daa663b77e012fe2e9625178027af",
+      "src/verification/format.ts": "d0b795e43430a0234cee302b7861d78fb47eac3890073e7a96bbf9a4100e656d",
+      "src/verification/common.tsx": "2dc57e6f57ed7065142f052183127cafe617807229710eac36b35f20010f0393",
+      "src/verification/representatives.tsx": "f9be1a02dba3085d7ab3159dc13d4dc7fe44b20214ab96e13a6d72f06f4fff41",
+      "src/verification/evidence.tsx": "2932ec3402c50b2cba3b9fab76dddc43697f383cf042e25a6271b58eec49ade5",
+      "src/test/image-retention.test.tsx": "f9e0290861b36ff281729b6a563b16e3b7e1a963829b9f2b1a1c05acb95dd32c",
+      "scripts/verify-retention-web.mjs": "0f20c5077c3256d94344ca5423a4475608cfc8a48afb61b254a7552c7e835e3c",
+      "scripts/retention-isolated-backend.mjs": "8bb7878cf72ab38bf0cffb3646b779d44699c32845f9bd6ce99f78ce5e9233a6",
+      "scripts/retention-isolated-environment.mjs": "cc2a9e7354e7d3b9ffd8dfe2ac693f89255352a554612a0e9abe32aebd8cb382",
+      "scripts/retention-contract-snapshot.mjs": "2efac345f81a2541201532252f213123e7dbcef7d8cf5ea1cdfde8d4b5ff921d",
+      "scripts/representative-browser.mjs": "2421a41bfab593a693f707da1762b91943134b62ae8036bd1e78362b2238b6b5"
+    },
+    "postRunDelta": [
+      {
+        "file": "src/deletion/pages.tsx",
+        "before": "e6bc5f9a9cd7a24e48671a167bd3465cc0b75c68eff7697a8d9f32d89805123c",
+        "after": "7546ec593e00be312117fde3861901cbc28165ca80177846c3234da32a1136a6",
+        "reason": "Presentation only: unconfirmed IMAGE_RETENTION INVENTORY no longer claims restrictions applied; timezone explicitly labeled. No endpoint, mutation, recovery or authorization changes."
+      },
+      {
+        "file": "src/test/image-retention.test.tsx",
+        "before": "910d9fbaa6ba3e6e35630041e77181674d872cb428df55912eb5faf36b17099b",
+        "after": "f9e0290861b36ff281729b6a563b16e3b7e1a963829b9f2b1a1c05acb95dd32c",
+        "reason": "Adds assertion for final status copy/timezone."
+      }
+    ],
+    "integrationRepeatedAfterCopyChange": false,
+    "postRunCoverage": "Full image-retention.test.tsx 33 PASS; deletion-pages.test.tsx 32 PASS after status-copy correction. Final product/test types, lint and build PASS."
+  },
+  "tests": {
+    "uniqueNew": 33,
+    "existingRegressionsExecuted": 215,
+    "uniqueTotalCovered": 248,
+    "initialFocalized": {
+      "file": "test-results/retention-unit.json",
+      "sha256": "9fe19aef2bada6ddaa6918df66d51022cb1e15ed76de433470c4cf2a04f4f47f",
+      "passed": 241,
+      "failed": 1,
+      "success": false,
+      "files": [
+        {
+          "file": "deletion-pages.test.tsx",
+          "passed": 32,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "deletion-service.test.ts",
+          "passed": 23,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "deletion-v2.test.tsx",
+          "passed": 57,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "image-retention.test.tsx",
+          "passed": 26,
+          "failed": 1,
+          "status": "failed"
+        },
+        {
+          "file": "representatives.test.tsx",
+          "passed": 29,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "verification-pages.test.tsx",
+          "passed": 27,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "verification-recovery.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "verification-service.test.ts",
+          "passed": 22,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "verification-upload.test.tsx",
+          "passed": 11,
+          "failed": 0,
+          "status": "passed"
+        }
+      ]
+    },
+    "finalNew": {
+      "file": "test-results/retention-unit-final.json",
+      "sha256": "2eaf32d8cb64517062873bf77629995bafaaae55815676a6b4031dff30ba69b7",
+      "passed": 33,
+      "failed": 0,
+      "success": true,
+      "files": [
+        {
+          "file": "image-retention.test.tsx",
+          "passed": 33,
+          "failed": 0,
+          "status": "passed"
+        }
+      ]
+    },
+    "copyRegression": {
+      "file": "test-results/retention-copy-final.json",
+      "sha256": "aa343f21ca7b6f88077dbe99e15e5f00c61bfac1b6e1b918d03b29819052be99",
+      "passed": 65,
+      "failed": 0,
+      "success": true,
+      "files": [
+        {
+          "file": "deletion-pages.test.tsx",
+          "passed": 32,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "file": "image-retention.test.tsx",
+          "passed": 33,
+          "failed": 0,
+          "status": "passed"
+        }
+      ]
+    },
+    "note": "Initial complete report: 215 existing regressions PASS, new file had one text selector mismatch. Overall command exit 1; wrapper also called obsolete result() during postprocessing. Fixed wrapper and selector; subsequent complete final files PASS. Do not count duplicate reruns or historical 130/40 as additional new tests."
+  },
+  "checks": {
+    "productTypes": "PASS",
+    "testTypes": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "buildWarning": "Main chunk exceeds 500 kB; no code-splitting redesign in this task.",
+    "json": "PASS",
+    "documentLinks": "PASS: 16 local links",
+    "diffCheck": "PASS",
+    "webFingerprints": "PASS: 24 current files",
+    "captures": "PASS: 6 hashes and visual inspection",
+    "sensitiveArtifactReview": "PASS: explicit own inventory; synthetic config only; no raw reports/profiles/builds/.env",
+    "ownPostmasterPidFilesAbsent": true
+  },
+  "captures": [
+    {
+      "file": "docs/retention-30d/calendar-320.png",
+      "sha256": "fd71b12f1931bd6943ec11028195b72835e7ca526eeee8ba7e9a8d60a158786e",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    },
+    {
+      "file": "docs/retention-30d/final-confirmation-320.png",
+      "sha256": "6a0da0e6fc99bc833a25c6b35fc2dbc91cc585fc410aad1fbc5d3401faa24bd9",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    },
+    {
+      "file": "docs/retention-30d/final-recovered-1365.png",
+      "sha256": "945e20ba6fde2621a5ab70c5fb3347c13b325064c316b3b128e66366ad1631d4",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    },
+    {
+      "file": "docs/retention-30d/notice-blocked-320.png",
+      "sha256": "ed106e1fbc447ee295c9fc304db4996947b59a4a1e9eebf5425533f2b2333086",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    },
+    {
+      "file": "docs/retention-30d/verified-scope-320.png",
+      "sha256": "9843e08f62e6ce788e124f67276b57b1910b77043bf33abdc3acaa3803ad73c6",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    },
+    {
+      "file": "docs/retention-30d/exception-320.png",
+      "sha256": "e9718d961c0f4dd8515531986b71f42b30c4fb35e64f6d06a8ccfaad50526d92",
+      "synthetic": true,
+      "inspected": true,
+      "historicalBeforePresentationCorrection": true
+    }
+  ],
+  "visual": {
+    "status": "PASS",
+    "checks": [
+      "desktop and 320 no horizontal overflow",
+      "keyboard Enter opens confirmation; focus contained in modal",
+      "long synthetic public reason and error surfaces",
+      "synthetic screenshots only"
+    ],
+    "widths": [
+      1365,
+      320
+    ],
+    "all14CapturesKeptLocally": true,
+    "selected6Retained": true,
+    "postRunCopyNotRecaptured": true
+  },
+  "limits": [
+    "No public GET calendar by case or current exception detail endpoint; no inferred dates/validity.",
+    "Constances attest limited scope, not total erasure; provider acceptance is not delivery/read.",
+    "Real Spaces/mail, legal texts B/C/D/I, operational preparation, historical transition and verified restore horizon remain pending.",
+    "Named custodians require operative capacity/access; designation is already done.",
+    "RESOLVED backend task behavior and Android/GPS outside scope."
+  ],
+  "localClose": {
+    "branch": "feature/driver-verification",
+    "head": "97850b8c447c71d6ae245bc8df3ce46413650da2",
+    "indexEmpty": true,
+    "ownChangedFiles": [
+      "BITACORA.md",
+      "VERIFICATION.md",
+      "src/deletion/contract.ts",
+      "src/deletion/pages.tsx",
+      "src/deletion/receipt.ts",
+      "src/deletion/review.tsx",
+      "src/verification/format.ts",
+      "src/verification/hooks.ts",
+      "src/verification/pages.tsx",
+      "src/verification/pending.ts",
+      "src/verification/service.ts",
+      "src/verification/types.ts",
+      "docs/DOCUMENTARY-RETENTION-30D-WEB-PROPOSAL.md",
+      "docs/DOCUMENTARY-RETENTION-30D-WEB.md",
+      "docs/retention-30d-web-evidence.json",
+      "docs/retention-30d/calendar-320.png",
+      "docs/retention-30d/exception-320.png",
+      "docs/retention-30d/final-confirmation-320.png",
+      "docs/retention-30d/final-recovered-1365.png",
+      "docs/retention-30d/notice-blocked-320.png",
+      "docs/retention-30d/verified-scope-320.png",
+      "docs/retention-web-files.json",
+      "scripts/retention-contract-snapshot.mjs",
+      "scripts/retention-isolated-backend.mjs",
+      "scripts/retention-isolated-environment.mjs",
+      "scripts/verify-retention-web.mjs",
+      "src/deletion/ImageRetentionStatus.tsx",
+      "src/deletion/image-retention.ts",
+      "src/test/image-retention.test.tsx",
+      "src/verification/retention.tsx"
+    ],
+    "otherWorktreesPreserved": true,
+    "primaryPreservedChanges": [
+      "BITACORA.md",
+      "README.md",
+      "VERIFICATION.md",
+      "docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md"
+    ],
+    "backendModifiedByThisTask": false
+  }
+}

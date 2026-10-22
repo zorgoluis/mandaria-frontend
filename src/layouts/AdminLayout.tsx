@@ -83,6 +83,15 @@ export function AdminLayout() {
     { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
     { to: '/customer/business', label: 'Cuenta Negocio', icon: Building2 },
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    ...(['DRIVER', 'PROVIDER_ADMIN'].includes(user?.role || '')
+      ? [
+          {
+            to: '/verification/representatives',
+            label: 'Representación legal',
+            icon: BadgeCheck,
+          },
+        ]
+      : []),
     ...(admin
       ? [
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
@@ -103,6 +112,11 @@ export function AdminLayout() {
       : user?.role === 'PROVIDER_ADMIN'
         ? [
             { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
+            {
+              to: '/provider/verification',
+              label: 'Verificación documental',
+              icon: BadgeCheck,
+            },
             { to: '/services', label: 'Servicios', icon: Send },
             { to: '/provider/credits', label: 'Créditos', icon: Coins },
           ]
@@ -141,6 +155,11 @@ export function AdminLayout() {
             label: 'Incidencias de custodia',
             icon: BadgeCheck,
           },
+          {
+            to: '/admin/verification-cases',
+            label: 'Revisión documental',
+            icon: BadgeCheck,
+          },
         ]
       : []),
     // V1.9: independent driver administration is SUPER_ADMIN only and stands apart from Providers.
@@ -162,6 +181,11 @@ export function AdminLayout() {
     // V1.9: the temporary portal a DRIVER uses to take services on their own.
     ...(user?.role === 'DRIVER'
       ? [
+          {
+            to: '/driver/onboarding',
+            label: 'Mi verificación',
+            icon: BadgeCheck,
+          },
           { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
           { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
           { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
@@ -225,6 +249,7 @@ export function AdminLayout() {
           ))}
         </nav>
         <div className="sidebar-bottom">
+          <Link to="/privacy/deletion">Baja y privacidad</Link>
           <span className="sidebar-emblem">
             <ArrowUpRight size={22} />
           </span>

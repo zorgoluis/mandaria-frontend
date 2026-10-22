@@ -1,0 +1,209 @@
+{
+  "date": "2026-10-17",
+  "database": "deletion_compatibility_web_1792219301750_test",
+  "cluster": "C:/Users/zorgl/Documents/mandaria-backend/.tmp/compatibility-implementation/pgdata",
+  "realBackend": true,
+  "externalStorage": false,
+  "newMigrations": 0,
+  "checks": [
+    "A: real restricted login, restoration, follow-up, forbidden operation and full projection; no logout",
+    "B: real commit checked before transport drop, reload, GET receipt, one original command/event; other admin denied; historical/current separated"
+  ],
+  "sources": [
+    {
+      "path": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d"
+    },
+    {
+      "path": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da"
+    },
+    {
+      "path": "src/auth/auth.responses.ts",
+      "sha256": "23b11dffc91a26ef4403cab91c3b0b2d530ad52ee4b98374a4ec4b792955bd25"
+    },
+    {
+      "path": "src/verification/deletion.controller.ts",
+      "sha256": "620425f402fddffd6ca01eff379b2e3153fdc14ac66c5d87840d52e21aeccc15"
+    },
+    {
+      "path": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff"
+    },
+    {
+      "path": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6"
+    },
+    {
+      "path": "dist/auth/auth.controller.js",
+      "sha256": "f26059831204e497d5e9e25b7da71f74591d8f0be650e39c720f08158e34f492"
+    },
+    {
+      "path": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+    },
+    {
+      "path": "dist/verification/deletion.controller.js",
+      "sha256": "e46ceae438104c4c1a54c1bbb0ef23d0b0bde82e84647d64f0569202de3403e2"
+    },
+    {
+      "path": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda"
+    },
+    {
+      "path": "dist/verification/deletion-command-receipt.js",
+      "sha256": "9086d7bf30fb88d374acf2f9badfa53009783b4272285c36ebf008e709c30ef7"
+    },
+    {
+      "path": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add"
+    },
+    {
+      "path": "docs/DOCUMENT-DELETION-COMPATIBILITY-IMPLEMENTATION.md",
+      "sha256": "1bc764a106ec6d4fe60c88beda843ff16f0d99e62869a94c7dedfa540296d65b"
+    }
+  ],
+  "postCommit": {
+    "verifiedBeforeDrop": true,
+    "commandCount": 1,
+    "eventCount": 1,
+    "revisionDelta": 1,
+    "recoveredByGet": true,
+    "originalPostCount": 1,
+    "originalCommandCount": 1,
+    "originalEventCount": 1,
+    "historicalRevision": 2,
+    "currentRevision": 3,
+    "foreignAdministrator": {
+      "status": 404,
+      "code": "COMMAND_RECEIPT_UNAVAILABLE"
+    }
+  },
+  "session": {
+    "restrictedFullProjection": 403,
+    "prohibitedOperation": 403,
+    "retainsIdentity": true,
+    "counts": {
+      "login": 2,
+      "refresh": 4,
+      "session": 8,
+      "legacy": 1,
+      "receipt": 2
+    },
+    "modes": [
+      {
+        "accessMode": "DELETION_RESTRICTED",
+        "identityFields": [
+          "id"
+        ]
+      },
+      {
+        "accessMode": "DELETION_RESTRICTED",
+        "identityFields": [
+          "id"
+        ]
+      },
+      {
+        "accessMode": "DELETION_RESTRICTED",
+        "identityFields": [
+          "id"
+        ]
+      },
+      {
+        "accessMode": "STANDARD",
+        "identityFields": [
+          "active",
+          "createdAt",
+          "email",
+          "emailVerifiedAt",
+          "id",
+          "role",
+          "updatedAt"
+        ]
+      },
+      {
+        "accessMode": "STANDARD",
+        "identityFields": [
+          "active",
+          "createdAt",
+          "email",
+          "emailVerifiedAt",
+          "id",
+          "role",
+          "updatedAt"
+        ]
+      },
+      {
+        "accessMode": "STANDARD",
+        "identityFields": [
+          "active",
+          "createdAt",
+          "email",
+          "emailVerifiedAt",
+          "id",
+          "role",
+          "updatedAt"
+        ]
+      },
+      {
+        "accessMode": "STANDARD",
+        "identityFields": [
+          "active",
+          "createdAt",
+          "email",
+          "emailVerifiedAt",
+          "id",
+          "role",
+          "updatedAt"
+        ]
+      },
+      {
+        "accessMode": "STANDARD",
+        "identityFields": [
+          "active",
+          "createdAt",
+          "email",
+          "emailVerifiedAt",
+          "id",
+          "role",
+          "updatedAt"
+        ]
+      }
+    ]
+  },
+  "cleanup": {
+    "browserAndServersStopped": true,
+    "ownedClusterStopped": true
+  },
+  "web": {
+    "head": "56c7bad0524cbbf05b45fa687a8ec625694a6ca0",
+    "branch": "feature/driver-verification",
+    "workingTree": true
+  },
+  "backend": {
+    "head": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a",
+    "branch": "feature/driver-verification",
+    "workingTree": true
+  },
+  "databaseIdentity": {
+    "name": "deletion_compatibility_20261017_test",
+    "directory": "C:/Users/zorgl/Documents/mandaria-backend/.tmp/compatibility-implementation/pgdata",
+    "host": "127.0.0.1",
+    "port": 55441
+  },
+  "databaseIdentityVerified": true,
+  "sourceRequestCount": 92,
+  "schemaSource": "deletion_compatibility_20261017_test",
+  "fixtures": {
+    "restrictedRequest": "8883fca2-29cf-46ba-be12-483a17648456",
+    "administrativeRequest": "67c97c79-809e-4cec-a516-2414c7bb5174"
+  },
+  "adminList": {
+    "status": 200,
+    "rows": 2,
+    "containsFixture": true,
+    "minimumRevision": 2
+  },
+  "externalStorageOperations": 0,
+  "status": "PASS"
+}

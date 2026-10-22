@@ -9,12 +9,69 @@ const tokens = {
   expiresIn: 60,
   tokenType: 'Bearer',
 }
-const user = { id: 'user', email: 'admin@example.test', role: 'SUPER_ADMIN' }
+const user = {
+  id: '11111111-1111-4111-8111-111111111111',
+  email: 'admin@example.test',
+  role: 'SUPER_ADMIN',
+  active: true,
+  emailVerifiedAt: null,
+  createdAt: '2026-10-17T00:00:00Z',
+  updatedAt: '2026-10-17T00:00:00Z',
+}
+const session = { accessMode: 'STANDARD', identity: user }
 beforeEach(() => {
   vi.resetModules()
   sessionStorage.clear()
 })
 describe('HTTP and human session', () => {
+  it('restricted login keeps identity separate and a forbidden full projection does not expire it', async () => {
+    const restricted = {
+      accessMode: 'DELETION_RESTRICTED',
+      identity: { id: user.id },
+      capabilities: { deletionFollowUp: true, activeDeliveryResolution: false },
+    }
+    const f = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(response(tokens))
+      .mockResolvedValueOnce(response(restricted))
+      .mockResolvedValueOnce(
+        response({ code: 'HTTP_403', message: 'ACCOUNT_CLOSING' }, 403),
+      )
+    const { authService, api, onSessionExpired } =
+      await import('../services/api')
+    const expired = vi.fn()
+    onSessionExpired(expired)
+    expect(await authService.login(user.email, 'synthetic')).toEqual(restricted)
+    await expect(api('/auth/me')).rejects.toMatchObject({
+      status: 403,
+      code: 'HTTP_403',
+    })
+    expect(expired).not.toHaveBeenCalled()
+    expect(sessionStorage.getItem('mandaria.refresh')).toBe('refresh-one')
+    expect(f).toHaveBeenCalledTimes(3)
+  })
+  it('token refresh reads current minimal authority once and preserves authTime semantics of backend', async () => {
+    sessionStorage.setItem('mandaria.refresh', 'old')
+    const restricted = {
+      accessMode: 'DELETION_RESTRICTED',
+      identity: { id: user.id },
+      capabilities: { deletionFollowUp: true, activeDeliveryResolution: false },
+    }
+    const f = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(response(tokens))
+      .mockResolvedValueOnce(response(restricted))
+    const { authService, onSessionIdentity } = await import('../services/api')
+    const changed = vi.fn()
+    onSessionIdentity(changed)
+    expect(await authService.restore()).toEqual(restricted)
+    expect(changed).toHaveBeenCalledWith(restricted)
+    expect(f).toHaveBeenCalledTimes(2)
+    expect(f.mock.calls[1][0]).toContain('/auth/me?projection=session')
+    expect(JSON.parse(String(f.mock.calls[0][1]?.body))).toEqual({
+      refreshToken: 'old',
+    })
+  })
   it.each([200, 401, 409, 500])(
     'execution commands send the exact key/body once on HTTP %s',
     async (status) => {
@@ -62,7 +119,7 @@ describe('HTTP and human session', () => {
             String(url).endsWith('/auth/refresh')
           )
             return response(tokens)
-          return response(user)
+          return response(session)
         })
       const { authService, api, apiOnce, publicApi } =
         await import('../services/api')
@@ -95,14 +152,16 @@ describe('HTTP and human session', () => {
     const fetcher = vi
       .spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(response(tokens))
-      .mockResolvedValueOnce(response(providerUser))
+      .mockResolvedValueOnce(
+        response({ accessMode: 'STANDARD', identity: providerUser }),
+      )
     const { authService } = await import('../services/api')
     expect(
       await authService.login('admin@example.test', 'test-password'),
-    ).toEqual(providerUser)
+    ).toEqual({ accessMode: 'STANDARD', identity: providerUser })
     expect(fetcher.mock.calls.map(([url]) => String(url))).toEqual([
       'http://localhost:3000/api/v1/auth/login',
-      'http://localhost:3000/api/v1/auth/me',
+      'http://localhost:3000/api/v1/auth/me?projection=session',
     ])
     expect(sessionStorage.getItem('role')).toBeNull()
   })
@@ -113,6 +172,8 @@ describe('HTTP and human session', () => {
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
       if (String(url).endsWith('/auth/refresh')) return response(tokens)
       if (String(url).endsWith('/auth/logout')) return response(null, 204)
+      if (String(url).endsWith('/auth/me?projection=session'))
+        return response(session)
       requests++
       if (requests === 1) return response({}, 401)
       return new Promise<Response>((resolve) => {
@@ -134,11 +195,11 @@ describe('HTTP and human session', () => {
     const fetcher = vi
       .spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(response(tokens))
-      .mockResolvedValueOnce(response(user))
+      .mockResolvedValueOnce(response(session))
       .mockResolvedValueOnce(response(null, 204))
     const { authService } = await import('../services/api')
     expect(await authService.login(' ADMIN@example.test ', 'password')).toEqual(
-      user,
+      session,
     )
     expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toEqual({
       email: 'admin@example.test',
@@ -166,9 +227,9 @@ describe('HTTP and human session', () => {
     const fetcher = vi
       .spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(response(tokens))
-      .mockResolvedValueOnce(response(user))
+      .mockResolvedValueOnce(response(session))
     const { authService } = await import('../services/api')
-    expect(await authService.restore()).toEqual(user)
+    expect(await authService.restore()).toEqual(session)
     expect(fetcher.mock.calls[0][0]).toContain('/auth/refresh')
     expect(sessionStorage.getItem('mandaria.refresh')).toBe('refresh-one')
   })
@@ -176,6 +237,8 @@ describe('HTTP and human session', () => {
     sessionStorage.setItem('mandaria.refresh', 'old')
     let refreshCount = 0
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
+      if (String(url).endsWith('/auth/me?projection=session'))
+        return response(session)
       if (String(url).endsWith('/auth/refresh')) {
         refreshCount++
         await new Promise((resolve) => setTimeout(resolve, 10))

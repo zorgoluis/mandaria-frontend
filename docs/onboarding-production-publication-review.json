@@ -1,0 +1,763 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-19T08:23:32.761Z",
+  "phase": "REVIEW_BEFORE_DOCUMENTATION_COMMIT_AND_PUSH",
+  "branch": "feature/driver-verification",
+  "remote": {
+    "name": "origin",
+    "url": "https://github.com/zorgoluis/mandaria-frontend.git",
+    "initialFetch": "SUCCESS, branch-only, no tags",
+    "sha": "fcc81e98e23b569723c78304caa6098e64b01963",
+    "ahead": 0,
+    "behind": 0,
+    "finalPushAndRemoteCheck": "Required after this record; this precommit record does not claim success"
+  },
+  "initialHead": "fcc81e98e23b569723c78304caa6098e64b01963",
+  "implementationCommit": "88a6ec8e025efe9c75688a1e8da796f5a3d74524",
+  "plannedCommits": [
+    {
+      "subject": "feat: support production documentary onboarding and policy publication",
+      "files": 17,
+      "status": "CREATED_LOCALLY"
+    },
+    {
+      "subject": "test: preserve isolated onboarding validation and publication review",
+      "files": 21,
+      "status": "REVIEWED_FOR_SELECTIVE_STAGING"
+    }
+  ],
+  "instructions": {
+    "agentsFile": "No AGENTS.md found in Web checkout or ancestors",
+    "continuity": [
+      "README.md",
+      "BITACORA.md",
+      "VERIFICATION.md",
+      "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md"
+    ],
+    "otherWorktrees": "Three existing worktrees preserved; none modified",
+    "initialIndex": "empty"
+  },
+  "scope": "All 37 pending files reviewed as own documentary onboarding implementation, tests, harnesses, docs and synthetic images; one publication review record added. Earlier deletion/W-01/V2/CANCELLED and closure already in published base.",
+  "files": [
+    {
+      "file": "BITACORA.md",
+      "sha256": "eccbd97ddd39b864420f3ace96a565cdb7eb2537b5a3961e48a4469dc0adeeed",
+      "plannedGitBlob": "81deb693a266a2fe3157271e6dfd5b2881e34ab7"
+    },
+    {
+      "file": "README.md",
+      "sha256": "563501cb4a4544c3ce433d9e3c775ab605e25a2dbced0074200a975051e6b372",
+      "plannedGitBlob": "d672fd7db6313fb201726d9da3b3c38a2aee5bd9"
+    },
+    {
+      "file": "VERIFICATION.md",
+      "sha256": "06bd25eff78372d5f397c9327ad7dea7d7ba45542daa175f39f88a3d7a62866d",
+      "plannedGitBlob": "c9e6c5df935c4f141f7123d4680215a5f80413cb"
+    },
+    {
+      "file": "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md",
+      "sha256": "bd1c09d9b261643dd974face73c5a4ae1df78a8c9be7a20a6435a07ccfad480c",
+      "plannedGitBlob": "4515d43c9892167f05acfb009a440254020a2794"
+    },
+    {
+      "file": "docs/onboarding-integration-preflight.json",
+      "sha256": "44d8a73117baf4eced698792f0e4a656ae575da4ce1b62be7c0c1007b73d8296",
+      "plannedGitBlob": "71bcfccd1c41e91447a41307ba97bc7f83de12cf"
+    },
+    {
+      "file": "docs/onboarding-integration-visual/historical-local-test.png",
+      "sha256": "738a669fad2fc64c10f74302056e07298e07ebf27e9046a7dc92ee0357a37977",
+      "plannedGitBlob": "131f70459b213cf020856b0ac943674f076e316e"
+    },
+    {
+      "file": "docs/onboarding-integration-visual/personal-acceptance.png",
+      "sha256": "10ddeff22c3deefde7d363579ff8caaf2885c84c68296a8e9d945006489196ba",
+      "plannedGitBlob": "367761c6600b069fa626a9ea3ba8d39b8e1c1f38"
+    },
+    {
+      "file": "docs/onboarding-integration-visual/publication-recovered.png",
+      "sha256": "00cc93eaf24c23d94273b13d10f7d6121771619dde6a3c24a6f6bd28e90e7279",
+      "plannedGitBlob": "5f41e787399fd760b36fe909f23a3509655ef57a"
+    },
+    {
+      "file": "docs/onboarding-production-integration-evidence.json",
+      "sha256": "b01efb890b8fe1384df937a2e58c2241c792e6e9bd03d54e224f3fb0d92ec80e",
+      "plannedGitBlob": "f988676985bf0127b1804085b7d7b4ed85f03d8f"
+    },
+    {
+      "file": "docs/onboarding-production-visual/historical-local-test-320.png",
+      "sha256": "56d0d6e84ede1af04c8cec3b740e46a12d855b4b0772b8c5ba6b6088dad6b8f6",
+      "plannedGitBlob": "a23d874f86e3179cf7920b39af641141fd6b4b59"
+    },
+    {
+      "file": "docs/onboarding-production-visual/policy-long-text-focus-320.png",
+      "sha256": "c4ef1ed9c5a1ce1688e7991ec36d3fa8bc075b7d9e44d6bbafa677ec216a58c6",
+      "plannedGitBlob": "9a19655c50869f9bb4363df3cd65354220dde26a"
+    },
+    {
+      "file": "docs/onboarding-production-visual/publication-preview-1280.png",
+      "sha256": "c4663d1c67ba6091b5bba7684220f24135da9281b1106bff88c451bde2a42bde",
+      "plannedGitBlob": "838ceba837235aefb46e11789921871c06fc2b01"
+    },
+    {
+      "file": "docs/onboarding-production-visual/publication-preview-320.png",
+      "sha256": "b5a9ba49a81b7f36440634c79ecc8a3f97cc3190996f384c53741c0ae7b98b5c",
+      "plannedGitBlob": "adc7a886f1908f9f071dd1c07a2b9f23842b8bec"
+    },
+    {
+      "file": "docs/onboarding-production-web-evidence.json",
+      "sha256": "2a682ec15561a89ed8c5346b79d895ad06ef0421a595d7e2872466559bd48367",
+      "plannedGitBlob": "b707230a9fd255c0c951b1e3f821d24d2cf4883e"
+    },
+    {
+      "file": "docs/onboarding-production-web-sources.json",
+      "sha256": "bbedf0997de790fc2468dd373669a458f7876e54bfbc289446beba882a28e688",
+      "plannedGitBlob": "70e8dad1519b4d9a44252632b009e909830554a8"
+    },
+    {
+      "file": "scripts/onboarding-isolated-backend.mjs",
+      "sha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65",
+      "plannedGitBlob": "607acee871cc64ef64787ad946e91a02e04aa9d1"
+    },
+    {
+      "file": "scripts/onboarding-isolated-environment.mjs",
+      "sha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953",
+      "plannedGitBlob": "93aed0619513f4c7cf3664343146e7a4984f6b80"
+    },
+    {
+      "file": "scripts/verify-documentary-web.mjs",
+      "sha256": "623774c4e431ebca08747edcefde571318b2e0491c224ff6be563a890ca10bf3",
+      "plannedGitBlob": "74149a3a6adbedb7b712ee68f16e9f2f85a7dfdf"
+    },
+    {
+      "file": "scripts/verify-onboarding-production-visual.mjs",
+      "sha256": "e388c2373482b211636d4da7cc87fa93c26c11fd7b38d379fd116c62a7c2d828",
+      "plannedGitBlob": "3e46990ac4122a31e8fcd5fc22085f7bf15d15ed"
+    },
+    {
+      "file": "scripts/verify-onboarding-production-web.mjs",
+      "sha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2",
+      "plannedGitBlob": "f85e6fac44dfdecc8669043ef148c7e5bd608d73"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b",
+      "plannedGitBlob": "f6a814ef1ac62531bf8145c04273bbeef1deb470"
+    },
+    {
+      "file": "src/test/onboarding-production.test.tsx",
+      "sha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681",
+      "plannedGitBlob": "dc11d93e31fa9aa2bd11d87c400282b7f40e4605"
+    },
+    {
+      "file": "src/test/verification-pages.test.tsx",
+      "sha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7",
+      "plannedGitBlob": "01c5599ac5414e4255e8b54974f89a0e18c6a2a8"
+    },
+    {
+      "file": "src/test/verification-service.test.ts",
+      "sha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7",
+      "plannedGitBlob": "12cf3dc0cf9f9925ec61928084a1ec6ddab1eeec"
+    },
+    {
+      "file": "src/verification/common.tsx",
+      "sha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa",
+      "plannedGitBlob": "ad0f1ee2bb940a25c3d714b01bd2ee61026cf494"
+    },
+    {
+      "file": "src/verification/evidence.tsx",
+      "sha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09",
+      "plannedGitBlob": "93fb89a5eeceee3ccb4fa783d5165829e2f15a15"
+    },
+    {
+      "file": "src/verification/format.ts",
+      "sha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845",
+      "plannedGitBlob": "115f632b58e6af1165cfcff207bc9a92e7064a04"
+    },
+    {
+      "file": "src/verification/hooks.ts",
+      "sha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+      "plannedGitBlob": "621343956f137dd109e0b9906ee2455850748fdc"
+    },
+    {
+      "file": "src/verification/identity.tsx",
+      "sha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb",
+      "plannedGitBlob": "79e2b1c8c2ed504b9a44ab1667e5e51bb0b76606"
+    },
+    {
+      "file": "src/verification/pages.tsx",
+      "sha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5",
+      "plannedGitBlob": "468c618e8afef758517c297c1cef443ac629bae3"
+    },
+    {
+      "file": "src/verification/pending.ts",
+      "sha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669",
+      "plannedGitBlob": "417fbbaff7420a0622b25f39fcd78155ba20f919"
+    },
+    {
+      "file": "src/verification/publications.tsx",
+      "sha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c",
+      "plannedGitBlob": "f9fdcd70d1603cba6c546640f81900280f76bbf8"
+    },
+    {
+      "file": "src/verification/service.ts",
+      "sha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935",
+      "plannedGitBlob": "48257cb53b8a1c9d64ec57a467b1062a6cc8c730"
+    },
+    {
+      "file": "src/verification/terms-contract.ts",
+      "sha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc",
+      "plannedGitBlob": "f0dab23eb96b63f810268904dd30b6d40d1055d3"
+    },
+    {
+      "file": "src/verification/terms.tsx",
+      "sha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a",
+      "plannedGitBlob": "061388180e71f5b217e7f608f8faa8ff54838030"
+    },
+    {
+      "file": "src/verification/types.ts",
+      "sha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675",
+      "plannedGitBlob": "a9edad73af91131ef4114c816d8b50f6421bce86"
+    },
+    {
+      "file": "src/verification/verification.css",
+      "sha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186",
+      "plannedGitBlob": "7c8332f51cbebd7a918ef87a2e860f1c03c4db20"
+    }
+  ],
+  "reviewRecord": {
+    "file": "docs/onboarding-production-publication-review.json",
+    "hashOmitted": "Self-reference; index checked separately before commit"
+  },
+  "implementationIndex": [
+    {
+      "file": "src/app/App.tsx",
+      "testedSha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b",
+      "stagedSha256": "a5ebb58cc91365cef4adbfc23c6eeacd9129453a54181e8a495314c024f1684f",
+      "gitBlob": "f6a814ef1ac62531bf8145c04273bbeef1deb470",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/test/onboarding-production.test.tsx",
+      "testedSha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681",
+      "stagedSha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681",
+      "gitBlob": "dc11d93e31fa9aa2bd11d87c400282b7f40e4605",
+      "lineEndingsOnly": false
+    },
+    {
+      "file": "src/test/verification-pages.test.tsx",
+      "testedSha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7",
+      "stagedSha256": "a23996e684d3f42b30f2491bb42c50007a4e1e0657f7cd6d910008db771d8453",
+      "gitBlob": "01c5599ac5414e4255e8b54974f89a0e18c6a2a8",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/test/verification-service.test.ts",
+      "testedSha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7",
+      "stagedSha256": "64812b9ad738f7115f8eec923d13e53623cf82682e0aca933c51dfbc2129247a",
+      "gitBlob": "12cf3dc0cf9f9925ec61928084a1ec6ddab1eeec",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/common.tsx",
+      "testedSha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa",
+      "stagedSha256": "ef0240369691c0670600efe1683f9ea4e3ec6ecb4b5907ff73ea294bfef0324a",
+      "gitBlob": "ad0f1ee2bb940a25c3d714b01bd2ee61026cf494",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/evidence.tsx",
+      "testedSha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09",
+      "stagedSha256": "d1bdf85cf19ff22cbdf5e7b457df606cfa4fb50a6560e4fd706713f4d9e97a1e",
+      "gitBlob": "93fb89a5eeceee3ccb4fa783d5165829e2f15a15",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/format.ts",
+      "testedSha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845",
+      "stagedSha256": "3f2c3c893711e6601ce2d59fad4d7fef43314aa2fe1735009caf5eae49f0caef",
+      "gitBlob": "115f632b58e6af1165cfcff207bc9a92e7064a04",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/hooks.ts",
+      "testedSha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+      "stagedSha256": "92cf1741bc66fab50275f8adf9f02c2391c999eff960a2eb7d7f2da8b6e70a7b",
+      "gitBlob": "621343956f137dd109e0b9906ee2455850748fdc",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/identity.tsx",
+      "testedSha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb",
+      "stagedSha256": "4d9309b72ca6125d8863a19067cb4c95a803fc71e4d3419f088a9c56427436db",
+      "gitBlob": "79e2b1c8c2ed504b9a44ab1667e5e51bb0b76606",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/pages.tsx",
+      "testedSha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5",
+      "stagedSha256": "44a15a4825cf6336e2d95082d497d9d530a7c3309b045b5fbb65d7a1c37dd60f",
+      "gitBlob": "468c618e8afef758517c297c1cef443ac629bae3",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/pending.ts",
+      "testedSha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669",
+      "stagedSha256": "9bd11ecdf882fb8b853f04d8f654d2ae0f56efea970743e621ae5f94af764082",
+      "gitBlob": "417fbbaff7420a0622b25f39fcd78155ba20f919",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/publications.tsx",
+      "testedSha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c",
+      "stagedSha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c",
+      "gitBlob": "f9fdcd70d1603cba6c546640f81900280f76bbf8",
+      "lineEndingsOnly": false
+    },
+    {
+      "file": "src/verification/service.ts",
+      "testedSha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935",
+      "stagedSha256": "c1cf08a6b6b42daeff7043b77db37fc723cb771eceb0cf624eec69f90a6c7e58",
+      "gitBlob": "48257cb53b8a1c9d64ec57a467b1062a6cc8c730",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/terms-contract.ts",
+      "testedSha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc",
+      "stagedSha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc",
+      "gitBlob": "f0dab23eb96b63f810268904dd30b6d40d1055d3",
+      "lineEndingsOnly": false
+    },
+    {
+      "file": "src/verification/terms.tsx",
+      "testedSha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a",
+      "stagedSha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a",
+      "gitBlob": "061388180e71f5b217e7f608f8faa8ff54838030",
+      "lineEndingsOnly": false
+    },
+    {
+      "file": "src/verification/types.ts",
+      "testedSha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675",
+      "stagedSha256": "484be435b76f597f20cb101acfa8f083094e4c3659a55a94dd147440dd3029e9",
+      "gitBlob": "a9edad73af91131ef4114c816d8b50f6421bce86",
+      "lineEndingsOnly": true
+    },
+    {
+      "file": "src/verification/verification.css",
+      "testedSha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186",
+      "stagedSha256": "a3fd17bcb77ef394feeec9d04bcd9a77cc3a9943479d55eebe940078edd551af",
+      "gitBlob": "7c8332f51cbebd7a918ef87a2e860f1c03c4db20",
+      "lineEndingsOnly": true
+    }
+  ],
+  "evidence": {
+    "file": "docs/onboarding-production-integration-evidence.json",
+    "sha256": "b01efb890b8fe1384df937a2e58c2241c792e6e9bd03d54e224f3fb0d92ec80e",
+    "runId": "1792397072142",
+    "status": "PASS",
+    "checkpoints": 12,
+    "webReferences": [
+      {
+        "file": "src/app/App.tsx",
+        "sha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b",
+        "currentSha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b",
+        "matches": true
+      },
+      {
+        "file": "src/verification/common.tsx",
+        "sha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa",
+        "currentSha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa",
+        "matches": true
+      },
+      {
+        "file": "src/verification/evidence.tsx",
+        "sha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09",
+        "currentSha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09",
+        "matches": true
+      },
+      {
+        "file": "src/verification/format.ts",
+        "sha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845",
+        "currentSha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845",
+        "matches": true
+      },
+      {
+        "file": "src/verification/forms.tsx",
+        "sha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1",
+        "currentSha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1",
+        "matches": true
+      },
+      {
+        "file": "src/verification/hooks.ts",
+        "sha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+        "currentSha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb",
+        "matches": true
+      },
+      {
+        "file": "src/verification/identity.tsx",
+        "sha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb",
+        "currentSha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb",
+        "matches": true
+      },
+      {
+        "file": "src/verification/legacy.tsx",
+        "sha256": "e3f85aff081d5b4bd703faef841bfbae5d3471aa758085743b7baa743b3d6444",
+        "currentSha256": "e3f85aff081d5b4bd703faef841bfbae5d3471aa758085743b7baa743b3d6444",
+        "matches": true
+      },
+      {
+        "file": "src/verification/pages.tsx",
+        "sha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5",
+        "currentSha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5",
+        "matches": true
+      },
+      {
+        "file": "src/verification/pending.ts",
+        "sha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669",
+        "currentSha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669",
+        "matches": true
+      },
+      {
+        "file": "src/verification/publications.tsx",
+        "sha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c",
+        "currentSha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c",
+        "matches": true
+      },
+      {
+        "file": "src/verification/service.ts",
+        "sha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935",
+        "currentSha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935",
+        "matches": true
+      },
+      {
+        "file": "src/verification/terms-contract.ts",
+        "sha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc",
+        "currentSha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc",
+        "matches": true
+      },
+      {
+        "file": "src/verification/terms.tsx",
+        "sha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a",
+        "currentSha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a",
+        "matches": true
+      },
+      {
+        "file": "src/verification/types.ts",
+        "sha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675",
+        "currentSha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.css",
+        "sha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186",
+        "currentSha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186",
+        "matches": true
+      },
+      {
+        "file": "src/test/onboarding-production.test.tsx",
+        "sha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681",
+        "currentSha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681",
+        "matches": true
+      },
+      {
+        "file": "src/test/verification-pages.test.tsx",
+        "sha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7",
+        "currentSha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7",
+        "matches": true
+      },
+      {
+        "file": "src/test/verification-service.test.ts",
+        "sha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7",
+        "currentSha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7",
+        "matches": true
+      },
+      {
+        "file": "src/test/verification-recovery.test.ts",
+        "sha256": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a",
+        "currentSha256": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a",
+        "matches": true
+      },
+      {
+        "file": "src/test/verification-upload.test.tsx",
+        "sha256": "653c945f917a177d97ced7de8052af8a9ff41861dfddf16f10632f1d4f02715a",
+        "currentSha256": "653c945f917a177d97ced7de8052af8a9ff41861dfddf16f10632f1d4f02715a",
+        "matches": true
+      },
+      {
+        "file": "src/test/verification-fixtures.ts",
+        "sha256": "6dba52be238b00476e33cc42f033027313253a035d97efcf09ef15993d0c15b3",
+        "currentSha256": "6dba52be238b00476e33cc42f033027313253a035d97efcf09ef15993d0c15b3",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-documentary-web.mjs",
+        "sha256": "623774c4e431ebca08747edcefde571318b2e0491c224ff6be563a890ca10bf3",
+        "currentSha256": "623774c4e431ebca08747edcefde571318b2e0491c224ff6be563a890ca10bf3",
+        "matches": true
+      },
+      {
+        "file": "scripts/onboarding-isolated-environment.mjs",
+        "sha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953",
+        "currentSha256": "fdae85d430f11d17628e35bf1f1b5d6966ea35fe5430a80628cf5b37e3fe3953",
+        "matches": true
+      },
+      {
+        "file": "scripts/onboarding-isolated-backend.mjs",
+        "sha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65",
+        "currentSha256": "4a14cf380a5609cca8d4ca44ac68cea77403dc01c28b8e8791d20567baebaa65",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-onboarding-production-web.mjs",
+        "sha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2",
+        "currentSha256": "ac1231323f37736cf17a82331aff483eecf3d8aef4be12eaca468ea5b7ca18f2",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-onboarding-production-visual.mjs",
+        "sha256": "e388c2373482b211636d4da7cc87fa93c26c11fd7b38d379fd116c62a7c2d828",
+        "currentSha256": "e388c2373482b211636d4da7cc87fa93c26c11fd7b38d379fd116c62a7c2d828",
+        "matches": true
+      }
+    ],
+    "backendReferences": [
+      {
+        "file": "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-PREPARATION.md",
+        "sha256": "502017af0b28d34187e36df27684a7bac83d01dc07ff47a32e3af7be56d183f9",
+        "currentSha256": "502017af0b28d34187e36df27684a7bac83d01dc07ff47a32e3af7be56d183f9",
+        "matches": true
+      },
+      {
+        "file": "docs/checks/documentary-onboarding-production.json",
+        "sha256": "96c0c350b47634de1056b6651e79b4c3fd135fa1c50a97f84df95fd4a636d4ff",
+        "currentSha256": "96c0c350b47634de1056b6651e79b4c3fd135fa1c50a97f84df95fd4a636d4ff",
+        "matches": true
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "028fb9f6e44d5d3417e31643ef3685ab3a64d35c46f46b5fb46b7c11a7361571",
+        "currentSha256": "028fb9f6e44d5d3417e31643ef3685ab3a64d35c46f46b5fb46b7c11a7361571",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "sha256": "0e252f68b047f436a1e3186995e37caf41203baa46f1a1b74315b415dae5c9ff",
+        "currentSha256": "0e252f68b047f436a1e3186995e37caf41203baa46f1a1b74315b415dae5c9ff",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.controller.ts",
+        "sha256": "bfb2de54d95a339bdf39fb574846e9ad28b50a49ffa8828b157db0098701de6b",
+        "currentSha256": "bfb2de54d95a339bdf39fb574846e9ad28b50a49ffa8828b157db0098701de6b",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.dto.ts",
+        "sha256": "a7fa2bafef890a9d763306a07db0e9f67b1d2d8135ab4834e932c7dd3479a76b",
+        "currentSha256": "a7fa2bafef890a9d763306a07db0e9f67b1d2d8135ab4834e932c7dd3479a76b",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.responses.ts",
+        "sha256": "67687b24d3f550dc7727b1905016991a82d31be7f4d3c7bd3b5f7cba1754f142",
+        "currentSha256": "67687b24d3f550dc7727b1905016991a82d31be7f4d3c7bd3b5f7cba1754f142",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-terms.ts",
+        "sha256": "7137f38755b6e5eb4a51697529d33fa7e3a93e7f34b0d6e6f5feceb1cb34bb85",
+        "currentSha256": "7137f38755b6e5eb4a51697529d33fa7e3a93e7f34b0d6e6f5feceb1cb34bb85",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-policy.ts",
+        "sha256": "afa0e761cfad32afe0eec57de41bfda96734f26248e484042f66d3cd88ecbe06",
+        "currentSha256": "afa0e761cfad32afe0eec57de41bfda96734f26248e484042f66d3cd88ecbe06",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-rules.ts",
+        "sha256": "d26f0ffe3fa8bd21b2679be546daaa7daf7f4e3a8cc633da05172245d16d1ccf",
+        "currentSha256": "d26f0ffe3fa8bd21b2679be546daaa7daf7f4e3a8cc633da05172245d16d1ccf",
+        "matches": true
+      },
+      {
+        "file": "src/auth/auth.guards.ts",
+        "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+        "currentSha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+        "matches": true
+      },
+      {
+        "file": "test/onboarding-production.e2e-spec.ts",
+        "sha256": "dd60f127d4a214c61d23aa08769f17016658fbaa8ca16370fb5a74791b310eed",
+        "currentSha256": "dd60f127d4a214c61d23aa08769f17016658fbaa8ca16370fb5a74791b310eed",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-onboarding-production.mjs",
+        "sha256": "ee9bedba082630fc9fca76e400afc5b8aecb74a5b6d19eedf988a532728ecd5d",
+        "currentSha256": "ee9bedba082630fc9fca76e400afc5b8aecb74a5b6d19eedf988a532728ecd5d",
+        "matches": true
+      },
+      {
+        "file": "prisma/migrations/20261019000100_documentary_production/migration.sql",
+        "sha256": "d3c1ca9f85e5ee65cb7180250ad15e106578e59b623fdb592db975fccb34265d",
+        "currentSha256": "d3c1ca9f85e5ee65cb7180250ad15e106578e59b623fdb592db975fccb34265d",
+        "matches": true
+      },
+      {
+        "file": "dist/app.module.js",
+        "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f",
+        "currentSha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f",
+        "matches": true
+      },
+      {
+        "file": "dist/setup.js",
+        "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3",
+        "currentSha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification.service.js",
+        "sha256": "35b1037339ea260ab532c4e2ebadedf0c885647403068d367ff694b3582d4f8d",
+        "currentSha256": "35b1037339ea260ab532c4e2ebadedf0c885647403068d367ff694b3582d4f8d",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification.controller.js",
+        "sha256": "98d47b4a407caaf7f3df57cbe96f96ae8686b1e11a80259b0123d4893417c960",
+        "currentSha256": "98d47b4a407caaf7f3df57cbe96f96ae8686b1e11a80259b0123d4893417c960",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification.dto.js",
+        "sha256": "98bcd371163ca996094e2fcceff4d4cd6aa0f0f19bf3a40e7458e06f0653de86",
+        "currentSha256": "98bcd371163ca996094e2fcceff4d4cd6aa0f0f19bf3a40e7458e06f0653de86",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification-policy.js",
+        "sha256": "79e59d3487dc0dfc0876b518ab0a33b223b946d8c89d5a2aa04058ddc7098afd",
+        "currentSha256": "79e59d3487dc0dfc0876b518ab0a33b223b946d8c89d5a2aa04058ddc7098afd",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification-terms.js",
+        "sha256": "d852616dac33d41878f81d22c4640300b08bb7addfb80f8690ca0ec253d4ee84",
+        "currentSha256": "d852616dac33d41878f81d22c4640300b08bb7addfb80f8690ca0ec253d4ee84",
+        "matches": true
+      },
+      {
+        "file": "dist/verification/verification-storage.js",
+        "sha256": "c1601496e137cb59b6217fe2bf632fbc6b371b96d65a3f31364c9580b5f0c2ed",
+        "currentSha256": "c1601496e137cb59b6217fe2bf632fbc6b371b96d65a3f31364c9580b5f0c2ed",
+        "matches": true
+      },
+      {
+        "file": "dist/auth/auth.guards.js",
+        "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a",
+        "currentSha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a",
+        "matches": true
+      }
+    ],
+    "protectedSources": [
+      {
+        "file": "src/verification/forms.tsx",
+        "sha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1",
+        "matches": true
+      },
+      {
+        "file": "src/auth/session.ts",
+        "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+        "matches": true
+      },
+      {
+        "file": "src/services/api.ts",
+        "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/receipt.ts",
+        "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "matches": true
+      }
+    ],
+    "selectedImages": 7,
+    "rawHistoricalReportHashesChecked": 4,
+    "rawReportsIncluded": false,
+    "historicalHarnessDifferences": [
+      "scripts/onboarding-isolated-environment.mjs",
+      "scripts/onboarding-isolated-backend.mjs",
+      "scripts/verify-onboarding-production-web.mjs"
+    ],
+    "reasonNoRerun": "All 27 integrated Web fingerprints and six protected sources match; no subsequent functional changes. Three earlier harness deltas already covered by A-H.",
+    "historicalReused": [
+      "A-H isolated integration PASS; one publication POST; zero duplicate effects",
+      "98 unique tests from latest complete affected files",
+      "TypeScript app/test, lint, build PASS and visual 1280/320"
+    ],
+    "executedInThisPublicationTask": []
+  },
+  "staticChecks": {
+    "jsonEvidenceFiles": 4,
+    "harnessSyntax": 5,
+    "relativeImports": 138,
+    "relativeLinksBeforePublicationAddendum": 148,
+    "localArtifactLinks": 12,
+    "sensitiveCredentialPatterns": 0,
+    "manualReview": "Complete pending diff and new source/harness/doc/evidence files; all selected images synthetic. Synthetic helper credentials are test literals, not real secrets.",
+    "lineEndings": "13 implementation blobs normalize CRLF to LF. Compared normalized content; historical raw SHA-256 retained unchanged. No functional differences.",
+    "diffCheck": "PASS"
+  },
+  "exclusions": {
+    "preserved": [
+      ".env and local configuration",
+      "node_modules",
+      "dist",
+      "test-results including PostgreSQL clusters, profiles, raw logs and traces"
+    ],
+    "included": false,
+    "deleted": false,
+    "unrelatedChangesDetected": []
+  },
+  "backendDependency": {
+    "testedBase": "06457dedd9b2f533862a0477b04b36b69e1990f0",
+    "requiredContent": "Productive onboarding implementation was uncommitted during the integrated run; tested contents identified by source/runtime fingerprints.",
+    "handoff": "mandaria-backend/docs/DOCUMENTARY-ONBOARDING-PRODUCTION-PREPARATION.md",
+    "migration": "20261019000100_documentary_production",
+    "contracts": [
+      "GET verification-terms by authorized scope",
+      "POST verification-terms/accept with exact versions/hashes, privacy acknowledgment and separate specific consents",
+      "SUPER_ADMIN policy read and immutable terms publication",
+      "GET verification-command-attempts with PUBLISH_TERMS/POLICY and original key",
+      "PRODUCTION provenance/checklist and LOCAL_TEST history"
+    ],
+    "finalCompatibleCommit": "NOT_CONFIRMED_IN_THIS_REVIEW",
+    "jointShaPairTested": false,
+    "contentCorrespondence": "23/23 observed backend source/runtime references still match A-H; this is historical integrated content, not a new deployment or mixed-version validation"
+  },
+  "limits": [
+    "No product change or suite/browser/integration rerun in publication task",
+    "No backend writes, main/QA updates, merge/rebase/force push, deployment or activation",
+    "Legal texts, privacy, specific purposes, publication authority and operational readiness remain required",
+    "Real HTTPS/CORS/mail/Spaces not validated by simulated transport integration",
+    "Deletion Spaces V2, RESOLVED and Android/GPS remain outside scope"
+  ],
+  "nextSteps": [
+    "Review documentary index against this inventory",
+    "Create coherent documentation/harness commit",
+    "Fetch only target branch again; stop on divergence",
+    "Push explicit feature/driver-verification refspec without force",
+    "Query remote SHA and compare with final local commit"
+  ]
+}

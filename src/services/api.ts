@@ -1,12 +1,37 @@
 import { env } from '../config/env'
-import type { Tokens, User } from '../types/api'
+import type { Tokens } from '../types/api'
+import { sessionIdentity, type SessionIdentity } from '../auth/session'
 import { ApiError, normalizeError } from './errors'
 
 const key = 'mandaria.refresh'
 let accessToken: string | null = null
 let generation = 0
-let refreshing: Promise<void> | null = null
+let refreshing: Promise<SessionIdentity> | null = null
 const listeners = new Set<() => void>()
+const identityListeners = new Set<(identity: SessionIdentity) => void>()
+export const onSessionIdentity = (
+  listener: (identity: SessionIdentity) => void,
+) => {
+  identityListeners.add(listener)
+  return () => {
+    identityListeners.delete(listener)
+  }
+}
+async function readSession(signal?: AbortSignal) {
+  const current = generation
+  const value = sessionIdentity(
+    await transport<unknown>(
+      '/auth/me?projection=session',
+      'GET',
+      undefined,
+      accessToken,
+      signal,
+    ),
+  )
+  if (current !== generation) throw normalizeError(401, null)
+  identityListeners.forEach((listener) => listener(value))
+  return value
+}
 export const onSessionExpired = (listener: () => void) => {
   listeners.add(listener)
   return () => {
@@ -54,6 +79,7 @@ async function transport<T>(
   signal?: AbortSignal,
   /** Extra request headers (V1.10 credit movements require Idempotency-Key). */
   extra?: Record<string, string>,
+  responseType: 'json' | 'blob' = 'json',
 ): Promise<T> {
   let response: Response
   try {
@@ -75,6 +101,11 @@ async function transport<T>(
   } catch (error) {
     if (signal?.aborted) throw error
     throw normalizeError(0, null)
+  }
+  if (response.ok && responseType === 'blob') {
+    if (!response.headers.get('Content-Type')?.startsWith('image/png'))
+      throw new ApiError(502, 'Formato de evidencia inesperado.')
+    return (await response.blob()) as T
   }
   let data: unknown
   if (response.status !== 204) {
@@ -113,6 +144,7 @@ async function refresh() {
         })
         if (generation !== current) throw normalizeError(401, null)
         save(tokens)
+        return await readSession()
       } catch (error) {
         if (
           error instanceof ApiError &&
@@ -134,6 +166,7 @@ export async function api<T>(
   body?: unknown,
   signal?: AbortSignal,
   headers?: Record<string, string>,
+  responseType: 'json' | 'blob' = 'json',
 ): Promise<T> {
   const current = generation
   const usedToken = accessToken
@@ -145,6 +178,7 @@ export async function api<T>(
       usedToken,
       signal,
       headers,
+      responseType,
     )
     if (generation !== current) throw normalizeError(401, null)
     return result
@@ -161,6 +195,7 @@ export async function api<T>(
         accessToken,
         signal,
         headers,
+        responseType,
       )
       if (generation !== current) throw normalizeError(401, null)
       return result
@@ -206,9 +241,20 @@ export async function apiOnce<T>(
   }
 }
 /** Unauthenticated endpoint (e.g. account activation): never sends or refreshes a session. */
-export const publicApi = <T>(path: string, method: string, body?: unknown) =>
-  transport<T>(path, method, body, null)
+export const publicApi = <T>(
+  path: string,
+  method: string,
+  body?: unknown,
+  signal?: AbortSignal,
+) => transport<T>(path, method, body, null, signal)
 export const authService = {
+  async session() {
+    const value = sessionIdentity(
+      await api<unknown>('/auth/me?projection=session'),
+    )
+    identityListeners.forEach((listener) => listener(value))
+    return value
+  },
   async login(email: string, password: string) {
     clearSession()
     save(
@@ -217,12 +263,11 @@ export const authService = {
         password,
       }),
     )
-    return api<User>('/auth/me')
+    return readSession()
   },
   async restore() {
     if (!storedRefresh()) return null
-    await refresh()
-    return api<User>('/auth/me')
+    return refresh()
   },
   async logout() {
     if (refreshing) await refreshing.catch(() => undefined)
@@ -232,3 +277,7 @@ export const authService = {
       await transport<void>('/auth/logout', 'POST', { refreshToken: token })
   },
 }
+
+/** Authorized private evidence proxy, keeping session handling centralized. */
+export const apiBlob = (path: string, signal?: AbortSignal) =>
+  api<Blob>(path, 'POST', undefined, signal, undefined, 'blob')

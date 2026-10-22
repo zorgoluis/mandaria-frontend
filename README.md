@@ -1,5 +1,56 @@
+> [Publicación administrativa sin alta: validación local](docs/PUBLICATION-WITHOUT-INTAKE.md). Requiere backend runtimeEnvironment; sin publicación ni despliegue.
+
+> **2026-10-20 — cierre local de conservación:** Cierre conjunto completado en feature/driver-verification, HEAD 97850b8c447c71d6ae245bc8df3ce46413650da2 conservado, worktree fleet-representative-web. Contrato backend nuevo consumido en expediente y seguimiento: fechas desconocidas/no accesibles, excepciones con revisión/vigencia, historia depurada e incidencia posterior. Se preservan recuperación, caché y acciones. [Matriz y evidencia](docs/RETENTION-WEB-PUBLICATION-REVIEW.md). Configuración productiva y publicación no ejecutadas.
+
 # Mandaria Web — V1.11-B
 
+## 2026-10-20 — Cierre de publicación y referencia backend confirmada
+
+Expediente y evidencia A–F publicados en Web `6bdeda4021bf01d822746b97189759ba0cf07d7a`, remoto comprobado. Backend compatible identificado localmente en `2c458fc955f699ce958dabf5fe89dcc58892a031` por correspondencia de fuentes/contrato/migración con las huellas del ensayo; no una prueba nueva de la pareja de SHA. [Cierre y pendientes](docs/FLEET-REPRESENTATIVE-WEB.md). Textos autorizados, entorno real y preparación operativa pendientes; sin despliegue, recepción real ni activación. Los apartados inferiores conservan el estado histórico, incluido el SHA backend antes pendiente.
+
+## 2026-10-19 — Revisión para publicar el expediente del representante
+
+Expediente privado, recuperación y corrección de selección durante reconsulta de privacidad revisados para publicar sólo la rama autorizada. [Inventario y comprobaciones](docs/fleet-representative-publication-review.json), [informe A–F](docs/FLEET-REPRESENTATIVE-WEB.md). Evidencia existente reutilizada, sin repetir suites. Requiere el backend compatible todavía sin commit, sus huellas/migración y textos autorizados. Publicar la rama no despliega ni activa recepción. Las entradas siguientes son historia de los ensayos.
+
+## Representación privada: integración A–F cerrada — 2026-10-19
+
+A–F completos en un ensayo reanudado sobre la misma base sintética: expediente privado, revisión SUPER_ADMIN, FLEET separado, recuperación sin duplicados, aislamiento y restricciones. Google Chrome 155 instalado sustituyó el launcher que fallaba; la causa raíz de `spawn UNKNOWN` del Chromium anterior sigue sin determinarse. Una corrección mínima conserva el archivo pendiente durante la reconsulta de privacidad, manteniendo los envíos bloqueados hasta terminar. 40 pruebas focalizadas ejecutadas, tipos/lint/build PASS; las 130 anteriores no se repitieron en bloque. Escritorio/320 px y teclado comprobados. [Informe, fallos preservados y límites](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia integrada](docs/fleet-representative-integration-evidence.json). Procesos propios detenidos, base sintética conservada; sin backend modificado, QA, commit, push, despliegue ni activación. Requiere backend compatible, textos autorizados y preparación operativa antes de recepción real. Las entradas inferiores son históricas.
+
+## Expediente privado de representación — 2026-10-19
+
+Implementación local en `feature/driver-verification`, worktree `C:/Users/zorgl/.codex/worktrees/fleet-representative-web/mandaria-frontend`, base `e657e715cadb1d6727fbde55a9202b6deaa2fdb9`. El checkout principal permanece en main y conserva su documentación previa. Entrada propia `/verification/representatives`, detalle documental existente y administración SUPER_ADMIN `/admin/fleet-representatives`. Privacidad previa, evidencias privadas, revisión y aceptación FLEET permanecen separadas de admisión y servicios.
+
+[Informe contractual, rutas y reproducción](docs/FLEET-REPRESENTATIVE-WEB.md) · [Evidencia saneada](docs/fleet-representative-web-evidence.json). 130 pruebas focalizadas PASS, tipos/lint/build PASS. Integración y visual pendientes: Chromium abortó con `spawn UNKNOWN`; el único diagnóstico adicional reprodujo el fallo sin backend/base. El entorno aislado se preparó y cerró; ningún recorrido de navegador se acredita. Requiere el backend local de representación aún sin commit, sus huellas/migración y revisión autorizada de textos. Sin recepción real, admisión, QA, cambios backend, commit, push ni despliegue. Las entradas siguientes conservan el historial.
+
+## Representación legal de flotilla — propuesta documental, 2026-10-19
+
+[Inventario, wireframes A–F y handoff de implementación](docs/FLEET-REPRESENTATIVE-WEB-PROPOSAL.md). Diseño de acceso por vínculo, privacidad personal antes de archivos, acreditación SUPER_ADMIN y aceptación FLEET posterior, separado de conductor/unidad y coordinación operativa. Depende del contrato final backend: se inspeccionó código candidato en curso, todavía distinto de OpenAPI, sin informe final ni publicación acreditada. El handoff delimita recuperación postrevocación y otras confirmaciones necesarias. No hay componentes, rutas, fixtures ni pruebas Web nuevas; no recibir poderes mediante los expedientes actuales. Sólo inspección estática y documentación local, sin publicación o activación. Las evidencias históricas siguientes no acreditan este flujo.
+
+## Publicación de la rama documental — revisión del 2026-10-19
+
+La adaptación de alta documental, sus pruebas y el ensayo A–H se revisan para publicar exclusivamente `feature/driver-verification`. [Inventario y correspondencia previa al commit](docs/onboarding-production-publication-review.json). Se conserva el PASS histórico del recorrido aislado y de las 98 pruebas: no se ejecutaron de nuevo. El backend compatible se identifica por contrato, migración y huellas probadas; su commit final no se ha confirmado en esta revisión. Publicar esta rama no despliega Web ni activa operaciones. Las entradas siguientes conservan las etapas anteriores.
+
+## Alta documental: ensayo integrado completado — 2026-10-19
+
+PASS en el recorrido A–H solicitado: publicación SUPER_ADMIN y recuperación tras respuesta perdida sin duplicados, registro independiente/correo capturado, consentimientos separados, JPEG/PNG, presentación y revisión de identidad y unidad. Aceptar no aprobó ni habilitó; LOCAL_TEST conservó su historia. Una ejecución autorizada con Web/backend reales y PostgreSQL temporal identificado, correo/almacenamiento simulados. [Informe y pendientes actuales](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md), [evidencia integrada](docs/onboarding-production-integration-evidence.json). No se repitieron 98 pruebas con fixtures. Se requiere el backend compatible con sus cambios locales y migración, textos aprobados y preparación operativa; no acredita aptitud productiva general. Sin cambios de producto/backend, QA, commit, push, despliegue o activación. La entrada inmediatamente inferior conserva el estado histórico anterior a este cierre.
+
+## Alta documental: contrato productivo — 2026-10-19
+
+Web adaptada localmente a publicaciones inmutables SUPER_ADMIN, términos/privacidad/consentimientos separados y transición de historia LOCAL_TEST. La publicación no activa la admisión ni aprueba expedientes. Requiere el backend con el contrato productivo aún sin commit; no basta su SHA base. [Informe, pruebas y límites](docs/DOCUMENTARY-ONBOARDING-PRODUCTION-WEB.md). 98 casos únicos focalizados aprobados, tipos/lint/build y revisión visual 1280/320. Integración real parcial: composición y política ausente comprobadas; recorrido completo pendiente por el límite de ejecución del arnés. Sin backend modificado, QA, commit, push, despliegue o activación. La entrada LOCAL_TEST inferior se conserva como historial.
+
+
+## Verificación documental de prueba — 2026-10-13
+
+Implementada desde main en `feature/driver-verification`, sin integrar QA ni activar backend. Incluye registro independiente sin proveedor, correo/términos LOCAL_TEST, expedientes y unidades, archivos privados JPEG/PNG, bandeja SUPER_ADMIN y recuperación mínima ante respuesta perdida. No apto para producción ni documentos reales.
+
+- DRIVER: `/driver/register` → `/driver/verify` → `/login?next=onboarding` → `/driver/onboarding`.
+- PROVIDER_ADMIN: `/provider/verification`, proveedor autorizado y aceptación del representante separada de la personal del conductor.
+- SUPER_ADMIN: `/admin/verification-cases`; revisión explícita, nunca aprobación por sólo cargar archivos.
+- Detalle: `/verification/cases/:id`; comprobante histórico: `/verification/acceptances/:id`.
+
+[Implementación, contratos, privacidad, recuperación y handoffs](docs/DRIVER-VERIFICATION-WEB.md) · [Compatibilidad main e historial](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md) · [Verificación y límites](VERIFICATION.md).
+
+No se agregaron dependencias ni se cambiaron configuración o versión. El cliente existente añade `/api/v1`; para una futura prueba real usar únicamente un origen local identificado según configuración vigente. No habilitar flags con estas instrucciones. La revisión reproducible `node scripts/verify-documentary-web.mjs` es sintética, no lee .env y detiene su Vite temporal; no acredita backend/PostgreSQL/Spaces reales.
 
 ## Diseño: validación documental de repartidores y unidades (2026-10-13)
 
@@ -469,3 +520,34 @@ Configurar privadamente `VITE_GOOGLE_MAPS_API_KEY` en `.env.local` para desarrol
 ### Registro público de clientes — diseño 2026-10-12
 
 Pantalla con marca/formulario responsive, validación inline y confirmación genérica conforme al contrato. No pide teléfono (no existe en el DTO). Revisión visual con API sintética: `node scripts/verify-registration-design.mjs`; pruebas focalizadas: `npx vitest run src/test/customer-registration-design.test.tsx src/test/customer.test.tsx --pool=threads --maxWorkers=1`. Véase VERIFICATION.md.
+
+## Baja y eliminación documental — prueba local (2026-10-16)
+
+Solicitud por alcance, seguimiento, recuperación por clave, constancias parciales
+y revisión SUPER_ADMIN en `/privacy/deletion` y `/admin/privacy/deletion`.
+`/privacy/deletion-access` permite consultar con la capacidad privada real expedida
+por backend, sin inventar una sesión posterior a la baja. Una solicitud aceptada
+no equivale a eliminación; H sólo acredita el alcance operativo y los respaldos
+siguen sin acreditación. El drenaje real de Spaces continúa pendiente.
+
+[Contrato, permisos, rutas, límites y futura integración aislada](docs/DOCUMENT-DELETION-WEB.md).
+[Pruebas y capturas sintéticas](VERIFICATION.md). No se ha ejecutado integración
+real de esta baja, ni modificado backend, integrado QA, hecho commit/push o desplegado.
+
+### Actualización 2026-10-17 — sesión y recuperación compatibles
+
+La sesión usa `auth/me?projection=session`, conservando identidad restringida sin
+inventar roles ni habilitar operación general. Los comandos administrativos de
+baja se recuperan por GET con su clave original después de recargar. Recibos
+históricos y estado actual permanecen separados; 404 no autoriza otra mutación.
+
+Los recorridos de sesión restringida y pérdida de respuesta **después del commit**
+se validaron con navegador, backend real y PostgreSQL sintético aislado. Un comando,
+un efecto original y recuperación denegada al otro administrador. Esto actualiza
+el pendiente de integración de esos dos recorridos, no acredita todo el workflow
+ni Spaces. [Cambios, evidencia y límites](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md).
+
+### Estado revisado para publicación — 2026-10-17
+
+La baja admite seguimiento y constancias parciales; la sesión restringida usa projection=session y la recuperación administrativa usa GET sin repetir la mutación. La entrega LEGACY restringida y el recibo realmente depurado tienen evidencia de navegador/backend/PostgreSQL aislados en [el informe de compatibilidad](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md). Las afirmaciones anteriores fechadas sobre integración pendiente son históricas. Drenaje real en Spaces pendiente: no se acredita eliminación total ni aptitud productiva. Publicación de código en feature/driver-verification no equivale a activación o despliegue.
+

@@ -1,0 +1,55 @@
+{
+  "uncommitted": true,
+  "checkout": "C:/Users/zorgl/Documents/mandaria-backend",
+  "files": [
+    {
+      "path": "src/verification/deletion.controller.ts",
+      "sha256": "A7CA35BF6D601551E61AF0EA8E024E04BA1EC565CBAA016388BFBE0A97F9656F"
+    },
+    {
+      "path": "src/verification/deletion.dto.ts",
+      "sha256": "D9A0F1118CC5BB8F1E5B859CF4F366548216D46D7CA8AE8DA00FD5092D1E318D"
+    },
+    {
+      "path": "src/verification/deletion.responses.ts",
+      "sha256": "015F84EDC1491CF1E40FABC0E2ACCCC147C0F59182FEC234C27E9FE444982D76"
+    },
+    {
+      "path": "src/verification/deletion.service.ts",
+      "sha256": "F3E9327E9456C6F591106C86516B0D0A1DF356813E8CF560E24D5DE024BDF1AE"
+    },
+    {
+      "path": "src/auth/auth.guards.ts",
+      "sha256": "FE6E0CC917949150818B4505EEF94F956DDF2F7901223EB58E6D640AFC3EC5E5"
+    },
+    {
+      "path": "src/auth/auth.service.ts",
+      "sha256": "D3F72F8D56DB09FDD0D492EB405F240FB5F66BFD0E5B2687268C3DB426FAC84F"
+    },
+    {
+      "path": "docs/openapi.json",
+      "sha256": "2A589D9BD28CBED954E7E8D7E8E8F0A1839B55757274E4746F7B4C3BAD14DDA9"
+    },
+    {
+      "path": "docs/DRIVER-VERIFICATION-DELETION-IMPLEMENTATION.md",
+      "sha256": "186F4A6F72BBB797E53E6E164EDEA106356C6706DAA8E64A0347CFA82925A8AC"
+    },
+    {
+      "path": "docs/DRIVER-VERIFICATION-DELETION-DESIGN.md",
+      "sha256": "382DF5EF3086F4A6281F78BCE58F0D512EA9ACFC1F94EE4F132448664E8AC5A2"
+    },
+    {
+      "path": "docs/DOCUMENTARY-RECOVERY-LOCAL-RUNBOOK.md",
+      "sha256": "800CD76D42178B99165A8FC3FB9FC0A72AF47CBDF5AED7DC4C276D1F24305E20"
+    },
+    {
+      "path": "docs/DRIVER-VERIFICATION-SPACES-DRAINAGE-PLAN.md",
+      "sha256": "407DE668A7BD535296818249D07FF3F0F89472577DF50E0F704C6956F48A74F1"
+    },
+    {
+      "path": "test/document-deletion.e2e-spec.ts",
+      "sha256": "2EA13D9F460EFB45ABB82026D0DF62CDC5D2164FF60FD9219655749C2BD27D5F"
+    }
+  ],
+  "head": "b300c250df9fcc4aea8bcd76a1d6ed7c93e04e9a"
+}

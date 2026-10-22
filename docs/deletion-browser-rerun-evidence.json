@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-17",
+  "status": "BLOCKED_ISOLATION",
+  "smoke": {
+    "status": "PASS",
+    "stage": "login-rendered",
+    "backendStarted": false,
+    "browser": "Chromium",
+    "reportWritten": true
+  },
+  "smokeScope": "Real Chromium and Web login only; VITE_API_URL set to local Web origin, no backend proxy or functional fixtures.",
+  "screenshot": "test-results/deletion-browser-rerun/smoke-login.png",
+  "screenshotReviewed": true,
+  "dockerInspection": {
+    "mode": "read-only",
+    "backendContainer": "mandaria-backend-1",
+    "port": "127.0.0.1:43000 -> 3000",
+    "database": {
+      "host": "postgres",
+      "port": 5432,
+      "name": "mandaria",
+      "exclusiveSyntheticDatabase": false
+    },
+    "postgresContainer": "mandaria-postgres-1",
+    "volume": "mandaria_postgres_data",
+    "mailProvider": "resend",
+    "deletionLocalFlag": "not present in container environment",
+    "syntheticDataVerified": false,
+    "storageDoubleVerified": false,
+    "decision": "Do not execute destructive documentary scenarios on this instance; no database queried or mutated."
+  },
+  "scenarios": {
+    "purgedReceipt": "BLOCKED",
+    "restrictedLegacyDelivery": "BLOCKED"
+  },
+  "functionalRequests": [],
+  "databaseEffects": null,
+  "productChanges": false,
+  "backendChanges": false,
+  "backendComparison": [
+    {
+      "file": "src/auth/auth.guards.ts",
+      "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+      "unchanged": true
+    },
+    {
+      "file": "src/auth/auth.controller.ts",
+      "sha256": "8087b4e5e999719310a530c4aa25959de1226e6202fb07d0a95039144267c14d",
+      "unchanged": true
+    },
+    {
+      "file": "src/users/users.service.ts",
+      "sha256": "cfd025d1fe86a9d3b65a3bd973458abba2e7b370435c1878e73477e289a48c6d",
+      "unchanged": true
+    },
+    {
+      "file": "src/verification/deletion.service.ts",
+      "sha256": "f87cba5bffaa16b611d96d09e1295462676df78e1bb5e58077f360dbd9ffa3ff",
+      "unchanged": true
+    },
+    {
+      "file": "src/verification/deletion-command-receipt.ts",
+      "sha256": "b0e779af6dc6091eb4a79a3f6ba6dc0e9b5d10284cc652c9533236247a1e51f6",
+      "unchanged": true
+    },
+    {
+      "file": "src/independent-drivers/independent-dispatches.service.ts",
+      "sha256": "01b8f4c008ceb5a1b0407c8eb7aa32c1b76d00f1fd23df1380f80efd61e170f4",
+      "unchanged": true
+    },
+    {
+      "file": "src/deliveries/delivery-completion.ts",
+      "sha256": "32a4a7f1b6bf547afda49e6593af4a2ad6c22da76d8229d028843d413d7ae1d0",
+      "unchanged": true
+    },
+    {
+      "file": "src/drivers/drivers.service.ts",
+      "sha256": "fcd6d98cc0b14ecc5fdb3dd8c47519f48769e787e69d918c8c13ac8001045547",
+      "unchanged": true
+    },
+    {
+      "file": "dist/auth/auth.guards.js",
+      "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a",
+      "unchanged": true
+    },
+    {
+      "file": "dist/verification/deletion.service.js",
+      "sha256": "ad42d477ab64e2e4ac436cd6d92b31d91c75faf69072e124fed7399d56422eda",
+      "unchanged": true
+    },
+    {
+      "file": "dist/independent-drivers/independent-dispatches.service.js",
+      "sha256": "d407c1b5c2188ef7de51128e8e9a6368f2bbfa1c3c7b2b4a37a5520a3396f3e6",
+      "unchanged": true
+    },
+    {
+      "file": "docs/openapi.json",
+      "sha256": "5bdc9323c26152b9947488b00fdcd4055cc3d7a47554c3b0b77211f7fc0f3add",
+      "unchanged": true
+    },
+    {
+      "file": "scripts/verify-deletion-final-contract.mjs",
+      "sha256": "d07123cdcf2cc7f34295ff86d68f1e4caebb92d66a9f25953276e23bfd118f7d",
+      "unchanged": true
+    },
+    {
+      "file": "scripts/verify-deletion-final-browser.mjs",
+      "sha256": "3f353a8bdcf1b8f93696afbb46490477b56d5e7255257498fe183975c3fe0605",
+      "unchanged": true
+    }
+  ],
+  "harness": {
+    "file": "scripts/verify-deletion-browser-smoke.mjs",
+    "sha256": "8996f7b50152e2da8a6101eb249fd8c80682c823847d2eb7ca409bc80b6aa5f1",
+    "note": "Formatting only after successful execution"
+  },
+  "validation": {
+    "syntax": "PASS",
+    "smoke": "PASS",
+    "mobile": "NOT RUN",
+    "functionalKeyboard": "NOT RUN",
+    "productTests": "NOT RUN - no product changes"
+  },
+  "cleanup": {
+    "ownViteClosed": true,
+    "ownChromiumClosed": true,
+    "port4208Free": true,
+    "dockerContainersUntouched": true,
+    "postgresStarted": false
+  },
+  "commit": false,
+  "push": false
+}

@@ -1,0 +1,46 @@
+.privacy-area {
+  max-width: 1000px;
+  overflow-wrap: anywhere;
+}
+.privacy-area nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.privacy-area h1,
+.privacy-area h2 {
+  margin: 20px 0;
+}
+.privacy-area p {
+  margin: 16px 0;
+}
+.privacy-area dd {
+  margin: 4px 0 16px;
+}
+.privacy-area dt {
+  font-weight: 700;
+}
+.privacy-area .button {
+  margin: 8px 8px 8px 0;
+  white-space: normal;
+}
+.privacy-area input,
+.privacy-area select {
+  max-width: 100%;
+}
+.privacy-area fieldset {
+  min-width: 0;
+}
+.privacy-area li {
+  margin-bottom: 12px;
+}
+@media (max-width: 640px) {
+  .privacy-area {
+    padding: 20px 16px;
+  }
+  .privacy-area .button {
+    width: 100%;
+    margin-right: 0;
+  }
+}

@@ -1,3 +1,15 @@
+# Compatibilidad Web/main — actualización de implementación 2026-10-13
+
+La fotografía histórica conservada abajo precede a la implementación backend local. Sus frases «no implementado» **no describen el working tree backend actual**. Web implementa onboarding documental de prueba desde main en rama feature/driver-verification, sin integrar QA. Base exacta, mapeo de contratos, cambios, discrepancias y pendientes en [DRIVER-VERIFICATION-WEB.md](DRIVER-VERIFICATION-WEB.md).
+
+- Provider nullable y onboarding independiente sin proveedor adaptados; correo, aceptación personal/FLEET, casos/unidades/evidencias/revisión y recuperación tienen módulo propio.
+- No depende de GPS, ejecución detallada, alta de clientes Negocio ni contratos humanos QA. No se importa el OpenAPI humano al portal público.
+- Cola y recuperación global DETAILED dejan de invocar APIs ausentes en main. Marcadores existentes preservados; usar entorno original para reconciliarlos. Otros flujos DETAILED heredados no quedan acreditados por este trabajo.
+- ACTIVE, aprobación comercial, aceptación de prueba y documentos cargados no se equiparan a habilitación operativa. Servicios comprometidos permanecen accesibles.
+- Pruebas frontend/visual con fixtures; **sin nueva integración HTTP real, PostgreSQL ni Spaces**. Revisar VERIFICATION para comandos y resultados, sin atribuir pruebas históricas a esta implementación.
+
+## Análisis anterior conservado íntegramente como historial
+
 # Validación documental de repartidores — compatibilidad Web con main
 
 ## Estado y referencias — 2026-10-13

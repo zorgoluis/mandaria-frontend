@@ -8,8 +8,13 @@ export function Login() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const destination =
-    params.get('next') === 'business' ? '/customer/business' : '/dashboard'
+    params.get('next') === 'business'
+      ? '/customer/business'
+      : params.get('next') === 'onboarding'
+        ? '/verification-entry'
+        : '/dashboard'
   const [visible, setVisible] = useState(false)
+  if (auth.restricted) return <Navigate to="/privacy/deletion" replace />
   if (auth.user) return <Navigate to={destination} replace />
   return (
     <div className="login-page">
@@ -125,7 +130,13 @@ export function Login() {
             ¿Recibiste una invitación? Activa tu cuenta desde el enlace del
             correo antes de iniciar sesión.
           </p>
+          <p>
+            <Link to="/driver/register">Registro independiente de prueba</Link>
+          </p>
           <div className="login-security">
+            <Link to="/privacy/deletion-access">
+              Seguimiento privado de baja
+            </Link>
             <ShieldCheck size={18} />
             <span>Usa tu cuenta personal para acceder a Mandaria.</span>
           </div>

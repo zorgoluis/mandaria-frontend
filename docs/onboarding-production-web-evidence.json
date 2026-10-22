@@ -1,0 +1,667 @@
+{
+  "recordedAt": "2026-10-19T07:48:48.694Z",
+  "task": "Web production documentary onboarding contract",
+  "status": "IMPLEMENTED_LOCALLY_FIXTURE_VALIDATED_INTEGRATION_PARTIAL_NOT_ACTIVATED",
+  "branch": "feature/driver-verification",
+  "webHead": "fcc81e98e23b569723c78304caa6098e64b01963",
+  "backendHead": "06457dedd9b2f533862a0477b04b36b69e1990f0",
+  "backendContentUncommitted": true,
+  "sources": {
+    "baseline": "onboarding-production-web-sources.json",
+    "backendCompared": [
+      {
+        "file": "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-PREPARATION.md",
+        "sha256": "502017af0b28d34187e36df27684a7bac83d01dc07ff47a32e3af7be56d183f9",
+        "stillMatches": true
+      },
+      {
+        "file": "docs/checks/documentary-onboarding-production.json",
+        "sha256": "96c0c350b47634de1056b6651e79b4c3fd135fa1c50a97f84df95fd4a636d4ff",
+        "stillMatches": true
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "028fb9f6e44d5d3417e31643ef3685ab3a64d35c46f46b5fb46b7c11a7361571",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "sha256": "0e252f68b047f436a1e3186995e37caf41203baa46f1a1b74315b415dae5c9ff",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification.controller.ts",
+        "sha256": "bfb2de54d95a339bdf39fb574846e9ad28b50a49ffa8828b157db0098701de6b",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification.dto.ts",
+        "sha256": "a7fa2bafef890a9d763306a07db0e9f67b1d2d8135ab4834e932c7dd3479a76b",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification.responses.ts",
+        "sha256": "67687b24d3f550dc7727b1905016991a82d31be7f4d3c7bd3b5f7cba1754f142",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification-terms.ts",
+        "sha256": "7137f38755b6e5eb4a51697529d33fa7e3a93e7f34b0d6e6f5feceb1cb34bb85",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification-policy.ts",
+        "sha256": "afa0e761cfad32afe0eec57de41bfda96734f26248e484042f66d3cd88ecbe06",
+        "stillMatches": true
+      },
+      {
+        "file": "src/verification/verification-rules.ts",
+        "sha256": "d26f0ffe3fa8bd21b2679be546daaa7daf7f4e3a8cc633da05172245d16d1ccf",
+        "stillMatches": true
+      },
+      {
+        "file": "src/auth/auth.guards.ts",
+        "sha256": "a3d7b24ce4b331136615328caadfac243cbbc7f4a281a2f33379541ca80c39da",
+        "stillMatches": true
+      },
+      {
+        "file": "test/onboarding-production.e2e-spec.ts",
+        "sha256": "dd60f127d4a214c61d23aa08769f17016658fbaa8ca16370fb5a74791b310eed",
+        "stillMatches": true
+      },
+      {
+        "file": "scripts/verify-onboarding-production.mjs",
+        "sha256": "ee9bedba082630fc9fca76e400afc5b8aecb74a5b6d19eedf988a532728ecd5d",
+        "stillMatches": true
+      },
+      {
+        "file": "prisma/migrations/20261019000100_documentary_production/migration.sql",
+        "sha256": "d3c1ca9f85e5ee65cb7180250ad15e106578e59b623fdb592db975fccb34265d",
+        "stillMatches": true
+      }
+    ],
+    "backendHistoricalComparisons": [
+      {
+        "file": "docs/DOCUMENTARY-PRODUCTION-CONFIG-AUDIT-2026-10-19.md",
+        "sha256": "539d27a2b5f94594c528a058eb05c3cbad71b1dfee6313db471ff508f25e50cd",
+        "matches": true
+      },
+      {
+        "file": "test/deletion-storage-composition.spec.ts",
+        "sha256": "fbfdd6954b55b6005cdee6a0ce5d6331ef84f1a8ff379168e8d55111bff8c51a",
+        "matches": true
+      },
+      {
+        "file": ".env.example",
+        "sha256": "4633c6bc0e93670fe2646895245ba6f65dfe43da663b8d5aaa6e582ce44673aa",
+        "matches": true
+      },
+      {
+        "file": "BITACORA.md",
+        "sha256": "895363e11e51e1f8c5253e6823750eb86c15428a4ea57e11f2ec2ea9206af345",
+        "matches": true
+      },
+      {
+        "file": "README.md",
+        "sha256": "edf8038f2586024ee16fab7311a16ec97cd639ffd8a549d389a5db4c910269ad",
+        "matches": true
+      },
+      {
+        "file": "VERIFICATION.md",
+        "sha256": "dadfe5de6710235389fa1250ad9f6d54398f5ac83ad2ec0e82f56f0dfb1f42f3",
+        "matches": true
+      },
+      {
+        "file": "docker-compose.yml",
+        "sha256": "59007e55e3659f94535d5a63aa218e0e1afcb5e4f76b35370479861a131176ff",
+        "matches": true
+      },
+      {
+        "file": "docs/API_ACCESS.md",
+        "sha256": "63131457a9e70eee4ff97e491a75de53ba24918b4d993c5623ba140877600ad1",
+        "matches": true
+      },
+      {
+        "file": "docs/DRIVER-VERIFICATION-IMPLEMENTATION.md",
+        "sha256": "9b746bbb9ed7886587bf8def5ac0f3a95933fb8a4653462f4f7e032246106e6b",
+        "matches": true
+      },
+      {
+        "file": "docs/openapi.json",
+        "sha256": "028fb9f6e44d5d3417e31643ef3685ab3a64d35c46f46b5fb46b7c11a7361571",
+        "matches": true
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "sha256": "3fd9a39905cf912540b4679da033a09958998a8416597e931cc4af38fa83dfba",
+        "matches": true
+      },
+      {
+        "file": "src/config/environment.spec.ts",
+        "sha256": "5d088a25c630ce7ad1dbcd6d2a3cf41e827e5f1200c7bfca70fc21b57e207899",
+        "matches": true
+      },
+      {
+        "file": "src/config/environment.ts",
+        "sha256": "681644183562de72fa82213d37e6d8c7d9fe066ddba30102b7dc3a9986c36654",
+        "matches": true
+      },
+      {
+        "file": "src/mail/resend-mail.provider.ts",
+        "sha256": "19b3b7285443f2d748bf10ef49027fd3d28a3208a4296e14644c216ad1efd4cf",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-notifications.ts",
+        "sha256": "8bd772a0cf4612c21574cef62b81ec34147a39646c2ddc32da2aca944e0c4f0f",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-policy.ts",
+        "sha256": "afa0e761cfad32afe0eec57de41bfda96734f26248e484042f66d3cd88ecbe06",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.controller.ts",
+        "sha256": "bfb2de54d95a339bdf39fb574846e9ad28b50a49ffa8828b157db0098701de6b",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.dto.ts",
+        "sha256": "a7fa2bafef890a9d763306a07db0e9f67b1d2d8135ab4834e932c7dd3479a76b",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.module.ts",
+        "sha256": "63a2e1977dfb2ad7cf7d5ef7b2b85d02c8239931dbed0271f15c2b3f6ec99d47",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.responses.ts",
+        "sha256": "67687b24d3f550dc7727b1905016991a82d31be7f4d3c7bd3b5f7cba1754f142",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification.service.ts",
+        "sha256": "0e252f68b047f436a1e3186995e37caf41203baa46f1a1b74315b415dae5c9ff",
+        "matches": true
+      },
+      {
+        "file": "test/driver-verification.e2e-spec.ts",
+        "sha256": "b32238f52908f5a47aab90ee353004819e5dfeef1f6953463d89d48aec0a1b1f",
+        "matches": true
+      },
+      {
+        "file": "test/driver-verification.spec.ts",
+        "sha256": "676ea46601bf82d4a1bc81bfc0002ed406e7b38791a0fcaa98b7fafd7dab50f6",
+        "matches": true
+      },
+      {
+        "file": "test/resend-mail.spec.ts",
+        "sha256": "df4ed90a03d8e7bfcce85593c1f032315d08ffc60859310a9d286df534a13286",
+        "matches": true
+      },
+      {
+        "file": "src/verification/verification-terms.ts",
+        "sha256": "7137f38755b6e5eb4a51697529d33fa7e3a93e7f34b0d6e6f5feceb1cb34bb85",
+        "matches": true
+      },
+      {
+        "file": "prisma/migrations/20261019000100_documentary_production/migration.sql",
+        "sha256": "d3c1ca9f85e5ee65cb7180250ad15e106578e59b623fdb592db975fccb34265d",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-onboarding-production.mjs",
+        "sha256": "ee9bedba082630fc9fca76e400afc5b8aecb74a5b6d19eedf988a532728ecd5d",
+        "matches": true
+      },
+      {
+        "file": "scripts/onboarding-migration-fixture.mjs",
+        "sha256": "2303bfc078ae8354dfdca845ebf8e8218e10582a6f0ad64c1e487c15cabdf694",
+        "matches": true
+      },
+      {
+        "file": "test/onboarding-production.e2e-spec.ts",
+        "sha256": "dd60f127d4a214c61d23aa08769f17016658fbaa8ca16370fb5a74791b310eed",
+        "matches": true
+      },
+      {
+        "file": "vitest.config.onboarding-production.ts",
+        "sha256": "15e32beb6c0158a607aeaa984936aba75081683f588b5d446e62c2eada99eb29",
+        "matches": true
+      },
+      {
+        "file": "docs/DOCUMENTARY-ONBOARDING-PRODUCTION-PREPARATION.md",
+        "sha256": "502017af0b28d34187e36df27684a7bac83d01dc07ff47a32e3af7be56d183f9",
+        "matches": true
+      }
+    ],
+    "backendRuntimeUsedInPartialAttempt": [
+      {
+        "file": "dist/app.module.js",
+        "sha256": "843e8260f403df4de95d916ad317faad6bcdb57f89e4a1a504ca4dc6d9f76b9f"
+      },
+      {
+        "file": "dist/setup.js",
+        "sha256": "3ca25f233658c437fdefb7dc9707647e0601a94676360ae25900bde6f8a745b3"
+      },
+      {
+        "file": "dist/verification/verification.service.js",
+        "sha256": "35b1037339ea260ab532c4e2ebadedf0c885647403068d367ff694b3582d4f8d"
+      },
+      {
+        "file": "dist/verification/verification.controller.js",
+        "sha256": "98d47b4a407caaf7f3df57cbe96f96ae8686b1e11a80259b0123d4893417c960"
+      },
+      {
+        "file": "dist/verification/verification.dto.js",
+        "sha256": "98bcd371163ca996094e2fcceff4d4cd6aa0f0f19bf3a40e7458e06f0653de86"
+      },
+      {
+        "file": "dist/verification/verification-policy.js",
+        "sha256": "79e59d3487dc0dfc0876b518ab0a33b223b946d8c89d5a2aa04058ddc7098afd"
+      },
+      {
+        "file": "dist/verification/verification-terms.js",
+        "sha256": "d852616dac33d41878f81d22c4640300b08bb7addfb80f8690ca0ec253d4ee84"
+      },
+      {
+        "file": "dist/verification/verification-storage.js",
+        "sha256": "c1601496e137cb59b6217fe2bf632fbc6b371b96d65a3f31364c9580b5f0c2ed"
+      },
+      {
+        "file": "dist/auth/auth.guards.js",
+        "sha256": "6d63d084c98f6ac224a80ef3a95259fa859b87bb33b24a685c0fb572b26fe10a"
+      }
+    ],
+    "web": [
+      {
+        "file": "src/app/App.tsx",
+        "sha256": "9a14ac7bcbf7813891aa03ba73ff64b46d7e07aaf460d97f1d279f68294aa43b"
+      },
+      {
+        "file": "src/verification/common.tsx",
+        "sha256": "e11ae8fab740b48e6e7760012e8f170f7bb5c62d8b54f2398ba171b76a52a8fa"
+      },
+      {
+        "file": "src/verification/evidence.tsx",
+        "sha256": "27b475cfeca56ef441ebd3373acde644e648e56942c5e539b6a1e1feb3a6de09"
+      },
+      {
+        "file": "src/verification/format.ts",
+        "sha256": "7ba71f14199cd3e7f04eb587caab00b9dab19b6ecfb76ec08922d733d6db9845"
+      },
+      {
+        "file": "src/verification/forms.tsx",
+        "sha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1"
+      },
+      {
+        "file": "src/verification/hooks.ts",
+        "sha256": "1e441d3247a20388271ee2af19d890524eade2f7344ae70ad6f60f88ceaf35cb"
+      },
+      {
+        "file": "src/verification/identity.tsx",
+        "sha256": "6a5600410bda215902af13fd2713bd0800c5e3a47aeee45461facd7e9ce045fb"
+      },
+      {
+        "file": "src/verification/legacy.tsx",
+        "sha256": "e3f85aff081d5b4bd703faef841bfbae5d3471aa758085743b7baa743b3d6444"
+      },
+      {
+        "file": "src/verification/pages.tsx",
+        "sha256": "4db6ef851a0e91cd77e9b019998f3a9420598398c6a440134f27042aa1b448d5"
+      },
+      {
+        "file": "src/verification/pending.ts",
+        "sha256": "6e9e776d6d68617a4fdfce22f0b2e1eb6f75b9e52afb454a12fa8fc24a303669"
+      },
+      {
+        "file": "src/verification/publications.tsx",
+        "sha256": "7fcf79f0a90e235c5fe2e92d450972c966f8bd138fab0238ce34ff1133b7cc6c"
+      },
+      {
+        "file": "src/verification/service.ts",
+        "sha256": "0763928c786dbb4fedc430110dfe055b2b26133c3cfc67b05f69dd03e0111935"
+      },
+      {
+        "file": "src/verification/terms-contract.ts",
+        "sha256": "9bbac96d64134ef14b359cdaf30b7de701aa747054ac9222f4d28b5f31f099dc"
+      },
+      {
+        "file": "src/verification/terms.tsx",
+        "sha256": "e21a9cc3737a3a15d62c24146701e6b5ccbcbb44462900ce53b0758559c1e18a"
+      },
+      {
+        "file": "src/verification/types.ts",
+        "sha256": "c1fd7349ae6b48a7970f60e6f02826ba766eed9ce5e6fe53f1897f31b0ed8675"
+      },
+      {
+        "file": "src/verification/verification.css",
+        "sha256": "47224b31d22c07a9d59df542889844fb83f36bf21307ec1e0fe6dca30f273186"
+      },
+      {
+        "file": "src/test/onboarding-production.test.tsx",
+        "sha256": "d768fa21ab22fb8345d7649fb3ea797de328f637855c35508aa5ed90a4f31681"
+      },
+      {
+        "file": "src/test/verification-pages.test.tsx",
+        "sha256": "027ca64eebb95e5a861d6498582f30ddebdcf58a0a214bc07aed6bbf436259b7"
+      },
+      {
+        "file": "src/test/verification-service.test.ts",
+        "sha256": "4f868c188cca1e4b822f2e9216fad699ba100dcf0cfeb7c40221159890880ab7"
+      },
+      {
+        "file": "src/test/verification-recovery.test.ts",
+        "sha256": "5051ec005e6a67fee4182400b322f229e0b5c9785c92b132f5d955d390601e4a"
+      },
+      {
+        "file": "src/test/verification-upload.test.tsx",
+        "sha256": "653c945f917a177d97ced7de8052af8a9ff41861dfddf16f10632f1d4f02715a"
+      },
+      {
+        "file": "src/test/verification-fixtures.ts",
+        "sha256": "6dba52be238b00476e33cc42f033027313253a035d97efcf09ef15993d0c15b3"
+      },
+      {
+        "file": "scripts/verify-documentary-web.mjs",
+        "sha256": "623774c4e431ebca08747edcefde571318b2e0491c224ff6be563a890ca10bf3"
+      },
+      {
+        "file": "scripts/onboarding-isolated-environment.mjs",
+        "sha256": "5e366282f519d79f3e4c91a9de502b5ed32f6d9ef42b143029f029e2f81e6346"
+      },
+      {
+        "file": "scripts/onboarding-isolated-backend.mjs",
+        "sha256": "d1abb62cdf0e4b77766f03048b22848826ae52d8927ee1d9364b4ad553efad5e"
+      },
+      {
+        "file": "scripts/verify-onboarding-production-web.mjs",
+        "sha256": "fc0d4bcbf27227179ed1bc3aa2ad9028b2e905c02d3e57211c73a0eacd35af74"
+      },
+      {
+        "file": "scripts/verify-onboarding-production-visual.mjs",
+        "sha256": "e388c2373482b211636d4da7cc87fa93c26c11fd7b38d379fd116c62a7c2d828"
+      }
+    ],
+    "unchangedProtected": [
+      {
+        "file": "src/verification/forms.tsx",
+        "sha256": "762dbf025c8ff625d37fc06f72881e1f325e2cf859e972b6943c2bc7070105f1",
+        "matches": true
+      },
+      {
+        "file": "src/auth/session.ts",
+        "sha256": "987490b9d8a04ce2a9bf86a682632be2b3e8570722d154e615688c5fc289af62",
+        "matches": true
+      },
+      {
+        "file": "src/services/api.ts",
+        "sha256": "56c85b2847557c5cb555083e1bd2a651e4fb4a878cf8fdba8d569d362fb781b8",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/receipt.ts",
+        "sha256": "f442af6d03dfae7b8ab18d26ddf4521b6052da187c6ff4395c8a0627f54f055b",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/service.ts",
+        "sha256": "44179e546e3dec54dccd150e770690c02a824e48f49e0de24747b3e66c74e802",
+        "matches": true
+      },
+      {
+        "file": "src/deletion/pages.tsx",
+        "sha256": "1e86e26a30fbcb19c67e83e4557804e796dd15fc0e9e08c1b6b7c9549e269f6e",
+        "matches": true
+      }
+    ]
+  },
+  "validation": {
+    "unit": {
+      "totalUnique": 98,
+      "passedUnique": 98,
+      "files": [
+        {
+          "file": "src/test/onboarding-production.test.tsx",
+          "count": 27,
+          "passed": 27,
+          "status": "passed"
+        },
+        {
+          "file": "src/test/verification-pages.test.tsx",
+          "count": 27,
+          "passed": 27,
+          "status": "passed"
+        },
+        {
+          "file": "src/test/verification-recovery.test.ts",
+          "count": 14,
+          "passed": 14,
+          "status": "passed"
+        },
+        {
+          "file": "src/test/verification-service.test.ts",
+          "count": 22,
+          "passed": 22,
+          "status": "passed"
+        },
+        {
+          "file": "src/test/verification-upload.test.tsx",
+          "count": 8,
+          "passed": 8,
+          "status": "passed"
+        }
+      ],
+      "aggregation": "Latest complete file execution, not the aggregate failed run: 54/54 pages+onboarding final, 44/44 service+recovery+upload from prior batch. Repetitions not counted.",
+      "reports": [
+        {
+          "file": "test-results/onboarding-production-unit.json",
+          "sha256": "36c24b9ce00e8fce5b00079deaa65a4671e86531f732c34dda21537defa031c0",
+          "overallStatus": "FAILED_97_OF_98_OLD_ALT_SELECTOR",
+          "completePassingFilesReused": [
+            "verification-service.test.ts",
+            "verification-recovery.test.ts",
+            "verification-upload.test.tsx"
+          ]
+        },
+        {
+          "file": "test-results/onboarding-production-pages-final.json",
+          "sha256": "2169f3e92619d93495b143ba652dac02d0407f6f9ae81ff224bfe9386e486f95",
+          "overallStatus": "PASS_54_OF_54"
+        }
+      ]
+    },
+    "types": "PASS",
+    "lint": "PASS",
+    "build": {
+      "status": "PASS",
+      "modules": 2323,
+      "warning": "Root chunk above 500 kB"
+    },
+    "visual": {
+      "status": "PASS",
+      "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+      "checks": [
+        "full-long-text-keyboard-scroll-visible-focus-separate-unchecked-consents",
+        "super-admin-complete-preview-scope-modal-background-inert-and-escape-no-publication",
+        "authorized-local-test-history-visible-no-implicit-reuse",
+        "missing-publication-explained"
+      ],
+      "screenshots": [
+        {
+          "file": "policy-long-text-focus-1280.png",
+          "width": 1280,
+          "sha256": "4cdc4a3ca56cdb0177c5bdd193df898896348c625667ea0ef20d8fc15228be39"
+        },
+        {
+          "file": "policy-long-text-focus-320.png",
+          "width": 320,
+          "sha256": "c4ef1ed9c5a1ce1688e7991ec36d3fa8bc075b7d9e44d6bbafa677ec216a58c6"
+        },
+        {
+          "file": "publication-preview-1280.png",
+          "width": 1280,
+          "sha256": "c4663d1c67ba6091b5bba7684220f24135da9281b1106bff88c451bde2a42bde"
+        },
+        {
+          "file": "publication-preview-320.png",
+          "width": 320,
+          "sha256": "b5a9ba49a81b7f36440634c79ecc8a3f97cc3190996f384c53741c0ae7b98b5c"
+        },
+        {
+          "file": "historical-local-test-1280.png",
+          "width": 1280,
+          "sha256": "3e5f040adf4fe27537478fb41eccfa88943e8d6905f78b1cdd3221213a4ec01f"
+        },
+        {
+          "file": "historical-local-test-320.png",
+          "width": 320,
+          "sha256": "56d0d6e84ede1af04c8cec3b740e46a12d855b4b0772b8c5ba6b6088dad6b8f6"
+        },
+        {
+          "file": "missing-policy-1280.png",
+          "width": 1280,
+          "sha256": "7ec74be547e6921e9bd4fd3757bb90bc0a3e9708802914789c143e4df62efcec"
+        },
+        {
+          "file": "missing-policy-320.png",
+          "width": 320,
+          "sha256": "cae51973642bae756abe00fc57e1eaeab55a8f577f82b03ddd6cdf842ff6d45d"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "mutations": 0,
+      "report": "test-results/onboarding-production-visual/1792395799561/report.json",
+      "reportSha256": "dc2ee3e68b6b50762c67edbe33445c849c3afc8145ab4cc031fdfdeb3e35dee7",
+      "publishedCaptures": [
+        {
+          "file": "onboarding-production-visual/historical-local-test-320.png",
+          "sha256": "56d0d6e84ede1af04c8cec3b740e46a12d855b4b0772b8c5ba6b6088dad6b8f6"
+        },
+        {
+          "file": "onboarding-production-visual/policy-long-text-focus-320.png",
+          "sha256": "c4ef1ed9c5a1ce1688e7991ec36d3fa8bc075b7d9e44d6bbafa677ec216a58c6"
+        },
+        {
+          "file": "onboarding-production-visual/publication-preview-1280.png",
+          "sha256": "c4663d1c67ba6091b5bba7684220f24135da9281b1106bff88c451bde2a42bde"
+        },
+        {
+          "file": "onboarding-production-visual/publication-preview-320.png",
+          "sha256": "b5a9ba49a81b7f36440634c79ecc8a3f97cc3190996f384c53741c0ae7b98b5c"
+        }
+      ]
+    },
+    "staticChecks": {
+      "bitacoraHistory": true,
+      "verificationHistory": true,
+      "linksValid": true,
+      "webHashesMatch": true,
+      "syntheticCapturesMatch": true,
+      "json": "PASS",
+      "diffCheck": "PASS",
+      "harnessSyntax": "PASS",
+      "index": "EMPTY"
+    }
+  },
+  "integration": {
+    "status": "INCOMPLETE_NOT_END_TO_END_VALIDATED",
+    "lastExecutedAttempt": "1792395222480",
+    "confirmedChecks": [
+      "real-backend-temporary-database-and-simulated-transports",
+      "missing-publication-preserves-history-and-blocks-new-acceptance"
+    ],
+    "failedStage": "browser",
+    "cause": "Harness selector expected a different historical-case warning; corrected in harness, not executed again.",
+    "transports": {
+      "publicationPosts": 0,
+      "acceptancePosts": 0,
+      "browserStoragePuts": 0,
+      "mailCaptured": 0,
+      "storageSdkCalls": 0
+    },
+    "remaining": [
+      "publication and its own GET recovery",
+      "independent registration and captured confirmation",
+      "separate acceptance and its GET recovery",
+      "new PNG upload, submission, and administrative review from Web"
+    ],
+    "attempts": [
+      {
+        "run": "1792395123661",
+        "status": "FAIL",
+        "failedStage": "database",
+        "identityChecked": false,
+        "databaseStopped": true,
+        "postmasterPidPresent": false,
+        "reportSha256": "e1d45da8f2e89adadfe46937614e6ccf244077cd6667a638a0e2b0d273b037bf"
+      },
+      {
+        "run": "1792395165483",
+        "status": "FAIL",
+        "failedStage": "database",
+        "identityChecked": false,
+        "databaseStopped": true,
+        "postmasterPidPresent": false,
+        "reportSha256": "71180bca16b470b596977b1d1beaab4cd65fb408d84d79dc928e6bc1321942a7"
+      },
+      {
+        "run": "1792395191054",
+        "status": "FAIL",
+        "failedStage": "database",
+        "identityChecked": true,
+        "databaseStopped": true,
+        "postmasterPidPresent": false,
+        "reportSha256": "ffd7327ee2447e872042097f65765e45f81f033e1ab69e5bf19aabb6c522d9d8"
+      },
+      {
+        "run": "1792395222480",
+        "status": "FAIL",
+        "failedStage": "browser",
+        "identityChecked": true,
+        "databaseStopped": true,
+        "postmasterPidPresent": false,
+        "reportSha256": "109daa80bb78c38f8433c14c5accd79d1e584c0bf33b086c55530b53b6087c29"
+      }
+    ],
+    "approval": {
+      "nextLaunchExecuted": false,
+      "result": "REJECTED_BY_AUTOMATIC_REVIEW",
+      "reason": "Reviewer interpreted another integration attempt as exceeding the single additional diagnosis limit.",
+      "userFollowup": "Delegated best option; left integrated run pending, continued independent fixture checks.",
+      "bypassed": false
+    },
+    "nativeRunnerAbort": false
+  },
+  "boundaries": {
+    "backendModified": false,
+    "envFilesRead": false,
+    "dockerUsed": false,
+    "realStorageOrMail": false,
+    "qaIntegration": false,
+    "commit": false,
+    "push": false,
+    "deployed": false,
+    "activated": false,
+    "deletionDeliveryCancelledRepeated": false
+  },
+  "pending": [
+    "complete corrected isolated integrated harness with additional execution authorization",
+    "compatible backend uncommitted content and migration before future Web release",
+    "approved legal texts and purposes, real destination/CORS/mail and operational preparation"
+  ],
+  "outsideScope": [
+    "Android/GPS",
+    "backend RESOLVED lifecycle",
+    "real V2 Spaces cleanup"
+  ],
+  "limitations": [
+    "fixtures are not legally approved documents",
+    "historical backend passing hashes do not establish a new integrated Web run",
+    "partial deletion attestations do not establish total erasure",
+    "no general production readiness"
+  ]
+}

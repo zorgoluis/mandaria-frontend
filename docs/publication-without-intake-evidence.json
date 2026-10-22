@@ -1,0 +1,27 @@
+{
+  "scope": "Administrative publication independent of intake",
+  "tests": {
+    "files": [
+      "src/test/onboarding-production.test.tsx",
+      "src/test/verification-pages.test.tsx"
+    ],
+    "passed": 57,
+    "environment": "jsdom, actual VerificationLayout, API doubles"
+  },
+  "build": "PASS",
+  "testTypes": "PASS",
+  "lint": "PASS",
+  "browserIntegration": "NOT_RUN",
+  "backendHttpPostgres": {
+    "passed": 17,
+    "evidence": "C:/Users/zorgl/Documents/mandaria-backend/docs/checks/publication-without-intake.json"
+  },
+  "hashes": {
+    "src/verification/publications.tsx": "7ff0373be8bf2fca05f13c1d32e1d2277e774951e7eba9d1da107ae2bd50213a",
+    "src/verification/pages.tsx": "f4a97dfb06e5ac5ffc05c5df03705ca7c7cfab9fd79fabbe710d37d28f78eeb3",
+    "src/verification/types.ts": "0e1dc841b62711a7a558b0decca0ed6622c41867b9865eda7fc02b6fe4da2d0b",
+    "src/test/onboarding-production.test.tsx": "46bd87ede084283f004a8f2de7713a5fa33ff01a84bcd24c6a35252103da90fa",
+    "src/test/verification-pages.test.tsx": "98edf20707ecedb945ec9c0efc3e7b3ea7dd585fbfff37340e916ef56f84af0c"
+  },
+  "finalTypeCorrection": "Removed unused Recovery import after layout regression refactor; types and lint rerun passed; no executable changes"
+}

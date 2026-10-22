@@ -23,12 +23,42 @@ const accessChallenge =
 const clearAccessChallenge = () => {
   accessChallenge.token = ''
 }
+import {
+  VerificationLayout,
+  DriverOnboarding,
+  ProviderVerification,
+  AdminVerification,
+  CaseDetail,
+  ReceiptPage,
+} from '../verification/pages'
+import { Register, RegistrationConfirm } from '../verification/identity'
+import { PublicationPage } from '../verification/publications'
+import {
+  RepresentativesPage,
+  AdminRepresentatives,
+} from '../verification/representatives'
+import {
+  PrivacyLayout,
+  DeletionHome,
+  NewDeletion,
+  DeletionDetail,
+  AdminDeletionList,
+  PrivateDeletion,
+} from '../deletion/pages'
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
 import { IncidentsPage, IncidentPage } from '../execution/incidents'
 import { Component, useEffect, type ReactNode } from 'react'
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import {
+  Link,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Login } from '../auth/Login'
+import { RestrictedActiveService } from '../deletion/ActiveService'
 import { AdminLayout } from '../layouts/AdminLayout'
 import { ErrorPage, ErrorState, Loading } from '../components/ui'
 import { Dashboard } from '../dashboard/Dashboard'
@@ -84,24 +114,42 @@ import {
 import type { Role } from '../types/api'
 export function Protected({ roles }: { roles?: Role[] }) {
   const auth = useAuth()
-  const location = useLocation()
+  const route = useLocation()
   if (auth.loading) return <Loading />
+  if (auth.restricted) {
+    if (
+      !roles &&
+      (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
+        route.pathname === '/privacy/active-service')
+    )
+      return <Outlet />
+    return <Navigate to="/privacy/deletion" replace />
+  }
   if (auth.error)
     return (
-      <ErrorState
-        error={auth.error}
-        retry={() => {
-          void auth.restore()
-        }}
-      />
+      <>
+        <Link to="/privacy/deletion-access">
+          Seguimiento privado de baja sin sesión operativa
+        </Link>
+        <ErrorState
+          error={auth.error}
+          retry={() => {
+            void auth.restore()
+          }}
+        />
+      </>
     )
   if (!auth.user)
     return (
       <Navigate
         to={
-          location.pathname.startsWith('/customer/business')
-            ? '/login?next=business'
-            : '/login'
+          /^\/(driver\/onboarding|provider\/verification|admin\/verification-cases|verification\/)/.test(
+            route.pathname,
+          )
+            ? '/login?next=onboarding'
+            : route.pathname.startsWith('/customer/business')
+              ? '/login?next=business'
+              : '/login'
         }
         replace
       />
@@ -118,7 +166,8 @@ export function App() {
     }
   }, [location.pathname])
   const auth = useAuth()
-  if (auth.loading) return <Loading />
+  if (auth.loading && location.pathname !== '/privacy/deletion-access')
+    return <Loading />
   return (
     <Routes>
       <Route path="/customer/register" element={<CustomerRegistration />} />
@@ -133,9 +182,38 @@ export function App() {
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route
+        path="/privacy/deletion-access"
+        element={
+          <PrivateDeletion
+            key={auth.user?.id ?? auth.restricted?.identity.id ?? 'private'}
+          />
+        }
+      />
+      <Route path="/driver/register" element={<Register />} />
+      <Route path="/driver/verify" element={<RegistrationConfirm />} />
       {/* Public: invited people have no session yet. */}
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
+        <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/active-service"
+            element={<RestrictedActiveService />}
+          />
+          <Route path="/privacy/deletion" element={<DeletionHome />} />
+          <Route path="/privacy/deletion/new" element={<NewDeletion />} />
+          <Route path="/privacy/deletion/:id" element={<DeletionDetail />} />
+          <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+            <Route
+              path="/admin/privacy/deletion"
+              element={<AdminDeletionList />}
+            />
+            <Route
+              path="/admin/privacy/deletion/:id"
+              element={<DeletionDetail admin />}
+            />
+          </Route>
+        </Route>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route element={<CustomerArea />}>
@@ -155,6 +233,64 @@ export function App() {
               element={<CustomerRequest key={location.pathname} />}
             />
           </Route>
+          <Route element={<VerificationLayout />}>
+            <Route element={<Protected roles={['DRIVER', 'PROVIDER_ADMIN']} />}>
+              <Route
+                path="verification/representatives"
+                element={<RepresentativesPage />}
+              />
+              <Route
+                path="verification/representatives/:subjectId"
+                element={<RepresentativesPage />}
+              />
+            </Route>
+            <Route element={<Protected roles={['DRIVER']} />}>
+              <Route path="driver/onboarding" element={<DriverOnboarding />} />
+            </Route>
+            <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
+              <Route
+                path="provider/verification"
+                element={<ProviderVerification />}
+              />
+            </Route>
+            <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+              <Route
+                path="admin/fleet-representatives"
+                element={<AdminRepresentatives />}
+              />
+              <Route
+                path="admin/verification-publications"
+                element={<PublicationPage />}
+              />
+              <Route
+                path="admin/verification-cases"
+                element={<AdminVerification />}
+              />
+            </Route>
+            <Route path="verification/cases/:id" element={<CaseDetail />} />
+            <Route
+              path="verification/acceptances/:id"
+              element={<ReceiptPage />}
+            />
+          </Route>
+
+          <Route
+            path="verification-entry"
+            element={
+              <Navigate
+                to={
+                  auth.user?.role === 'DRIVER'
+                    ? '/driver/onboarding'
+                    : auth.user?.role === 'PROVIDER_ADMIN'
+                      ? '/provider/verification'
+                      : auth.user?.role === 'SUPER_ADMIN'
+                        ? '/admin/verification-cases'
+                        : '/dashboard'
+                }
+                replace
+              />
+            }
+          />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route

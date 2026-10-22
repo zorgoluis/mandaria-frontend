@@ -1,0 +1,108 @@
+.verification-area {
+  max-width: 1100px;
+  margin: auto;
+  overflow-wrap: anywhere;
+}
+.verification-area .panel {
+  margin: 20px 0;
+}
+.verification-public {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 24px;
+}
+.verification-form {
+  display: grid;
+  gap: 16px;
+  margin: 16px 0;
+}
+.verification-form input:not([type='checkbox']),
+.verification-form textarea,
+.verification-form select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.verification-form fieldset {
+  min-width: 0;
+}
+.verification-form .button {
+  justify-self: start;
+  max-width: 100%;
+  white-space: normal;
+}
+.verification-terms {
+  white-space: pre-wrap;
+  max-height: 480px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.verification-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0;
+}
+.verification-check input {
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.verification-files {
+  padding-left: 20px;
+}
+.verification-files li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.verification-files button {
+  margin: 8px;
+}
+.verification-preview {
+  max-width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+}
+.verification-area dl div {
+  margin: 12px 0;
+}
+.verification-area dd {
+  margin-left: 0;
+}
+.verification-area button:focus-visible,
+.verification-terms:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .verification-public {
+    margin: 0;
+    padding: 16px;
+  }
+  .verification-area .panel-body {
+    padding: 16px;
+  }
+  .verification-area figure {
+    margin: 0;
+  }
+  .verification-terms {
+    padding: 12px;
+  }
+}
+
+.verification-area button:not(.button):not(.icon-button) {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: white;
+  color: var(--brand);
+  font: inherit;
+  cursor: pointer;
+}
+.verification-area button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
