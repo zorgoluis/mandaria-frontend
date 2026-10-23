@@ -1,3 +1,11 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({
+  fleet: {
+    context: vi.fn(),
+    spending: vi.fn().mockResolvedValue({ enabled: false, revision: '0' }),
+  },
+}))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   cleanup,
@@ -170,6 +178,8 @@ const noSecrets = () => {
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
+  vi.mocked(fleet.spending).mockResolvedValue({ enabled: false, revision: '0' })
   vi.mocked(invitations.list).mockResolvedValue(
     page([pending, expired, accepted]),
   )

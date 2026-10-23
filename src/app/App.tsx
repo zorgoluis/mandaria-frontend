@@ -1,3 +1,4 @@
+import { FleetServicesPage } from '../fleet/pages'
 import {
   BusinessCustomerPage,
   BusinessAdminPage,
@@ -419,6 +420,11 @@ export function App() {
             {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
             <Route path="provider/credits" element={<MyCreditsPage />} />
             {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
+            <Route path="fleet-services" element={<FleetServicesPage />} />
+            <Route
+              path="fleet-services/:id"
+              element={<FleetServicesPage key={location.pathname} />}
+            />
             <Route path="services" element={<ProviderServicesPage />} />
             <Route
               path="services/:id"

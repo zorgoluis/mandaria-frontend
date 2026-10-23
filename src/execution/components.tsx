@@ -1,3 +1,4 @@
+import { useFleetPermission } from '../fleet/permissions'
 import { HistoricalAdvanceRecovery } from './historical-recovery'
 import { useHistoricalMarkers } from './historical-store'
 import { useState, useEffect, useRef } from 'react'
@@ -281,6 +282,7 @@ export function ExecutionPanel({
   legacy404?: boolean
   operationalAssignmentId?: string | null
 }) {
+  const mutateAllowed = useFleetPermission('canMutateIncidents')
   const { user } = useAuth()
   const [page, setPage] = useState(1)
   const [dialog, setDialog] = useState<'report' | null>(null)
@@ -323,7 +325,7 @@ export function ExecutionPanel({
     scope.surface === 'admin'
       ? user?.role === 'SUPER_ADMIN'
       : scope.surface === 'provider'
-        ? user?.role === 'PROVIDER_ADMIN' && !!scope.providerId
+        ? user?.role === 'PROVIDER_ADMIN' && !!scope.providerId && mutateAllowed
         : false
   const blocked =
     (scope.surface === 'provider' &&

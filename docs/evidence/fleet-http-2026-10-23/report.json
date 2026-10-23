@@ -1,0 +1,57 @@
+{
+  "scope": "real Web/Nest HTTP/PostgreSQL; synthetic identities/data; external routing/mail simulated",
+  "output": "test-results/fleet-http-1792783122772",
+  "checks": [
+    "real-login-and-own-history",
+    "private-envelope-without-contact-or-package-content",
+    "old-deep-link-no-legacy-projection-and-eight-HTTP-mutations-denied",
+    "spending-revoke-lost-response-reload-exact-replay-one-effect-ACTIVE-preserved",
+    "real-revision-conflict-requires-review",
+    "PAUSED-observer-and-real-denial",
+    "real-invalid-cursor-error-clears-rows-and-refresh-recovers",
+    "27-seeded-historical-segments-real-list-detail-cursor-filter-reset-and-foreign-404",
+    "ADMIN_DISPATCH-read-regression-and-DRAINING-claim-denial",
+    "membership-revocation-clears-visible-private-data-and-HTTP-denies"
+  ],
+  "networkErrors": [],
+  "complete": true,
+  "database": {
+    "name": "mandaria_fleet_web_test",
+    "directory": "/tmp/mandaria-fleet-web-wZlKo5/pgdata",
+    "migrations": 63,
+    "apiPort": 4227
+  },
+  "lostResponseCommitted": true,
+  "idempotency": {
+    "originalPuts": 1,
+    "exactReplays": 1,
+    "commandsBefore": 2,
+    "commandsAfterLost": 3,
+    "commandsAfterReplay": 3,
+    "activeBefore": 1,
+    "activeAfter": 1,
+    "ledgerUnchanged": true
+  },
+  "invalidCursor": {
+    "status": 409,
+    "code": "ECONOMIC_CONTEXT_CHANGED"
+  },
+  "shutdown": {
+    "stopped": true,
+    "data": "/tmp/mandaria-fleet-web-wZlKo5/pgdata",
+    "backendUnchanged": true,
+    "backendHashes": {
+      "src/fleet-offers/fleet.controller.ts": "32e704f3fc1a73a3382fd2b1a21163f3ddc09a02c8aa6fa256cb2e2323158f8c",
+      "src/fleet-offers/fleet.dto.ts": "aadd0b7d34625f6c8b9ba71e4627869248244ab0615134c60ee0bf5d1e7f7613",
+      "src/fleet-offers/fleet.service.ts": "2efc3aef148132a4238f0659be8f4ab7a06f11fe3921f61811f0e99bccba1dc7",
+      "src/fleet-offers/fleet-legacy.guard.ts": "b9f44b3bd70e8908028a4793a5bf08b09bb4906fb275d9bedce8ba6f151ff03a",
+      "dist/fleet-offers/fleet.controller.js": "9f105ecada87b784da487ef54d35234df62cd0a64c72d03d262255ead370fc09",
+      "dist/fleet-offers/fleet.dto.js": "8f2fa5f9354a53a6bf80580e09f1a3e5794a0efaf253f7dd58054fa849a4c473",
+      "dist/fleet-offers/fleet.service.js": "2fa22d8a669f5b6f31fcc466bdd37925abebfe5de63c9c7866acb1e530a9ca57",
+      "dist/fleet-offers/fleet-legacy.guard.js": "16b81eee82730b745c161a9cfa807589357243161a5c4613bc9831093a4bcc08",
+      "prisma/schema.prisma": "0e68b129f6418e88be4cc7ff5c6c5be015e2401ff84ee47617d8240d345ef886",
+      "prisma/migrations/20261023000200_fleet_direct_take/migration.sql": "093160a9b229bb99d606b8004010fb357a756ddcef36c3d47191f2d09707db90"
+    }
+  },
+  "processClosed": true
+}

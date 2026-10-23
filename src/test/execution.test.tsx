@@ -1,3 +1,5 @@
+import { FleetContext } from '../fleet/permissions'
+import { fleetContext } from './fleet-fixture'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -89,7 +91,9 @@ function mount(
         <MemoryRouter initialEntries={[path]}>
           <FeedbackProvider>
             <ExecutionRecovery />
-            {children}
+            <FleetContext.Provider value={fleetContext()}>
+              {children}
+            </FleetContext.Provider>
           </FeedbackProvider>
         </MemoryRouter>
       </AuthContext.Provider>

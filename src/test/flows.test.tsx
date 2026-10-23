@@ -245,6 +245,7 @@ describe('auth and permissions UX', () => {
       'Mi proveedor',
       'Verificación documental',
       'Servicios',
+      'Envíos de mi flotilla',
       'Créditos',
       'Repartidores',
       'Vehículos',

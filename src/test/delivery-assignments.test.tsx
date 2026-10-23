@@ -1,3 +1,6 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({ fleet: { context: vi.fn() } }))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -262,6 +265,7 @@ const openAssign = async (user: ReturnType<typeof userEvent.setup>) => {
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
   vi.mocked(providers.profiles).mockResolvedValue(
     page([profile(A, 'Rápidos A')]),
   )

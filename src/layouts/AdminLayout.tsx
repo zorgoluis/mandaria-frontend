@@ -118,6 +118,11 @@ export function AdminLayout() {
               icon: BadgeCheck,
             },
             { to: '/services', label: 'Servicios', icon: Send },
+            {
+              to: '/fleet-services',
+              label: 'Envíos de mi flotilla',
+              icon: Send,
+            },
             { to: '/provider/credits', label: 'Créditos', icon: Coins },
           ]
         : []),

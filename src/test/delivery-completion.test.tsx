@@ -1,3 +1,6 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({ fleet: { context: vi.fn() } }))
 import { executionApi } from '../execution/service'
 import { detailFixture } from './execution-fixture'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -350,6 +353,7 @@ const deliverButton = () =>
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
   vi.mocked(providers.profiles).mockResolvedValue(page([profile(A, 'Rápidos')]))
   vi.mocked(providers.profile).mockResolvedValue(profile(A, 'Rápidos'))
   vi.mocked(providerDispatches.get).mockResolvedValue(owned())

@@ -1,3 +1,5 @@
+import { FleetResourceScope as ProviderScope } from '../fleet/resources'
+import { FleetSpending } from '../fleet/spending'
 import { resourceLink, useResourceFilters } from '../logistics/navigation'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -15,11 +17,7 @@ import {
   Table,
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
-import {
-  CapacityCards,
-  ProviderScope,
-  ResourceFilters,
-} from '../logistics/components'
+import { CapacityCards, ResourceFilters } from '../logistics/components'
 import {
   invalidateLogistics,
   logisticsKey,
@@ -357,6 +355,9 @@ function DriverContent({
           </Field>
         </ActionForm>
       </section>
+      {scope.role === 'PROVIDER_ADMIN' && (
+        <FleetSpending providerId={scope.providerId} driverId={item.id} />
+      )}
       <DriverAssignment scope={scope} driver={item} />
       <AssignmentHistory scope={scope} kind="drivers" id={item.id} />
       {status && (
