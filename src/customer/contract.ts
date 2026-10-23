@@ -16,7 +16,10 @@ export type RegisterCustomerDto = {
 export type DirectPrequoteDto = {
   conditions: DirectPrequoteConditionsDto
   shippingPayer?: 'REQUESTER' | 'RECIPIENT'
+  stopAddresses?: Array<PrequoteStopAddress>
 }
+/** Address text chosen at quote time; outside conditions, never priced or hashed. */
+export type PrequoteStopAddress = { sequence: number; address: string }
 export type DirectPrequoteCreatedResponse = {
   prequote: DirectPrequoteResponse
   replayed: boolean
@@ -38,6 +41,8 @@ export type DirectPrequoteResponse = {
   deliveryRequestPublicId: string | null
   deliveryQuotePublicId: string | null
   availabilityGuaranteed: false
+  /** Absent on backends and prequotes without snapshots. */
+  stopAddresses?: Array<PrequoteStopAddress> | null
 }
 export type DirectConversionDto = {
   conditionsVersion: 1

@@ -1,3 +1,10 @@
+## 2026-10-22 — Snapshot de dirección por parada en precotización
+
+Rama feat/prequote-stop-addresses desde QA 58f4d51, sin commit ni push. Causa: la precotización sólo guardaba coordenadas y Detalles reconstruía la dirección con geocodificación inversa, que devuelve el elemento más cercano al punto y no el lugar elegido. Web preparada para el contrato solicitado al backend: `stopAddresses` [{sequence, address}] fuera de `conditions`, opcional, sin precio ni hash.
+
+Envío detrás de VITE_PREQUOTE_STOP_ADDRESSES (false por defecto; .env.example, Dockerfile y README) porque el ValidationPipe global del backend rechaza campos desconocidos. Sólo se envía texto elegido en autocompletado o búsqueda; mapa, dispositivo y etiquetas genéricas no. Lectura siempre activa: Detalles prellena el snapshot sin llamar a Google y conserva la geocodificación inversa para paradas sin snapshot. Ajustar precotización reutiliza lo editado en Detalles o, si no hay, el snapshot. Snapshots malformados, duplicados o >300 se ignoran. Coordenadas cotizadas y DeliveryStopDto.address obligatorio sin cambios.
+
+Pendiente: backend con `stopAddresses` desplegado; después activar la variable en el build de QA y probar con navegador real. Sin backend real ni navegador en esta tarea.
 ## 2026-10-21 — Integración de main en QA
 
 Merge de main 8b864c5 sobre QA 0409015 (base común 06d9766) en worktree mandaria-frontend-qa, rama merge/main-into-qa. Once conflictos resueltos conservando ambos lados: CSP de Google Maps de QA más blob: de main en img-src; transporte con rama blob de main y parseo estricto/Retry-After de QA; códigos BUSINESS/CUSTOMER y VERIFICATION/LICENSE unidos; Login con next=business y next=onboarding y redirección de sesión restringida; rutas de cliente y de verificación/baja juntas. Bitácoras, README e informe de compatibilidad conservan ambos historiales.

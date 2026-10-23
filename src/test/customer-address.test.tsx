@@ -164,3 +164,27 @@ it('ignores responses after timeout', async () => {
   expect(screen.getByLabelText('Dirección de origen')).toHaveValue('')
   expect(screen.getByText(/No se pudo sugerir/)).toBeInTheDocument()
 })
+it('quote-time snapshot prefills without reverse geocoding and stays editable', async () => {
+  const changed = vi.fn()
+  render(
+    <SuggestedAddress
+      name="address0"
+      label="Dirección de origen"
+      latitude={17}
+      longitude={-93}
+      initialAddress="Av. Central 123, Ocozocoautla"
+      onValueChange={changed}
+    />,
+  )
+  const input = screen.getByLabelText('Dirección de origen')
+  expect(input).toHaveValue('Av. Central 123, Ocozocoautla')
+  expect(screen.getByText(/Dirección elegida al cotizar/)).toBeInTheDocument()
+  expect(changed).toHaveBeenCalledWith('Av. Central 123, Ocozocoautla')
+  fireEvent.change(input, { target: { value: 'Av. Central 123, interior 4' } })
+  expect(input).toHaveValue('Av. Central 123, interior 4')
+  await act(async () => {
+    await Promise.resolve()
+  })
+  expect(mocks.load).not.toHaveBeenCalled()
+  expect(mocks.geocode).not.toHaveBeenCalled()
+})

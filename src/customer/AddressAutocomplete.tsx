@@ -90,10 +90,12 @@ export function AddressAutocomplete({
       if (!active.current || ticket !== sequence.current) return
       session.current = null
       if (!place.location) throw new Error('No location')
+      const label = place.formattedAddress || prediction.text.toString()
       const point = {
         lat: place.location.lat(),
         lng: place.location.lng(),
-        label: place.formattedAddress || prediction.text.toString(),
+        label,
+        address: label,
       }
       if (!validPosition(point)) throw new Error('Invalid location')
       setText(point.label)

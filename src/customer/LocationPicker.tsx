@@ -171,6 +171,7 @@ export function LocationPicker({
       const options = response.results
         .map((result) => ({
           label: result.formatted_address,
+          address: result.formatted_address,
           lat: result.geometry.location.lat(),
           lng: result.geometry.location.lng(),
         }))

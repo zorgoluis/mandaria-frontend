@@ -8,6 +8,8 @@ import { ConversionForm } from './ConversionForm'
 import { OwnerLocation } from '../location/components'
 import { ApiError } from '../services/errors'
 import { validPosition } from './location-selection'
+import { snapshotAddress, stopAddresses } from './stop-addresses'
+import { env } from '../config/env'
 import { TrackingLinks } from '../location/TrackingLinks'
 import { AttemptRecovery } from './AttemptRecovery'
 import { retainCustomerSnapshot } from './tracking'
@@ -306,12 +308,15 @@ export function NewRequest() {
           ? {
               conditions: quote.data.conditions,
               payer: quote.data.shippingTerms?.payer,
-              addresses,
+              // Text edited in Detalles wins over the server snapshot.
+              addresses: quote.data.conditions.stops.map(
+                (_, i) => addresses[i] || snapshotAddress(quote.data, i) || '',
+              ),
             }
           : undefined
       }
       capabilities={cap.data}
-      onSubmit={async (conditions, shippingPayer) => {
+      onSubmit={async (conditions, shippingPayer, chosen) => {
         if (
           conditions.stops.some(
             (s) => !validPosition({ lat: s.latitude, lng: s.longitude }),
@@ -321,12 +326,17 @@ export function NewRequest() {
             400,
             'Selecciona un origen y un destino válidos antes de cotizar.',
           )
+        const snapshot = env.prequoteStopAddresses ? stopAddresses(chosen) : []
         const r = await command<DirectPrequoteCreatedResponse>(
           user!.id,
           'prequote',
           'new',
           '/customer/delivery-prequotes',
-          { conditions, shippingPayer },
+          {
+            conditions,
+            shippingPayer,
+            ...(snapshot.length ? { stopAddresses: snapshot } : {}),
+          },
         )
         setSearch({ prequote: r.prequote.publicId })
       }}

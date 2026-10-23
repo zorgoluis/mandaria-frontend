@@ -27,17 +27,19 @@ export function QuoteForm({
   onSubmit: (
     conditions: DirectPrequoteDto['conditions'],
     payer: 'REQUESTER' | 'RECIPIENT',
+    addresses: (string | undefined)[],
   ) => Promise<void>
 }) {
   const point = (index: number): SelectedLocation | null => {
     const stop = initial?.conditions.stops[index]
+    const address = initial?.addresses[index] || undefined
     return stop
       ? {
           lat: stop.latitude,
           lng: stop.longitude,
           label:
-            initial?.addresses[index] ||
-            (index === 0 ? 'Origen cotizado' : 'Destino cotizado'),
+            address || (index === 0 ? 'Origen cotizado' : 'Destino cotizado'),
+          address,
         }
       : null
   }
@@ -126,6 +128,7 @@ export function QuoteForm({
               ],
             },
             payer,
+            [origin.address, destination.address],
           )
         }}
         submitPlacement={(controls) => (
