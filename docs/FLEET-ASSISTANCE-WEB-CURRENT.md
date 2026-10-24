@@ -1,3 +1,5 @@
+> Actualización 2026-10-24: la proyección PROVIDER_ADMIN ya existe y está integrada. Consulte el [informe vigente](FLEET-ASSISTANCE-PROVIDER-MOVEMENTS-WEB.md). Este documento y su evidencia conservan el estado histórico del 23 de octubre.
+
 # Asistencia Web — contraste con backend actual
 
 2026-10-23, America/Mexico_City. Repositorio `C:/Users/zorgl/Documents/mandaria-frontend`, rama QA, HEAD `7488fc881fbe99f887c24948db2ee0d3e169b95f`, sin commit. Continúa la implementación existente y sustituye las conclusiones desactualizadas del [primer informe local](FLEET-ASSISTANCE-WEB.md). Se conserva su evidencia histórica.

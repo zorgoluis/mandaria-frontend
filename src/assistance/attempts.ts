@@ -185,9 +185,13 @@ export async function sendIntent(intent: Intent, scope: Scope) {
   if (
     intent.environment !== env.apiUrl ||
     intent.scope.actor !== scope.actor ||
-    intent.scope.surface !== scope.surface
+    intent.scope.surface !== scope.surface ||
+    (scope.surface === 'provider' &&
+      intent.scope.providerId !== scope.providerId)
   )
-    throw Error('Reautentica la misma cuenta y rol para recuperar.')
+    throw Error(
+      'Selecciona la misma cuenta, rol y proveedor del intento para reenviarlo.',
+    )
   if (
     intent.path !==
     commandPath(intent.scope, intent.operation, intent.caseId, intent.ref)

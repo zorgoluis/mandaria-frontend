@@ -99,7 +99,11 @@ export function AssistanceCommands({
       if (active()) {
         setReceipt({ status: 'APPLIED', receipt: result })
         setMessage(
-          'Comando aplicado. Revisa el recibo y las proyecciones actualizadas.',
+          i.operation === 'DECLARE_MOVEMENT'
+            ? 'Declaración registrada, pendiente de acreditación. No acredita pago ni modifica créditos o entrega.'
+            : i.operation === 'DISPUTE'
+              ? 'Disputa registrada. No revierte movimientos, devuelve efectivo ni modifica la entrega.'
+              : 'Comando aplicado. Revisa el recibo y las proyecciones actualizadas.',
         )
         await refresh()
       }

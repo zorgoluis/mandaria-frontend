@@ -1,4 +1,5 @@
 import { useAssistanceAccess } from './command-context'
+import { ProviderMovements } from './movements'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
@@ -417,13 +418,7 @@ function CaseContent({
           {d.summary.capabilities?.canDispute === true && (
             <CommandForm detail={d} operation="DISPUTE" admin={false} />
           )}
-          {d.summary.capabilities?.canDeclareMovement === true && (
-            <CommandForm
-              detail={d}
-              operation="DECLARE_MOVEMENT"
-              admin={false}
-            />
-          )}
+          <ProviderMovements scope={scope} detail={d} />
         </>
       )}
     </>

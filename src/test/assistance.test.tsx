@@ -156,7 +156,7 @@ it('an old projection without capabilities stays readable and grants no commands
     screen.queryByRole('heading', { name: 'Declarar movimiento' }),
   ).not.toBeInTheDocument()
 })
-it('owner ignores additive DRIVER movementContext and cannot reverse a movement', async () => {
+it('owner rejects a malformed movementContext and cannot reverse a movement', async () => {
   const d = {
     ...assistanceDetail(),
     movementContext: {
@@ -164,12 +164,12 @@ it('owner ignores additive DRIVER movementContext and cannot reverse a movement'
       capabilities: { canDeclareMovement: true },
     },
   }
-  vi.mocked(assistance.detail).mockResolvedValue(d)
+  vi.mocked(assistance.detail).mockResolvedValue(
+    d as unknown as ReturnType<typeof assistanceDetail>,
+  )
   mount()
   expect(
-    await screen.findByText(
-      /La proyección propia no incluye partes ni movimientos/,
-    ),
+    await screen.findByText(/La proyección de movimientos no es compatible/),
   ).toBeVisible()
   expect(screen.queryByLabelText('Movimiento original')).not.toBeInTheDocument()
   expect(assistance.collection).not.toHaveBeenCalled()
@@ -224,7 +224,7 @@ it('owner separates accredited delivery, disputed money, unknown amounts and una
   expect(screen.getByText(/Esperado: Desconocido/)).toHaveTextContent(
     'Acreditado: 25.00',
   )
-  expect(screen.getByText(/proyección propia no incluye partes/)).toBeVisible()
+  expect(screen.getByText(/Este backend no ofrece contexto/)).toBeVisible()
   expect(assistance.proposal).not.toHaveBeenCalled()
   expect(assistance.collection).not.toHaveBeenCalled()
   expect(
@@ -371,6 +371,8 @@ it('storage failure prevents network mutation', async () => {
 it.each([
   'ASSISTANCE_DISABLED',
   'CASE_REVISION_CONFLICT',
+  'MOVEMENT_DUPLICATE',
+  'MOVEMENT_COMBINATION_NOT_AUTHORIZED',
   'PROPOSAL_STALE',
   'RETRY_SAME_ATTEMPT',
 ])('retains same intent on %s without automatic rekey', async (code) => {
@@ -415,6 +417,62 @@ it.each([
     expect(sendIntent).not.toHaveBeenCalled()
     if (status === 'UNKNOWN')
       expect(screen.getByText(/no prueba ausencia de efectos/)).toBeVisible()
+  },
+)
+it.each(
+  (['DECLARE_MOVEMENT', 'DISPUTE'] as const).flatMap((operation) =>
+    (
+      [
+        'UNKNOWN',
+        'PENDING',
+        'APPLIED',
+        'REJECTED',
+        'CLOSED_NO_EFFECTS',
+      ] as const
+    ).map((status) => ({ operation, status })),
+  ),
+)(
+  'recovers $operation as $status without replacing its body or resending',
+  async ({ operation, status }) => {
+    const body =
+      operation === 'DISPUTE'
+        ? {
+            expectedCaseRevision: '9007199254740993',
+            movementId: ids.proposal,
+            reason: 'Revisión sintética',
+          }
+        : {
+            expectedCaseRevision: '9007199254740993',
+            physicalMovementId: ids.evidence,
+            sourceKind: 'DECLARATION',
+            fromPartyId: ids.party,
+            toPartyId: ids.obligation,
+            beneficiaryPartyId: ids.obligation,
+            declaredConcepts: ['GOODS'],
+            amount: '25.10',
+            currency: 'MXN',
+            occurredAt: '2026-10-24T00:00:00.000Z',
+          }
+    const i = makeIntent(scope, operation, ids.case, body)
+    vi.mocked(intentStore.read).mockResolvedValue(i)
+    vi.mocked(recoverIntent).mockResolvedValue({
+      status,
+      canClose: status === 'UNKNOWN' || status === 'PENDING',
+    })
+    render(
+      wrap(
+        <AssistanceCommands scope={scope}>
+          <p>Expediente</p>
+        </AssistanceCommands>,
+      ),
+    )
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Consultar intento' }),
+    )
+    await screen.findByText(`Estado del intento: ${status}`)
+    expect(recoverIntent).toHaveBeenCalledWith(i)
+    expect(sendIntent).not.toHaveBeenCalled()
+    expect(i.body).toEqual(body)
   },
 )
 it('technical close uses original operation/key and never claims operational success', async () => {

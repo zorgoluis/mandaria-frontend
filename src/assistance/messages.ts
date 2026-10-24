@@ -1,5 +1,16 @@
 import { ApiError } from '../services/errors'
 export const messages: Record<string, string> = {
+  MOVEMENT_COMBINATION_NOT_AUTHORIZED:
+    'La combinación ya no está autorizada. Recupera el intento y revisa las opciones actuales; no combines otras partes bajo la misma clave.',
+  MOVEMENT_ADMIN_REVIEW_REQUIRED:
+    'La reversión requiere revisión administrativa. Puedes aportar información o disputar el movimiento autorizado.',
+  MOVEMENT_DUPLICATE:
+    'El hecho ya tiene un movimiento registrado. Consulta el resultado; no generes otro identificador para declararlo de nuevo.',
+  RESOURCE_NOT_FOUND:
+    'El expediente o movimiento no está disponible para esta cuenta y proveedor.',
+  CASE_CLOSED: 'El expediente está cerrado; no admite nuevas declaraciones.',
+  NO_AUTHORIZED_MOVEMENT_REFERENCES:
+    'No hay combinaciones autorizadas para declarar. Puedes aportar información para revisión administrativa.',
   EVIDENCE_STORAGE_NOT_CONFIGURED:
     'El almacenamiento privado no está habilitado. Conserva el intento y consulta su resultado; las lecturas y recuperación siguen sus permisos.',
   EVIDENCE_TOO_LARGE:

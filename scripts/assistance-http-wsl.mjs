@@ -371,6 +371,17 @@ try {
     })
   }
   await fixture.app.listen(apiPort, '127.0.0.1')
+  const owner2 = await prisma.user.create({
+    data: {
+      email: fixture.mail('owner2'),
+      passwordHash: owner.passwordHash,
+      role: 'PROVIDER_ADMIN',
+      active: true,
+    },
+  })
+  await prisma.providerMembership.create({
+    data: { userId: owner2.id, providerId: providers.A, role: 'OWNER' },
+  })
   const migrations = await prisma.$queryRawUnsafe(
     'SELECT count(*)::int AS count FROM "_prisma_migrations" WHERE finished_at IS NOT NULL',
   )
@@ -386,6 +397,7 @@ try {
       otherEmail: fixture.mail('adminB'),
       adminEmail: fixture.mail('sa'),
       admin2Email: fixture.mail('sa2'),
+      owner2Email: fixture.mail('owner2'),
     },
     ids: {
       providers,
@@ -416,7 +428,88 @@ try {
         })
         break
       }
-      if (command.action === 'assistanceMetrics')
+      if (command.action === 'seedProviderMovements') {
+        const c = await prisma.assistanceCase.findUniqueOrThrow({
+          where: { id: command.caseId },
+        })
+        assert.equal(c.providerId, providers.A)
+        const participant =
+          await prisma.assistanceParticipation.findFirstOrThrow({
+            where: { caseId: c.id },
+          })
+        const from = await prisma.assistanceParty.findFirstOrThrow({
+          where: { caseId: c.id, kind: 'PROVIDER' },
+        })
+        const to = await prisma.assistanceParty.findFirstOrThrow({
+          where: { caseId: c.id, kind: 'DRIVER' },
+        })
+        await prisma.cashObligation.create({
+          data: {
+            id: crypto.randomUUID(),
+            caseId: c.id,
+            participationId: participant.id,
+            concept: 'REFUND',
+            debtorPartyId: from.id,
+            creditorPartyId: to.id,
+            beneficiaryPartyId: to.id,
+            knowledge: 'KNOWN',
+            expectedAmount: '350.00',
+            currency: 'MXN',
+            termsRef: 'synthetic-provider-refund',
+            ordinal: 0,
+            occurredAt: new Date(),
+            createdByUserId: sa.id,
+          },
+        })
+        for (let i = 0; i < 26; i++)
+          await prisma.cashMovement.create({
+            data: {
+              id: crypto.randomUUID(),
+              caseId: c.id,
+              physicalMovementId: crypto.randomUUID(),
+              sourceKind: 'DECLARATION',
+              fromPartyId: from.id,
+              toPartyId: to.id,
+              beneficiaryPartyId: to.id,
+              declaredConcepts: ['REFUND'],
+              amount: '1.00',
+              currency: 'MXN',
+              occurredAt: new Date(),
+              createdByUserId: owner.id,
+            },
+          })
+        await prisma.assistanceCase.update({
+          where: { id: c.id },
+          data: {
+            revision: { increment: 1 },
+            materialRevision: { increment: 1 },
+            economicState: 'PENDIENTE',
+          },
+        })
+        result = { seeded: true }
+      } else if (command.action === 'providerMovementMetrics') {
+        const c = await prisma.assistanceCase.findUniqueOrThrow({
+          where: { id: command.caseId },
+        })
+        const movements = await prisma.cashMovement.findMany({
+          where: { caseId: c.id, amount: '25.10' },
+          select: { id: true, physicalMovementId: true, status: true },
+        })
+        result = {
+          movements,
+          allocations: await prisma.cashAllocation.count({
+            where: { caseId: c.id },
+          }),
+          disputes: await prisma.cashDispute.count({ where: { caseId: c.id } }),
+          ledgerEntries: await prisma.creditLedgerEntry.count(),
+          operationalState: c.operationalState,
+          assignmentStatus: (
+            await prisma.deliveryAssignment.findUniqueOrThrow({
+              where: { id: c.anchorAssignmentId },
+            })
+          ).status,
+        }
+      } else if (command.action === 'assistanceMetrics')
         result = await prisma.$queryRawUnsafe(
           'SELECT operation,status,count(*)::int AS count FROM "AssistanceCommand" GROUP BY operation,status',
         )

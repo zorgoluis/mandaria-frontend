@@ -48,6 +48,61 @@ it('exact controller paths and opaque history cursor are preserved', async () =>
     { caseId: ids.case, operation: 'SEAL_EVIDENCE' },
   )
 })
+it('provider movement-context uses its dedicated route and preserves cursor and filter scope', async () => {
+  await assistance.movementContext(scope, ids.case, {
+    limit: 1,
+    status: 'OPEN',
+    dispatchId: ids.dispatch,
+    pageToken: 'opaque+/=',
+  })
+  const path = vi.mocked(api).mock.calls[0][0]
+  expect(path).toContain(
+    `/provider/fleet-assistance-cases/${ids.case}/movement-context?`,
+  )
+  const q = new URL(path, 'http://local.test').searchParams
+  expect(Object.fromEntries(q)).toEqual({
+    limit: '1',
+    status: 'OPEN',
+    dispatchId: ids.dispatch,
+    pageToken: 'opaque+/=',
+    providerId: scope.providerId,
+  })
+  expect(() =>
+    assistance.movementContext({ ...scope, surface: 'admin' }, ids.case),
+  ).toThrow()
+})
+it('movement replay keeps its physical id, account, provider and revision after durable recovery', async () => {
+  const body = {
+    expectedCaseRevision: '9007199254740993',
+    physicalMovementId: ids.evidence,
+    sourceKind: 'DECLARATION',
+    fromPartyId: ids.party,
+    toPartyId: ids.obligation,
+    beneficiaryPartyId: ids.obligation,
+    declaredConcepts: ['GOODS'],
+    amount: '25.10',
+    currency: 'MXN',
+    occurredAt: '2026-10-24T00:00:00.000Z',
+  }
+  const i = makeIntent(scope, 'DECLARE_MOVEMENT', ids.case, body)
+  const restored = await decryptIntent(await encryptIntent(i), scope)
+  body.physicalMovementId = ids.proposal
+  await sendIntent(restored, scope)
+  await sendIntent(restored, scope)
+  expect(vi.mocked(apiOnce).mock.calls[0]).toEqual(
+    vi.mocked(apiOnce).mock.calls[1],
+  )
+  expect(restored.body.physicalMovementId).toBe(ids.evidence)
+  await expect(
+    sendIntent(restored, { ...scope, providerId: 'another-provider' }),
+  ).rejects.toThrow()
+  await expect(
+    sendIntent(
+      { ...restored, environment: 'https://another-environment.invalid' },
+      scope,
+    ),
+  ).rejects.toThrow()
+})
 it('frozen intention encrypts at rest, refuses different account and exact replay uses apiOnce', async () => {
   const body = { expectedCaseRevision: '3', text: 'Original', evidenceIds: [] }
   const i = makeIntent(scope, 'CONTRIBUTE', ids.case, body)

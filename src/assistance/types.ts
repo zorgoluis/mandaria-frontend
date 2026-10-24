@@ -50,6 +50,7 @@ export interface Summary {
   }
 }
 export interface CaseDetail {
+  movementContext?: MovementContext | null
   summary: Summary
   participation: {
     assignmentId: string
@@ -71,6 +72,52 @@ export interface CaseDetail {
   nextHistoryPageToken: string | null
   materialRevision?: string
   collections?: Partial<Record<Collection, CursorPage<RecordRow>>>
+}
+export interface MovementParty {
+  partyId: string
+  kind: 'DRIVER' | 'PROVIDER' | 'ORIGIN' | 'RECIPIENT' | 'EXTERNAL'
+  label: string | null
+  isOwn: boolean
+}
+export interface DeclarationOption {
+  obligationId: string
+  fromPartyId: string
+  toPartyId: string
+  beneficiaryPartyId: string
+  concept:
+    'SHIPPING_FEE' | 'GOODS' | 'COURIER_ADVANCE' | 'REFUND' | 'DIFFERENCE'
+  currency: 'MXN'
+}
+export interface ParticipantMovement {
+  id: string
+  fromPartyId: string
+  toPartyId: string
+  beneficiaryPartyId: string
+  declaredConcepts: string[]
+  amount: string
+  currency: 'MXN'
+  occurredAt: string
+  recordedAt: string
+  status: 'DECLARED' | 'ACCREDITED' | 'RETRACTED'
+  canDispute: boolean
+  disputeReason: string | null
+  canReverse: false
+  reverseReason: 'MOVEMENT_ADMIN_REVIEW_REQUIRED'
+}
+export interface MovementContext {
+  schemaVersion: 1
+  caseRevision: string
+  asOf: string
+  parties: MovementParty[]
+  declarationOptions: DeclarationOption[]
+  capabilities: {
+    canDeclareMovement: boolean
+    declareMovementReason: string | null
+    canReverseMovement: false
+    reverseMovementReason: 'MOVEMENT_ADMIN_REVIEW_REQUIRED'
+  }
+  movements: ParticipantMovement[]
+  nextPageToken: string | null
 }
 export const collections = [
   'parties',

@@ -10,6 +10,7 @@ import type {
   CursorPage,
   RecordRow,
   AttemptReceipt,
+  MovementContext,
 } from './types'
 export type Operation = keyof CommandBodies | 'SEAL_EVIDENCE'
 export const ownerOperations: Operation[] = [
@@ -52,6 +53,21 @@ const query = (s: Scope, f: Filters) =>
     pageToken: f.pageToken,
   })
 export const assistance = {
+  movementContext: (
+    s: Scope,
+    id: string,
+    f: Filters = {},
+    signal?: AbortSignal,
+  ) => {
+    if (s.surface !== 'provider')
+      throw Error('Proyección exclusiva del proveedor')
+    return api<MovementContext>(
+      `${base(s)}/${encodeURIComponent(id)}/movement-context?${query(s, f)}`,
+      'GET',
+      undefined,
+      signal,
+    )
+  },
   list: (s: Scope, f: Filters, signal?: AbortSignal) =>
     api<CursorPage<Summary>>(
       `${base(s)}?${query(s, f)}`,

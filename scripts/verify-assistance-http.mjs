@@ -156,7 +156,10 @@ try {
   })
   const posts = []
   let lose = false,
-    drop = false
+    drop = false,
+    loseMovement = false
+  let dropMovement = false,
+    lateMovement
   await page.route('**/*', async (route) => {
     const req = route.request(),
       url = new URL(req.url())
@@ -167,6 +170,27 @@ try {
     if (url.pathname.startsWith('/api/'))
       reqs.push({ method: req.method(), path: url.pathname })
     if (req.method() === 'POST' && url.pathname.includes('fleet-assistance')) {
+      if (dropMovement && url.pathname.endsWith('/movement-declarations')) {
+        dropMovement = false
+        // Synthetic session only, memory only; never write headers/body to evidence.
+        lateMovement = {
+          url: req.url(),
+          headers: req.headers(),
+          data: req.postDataJSON(),
+        }
+        return route.abort('failed')
+      }
+      if (loseMovement && url.pathname.endsWith('/movement-declarations')) {
+        loseMovement = false
+        posts.push({
+          path: url.pathname,
+          key: req.headers()['idempotency-key'],
+          body: req.postDataJSON(),
+        })
+        const response = await route.fetch()
+        assert.equal(response.status(), 200)
+        return route.abort('failed')
+      }
       if (!url.pathname.endsWith('/content'))
         posts.push({
           path: url.pathname,
@@ -188,7 +212,14 @@ try {
     return route.continue()
   })
   const open = (path) => page.goto('http://127.0.0.1:4238' + path)
+  const loginTimes = []
   const login = async (email) => {
+    // Respect the real auth controller's five logins per minute per IP.
+    if (loginTimes.length >= 5) {
+      const wait = 61000 - (Date.now() - loginTimes[loginTimes.length - 5])
+      if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait))
+    }
+    loginTimes.push(Date.now())
     console.log('browser-login')
     await open('/login')
     await page.evaluate(() => sessionStorage.clear())
@@ -197,10 +228,24 @@ try {
     await page
       .getByLabel('Contraseña', { exact: true })
       .fill(info.credentials.password)
-    await page
-      .getByRole('button', { name: 'Iniciar sesión', exact: true })
-      .click()
-    await expect(page).not.toHaveURL(/\/login$/)
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const received = page.waitForResponse(
+        (r) =>
+          r.url().endsWith('/auth/login') && r.request().method() === 'POST',
+      )
+      await page
+        .getByRole('button', { name: 'Iniciar sesión', exact: true })
+        .click()
+      const response = await received
+      if (response.status() !== 429) {
+        assert.equal(response.status(), 200)
+        break
+      }
+      const seconds = Number(response.headers()['retry-after']) || 60
+      console.log('Respecting local authentication Retry-After')
+      await new Promise((resolve) => setTimeout(resolve, (seconds + 1) * 1000))
+    }
+    await expect(page).not.toHaveURL(/\/login$/, { timeout: 20000 })
   }
   const confirm = async () =>
     page
@@ -248,10 +293,151 @@ try {
   await open('/fleet-assistance/' + caseId + '?providerId=' + providers.A)
   await expect(page.getByText('EN_REVISIÓN', { exact: true })).toBeVisible()
   await expect(
-    page.getByText(/proyección propia no incluye partes/),
+    page.getByText(/No hay combinaciones autorizadas para declarar/),
   ).toBeVisible()
   report.checks.push(
     'owner-real-login-historical-create-private-detail-and-missing-reference-gate',
+  )
+  await request('seedProviderMovements', { caseId })
+  await page.getByRole('button', { name: 'Actualizar expediente' }).click()
+  await expect(page.getByLabel('Combinación autorizada')).toBeVisible()
+  await page.getByRole('button', { name: 'Cargar más movimientos' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Cargar más movimientos' }),
+  ).toHaveCount(0)
+  assert(reqs.some((r) => r.path.endsWith('/movement-context')))
+  report.checks.push(
+    'provider-real-movement-context-authorized-options-and-opaque-continuation',
+  )
+  const moneyBefore = await request('providerMovementMetrics', { caseId })
+  await page.getByLabel('Combinación autorizada').selectOption('0')
+  await page.getByLabel('Importe declarado MXN').fill('25,10')
+  await page
+    .getByLabel('Fecha física del movimiento (UTC)')
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
+  await page
+    .getByRole('button', { name: 'Revisar declaración', exact: true })
+    .click()
+  await expect(
+    page.getByRole('region', { name: 'Vista previa de declaración' }),
+  ).toContainText('25.10 MXN')
+  await page
+    .getByRole('region', { name: 'Vista previa de declaración' })
+    .screenshot({ path: output + '/declaration-preview.png' })
+  loseMovement = true
+  await page
+    .getByRole('button', { name: 'Confirmar declaración revisada' })
+    .click()
+  await confirm()
+  await expect(page.getByText(/Resultado no confirmado/)).toBeVisible()
+  const declared = posts.find((p) => p.path.endsWith('/movement-declarations'))
+  assert.equal(declared.body.amount, '25.10')
+  assert.equal(declared.body.sourceKind, 'DECLARATION')
+  for (const absent of [
+    'evidenceIds',
+    'sourceRef',
+    'obligationId',
+    'reversesMovementId',
+  ])
+    assert(!(absent in declared.body))
+  await page.reload()
+  await page.getByRole('button', { name: 'Consultar intento' }).click()
+  await expect(page.getByText('Estado del intento: APPLIED')).toBeVisible()
+  const moneyAfter = await request('providerMovementMetrics', { caseId })
+  assert.equal(moneyAfter.movements.length, 1)
+  assert.equal(
+    moneyAfter.movements[0].physicalMovementId,
+    declared.body.physicalMovementId,
+  )
+  assert.equal(moneyAfter.movements[0].status, 'DECLARED')
+  assert.equal(moneyAfter.allocations, 0)
+  assert.equal(moneyAfter.ledgerEntries, moneyBefore.ledgerEntries)
+  assert.equal(moneyAfter.assignmentStatus, moneyBefore.assignmentStatus)
+  report.checks.push(
+    'provider-money-exact-body-lost-response-reload-same-physical-id-one-pending-record-no-ledger-or-delivery-effect',
+  )
+  await login(info.credentials.owner2Email)
+  await open('/fleet-assistance/' + caseId + '?providerId=' + providers.A)
+  await expect(
+    page.getByRole('heading', { name: 'REFUND · 25.10 MXN' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Consultar intento' }),
+  ).toHaveCount(0)
+  report.checks.push(
+    'second-provider-admin-reads-authorized-facts-without-first-actor-private-attempt',
+  )
+  await login(info.credentials.email)
+  await open('/fleet-assistance/' + caseId + '?providerId=' + providers.A)
+  await page.getByRole('button', { name: 'Consultar intento' }).click()
+  await expect(page.getByText('Estado del intento: APPLIED')).toBeVisible()
+  await acknowledge()
+  const movement = page
+    .locator('article')
+    .filter({ has: page.getByRole('heading', { name: 'REFUND · 25.10 MXN' }) })
+  await movement
+    .getByLabel('Motivo de disputa del movimiento')
+    .fill('Revisión sintética del movimiento declarado')
+  await movement
+    .getByRole('button', { name: 'Revisar disputa del movimiento' })
+    .click()
+  await confirm()
+  await expect(page.getByText('Estado del intento: APPLIED')).toBeVisible()
+  const disputed = posts.find((p) => p.path.endsWith('/disputes'))
+  assert.equal(disputed.body.movementId, moneyAfter.movements[0].id)
+  assert.notEqual(disputed.body.movementId, declared.body.physicalMovementId)
+  assert.deepEqual(Object.keys(disputed.body).sort(), [
+    'expectedCaseRevision',
+    'movementId',
+    'reason',
+  ])
+  await acknowledge()
+  const disputeAfter = await request('providerMovementMetrics', { caseId })
+  assert.equal(disputeAfter.disputes, 1)
+  assert.equal(disputeAfter.movements[0].status, 'DECLARED')
+  assert.equal(disputeAfter.allocations, 0)
+  assert.equal(disputeAfter.ledgerEntries, moneyBefore.ledgerEntries)
+  assert.equal(disputeAfter.operationalState, moneyBefore.operationalState)
+  assert(
+    !reqs.some(
+      (r) =>
+        r.path.startsWith('/api/v1/driver/') ||
+        r.path.startsWith('/api/v1/admin/'),
+    ),
+  )
+  report.checks.push(
+    'provider-dispute-by-record-id-without-reversal-or-physical-effect-and-no-driver-admin-requests',
+  )
+  await movement.screenshot({ path: output + '/declared-movement.png' })
+  await page.getByLabel('Combinación autorizada').selectOption('0')
+  await page.getByLabel('Importe declarado MXN').fill('33.20')
+  await page
+    .getByLabel('Fecha física del movimiento (UTC)')
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
+  await page
+    .getByRole('button', { name: 'Revisar declaración', exact: true })
+    .click()
+  dropMovement = true
+  await page
+    .getByRole('button', { name: 'Confirmar declaración revisada' })
+    .click()
+  await confirm()
+  await page.getByRole('button', { name: 'Consultar intento' }).click()
+  await expect(page.getByText('Estado del intento: UNKNOWN')).toBeVisible()
+  await page.getByRole('button', { name: 'Cerrar intento técnico' }).click()
+  await expect(
+    page.getByText('Estado del intento: CLOSED_NO_EFFECTS'),
+  ).toBeVisible()
+  const late = await context.request.post(lateMovement.url, {
+    headers: lateMovement.headers,
+    data: lateMovement.data,
+  })
+  assert.equal(late.status(), 409)
+  assert.equal((await late.json()).code, 'ATTEMPT_CLOSED')
+  lateMovement = undefined
+  await acknowledge()
+  report.checks.push(
+    'provider-UNKNOWN-technical-close-blocks-original-late-declaration',
   )
   const before = await request('assistanceMetrics')
   const contribution = page
@@ -404,7 +590,9 @@ try {
     page.getByText(/Intento pendiente: UPLOAD_EVIDENCE/),
   ).toBeVisible()
   await expect(page.getByText('Estado del intento: APPLIED')).toBeVisible()
-  await expect(page.getByLabel('Seleccionar nuevamente el archivo original')).toBeEnabled()
+  await expect(
+    page.getByLabel('Seleccionar nuevamente el archivo original'),
+  ).toBeEnabled()
   await page
     .getByLabel('Seleccionar nuevamente el archivo original')
     .setInputFiles({
@@ -553,10 +741,20 @@ try {
   await expect(page.getByText('Estado del intento: APPLIED')).toBeVisible()
   await acknowledge()
   report.checks.push('same-account-pending-intent-survives-other-role-login')
+  await expect(page.getByLabel('Combinación autorizada')).toHaveCount(0)
+  await expect(
+    page.getByRole('button', { name: 'Revisar disputa del movimiento' }),
+  ).toHaveCount(0)
+  await expect(
+    page.getByRole('heading', { name: 'Movimientos propios', exact: true }),
+  ).toBeVisible()
+  report.checks.push(
+    'provider-commands-off-keeps-movement-reading-and-attempt-recovery',
+  )
   await request('revokeMembership')
-  await page.getByRole('button', { name: 'Actualizar expediente' }).click()
+  await page.getByRole('button', { name: 'Actualizar movimientos' }).click()
   await expect(page.getByText('EN_REVISIÓN', { exact: true })).toHaveCount(0)
-  await expect(page.getByText(/No se muestran datos anteriores/)).toBeVisible()
+  await expect(page.getByText(/El acceso cambió/)).toBeVisible()
   report.checks.push('real-membership-revocation-removes-private-case')
   report.idempotency = { before, after }
   assert.equal(report.networkErrors.length, 0)
@@ -618,7 +816,12 @@ try {
       output,
       complete: report.complete,
       checks: report.checks,
-      shutdown: report.shutdown,
+      shutdown: {
+        stopped: report.shutdown?.stopped,
+        backendUnchanged: report.shutdown?.backendUnchanged,
+        runtimeBuiltFromCurrentSources:
+          report.shutdown?.runtimeBuiltFromCurrentSources,
+      },
     }),
   )
 }
