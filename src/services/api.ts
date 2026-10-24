@@ -79,7 +79,7 @@ async function transport<T>(
   signal?: AbortSignal,
   /** Extra request headers (V1.10 credit movements require Idempotency-Key). */
   extra?: Record<string, string>,
-  responseType: 'json' | 'blob' = 'json',
+  responseType: 'json' | 'blob' | 'private-image' = 'json',
 ): Promise<T> {
   let response: Response
   try {
@@ -92,18 +92,26 @@ async function transport<T>(
       credentials: 'omit',
       redirect: 'error',
       headers: {
-        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(body !== undefined && !(body instanceof FormData)
+          ? { 'Content-Type': 'application/json' }
+          : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...extra,
       },
-      ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+      ...(body !== undefined
+        ? { body: body instanceof FormData ? body : JSON.stringify(body) }
+        : {}),
     })
   } catch (error) {
     if (signal?.aborted) throw error
     throw normalizeError(0, null)
   }
-  if (response.ok && responseType === 'blob') {
-    if (!response.headers.get('Content-Type')?.startsWith('image/png'))
+  if (response.ok && responseType !== 'json') {
+    const mime = response.headers.get('Content-Type')?.split(';')[0]
+    if (
+      mime !== 'image/png' &&
+      !(responseType === 'private-image' && mime === 'image/jpeg')
+    )
       throw new ApiError(502, 'Formato de evidencia inesperado.')
     return (await response.blob()) as T
   }
@@ -166,7 +174,7 @@ export async function api<T>(
   body?: unknown,
   signal?: AbortSignal,
   headers?: Record<string, string>,
-  responseType: 'json' | 'blob' = 'json',
+  responseType: 'json' | 'blob' | 'private-image' = 'json',
 ): Promise<T> {
   const current = generation
   const usedToken = accessToken

@@ -94,6 +94,11 @@ export function AdminLayout() {
       : []),
     ...(admin
       ? [
+          {
+            to: '/admin/fleet-assistance',
+            label: 'Asistencia y conciliación',
+            icon: BadgeCheck,
+          },
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
           {
             to: '/admin/customer-business-applications',
@@ -115,6 +120,11 @@ export function AdminLayout() {
             {
               to: '/provider/verification',
               label: 'Verificación documental',
+              icon: BadgeCheck,
+            },
+            {
+              to: '/fleet-assistance',
+              label: 'Asistencia y conciliación',
               icon: BadgeCheck,
             },
             { to: '/services', label: 'Servicios', icon: Send },

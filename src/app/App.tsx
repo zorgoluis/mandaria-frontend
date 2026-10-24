@@ -1,3 +1,4 @@
+import { AssistancePage } from '../assistance/pages'
 import { FleetServicesPage } from '../fleet/pages'
 import {
   BusinessCustomerPage,
@@ -312,6 +313,16 @@ export function App() {
           </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
             <Route
+              path="admin/fleet-assistance"
+              element={<AssistancePage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-assistance/:id"
+              element={
+                <AssistancePage surface="admin" key={location.pathname} />
+              }
+            />
+            <Route
               path="admin/customer-business-applications"
               element={<BusinessAdminPage />}
             />
@@ -418,6 +429,16 @@ export function App() {
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
             <Route path="provider/profile" element={<MyProvider />} />
             {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
+            <Route
+              path="fleet-assistance"
+              element={<AssistancePage surface="provider" />}
+            />
+            <Route
+              path="fleet-assistance/:id"
+              element={
+                <AssistancePage surface="provider" key={location.pathname} />
+              }
+            />
             <Route path="provider/credits" element={<MyCreditsPage />} />
             {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
             <Route path="fleet-services" element={<FleetServicesPage />} />

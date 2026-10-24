@@ -255,6 +255,11 @@ function Segment({
   return (
     <article className="panel panel-body">
       <h2>{item.reference}</h2>
+      <Link
+        to={`/fleet-assistance?new=1&providerId=${encodeURIComponent(providerId)}&dispatchId=${encodeURIComponent(item.dispatchId)}&assignmentId=${encodeURIComponent(item.assignmentId)}`}
+      >
+        Solicitar asistencia sobre esta participación
+      </Link>
       <dl>
         <dt>Estado de asignación</dt>
         <dd>{item.status}</dd>

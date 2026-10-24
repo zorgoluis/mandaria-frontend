@@ -244,6 +244,7 @@ describe('auth and permissions UX', () => {
       'Dashboard',
       'Mi proveedor',
       'Verificación documental',
+      'Asistencia y conciliación',
       'Servicios',
       'Envíos de mi flotilla',
       'Créditos',
@@ -280,6 +281,7 @@ describe('auth and permissions UX', () => {
     ).toEqual([
       'Mis envíos',
       'Dashboard',
+      'Asistencia y conciliación',
       'Integraciones',
       'Proveedores',
       'Administradores',
