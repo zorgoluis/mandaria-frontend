@@ -1,4 +1,5 @@
 import { AssistancePage } from '../assistance/pages'
+import { FleetExitsPage, PrivateExitRecovery } from '../fleet-exit/pages'
 import { FleetServicesPage } from '../fleet/pages'
 import {
   BusinessCustomerPage,
@@ -122,7 +123,8 @@ export function Protected({ roles }: { roles?: Role[] }) {
     if (
       !roles &&
       (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
-        route.pathname === '/privacy/active-service')
+        route.pathname === '/privacy/active-service' ||
+        route.pathname === '/privacy/fleet-exit-recovery')
     )
       return <Outlet />
     return <Navigate to="/privacy/deletion" replace />
@@ -198,6 +200,10 @@ export function App() {
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/fleet-exit-recovery"
+            element={<PrivateExitRecovery />}
+          />
           <Route
             path="/privacy/active-service"
             element={<RestrictedActiveService />}
@@ -317,6 +323,14 @@ export function App() {
               element={<AssistancePage surface="admin" />}
             />
             <Route
+              path="admin/fleet-exits"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-exits/:id"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
               path="admin/fleet-assistance/:id"
               element={
                 <AssistancePage surface="admin" key={location.pathname} />
@@ -427,6 +441,14 @@ export function App() {
             <Route path="driver/credits" element={<DriverCreditsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
+            <Route
+              path="fleet-exits"
+              element={<FleetExitsPage surface="provider" />}
+            />
+            <Route
+              path="fleet-exits/:id"
+              element={<FleetExitsPage surface="provider" />}
+            />
             <Route path="provider/profile" element={<MyProvider />} />
             {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
             <Route

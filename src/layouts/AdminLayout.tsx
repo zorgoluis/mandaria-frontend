@@ -99,6 +99,11 @@ export function AdminLayout() {
             label: 'Asistencia y conciliación',
             icon: BadgeCheck,
           },
+          {
+            to: '/admin/fleet-exits',
+            label: 'Salidas de flotilla',
+            icon: BadgeCheck,
+          },
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
           {
             to: '/admin/customer-business-applications',
@@ -117,6 +122,11 @@ export function AdminLayout() {
       : user?.role === 'PROVIDER_ADMIN'
         ? [
             { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
+            {
+              to: '/fleet-exits',
+              label: 'Salidas de flotilla',
+              icon: BadgeCheck,
+            },
             {
               to: '/provider/verification',
               label: 'Verificación documental',

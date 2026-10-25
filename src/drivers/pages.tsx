@@ -306,6 +306,11 @@ function DriverContent({
       />
       <section className="panel panel-body">
         <h2>Información</h2>
+        <Link
+          to={`${scope.role === 'SUPER_ADMIN' ? '/admin' : ''}/fleet-exits?driverId=${encodeURIComponent(item.id)}&providerId=${encodeURIComponent(scope.providerId)}`}
+        >
+          Consultar afiliación y salida de flotilla
+        </Link>
         <InfoGrid
           items={[
             ['Usuario', item.user.email],
