@@ -36,6 +36,23 @@ export function AssistanceCommands({
     [receipt, setReceipt] = useState<AttemptReceipt | null>(null),
     [broken, setBroken] = useState(false)
   const [denied, setDenied] = useState(false)
+  const [evidenceParties, setEvidenceParties] = useState<
+    Record<string, string>
+  >({})
+  const rememberEvidence = (i: Intent, r?: Record<string, unknown> | null) => {
+    const evidenceId = (r?.result as Record<string, unknown> | undefined)
+      ?.evidenceId
+    if (
+      i.operation === 'RECORD_EVIDENCE' &&
+      i.evidenceParty &&
+      typeof evidenceId === 'string'
+    )
+      setEvidenceParties((p) => ({
+        ...p,
+        [`${i.caseId}:${evidenceId}`]: i.evidenceParty!,
+      }))
+  }
+  const forgetEvidenceParties = useCallback(() => setEvidenceParties({}), [])
   const deny = useCallback(() => {
     setDenied(true)
     setDraft(null)
@@ -97,6 +114,7 @@ export function AssistanceCommands({
     try {
       const result = await sendIntent(i, scope)
       if (active()) {
+        rememberEvidence(i, result)
         setReceipt({ status: 'APPLIED', receipt: result })
         setMessage(
           i.operation === 'DECLARE_MOVEMENT'
@@ -118,11 +136,14 @@ export function AssistanceCommands({
   return (
     <Context.Provider
       value={{
+        forgetEvidenceParties,
+        evidenceParties,
         deny,
         blocked: loading || busy || !!pending || !!draft || broken || denied,
-        prepare: (operation, caseId, body, ref, file) => {
+        prepare: (operation, caseId, body, ref, file, evidenceParty) => {
           if (loading || busy || pending || draft || broken || denied) return
           const i = makeIntent(scope, operation, caseId, body, ref)
+          i.evidenceParty = evidenceParty
           if (file) {
             i.file = file
             i.fileMeta = {
@@ -143,6 +164,13 @@ export function AssistanceCommands({
         {message && <p role="status">{message}</p>}
         {pending && (
           <>
+            {pending.recoveryOnly && (
+              <p role="note">
+                Las referencias privadas no se guardaron. Consulta el resultado
+                o solicita el cierre técnico; no se permite reconstruir el
+                cuerpo para reenviar.
+              </p>
+            )}
             <p>
               Intento pendiente: {pending.operation} · Caso {pending.caseId}.
               Reautenticación sólo con la misma cuenta.
@@ -182,6 +210,8 @@ export function AssistanceCommands({
                 void run(async () => {
                   const result = await recoverIntent(pending)
                   if (active()) {
+                    if (result.status === 'APPLIED')
+                      rememberEvidence(pending, result.receipt)
                     setReceipt(result)
                     setMessage(
                       result.status === 'UNKNOWN'
@@ -203,6 +233,7 @@ export function AssistanceCommands({
                   className="button secondary"
                   disabled={
                     busy ||
+                    pending.recoveryOnly ||
                     !receipt ||
                     receipt.status === 'PENDING' ||
                     (pending.operation === 'SEAL_EVIDENCE' && !pending.file)

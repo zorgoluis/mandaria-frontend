@@ -13,6 +13,8 @@ import type { CaseDetail, Schema } from './types'
 import { economicTerms, hash, noObligationsTerms } from './hashes'
 import { useCommands } from './command-context'
 import { assistanceError } from './messages'
+import type { ReferenceCatalog } from './admin-references'
+import { bindReferences, referenceOptions } from './admin-reference-bindings'
 function Fields({
   schema,
   value,
@@ -96,6 +98,7 @@ function Fields({
               </fieldset>
             )
           const opts =
+            options[k] ??
             s.enum?.map((x) => ({ value: x, label: x })) ??
             (s.type === 'array'
               ? s.items?.enum?.map((x) => ({ value: x, label: x }))
@@ -221,12 +224,14 @@ export function CommandForm({
   admin,
   extraOptions = {},
   assignmentId,
+  administrativeReferences,
 }: {
   operation: keyof CommandBodies
   detail?: CaseDetail
   admin: boolean
   extraOptions?: Options
   assignmentId?: string
+  administrativeReferences?: ReferenceCatalog
 }) {
   const commands = useCommands(),
     [kind, setKind] = useState('VERIFY_NO_OBLIGATIONS'),
@@ -305,6 +310,30 @@ export function CommandForm({
     if (value.kind !== 'DRIVER') skipped.push('userId')
     if (value.kind !== 'PROVIDER') skipped.push('providerId')
   }
+  if (operation === 'RECORD_OBLIGATION' && value.knowledge === 'UNKNOWN')
+    skipped.push('expectedAmount')
+  if (administrativeReferences && detail)
+    Object.assign(
+      options,
+      referenceOptions(
+        administrativeReferences,
+        value,
+        detail,
+        commands.evidenceParties,
+      ),
+    )
+  const shipping =
+    operation === 'DECLARE_MOVEMENT' &&
+    value.sourceKind === 'SHIPPING_DECLARATION' &&
+    administrativeReferences
+  if (shipping)
+    skipped.push(
+      'sourceRef',
+      'amount',
+      'currency',
+      'occurredAt',
+      'declaredConcepts',
+    )
   const body = async () => {
     const b = { ...defaults(schema), ...value }
     if (operation === 'CREATE') {
@@ -393,7 +422,11 @@ export function CommandForm({
           'Esta confirmación requiere términos físicos o excepcionales completos. No se habilita sin una representación autorizada de esos términos.',
         )
     }
-    if (operation === 'RECORD_EVIDENCE' && b.kind === 'VERIFIED_CONTACT_NOTE') {
+    if (
+      !administrativeReferences &&
+      operation === 'RECORD_EVIDENCE' &&
+      b.kind === 'VERIFIED_CONTACT_NOTE'
+    ) {
       const note = rows(detail!, 'contributions').find(
         (r) => r.id === value.noteId,
       )
@@ -406,6 +439,15 @@ export function CommandForm({
       delete b.noteId
     }
     if (b.knowledge === 'UNKNOWN') b.expectedAmount = null
+    if (administrativeReferences)
+      bindReferences(
+        administrativeReferences,
+        operation,
+        b,
+        value,
+        detail!,
+        commands.evidenceParties,
+      )
     if (!validate(schema, b)) {
       const invalid = [
         ...new Set([
@@ -424,7 +466,7 @@ export function CommandForm({
     }
     return b
   }
-  const missing =
+  const legacyMissing =
     operation === 'RECORD_EVIDENCE' && value.kind === 'EXISTING_INTERNAL_RECORD'
       ? 'Falta la representación canónica completa del registro interno para verificar sourceRef.sha256. No se calcula desde una proyección parcial.'
       : operation === 'RECORD_EVIDENCE' && value.kind === 'PRIVATE_IMAGE'
@@ -459,6 +501,21 @@ export function CommandForm({
                             !options.custodyResolutionId?.length
                           ? 'Falta enlazar una resolución del procedimiento físico de custodia existente; no se crea desde asistencia.'
                           : ''
+  const missing = administrativeReferences
+    ? Object.values(administrativeReferences).some((p) => !p.commandsEnabled)
+      ? 'Comandos deshabilitados: consulta y recuperación de intentos disponibles.'
+      : operation === 'RECORD_EVIDENCE' && value.kind === 'PRIVATE_IMAGE'
+        ? 'Usa el flujo de imagen privada existente.'
+        : operation === 'VERIFY_IDENTITY' &&
+            value.partyId &&
+            !options.method?.length
+          ? 'Esta parte no ofrece un canal registrado y método compatibles. No se puede verificar su identidad desde esta referencia.'
+          : operation === 'VERIFY_IDENTITY' &&
+              value.partyId &&
+              !options.verificationNoteEvidenceId?.length
+            ? 'No hay un acta vinculada de forma comprobada a esta parte. Consulta las páginas de evidencias y registra la evidencia de su nota administrativa cuando corresponda; no se deduce la asociación por su etiqueta.'
+            : ''
+    : legacyMissing
   return (
     <section className="panel panel-body">
       <h3>{labels[operation]}</h3>
@@ -471,6 +528,51 @@ export function CommandForm({
             .catch((e) => setError(assistanceError(e)))
         }}
       >
+        {administrativeReferences && (
+          <>
+            <p>
+              Seleccionar una referencia no acredita el hecho. Documenta la
+              comprobación humana real y conserva evidencias, confirmaciones y
+              revisiones requeridas.
+            </p>
+            <Fields
+              schema={{
+                type: 'object',
+                properties: Object.fromEntries(
+                  [
+                    ...(operation === 'REGISTER_PARTY' &&
+                    !['DRIVER', 'PROVIDER'].includes(String(value.kind))
+                      ? ['stopReference']
+                      : []),
+                    ...(operation === 'RECORD_EVIDENCE' &&
+                    value.kind !== 'PRIVATE_IMAGE'
+                      ? [
+                          ...(value.kind === 'VERIFIED_CONTACT_NOTE'
+                            ? ['referenceParty']
+                            : []),
+                          'evidenceReference',
+                        ]
+                      : []),
+                    ...(shipping ? ['shippingReference'] : []),
+                  ].map((k) => [k, { type: 'string' }]),
+                ),
+              }}
+              value={value}
+              onChange={(v) => {
+                setValue(v)
+                setPreview(null)
+              }}
+              options={options}
+            />
+            {shipping && (
+              <p>
+                El importe, moneda, fecha y conceptos se copiarán de la
+                declaración original. El resultado queda DECLARED, sin acreditar
+                dinero.
+              </p>
+            )}
+          </>
+        )}
         {operation === 'PROPOSE' && (
           <Field label="Tipo de propuesta">
             <select
@@ -564,6 +666,7 @@ export function CommandForm({
             </fieldset>
           )}
         {operation === 'RECORD_EVIDENCE' &&
+          !administrativeReferences &&
           value.kind === 'VERIFIED_CONTACT_NOTE' && (
             <Field label="Aporte que documenta la verificación">
               <select
@@ -625,6 +728,11 @@ export function CommandForm({
                 operation,
                 String(preview.caseId ?? detail!.summary.id),
                 preview,
+                undefined,
+                undefined,
+                operation === 'RECORD_EVIDENCE' && administrativeReferences
+                  ? String(value.referenceParty ?? '') || undefined
+                  : undefined,
               )
               setPreview(null)
             }}

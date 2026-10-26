@@ -1,5 +1,10 @@
 import type { CaseDetail, RecordRow, Schema } from './types'
 export const labels: Record<string, string> = {
+  stopReference: 'Parada con contacto registrado',
+  shippingReference: 'Declaración de cobro original',
+  evidenceReference: 'Fuente canónica de evidencia',
+  referenceParty: 'Parte de la nota de verificación',
+  existingReceiptId: 'Recibo original de liberación',
   userId: 'Usuario histórico',
   providerId: 'Proveedor histórico',
   CREATE: 'Solicitar asistencia',

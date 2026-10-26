@@ -5,7 +5,8 @@ import { adminAssignments } from '../delivery-assignments/service'
 import { executionApi } from '../execution/service'
 import { Field, Loading } from '../components/ui'
 import { assistance } from './service'
-import { CommandForm } from './forms'
+import { AdminReferenceForm } from './admin-reference-form'
+import { referencePage } from './admin-references'
 import { labels, rows, type Options } from './form-model'
 import { CollectionView } from './pages'
 import { useCommands, useAssistanceAccess } from './command-context'
@@ -24,6 +25,30 @@ export function AdminCase({
   const [d, setD] = useState(detail),
     [op, setOp] = useState<keyof CommandBodies>('CONTRIBUTE'),
     [custodyOptions, setCustodyOptions] = useState<Options>({})
+  const commandGate = useQuery({
+    queryKey: [
+      'assistance',
+      scope.actor,
+      'admin-command-gate',
+      detail.summary.id,
+      detail.summary.revision,
+    ],
+    queryFn: async ({ signal }) => {
+      const page = await referencePage(
+        scope,
+        detail.summary.id,
+        'parties',
+        { limit: 1 },
+        signal,
+      )
+      // Keep only the permission projection here, never duplicate the catalog.
+      return { enabled: page.commandsEnabled, revision: page.caseRevision }
+    },
+    retry: false,
+    gcTime: 0,
+    staleTime: 0,
+  })
+  useAssistanceAccess(commandGate.error)
   const anchors = useQuery({
     queryKey: [
       'assistance',
@@ -117,30 +142,40 @@ export function AdminCase({
           onOptions={setCustodyOptions}
         />
       )}
-      <CommandForm
+      <AdminReferenceForm
         key={op}
+        scope={scope}
         operation={op}
         detail={d}
-        admin
         extraOptions={{ ...extras, ...custodyOptions }}
       />
-      <Upload scope={scope} detail={d} />
-      <section className="panel panel-body">
-        <h3>Propuestas congeladas</h3>
-        <p>
-          Los votos se cuentan por identidad vigente. Dos sesiones del mismo
-          usuario no son dos operadores. Un cambio material exige revisar hechos
-          y crear otra propuesta.
-        </p>
-        {rows(d, 'proposals').map((p) => (
-          <Proposal
-            key={`${p.id}:${d.summary.revision}`}
-            scope={scope}
-            detail={d}
-            id={p.id}
-          />
-        ))}
-      </section>
+      <fieldset
+        className="execution-fieldset"
+        disabled={
+          commandGate.isFetching ||
+          commandGate.isError ||
+          !commandGate.data?.enabled ||
+          commandGate.data.revision !== d.summary.revision
+        }
+      >
+        <Upload scope={scope} detail={d} />
+        <section className="panel panel-body">
+          <h3>Propuestas congeladas</h3>
+          <p>
+            Los votos se cuentan por identidad vigente. Dos sesiones del mismo
+            usuario no son dos operadores. Un cambio material exige revisar
+            hechos y crear otra propuesta.
+          </p>
+          {rows(d, 'proposals').map((p) => (
+            <Proposal
+              key={`${p.id}:${d.summary.revision}`}
+              scope={scope}
+              detail={d}
+              id={p.id}
+            />
+          ))}
+        </section>
+      </fieldset>
       <section className="panel panel-body">
         <h3>Evidencias privadas</h3>
         {rows(d, 'evidence')

@@ -1,4 +1,4 @@
-import { useAssistanceAccess } from './command-context'
+import { useAssistanceAccess, useCommands } from './command-context'
 import { ProviderMovements } from './movements'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
@@ -302,6 +302,8 @@ function Create({ scope }: { scope: Scope }) {
   )
 }
 function Detail({ scope, id }: { scope: Scope; id: string }) {
+  const { forgetEvidenceParties } = useCommands()
+  useEffect(() => () => forgetEvidenceParties?.(), [id, forgetEvidenceParties])
   const client = useQueryClient(),
     q = useQuery({
       queryKey: [...key(scope), 'detail', id],

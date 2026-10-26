@@ -3,6 +3,8 @@ import { ApiError } from '../services/errors'
 import type { Operation } from './service'
 import type { Intent } from './attempts'
 interface Commands {
+  evidenceParties?: Record<string, string>
+  forgetEvidenceParties?: () => void
   deny: () => void
   blocked: boolean
   prepare: (
@@ -11,6 +13,7 @@ interface Commands {
     body: Record<string, unknown>,
     ref?: string,
     file?: Intent['file'],
+    evidenceParty?: string,
   ) => void
 }
 export const Context = createContext<Commands | null>(null)

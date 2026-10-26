@@ -17,6 +17,8 @@ export interface Intent {
   file?: { mime: string; bytes: string }
   fileMeta?: { mime: string; bytes: number; sha256: string }
   createdAt: string
+  recoveryOnly?: boolean
+  evidenceParty?: string
 }
 const storageId = (scope: Scope) => `${env.apiUrl}|${scope.actor}`
 const db = () =>
@@ -34,7 +36,24 @@ interface Encrypted {
 }
 export async function encryptIntent(intent: Intent): Promise<Encrypted> {
   // Bytes live only in this mounted session. A restart requires the same file.
-  const persisted = { ...intent, file: undefined }
+  const privateBody =
+    intent.scope.surface === 'admin' &&
+    (intent.operation === 'VERIFY_IDENTITY' ||
+      (intent.operation === 'RECORD_EVIDENCE' && !!intent.body.sourceRef) ||
+      (intent.operation === 'REGISTER_PARTY' &&
+        !!intent.body.contactSourceRef) ||
+      (intent.operation === 'DECLARE_MOVEMENT' &&
+        intent.body.sourceKind === 'SHIPPING_DECLARATION') ||
+      (intent.operation === 'PROPOSE' &&
+        ['ACCESS_RECOVERED', 'ASSISTED_RELEASE'].includes(
+          String(intent.body.type),
+        )))
+  const persisted = {
+    ...intent,
+    file: undefined,
+    evidenceParty: undefined,
+    ...(privateBody ? { body: {}, recoveryOnly: true } : {}),
+  }
   const key = await crypto.subtle.generateKey(
     { name: 'AES-GCM', length: 256 },
     false,
@@ -182,6 +201,10 @@ export function makeIntent(
   )
 }
 export async function sendIntent(intent: Intent, scope: Scope) {
+  if (intent.recoveryOnly)
+    throw Error(
+      'Cuerpo privado no conservado. Consulta o cierra el intento; no se reconstruirá para reenviarlo.',
+    )
   if (
     intent.environment !== env.apiUrl ||
     intent.scope.actor !== scope.actor ||

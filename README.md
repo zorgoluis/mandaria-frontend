@@ -1,3 +1,7 @@
+## 2026-10-25 — QA conjunta y referencias administrativas
+
+QA conserva los commits B2B `263a4b9` y zonas `b55f772`. Verificación conjunta nueva:1566/1566; tras integrar las referencias administrativas, suite global1596/1596 en79 archivos, tipos/lint/build PASS. Web1.11.0 intacta, sin commit/push o despliegue. HTTP local nuevo: 12/12 comprobaciones, entorno sintético cerrado. Referencias SUPER_ADMIN con intención privada en memoria y recuperación durable sin cuerpos sensibles; proveedor/movementContext y zonas conservados. Contratos, evidencia HTTP sintética y límites (incluido EXISTING_RELEASE completo pendiente) en [integración administrativa](docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md) y [VERIFICATION](VERIFICATION.md). Historia previa conservada.
+
 ## 2026-10-25 — Revisión y commit separado QA de zonas del independiente
 
 Diff de zonas revisado sobre QA263a4b9, conservando el commit B2B separado. SUPER_ADMIN usa profileId real, catálogo activo paginado y protocolo de ofertas con requestId en body; intención cifrada y replay exacto, conflicto con revisión explícita y lista vacía confirmada. Se incluyen la estabilización de fixtures/etiquetas y maxWorkers4 documentados. Sin cambios adicionales de código de producto durante esta revisión.
