@@ -531,7 +531,10 @@ try {
           },
         })
         result = { changed: true }
-      } else if (command.action === 'historicalReleaseReference') {
+      } else if (
+        command.action === 'historicalReleaseReference' ||
+        command.action === 'unreachableReleaseFixture'
+      ) {
         const bearer = { type: 'bearer' }
         const d = await fixture.openDispatch()
         const terms = (
@@ -557,28 +560,32 @@ try {
         const e = await prisma.deliveryExecution.findUniqueOrThrow({
           where: { dispatchId: d.id },
         })
-        const requestId = crypto.randomUUID()
-        const response = (
-          await api()
-            .post('/api/v1/driver/dispatches/' + d.id + '/fleet-release')
-            .auth(t.pedro, bearer)
-            .set('Idempotency-Key', requestId)
-            .send({
-              assignmentId: e.assignmentId,
-              expectedExecutionRevision: String(e.revision),
-              reason: 'OPERATIONAL_CHANGE',
-            })
-            .expect(200)
-        ).body
-        const receipt = await prisma.fleetCommand.findFirstOrThrow({
-          where: { requestId, operation: 'RELEASE', status: 'APPLIED' },
-        })
-        assert.equal(receipt.response.assignmentId, e.assignmentId)
-        result = {
-          assignmentId: e.assignmentId,
-          dispatchId: d.id,
-          requestId,
-          responseId: response.receiptId,
+        if (command.action === 'unreachableReleaseFixture') {
+          result = { assignmentId: e.assignmentId, dispatchId: d.id }
+        } else {
+          const requestId = crypto.randomUUID()
+          const response = (
+            await api()
+              .post('/api/v1/driver/dispatches/' + d.id + '/fleet-release')
+              .auth(t.pedro, bearer)
+              .set('Idempotency-Key', requestId)
+              .send({
+                assignmentId: e.assignmentId,
+                expectedExecutionRevision: String(e.revision),
+                reason: 'OPERATIONAL_CHANGE',
+              })
+              .expect(200)
+          ).body
+          const receipt = await prisma.fleetCommand.findFirstOrThrow({
+            where: { requestId, operation: 'RELEASE', status: 'APPLIED' },
+          })
+          assert.equal(receipt.response.assignmentId, e.assignmentId)
+          result = {
+            assignmentId: e.assignmentId,
+            dispatchId: d.id,
+            requestId,
+            responseId: response.receiptId,
+          }
         }
       } else if (command.action === 'releaseInvariants') {
         const a = await prisma.deliveryAssignment.findUniqueOrThrow({

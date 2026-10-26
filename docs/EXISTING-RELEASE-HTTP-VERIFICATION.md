@@ -1,5 +1,7 @@
 # EXISTING_RELEASE — verificación Web/HTTP local
 
+Actualización posterior: [ASSISTED_RELEASE / UNREACHABLE / NEW_ACTION con doble aprobación completado por HTTP sintético](ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Las menciones inferiores de ese pendiente se conservan como historia; no implica matriz exhaustiva de variantes.
+
 Actualización posterior: [ACCESS_RECOVERED ya aplicado y verificado por HTTP local](ACCESS-RECOVERED-HTTP-VERIFICATION.md), con replay y servicio ACTIVE. Las menciones de ese pendiente inferiores se conservan como historia.
 
 2026-10-25. QA sobre `9e4af36`, Web 1.11.0, backend local `204d4f7` / 1.13.2. Esta ampliación de evidencia completa el pendiente documentado en la integración de referencias administrativas; los informes anteriores se conservan como historia.

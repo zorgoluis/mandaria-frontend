@@ -1,5 +1,7 @@
 # ACCESS_RECOVERED — aplicación HTTP local
 
+Actualización posterior: [ASSISTED_RELEASE / UNREACHABLE / NEW_ACTION con doble aprobación completado por HTTP sintético](ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Las menciones inferiores de ese pendiente se conservan como historia; no implica matriz exhaustiva de variantes.
+
 2026-10-25. Frontend QA sobre `79e938d`, Web 1.11.0. Backend local QA `204d4f712fb150f872e006a891595f8d64b6a2c7`, paquete 1.13.2, asistencia 1.0.0 y schemaVersion 1. Esta verificación completa el pendiente de aplicación de ACCESS_RECOVERED de los informes anteriores; no sustituye ni altera sus resultados históricos.
 
 ## Recorrido y controles

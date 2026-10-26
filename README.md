@@ -1,3 +1,7 @@
+## 2026-10-25 — UNREACHABLE con doble aprobación verificado
+
+ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE aplicado por HTTP local: dos administradores distintos, un único reembolso; dos sesiones de la misma identidad no bastan. **16/16 HTTP PASS**, **93/93 regresiones PASS**, entorno cerrado. Backend utilizado1.13.3/f2f942e por trabajo ajeno; Web1.11.0 intacta. [Evidencia y límites](docs/ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Sin backend/móvil, commit/push o despliegue. Historia inferior preservada.
+
 ## 2026-10-25 — ACCESS_RECOVERED completo en HTTP local
 
 Aplicación, consulta de recibo y replay verificados: una resolución, sesión válida y servicio ACTIVE sin liberación/reembolso. HTTP nuevo **15/15 PASS**; regresiones focalizadas **93/93 PASS**; entorno cerrado y backend intacto. [Recorrido y evidencia](docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md). Web1.11.0 sin cambios; sin commit/push o despliegue. Las cifras globales inferiores son históricas.

@@ -7,6 +7,7 @@ import { createInterface } from 'node:readline'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { randomUUID, createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
+import { verifyUnreachableRelease } from './verify-unreachable-release-flow.mjs'
 import { resolve } from 'node:path'
 const output = `test-results/admin-references-http-${Date.now()}`
 await mkdir(output, { recursive: true })
@@ -351,9 +352,16 @@ try {
   await page
     .getByLabel('Contraseña', { exact: true })
     .fill(info.credentials.password)
+  const browserLoginResponse = page.waitForResponse(
+    (r) => r.url().endsWith('/auth/login') && r.request().method() === 'POST',
+  )
   await page
     .getByRole('button', { name: 'Iniciar sesión', exact: true })
     .click()
+  const browserAdminToken = (await (await browserLoginResponse).json())
+    .accessToken
+  assert.equal(typeof browserAdminToken, 'string')
+  assert.notEqual(browserAdminToken, token)
   await expect(page).not.toHaveURL(/\/login$/)
   await page.goto(origin + '/admin/fleet-assistance/' + caseId)
   const action = async (value) => {
@@ -632,6 +640,21 @@ try {
     409,
   )
   report.checks.push('changed-source-hash-rejected-without-silent-replacement')
+  report.unreachableRelease = await verifyUnreachableRelease({
+    http,
+    token,
+    other,
+    sameActor: browserAdminToken,
+    request,
+    page,
+    origin,
+    action,
+    review,
+    acknowledge,
+  })
+  report.checks.push(
+    'unreachable-new-action-origin-proof-inventory-two-distinct-admins-same-identity-not-two-apply-receipt-replay-single-refund',
+  )
   const historical = await request('historicalReleaseReference')
   const shippingFixture = await request('shippingReferenceFixture')
   caseId = randomUUID()

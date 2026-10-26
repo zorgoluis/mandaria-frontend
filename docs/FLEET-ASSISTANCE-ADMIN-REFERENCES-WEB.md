@@ -1,5 +1,7 @@
 # Referencias administrativas de asistencia — integración Web local
 
+Actualización posterior: [ASSISTED_RELEASE / UNREACHABLE / NEW_ACTION con doble aprobación completado por HTTP sintético](ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Las menciones inferiores de ese pendiente se conservan como historia; no implica matriz exhaustiva de variantes.
+
 Actualización posterior: [ACCESS_RECOVERED ya aplicado y verificado por HTTP local](ACCESS-RECOVERED-HTTP-VERIFICATION.md), con replay y servicio ACTIVE. Las menciones de ese pendiente inferiores se conservan como historia.
 
 Actualización posterior al commit 9e4af36: **EXISTING_RELEASE / CONTACTABLE completado por HTTP sintético, 14/14 comprobaciones PASS**. Ver [recorrido y evidencia nuevos](EXISTING-RELEASE-HTTP-VERIFICATION.md). Las menciones de pendiente y cifras inferiores describen la etapa anterior y se conservan como historia.
