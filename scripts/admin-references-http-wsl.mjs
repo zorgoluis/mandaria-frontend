@@ -420,7 +420,7 @@ try {
       historicalDispatch: historicalDispatch.id,
     },
   })
-  let shippingSnapshot
+  let shippingSnapshot, recoveryAccessToken
   const input = createInterface({ input: process.stdin })
   for await (const line of input) {
     const command = JSON.parse(line)
@@ -450,11 +450,76 @@ try {
         break
       }
       if (command.action === 'createRecoverySession') {
-        await api()
+        const login = await api()
           .post('/api/v1/auth/login')
           .send({ email: fixture.mail('carlos'), password: fixture.password })
           .expect(200)
+        recoveryAccessToken = login.body.accessToken
         result = { created: true }
+      } else if (command.action === 'recoveryInvariants') {
+        const c = await prisma.assistanceCase.findUniqueOrThrow({
+          where: { id: command.caseId },
+        })
+        const a = await prisma.deliveryAssignment.findUniqueOrThrow({
+          where: { id: c.anchorAssignmentId },
+        })
+        const d = await prisma.dispatch.findUniqueOrThrow({
+          where: { id: c.dispatchId },
+        })
+        const execution = await prisma.deliveryExecution.findUniqueOrThrow({
+          where: { dispatchId: c.dispatchId },
+        })
+        const driver = await prisma.driver.findUniqueOrThrow({
+          where: { id: c.subjectDriverId },
+        })
+        const session = await prisma.offerSession.findUniqueOrThrow({
+          where: { id: command.sessionId },
+        })
+        assert.equal(session.userId, driver.userId)
+        const refreshes = await prisma.refreshToken.count({
+          where: {
+            sessionId: session.id,
+            createdAt: { gte: c.createdAt },
+            revokedAt: null,
+          },
+        })
+        assert(recoveryAccessToken)
+        await api()
+          .get('/api/v1/driver/me')
+          .auth(recoveryAccessToken, { type: 'bearer' })
+          .expect(200)
+        const resolutions = await prisma.$queryRawUnsafe(
+          'SELECT count(*)::int AS count FROM "AssistanceResolution" WHERE "caseId"=$1::uuid AND type=\'ACCESS_RECOVERED\'',
+          c.id,
+        )
+        result = {
+          business: {
+            assignmentStatus: a.status,
+            assignmentUpdatedAt: a.updatedAt.toISOString(),
+            endedAt: a.endedAt,
+            dispatchStatus: d.status,
+            executionPhase: execution.phase,
+            executionRevision: String(execution.revision),
+            releases: await prisma.fleetCommand.count({
+              where: {
+                resourceId: c.dispatchId,
+                operation: 'RELEASE',
+                status: 'APPLIED',
+              },
+            }),
+            refunds: await prisma.creditLedgerEntry.count({
+              where: { referenceId: c.dispatchId, type: 'SERVICE_REFUND' },
+            }),
+          },
+          session: {
+            belongsToDriver: true,
+            revoked: !!session.revokedAt,
+            unexpired: session.expiresAt > new Date(),
+            newLiveRefreshes: refreshes,
+            driverMeStatus: 200,
+          },
+          resolutions: resolutions[0].count,
+        }
       } else if (command.action === 'staleAssignmentSource') {
         const c = await prisma.assistanceCase.findUniqueOrThrow({
           where: { id: command.caseId },

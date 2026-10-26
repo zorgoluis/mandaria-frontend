@@ -1,3 +1,7 @@
+## 2026-10-25 — ACCESS_RECOVERED completo en HTTP local
+
+Aplicación, consulta de recibo y replay verificados: una resolución, sesión válida y servicio ACTIVE sin liberación/reembolso. HTTP nuevo **15/15 PASS**; regresiones focalizadas **93/93 PASS**; entorno cerrado y backend intacto. [Recorrido y evidencia](docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md). Web1.11.0 sin cambios; sin commit/push o despliegue. Las cifras globales inferiores son históricas.
+
 ## 2026-10-25 — Verificación completa de EXISTING_RELEASE
 
 HTTP local nuevo **14/14 PASS**: liberación existente acreditada con inventario, confirmaciones, revisión y replay, sin repetir liberación/reembolso. Corregido el refresco de permisos con igual revisión. Suite global nueva **1597/1597**, tipos/lint/build PASS; Web1.11.0 intacta. [Recorrido, evidencia y límites](docs/EXISTING-RELEASE-HTTP-VERIFICATION.md). Sin backend/móvil, commit/push ni despliegue. Las entradas inferiores conservan la historia previa.

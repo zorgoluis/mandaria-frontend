@@ -456,6 +456,9 @@ try {
   await action('PROPOSE')
   await page.getByLabel('Tipo de propuesta').selectOption('ACCESS_RECOVERED')
   await page.getByLabel('Nueva sesión verificada').selectOption({ index: 1 })
+  const recoverySessionId = await page
+    .getByLabel('Nueva sesión verificada')
+    .inputValue()
   await page
     .getByLabel('Verificación', { exact: true })
     .selectOption({ index: 1 })
@@ -488,9 +491,100 @@ try {
     },
     409,
   )
-  assert(beforeReview.code)
+  assert.equal(beforeReview.code, 'APPROVALS_REQUIRED')
   report.checks.push(
     'browser-current-driver-session-proposal-no-automatic-apply-review-barrier',
+  )
+  const recoveryBefore = await request('recoveryInvariants', {
+    caseId,
+    sessionId: recoverySessionId,
+  })
+  assert.equal(recoveryBefore.business.assignmentStatus, 'ACTIVE')
+  assert.equal(recoveryBefore.business.endedAt, null)
+  assert.equal(recoveryBefore.session.revoked, false)
+  assert.equal(recoveryBefore.session.unexpired, true)
+  assert(recoveryBefore.session.newLiveRefreshes > 0)
+  assert.equal(recoveryBefore.resolutions, 0)
+  const recoveryRevision = {
+    expectedProposalRevision: proposal.proposalRevision,
+    snapshotHash: proposal.snapshotHash,
+  }
+  const reviewDetail = await http(base, other)
+  const approvedRecovery = await http(
+    base + '/proposals/' + proposal.proposalId + '/reviews',
+    other,
+    'POST',
+    {
+      expectedCaseRevision: reviewDetail.summary.revision,
+      ...recoveryRevision,
+      decision: 'APPROVE',
+      reason:
+        'Revisión sintética por segundo administrador de sesión e identidad verificadas',
+    },
+    randomUUID(),
+  )
+  assert.equal(approvedRecovery.result.proposalStatus, 'READY')
+  const recoveryKey = randomUUID(),
+    recoveryPath = base + '/proposals/' + proposal.proposalId + '/apply'
+  const recoveryBody = {
+    expectedCaseRevision: (await http(base, token)).summary.revision,
+    ...recoveryRevision,
+  }
+  const recoveryApplied = await http(
+    recoveryPath,
+    token,
+    'POST',
+    recoveryBody,
+    recoveryKey,
+  )
+  assert.equal(recoveryApplied.result.operationalState, 'ACCESO_RECUPERADO')
+  const recoveredReceipt = await http(
+    '/fleet-assistance-attempts/' +
+      recoveryKey +
+      '?caseId=' +
+      caseId +
+      '&operation=APPLY',
+    token,
+  )
+  assert.equal(recoveredReceipt.status, 'APPLIED')
+  assert.equal(
+    recoveredReceipt.receipt.result.resolutionId,
+    recoveryApplied.result.resolutionId,
+  )
+  assert.deepEqual(
+    await http(recoveryPath, token, 'POST', recoveryBody, recoveryKey),
+    recoveryApplied,
+  )
+  assert.equal(
+    (await http(base + '/proposals/' + proposal.proposalId, token)).status,
+    'APPLIED',
+  )
+  assert.equal(
+    (await http(base, token)).summary.operationalState,
+    'ACCESO_RECUPERADO',
+  )
+  const recoveryAfter = await request('recoveryInvariants', {
+    caseId,
+    sessionId: recoverySessionId,
+  })
+  assert.deepEqual(recoveryAfter.business, recoveryBefore.business)
+  assert.deepEqual(recoveryAfter.session, recoveryBefore.session)
+  assert.equal(recoveryAfter.resolutions, 1)
+  await page.getByRole('button', { name: 'Actualizar expediente' }).click()
+  await expect(
+    page.getByText('ACCESO_RECUPERADO', { exact: true }).first(),
+  ).toBeVisible()
+  report.accessRecovered = {
+    proposalFromBrowser: true,
+    secondAdminReview: true,
+    applied: true,
+    attemptLookup: true,
+    exactReplay: true,
+    before: recoveryBefore,
+    after: recoveryAfter,
+  }
+  report.checks.push(
+    'access-recovered-second-admin-review-http-apply-receipt-replay-one-resolution-driver-session-valid-service-remains-ACTIVE',
   )
   await action('RECORD_OBLIGATION')
   const participation = (await refs('participations'))[0]
