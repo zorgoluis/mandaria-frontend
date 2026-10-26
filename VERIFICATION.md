@@ -1,3 +1,24 @@
+## 2026-10-26 — Revisión y commit local QA de la verificación conjunta
+
+Diff final revisado sobre QA 5924964: sólo logs, manifiesto y continuidad de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE. Las cuatro huellas SHA-256 coinciden y los logs respaldan 1597/1597 pruebas en 79 archivos, tipos/lint/build PASS. Sin hallazgos ni correcciones adicionales; aviso conocido de chunk >500 kB.
+
+Se reutilizan las ejecuciones de la verificación conjunta inmediatamente anterior; no se ejecutaron nuevamente durante esta revisión. HTTP permanece histórico. Commit local autorizado ahora por el usuario; las menciones anteriores «sin commit» y commitCreated=false describen la etapa de ejecución. Web 1.11.0 intacta; sin cambios de producto, backend/móvil, push o despliegue. Historial preservado.
+
+## 2026-10-26 — Verificación conjunta QA de las tres variantes de asistencia
+
+Ejecuciones NUEVAS sobre QA `59249641962c6074e817e2277a98e4d3af540515`, con árbol inicial limpio y Web **1.11.0**: incluye EXISTING_RELEASE `79e938d`, ACCESS_RECOVERED `f52b782` y ASSISTED_RELEASE/UNREACHABLE `5924964`. AGENTS.md no existe en el repositorio ni en los ancestros consultados; continuidad y documentación actuales leídas.
+
+- `npm test`: **1597/1597 PASS, 79/79 archivos**, 110.08 s, salida 0.
+- `npm run typecheck:test`: PASS, salida 0.
+- `npm run lint`: PASS, salida 0.
+- `npm run build`: PASS, salida 0; conserva el aviso conocido de chunk >500 kB.
+
+Suite global completa, sin omisiones ni cambios de permisos, configuración, concurrencia o tiempos. Se ejecutó fuera del sandbox por el ENOENT de temporales documentado anteriormente; no hubo fallo nuevo ni corrección necesaria. Tipos/lint/build ejecutados en el entorno habitual. Logs nuevos en `docs/evidence/qa-assistance-combined-2026-10-26/`; comandos, commits y huellas en [manifiesto conjunto](docs/qa-assistance-combined-evidence.json).
+
+HTTP no se reejecutó en esta tarea: los informes previos de EXISTING_RELEASE (14), ACCESS_RECOVERED (15) y UNREACHABLE (16, incluye las tres variantes) permanecen históricos, sin atribuirlos a esta ejecución global. Las pruebas Web con mocks no acreditan nuevas llamadas Nest/PostgreSQL ni UI Android. Continúan los límites de cobertura exhaustiva de proofSource, expiración/revocación de aprobaciones, custodia/economía y operación remota descritos en los informes HTTP.
+
+Sin cambios de producto, harness, versión, dependencias, backend o móvil; sin commit/push ni despliegue. Sólo evidencia y continuidad nuevas; historial inferior preservado.
+
 ## 2026-10-25 — Revisión y commit local QA de UNREACHABLE
 
 Diff final revisado sobre QAf52b782: ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE con inventario y doble aprobación, corrección del harness que reutiliza sesiones existentes, evidencia y continuidad. Las15 huellas previas coinciden; HTTP16/16 completo, cero errores de navegador, backend sin cambios por el harness y entorno cerrado. Dos sesiones de la misma identidad no suman dos votos; dos administradores distintos habilitan la aplicación y el replay conserva un único reembolso. Sin correcciones adicionales en esta revisión.

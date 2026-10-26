@@ -1,3 +1,7 @@
+## 2026-10-26 — QA conjunta de asistencia
+
+Verificación nueva de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE sobre QA `5924964`: **1597/1597 pruebas, 79 archivos**, tipos, lint y build PASS. Sin correcciones necesarias; aviso conocido de chunk >500 kB. Web 1.11.0 intacta. [Evidencia conjunta](docs/qa-assistance-combined-evidence.json) y [continuidad](VERIFICATION.md). HTTP anterior histórico, no reejecutado. Sin commit, push o despliegue; historia inferior preservada.
+
 ## 2026-10-25 — UNREACHABLE con doble aprobación verificado
 
 ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE aplicado por HTTP local: dos administradores distintos, un único reembolso; dos sesiones de la misma identidad no bastan. **16/16 HTTP PASS**, **93/93 regresiones PASS**, entorno cerrado. Backend utilizado1.13.3/f2f942e por trabajo ajeno; Web1.11.0 intacta. [Evidencia y límites](docs/ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Sin backend/móvil, commit/push o despliegue. Historia inferior preservada.
