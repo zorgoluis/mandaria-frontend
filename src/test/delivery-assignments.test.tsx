@@ -182,6 +182,7 @@ function service(over: Partial<DispatchService> = {}): DispatchService {
 function owned(over: Partial<ProviderDispatch> = {}): ProviderDispatch {
   return {
     id: DISPATCH,
+    trackingMode: 'LEGACY',
     status: 'CLAIMED',
     access: 'OWNER',
     serviceType: 'LOCAL_DELIVERY',

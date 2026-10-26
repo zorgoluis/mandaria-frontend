@@ -1,0 +1,110 @@
+
+> mandaria-web@1.11.0 test
+> vitest run
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/independent-zones.test.tsx (18 tests | 1 failed) 2339ms
+   × preserves the original durable intention after PUT 401 UNAUTHORIZED 1032ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/independent-zones.test.tsx > preserves the original durable intention after PUT 401 UNAUTHORIZED
+TestingLibraryElementError: Unable to find a label with the text of: /Zona norte/
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      aria-label="Zonas propias autorizadas"
+      class="panel panel-body"
+    >
+      <h2>
+        Zonas propias autorizadas
+      </h2>
+      <p>
+        Autoriza zonas del catálogo al perfil independiente. No aprueba la habilitación, levanta restricciones, hereda cobertura de flotilla, selecciona zona ni inicia turno.
+      </p>
+      <p>
+        Revisión vigente:
+        9007199254740993
+         ·
+        0
+         zonas autorizadas.
+      </p>
+      <p>
+        Esta lectura no identifica quién aplicó un cambio ni resuelve por sí sola una intención incierta.
+      </p>
+      <button
+        class="button secondary"
+      >
+        Consultar zonas vigentes
+      </button>
+      <button
+        class="button"
+      >
+        Editar autorizaciones de zonas
+      </button>
+    </section>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      aria-label="Zonas propias autorizadas"
+      class="panel panel-body"
+    >
+      <h2>
+        Zonas propias autorizadas
+      </h2>
+      <p>
+        Autoriza zonas del catálogo al perfil independiente. No aprueba la habilitación, levanta restricciones, hereda cobertura de flotilla, selecciona zona ni inicia turno.
+      </p>
+      <p>
+        Revisión vigente:
+        9007199254740993
+         ·
+        0
+         zonas autorizadas.
+      </p>
+      <p>
+        Esta lectura no identifica quién aplicó un cambio ni resuelve por sí sola una intención incierta.
+      </p>
+      <button
+        class="button secondary"
+      >
+        Consultar zonas vigentes
+      </button>
+      <button
+        class="button"
+      >
+        Editar autorizaciones de zonas
+      </button>
+    </section>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ edit src/test/independent-zones.test.tsx:67:16
+     65|     }),
+     66|   )
+     67|   await screen.findByLabelText(/Zona norte/)
+       |                ^
+     68|   if (empty)
+     69|     fireEvent.click(
+ ❯ src/test/independent-zones.test.tsx:294:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 76 passed (77)
+      Tests  1 failed | 1562 passed (1563)
+   Start at  11:53:50
+   Duration  115.90s (tests 44%, environment 35%, setup 7%, import 7%, transform 6%)
+
+Environment  jsdom was created 77 times · 155.41s total, 35% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

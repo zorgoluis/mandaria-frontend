@@ -13,6 +13,8 @@ import { queryClient } from '../services/query'
 import { normalizeError } from '../services/errors'
 import { driverPortal } from '../driver-portal/service'
 import { independentDrivers } from '../independent-drivers/service'
+import { offerZones } from '../independent-zones/service'
+import { zoneStore } from '../independent-zones/intent'
 import { independentCreditsAdmin, myDriverCredits } from '../credits/service'
 import type { CreditAccount } from '../credits/types'
 import { providers } from '../providers/service'
@@ -25,6 +27,13 @@ import type {
 import type { IndependentDriverProfile } from '../independent-drivers/types'
 import type { Role } from '../types/api'
 
+vi.mock('../independent-zones/service', () => ({
+  offerZones: { get: vi.fn(), put: vi.fn() },
+}))
+vi.mock('../independent-zones/intent', async (original) => ({
+  ...(await original<typeof import('../independent-zones/intent')>()),
+  zoneStore: { read: vi.fn() },
+}))
 vi.mock('../driver-portal/service', () => ({
   driverPortal: {
     me: vi.fn(),
@@ -223,7 +232,7 @@ function profile(
   over: Partial<IndependentDriverProfile> = {},
 ): IndependentDriverProfile {
   return {
-    id: 'profile-1',
+    id: '77777777-7777-4777-8777-777777777777',
     driverId: DRIVER_ID,
     status: 'APPROVED',
     approvedAt: stamp,
@@ -350,6 +359,8 @@ it('current independent custodian continues detailed execution despite commercia
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(offerZones.get).mockResolvedValue({ revision: '0', zoneIds: [] })
+  vi.mocked(zoneStore.read).mockResolvedValue(null)
   vi.mocked(independentCreditsAdmin.account).mockResolvedValue(creditAccount)
   vi.mocked(independentCreditsAdmin.ledger).mockResolvedValue(emptyLedger)
   vi.mocked(myDriverCredits.account).mockResolvedValue(creditAccount)
@@ -1085,4 +1096,24 @@ it('documentary lapse preserves committed independent legacy service without QA 
     screen.getByText(/El servicio comprometido mantiene/),
   ).toBeInTheDocument()
   expect(driverPortal.take).not.toHaveBeenCalled()
+})
+it('loads offer zones using the real profile id, distinct from the routed driver id', async () => {
+  mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
+  await waitFor(() =>
+    expect(offerZones.get).toHaveBeenCalledWith(
+      profile().id,
+      expect.any(AbortSignal),
+    ),
+  )
+  expect(profile().id).not.toBe(DRIVER_ID)
+  expect(independentDrivers.enable).not.toHaveBeenCalled()
+})
+it('does not load zones or create a profile when the independent profile is absent', async () => {
+  vi.mocked(independentDrivers.get).mockRejectedValue(
+    normalizeError(404, { message: 'Perfil ausente' }),
+  )
+  mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
+  await screen.findByRole('alert')
+  expect(offerZones.get).not.toHaveBeenCalled()
+  expect(independentDrivers.enable).not.toHaveBeenCalled()
 })
