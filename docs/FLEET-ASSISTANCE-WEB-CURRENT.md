@@ -1,3 +1,5 @@
+> Actualización 2026-10-25: las siete referencias administrativas de backend 1.13.2 ya están integradas para SUPER_ADMIN. Los bloqueos por referencias ausentes descritos abajo son históricos; movementContext de PROVIDER_ADMIN permanece integrado. Consulte la [integración vigente](FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md) y la [verificación completa de EXISTING_RELEASE / CONTACTABLE](EXISTING-RELEASE-HTTP-VERIFICATION.md). No implica disponibilidad remota.
+
 > Actualización 2026-10-24: la proyección PROVIDER_ADMIN ya existe y está integrada. Consulte el [informe vigente](FLEET-ASSISTANCE-PROVIDER-MOVEMENTS-WEB.md). Este documento y su evidencia conservan el estado histórico del 23 de octubre.
 
 # Asistencia Web — contraste con backend actual

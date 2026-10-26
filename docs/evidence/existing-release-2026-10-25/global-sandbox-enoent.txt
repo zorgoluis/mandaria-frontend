@@ -1,0 +1,201 @@
+> mandaria-web@1.11.0 test
+> vitest run
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/logistics.test.tsx (0 test)
+ ❯ src/test/invitations.test.tsx (0 test)
+ ❯ src/test/flows.test.tsx (0 test)
+ ❯ src/test/dispatch.test.tsx (0 test)
+ ❯ src/test/delivery-assignments.test.tsx (0 test)
+ ❯ src/test/driver-portal.test.tsx (0 test)
+ ❯ src/test/partner-applications.test.tsx (0 test)
+ ❯ src/test/delivery-requests.test.tsx (0 test)
+ ❯ src/test/delivery-completion.test.tsx (0 test)
+ ❯ src/test/pricing.test.tsx (0 test)
+ ❯ src/test/credits.test.tsx (0 test)
+ ❯ src/test/service-coverage.test.tsx (0 test)
+ ❯ src/test/quotes.test.tsx (0 test)
+ ❯ src/test/webhooks.test.tsx (0 test)
+ ❯ src/test/fleet-exit.test.tsx (0 test)
+ ❯ src/test/verification-upload.test.tsx (0 test)
+ ❯ src/test/verification-pages.test.tsx (0 test)
+ ❯ src/test/fleet.test.tsx (0 test)
+ ❯ src/test/assistance.test.tsx (0 test)
+ ❯ src/test/representatives.test.tsx (0 test)
+ ❯ src/test/business-pages.test.tsx (0 test)
+ ❯ src/test/customer-autocomplete.test.tsx (0 test)
+ ❯ src/test/onboarding-production.test.tsx (0 test)
+ ❯ src/test/deletion-v2.test.tsx (0 test)
+ ❯ src/test/deletion-pages.test.tsx (0 test)
+ ❯ src/test/execution.test.tsx (0 test)
+ ❯ src/test/documentary-availability.test.tsx (0 test)
+ ❯ src/test/customer-conversion-design.test.tsx (0 test)
+ ❯ src/test/independent-zones.test.tsx (0 test)
+ ❯ src/test/customer.test.tsx (0 test)
+ ❯ src/test/developers.test.tsx (0 test)
+ ❯ src/test/customer-profile-design.test.tsx (0 test)
+ ❯ src/test/location.test.tsx (0 test)
+ ❯ src/test/customer-quote-design.test.tsx (0 test)
+ ❯ src/test/customer-location.test.tsx (0 test)
+ ❯ src/test/google-map.test.tsx (0 test)
+ ❯ src/test/customer-reconciliation.test.tsx (0 test)
+ ❯ src/test/customer-request-design.test.tsx (0 test)
+ ❯ src/test/image-retention.test.tsx (0 test)
+ ❯ src/test/provider-movements.test.tsx (0 test)
+ ❯ src/test/customer-registration-design.test.tsx (0 test)
+ ❯ src/test/session-compatibility.test.tsx (0 test)
+ ❯ src/test/customer-shipments-design.test.tsx (0 test)
+ ❯ src/test/customer-address.test.tsx (0 test)
+ ❯ src/test/collection-instructions.test.tsx (0 test)
+ ❯ src/test/public-tracking-design.test.tsx (0 test)
+ ❯ src/test/customer-contact.test.tsx (0 test)
+ ❯ src/test/provider-historical-attempt.test.tsx (0 test)
+ ❯ src/test/admin-reference-access.test.tsx (0 test)
+ ❯ src/test/execution-reconciliation.test.ts (0 test)
+ ❯ src/test/api.test.ts (0 test)
+ ❯ src/test/admin-references.test.tsx (0 test)
+ ❯ src/test/fleet-api.test.ts (0 test)
+ ❯ src/test/dispatch-search.test.tsx (0 test)
+ ❯ src/test/retention-projection.test.tsx (0 test)
+ ❯ src/test/google-loader.test.ts (0 test)
+ ❯ src/test/assistance-api.test.ts (0 test)
+ ❯ src/test/verification-service.test.ts (0 test)
+ ❯ src/test/pricing-api.test.ts (0 test)
+ ❯ src/test/independent-drivers-api.test.ts (0 test)
+ ❯ src/test/credits-api.test.ts (0 test)
+ ❯ src/test/business-recovery.test.ts (0 test)
+ ❯ src/test/deletion-service.test.ts (0 test)
+ ❯ src/test/delivery-requests-api.test.ts (0 test)
+ ❯ src/test/delivery-assignments-api.test.ts (0 test)
+ ❯ src/test/verification-recovery.test.ts (0 test)
+ ❯ src/test/fleet-exit-api.test.ts (0 test)
+ ❯ src/test/independent-zones-api.test.ts (0 test)
+ ❯ src/test/logistics-api.test.ts (0 test)
+ ❯ src/test/invitations-api.test.ts (0 test)
+ ❯ src/test/dispatch-api.test.ts (0 test)
+ ❯ src/test/webhooks-api.test.ts (0 test)
+ ❯ src/test/quotes-api.test.ts (0 test)
+ ❯ src/test/customer-service.test.ts (0 test)
+ ❯ src/test/service-coverage-api.test.ts (0 test)
+ ❯ src/test/integration-credentials-api.test.ts (0 test)
+ ❯ src/test/business-service.test.ts (0 test)
+ ❯ src/test/execution-attempt-service.test.ts (0 test)
+ ❯ src/test/customer-tracking.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 79 ⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/admin-reference-access.test.tsx [ src/test/admin-reference-access.test.tsx ]
+ FAIL  src/test/admin-references.test.tsx [ src/test/admin-references.test.tsx ]
+ FAIL  src/test/api.test.ts [ src/test/api.test.ts ]
+ FAIL  src/test/assistance-api.test.ts [ src/test/assistance-api.test.ts ]
+ FAIL  src/test/assistance.test.tsx [ src/test/assistance.test.tsx ]
+ FAIL  src/test/business-pages.test.tsx [ src/test/business-pages.test.tsx ]
+ FAIL  src/test/business-recovery.test.ts [ src/test/business-recovery.test.ts ]
+ FAIL  src/test/business-service.test.ts [ src/test/business-service.test.ts ]
+ FAIL  src/test/collection-instructions.test.tsx [ src/test/collection-instructions.test.tsx ]
+ FAIL  src/test/credits-api.test.ts [ src/test/credits-api.test.ts ]
+ FAIL  src/test/credits.test.tsx [ src/test/credits.test.tsx ]
+ FAIL  src/test/customer-address.test.tsx [ src/test/customer-address.test.tsx ]
+ FAIL  src/test/customer-autocomplete.test.tsx [ src/test/customer-autocomplete.test.tsx ]
+ FAIL  src/test/customer-contact.test.tsx [ src/test/customer-contact.test.tsx ]
+ FAIL  src/test/customer-conversion-design.test.tsx [ src/test/customer-conversion-design.test.tsx ]
+ FAIL  src/test/customer-location.test.tsx [ src/test/customer-location.test.tsx ]
+ FAIL  src/test/customer-profile-design.test.tsx [ src/test/customer-profile-design.test.tsx ]
+ FAIL  src/test/customer-quote-design.test.tsx [ src/test/customer-quote-design.test.tsx ]
+ FAIL  src/test/customer-reconciliation.test.tsx [ src/test/customer-reconciliation.test.tsx ]
+ FAIL  src/test/customer-registration-design.test.tsx [ src/test/customer-registration-design.test.tsx ]
+ FAIL  src/test/customer-request-design.test.tsx [ src/test/customer-request-design.test.tsx ]
+ FAIL  src/test/customer-service.test.ts [ src/test/customer-service.test.ts ]
+ FAIL  src/test/customer-shipments-design.test.tsx [ src/test/customer-shipments-design.test.tsx ]
+ FAIL  src/test/customer-tracking.test.ts [ src/test/customer-tracking.test.ts ]
+ FAIL  src/test/customer.test.tsx [ src/test/customer.test.tsx ]
+ FAIL  src/test/deletion-pages.test.tsx [ src/test/deletion-pages.test.tsx ]
+ FAIL  src/test/deletion-service.test.ts [ src/test/deletion-service.test.ts ]
+ FAIL  src/test/deletion-v2.test.tsx [ src/test/deletion-v2.test.tsx ]
+ FAIL  src/test/delivery-assignments-api.test.ts [ src/test/delivery-assignments-api.test.ts ]
+ FAIL  src/test/delivery-assignments.test.tsx [ src/test/delivery-assignments.test.tsx ]
+ FAIL  src/test/delivery-completion.test.tsx [ src/test/delivery-completion.test.tsx ]
+ FAIL  src/test/delivery-requests-api.test.ts [ src/test/delivery-requests-api.test.ts ]
+ FAIL  src/test/delivery-requests.test.tsx [ src/test/delivery-requests.test.tsx ]
+ FAIL  src/test/developers.test.tsx [ src/test/developers.test.tsx ]
+ FAIL  src/test/dispatch-api.test.ts [ src/test/dispatch-api.test.ts ]
+ FAIL  src/test/dispatch-search.test.tsx [ src/test/dispatch-search.test.tsx ]
+ FAIL  src/test/documentary-availability.test.tsx [ src/test/documentary-availability.test.tsx ]
+ FAIL  src/test/driver-portal.test.tsx [ src/test/driver-portal.test.tsx ]
+ FAIL  src/test/execution-attempt-service.test.ts [ src/test/execution-attempt-service.test.ts ]
+ FAIL  src/test/execution-reconciliation.test.ts [ src/test/execution-reconciliation.test.ts ]
+ FAIL  src/test/execution.test.tsx [ src/test/execution.test.tsx ]
+ FAIL  src/test/fleet-api.test.ts [ src/test/fleet-api.test.ts ]
+ FAIL  src/test/fleet-exit-api.test.ts [ src/test/fleet-exit-api.test.ts ]
+ FAIL  src/test/fleet-exit.test.tsx [ src/test/fleet-exit.test.tsx ]
+ FAIL  src/test/fleet.test.tsx [ src/test/fleet.test.tsx ]
+ FAIL  src/test/google-loader.test.ts [ src/test/google-loader.test.ts ]
+ FAIL  src/test/google-map.test.tsx [ src/test/google-map.test.tsx ]
+ FAIL  src/test/image-retention.test.tsx [ src/test/image-retention.test.tsx ]
+ FAIL  src/test/independent-drivers-api.test.ts [ src/test/independent-drivers-api.test.ts ]
+ FAIL  src/test/independent-zones-api.test.ts [ src/test/independent-zones-api.test.ts ]
+ FAIL  src/test/independent-zones.test.tsx [ src/test/independent-zones.test.tsx ]
+ FAIL  src/test/integration-credentials-api.test.ts [ src/test/integration-credentials-api.test.ts ]
+ FAIL  src/test/invitations-api.test.ts [ src/test/invitations-api.test.ts ]
+ FAIL  src/test/location.test.tsx [ src/test/location.test.tsx ]
+ FAIL  src/test/logistics-api.test.ts [ src/test/logistics-api.test.ts ]
+ FAIL  src/test/logistics.test.tsx [ src/test/logistics.test.tsx ]
+ FAIL  src/test/onboarding-production.test.tsx [ src/test/onboarding-production.test.tsx ]
+ FAIL  src/test/partner-applications.test.tsx [ src/test/partner-applications.test.tsx ]
+ FAIL  src/test/pricing-api.test.ts [ src/test/pricing-api.test.ts ]
+ FAIL  src/test/pricing.test.tsx [ src/test/pricing.test.tsx ]
+ FAIL  src/test/provider-historical-attempt.test.tsx [ src/test/provider-historical-attempt.test.tsx ]
+ FAIL  src/test/provider-movements.test.tsx [ src/test/provider-movements.test.tsx ]
+ FAIL  src/test/public-tracking-design.test.tsx [ src/test/public-tracking-design.test.tsx ]
+ FAIL  src/test/quotes-api.test.ts [ src/test/quotes-api.test.ts ]
+ FAIL  src/test/quotes.test.tsx [ src/test/quotes.test.tsx ]
+ FAIL  src/test/representatives.test.tsx [ src/test/representatives.test.tsx ]
+ FAIL  src/test/retention-projection.test.tsx [ src/test/retention-projection.test.tsx ]
+ FAIL  src/test/service-coverage-api.test.ts [ src/test/service-coverage-api.test.ts ]
+ FAIL  src/test/service-coverage.test.tsx [ src/test/service-coverage.test.tsx ]
+ FAIL  src/test/session-compatibility.test.tsx [ src/test/session-compatibility.test.tsx ]
+ FAIL  src/test/verification-pages.test.tsx [ src/test/verification-pages.test.tsx ]
+ FAIL  src/test/verification-recovery.test.ts [ src/test/verification-recovery.test.ts ]
+ FAIL  src/test/verification-service.test.ts [ src/test/verification-service.test.ts ]
+ FAIL  src/test/verification-upload.test.tsx [ src/test/verification-upload.test.tsx ]
+ FAIL  src/test/webhooks-api.test.ts [ src/test/webhooks-api.test.ts ]
+ FAIL  src/test/webhooks.test.tsx [ src/test/webhooks.test.tsx ]
+Error: ENOENT: no such file or directory, open 'C:\Users\zorgl\AppData\Local\Packages\sandbox.{360f8db8-c9bb-4fde-b76f-90603be6e09f}\AC\Temp\eXaqDSitVlsHdwjA_guzR\client\c4a4101937ae469d8b7f41157ba3f08e43e583b3'
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/79]⎯
+
+ FAIL  src/test/dispatch.test.tsx [ src/test/dispatch.test.tsx ]
+Error: ENOENT: no such file or directory, open 'C:\Users\zorgl\AppData\Local\Packages\sandbox.{360f8db8-c9bb-4fde-b76f-90603be6e09f}\AC\Temp\eXaqDSitVlsHdwjA_guzR\client\246151c43255645aca05585c6a5f88405d3bc581'
+ ❯ src/test/dispatch.test.tsx:20:1
+     18| import { MemoryRouter } from 'react-router-dom'
+     19| import { QueryClientProvider } from '@tanstack/react-query'
+     20| import { App } from '../app/App'
+       | ^
+     21| import { AuthContext } from '../auth/context'
+     22| import { FeedbackProvider } from '../components/Feedback'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/79]⎯
+
+ FAIL  src/test/flows.test.tsx [ src/test/flows.test.tsx ]
+ FAIL  src/test/invitations.test.tsx [ src/test/invitations.test.tsx ]
+Error: ENOENT: no such file or directory, open 'C:\Users\zorgl\AppData\Local\Packages\sandbox.{360f8db8-c9bb-4fde-b76f-90603be6e09f}\AC\Temp\eXaqDSitVlsHdwjA_guzR\client\495e30a67b2c2119e3e3bb9517b1ec730a05620e'
+ ❯ src/assistance/command-context.ts:2:1
+      1| import { createContext, useContext, useEffect } from 'react'
+      2| import { ApiError } from '../services/errors'
+       | ^
+      3| import type { Operation } from './service'
+      4| import type { Intent } from './attempts'
+ ❯ src/assistance/pages.tsx:1:1
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/79]⎯
+
+
+ Test Files  79 failed (79)
+      Tests  no tests
+   Start at  22:44:37
+   Duration  54.24s (environment 98%, setup 1%)
+
+Environment  jsdom was created 79 times · 184.02s total, 98% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

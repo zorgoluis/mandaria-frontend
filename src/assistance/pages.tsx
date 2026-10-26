@@ -329,7 +329,7 @@ function Detail({ scope, id }: { scope: Scope; id: string }) {
       ) : (
         <fieldset className="execution-fieldset" disabled={q.isFetching}>
           <CaseContent
-            key={`${id}:${q.data.summary.revision}`}
+            key={`${id}:${q.data.summary.revision}:${q.dataUpdatedAt}`}
             scope={scope}
             detail={q.data}
           />

@@ -26,6 +26,8 @@ import { providers } from '../providers/service'
 import { adminAssignments } from '../delivery-assignments/service'
 import { ApiError } from '../services/errors'
 import { assistanceDetail, ids, scope } from './assistance-fixture'
+import * as apiModule from '../services/api'
+import { referenceCatalog } from './admin-references-fixture'
 import type { Role } from '../types/api'
 import type { AttemptReceipt } from '../assistance/types'
 vi.mock('../assistance/service', async (importOriginal) => ({
@@ -142,6 +144,42 @@ it.each(['DRIVER', 'CUSTOMER', 'SUPER_ADMIN'] as Role[])(
 it('provider cannot enter administrative deep link', () => {
   mount('PROVIDER_ADMIN', 'admin')
   expect(assistance.detail).not.toHaveBeenCalled()
+})
+it('refreshes administrative permissions when the case revision is unchanged', async () => {
+  const detail = assistanceDetail(true)
+  vi.mocked(assistance.detail).mockResolvedValue(detail)
+  const catalog = referenceCatalog()
+  let enabled = true
+  const spy = vi.spyOn(apiModule, 'api').mockImplementation(async (path) => {
+    if (path.includes('/administrative-references/')) {
+      const section = path
+        .split('/')
+        .at(-1)!
+        .split('?')[0] as keyof typeof catalog
+      return { ...catalog[section], commandsEnabled: enabled } as never
+    }
+    return { items: [], nextPageToken: null } as never
+  })
+  try {
+    mount('SUPER_ADMIN', 'admin')
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Revisar intención' }),
+      ).toBeEnabled(),
+    )
+    enabled = false
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Actualizar expediente' }),
+    )
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Revisar intención' }),
+      ).toBeDisabled(),
+    )
+    expect(assistance.detail).toHaveBeenCalledTimes(2)
+  } finally {
+    spy.mockRestore()
+  }
 })
 it('an old projection without capabilities stays readable and grants no commands', async () => {
   const d = assistanceDetail()

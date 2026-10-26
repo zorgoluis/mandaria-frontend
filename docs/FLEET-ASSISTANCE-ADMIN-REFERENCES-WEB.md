@@ -1,5 +1,7 @@
 # Referencias administrativas de asistencia — integración Web local
 
+Actualización posterior al commit 9e4af36: **EXISTING_RELEASE / CONTACTABLE completado por HTTP sintético, 14/14 comprobaciones PASS**. Ver [recorrido y evidencia nuevos](EXISTING-RELEASE-HTTP-VERIFICATION.md). Las menciones de pendiente y cifras inferiores describen la etapa anterior y se conservan como historia.
+
 2026-10-25. Web 1.11.0, QA sobre `b55f772` y `263a4b9`. Ampliación aditiva de asistencia/conciliación 1.0.0, schemaVersion 1. Fuentes backend locales consultadas: commit `204d4f7`, paquete **1.13.2** (el handoff indica pruebas originales sobre 1.13.1). Esto no acredita disponibilidad remota. Sin migración nueva: entorno sintético de 65 migraciones. No se modifica backend, móvil, versión, dependencias, configuración ni `.env`; sin commit en la etapa inicial, push o despliegue. Revisión posterior autorizada para commit local QA: 92/92 pruebas focalizadas PASS; evidencia global y HTTP anterior verificada por huellas, sin reejecutarla.
 
 ## Alcance y archivos

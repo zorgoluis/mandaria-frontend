@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 import { spawn } from 'node:child_process'
 import { createInterface } from 'node:readline'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { randomUUID } from 'node:crypto'
+import { randomUUID, createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
 import { resolve } from 'node:path'
 const output = `test-results/admin-references-http-${Date.now()}`
@@ -417,7 +417,7 @@ try {
     .selectOption({ index: 1 })
   await page
     .getByLabel('Fecha de observación')
-    .fill(new Date().toISOString().slice(0, 19))
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
   loseEvidence = true
   await review()
   await expect(
@@ -446,7 +446,7 @@ try {
     .selectOption(replay.result.evidenceId)
   await page
     .getByLabel('Fecha física del hecho')
-    .fill(new Date().toISOString().slice(0, 19))
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
   await review()
   await acknowledge()
   report.checks.push(
@@ -464,7 +464,7 @@ try {
     .fill('Revisión sintética de acceso recuperado')
   await page
     .getByLabel('Fecha física del hecho')
-    .fill(new Date().toISOString().slice(0, 19))
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
   await page
     .getByLabel('Evidencias', { exact: true })
     .selectOption(replay.result.evidenceId)
@@ -510,7 +510,7 @@ try {
   await page.getByLabel('Orden', { exact: true }).fill('0')
   await page
     .getByLabel('Fecha física del hecho')
-    .fill(new Date().toISOString().slice(0, 19))
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
   await review()
   await acknowledge()
   report.checks.push('browser-first-obligation-with-real-participation-id')
@@ -538,6 +538,7 @@ try {
     409,
   )
   report.checks.push('changed-source-hash-rejected-without-silent-replacement')
+  const historical = await request('historicalReleaseReference')
   const shippingFixture = await request('shippingReferenceFixture')
   caseId = randomUUID()
   base = `/admin/fleet-assistance-cases/${caseId}`
@@ -591,7 +592,7 @@ try {
   })
   await page
     .getByLabel('Fecha de observación')
-    .fill(new Date().toISOString().slice(0, 19))
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
   await review()
   await acknowledge()
   await action('DECLARE_MOVEMENT')
@@ -626,7 +627,7 @@ try {
   report.checks.push(
     'browser-shipping-selector-exact-source-amount-date-concepts-real-DECLARED-original-unchanged-foreign-case-denied',
   )
-  const historical = await request('historicalReleaseReference')
+
   const releaseCase = randomUUID()
   await http(
     '/admin/fleet-assistance-cases',
@@ -652,6 +653,224 @@ try {
   assert(release)
   assert.notEqual(release.id, historical.requestId)
   assert.notEqual(release.existingReceiptId, historical.responseId)
+  const releaseCommand = async (suffix, body, status = 200, actor = token) => {
+    const d = await http(releaseBase, actor)
+    return http(
+      releaseBase + '/' + suffix,
+      actor,
+      'POST',
+      {
+        expectedCaseRevision: d.summary.revision,
+        ...body,
+      },
+      randomUUID(),
+      status,
+    )
+  }
+  const releaseRefs = async (section) => {
+    const items = []
+    let cursor
+    do {
+      const p = await http(
+        releaseBase +
+          '/administrative-references/' +
+          section +
+          (cursor ? '?pageToken=' + encodeURIComponent(cursor) : ''),
+        token,
+      )
+      items.push(...p.items)
+      cursor = p.nextPageToken
+    } while (cursor)
+    return items
+  }
+  const stop = (await releaseRefs('stops')).find((s) => s.type === 'PICKUP')
+  assert(stop?.contactSourceRef)
+  const registered = await releaseCommand('parties', {
+    kind: 'ORIGIN',
+    label: 'Origen de liberación sintético',
+    contactSourceRef: stop.contactSourceRef,
+  })
+  const releaseParties = await releaseRefs('parties')
+  const releaseEvidence = [],
+    releaseConfirmations = [],
+    identities = []
+  for (const party of [
+    releaseParties.find((p) => p.kind === 'DRIVER'),
+    releaseParties.find((p) => p.id === registered.result.partyId),
+  ]) {
+    assert(party?.methods.includes('REGISTERED_CHANNEL_CALLBACK'))
+    const contribution = await releaseCommand('contributions', {
+      partyId: party.id,
+      text: 'Acta sintética: canal comprobado y ausencia de recogida, cobro, anticipo y obligaciones. No llamada humana real.',
+    })
+    const source = (await releaseRefs('evidence-sources')).find(
+      (s) => s.sourceRef.id === contribution.result.contributionId,
+    )
+    assert.equal(source.partyId, party.id)
+    const evidence = await releaseCommand('evidence', {
+      kind: source.kind,
+      sourceRef: source.sourceRef,
+      observedAt: new Date().toISOString(),
+    })
+    releaseEvidence.push(evidence.result.evidenceId)
+    const verification = await releaseCommand('identity-verifications', {
+      partyId: party.id,
+      contactSourceRef: party.contactSourceRef,
+      method: 'REGISTERED_CHANNEL_CALLBACK',
+      outcome: 'VERIFIED',
+      occurredAt: new Date().toISOString(),
+      verificationNoteEvidenceId: evidence.result.evidenceId,
+    })
+    identities.push({
+      partyId: party.id,
+      verificationId: verification.result.verificationId,
+    })
+  }
+  const concepts = [
+    'SHIPPING_FEE',
+    'GOODS',
+    'COURIER_ADVANCE',
+    'REFUND',
+    'DIFFERENCE',
+  ]
+  const terms = {
+    assignmentId: historical.assignmentId,
+    concepts,
+    noPickup: true,
+    noCollection: true,
+    noAdvance: true,
+    noObligations: true,
+  }
+  const termsHash = createHash('sha256')
+    .update(
+      JSON.stringify(terms, (_k, v) =>
+        v && typeof v === 'object' && !Array.isArray(v)
+          ? Object.fromEntries(
+              Object.entries(v).sort(([a], [b]) => a.localeCompare(b)),
+            )
+          : v,
+      ),
+    )
+    .digest('hex')
+  for (const identity of identities)
+    for (const assertion of [
+      'NO_PICKUP',
+      'NO_COLLECTION',
+      'NO_ADVANCE',
+      'NO_OBLIGATIONS',
+    ]) {
+      const confirmation = await releaseCommand('confirmations', {
+        ...identity,
+        assertion,
+        targetType: 'CASE',
+        targetId: releaseCase,
+        termsHash,
+        evidenceIds: releaseEvidence,
+        observedAt: new Date().toISOString(),
+      })
+      releaseConfirmations.push(confirmation.result.confirmationId)
+    }
+  const proposeRelease = async (
+    type,
+    payload,
+    confirmations = releaseConfirmations,
+  ) =>
+    (
+      await releaseCommand('proposals', {
+        type,
+        assignmentId: historical.assignmentId,
+        occurredAt: new Date().toISOString(),
+        reason: 'Verificación HTTP sintética de liberación existente',
+        evidenceIds: releaseEvidence,
+        confirmationIds: confirmations,
+        payload,
+      })
+    ).result
+  const proposalBody = (p) => ({
+    expectedProposalRevision: p.proposalRevision,
+    snapshotHash: p.snapshotHash,
+  })
+  const approveRelease = (p) =>
+    releaseCommand(
+      'proposals/' + p.proposalId + '/reviews',
+      {
+        ...proposalBody(p),
+        decision: 'APPROVE',
+        reason: 'Revisión independiente de evidencia sintética',
+      },
+      200,
+      other,
+    )
+  const beforeInventory = await proposeRelease('ASSISTED_RELEASE', {
+    availability: 'CONTACTABLE',
+    proofSource: 'EXISTING_RELEASE',
+    existingReceiptId: historical.requestId,
+  })
+  await approveRelease(beforeInventory)
+  assert.equal(
+    (
+      await releaseCommand(
+        'proposals/' + beforeInventory.proposalId + '/apply',
+        proposalBody(beforeInventory),
+        409,
+      )
+    ).code,
+    'OBLIGATIONS_UNVERIFIED',
+  )
+  const inventory = await proposeRelease('VERIFY_NO_OBLIGATIONS', {
+    inventoryEvidenceIds: releaseEvidence,
+    coveredConcepts: concepts,
+  })
+  assert.equal(
+    (
+      await releaseCommand(
+        'proposals/' + inventory.proposalId + '/apply',
+        proposalBody(inventory),
+        409,
+      )
+    ).code,
+    'APPROVALS_REQUIRED',
+  )
+  await approveRelease(inventory)
+  await releaseCommand(
+    'proposals/' + inventory.proposalId + '/apply',
+    proposalBody(inventory),
+  )
+  assert.equal(
+    (await http(releaseBase, token)).summary.economicState,
+    'SIN_OBLIGACIONES_VERIFICADAS',
+  )
+  const missingConfirmations = await proposeRelease(
+    'ASSISTED_RELEASE',
+    {
+      availability: 'CONTACTABLE',
+      proofSource: 'EXISTING_RELEASE',
+      existingReceiptId: historical.requestId,
+    },
+    [],
+  )
+  await approveRelease(missingConfirmations)
+  assert.equal(
+    (
+      await releaseCommand(
+        'proposals/' + missingConfirmations.proposalId + '/apply',
+        proposalBody(missingConfirmations),
+        409,
+      )
+    ).code,
+    'OBLIGATIONS_UNVERIFIED',
+  )
+  report.checks.push(
+    'existing-release-positive-inventory-eight-confirmations-two-identities-and-missing-inventory-confirmations-approval-barriers',
+  )
+  const beforeRelease = await request('releaseInvariants', {
+    assignmentId: historical.assignmentId,
+    caseId: releaseCase,
+  })
+  assert.equal(beforeRelease.releases, 1)
+  assert.equal(beforeRelease.assignmentStatus, 'CANCELLED')
+  for (const key of ['obligations', 'movements', 'shipping'])
+    assert.equal(beforeRelease[key], 0)
   await page.goto(origin + '/admin/fleet-assistance/' + releaseCase)
   await action('PROPOSE')
   await page.getByLabel('Tipo de propuesta').selectOption('ASSISTED_RELEASE')
@@ -668,9 +887,92 @@ try {
   report.checks.push(
     'historical-release-fixture-selector-uses-original-requestId-not-opaque-id-or-response-receipt',
   )
-  report.pending = [
-    'Full EXISTING_RELEASE: synthetic historical receipt selection only; no verified zero-obligation inventory, required confirmations, proposal approvals or apply in this fixture.',
-  ]
+  await page
+    .getByLabel('Disponibilidad', { exact: true })
+    .selectOption('CONTACTABLE')
+  await page
+    .getByLabel('Motivo', { exact: true })
+    .fill(
+      'Acreditar liberación sintética existente sin nueva liberación ni reembolso',
+    )
+  await page
+    .getByLabel('Fecha física del hecho')
+    .fill(new Date().toISOString().slice(0, 19).replace(/:00$/, ''))
+  await page
+    .getByLabel('Evidencias', { exact: true })
+    .selectOption(releaseEvidence)
+  await page
+    .getByLabel('Confirmaciones', { exact: true })
+    .selectOption(releaseConfirmations)
+  const releaseResponse = page.waitForResponse(
+    (r) => r.url().endsWith('/proposals') && r.request().method() === 'POST',
+  )
+  await review()
+  const finalProposal = (await (await releaseResponse).json()).result
+  assert(finalProposal.proposalId)
+  await acknowledge()
+  assert.equal(
+    (
+      await releaseCommand(
+        'proposals/' + finalProposal.proposalId + '/apply',
+        proposalBody(finalProposal),
+        409,
+      )
+    ).code,
+    'APPROVALS_REQUIRED',
+  )
+  await approveRelease(finalProposal)
+  const applyPath =
+    releaseBase + '/proposals/' + finalProposal.proposalId + '/apply'
+  const applyKey = randomUUID()
+  const applyBody = {
+    expectedCaseRevision: (await http(releaseBase, token)).summary.revision,
+    ...proposalBody(finalProposal),
+  }
+  const applied = await http(applyPath, token, 'POST', applyBody, applyKey)
+  const appliedReplay = await http(
+    applyPath,
+    token,
+    'POST',
+    applyBody,
+    applyKey,
+  )
+  assert.deepEqual(appliedReplay, applied)
+  assert.equal(
+    (await http(releaseBase + '/proposals/' + finalProposal.proposalId, token))
+      .status,
+    'APPLIED',
+  )
+  assert.equal(
+    (await http(releaseBase, token)).summary.operationalState,
+    'LIBERADO',
+  )
+  const afterRelease = await request('releaseInvariants', {
+    assignmentId: historical.assignmentId,
+    caseId: releaseCase,
+  })
+  assert.deepEqual(afterRelease, beforeRelease)
+  await page.getByRole('button', { name: 'Actualizar expediente' }).click()
+  await expect(
+    page.getByText('LIBERADO', { exact: true }).first(),
+  ).toBeVisible()
+  report.existingRelease = {
+    realFleetTakeAndRelease: true,
+    syntheticHumanStatements: true,
+    identities: 2,
+    confirmations: 8,
+    inventoryVerified: true,
+    proposalFromBrowser: true,
+    reviewBySecondAdmin: true,
+    applied: true,
+    exactReplay: true,
+    before: beforeRelease,
+    after: afterRelease,
+  }
+  report.checks.push(
+    'browser-existing-release-proposal-second-admin-review-http-apply-LIBERADO-exact-replay-no-new-release-refund-or-assignment-change',
+  )
+  report.pending = []
   await page.goto(origin + '/admin/fleet-assistance/' + caseId)
   await action('CONTRIBUTE')
   for (const width of [1280, 320]) {

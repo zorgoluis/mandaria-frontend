@@ -467,23 +467,92 @@ try {
         })
         result = { changed: true }
       } else if (command.action === 'historicalReleaseReference') {
-        const a = await prisma.deliveryAssignment.findFirstOrThrow({
-          where: { dispatchId: historicalDispatch.id, status: 'CANCELLED' },
+        const bearer = { type: 'bearer' }
+        const d = await fixture.openDispatch()
+        const terms = (
+          await api()
+            .get('/api/v1/driver/fleet-dispatches/' + d.id)
+            .auth(t.pedro, bearer)
+            .expect(200)
+        ).body
+        await api()
+          .post('/api/v1/driver/dispatches/' + d.id + '/fleet-take')
+          .auth(t.pedro, bearer)
+          .set('Idempotency-Key', crypto.randomUUID())
+          .send({
+            expectedContextRevision: terms.contextRevision,
+            expectedProviderModeRevision: terms.providerModeRevision,
+            pairingId: terms.pairing.id,
+            expectedPairingRevision: terms.pairing.revision,
+            vehicleId: terms.pairing.vehicleId,
+            expectedOfferRevision: terms.offerRevision,
+            economicConfirmation: terms.economicConfirmation,
+          })
+          .expect(200)
+        const e = await prisma.deliveryExecution.findUniqueOrThrow({
+          where: { dispatchId: d.id },
         })
-        const requestId = crypto.randomUUID(),
-          responseId = crypto.randomUUID()
-        await prisma.fleetCommand.create({
-          data: {
-            actorId: owner.id,
-            requestId,
+        const requestId = crypto.randomUUID()
+        const response = (
+          await api()
+            .post('/api/v1/driver/dispatches/' + d.id + '/fleet-release')
+            .auth(t.pedro, bearer)
+            .set('Idempotency-Key', requestId)
+            .send({
+              assignmentId: e.assignmentId,
+              expectedExecutionRevision: String(e.revision),
+              reason: 'OPERATIONAL_CHANGE',
+            })
+            .expect(200)
+        ).body
+        const receipt = await prisma.fleetCommand.findFirstOrThrow({
+          where: { requestId, operation: 'RELEASE', status: 'APPLIED' },
+        })
+        assert.equal(receipt.response.assignmentId, e.assignmentId)
+        result = {
+          assignmentId: e.assignmentId,
+          dispatchId: d.id,
+          requestId,
+          responseId: response.receiptId,
+        }
+      } else if (command.action === 'releaseInvariants') {
+        const a = await prisma.deliveryAssignment.findUniqueOrThrow({
+          where: { id: command.assignmentId },
+        })
+        const dispatch = await prisma.dispatch.findUniqueOrThrow({
+          where: { id: a.dispatchId },
+        })
+        const releases = await prisma.fleetCommand.count({
+          where: {
+            resourceId: a.dispatchId,
             operation: 'RELEASE',
-            resourceId: historicalDispatch.id,
-            hash: 'a'.repeat(64),
             status: 'APPLIED',
-            response: { assignmentId: a.id, receiptId: responseId },
           },
         })
-        result = { assignmentId: a.id, requestId, responseId }
+        const refunds = await prisma.creditLedgerEntry.count({
+          where: { referenceId: a.dispatchId, type: 'SERVICE_REFUND' },
+        })
+        const obligations = await prisma.$queryRawUnsafe(
+          'SELECT count(*)::int AS count FROM "CashObligation" WHERE "caseId"=$1::uuid',
+          command.caseId,
+        )
+        const movements = await prisma.$queryRawUnsafe(
+          'SELECT count(*)::int AS count FROM "CashMovement" WHERE "caseId"=$1::uuid',
+          command.caseId,
+        )
+        const shipping = await prisma.shippingCollectionDeclaration.count({
+          where: { dispatchId: a.dispatchId },
+        })
+        result = {
+          assignmentStatus: a.status,
+          assignmentUpdatedAt: a.updatedAt.toISOString(),
+          dispatchStatus: dispatch.status,
+          releases,
+          refunds,
+          obligations: obligations[0].count,
+          movements: movements[0].count,
+          shipping,
+        }
       } else if (command.action === 'shippingReferenceFixture') {
         const bearer = { type: 'bearer' }
         // Existing synthetic Pedro has a real pairing, spending grant and active FLEET reception.

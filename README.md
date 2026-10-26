@@ -1,3 +1,7 @@
+## 2026-10-25 — Verificación completa de EXISTING_RELEASE
+
+HTTP local nuevo **14/14 PASS**: liberación existente acreditada con inventario, confirmaciones, revisión y replay, sin repetir liberación/reembolso. Corregido el refresco de permisos con igual revisión. Suite global nueva **1597/1597**, tipos/lint/build PASS; Web1.11.0 intacta. [Recorrido, evidencia y límites](docs/EXISTING-RELEASE-HTTP-VERIFICATION.md). Sin backend/móvil, commit/push ni despliegue. Las entradas inferiores conservan la historia previa.
+
 ## 2026-10-25 — QA conjunta y referencias administrativas
 
 QA conserva los commits B2B `263a4b9` y zonas `b55f772`. Verificación conjunta nueva:1566/1566; tras integrar las referencias administrativas, suite global1596/1596 en79 archivos, tipos/lint/build PASS. Web1.11.0 intacta, sin commit/push o despliegue. HTTP local nuevo: 12/12 comprobaciones, entorno sintético cerrado. Referencias SUPER_ADMIN con intención privada en memoria y recuperación durable sin cuerpos sensibles; proveedor/movementContext y zonas conservados. Contratos, evidencia HTTP sintética y límites (incluido EXISTING_RELEASE completo pendiente) en [integración administrativa](docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md) y [VERIFICATION](VERIFICATION.md). Historia previa conservada.
