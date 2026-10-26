@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-26T03:35:04.787Z",
+  "scope": "Built local portal only; external network/API blocked; no backend operations",
+  "checks": [
+    "desktop navigation/render/overflow authentication",
+    "desktop navigation/render/overflow prequotes",
+    "desktop navigation/render/overflow execution",
+    "desktop navigation/render/overflow location",
+    "desktop navigation/render/overflow webhooks",
+    "desktop navigation/render/overflow errors",
+    "desktop navigation/render/overflow search",
+    "desktop navigation/render/overflow reference",
+    "mobile navigation/render/overflow authentication",
+    "mobile navigation/render/overflow prequotes",
+    "mobile navigation/render/overflow execution"
+  ],
+  "forbidden": [],
+  "errors": [],
+  "downloads": [
+    {
+      "viewport": "desktop",
+      "file": "openapi-b2b.json",
+      "mime": "application/json",
+      "sha256": "9fa53a2720392fe660c2ce80497899b6b5f738bcf4357ca9e51ebd191b97dee4"
+    },
+    {
+      "viewport": "desktop",
+      "file": "examples/b2b-flow.json",
+      "mime": "application/json",
+      "sha256": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57"
+    },
+    {
+      "viewport": "desktop",
+      "file": "B2B-PUBLIC-GUIDE.md",
+      "mime": "text/markdown",
+      "sha256": "42c7c39f4d3a94473555b28a8f2bedf15725a102ef153e06c2237bce8b5ee80f"
+    },
+    {
+      "viewport": "desktop",
+      "file": "B2B-WEBHOOKS.md",
+      "mime": "text/markdown",
+      "sha256": "21d15e1f79245b8dc9e45502519890d636ed28330fd5a6ebd7557983b77cd389"
+    },
+    {
+      "viewport": "desktop",
+      "file": "examples/verify-mandaria-webhook.mjs",
+      "mime": "text/javascript",
+      "sha256": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"
+    }
+  ],
+  "complete": false,
+  "failure": "mobile overflow location\n\ntrue !== false\n"
+}

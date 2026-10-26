@@ -28,3 +28,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local integrator review artifacts; sources live in docs/ and scripts/.
+.tmp/b2b-*
+.tmp/extract-reviewed-b2b.ps1
