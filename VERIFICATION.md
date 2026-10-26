@@ -1,3 +1,9 @@
+## 2026-10-26 — Revisión y commit separado QA de aprobaciones
+
+Diff final revisado sobre QA f3ae9c8, conservando el commit de sincronización1.13.3/B2B. Se incorpora el harness de revocación, replay, invalidación material y nueva propuesta con dos votos, junto con informes, evidencia HTTP y continuidad. Las9 huellas previas coinciden; informe16/16 completo, cero errores de navegador, backend sin cambios y entorno cerrado. Sin hallazgos ni correcciones adicionales.
+
+Se reutilizan explícitamente las ejecuciones HTTP16/16 y regresiones93/93 de la verificación original; no se reejecutan durante esta revisión. La ausencia de TTL temporal sigue documentada y no se presenta como expiración probada. Commit local autorizado ahora; las menciones anteriores «sin commit» describen sus etapas originales. Web1.11.0 intacta; sin backend/móvil, push ni despliegue. Historia preservada.
+
 ## 2026-10-26 — Revisión y commit QA de sincronización 1.13.3/B2B
 
 Diff revisado sobre QA 8dc67e6: metadatos públicos1.13.3, fuentes regenerables del paquete, evidencia y compatibilidad. Las24 huellas de sincronización y el ZIP coinciden; las9 huellas de aprobaciones pendientes permanecen intactas. Sin hallazgos ni correcciones adicionales. Se conservan los resultados recientes118/118,10/10, tipos/lint/build y navegador local; no son nuevas ejecuciones de esta revisión.
@@ -13,6 +19,18 @@ Actualizados OpenAPI público/manifiesto mediante sync existente, textos del paq
 Ejecuciones NUEVAS: comparación y sync --check PASS; 10/10 tests Node de paquete/rutas; 118/118 Vitest en5 archivos (25 portal+93 asistencia),10.61s; tipos/lint/build PASS; navegador local16 recorridos/10 descargas, cero errores/peticiones externas o API; formato script/manifiesto y whitespace PASS. Prettier OpenAPI señala formato ya presente en HEAD1.13.1: ambos logs conservados, se respeta la copia autorizada exacta. Aviso previo chunk>500kB persiste. Sin fallos nuevos funcionales.
 
 [Informe, comandos, límites y paquete](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md); evidencia nueva docs/evidence/backend-1133-sync-2026-10-26/ y manifiesto docs/backend-1133-sync-evidence.json. Global1597 y HTTP16 anteriores HISTÓRICOS, no reejecutados porque no cambió comportamiento. Revocación/invalidez material probadas, TTL temporal ausente y distinto de expiración del cursor. Las nueve huellas de evidencia de aprobaciones pendiente permanecen intactas. Historial y cambios ajenos preservados; sin backend/App, dependencias/.env/flags, versión, Docker, commit/push, publicación o despliegue.
+
+## 2026-10-26 — Revocación e invalidación de aprobaciones ASSISTED_RELEASE
+
+Sobre QA 8dc67e6, Web 1.11.0 intacta, se amplía sólo el harness UNREACHABLE/NEW_ACTION. HTTP real NUEVO: revocar el segundo voto devuelve DRAFT/count=1; replay exacto estable; APPLY rechaza APPROVALS_REQUIRED sin efectos. Repetir el voto del otro actor no reemplaza el revocado. Reaprobar explícitamente restablece READY. Una contribución material por API invalida la propuesta: STALE/PROPOSAL_STALE sin efectos. Nueva propuesta exige dos votos nuevos; aplicación LIBERADO, recibo/replay y un único reembolso.
+
+Bloqueo concreto: la aprobación no tiene TTL en OpenAPI/DTO, tabla AssistanceApproval ni votes/barrera SQL del backend 1.13.3. No se puede acreditar expiración temporal inexistente; no se alteraron relojes ni registros para simularla. Invalidación material y expiración de cursor no equivalen a caducidad del voto. [Contrato, recorrido y límites](docs/ASSISTED-RELEASE-APPROVAL-LIFECYCLE-HTTP.md).
+
+Ejecuciones NUEVAS: node scripts/verify-admin-references-http.mjs, **16/16 grupos HTTP PASS** (aserciones ampliadas dentro de UNREACHABLE), cero errores de navegador, 65 migraciones, cursor expirado tras cinco minutos reales, cierre confirmado y fuentes backend sin cambios. Backend QA f2f942e, 1.13.3, copiado y compilado en entorno sintético aislado. Primer sondeo /health encontró ECONNREFUSED durante el arranque; el readiness posterior y el recorrido completo pasaron, sin cambiar tiempos.
+
+Regresiones NUEVAS: npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts, **93/93 PASS, 4 archivos, 7.31 s**. Sintaxis y Prettier PASS. Sin fallos de producto que corregir. Global1597/tipos/lint/build del pase conjunto anterior son HISTÓRICOS, no reejecutados. Evidencia en docs/evidence/approval-lifecycle-2026-10-26/ y manifiesto docs/approval-lifecycle-web-evidence.json.
+
+Propuesta inicial en Web; sustituta, revisiones y aplicación por HTTP. No acredita UI Android ni llamadas humanas. Permanecen límites de otros proofSource, pérdida de rol/actividad de aprobadores y custodia/economía. Backend/móvil, versión, dependencias/configuración/.env intactos; cambios ajenos backend preservados. Sin Docker, datos reales, commit/push ni despliegue. Historia inferior preservada.
 
 ## 2026-10-26 — Revisión y commit local QA de la verificación conjunta
 

@@ -1,3 +1,5 @@
+> Actualización 2026-10-26: revocación e invalidación material verificadas en una nueva ejecución. La expiración temporal carece de TTL implementado y queda bloqueada. Véase [ciclo de aprobaciones](ASSISTED-RELEASE-APPROVAL-LIFECYCLE-HTTP.md). El informe inferior conserva su ejecución histórica.
+
 # ASSISTED_RELEASE / UNREACHABLE — HTTP local con doble aprobación
 
 2026-10-25. Frontend QA sobre `f52b782`, Web 1.11.0 sin cambios. La prueba usa un caso nuevo con asignación ACTIVE y `proofSource=NEW_ACTION`: acredita una liberación efectiva, no sólo el selector de un recibo histórico.

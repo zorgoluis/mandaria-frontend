@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-26",
+  "branch": "QA",
+  "baseCommit": "8dc67e6",
+  "webVersion": "1.11.0",
+  "backend": {
+    "head": "f2f942e046901551f4e4d144479d6b5bbeac0014",
+    "version": "1.13.3",
+    "readOnly": true,
+    "sourceFiles": 379,
+    "unchanged": true,
+    "runtimeBuiltFromCurrentSources": true
+  },
+  "http": {
+    "command": "node scripts/verify-admin-references-http.mjs",
+    "report": "docs/evidence/approval-lifecycle-2026-10-26/http-report.json",
+    "passedGroups": 16,
+    "complete": true,
+    "stopped": true,
+    "browserErrors": [],
+    "scenario": {
+      "proofSource": "NEW_ACTION",
+      "availability": "UNREACHABLE",
+      "syntheticHumanStatements": true,
+      "driverUnreachable": true,
+      "originConfirmations": 4,
+      "inventoryVerified": true,
+      "missingUnreachableProofRejected": true,
+      "requiredApprovals": 2,
+      "zeroAndOneApprovalRejected": true,
+      "sameIdentityDifferentSessionCountsOnce": true,
+      "twoDistinctAdminsReady": true,
+      "revocationBlocksApply": true,
+      "revocationExactReplay": true,
+      "remainingActorCannotReplaceRevokedVote": true,
+      "explicitReapprovalRestoresReady": true,
+      "materialChangeInvalidatesApprovals": true,
+      "newProposalRequiresTwoNewVotes": true,
+      "temporalApprovalExpiry": "BLOCKED: no approval TTL in backend contract or vote evaluation",
+      "proposalFromBrowser": true,
+      "applied": true,
+      "attemptLookup": true,
+      "exactReplay": true,
+      "newKeyReapplyRejected": true,
+      "before": {
+        "assignmentStatus": "ACTIVE",
+        "assignmentUpdatedAt": "2026-10-26T06:12:06.28Z",
+        "dispatchStatus": "CLAIMED",
+        "releases": 0,
+        "refunds": 0,
+        "obligations": 0,
+        "movements": 0,
+        "shipping": 0
+      },
+      "after": {
+        "assignmentStatus": "CANCELLED",
+        "assignmentUpdatedAt": "2026-10-26T06:12:12.652Z",
+        "dispatchStatus": "OPEN",
+        "releases": 0,
+        "refunds": 1,
+        "obligations": 0,
+        "movements": 0,
+        "shipping": 0
+      }
+    }
+  },
+  "regressions": {
+    "command": "npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts",
+    "passed": 93,
+    "files": 4,
+    "seconds": 7.31
+  },
+  "syntax": "PASS",
+  "format": "PASS",
+  "globalTypesLintBuild": "Historical combined QA verification, not rerun",
+  "blockers": [
+    "Temporal approval expiry: REVIEW DTO/OpenAPI and AssistanceApproval define no TTL; votes and SQL guard do not check approval age. Material invalidation and cursor expiration are not temporal approval expiration."
+  ],
+  "startupObservation": "Initial health poll ECONNREFUSED before readiness; complete run passed without changing timeouts.",
+  "hashes": [
+    {
+      "path": "scripts/verify-unreachable-release-flow.mjs",
+      "sha256": "fed85047704f751618f27919ab95b736a9b1e38f73baa8fd2cc99d85f5bc1b97"
+    },
+    {
+      "path": "scripts/verify-admin-references-http.mjs",
+      "sha256": "2beb84dddec7f81f8eb097bd06c1f079d8bd4c748ca599e26304864cbe2512e7"
+    },
+    {
+      "path": "scripts/admin-references-http-wsl.mjs",
+      "sha256": "13c649f0a9be7a1bec470ba7a3fc781289fa8c2677be36dc875ca1b531236dbd"
+    },
+    {
+      "path": "docs/ASSISTED-RELEASE-APPROVAL-LIFECYCLE-HTTP.md",
+      "sha256": "66681b41565f56b4c17028d4e9524a1e53c6f64c9b3ee4efa755c90785231d75"
+    },
+    {
+      "path": "docs/evidence/approval-lifecycle-2026-10-26/format.txt",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "docs/evidence/approval-lifecycle-2026-10-26/syntax.txt",
+      "sha256": "baf92339cfa994b489524a281fd463de4ecd2e773da05883b37ef8dced630f04"
+    },
+    {
+      "path": "docs/evidence/approval-lifecycle-2026-10-26/http-report.json",
+      "sha256": "68b8758efa9092de700e5736bbc51bf518fe41ca4601a060e4b4d77a2a620cae"
+    },
+    {
+      "path": "docs/evidence/approval-lifecycle-2026-10-26/regressions.txt",
+      "sha256": "b1842142d049836c89e0fd6f4c120ded34ff0a393cccfa418239270d11358ee5"
+    },
+    {
+      "path": "docs/evidence/approval-lifecycle-2026-10-26/http-run.txt",
+      "sha256": "bb97da137754b55c91c0ad6e9578544cbcaea42b3991336d0923a6eba15ffad7"
+    }
+  ],
+  "productChanges": false,
+  "backendOrMobileChanges": false,
+  "versionChanged": false,
+  "commit": false,
+  "push": false,
+  "deployment": false,
+  "commitReview": {
+    "date": "2026-10-26",
+    "baseCommit": "f3ae9c8",
+    "verifiedHashes": 9,
+    "findings": [],
+    "testsRerun": false,
+    "previousHttpAndRegressionResultsReused": true,
+    "localCommitAuthorized": true,
+    "versionChanged": false,
+    "push": false,
+    "deployment": false
+  }
+}

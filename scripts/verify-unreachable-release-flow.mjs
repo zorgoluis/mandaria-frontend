@@ -237,7 +237,7 @@ export async function verifyUnreachableRelease({
     (r) => r.url().endsWith('/proposals') && r.request().method() === 'POST',
   )
   await review()
-  const p = (await (await response).json()).result
+  let p = (await (await response).json()).result
   await acknowledge()
   assert.equal(p.requiredApprovals, 2)
   assert.equal((await apply(p, 409)).code, 'APPROVALS_REQUIRED')
@@ -253,6 +253,50 @@ export async function verifyUnreachableRelease({
   const second = await approve(p, other)
   assert.equal(second.result.effectiveApprovalCount, 2)
   assert.equal(second.result.proposalStatus, 'READY')
+  const revokeBody = {
+    expectedCaseRevision: (await http(base, other)).summary.revision,
+    ...frozen(p),
+    decision: 'REVOKE',
+    reason: 'Retiro sintético de aprobación antes de aplicar',
+  }
+  const revokePath = base + '/proposals/' + p.proposalId + '/reviews'
+  const revokeKey = randomUUID()
+  const revoked = await http(revokePath, other, 'POST', revokeBody, revokeKey)
+  assert.equal(revoked.result.effectiveApprovalCount, 1)
+  assert.equal(revoked.result.proposalStatus, 'DRAFT')
+  assert.deepEqual(
+    await http(revokePath, other, 'POST', revokeBody, revokeKey),
+    revoked,
+  )
+  assert.equal((await apply(p, 409)).code, 'APPROVALS_REQUIRED')
+  assert.deepEqual(await invariants(), before)
+  assert.equal((await approve(p, token)).result.effectiveApprovalCount, 1)
+  assert.equal((await apply(p, 409)).code, 'APPROVALS_REQUIRED')
+  assert.equal((await approve(p, other)).result.proposalStatus, 'READY')
+  await command('contributions', {
+    partyId: originParty,
+    text: 'Dato material sintético posterior a las aprobaciones; exige nueva revisión.',
+  })
+  assert.equal((await apply(p, 409)).code, 'PROPOSAL_STALE')
+  assert.deepEqual(await invariants(), before)
+  const staleProposal = await http(base + '/proposals/' + p.proposalId, token)
+  assert.equal(staleProposal.status, 'STALE')
+  p = (
+    await command('proposals', {
+      type: 'ASSISTED_RELEASE',
+      assignmentId: fixture.assignmentId,
+      occurredAt: new Date().toISOString(),
+      reason:
+        'Nueva propuesta sintética tras invalidación material; nuevos votos',
+      evidenceIds,
+      confirmationIds: confirmations,
+      payload: { proofSource: 'NEW_ACTION', availability: 'UNREACHABLE' },
+    })
+  ).result
+  assert.equal((await apply(p, 409)).code, 'APPROVALS_REQUIRED')
+  assert.equal((await approve(p, token)).result.effectiveApprovalCount, 1)
+  assert.equal((await apply(p, 409)).code, 'APPROVALS_REQUIRED')
+  assert.equal((await approve(p, other)).result.proposalStatus, 'READY')
   const path = base + '/proposals/' + p.proposalId + '/apply',
     key = randomUUID()
   const body = {
@@ -308,6 +352,14 @@ export async function verifyUnreachableRelease({
     zeroAndOneApprovalRejected: true,
     sameIdentityDifferentSessionCountsOnce: true,
     twoDistinctAdminsReady: true,
+    revocationBlocksApply: true,
+    revocationExactReplay: true,
+    remainingActorCannotReplaceRevokedVote: true,
+    explicitReapprovalRestoresReady: true,
+    materialChangeInvalidatesApprovals: true,
+    newProposalRequiresTwoNewVotes: true,
+    temporalApprovalExpiry:
+      'BLOCKED: no approval TTL in backend contract or vote evaluation',
     proposalFromBrowser: true,
     applied: true,
     attemptLookup: true,
