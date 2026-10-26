@@ -1,3 +1,5 @@
+> Compatibilidad revalidada 2026-10-26 con backend1.13.3/f2f942e: schema administrativo idéntico, siete secciones ya integradas y movementContext conservado. Sin cambios funcionales ni nueva ejecución HTTP. [Sincronización y pruebas nuevas](BACKEND-1.13.3-WEB-SYNCHRONIZATION.md). Las cifras inferiores son históricas.
+
 # Referencias administrativas de asistencia — integración Web local
 
 Actualización posterior: [ASSISTED_RELEASE / UNREACHABLE / NEW_ACTION con doble aprobación completado por HTTP sintético](ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Las menciones inferiores de ese pendiente se conservan como historia; no implica matriz exhaustiva de variantes.

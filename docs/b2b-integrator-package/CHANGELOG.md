@@ -1,5 +1,9 @@
 # Borrador para revisión — no enviado/no publicado
 
+## Actualización documental — 2026-10-26
+
+Contrato público 1.13.3: respecto de la copia 1.13.1 sólo cambia info.version. Se conservan 20 operaciones y 50 schemas; no se anuncia una API ni capacidad HTTP nueva. El paquete backend está publicado en Git QA; no acredita despliegue ni disponibilidad remota. No requiere integración FCM en Web.
+
 ## Cambios y compatibilidad — 2026-10-25
 
 Dos comparaciones diferentes:

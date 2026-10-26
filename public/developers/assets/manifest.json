@@ -2,7 +2,7 @@
   "source": "Mandaria public B2B artifacts",
   "notice": "Borrador para revisión — no enviado/no publicado",
   "sourceHashes": {
-    "openapi-b2b.json": "9fa53a2720392fe660c2ce80497899b6b5f738bcf4357ca9e51ebd191b97dee4",
+    "openapi-b2b.json": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c",
     "B2B-PUBLIC-GUIDE.md": "431921966e37953cc0f1a8da4fbc82f1e736f77c373a9acae5e700f6f65c43aa",
     "B2B-WEBHOOKS.md": "fd533d9aab41282cc028b90562758b1fe6c214fa9c07b1a1a3f4b37a504ed7ae",
     "examples/b2b-flow.json": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57",
@@ -14,11 +14,11 @@
     "PUBLIC-B2B-TRACKING.md": "B2B-PUBLIC-GUIDE.md#fotografía-pública-versionada--disponible-en-checkout-qa-no-desplegada"
   },
   "files": {
-    "openapi-b2b.json": "9fa53a2720392fe660c2ce80497899b6b5f738bcf4357ca9e51ebd191b97dee4",
+    "openapi-b2b.json": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c",
     "B2B-PUBLIC-GUIDE.md": "42c7c39f4d3a94473555b28a8f2bedf15725a102ef153e06c2237bce8b5ee80f",
     "B2B-WEBHOOKS.md": "21d15e1f79245b8dc9e45502519890d636ed28330fd5a6ebd7557983b77cd389",
     "examples/b2b-flow.json": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57",
     "examples/verify-mandaria-webhook.mjs": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"
   },
-  "contractVersion": "1.13.1"
+  "contractVersion": "1.13.3"
 }

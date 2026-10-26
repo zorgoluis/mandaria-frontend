@@ -4,6 +4,8 @@
 
 Destinatario, canal, entorno, soporte y fecha de disponibilidad: por confirmar.
 
+Actualización de revisión 2026-10-26: el contrato público adjunto indica 1.13.3; frente a 1.13.1 sólo cambia info.version. Sin nuevas APIs B2B ni confirmación de despliegue. Este borrador no se ha enviado.
+
 Preparamos una sincronización de documentación Mandaria B2B: contrato público, guía, ejemplos y verificación de firma. El portal local estaba atrasado en la representación de búsqueda automática opcional; la búsqueda no es una novedad creada por el paquete backend 1.13.1. Entre los contratos backend revisados 1.13.0 y 1.13.1 sólo cambió info.version.
 
 Para integraciones habilitadas, consulten la misma MDR mientras search indique SEARCHING/RETRY_PENDING y status permanezca OPEN. No creen reemplazos por timeout o contador local; precio, MQ y consentimiento no se renuevan automáticamente. Si search está ausente, conserven el comportamiento legacy. Revisen los schemas y validen con datos sintéticos en el entorno que se acuerde.

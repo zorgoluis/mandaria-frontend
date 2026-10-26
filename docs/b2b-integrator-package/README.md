@@ -2,7 +2,7 @@
 
 ## Inicio e índice
 
-Contrato público Mandaria B2B 1.13.1. Esta versión del paquete backend no sustituye las versiones funcionales de consentimiento, términos, GPS o seguimiento; la versión Web no se modifica. El servidor documentado es https://mandaria.com.mx y las rutas OpenAPI ya contienen /api/v1. No concatenar dos veces el prefijo ni usar el origen del portal como API. No acredita despliegue ni autoriza peticiones remotas.
+Contrato público Mandaria B2B 1.13.3. Actualización documental del paquete backend; sin nuevas operaciones HTTP B2B. Esta versión del paquete backend no sustituye las versiones funcionales de consentimiento, términos, GPS o seguimiento; la versión Web no se modifica. El servidor documentado es https://mandaria.com.mx y las rutas OpenAPI ya contienen /api/v1. No concatenar dos veces el prefijo ni usar el origen del portal como API. No acredita despliegue ni autoriza peticiones remotas.
 
 - [OpenAPI público](openapi-b2b.json): importar sin ejecutar solicitudes automáticas.
 - [Guía pública](B2B-PUBLIC-GUIDE.md): autenticación, MPQ → MDR/MQ → consentimiento → aceptación y recuperación.

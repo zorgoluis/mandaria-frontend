@@ -1,3 +1,5 @@
+> Actualización 2026-10-26: contrato público1.13.3 (sólo info.version), paquete local .tmp/b2b-integrator-package-2026-10-26.zip y nueva validación de ZIP/portal. [Informe vigente, hashes y comandos](BACKEND-1.13.3-WEB-SYNCHRONIZATION.md). El documento inferior conserva la revisión histórica1.13.1 y su paquete.
+
 # Portal y paquete B2B — revisión local 2026-10-25
 
 Implementación Web local en QA base19d30bc; versión Web1.11.0 sin cambio. Contrato público backend1.13.1. El «1.12.0» del baseline es info.version de la copia pública antigua, no la versión npm Web. No se modificaron backend ni mandaria-driver, datos, .env o dependencias. No hubo Docker, migraciones, activaciones, commit/push, despliegue, publicación ni mensajes/envíos externos.

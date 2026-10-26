@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs'
 import { resolve, dirname, relative } from 'node:path'
 import { createHash } from 'node:crypto'
 import { pathToFileURL } from 'node:url'
-export const stamp = '2026-10-25'
+export const stamp = '2026-10-26'
 export const notice = 'Borrador para revisión — no enviado/no publicado'
 export const publicFiles = [
   'openapi-b2b.json',
@@ -43,7 +43,7 @@ export function zip(entries) {
       crc = crc32(data),
       h = Buffer.alloc(30),
       c = Buffer.alloc(46)
-    const date = ((2026 - 1980) << 9) | (10 << 5) | 25
+    const date = ((2026 - 1980) << 9) | (10 << 5) | 26
     h.writeUInt32LE(0x04034b50)
     h.writeUInt16LE(20, 4)
     h.writeUInt16LE(0x800, 6)

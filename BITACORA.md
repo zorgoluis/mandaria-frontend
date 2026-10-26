@@ -1,3 +1,19 @@
+## 2026-10-26 — Revisión y commit QA de sincronización 1.13.3/B2B
+
+Diff revisado sobre QA 8dc67e6: metadatos públicos1.13.3, fuentes regenerables del paquete, evidencia y compatibilidad. Las24 huellas de sincronización y el ZIP coinciden; las9 huellas de aprobaciones pendientes permanecen intactas. Sin hallazgos ni correcciones adicionales. Se conservan los resultados recientes118/118,10/10, tipos/lint/build y navegador local; no son nuevas ejecuciones de esta revisión.
+
+Commit local autorizado exclusivamente para sincronización/B2B. Harness, informes, evidencia HTTP y entradas de continuidad de aprobaciones se dejan pendientes mediante selección parcial de los documentos compartidos. ZIP local ignorado, sin envío/publicación; Web1.11.0 intacta, sin push ni despliegue. Las menciones previas «sin commit» describen sus etapas originales.
+
+## 2026-10-26 — Sincronización documental backend 1.13.3
+
+QA 8dc67e6, Web 1.11.0 intacta. Backend QA f2f942e046901551f4e4d144479d6b5bbeac0014/1.13.3 coincide con la entrega Git indicada; no acredita servicio remoto ni despliegue. Comparación canónica: OpenAPI público Web1.13.1→1.13.3 y backend interno/público1.13.2→1.13.3 sólo difieren en info.version. Schema administrativo idéntico; no se rehacen las siete secciones, movementContext ni asistencia, y no se integra FCM Android en Web.
+
+Actualizados OpenAPI público/manifiesto mediante sync existente, textos del paquete y fecha del generador. ZIP local .tmp/b2b-integrator-package-2026-10-26.zip: 11 archivos permitidos, SHA256 a914ace0310c2afa17afde9974ec731f2d75a9fc7e1b4d299be281a2ec6e69c4. Extracción real, hashes, allowlist, enlaces y bytes deterministas PASS. Fuera de public/dist, ignorado por Git; paquete anterior conservado, sin envío.
+
+Ejecuciones NUEVAS: comparación y sync --check PASS; 10/10 tests Node de paquete/rutas; 118/118 Vitest en5 archivos (25 portal+93 asistencia),10.61s; tipos/lint/build PASS; navegador local16 recorridos/10 descargas, cero errores/peticiones externas o API; formato script/manifiesto y whitespace PASS. Prettier OpenAPI señala formato ya presente en HEAD1.13.1: ambos logs conservados, se respeta la copia autorizada exacta. Aviso previo chunk>500kB persiste. Sin fallos nuevos funcionales.
+
+[Informe, comandos, límites y paquete](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md); evidencia nueva docs/evidence/backend-1133-sync-2026-10-26/ y manifiesto docs/backend-1133-sync-evidence.json. Global1597 y HTTP16 anteriores HISTÓRICOS, no reejecutados porque no cambió comportamiento. Revocación/invalidez material probadas, TTL temporal ausente y distinto de expiración del cursor. Las nueve huellas de evidencia de aprobaciones pendiente permanecen intactas. Historial y cambios ajenos preservados; sin backend/App, dependencias/.env/flags, versión, Docker, commit/push, publicación o despliegue.
+
 ## 2026-10-26 — Revisión y commit local QA de la verificación conjunta
 
 Diff final revisado sobre QA 5924964: sólo logs, manifiesto y continuidad de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE. Las cuatro huellas SHA-256 coinciden y los logs respaldan 1597/1597 pruebas en 79 archivos, tipos/lint/build PASS. Sin hallazgos ni correcciones adicionales; aviso conocido de chunk >500 kB.

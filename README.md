@@ -1,3 +1,7 @@
+## 2026-10-26 — Compatibilidad backend 1.13.3
+
+Contrato público actualizado sólo en info.version, sin API B2B nueva ni integración FCM Web. Paquete local regenerado y ZIP verificado; 118 pruebas focalizadas, 10 de paquete, tipos/lint/build y navegador local PASS. [Informe y evidencia](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md). Web1.11.0 intacta; sin disponibilidad remota acreditada, envío, commit/push o despliegue. Historia inferior preservada.
+
 ## 2026-10-26 — QA conjunta de asistencia
 
 Verificación nueva de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE sobre QA `5924964`: **1597/1597 pruebas, 79 archivos**, tipos, lint y build PASS. Sin correcciones necesarias; aviso conocido de chunk >500 kB. Web 1.11.0 intacta. [Evidencia conjunta](docs/qa-assistance-combined-evidence.json) y [continuidad](VERIFICATION.md). HTTP anterior histórico, no reejecutado. Sin commit, push o despliegue; historia inferior preservada.
