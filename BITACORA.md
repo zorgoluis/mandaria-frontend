@@ -1,3 +1,39 @@
+## 2026-10-26 — Revisión final y commit local QA de MDR-000001
+
+Diff revisado sobre QA5173644: supervisor local de preparación, evidencia UI de reclamo/asignación, dos muestras GPS y continuidad. Sin cambios de producto, dependencias, configuración ni versión (Web1.11.0). Las menciones históricas «pendiente»/«sin commit» describen sus etapas originales; este commit incorpora el cierre posterior sin sobrescribirlas.
+
+Revisión NUEVA: sintaxis Node, ESLint y Prettier del supervisor PASS; seis hashes históricos coinciden; seis copias GPS coinciden byte a byte con fuentes Driver/Coita; correlación de ambas muestras y los dos POST de negocio (claim200/assignment201) verificada. Capturas revisadas visualmente, registros sin credenciales/tokens. No se repitieron HTTP operativo, GPS, suite global, tipos ni build; sus cifras anteriores siguen históricas. Sin hallazgos nuevos de producto. Primera comparación nominal GPS indeterminada se conserva como limitación.
+
+Evidencia GPS ahora autocontenida bajo docs/evidence/reserved-assignment-20261026/: coita-sample{1,2}-map.png, coita-sample{1,2}-observation.json y driver-sample{1,2}.jsonl. review-manifest.json registra origen, SHA256, correlaciones y alcance. Sólo datos sintéticos. Sin backend/móvil modificados, push o despliegue; no nuevas muestras ni hitos.
+
+## 2026-10-26 — Acuse final del cierre GPS Driver
+
+Responsable Driver confirma GPS detenido, servicio Android ausente y cierre exclusivo del AVD5582, conservando datos; Coita/servidores intactos. Muestra2: accuracy5m/delta0.173m reportados por Coita; muestra1 indeterminada por falta de coordenadas/accuracy conservadas. Sin nuevas capturas ni hitos. Detalle añadido al handoff PROVIDER-INTERACTIVE-LOCAL-20261026.md; PICKED_UP revisión4 intacto. Sin nuevas pruebas Web, commit/push o despliegue.
+
+## 2026-10-26 — MDR-000001: PICKED_UP y dos muestras observadas
+
+Web reclamó/asignó el pedido reservado a Ana/fleet1; Driver avanzó por UI real a PICKED_UP revisión4 (2026-10-27T04:47:35Z) y publicó dos posiciones simuladas mediante LocationManager/FGS. Coita capturó ambos marcadores/tiles RECENT: locationVersion="11"→"12", publicVersion="13", assignmentGeneration="4". capturedAt/receivedAt UTC:04:48:16.343/04:48:30.685 y04:51:49.530/04:52:03.342. Segunda enviada tras acuse/readiness de primera. GPS detenidoUI; asignación ACTIVE, sin completion.
+
+[Handoff y evidencia](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md) conserva correlaciones, versiones de APK, fuentes Driver/Coita y límites. Segunda posición coincide nominal dentro1m; primera diferencia exacta sin causa acreditada. No se declara borrado por expiración, dispositivo físico, replay ni suite global nueva. Android atribuido a responsables. Web1.11.0/QA5173644 intactos, sin producto, commit/push o despliegue; historia/cambios previos conservados.
+
+## 2026-10-26 — Pedido reservado reclamado y asignado por UI
+
+Nueva autorización humana ejecutada: cadena checkout a6764b7a-b75c-4578-ba82-562df3fe9001→pedido cb9609f4-c9b5-40a3-8dce-148f1aa9db2d→intento4e86bc19-3bfa-4a6a-8502-62f2697aaa03→MDR-000001/MQ-000001→dispatch7e9272b5-10ca-4ceb-b1c1-3fbf78cbf632 comprobada por responsables antes de reclamar. UI claim20004:40:07.525Z y assignment20104:40:33.972Z; Ana/fleet1, ADMIN_DISPATCH. GET Web/Driver confirma assignment0aebcbc2-b8e1-45f2-b6c1-2c9c190f0ee9 ACTIVE; ejecuciónrev1 sin hito al asignar. Costo mostrado4créditos, envío55MXN CASH/RECIPIENT y comida PREPAID separados.
+
+Handoff docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md y captura/tráfico sanitizado docs/evidence/reserved-assignment-20261026/. Revisión automática inicial rechazó reclamo por externalReference distinta; resuelto mediante lectura de la cadena real, sin bypass. Driver/Coita coordinados para PICKED_UP y dos muestras LocationManager/FGS; muestras aún pendientes al registrar esta entrada. Sin nuevos tests de código, servicios reiniciados, flags, versión, commit/push ni despliegue. Historial conservado.
+
+## 2026-10-26 — Handoff reservado/GPS: lectura21:31 México
+
+Web5173 HTTP200, supervisor Mandaria56597 ready/PID41072; health404 no se interpreta como caída. Coita65397 ECONNREFUSED. Sin sesión UI disponible para revalidar datos privados. No hay asignación reservada acreditada en evidencia Web: MDR/dispatchId/assignmentId/orderId/fase y ACTIVE vigente pendientes. Datos UI originales históricos. Driver21:16 informó401/contexto, sin asignación y cero muestras; no es una comprobación nueva de Web. Dos muestras LocationManager/FGS PENDIENTES.
+
+Actualizado docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md con correlaciones, requisitos y límites. Sólo lecturas/status y documentación frontend; sin login, reinicios, mutaciones, GPS por script, flags, credenciales, FCM, mensajes externos, backend/App, commit/push ni despliegue. Historial preservado.
+
+## 2026-10-26 — Web local preparada; reclamo/asignación pendientes
+
+QA 5173644, Web1.11.0, árbol inicial limpio. Preview de build nuevo en localhost:5173, API efectiva127.0.0.1:56597/api/v1 comprobada en navegador real. Login PROVIDER_ADMIN, proveedorA, ADMIN_DISPATCH, conductores/vehículos y saldo100 verificados; lista de servicios disponibles vacía. Ana activa pero Desconectado; fleet1 activa y sin asignar. Sin despacho reservado/dispatchId confirmado: no reclamo, asignación, cargo, cancelación ni entrega. Handoff requiere recorrido Coita MPQ→conversión→consentimientoMQ→aceptación y revisión de elegibilidad del conductor.
+
+NUEVO:143/143 regresiones con mocks en6archivos, tipos producto/tests, lint global, build aislado y sintaxis/lint supervisor PASS; warning chunk>500kB conservado.35 registros HTTP sanitizados, sin4xx/5xx, distintos de pruebas con mocks. No aceptación integral ni reejecución de cifras históricas. Frontend PID21788 queda encendido; backends intactos. Sin defectos nuevos de producto; sólo supervisor/evidencia/documentación, sin versión/commit/push/despliegue. [Informe y comandos](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md), [manifiesto](docs/provider-interactive-local-evidence.json). Historial inferior conservado.
+
 ## 2026-10-26 — Revisión y commit separado QA de aprobaciones
 
 Diff final revisado sobre QA f3ae9c8, conservando el commit de sincronización1.13.3/B2B. Se incorpora el harness de revocación, replay, invalidación material y nueva propuesta con dos votos, junto con informes, evidencia HTTP y continuidad. Las9 huellas previas coinciden; informe16/16 completo, cero errores de navegador, backend sin cambios y entorno cerrado. Sin hallazgos ni correcciones adicionales.

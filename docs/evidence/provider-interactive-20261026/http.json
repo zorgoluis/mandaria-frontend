@@ -1,0 +1,212 @@
+[
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"POST\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/refresh\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.210Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/me\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.231Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profiles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.271Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profile\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.285Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/capacity\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.309Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/drivers\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.311Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/vehicles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:22.323Z",
+    "url": "http://localhost:5173/dashboard"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"POST\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/refresh\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.817Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/me\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.831Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profiles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.866Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profile\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.892Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/fleet-operation-context\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.921Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/dispatches\",\"status\":200}",
+    "timestamp": "2026-10-26T23:07:58.963Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/dispatches\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:14.004Z",
+    "url": "http://localhost:5173/services"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"POST\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/refresh\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.161Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/me\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.183Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profiles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.218Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profile\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.236Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/fleet-operation-context\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.265Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/capacity\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.289Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/driver-invitations\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.293Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/drivers\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:24.295Z",
+    "url": "http://localhost:5173/drivers"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"POST\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/refresh\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.293Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/me\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.322Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profiles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.362Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profile\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.378Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/fleet-operation-context\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.401Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/capacity\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.421Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/vehicles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:38.427Z",
+    "url": "http://localhost:5173/vehicles"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"POST\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/refresh\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.268Z",
+    "url": "http://localhost:5173/provider/credits"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/auth/me\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.310Z",
+    "url": "http://localhost:5173/provider/credits"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profiles\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.353Z",
+    "url": "http://localhost:5173/provider/credits"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/profile\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.373Z",
+    "url": "http://localhost:5173/provider/credits"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/credits\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.431Z",
+    "url": "http://localhost:5173/provider/credits"
+  },
+  {
+    "level": "info",
+    "message": "LOCAL_HTTP {\"method\":\"GET\",\"url\":\"http://127.0.0.1:56597/api/v1/provider/credits/ledger\",\"status\":200}",
+    "timestamp": "2026-10-26T23:08:52.490Z",
+    "url": "http://localhost:5173/provider/credits"
+  }
+]
