@@ -1,0 +1,17 @@
+isolated-database-ready
+Real backend ready with synthetic fixture
+browser-login
+browser-login
+browser-login
+browser-login
+browser-login
+browser-login
+Respecting local authentication Retry-After
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+Waiting for actual five-minute cursor expiry
+{"output":"test-results/client-sync-http-1792950292962","complete":true,"checks":["multiple-memberships-require-explicit-provider","two-tabs-share-encrypted-original-intent-without-new-START","owner-START-lost-real-response-reload-recovers-by-affiliation-without-exitId-one-PENDING-active-service-preserved","provider-RECHECK-keeps-PENDING-no-force-no-cancellation","START-flag-off-retains-reading","UNKNOWN-close-original-START-affiliation-tombstone-blocks-late-request","ADMIN-membership-START-COMPLETED-identity-history-ledger-preserved-no-new-independent-profile-no-driver-admin-fallback","COMPLETED-ex-provider-authorized-historical-movementContext-declaration-and-dispute-no-ledger-no-reaffiliation","second-provider-member-reads-history-without-original-private-intent","SUPER_ADMIN-no-START-RECHECK-accepted-with-flag-off-and-independent-separate","Web-profileId-distinct-from-driverId-paginated-active-catalog-PUT-body-only-DRIVER-read-no-auto-selection-or-shift","lost-PUT-response-reload-exact-replay-historical-receipt-does-not-overwrite-second-admin","revision-conflict-explicit-review-new-intent-remove-all-confirmation-feature-disabled","membership-loss-removes-private-detail-preserves-original-APPLIED-redacted-recovery","provider-switch-never-shows-another-provider-intent","real-custody-events-incident-return-via-existing-APIs-completes-pending-exit","ACCOUNT_CLOSING-real-deletion-reauth-same-owner-private-existing-exit-recovery-no-new-commands","actual-five-minute-exit-cursor-expired-400-INVALID_CURSOR-authorized-restart"],"shutdown":{"stopped":true,"backendUnchanged":true,"runtimeBuiltFromCurrentSources":true}}

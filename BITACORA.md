@@ -1,3 +1,271 @@
+## 2026-10-26 — Revisión final y commit local QA de MDR-000001
+
+Diff revisado sobre QA5173644: supervisor local de preparación, evidencia UI de reclamo/asignación, dos muestras GPS y continuidad. Sin cambios de producto, dependencias, configuración ni versión (Web1.11.0). Las menciones históricas «pendiente»/«sin commit» describen sus etapas originales; este commit incorpora el cierre posterior sin sobrescribirlas.
+
+Revisión NUEVA: sintaxis Node, ESLint y Prettier del supervisor PASS; seis hashes históricos coinciden; seis copias GPS coinciden byte a byte con fuentes Driver/Coita; correlación de ambas muestras y los dos POST de negocio (claim200/assignment201) verificada. Capturas revisadas visualmente, registros sin credenciales/tokens. No se repitieron HTTP operativo, GPS, suite global, tipos ni build; sus cifras anteriores siguen históricas. Sin hallazgos nuevos de producto. Primera comparación nominal GPS indeterminada se conserva como limitación.
+
+Evidencia GPS ahora autocontenida bajo docs/evidence/reserved-assignment-20261026/: coita-sample{1,2}-map.png, coita-sample{1,2}-observation.json y driver-sample{1,2}.jsonl. review-manifest.json registra origen, SHA256, correlaciones y alcance. Sólo datos sintéticos. Sin backend/móvil modificados, push o despliegue; no nuevas muestras ni hitos.
+
+## 2026-10-26 — Acuse final del cierre GPS Driver
+
+Responsable Driver confirma GPS detenido, servicio Android ausente y cierre exclusivo del AVD5582, conservando datos; Coita/servidores intactos. Muestra2: accuracy5m/delta0.173m reportados por Coita; muestra1 indeterminada por falta de coordenadas/accuracy conservadas. Sin nuevas capturas ni hitos. Detalle añadido al handoff PROVIDER-INTERACTIVE-LOCAL-20261026.md; PICKED_UP revisión4 intacto. Sin nuevas pruebas Web, commit/push o despliegue.
+
+## 2026-10-26 — MDR-000001: PICKED_UP y dos muestras observadas
+
+Web reclamó/asignó el pedido reservado a Ana/fleet1; Driver avanzó por UI real a PICKED_UP revisión4 (2026-10-27T04:47:35Z) y publicó dos posiciones simuladas mediante LocationManager/FGS. Coita capturó ambos marcadores/tiles RECENT: locationVersion="11"→"12", publicVersion="13", assignmentGeneration="4". capturedAt/receivedAt UTC:04:48:16.343/04:48:30.685 y04:51:49.530/04:52:03.342. Segunda enviada tras acuse/readiness de primera. GPS detenidoUI; asignación ACTIVE, sin completion.
+
+[Handoff y evidencia](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md) conserva correlaciones, versiones de APK, fuentes Driver/Coita y límites. Segunda posición coincide nominal dentro1m; primera diferencia exacta sin causa acreditada. No se declara borrado por expiración, dispositivo físico, replay ni suite global nueva. Android atribuido a responsables. Web1.11.0/QA5173644 intactos, sin producto, commit/push o despliegue; historia/cambios previos conservados.
+
+## 2026-10-26 — Pedido reservado reclamado y asignado por UI
+
+Nueva autorización humana ejecutada: cadena checkout a6764b7a-b75c-4578-ba82-562df3fe9001→pedido cb9609f4-c9b5-40a3-8dce-148f1aa9db2d→intento4e86bc19-3bfa-4a6a-8502-62f2697aaa03→MDR-000001/MQ-000001→dispatch7e9272b5-10ca-4ceb-b1c1-3fbf78cbf632 comprobada por responsables antes de reclamar. UI claim20004:40:07.525Z y assignment20104:40:33.972Z; Ana/fleet1, ADMIN_DISPATCH. GET Web/Driver confirma assignment0aebcbc2-b8e1-45f2-b6c1-2c9c190f0ee9 ACTIVE; ejecuciónrev1 sin hito al asignar. Costo mostrado4créditos, envío55MXN CASH/RECIPIENT y comida PREPAID separados.
+
+Handoff docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md y captura/tráfico sanitizado docs/evidence/reserved-assignment-20261026/. Revisión automática inicial rechazó reclamo por externalReference distinta; resuelto mediante lectura de la cadena real, sin bypass. Driver/Coita coordinados para PICKED_UP y dos muestras LocationManager/FGS; muestras aún pendientes al registrar esta entrada. Sin nuevos tests de código, servicios reiniciados, flags, versión, commit/push ni despliegue. Historial conservado.
+
+## 2026-10-26 — Handoff reservado/GPS: lectura21:31 México
+
+Web5173 HTTP200, supervisor Mandaria56597 ready/PID41072; health404 no se interpreta como caída. Coita65397 ECONNREFUSED. Sin sesión UI disponible para revalidar datos privados. No hay asignación reservada acreditada en evidencia Web: MDR/dispatchId/assignmentId/orderId/fase y ACTIVE vigente pendientes. Datos UI originales históricos. Driver21:16 informó401/contexto, sin asignación y cero muestras; no es una comprobación nueva de Web. Dos muestras LocationManager/FGS PENDIENTES.
+
+Actualizado docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md con correlaciones, requisitos y límites. Sólo lecturas/status y documentación frontend; sin login, reinicios, mutaciones, GPS por script, flags, credenciales, FCM, mensajes externos, backend/App, commit/push ni despliegue. Historial preservado.
+
+## 2026-10-26 — Web local preparada; reclamo/asignación pendientes
+
+QA 5173644, Web1.11.0, árbol inicial limpio. Preview de build nuevo en localhost:5173, API efectiva127.0.0.1:56597/api/v1 comprobada en navegador real. Login PROVIDER_ADMIN, proveedorA, ADMIN_DISPATCH, conductores/vehículos y saldo100 verificados; lista de servicios disponibles vacía. Ana activa pero Desconectado; fleet1 activa y sin asignar. Sin despacho reservado/dispatchId confirmado: no reclamo, asignación, cargo, cancelación ni entrega. Handoff requiere recorrido Coita MPQ→conversión→consentimientoMQ→aceptación y revisión de elegibilidad del conductor.
+
+NUEVO:143/143 regresiones con mocks en6archivos, tipos producto/tests, lint global, build aislado y sintaxis/lint supervisor PASS; warning chunk>500kB conservado.35 registros HTTP sanitizados, sin4xx/5xx, distintos de pruebas con mocks. No aceptación integral ni reejecución de cifras históricas. Frontend PID21788 queda encendido; backends intactos. Sin defectos nuevos de producto; sólo supervisor/evidencia/documentación, sin versión/commit/push/despliegue. [Informe y comandos](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md), [manifiesto](docs/provider-interactive-local-evidence.json). Historial inferior conservado.
+
+## 2026-10-26 — Revisión y commit separado QA de aprobaciones
+
+Diff final revisado sobre QA f3ae9c8, conservando el commit de sincronización1.13.3/B2B. Se incorpora el harness de revocación, replay, invalidación material y nueva propuesta con dos votos, junto con informes, evidencia HTTP y continuidad. Las9 huellas previas coinciden; informe16/16 completo, cero errores de navegador, backend sin cambios y entorno cerrado. Sin hallazgos ni correcciones adicionales.
+
+Se reutilizan explícitamente las ejecuciones HTTP16/16 y regresiones93/93 de la verificación original; no se reejecutan durante esta revisión. La ausencia de TTL temporal sigue documentada y no se presenta como expiración probada. Commit local autorizado ahora; las menciones anteriores «sin commit» describen sus etapas originales. Web1.11.0 intacta; sin backend/móvil, push ni despliegue. Historia preservada.
+
+## 2026-10-26 — Revisión y commit QA de sincronización 1.13.3/B2B
+
+Diff revisado sobre QA 8dc67e6: metadatos públicos1.13.3, fuentes regenerables del paquete, evidencia y compatibilidad. Las24 huellas de sincronización y el ZIP coinciden; las9 huellas de aprobaciones pendientes permanecen intactas. Sin hallazgos ni correcciones adicionales. Se conservan los resultados recientes118/118,10/10, tipos/lint/build y navegador local; no son nuevas ejecuciones de esta revisión.
+
+Commit local autorizado exclusivamente para sincronización/B2B. Harness, informes, evidencia HTTP y entradas de continuidad de aprobaciones se dejan pendientes mediante selección parcial de los documentos compartidos. ZIP local ignorado, sin envío/publicación; Web1.11.0 intacta, sin push ni despliegue. Las menciones previas «sin commit» describen sus etapas originales.
+
+## 2026-10-26 — Sincronización documental backend 1.13.3
+
+QA 8dc67e6, Web 1.11.0 intacta. Backend QA f2f942e046901551f4e4d144479d6b5bbeac0014/1.13.3 coincide con la entrega Git indicada; no acredita servicio remoto ni despliegue. Comparación canónica: OpenAPI público Web1.13.1→1.13.3 y backend interno/público1.13.2→1.13.3 sólo difieren en info.version. Schema administrativo idéntico; no se rehacen las siete secciones, movementContext ni asistencia, y no se integra FCM Android en Web.
+
+Actualizados OpenAPI público/manifiesto mediante sync existente, textos del paquete y fecha del generador. ZIP local .tmp/b2b-integrator-package-2026-10-26.zip: 11 archivos permitidos, SHA256 a914ace0310c2afa17afde9974ec731f2d75a9fc7e1b4d299be281a2ec6e69c4. Extracción real, hashes, allowlist, enlaces y bytes deterministas PASS. Fuera de public/dist, ignorado por Git; paquete anterior conservado, sin envío.
+
+Ejecuciones NUEVAS: comparación y sync --check PASS; 10/10 tests Node de paquete/rutas; 118/118 Vitest en5 archivos (25 portal+93 asistencia),10.61s; tipos/lint/build PASS; navegador local16 recorridos/10 descargas, cero errores/peticiones externas o API; formato script/manifiesto y whitespace PASS. Prettier OpenAPI señala formato ya presente en HEAD1.13.1: ambos logs conservados, se respeta la copia autorizada exacta. Aviso previo chunk>500kB persiste. Sin fallos nuevos funcionales.
+
+[Informe, comandos, límites y paquete](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md); evidencia nueva docs/evidence/backend-1133-sync-2026-10-26/ y manifiesto docs/backend-1133-sync-evidence.json. Global1597 y HTTP16 anteriores HISTÓRICOS, no reejecutados porque no cambió comportamiento. Revocación/invalidez material probadas, TTL temporal ausente y distinto de expiración del cursor. Las nueve huellas de evidencia de aprobaciones pendiente permanecen intactas. Historial y cambios ajenos preservados; sin backend/App, dependencias/.env/flags, versión, Docker, commit/push, publicación o despliegue.
+
+## 2026-10-26 — Revocación e invalidación de aprobaciones ASSISTED_RELEASE
+
+Sobre QA 8dc67e6, Web 1.11.0 intacta, se amplía sólo el harness UNREACHABLE/NEW_ACTION. HTTP real NUEVO: revocar el segundo voto devuelve DRAFT/count=1; replay exacto estable; APPLY rechaza APPROVALS_REQUIRED sin efectos. Repetir el voto del otro actor no reemplaza el revocado. Reaprobar explícitamente restablece READY. Una contribución material por API invalida la propuesta: STALE/PROPOSAL_STALE sin efectos. Nueva propuesta exige dos votos nuevos; aplicación LIBERADO, recibo/replay y un único reembolso.
+
+Bloqueo concreto: la aprobación no tiene TTL en OpenAPI/DTO, tabla AssistanceApproval ni votes/barrera SQL del backend 1.13.3. No se puede acreditar expiración temporal inexistente; no se alteraron relojes ni registros para simularla. Invalidación material y expiración de cursor no equivalen a caducidad del voto. [Contrato, recorrido y límites](docs/ASSISTED-RELEASE-APPROVAL-LIFECYCLE-HTTP.md).
+
+Ejecuciones NUEVAS: node scripts/verify-admin-references-http.mjs, **16/16 grupos HTTP PASS** (aserciones ampliadas dentro de UNREACHABLE), cero errores de navegador, 65 migraciones, cursor expirado tras cinco minutos reales, cierre confirmado y fuentes backend sin cambios. Backend QA f2f942e, 1.13.3, copiado y compilado en entorno sintético aislado. Primer sondeo /health encontró ECONNREFUSED durante el arranque; el readiness posterior y el recorrido completo pasaron, sin cambiar tiempos.
+
+Regresiones NUEVAS: npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts, **93/93 PASS, 4 archivos, 7.31 s**. Sintaxis y Prettier PASS. Sin fallos de producto que corregir. Global1597/tipos/lint/build del pase conjunto anterior son HISTÓRICOS, no reejecutados. Evidencia en docs/evidence/approval-lifecycle-2026-10-26/ y manifiesto docs/approval-lifecycle-web-evidence.json.
+
+Propuesta inicial en Web; sustituta, revisiones y aplicación por HTTP. No acredita UI Android ni llamadas humanas. Permanecen límites de otros proofSource, pérdida de rol/actividad de aprobadores y custodia/economía. Backend/móvil, versión, dependencias/configuración/.env intactos; cambios ajenos backend preservados. Sin Docker, datos reales, commit/push ni despliegue. Historia inferior preservada.
+
+## 2026-10-26 — Revisión y commit local QA de la verificación conjunta
+
+Diff final revisado sobre QA 5924964: sólo logs, manifiesto y continuidad de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE. Las cuatro huellas SHA-256 coinciden y los logs respaldan 1597/1597 pruebas en 79 archivos, tipos/lint/build PASS. Sin hallazgos ni correcciones adicionales; aviso conocido de chunk >500 kB.
+
+Se reutilizan las ejecuciones de la verificación conjunta inmediatamente anterior; no se ejecutaron nuevamente durante esta revisión. HTTP permanece histórico. Commit local autorizado ahora por el usuario; las menciones anteriores «sin commit» y commitCreated=false describen la etapa de ejecución. Web 1.11.0 intacta; sin cambios de producto, backend/móvil, push o despliegue. Historial preservado.
+
+## 2026-10-26 — Verificación conjunta QA de las tres variantes de asistencia
+
+Ejecuciones NUEVAS sobre QA `59249641962c6074e817e2277a98e4d3af540515`, con árbol inicial limpio y Web **1.11.0**: incluye EXISTING_RELEASE `79e938d`, ACCESS_RECOVERED `f52b782` y ASSISTED_RELEASE/UNREACHABLE `5924964`. AGENTS.md no existe en el repositorio ni en los ancestros consultados; continuidad y documentación actuales leídas.
+
+- `npm test`: **1597/1597 PASS, 79/79 archivos**, 110.08 s, salida 0.
+- `npm run typecheck:test`: PASS, salida 0.
+- `npm run lint`: PASS, salida 0.
+- `npm run build`: PASS, salida 0; conserva el aviso conocido de chunk >500 kB.
+
+Suite global completa, sin omisiones ni cambios de permisos, configuración, concurrencia o tiempos. Se ejecutó fuera del sandbox por el ENOENT de temporales documentado anteriormente; no hubo fallo nuevo ni corrección necesaria. Tipos/lint/build ejecutados en el entorno habitual. Logs nuevos en `docs/evidence/qa-assistance-combined-2026-10-26/`; comandos, commits y huellas en [manifiesto conjunto](docs/qa-assistance-combined-evidence.json).
+
+HTTP no se reejecutó en esta tarea: los informes previos de EXISTING_RELEASE (14), ACCESS_RECOVERED (15) y UNREACHABLE (16, incluye las tres variantes) permanecen históricos, sin atribuirlos a esta ejecución global. Las pruebas Web con mocks no acreditan nuevas llamadas Nest/PostgreSQL ni UI Android. Continúan los límites de cobertura exhaustiva de proofSource, expiración/revocación de aprobaciones, custodia/economía y operación remota descritos en los informes HTTP.
+
+Sin cambios de producto, harness, versión, dependencias, backend o móvil; sin commit/push ni despliegue. Sólo evidencia y continuidad nuevas; historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit local QA de UNREACHABLE
+
+Diff final revisado sobre QAf52b782: ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE con inventario y doble aprobación, corrección del harness que reutiliza sesiones existentes, evidencia y continuidad. Las15 huellas previas coinciden; HTTP16/16 completo, cero errores de navegador, backend sin cambios por el harness y entorno cerrado. Dos sesiones de la misma identidad no suman dos votos; dos administradores distintos habilitan la aplicación y el replay conserva un único reembolso. Sin correcciones adicionales en esta revisión.
+
+Se reutilizan explícitamente las ejecuciones recientes HTTP16/16 y regresiones93/93, sintaxis/formato PASS; no se reejecutaron ahora. Global1597 y tipos/lint/build anteriores siguen históricos. Backend utilizado1.13.3/f2f942e por trabajo ajeno, Web1.11.0 intacta. Commit local autorizado por el usuario; las menciones anteriores «sin commit» describen sus etapas originales. Sin backend/móvil, push ni despliegue; historial preservado.
+
+## 2026-10-25 — ASSISTED_RELEASE UNREACHABLE con doble aprobación
+
+Sobre QA f52b782 y Web1.11.0 intacta, se completa HTTP local de ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE. Nueva asignación ACTIVE obtenida por Fleet TAKE; ORIGIN verificado con cuatro confirmaciones; constancia DRIVER UNREACHABLE vigente; inventario positivo. Sin constancia de no localización, el inventario se rechaza COUNTERPARTY_UNVERIFIED. La propuesta preparada en navegador exige dos votos: cero/uno rechazan APPLY; otra sesión de la misma identidad sigue contando uno. Segundo SUPER_ADMIN distinto produce READY; aplicación HTTP deja LIBERADO, asignación CANCELLED, dispatch OPEN y un solo reembolso. Consulta del intento y replay exacto conservan recibo; aplicar con nueva clave rechaza PROPOSAL_STALE sin duplicar efectos. No se registra un Fleet RELEASE adicional.
+
+HTTP NUEVO `node scripts/verify-admin-references-http.mjs`: **16/16 PASS**, cero errores de navegador,65 migraciones, cursor expirado tras cinco minutos reales y cierre Nest/PostgreSQL confirmado. Incluye nuevamente ACCESS_RECOVERED y EXISTING_RELEASE/CONTACTABLE. Backend realmente ejecutado: QA `f2f942e046901551f4e4d144479d6b5bbeac0014`, paquete1.13.3 por trabajo ajeno;379 huellas coinciden con la copia compilada. Las15 fuentes de asistencia son iguales a la evidencia anterior1.13.2. No se restauró checkout ni se amplió alcance a FCM. Cambios ajenos BITACORA.md, docs/OFFER-FCM-DRIVER-AGENT-PROMPT.md y nul preservados.
+
+Corrección del harness: primer ensayo HTTP429 por login adicional para segunda sesión. Se usan las sesiones ya creadas por API/navegador, sin ampliar límites de autenticación, relajar permisos o tiempos. Informe fallido conservado con cierre confirmado. Regresiones NUEVAS `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts`: **93/93 PASS,4 archivos**,8.40s. Sintaxis Node de los tres scripts y Prettier PASS. Global1597 y tipos/lint/build anteriores permanecen HISTÓRICOS, no se reejecutaron; no hubo cambios de producto.
+
+Evidencia y fallos separados en `docs/evidence/unreachable-release-2026-10-25/`; manifiesto `docs/unreachable-release-web-evidence.json`; [recorrido y límites](docs/ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Propuesta/lectura final en navegador; inventario, revisiones y aplicación por HTTP; actas humanas sintéticas. Se completa UNREACHABLE/NEW_ACTION con doble aprobación, sin afirmar matriz exhaustiva de proofSource, revocaciones/expiraciones, custodia o economía, llamadas reales, UI Android o disponibilidad remota. Sin backend/móvil, cambio de versión Web, dependencias/configuración/.env, Docker, commit/push ni despliegue. Historial preservado.
+
+## 2026-10-25 — Revisión y commit local QA de ACCESS_RECOVERED
+
+Diff final revisado sobre QA79e938d: harness ampliado hasta aplicación ACCESS_RECOVERED, consulta del recibo mediante receipt.result, replay y controles de sesión/servicio, evidencia y continuidad. Las 13 huellas previas coinciden; HTTP15/15 completo, sin errores de navegador, backend intacto y entorno cerrado. Una resolución, sesión vigente y asignación ACTIVE sin efectos físicos/económicos nuevos. Sin correcciones adicionales durante esta revisión.
+
+Se reutilizan explícitamente las ejecuciones recientes HTTP15/15 y regresiones93/93, sintaxis/formato PASS; no se reejecutaron ahora. Global1597 y tipos/lint/build anteriores permanecen históricos. Commit local autorizado por el usuario, incluyendo evidencia fallida y final separadas. Las menciones anteriores «sin commit» describen sus etapas originales. Web1.11.0 intacta; sin backend/móvil, push o despliegue. Historial preservado.
+
+## 2026-10-25 — ACCESS_RECOVERED aplicado y verificado por HTTP local
+
+Sobre QA79e938d, Web1.11.0 intacta. Se amplía el harness existente: login DRIVER sintético posterior a la apertura, sesión seleccionada por newSessionId, propuesta Web con evidencia/identidad verificadas, rechazo APPROVALS_REQUIRED antes de revisión, aprobación por segundo SUPER_ADMIN y aplicación HTTP. El recibo devuelve ACCESO_RECUPERADO, la propuesta APPLIED; consulta del intento y replay exacto conservan el mismo resultado. GET y refresco Web confirman el estado. Una sola resolución; asignación ACTIVE con endedAt=null, dispatch/ejecución sin cambio, cero liberaciones y reembolsos; sesión vigente del conductor con refresh emitido desde la apertura y /driver/me200 antes/después. Tokens sólo en memoria, no en evidencia.
+
+HTTP NUEVO: `node scripts/verify-admin-references-http.mjs` **15/15 PASS**, cero errores de navegador,65 migraciones, expiración real del cursor tras cinco minutos y cierre Nest/PostgreSQL confirmado. Incluye nuevamente EXISTING_RELEASE/CONTACTABLE sin duplicar efectos. Backend QA `204d4f712fb150f872e006a891595f8d64b6a2c7`,1.13.2,377 fuentes comprobadas; runtime compilado desde copia actual, no dist viejo. Cambios documentales ajenos backend (BITACORA, VERIFICATION, documentos OFFER-FCM y nul) preservados.
+
+Único fallo nuevo: aserción del harness leía result directamente en la consulta de intentos; el contrato devuelve receipt.result. Se corrigió sólo el harness, se conservó el informe fallido y se repitió completo. Sin correcciones nuevas de producto ni backend. Pruebas NUEVAS: `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts` **93/93 PASS,4 archivos**,5.43s; sintaxis Node de ambos scripts y Prettier focalizado PASS. Global1597 y tipos/lint/build previos se conservan como HISTÓRICOS, no se reejecutaron para este cambio de harness.
+
+Evidencia: `docs/evidence/access-recovered-2026-10-25/`; manifiesto `docs/access-recovered-web-evidence.json`; [recorrido y límites](docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md). Propuesta/refresco en navegador; revisión y aplicación por HTTP. No se acredita UI Android, llamadas reales, revocación de todas las sesiones anteriores, UNREACHABLE/doble aprobación ni disponibilidad remota. Se resuelve el pendiente de aplicación ACCESS_RECOVERED, conservando entradas anteriores como historia. Sin backend/móvil, versión, dependencias/configuración/.env, Docker, commit/push o despliegue.
+
+## 2026-10-25 — Revisión y commit local QA de EXISTING_RELEASE
+
+Diff final revisado sobre QA9e4af36: recorrido HTTP completo EXISTING_RELEASE/CONTACTABLE, refresco de permisos con revisión invariable, regresión, harness y evidencia. Las 24 huellas previas de fuentes/documentación/evidencia coinciden; informe HTTP completo14/14, sin errores de navegador y con cierre confirmado. Sin nuevas correcciones de producto durante esta revisión. Suite global1597/1597, tipos/lint/build y HTTP14 se reutilizan del pase reciente comprobado; no son nuevas ejecuciones de esta revisión.
+
+Commit local autorizado ahora por el usuario, incluyendo continuidad y avisos históricos actualizados. Las menciones anteriores «sin commit» corresponden a sus etapas originales. Versión1.11.0 intacta; backend/móvil sin cambios; sin push ni despliegue. Se conservan los límites de ACCESS_RECOVERED completo, UNREACHABLE y UI Android. Historial preservado.
+
+## 2026-10-25 — Contraste del adjunto de referencias backend 1.13.2
+
+El adjunto recibido vuelve a describir la integración ya implementada en QA9e4af36 y completada por los cambios pendientes de EXISTING_RELEASE. Se conserva íntegramente ese trabajo. Comprobación documental NUEVA: backend QA `204d4f712fb150f872e006a891595f8d64b6a2c7`, paquete1.13.2; 377 huellas de las fuentes ejecutadas coinciden con el checkout actual; 22 huellas de implementación/evidencia coinciden antes de esta actualización; schema Web de las siete secciones idéntico a OpenAPI. Los únicos cambios backend visibles siguen siendo BITACORA.md y nul, ajenos y preservados. AGENTS.md no existe en el repositorio ni ancestros consultados.
+
+No fue necesario rehacer código de producto ni ejecutar otra vez las pruebas: se reutilizan explícitamente los resultados recientes del mismo árbol (global1597/1597, tipos/lint/build PASS, HTTP14/14 con cierre confirmado). Esto es un contraste documental y de huellas, no una nueva ejecución funcional. Se añaden avisos a los dos informes históricos para evitar interpretar contactSourceRef, participationId o movementContext como ausentes. Los límites de ACCESS_RECOVERED completo, UNREACHABLE y UI Android permanecen explícitos; EXISTING_RELEASE/CONTACTABLE está completado con datos sintéticos. Sin nuevo commit/push, versión, backend/móvil, Docker o despliegue. Historia preservada.
+
+## 2026-10-25 — EXISTING_RELEASE completo por HTTP local
+
+Ampliación sobre QA `9e4af36`, Web 1.11.0 intacta. Se completa el pendiente de EXISTING_RELEASE / CONTACTABLE con datos sintéticos: TAKE/RELEASE Fleet reales generan el recibo original; dos identidades verificadas y ocho confirmaciones; inventario positivo sin obligaciones; propuesta preparada en navegador; revisión HTTP de segundo SUPER_ADMIN; aplicación y replay exacto. GET y refresco Web confirman LIBERADO. Los controles antes/después conservan una liberación, un reembolso, asignación CANCELLED sin cambios y cero obligaciones/movimientos/cobro. Sin insertar recibos artificiales ni modificar estados de asistencia directamente en base.
+
+Ejecución HTTP NUEVA: `node scripts/verify-admin-references-http.mjs`, **14/14 PASS**, cero errores de navegador, 65 migraciones, cursor expirado tras cinco minutos reales y Nest/PostgreSQL cerrados. Fuentes backend comprobadas sin cambios. Se verifican rechazos por inventario/confirmaciones ausentes y falta de aprobación; no se omiten barreras para completar el recorrido. Las declaraciones humanas son sintéticas; revisión/aplicación se ejercitan por HTTP, no se atribuyen a formularios Web.
+
+Fallo Web verificado y corregido: Actualizar expediente conservaba referencias/permisos cuando el flag cambiaba sin incrementar la revisión. El contenido se renueva con dataUpdatedAt, reconsulta permisos y descarta preparación anterior, conservando el intento durable exterior. Regresión nueva incluida. El harness normaliza datetime-local para segundos cero. Una ejecución interrumpida no produjo informe y su PostgreSQL residual fue identificado/cerrado; no se declara PASS. Primera suite global bloqueada por ENOENT de temporales del sandbox (79 archivos sin tests ejecutados); repetida sin ese aislamiento, sin cambiar configuración o tiempos.
+
+Validación NUEVA final: `npm test` **1597/1597 PASS, 79 archivos**,101.05s; tipos, lint, build y formato focalizado PASS. Archivo focalizado de asistencia **44/44 PASS**,5.98s. Permanece el aviso conocido de bundle>500kB. Informes fallidos y finales separados en `docs/evidence/existing-release-2026-10-25/`; [recorrido y límites](docs/EXISTING-RELEASE-HTTP-VERIFICATION.md), manifiesto `docs/existing-release-web-evidence.json`. Los informes anteriores (incluido HTTP12 y global1596) siguen siendo históricos; esta entrada resuelve su pendiente de EXISTING_RELEASE, no el de ACCESS_RECOVERED completo o UNREACHABLE/UI Android/operación real.
+
+Sin cambios backend/móvil, versión, dependencias, configuración, .env, commit/push ni despliegue. Se preservan los cambios ajenos de backend BITACORA.md y nul; no se tocaron. Historia inferior intacta.
+
+## 2026-10-25 — Revisión final y commit local QA de referencias administrativas
+
+Diff revisado sobre QA b55f772, conservando los commits de B2B y zonas. Las 32 huellas de implementación y evidencia coincidieron antes de esta actualización. Sin correcciones adicionales de producto durante la revisión.
+
+Comprobación NUEVA: `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts`: **92/92 PASS, 4 archivos**, 5.89s. Log archivado en `docs/evidence/qa-combined-admin-references-2026-10-25/admin-references-commit-review.txt`. La suite global 1596/1596, tipos, lint, build y HTTP 12/12 de la implementación anterior se conservan con huellas verificadas; no se reejecutaron en esta revisión. Cierre sintético confirmado en el reporte HTTP, sin errores de navegador. EXISTING_RELEASE completo sigue pendiente; ACCESS_RECOVERED acredita propuesta y barrera de revisión, no aplicación completa.
+
+Commit local autorizado ahora por el usuario: integración, pruebas, evidencia HTTP y continuidad. La mención «sin commit» de la entrada anterior describe aquella etapa. Web 1.11.0 intacta; sin push, publicación, despliegue ni modificaciones backend/móvil. Historial preservado.
+
+## 2026-10-25 — QA conjunta y referencias administrativas de asistencia
+
+Verificados juntos los commits QA `263a4b9` (B2B/paquete) y `b55f772` (zonas). Baseline NUEVA antes de ampliar: `npm test` **1566/1566 PASS, 77 archivos**,108.61s; `npm run typecheck:test`, `npm run lint`, `npm run build` PASS. No se corrigieron fallos de esos commits ni se reutilizó la cifra histórica1563 como ejecución actual.
+
+Por aclaración expresa del usuario se implementó después el adjunto de referencias administrativas: siete secciones tipadas/validadas contra OpenAPI, selectores SUPER_ADMIN, paginación completa, partes/canales autorizados, participación real para primera obligación, sesión y recibo original en propuestas, declaración SHIPPING_DECLARATION exacta y evidencia con hash del servidor. PROVIDER_ADMIN/movementContext, B2B, zonas y desvinculación conservados. Sin crear permisos desde caché. Catálogos sólo en memoria, cancelación/limpieza por actor/caso; cuerpos sensibles excluidos del intento durable y reinicio limitado a consulta/cierre técnico, conservando identidad y replay exacto en memoria.
+
+Suite GLOBAL final NUEVA: `npm test` **1596/1596 PASS,79 archivos**,105.33s. Tipos de tests, lint global, build y formato focalizado PASS. Schema de respuesta generado comparado con OpenAPI local: coincidencia exacta. Se conserva aviso de bundle>500kB. Ningún test omitido, ningún permiso relajado y sin aumentar tiempos de pruebas para ocultar fallos.
+
+HTTP NUEVO final: `node scripts/verify-admin-references-http.mjs` **12/12 comprobaciones PASS**, Nest/PostgreSQL sintéticos y65 migraciones. Incluye siete secciones/paginación, proveedor403 y cursores ajenos, fuente alterada/ajena/obsoleta, contribución→acta→identidad desde navegador, respuesta perdida/recibo/replay exacto, sesión→propuesta con barrera de revisión, primera obligación, parada→parte, cobro original→DECLARED sin modificar original, recibo histórico con requestId exacto,1280/320px/teclado/flagOFF y cursor expirado tras cinco minutos reales. Cierre Nest/PostgreSQL confirmado; fuentes backend verificadas sin cambio.0 errores de navegador. El recibo de liberación es fixture histórico; **no se acredita EXISTING_RELEASE completo**. Capturas revisadas sin referencias privadas, cuerpos o credenciales.
+
+Backend leído: commit `204d4f7`, paquete1.13.2; ampliación asistencia1.0.0/schemaVersion1,65 migraciones. Su handoff refiere pruebas originales1.13.1, sin acreditar disponibilidad remota. Harness compila una copia actual en scratch WSL, utiliza dependencias locales, PostgreSQL desechable y datos sintéticos, bloquea red externa e ignora .env. El código/backend móvil no se modifica. Los43E2E/765unit/40B2B backend son HISTÓRICOS, no pruebas Web.
+
+Fallos nuevos corregidos: el formulario UNKNOWN exigía importe HTML pese a enviar null; fixture unitario de evidencia incompleto; sincronización inicial del puente WSL; selección de evidencia obligatoria en inventario; fixture de conductor que intentaba usar una ruta LEGACY con modalidad DRIVER_TAKE (se usa el conductor sintético ya habilitado por APIs FLEET); fixture de huella obsoleta que violaba la restricción de asignación activa (sólo cambia updatedAt en datos desechables). No se modificaron reglas backend para resolverlos. La captura móvil se realiza con animaciones deshabilitadas para no fotografiar una transición del menú.
+
+Documento de integración, contratos y límites: [FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md](docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md). Evidencia nueva: `docs/evidence/qa-combined-admin-references-2026-10-25/`; manifiesto `docs/admin-references-web-evidence.json`. EXISTING_RELEASE completo permanece pendiente: el selector del recibo histórico no acredita inventario sin obligaciones, confirmaciones, aprobaciones ni aplicación. No se prueba UI Android, llamadas humanas, operación remota o proveedores reales. Web1.11.0 intacta; sin commit/push, publicación, despliegue, Docker ni .env. Historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit separado QA de zonas del independiente
+
+Diff de zonas revisado sobre QA263a4b9, conservando el commit B2B separado. SUPER_ADMIN usa profileId real, catálogo activo paginado y protocolo de ofertas con requestId en body; intención cifrada y replay exacto, conflicto con revisión explícita y lista vacía confirmada. Se incluyen la estabilización de fixtures/etiquetas y maxWorkers4 documentados. Sin cambios adicionales de código de producto durante esta revisión.
+
+Nueva comprobación: `npx vitest run src/test/independent-zones-api.test.ts src/test/independent-zones.test.tsx src/test/driver-portal.test.tsx src/test/delivery-assignments-api.test.ts src/test/delivery-assignments.test.tsx`:107/107 PASS,5 archivos. Las34 huellas anteriores de fuentes/evidencia verificadas coinciden (se excluyen los dos documentos compartidos de continuidad ampliados por B2B). HTTP18/18 PASS con cierre confirmado y backend intacto se reutiliza, no se reejecuta. Suite global1563/1563, tipos/lint/build previos permanecen como evidencia histórica, no nuevos resultados de esta revisión. Android UI sigue pendiente.
+
+Commit local autorizado de zonas, pruebas, evidencia HTTP, handoff y continuidad; versión Web1.11.0 intacta. Manifiesto actualizado con huellas de revisión y Git, manteniendo la evidencia de la ejecución original. Sólo se normalizan espacios finales de logs y EOF documental para el diff; no se alteran comandos/resultados. Sin backend/móvil, push, publicación, despliegue ni activación. Historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit local QA del portal B2B
+
+Diff B2B revisado; fuentes públicas, paquete regenerable y evidencia incluidos en commit local autorizado. Se preservan sin incluir los cambios pendientes de zonas (incluida su continuidad local). Se normalizan a LF las fuentes textuales del ZIP para regenerarlo idéntico tras checkout Windows; 10/10 comprobaciones de paquete/rutas reejecutadas PASS y SHA256 del ZIP sin cambio. Las 25 pruebas de portal, tipos/lint/build y navegador anteriores se reutilizan como evidencia, no como nueva ejecución. No se modifica versión ni se hace push, publicación, envío o despliegue.
+
+## 2026-10-25 — Portal B2B sincronizado y paquete local para integradores
+
+QA19d30bc, Web1.11.0 sin incremento. Sincronizadas las cinco fuentes públicas del backend1.13.1;20 operaciones método+ruta exactas y schemas de automaticDispatchSearch/search. Visor/descarga leen el mismo asset. Revalidación contra backend9af2185:1.13.0→1.13.1 sólo cambia info.version; búsqueda automática corrige atraso local y no se anuncia como novedad de1.13.1. Tres referencias fuera del paquete aprobado se resuelven a secciones públicas, sin copiar handoffs. Nueva navegación de búsqueda y tabla GPS corregida a320px. Se conservó el trabajo previo de zonas/desvinculación/asistencia.
+
+Paquete local de11 archivos y ZIP determinista en `.tmp/b2b-integrator-package-2026-10-25.zip`, SHA256 `e2744137f5e5395d87b644fbeb1f540753662ddb0aa477becd59ccff16ac00f0`. Rotulado «Borrador para revisión — no enviado/no publicado», fuera de public/dist y sin enlace público al ZIP. Fuentes y regeneración: `docs/b2b-integrator-package/` y `node scripts/package-b2b-integrators.mjs`. Incluye cambios, matriz de disponibilidad, plan sintético, comunicación existente/nueva y manifiesto sin informes internos. Destinatario/canal/entorno/soporte/fecha y disponibilidad remota por confirmar; distribución requiere instrucción posterior.
+
+Pruebas NUEVAS: `npx vitest run src/test/developers.test.tsx`25/25 PASS; `node --test scripts/b2b-integrator-package.test.mjs scripts/check-developers-entry.test.mjs`10/10 PASS; `node scripts/sync-public-b2b.mjs --check`, `npm run typecheck:test`, `npm run lint`, `npm run build` y formato focalizado PASS. Build conserva advertencia de chunk>500kB. Navegador `node scripts/verify-b2b-integrator-browser.mjs`:16 recorridos y10 descargas reales en1440/320px, MIME/bytes/schemas correctos,0 errores y0 llamadas externas/API, red externa bloqueada. ZIP real extraído por Windows, allowlist/hashes exactos y regeneración idéntica. Se corrigieron carreras del harness, mapeo de enlaces codificados y expectativas estáticas obsoletas TLS de nginx (configuración intacta).
+
+No se ejecutó suite global Vitest ni HTTP funcional backend en esta tarea;1563 pruebas/18 HTTP de zonas y40 B2B backend son HISTÓRICOS, no resultados nuevos. No se declara disponibilidad remota ni receptor de integrador probado. [Informe y comandos](docs/B2B-INTEGRATOR-PACKAGE-WEB.md), [evidencia](docs/b2b-integrator-evidence.json). Sin modificar backend/móvil, .env, dependencias, datos reales, Docker, migraciones, versión, commit/push, despliegue, publicación, credenciales, mensajes o activación remota. Historial inferior preservado.
+
+## 2026-10-25 — Zonas propias del independiente y sincronización backend 1.13.1
+
+Web 1.11.0 sobre QA base 19d30bc, sin cambio de versión ni commit. Integración SUPER_ADMIN de GET/PUT offer-zones con profileId real, catálogo activo paginado, confirmación de lista vacía e intención cifrada durable por actor/entorno/perfil. Replay conserva body/requestId; el recibo histórico no sustituye proyección vigente; conflicto exige revisión humana. No se rehacen desvinculación 1.0.0 ni asistencia/movementContext.
+
+Validación nueva: suite GLOBAL final `npm test` **1563/1563 PASS, 77 archivos**, 99.25s; tipos de tests, lint global, build y formato focalizado PASS. Se conservan advertencia de chunk >500kB y los informes históricos inferiores. Baseline de esta tarea:1508 PASS/20 FAIL; se corrigieron fixtures de trackingMode/etiquetas y se limitó la concurrencia jsdom a4 sin omitir tests ni ampliar deadlines. Los fallos nuevos de fixtures/composición y clic previo a habilitación también quedaron corregidos; pases intermedios archivados.
+
+HTTP nuevo `node scripts/verify-client-sync-http.mjs`: **18 comprobaciones PASS** con Nest/PostgreSQL sintéticos en WSL; zonas visibles en lectura DRIVER sin selección/turno automáticos, pérdida de respuesta/replay, otro administrador, vaciado y flag OFF. Se reejecutaron salida/movementContext y se ampliaron ACCOUNT_CLOSING/reauth, cursor expirado tras cinco minutos reales y custodia resuelta por APIs existentes. Backend compilado desde fuentes actuales verificadas; procesos cerrados y backend intacto. Routing/mail simulados y FCM/socket desactivados. Esto no acredita UI Android ni reutiliza cifras históricas backend como resultados Web.
+
+Implementación, matriz y límites: [informe](docs/INDEPENDENT-OFFER-ZONES-WEB.md). Reproducción móvil pendiente: [handoff](docs/INDEPENDENT-OFFER-ZONES-MOBILE-HANDOFF.md). Comandos, intentos fallidos, logs, capturas y huellas: [manifiesto](docs/client-sync-web-evidence.json), [evidencia](docs/evidence/client-sync-2026-10-25/report.json). No hay bloqueo local de zonas por el futuro contexto de asistencia. Retención de siete días y ciertos errores se cubren con Vitest simulado, no HTTP real. Sin backend/móvil, dependencias, .env, datos operativos, Docker, versión, commit/push, mensajes externos, despliegue o activación remota. Historial inferior preservado.
+
+## 2026-10-24 — Revisión para commit local QA y versión Web 1.11.0
+
+Diff final de desvinculación y transición independiente revisado; 41 huellas previas de implementación/evidencia coinciden. Versión Web incrementada de1.10.0 a1.11.0 en package.json y package-lock.json, sin cambios de dependencias; el contrato funcional permanece1.0.0. Build con1.11.0 PASS, con la advertencia conocida de chunk >500kB. Evidencia HTTP vigente:12 comprobaciones PASS; se reutiliza sin atribuir una nueva ejecución al cambio de versión. También se conservan63 pruebas nuevas PASS,325 focalizadas y los límites/fallos globales documentados abajo.
+
+Commit local autorizado en QA con código, pruebas, continuidad y evidencia. El manifiesto registra esta revisión previa al commit y sus huellas; el SHA del commit corresponde a la revisión Git que contiene esta entrada. Sin push, despliegue, activación remota ni cambios backend/driver. Historial inferior preservado.
+
+## 2026-10-24 — Desvinculación Web 1.0.0 implementada localmente
+
+QA base 829d012. La autorización posterior sustituye el alcance documental previo: cliente tipado validado con OpenAPI, navegación proveedor/admin, START/RECHECK por capacidades, detalle histórico, avisos y recuperación cifrada por cuenta/entorno/proveedor implementados. SUPER_ADMIN no inicia salidas; APPLIED/PENDING no se presenta como desvinculación completada. Se conserva asistencia/movementContext y operación FLEET/independiente previa.
+
+Validación Web: 325 pruebas focalizadas PASS; tras retirar recibos privados en memoria al perder autoridad y conservar el recibo COMPLETED ante el 404 esperado del contexto, 63 pruebas nuevas PASS y build PASS. Tipos, lint global y formato focalizado PASS. Suite global anterior al último ajuste: 1506 PASS/21 FAIL; 18 fallos de asignaciones (17 UI y1 etiquetas) coinciden con deuda histórica. Los3 fallos de dispatch/finalización sensibles a carga pasan al ejecutar sus archivos completos aparte (96/96). Se actualizaron las expectativas de navegación por sus enlaces vigentes. Build conserva advertencia de chunk >500kB.
+
+HTTP final: 12 comprobaciones PASS, incluida conciliación histórica después de COMPLETED; procesos cerrados y backend intacto. Comandos, capturas, huellas y límites en [informe de integración](docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB.md) y [manifiesto](docs/fleet-exit-web-evidence.json). No se atribuyen a Web las177 E2E/765 unitarias/40 B2B previas del backend. Se mantienen documentadas las ramas no ejecutadas por HTTP. Sin backend/driver, dependencias, configuración, .env o versión modificados; sin Docker, datos reales, commit/push, despliegue o activación remota. Historial inferior conservado.
+
+## 2026-10-24 — Diseño Web de desvinculación y transición independiente 1.0.0
+
+QA base 829d012; sólo diseño documental, sin implementación de la ampliación. [Documento de integración](docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB-DESIGN.md): experiencias PROVIDER_ADMIN/SUPER_ADMIN separadas, navegación y archivos previstos, estados de afiliación/salida/elegibilidad, rutas/DTO futuros, intención cifrada y recuperación START por affiliationId, privacidad histórica, avisos HTTP y matriz X01–X30 prevista.
+
+Comprobación documental y estática exclusivamente: cuatro documentos backend leídos en sólo lectura y recorridos Web contrastados. API nueva no disponible; no se ejecutaron pruebas funcionales, mocks ni HTTP. Pendientes concretos de scope provider, filtros de avisos, schema REJECTED, allowlist de cuenta restringida y selector Web de zonas identificados; políticas S1–S10 conservadas. Sin código, dependencias, configuración, .env, backend/driver, datos operativos, Docker, commit/push o despliegue. Asistencia/movementContext, FLEET e independiente previos permanecen vigentes. Historial inferior conservado.
+
+## 2026-10-24 — Revisión y commit local de movimientos del proveedor
+
+Diff final revisado para commit local autorizado en QA: movementContext PROVIDER_ADMIN, declaraciones, disputas, recuperación y evidencia HTTP. Las 33 huellas del manifiesto coinciden con fuentes y artefactos del pase validado; se reutilizan 158 pruebas focalizadas, 20 comprobaciones HTTP reales, tipos/lint/build y revisión visual. No se repiten suites ni se modifica código. Sin push, despliegue o activación. La revisión Git que contiene esta entrada identifica el commit; el manifiesto conserva el estado anterior al commit durante la verificación.
+
+## 2026-10-24 — movementContext PROVIDER_ADMIN integrado localmente
+
+Web vigente: C:/Users/zorgl/Documents/mandaria-frontend, QA base 1ec1a83. El backend actual ya ofrece proyección provider: se sustituye el bloqueo histórico general. Selección de combinaciones autorizadas, dinero exacto, declaración pendiente, disputa por movement.id y recuperación cifrada implementadas; las contrapartes ambiguas siguen bloqueadas con explicación.
+
+Validación propia Web: 158 pruebas focalizadas, 20 comprobaciones HTTP reales contra Node/PostgreSQL aislados en WSL, tipos/lint/build PASS y revisión visual. Se conservan consola SUPER_ADMIN, FLEET 1.0.0 e independiente 1.1.0. Entorno de ensayo cerrado; backend intacto. [Informe vigente y límites](docs/FLEET-ASSISTANCE-PROVIDER-MOVEMENTS-WEB.md) · [Evidencia](docs/fleet-assistance-provider-movements-evidence.json). Activación remota/producción pendiente por separado; sin commit, push, despliegue ni cambios de .env. Las entradas inferiores son históricas.
+
+## 2026-10-23 — Revisión para commit local de asistencia en QA
+
+Commit local autorizado con implementación y evidencia HTTP actualizada; sin push ni despliegue. Diff revisado y huellas de fuentes/capturas contrastadas con el manifiesto: coinciden. Se reutilizan 119 pruebas focalizadas y 14 comprobaciones HTTP reales, tipos/lint/build y revisión visual del pase final, sin repetir suites ni modificar código. Los bloqueos de referencias backend siguen documentados; no se declara integración completa ni activación productiva. El SHA del commit se obtiene de la revisión Git que contiene esta entrada.
+
+## 2026-10-23 — Asistencia Web contra backend actual (continuación)
+
+QA base 7488fc8; se conserva la implementación previa. La ampliación movementContext es sólo DRIVER y no concede referencias al dueño. Ahora el upload conserva únicamente huellas, exige reselección del original tras reinicio y mantiene la reserva hasta confirmar atómicamente el siguiente paso. Selectores administrativos aprovechan identidades históricas y participationId de obligaciones existentes; filtros de estado, envío, proveedor y límite integrados. Proyecciones antiguas sin capacidades no conceden comandos.
+
+[Informe vigente, pruebas y bloqueos exactos](docs/FLEET-ASSISTANCE-WEB-CURRENT.md). Validación final: 119 pruebas focalizadas, 14 comprobaciones HTTP real, tipos/lint/build PASS y capturas revisadas; entorno de ensayo cerrado. No se declara integración completa: faltan canales registrados, referencias propias del dueño y selectores documentados. Backend actual comparado con Windows y recompilado en scratch WSL para HTTP sintético. Sin .env compartidos, Docker, backend/driver modificados, proveedores reales, commit/push ni despliegue. Las entradas siguientes conservan los resultados históricos.
+
+## 2026-10-23 — Asistencia y conciliación: Web local y HTTP
+
+Web vigente en C:/Users/zorgl/Documents/mandaria-frontend, QA base 7488fc8. UI por rol, cliente tipado, intentos cifrados y recuperación, evidencia privada y propuestas/votos implementados. Chrome → Nest WSL → PostgreSQL sintético: 11 comprobaciones HTTP PASS; 95 pruebas focalizadas PASS, typecheck:test, lint y build PASS. Capturas dueño 1280/320 y admin 1280 revisadas. Suite global no repetida; fallos históricos no declarados resueltos.
+
+Integración aún incompleta: faltan referencias autorizadas de canal registrado, participación, partes/movimientos propios y otros selectores; se bloquean comandos dependientes. El HTTP real confirmó que incluso admin recibe contactSourceRef redactado. [Implementación, recorridos y faltantes exactos](docs/FLEET-ASSISTANCE-WEB.md) · [Evidencia](docs/fleet-assistance-web-evidence.json). Backend/DB de prueba cerrados, fuentes backend intactas; sin .env, datos/proveedores reales, commit/push o despliegue. Esta entrada actualiza el contexto; las entradas inferiores conservan su historial.
+
+## 2026-10-23 — Integración HTTP FLEET local verificada
+
+Web vigente en C:/Users/zorgl/Documents/mandaria-frontend (QA, base 58f4d519). Chrome → Vite → Nest en WSL → PostgreSQL aislado: **10 escenarios PASS**, autenticación y autorización reales con identidades sintéticas. Recuperación de gasto tras respuesta perdida: mismo cuerpo/UUID, operaciones 2 → 3 → 3, ACTIVE conservado y ledger sin cambios. Corregido el mensaje del cursor malformado que el backend devuelve como 409 ECONOMIC_CONTEXT_CHANGED.
+
+34 pruebas FLEET PASS; tipos de pruebas, build y lint focalizado PASS. Capturas 1280/320 revisadas. Backend y PostgreSQL de ensayo detenidos, auxiliares cerrados. Sin despliegue ni proveedores reales; sin cambios de .env, Docker o fuentes backend. [Informe HTTP](docs/FLEET-DIRECT-TAKE-HTTP-INTEGRATION.md) y [evidencia HTTP](docs/fleet-direct-take-http-evidence.json). Esta entrada sustituye el estado “integración pendiente” de las entradas históricas siguientes; sus resultados anteriores se conservan.
+
+## 2026-10-23 — Web FLEET implementada localmente
+
+Contexto vigente: C:/Users/zorgl/Documents/mandaria-frontend, rama QA, base 58f4d519; checkout inicialmente limpio, sin AGENTS.md. Se sustituye sólo el alcance anterior de diseño: contexto/capacidades, observación privada por segmentos y gasto por conductor implementados; ADMIN_DISPATCH preservado y DRIVER_TAKE/PAUSED sin mutaciones de envío. Contratos FLEET 1.0.0 e independiente 1.1.0 consultados en backend local, sólo lectura.
+
+296 pruebas focalizadas finales PASS; suite completa previa al último endurecimiento 1352 PASS/20 fallos previos documentados. Build PASS; Chrome sintético 1280/320, foco/Enter y privacidad PASS. Tipos/lint y manifiesto final en [informe y límites](docs/FLEET-DIRECT-TAKE-WEB.md) y [evidencia](docs/fleet-direct-take-web-evidence.json). Integración HTTP real pendiente: WSL conserva clústeres de prueba detenidos, sin API activa. No confundir fixtures o evidencia backend histórica con E2E Web. Sin .env, Docker, backend/App, datos reales, commit/push, despliegue ni activación. Las entradas siguientes son historia preservada.
+
+## 2026-10-21 — Integración de main en QA
+
+Merge de main 8b864c5 sobre QA 0409015 (base común 06d9766) en worktree mandaria-frontend-qa, rama merge/main-into-qa. Once conflictos resueltos conservando ambos lados: CSP de Google Maps de QA más blob: de main en img-src; transporte con rama blob de main y parseo estricto/Retry-After de QA; códigos BUSINESS/CUSTOMER y VERIFICATION/LICENSE unidos; Login con next=business y next=onboarding y redirección de sesión restringida; rutas de cliente y de verificación/baja juntas. Bitácoras, README e informe de compatibilidad conservan ambos historiales.
+
+Ajustes propios de QA: main desactivó en Web la ejecución detallada porque su backend no la ofrece; QA sí la ofrece, así que se conservan ExecutionRecovery, la página y el enlace de incidencias de custodia (sin HistoricalOperationsNotice). sessionIdentity acepta CUSTOMER, que main rechazaba y habría impedido iniciar sesión a clientes. verification-entry envía a /dashboard los roles sin expediente propio.
+
+Validación nueva: tsc -b, typecheck:test, ESLint y build PASS (advertencia previa chunk >500 kB). Vitest completo 1323/1344; las 21 fallas coinciden con QA limpio (22 fallas): 20 deterministas preexistentes en delivery-assignments y flows, más fallas intermitentes por carga que pasan aisladas. Dos pruebas ajustadas a la semántica de QA y una nueva para CUSTOMER. Sin navegador, backend real, push ni despliegue. Requiere backend QA con /auth/me?projection=session y los endpoints de verificación y baja de main.
 ## 2026-10-21 — Revisión para publicar historial en main
 
 Commit/push autorizados. Fetch nuevo 0/0 e índice vacío; seis archivos propios revisados, sin cambios ajenos en este checkout. Se reutilizan 104 pruebas Web y 25 E2E backend de la tarea anterior, tipos/build/lint; no se repiten suites. Backend compatible requerido para la nueva consulta paginada. SHA remoto se comprobará tras push normal. Sin despliegue ni activación.
@@ -382,3 +650,51 @@ Se preparan dos commits coherentes: producto/pruebas de baja y sesión; arneses/
 Límites vigentes: constancias parciales; drenaje real en Spaces pendiente, sin eliminación total ni aptitud productiva. Tras entregar, UI informa que no hay resolución activa, sin constancia histórica explícita de entrega. Revisión y manifiesto de huellas: [deletion-publication-review.json](docs/deletion-publication-review.json).
 
 Revisión final del índice: diff --cached --check detectó líneas vacías sobrantes al final de deletion-isolated-browser.mjs. Se retiraron únicamente esas líneas; contenido ejecutable idéntico. Huellas original/publicable reconciliadas en deletion-publication-review.json, sin reescribir evidencia histórica. Sintaxis y cuatro pruebas del helper comprobadas; no repetición de entrega/recibo por ausencia de cambio funcional.
+
+# Bitácora Mandaria Web
+
+## 2026-10-13 — Compatibilidad documental Driver/Vehicle sobre backend main
+
+Estado actual: análisis finalizado, implementación no iniciada. Web QA `e303739`, checkout principal limpio al inicio; backend feature/driver-verification/main `1fa2cb1` con 32 migraciones, QA `9ad39b9` con 46, comparados sólo lectura. Referencias locales sin fetch. [Informe completo](docs/DRIVER-VERIFICATION-MAIN-COMPATIBILITY.md).
+
+Cierre: avance concurrente backend documental a `90b7243` y QA a `674e172`; diff de código/prisma y OpenAPI comparado vacío respecto a las referencias iniciales. Matriz contractual sin cambio; backend limpio al cierre. No se hicieron esos commits desde esta tarea.
+
+Solicitud: contrastar contratos y diseñar registro/revisión de independientes y flotillas sin integrar QA. Cambios: sólo informe, BITACORA, README y VERIFICATION. Recomendación futura: Web main `06d9766` con adaptación explícita de rutas DETAILED/recuperación aún presentes; no compatibilidad integral acreditada. Bloqueos: provider null/alta DRIVER, expediente privado versionado por identidad/unidad, notificación durable, recuperación propia y decisiones de transición/purga. Existentes, servicios comprometidos y cinco intentos preservados.
+
+Verificaciones NUEVAS: Git refs/status/diff/tree, controladores/DTO/proyecciones y OpenAPI main/QA, consumidores/rutas/guards; revisión documental. No pruebas funcionales, HTTP/DB, navegador, suites, tipos/lint/build, instalaciones ni servicios. Evidencia histórica siguiente no acredita onboarding nuevo. Sin cambios backend/app/configuración, merge, commit/push/despliegue ni mensajes a agentes.
+
+## 2026-10-13 — Presentación del cierre de ejecución
+
+Checkout: `C:/Users/zorgl/Documents/mandaria-frontend`, rama `QA`, base `2e595048cf62cce4d8ed47ca6ac69140f2012fc8`; limpio al iniciar. AGENTS.md no existe en este checkout. Se revisaron BITACORA, README y VERIFICATION.
+
+- Causa: ExecutionProgress identificaba el paso actual sólo por phase, aun con custodia terminal. Ahora DELIVERED/RETURNED trasladan el resaltado y aria-current="step" al cierre; AT_DROPOFF conserva su significado de último hito y todos los hitos siguen visibles. RETURNED mantiene el texto diferenciado de devolución. Sin cierre, la fase continúa siendo actual incluso sin asignación/acciones: no se infiere entrega.
+- Archivos: src/execution/components.tsx, src/test/execution.test.tsx, scripts/verify-execution-terminal.mjs, BITACORA.md y VERIFICATION.md. Se reutiliza el CSS existente. Revisión estática de consumidores: dispatch/pages.tsx (proveedor), dispatch/admin.tsx (administración), driver-portal/pages.tsx (repartidor/independiente), execution/incidents.tsx (incidencias), directamente o mediante ExecutionPanel. Sin cambios de permisos, operaciones, historial ni contratos.
+- `npx vitest run src/test/execution.test.tsx`: archivo completo, 40/40 aprobadas (tres casos nuevos: entregado, devuelto y transición desde destino sin entrega).
+- `npx eslint src/execution/components.tsx src/test/execution.test.tsx scripts/verify-execution-terminal.mjs`: aprobado.
+- `npm run typecheck:test`: aprobado. `npm run build`: TypeScript y Vite aprobados; advertencia de chunk mayor de 500 kB, existente.
+- `node scripts/verify-execution-terminal.mjs`: Chromium con fixtures del componente, 1440 y 390 px. Un único aria-current coherente por estado, sin errores de render ni desbordamiento. Capturas revisadas: test-results/execution-terminal/1440.png y 390.png. Lista semántica conservada; no se añadieron controles ni tabulaciones artificiales.
+- Límites: evidencia nueva frontend sintética, separada de las verificaciones históricas siguientes. No acredita integración backend, pantallas completas con sesión, lector de pantalla, móvil físico ni VM. No se consultó ni entregó MDR-000002; no se modificaron servicios reales. Servidor visual temporal detenido. Sin backend, configuración, commit, push o despliegue.
+
+## Estado actual — 2026-10-12
+
+Checkout principal `C:/Users/zorgl/Documents/mandaria-frontend`, **QA** sobre `a5fe19a6c0375207e552f1b04580ba7bbe04b3e7`. Aprobación manual de cuenta Negocio implementada localmente contra el contrato backend publicado `9ad39b9`. Índice sin cambios preparados. Sin commit/push/despliegue.
+
+### Solicitud
+
+Implementar y validar el contrato comercial aprobado, manteniendo los cambios anteriores del logo/diseño/documentación y la continuidad logística V1.17/V1.18.
+
+### Cambios
+
+Nuevo módulo interno customer-business, solicitud e historial propios, decisión/acceso administrativo SUPER_ADMIN, registro/anexión Personal, orientación de token REGISTER antiguo y descenso por Receipt. Recuperación comercial separada de logística, marcadores mínimos, sesiones aisladas, exact replay sólo con cuerpo original, GET/close y refresco de estado actual. Nuevas rutas y CTA `/customer/business`.
+
+### Verificaciones y resultado
+
+155 pruebas frontend distintas en 11 archivos focalizados, TypeScript, lint pertinente y build aprobados; revisión Chromium con API sintética a 1440/390 y registro/perfil a 1440/1000/390, teclado y capturas locales. Resultados y comandos en [VERIFICATION](VERIFICATION.md). No prueba real de backend/DB/VM; 69/69 backend se conserva sólo como antecedente publicado.
+
+### Pendientes y límites
+
+Responsables del entorno deben comprobar backend compatible/migración46 y despliegue; ninguna activación realizada aquí. Aviso de tamaño de chunk Root (~763 kB) conservado. No hay cambio backend solicitado o incompatibilidad bloqueante demostrada por la revisión estática. Protección de marcadores limitada al navegador/origen, autoridad final backend.
+
+### Continuidad preservada
+
+BITACORA no existía en la raíz al comenzar; el historial anterior permanece en README, VERIFICATION, docs/V1.17-WEB y la propuesta comercial, ahora rotulada como histórica. Procedimiento y archivos en [implementación](docs/BUSINESS-APPROVAL-WEB-PROPOSAL.md).

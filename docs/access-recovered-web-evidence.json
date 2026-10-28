@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-25",
+  "branch": "QA",
+  "baseCommit": "79e938d",
+  "webVersion": "1.11.0",
+  "backend": {
+    "head": "204d4f712fb150f872e006a891595f8d64b6a2c7",
+    "version": "1.13.2",
+    "readOnly": true,
+    "migrations": 65,
+    "sourceFiles": 377,
+    "sourcesUnchanged": true,
+    "builtFromCurrentSources": true
+  },
+  "http": {
+    "command": "node scripts/verify-admin-references-http.mjs",
+    "report": "docs/evidence/access-recovered-2026-10-25/http-report.json",
+    "passed": 15,
+    "complete": true,
+    "stopped": true,
+    "browserErrors": [],
+    "checks": [
+      "seven-real-sections-multipage-no-duplicates-provider-denied-strict-query-actor-section-cursors",
+      "tampered-and-foreign-evidence-rejected",
+      "browser-contribution-canonical-note-evidence-lost-response-receipt-exact-replay",
+      "browser-identity-same-party-canonical-channel-offered-method-real-receipt",
+      "browser-current-driver-session-proposal-no-automatic-apply-review-barrier",
+      "access-recovered-second-admin-review-http-apply-receipt-replay-one-resolution-driver-session-valid-service-remains-ACTIVE",
+      "browser-first-obligation-with-real-participation-id",
+      "browser-stop-registration-exact-channel-refreshes-parties",
+      "changed-source-hash-rejected-without-silent-replacement",
+      "browser-shipping-selector-exact-source-amount-date-concepts-real-DECLARED-original-unchanged-foreign-case-denied",
+      "existing-release-positive-inventory-eight-confirmations-two-identities-and-missing-inventory-confirmations-approval-barriers",
+      "historical-release-fixture-selector-uses-original-requestId-not-opaque-id-or-response-receipt",
+      "browser-existing-release-proposal-second-admin-review-http-apply-LIBERADO-exact-replay-no-new-release-refund-or-assignment-change",
+      "desktop-mobile-keyboard-and-real-flag-off",
+      "real-five-minute-cursor-expiration"
+    ],
+    "accessRecovered": {
+      "proposalFromBrowser": true,
+      "secondAdminReview": true,
+      "applied": true,
+      "attemptLookup": true,
+      "exactReplay": true,
+      "before": {
+        "business": {
+          "assignmentStatus": "ACTIVE",
+          "assignmentUpdatedAt": "2026-10-26T04:56:47.221Z",
+          "endedAt": null,
+          "dispatchStatus": "CLAIMED",
+          "executionPhase": 0,
+          "executionRevision": "1",
+          "releases": 0,
+          "refunds": 0
+        },
+        "session": {
+          "belongsToDriver": true,
+          "revoked": false,
+          "unexpired": true,
+          "newLiveRefreshes": 1,
+          "driverMeStatus": 200
+        },
+        "resolutions": 0
+      },
+      "after": {
+        "business": {
+          "assignmentStatus": "ACTIVE",
+          "assignmentUpdatedAt": "2026-10-26T04:56:47.221Z",
+          "endedAt": null,
+          "dispatchStatus": "CLAIMED",
+          "executionPhase": 0,
+          "executionRevision": "1",
+          "releases": 0,
+          "refunds": 0
+        },
+        "session": {
+          "belongsToDriver": true,
+          "revoked": false,
+          "unexpired": true,
+          "newLiveRefreshes": 1,
+          "driverMeStatus": 200
+        },
+        "resolutions": 1
+      }
+    }
+  },
+  "regressions": {
+    "command": "npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts",
+    "passed": 93,
+    "files": 4,
+    "seconds": 5.43
+  },
+  "syntax": "node --check both harness scripts: PASS",
+  "format": "Prettier both harness scripts: PASS",
+  "productChanges": false,
+  "historicalNotReexecuted": [
+    "Global1597/1597, types/lint/build from EXISTING_RELEASE verification",
+    "Backend43 E2E/765unit/40B2B are not Web tests"
+  ],
+  "correctedFailure": "Harness attempt lookup assertion used result instead of receipt.result; failed environment stopped and complete HTTP rerun passed.",
+  "limitations": [
+    "Proposal/final display via browser; second-admin review/apply/receipt lookup via HTTP",
+    "No response loss simulated for this APPLY; original evidence response-loss test still executed",
+    "No new exhaustive revoked/expired session or revoke-all flow",
+    "No Android UI, real human calls, remote availability or UNREACHABLE/double-approval verification"
+  ],
+  "noVersionChange": true,
+  "noBackendOrMobileChanges": true,
+  "noPush": true,
+  "noDeployment": true,
+  "sha256": {
+    "BITACORA.md": "bae3e61dba32a0e9edefdec7b19630699b87dc27cc649baabbe958a3d0cdc6f5",
+    "README.md": "ac96f790d0deb2601261a3600d985b40d23341fed95167ec6be535f1895f1bd9",
+    "VERIFICATION.md": "ebfb358cf8991d36d469f78c00ec41ef1ffa14b0201a0fbc50354d40cc7a0220",
+    "docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md": "c969df71aa98441762b910f8dc40d6da8e8a893bb1b8bcdeb4b80ffe8e44da38",
+    "docs/EXISTING-RELEASE-HTTP-VERIFICATION.md": "5750e26db020837a67ea4a749cded4f278a266d55ef04f6c3a7ca9145cb45934",
+    "docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md": "4726e51d00fdb15896f7e079a5558077176d3a3a3e4a68df7667fcd32e8bd895",
+    "scripts/admin-references-http-wsl.mjs": "dd632f3887c93bd431d039692e0bcd4d59344717622725f8dfadef6e8f4fec6c",
+    "scripts/verify-admin-references-http.mjs": "2169922693c10f5c4d76053b711d0ab1f883ebfe71a1a9dbb3e6c8773e438dec",
+    "docs/evidence/access-recovered-2026-10-25/format.txt": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "docs/evidence/access-recovered-2026-10-25/http-harness-envelope-failure.json": "85f3cf8895d344c0c69551c8d7baf21021d490b7136ad97fcc8bfaf392029c39",
+    "docs/evidence/access-recovered-2026-10-25/http-report.json": "fc644c34b50cde8b69a4293b9623b45dd64619234d5138c1841c7368dcea0370",
+    "docs/evidence/access-recovered-2026-10-25/http-run.txt": "3d3272bc2eb7e19645b7599b1284f68ed3dcba836a477cdf563a77086268dfa8",
+    "docs/evidence/access-recovered-2026-10-25/regressions.txt": "6db2e449c7a57a5a3b930b03fa6dd663f91804e7e8b27896fc039078507a8372"
+  },
+  "implementationNoCommit": true,
+  "localCommitAuthorized": true,
+  "commitReview": {
+    "date": "2026-10-25",
+    "baseCommit": "79e938d",
+    "hashesMatched": 13,
+    "additionalCodeChanges": false,
+    "functionalTestsReexecuted": false,
+    "diffCheck": "PASS"
+  },
+  "gitBlobSha256": {
+    "BITACORA.md": "b9100efc81b0d45f7e2195bd89bd1ddfab10aa917d6e340a41632161fcdeb1cd",
+    "README.md": "4ebd0fdd4c0577d5efb6910ba4f1671bfffbb0fa447045a48f07f50df894ceb0",
+    "VERIFICATION.md": "d8e6bbf3ac46648fa3e016062900cff0fb1c96fef578242a6e645b6144ec3426",
+    "docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md": "c969df71aa98441762b910f8dc40d6da8e8a893bb1b8bcdeb4b80ffe8e44da38",
+    "docs/EXISTING-RELEASE-HTTP-VERIFICATION.md": "5750e26db020837a67ea4a749cded4f278a266d55ef04f6c3a7ca9145cb45934",
+    "docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md": "4726e51d00fdb15896f7e079a5558077176d3a3a3e4a68df7667fcd32e8bd895",
+    "scripts/admin-references-http-wsl.mjs": "dd632f3887c93bd431d039692e0bcd4d59344717622725f8dfadef6e8f4fec6c",
+    "scripts/verify-admin-references-http.mjs": "bbd63848cee9d329dde0227e3b9f249014f83ea2111613ade799c48b08fc5fcb",
+    "docs/evidence/access-recovered-2026-10-25/format.txt": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "docs/evidence/access-recovered-2026-10-25/http-harness-envelope-failure.json": "85f3cf8895d344c0c69551c8d7baf21021d490b7136ad97fcc8bfaf392029c39",
+    "docs/evidence/access-recovered-2026-10-25/http-report.json": "fc644c34b50cde8b69a4293b9623b45dd64619234d5138c1841c7368dcea0370",
+    "docs/evidence/access-recovered-2026-10-25/http-run.txt": "3d3272bc2eb7e19645b7599b1284f68ed3dcba836a477cdf563a77086268dfa8",
+    "docs/evidence/access-recovered-2026-10-25/regressions.txt": "6db2e449c7a57a5a3b930b03fa6dd663f91804e7e8b27896fc039078507a8372"
+  }
+}

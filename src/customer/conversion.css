@@ -1,0 +1,252 @@
+.conversion-back {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.conversion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.conversion-tags span {
+  border-radius: 999px;
+  background: #e7f2ef;
+  color: #13594d;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+}
+.conversion-tags span + span {
+  background: #fff4e0;
+  color: #8a5a12;
+}
+.conversion-page .quote-steps .completed {
+  color: #156b5c;
+}
+.conversion-page .quote-steps .completed > span {
+  background: #e7f2ef;
+  border-color: #e7f2ef;
+}
+.conversion-page .quote-steps .completed + li::before {
+  background: #156b5c;
+}
+.conversion-card {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.conversion-card h2 {
+  font-size: 19px;
+  margin: 0;
+}
+.conversion-stop-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.conversion-stop-title > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e7f2ef;
+}
+.conversion-stop-title > span::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 3px solid #156b5c;
+  border-radius: 50%;
+}
+.conversion-stop-title > .destination::after {
+  background: #156b5c;
+}
+.conversion-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.conversion-page .field {
+  min-width: 0;
+}
+.conversion-page .field small {
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.5;
+  padding-left: 4px;
+}
+.conversion-origin-name {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 10px;
+}
+.conversion-origin-name > .field {
+  display: contents;
+}
+.conversion-origin-name > .field > span:first-child {
+  grid-row: 1;
+  grid-column: 1;
+  font-size: 14px;
+  font-weight: 600;
+}
+.conversion-origin-name > .field > input,
+.conversion-origin-name > .field > small {
+  grid-column: 1 / -1;
+}
+.conversion-restore {
+  grid-row: 1;
+  grid-column: 2;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #156b5c;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+}
+.conversion-goods {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+.conversion-goods .quote-segments {
+  width: 100%;
+  border-radius: 24px;
+}
+.conversion-goods .quote-segments label {
+  flex: 1;
+}
+.conversion-page .quote-segments span {
+  min-height: 44px;
+  text-align: center;
+  justify-content: center;
+  padding: 8px 14px;
+}
+.conversion-money {
+  position: relative;
+  display: block;
+}
+.conversion-money > span {
+  position: absolute;
+  top: 16px;
+  color: #8a9894;
+  font-weight: 600;
+}
+.conversion-money > span:first-child {
+  left: 20px;
+}
+.conversion-money > span:last-child {
+  right: 20px;
+}
+.conversion-page .conversion-money input {
+  padding-inline: 40px 62px !important;
+}
+.conversion-info {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  margin: 0;
+  background: #f6f8f7;
+  border-radius: 16px;
+  padding: 14px 18px;
+  color: #3d4b47;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.conversion-info svg {
+  flex-shrink: 0;
+  fill: #156b5c;
+  stroke: white;
+}
+.conversion-subtitle {
+  font-size: 14px;
+  color: #5f6e6a;
+  margin: 8px 0 0;
+}
+.conversion-sidebar {
+  display: grid;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+}
+.conversion-price {
+  background: #156b5c;
+  color: white;
+  border-radius: 24px;
+  padding: 28px;
+}
+.conversion-price > span,
+.conversion-price p {
+  font-size: 13px;
+  color: #cfe7e0;
+}
+.conversion-price > div {
+  margin-block: 8px;
+}
+.conversion-price strong {
+  font-size: 44px;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.conversion-price b {
+  font-size: 18px;
+  color: #cfe7e0;
+}
+.conversion-price p {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+.conversion-summary {
+  position: static;
+}
+.conversion-expired {
+  background: #fff4e0;
+  color: #8a5a12;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 14px;
+}
+.conversion-expired button {
+  display: block;
+  color: inherit;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  margin-top: 10px;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 700;
+}
+.conversion-page .conversion-error {
+  color: #b0382a;
+}
+.conversion-page input[aria-invalid='true'] {
+  border-color: #c0392b !important;
+}
+@media (max-width: 1100px) {
+  .conversion-sidebar {
+    position: static;
+  }
+  .conversion-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Follow the input's actual requirement, including the conditional goods amount. */
+.conversion-page .field:has(input:required) > span:first-child::after,
+.conversion-page .quote-choice:has(input:required) > legend::after {
+  content: ' *';
+  color: #b0382a;
+  font-weight: 700;
+}
+.conversion-required-note {
+  color: #5f6e6a;
+  font-size: 13px;
+  margin: -12px 0 24px;
+}

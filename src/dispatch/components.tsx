@@ -1,3 +1,5 @@
+import { useFleetPermission } from '../fleet/permissions'
+import { ShippingPaymentBlock } from '../shipping/Payment'
 import type { DispatchSearch } from './search'
 import { SearchStatus } from './SearchStatus'
 import { searchAllowsTake } from './search'
@@ -83,12 +85,21 @@ export function MoneyBlock({
   collectionInstructions,
   executionFields,
   compact = false,
+  offer = false,
 }: {
   service: DispatchService
   collectionInstructions?: CollectionInstructions
   executionFields?: ExecutionFields
   compact?: boolean
+  offer?: boolean
 }) {
+  if (executionFields?.shippingPayment != null && !executionFields.execution)
+    return (
+      <ShippingPaymentBlock
+        value={executionFields.shippingPayment}
+        offer={offer}
+      />
+    )
   if (executionFields?.execution)
     return (
       <DetailedPayment
@@ -177,6 +188,8 @@ export function ServiceCard({
   onClaim: (dispatch: ProviderDispatch) => void
   onRelease: (dispatch: ProviderDispatch) => void
 }) {
+  const claimAllowed = useFleetPermission('canClaim')
+  const releaseAllowed = useFleetPermission('canRelease')
   const service = dispatch.service
   const expiredLocally =
     dispatch.status === 'OPEN' && remaining(dispatch.expiresAt, now) === null
@@ -221,6 +234,7 @@ export function ServiceCard({
             collectionInstructions={dispatch.collectionInstructions}
             executionFields={dispatch}
             compact
+            offer={dispatch.status === 'OPEN'}
           />
           <p className="credit-chip">
             Cuesta {creditCostLabel(dispatch.creditCost)}
@@ -237,20 +251,22 @@ export function ServiceCard({
         >
           Ver detalle <ArrowUpRight size={14} />
         </Link>
-        {dispatch.access === 'OFFER' && dispatch.status === 'OPEN' && (
-          <button
-            className="button small"
-            disabled={!canClaim(dispatch, now)}
-            onClick={() => onClaim(dispatch)}
-          >
-            {dispatch.search && !searchAllowsTake(dispatch.search, now)
-              ? 'Esperando actualización'
-              : expiredLocally
-                ? 'Tiempo terminado'
-                : 'TOMAR SERVICIO'}
-          </button>
-        )}
-        {canRelease(dispatch) && (
+        {claimAllowed &&
+          dispatch.access === 'OFFER' &&
+          dispatch.status === 'OPEN' && (
+            <button
+              className="button small"
+              disabled={!canClaim(dispatch, now)}
+              onClick={() => onClaim(dispatch)}
+            >
+              {dispatch.search && !searchAllowsTake(dispatch.search, now)
+                ? 'Esperando actualización'
+                : expiredLocally
+                  ? 'Tiempo terminado'
+                  : 'TOMAR SERVICIO'}
+            </button>
+          )}
+        {releaseAllowed && canRelease(dispatch) && (
           <button
             className="button secondary destructive small"
             disabled={dispatch.assignment !== null}

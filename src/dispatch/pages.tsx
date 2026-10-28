@@ -1,3 +1,7 @@
+import { Link } from 'react-router-dom'
+import { FleetGate } from '../fleet/gate'
+import { FleetHistory } from '../fleet/pages'
+import { allows, useFleetPermission } from '../fleet/permissions'
 import { SearchStatus } from './SearchStatus'
 import { dispatchPollInterval } from './search'
 import { legacyProjection } from './rules'
@@ -73,16 +77,41 @@ export function ProviderServicesPage() {
     <>
       <PageTitle
         title="Servicios"
-        description="Servicios ofrecidos a tu proveedor. Mandaria confirma quién toma cada uno."
+        description="Operación e historial conforme al modo y permisos vigentes de tu flotilla."
       />
       <ProviderScope>
-        {(scope) => <ServicesBoard key={scope.providerId} scope={scope} />}
+        {(scope) => (
+          <FleetGate key={scope.providerId} providerId={scope.providerId}>
+            {(context) =>
+              context.operationMode === 'ADMIN_DISPATCH' ||
+              context.operationMode === 'DRAINING' ? (
+                <>
+                  <Link
+                    to={
+                      '/fleet-services?providerId=' +
+                      encodeURIComponent(scope.providerId)
+                    }
+                  >
+                    Envíos de mi flotilla
+                  </Link>
+                  <ServicesBoard scope={scope} />
+                </>
+              ) : allows(context, 'canObserveServices') ? (
+                <FleetHistory providerId={scope.providerId} />
+              ) : (
+                <p>Sin permiso de consulta.</p>
+              )
+            }
+          </FleetGate>
+        )}
       </ProviderScope>
     </>
   )
 }
 
 function ServicesBoard({ scope }: { scope: ProviderContext }) {
+  const claimAllowed = useFleetPermission('canClaim')
+  const releaseAllowed = useFleetPermission('canRelease')
   const [params, setParams] = useSearchParams()
   const tab: TabId = tabs.some((t) => t.id === params.get('tab'))
     ? (params.get('tab') as TabId)
@@ -199,7 +228,7 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
           si un servicio sigue disponible.
         </p>
       </div>
-      {claiming && (
+      {claiming && claimAllowed && (
         <ClaimDialog
           providerId={scope.providerId}
           dispatch={claiming}
@@ -210,7 +239,7 @@ function ServicesBoard({ scope }: { scope: ProviderContext }) {
           }}
         />
       )}
-      {releasing && (
+      {releasing && releaseAllowed && (
         <ReleaseDialog
           providerId={scope.providerId}
           dispatch={releasing}
@@ -227,11 +256,21 @@ export function ProviderServiceDetail() {
   return (
     <ProviderScope>
       {(scope) => (
-        <ServiceRecord
-          key={`${scope.providerId}:${id}`}
-          scope={scope}
-          id={id}
-        />
+        <FleetGate
+          key={scope.providerId + ':' + id}
+          providerId={scope.providerId}
+        >
+          {(context) =>
+            context.operationMode === 'ADMIN_DISPATCH' ||
+            context.operationMode === 'DRAINING' ? (
+              <ServiceRecord scope={scope} id={id} />
+            ) : allows(context, 'canObserveServices') ? (
+              <FleetHistory providerId={scope.providerId} dispatchId={id} />
+            ) : (
+              <p>Sin permiso de consulta.</p>
+            )
+          }
+        </FleetGate>
       )}
     </ProviderScope>
   )
@@ -293,6 +332,9 @@ function ServiceContent({
   dispatch: ProviderDispatch
   back: string
 }) {
+  const claimAllowed = useFleetPermission('canClaim')
+  const releaseAllowed = useFleetPermission('canRelease')
+  const deliverAllowed = useFleetPermission('canDeliver')
   const navigate = useNavigate()
   const now = useNow(dispatch.status === 'OPEN')
   const [claiming, setClaiming] = useState(false)
@@ -362,7 +404,9 @@ function ServiceContent({
           description={`${serviceTypeLabels[dispatch.serviceType] ?? 'Servicio'} · ${scope.name}`}
           back={back}
           action={
-            dispatch.access === 'OFFER' && dispatch.status === 'OPEN' ? (
+            claimAllowed &&
+            dispatch.access === 'OFFER' &&
+            dispatch.status === 'OPEN' ? (
               <button
                 className="button"
                 disabled={!canClaim(dispatch, now)}
@@ -372,7 +416,7 @@ function ServiceContent({
               </button>
             ) : mine && dispatch.status === 'CLAIMED' ? (
               <div className="row-actions">
-                {owner && (
+                {owner && releaseAllowed && (
                   <button
                     className="button secondary destructive"
                     disabled={active !== null}
@@ -386,7 +430,7 @@ function ServiceContent({
                     LIBERAR SERVICIO
                   </button>
                 )}
-                {deliverable && (
+                {deliverable && deliverAllowed && (
                   <button
                     className="button"
                     onClick={() => setDelivering(true)}
@@ -577,7 +621,7 @@ function ServiceContent({
             </section>
           </>
         )}
-        {claiming && (
+        {claiming && claimAllowed && (
           <ClaimDialog
             providerId={scope.providerId}
             dispatch={dispatch}
@@ -585,7 +629,7 @@ function ServiceContent({
             onClaimed={() => setClaiming(false)}
           />
         )}
-        {releasing && (
+        {releasing && releaseAllowed && (
           <ReleaseDialog
             providerId={scope.providerId}
             dispatch={dispatch}
@@ -596,7 +640,7 @@ function ServiceContent({
             }}
           />
         )}
-        {delivering && active && deliverable && (
+        {delivering && active && deliverable && deliverAllowed && (
           <DeliverDialog
             providerId={scope.providerId}
             dispatch={dispatch}

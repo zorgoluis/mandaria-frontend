@@ -1,0 +1,17 @@
+{
+  "backendVersion": "1.13.3",
+  "previousWebVersion": "1.13.1",
+  "publicOnlyVersionDifference": true,
+  "internal1132To1133OnlyVersionDifference": true,
+  "public1132To1133OnlyVersionDifference": true,
+  "administrativeSchemaEqual": true,
+  "route": "/api/v1/admin/fleet-assistance-cases/{id}/administrative-references/{section}",
+  "operations": 20,
+  "schemas": 50,
+  "servers": [
+    {
+      "url": "https://mandaria.com.mx",
+      "description": "Origen público confirmado por el propietario. Las rutas ya incluyen /api/v1; no añadir ese prefijo a servers.url."
+    }
+  ]
+}

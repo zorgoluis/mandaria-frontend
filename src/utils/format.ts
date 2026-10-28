@@ -31,6 +31,7 @@ export const labels: Record<string, string> = {
   SUPER_ADMIN: 'Superadministrador',
   PROVIDER_ADMIN: 'Administrador de proveedor',
   DRIVER: 'Repartidor',
+  CUSTOMER: 'Cliente',
   OWNER: 'Propietario',
   ADMIN: 'Administrador',
   CREATED: 'Creada',

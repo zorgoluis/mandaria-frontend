@@ -1,3 +1,6 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({ fleet: { context: vi.fn() } }))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -305,6 +308,7 @@ const dialog = () => within(screen.getByRole('dialog'))
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
   vi.mocked(providerCreditsAdmin.account).mockResolvedValue(account())
   vi.mocked(providerCreditsAdmin.ledger).mockResolvedValue(page([entry()]))
   vi.mocked(independentCreditsAdmin.account).mockResolvedValue(

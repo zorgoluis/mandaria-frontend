@@ -1,6 +1,23 @@
 # Mandaria — guía pública B2B
 
+## V1.18 — GPS y enlaces temporales (backend local, sin activar)
+
+[Contrato B2B y ejemplo completo](B2B-PUBLIC-GUIDE.md#v118--gps-y-enlaces-temporales-backend-local-sin-activar). Nuevos scopes explícitos `deliveries:location:read` y `deliveries:tracking-links:manage`, además de `deliveries:read`. GET de ubicación propia y gestión/reconciliación de un enlace destinatario. La posición usa `locationVersion` independiente de `publicVersion`; no es evidencia de custodia, entrega ni pago. Sin historial de recorridos ni nuevos webhooks. Flags false por defecto; resincronizar OpenAPI público, sin inferir disponibilidad remota. Límites técnicos no acreditan capacidad simultánea.
+
+## V1.17 — pagador del envío (implementación local, no activada)
+
+La integración conserva RECIPIENT por defecto. Sólo SUPER_ADMIN puede configurar REQUESTER; no hay override B2B por solicitud. shippingTerms se congela al emitir/crear y al convertir: REQUESTER requiere payerContact (name, phone, capacity REQUESTER o AUTHORIZED_REPRESENTATIVE) en la creación o en el envelope de conversión. El hash final proviene de la MDR convertida, no de MPQ si se añadió contacto. Modificación de política antes de convertir produce409 SHIPPING_POLICY_CHANGED; replays comprometidos mantienen términos originales.
+
+REQUESTER paga efectivo en recogida, personalmente o mediante representante presente. Aceptar exige customerAuthorization.version=2, shippingTermsVersion=1 y shippingTermsHash exacto junto con MQ/importe/moneda/vencimiento, incluso para solicitudes sin MPQ. RECIPIENT mantiene el contrato previo. La instrucción en conversión es eco validado, no permiso de cambiar política. El nuevo status.shippingPayment es null para historia sin términos o resume payer/method/dueAt/component/termsVersion/termsHash, importe/moneda de MQ aceptada, instructionStatus, evidenceStatus, declaredAt y collectShipping. No expone el contacto de pago. HISTORICAL y collectShipping=false tras cierre; DECLARED significa declaración humana, no comprobación bancaria. No ordenar por revision: comparar publicVersion por MDR.
+
+Directos CUSTOMER usan rutas y tokens humanos separados, excluidos de este contrato público. No hay nuevo webhook: delivery.completed conserva su payload y consulta reconcilia. No se automatiza devolución monetaria ni liquidación entre ejecutores.
+
+
 Contrato descargable: [openapi-b2b.json](openapi-b2b.json). Ejemplos ficticios; no representan una cuenta, precio garantizado o servicio disponible. Integración exclusivamente servidor a servidor: nunca guardar clientSecret ni el secreto de webhook en la app móvil o JavaScript público.
+
+## Búsqueda automática opcional después de aceptar
+
+Las integraciones habilitadas explícitamente pueden recibir hasta cinco rondas logísticas sobre la misma solicitud/cotización aceptada. Consultar `GET /api/v1/delivery-requests/{publicId}/status`: `search.state=SEARCHING` o `RETRY_PENDING` mantiene `status=OPEN`; no crear reemplazos por el contador local. La quinta ventana vencida sin toma informa EXPIRED/EXHAUSTED. Precio, consentimiento y vencimiento de MQ no se renuevan. Sin `search`, conserva el comportamiento legacy. [Contrato, ejemplos y operación](B2B-PUBLIC-GUIDE.md#búsqueda-automática-opcional-después-de-aceptar).
 
 ## Direcciones confirmadas
 
@@ -73,7 +90,7 @@ El JSON descargable contiene cuerpos y restricciones de emisión/conversión y e
 
 ## Vencimiento y nueva secuencia
 
-Si vence después de convertir, no recotizar esa MDR ni modificar precio/expiry. Cancelar la MDR anterior y confirmar **MDR CANCELLED con cancelledAt**, después **status CANCELLED/EXPIRED con deliveredAt null**. El 200 de cancelación no basta: una entrega física previa puede conservar estado público DELIVERED. Ante carrera cancelación/aceptación, consultar el resultado definitivo; no iniciar sucesor si el resultado es incierto o DELIVERED.
+Si la MQ OFFERED vence después de convertir y antes de aceptar, no recotizar esa MDR ni modificar precio/expiry. Cancelar la MDR anterior y confirmar **MDR CANCELLED con cancelledAt**, después **status CANCELLED/EXPIRED con deliveredAt null**. El 200 de cancelación no basta: una entrega física previa puede conservar estado público DELIVERED. Ante carrera cancelación/aceptación, consultar el resultado definitivo; no iniciar sucesor si el resultado es incierto o DELIVERED.
 
 Sólo entonces iniciar nueva MPQ → conversión → consentimiento sobre nueva MQ → aceptación. El integrador serializa por pedido y comprueba que siga vigente con el restaurante. `externalReference` NO es única y no impide por sí sola dos envíos. Reiniciar envío no exige otra transferencia de comida ni implica reembolso; la confirmación del restaurante y las devoluciones comerciales se gestionan fuera de Mandaria. No hay sustitución enlazada y atómica.
 
@@ -110,6 +127,6 @@ No se añaden webhooks. `delivery.completed` conserva contrato y sólo correspon
 
 ## Fotografía pública versionada — disponible en checkout QA, no desplegada
 
-GET status añade publicVersion (string decimal durable), trackingMode (LEGACY/DETAILED/null), assignmentState (NONE/ACTIVE/ENDED) y terminalOutcome (DELIVERED/RETURNED_TO_ORIGIN/CANCELLED/EXPIRED o null). Los campos anteriores se conservan. [Contrato, ejemplos, recuperación y límites](PUBLIC-B2B-TRACKING.md).
+GET status añade publicVersion (string decimal durable), trackingMode (LEGACY/DETAILED/null), assignmentState (NONE/ACTIVE/ENDED) y terminalOutcome (DELIVERED/RETURNED_TO_ORIGIN/CANCELLED/EXPIRED o null). Los campos anteriores se conservan. [Contrato, ejemplos, recuperación y límites](B2B-PUBLIC-GUIDE.md#fotografía-pública-versionada--disponible-en-checkout-qa-no-desplegada).
 
 Sondeo recomendado desde el backend integrador, compartiendo resultados: objetivo15s para entregas activas observadas, sin garantía de capacidad. A15s,4 solicitudes/min por MDR; límite actual100/min por IP/manejador, compartido y en memoria. Aplicar presupuesto agregado, jitter,429/Retry-After y backoff; detener sondeo continuo en terminal confirmado. No inferir legacy de campo ausente ni cobro de entrega física. delivery.completed mantiene su payload anterior; consultar status para obtener versión y reconciliar.

@@ -176,6 +176,11 @@ fieldset {
   display: flex;
   flex-direction: column;
   z-index: 20;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+.sidebar > * {
+  flex-shrink: 0;
 }
 .sidebar .brand {
   margin: 0 5px 45px;
@@ -1078,6 +1083,102 @@ dialog::backdrop {
 }
 .login-form .form-actions small {
   display: none;
+}
+.customer-location-picker {
+  min-width: 0;
+  margin-bottom: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--surface);
+}
+.customer-location-picker legend {
+  padding: 0 8px;
+  font-weight: 700;
+}
+.customer-location-picker legend svg {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.location-picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.location-picker-actions .button {
+  min-height: 44px;
+}
+.location-picker-results {
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.location-picker-results button {
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+.location-picker-results button:hover {
+  background: #edf5f3;
+}
+.location-picker-map {
+  height: 300px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.location-picker-selection {
+  padding: 16px;
+  background: #edf5f3;
+  border-radius: 8px;
+  margin: 16px 0;
+  overflow-wrap: anywhere;
+}
+.location-picker-selection p {
+  margin: 8px 0;
+}
+.login-recovery {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -12px;
+}
+.login-recovery a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.login-recovery a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.login-registration {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.login-registration h3 {
+  margin-bottom: 8px;
+}
+.login-registration p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.login-registration .button {
+  width: 100%;
+  min-height: 44px;
+}
+.login-form > .login-invitation {
+  margin: 20px 0 0;
+  font-size: 12px;
 }
 .password-field {
   display: flex;
@@ -2772,3 +2873,65 @@ dialog .money-block {
 .onboarding-steps svg {
   vertical-align: -2px;
 }
+
+.customer-public {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 24px;
+}
+.customer-public fieldset {
+  min-width: 0;
+}
+
+.customer-panel,
+.shipping-policy {
+  padding: 24px;
+  margin-block: 20px;
+}
+.customer-area {
+  max-width: 1050px;
+}
+.customer-area input[type='checkbox'],
+.customer-public input[type='checkbox'],
+.shipping-policy input[type='checkbox'] {
+  width: auto;
+  align-self: flex-start;
+}
+.customer-area fieldset {
+  min-width: 0;
+}
+.customer-area h2,
+.shipping-policy h2 {
+  margin-bottom: 16px;
+}
+.customer-area .form-fields > fieldset {
+  border: 1px solid #dfe7e6;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.shared-tracking {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 48px);
+}
+.location-panel {
+  padding: 24px;
+  margin-block: 20px;
+  overflow-wrap: anywhere;
+}
+.location-panel .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.location-panel input[readonly] {
+  width: 100%;
+  min-width: 0;
+}
+.location-panel button {
+  margin-block: 8px;
+  white-space: normal;
+}
+.location-map { width: 100%; height: 320px; border-radius: 12px; }
+.location-map-panel { margin-block: 1rem; }

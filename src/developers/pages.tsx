@@ -5,8 +5,24 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { env } from '../config/env'
 import trackingGuide from './tracking.md?raw'
+import locationGuide from './location.md?raw'
 
 const assets = '/developers/assets/'
+const httpMethods = new Set([
+  'get',
+  'post',
+  'put',
+  'patch',
+  'delete',
+  'head',
+  'options',
+  'trace',
+])
+const headingId = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}_\-\s]/gu, '')
+    .replace(/ /g, '-')
 const downloads = [
   'openapi-b2b.json',
   'B2B-PUBLIC-GUIDE.md',
@@ -55,6 +71,8 @@ const nav = [
   ['authentication', 'Autenticación y scopes'],
   ['prequotes', 'Precotización y aceptación'],
   ['execution', 'Progreso y resultado'],
+  ['search', 'Búsqueda automática'],
+  ['location', 'GPS y enlaces temporales'],
   ['webhooks', 'Webhooks'],
   ['errors', 'Errores e idempotencia'],
   ['reference', 'Referencia API'],
@@ -109,6 +127,35 @@ export function DeveloperPortal() {
               element={<Guide title="Webhooks" file="B2B-WEBHOOKS.md" />}
             />
             <Route path="reference" element={<Reference />} />
+            <Route
+              path="search"
+              element={
+                <Guide
+                  title="Búsqueda automática opcional"
+                  section="Búsqueda automática opcional después de aceptar"
+                />
+              }
+            />
+            <Route
+              path="location"
+              element={
+                <article className="developer-prose">
+                  <h1>GPS y enlaces temporales</h1>
+                  <Markdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ children }) => (
+                        <div className="table-scroll">
+                          <table>{children}</table>
+                        </div>
+                      ),
+                    }}
+                  >
+                    {locationGuide}
+                  </Markdown>
+                </article>
+              }
+            />
             <Route
               path="execution"
               element={
@@ -171,8 +218,9 @@ function Intro() {
         implícito.
       </p>
       <p>
-        API pública confirmada: <code>https://mandaria.com.mx/api/v1</code>.
-        Portal: <code>https://mandaria.com.mx/developers</code>. Publicar la
+        Origen documentado, disponibilidad remota por confirmar:{' '}
+        <code>https://mandaria.com.mx/api/v1</code>. Portal:{' '}
+        <code>https://mandaria.com.mx/developers</code>. Publicar la
         documentación no activa capacidades ni envíos. Consulta el servidor
         incluido en el JSON en la referencia API antes de importarlo.
       </p>
@@ -232,11 +280,21 @@ function Guide({
           remarkPlugins={[remarkGfm]}
           skipHtml
           components={{
+            h2: ({ children }) => (
+              <h2 id={headingId(String(children))}>{children}</h2>
+            ),
             a: ({ href, children }) => {
               if (href === 'B2B-WEBHOOKS.md')
                 return <Link to="/developers/webhooks">{children}</Link>
               if (href === 'PUBLIC-B2B-TRACKING.md')
                 return <Link to="/developers/execution">{children}</Link>
+              if (href?.startsWith('B2B-PUBLIC-GUIDE.md#')) {
+                if (decodeURI(href).includes('#fotografía-'))
+                  return <Link to="/developers/execution">{children}</Link>
+                if (decodeURI(href).includes('#búsqueda-'))
+                  return <Link to="/developers/search">{children}</Link>
+                return <Link to="/developers/location">{children}</Link>
+              }
               return href && downloads.includes(href) ? (
                 <a href={assets + href} download>
                   {children}
@@ -366,8 +424,8 @@ function Reference() {
       </p>
       <p>
         Origen configurado: <code>{env.apiUrl}</code>. Origen público
-        confirmado: <code>https://mandaria.com.mx</code>. Las rutas del contrato
-        ya incluyen
+        documentado (disponibilidad remota por confirmar):{' '}
+        <code>https://mandaria.com.mx</code>. Las rutas del contrato ya incluyen
         <code> /api/v1</code>; no añadas ese prefijo al servidor del JSON.
       </p>
       {query.data && (
@@ -402,32 +460,43 @@ function Reference() {
             Contrato revisado de backend · Versión {query.data.info.version}. La
             versión de paquete no acredita habilitación operativa.
           </p>
+          <p>
+            {Object.values(query.data.paths).reduce(
+              (n, methods) =>
+                n +
+                Object.keys(methods).filter((m) => httpMethods.has(m)).length,
+              0,
+            )}{' '}
+            operaciones públicas (método + ruta).
+          </p>
           {Object.entries(query.data.paths).flatMap(([path, methods]) =>
-            Object.entries(methods).map(([method, op]) => (
-              <details className="developer-operation" key={method + path}>
-                <summary>
-                  <strong>{method.toUpperCase()}</strong> <code>{path}</code>
-                </summary>
-                <h2>{op.summary}</h2>
-                <p>{op.description}</p>
-                <p>
-                  Scopes:{' '}
-                  {op['x-scopes']?.join(', ') ||
-                    'Consulta los requisitos de autenticación de la operación.'}
-                </p>
-                <CopyCode>
-                  {JSON.stringify(
-                    {
-                      parameters: op.parameters,
-                      requestBody: op.requestBody,
-                      responses: op.responses,
-                    },
-                    null,
-                    2,
-                  )}
-                </CopyCode>
-              </details>
-            )),
+            Object.entries(methods)
+              .filter(([method]) => httpMethods.has(method))
+              .map(([method, op]) => (
+                <details className="developer-operation" key={method + path}>
+                  <summary>
+                    <strong>{method.toUpperCase()}</strong> <code>{path}</code>
+                  </summary>
+                  <h2>{op.summary}</h2>
+                  <p>{op.description}</p>
+                  <p>
+                    Scopes:{' '}
+                    {op['x-scopes']?.join(', ') ||
+                      'Consulta los requisitos de autenticación de la operación.'}
+                  </p>
+                  <CopyCode>
+                    {JSON.stringify(
+                      {
+                        parameters: op.parameters,
+                        requestBody: op.requestBody,
+                        responses: op.responses,
+                      },
+                      null,
+                      2,
+                    )}
+                  </CopyCode>
+                </details>
+              )),
           )}
           <h2>Esquemas</h2>
           {Object.entries(query.data.components.schemas).map(

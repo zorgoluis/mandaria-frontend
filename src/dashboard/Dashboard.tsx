@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import {
   ArrowUpRight,
   Building2,
@@ -21,7 +21,9 @@ import { partnerApplications } from '../partner-applications/service'
 import { partnerApplicationKeys } from '../partner-applications/queries'
 export function Dashboard() {
   const { user } = useAuth()
-  return user?.role === 'SUPER_ADMIN' ? (
+  return user?.role === 'CUSTOMER' ? (
+    <Navigate to="/customer" replace />
+  ) : user?.role === 'SUPER_ADMIN' ? (
     <AdminDashboard />
   ) : user?.role === 'PROVIDER_ADMIN' ? (
     <>

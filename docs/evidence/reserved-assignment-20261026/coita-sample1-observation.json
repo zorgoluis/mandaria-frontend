@@ -1,0 +1,28 @@
+{
+  "orderId": "cb9609f4-c9b5-40a3-8dce-148f1aa9db2d",
+  "progress": {
+    "publicVersion": "13",
+    "status": "ASSIGNED",
+    "trackingMode": "DETAILED",
+    "assignmentState": "ACTIVE",
+    "phase": "PICKED_UP",
+    "attentionRequired": false,
+    "terminalOutcome": null
+  },
+  "locationVersion": "11",
+  "assignmentGeneration": "4",
+  "availability": "AVAILABLE",
+  "reason": null,
+  "pointMatches": false,
+  "sampleTimes": {
+    "capturedAt": "2026-10-27T04:48:16.343Z",
+    "receivedAt": "2026-10-27T04:48:30.685Z",
+    "freshUntil": "2026-10-27T04:49:16.343Z",
+    "eraseAfter": "2026-10-27T04:58:16.343Z"
+  },
+  "observation": {
+    "evaluatedAt": "2026-10-27T04:50:25.689Z",
+    "freshness": "STALE",
+    "projectedAt": "2026-10-27T04:50:25.697Z"
+  }
+}

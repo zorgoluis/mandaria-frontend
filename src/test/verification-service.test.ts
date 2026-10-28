@@ -53,7 +53,10 @@ it('publication returns its own receipt without a case id and recovers through d
   const f = vi
     .spyOn(globalThis, 'fetch')
     .mockResolvedValueOnce(Response.json(receipt))
-    .mockResolvedValue(Response.json({ state: 'ABSENT' }))
+    // A body is readable once: each attempt query needs its own response.
+    .mockImplementation(() =>
+      Promise.resolve(Response.json({ state: 'ABSENT' })),
+    )
   const marker = { ...m, operation: 'PUBLISH_TERMS' as const, target: 'POLICY' }
   await expect(
     verification.command(marker, '/admin/verification-terms/publications', {}),

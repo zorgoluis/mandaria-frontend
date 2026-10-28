@@ -68,6 +68,27 @@ it('restricted projection is kept separately, strips unauthorized identity field
     sessionIdentity({ accessMode: 'UNKNOWN', identity: { id: actor } }),
   ).toThrow()
 })
+it('standard projection accepts CUSTOMER and rejects unknown roles', () => {
+  const identity = {
+    id: actor,
+    email: 'cliente@example.test',
+    role: 'CUSTOMER',
+    active: true,
+    emailVerifiedAt: null,
+    createdAt: '2026-10-01T00:00:00.000Z',
+    updatedAt: '2026-10-01T00:00:00.000Z',
+  }
+  expect(sessionIdentity({ accessMode: 'STANDARD', identity })).toEqual({
+    accessMode: 'STANDARD',
+    identity,
+  })
+  expect(() =>
+    sessionIdentity({
+      accessMode: 'STANDARD',
+      identity: { ...identity, role: 'GUEST' },
+    }),
+  ).toThrow()
+})
 it.each([
   '/dashboard',
   '/admin/privacy/deletion',

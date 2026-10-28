@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-26T03:34:43.226Z",
+  "scope": "Built local portal only; external network/API blocked; no backend operations",
+  "checks": [],
+  "forbidden": [],
+  "errors": [],
+  "downloads": [],
+  "complete": false,
+  "failure": "expect(locator).toBeFocused() failed\n\nLocator:  getByRole('link', { name: 'Saltar al contenido' })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('link', { name: 'Saltar al contenido' }) with timeout 5000ms\n  - waiting for getByRole('link', { name: 'Saltar al contenido' })\n    13 × locator resolved to <a class=\"developer-skip\" href=\"#developer-content\">Saltar al contenido</a>\n       - unexpected value \"inactive\"\n"
+}

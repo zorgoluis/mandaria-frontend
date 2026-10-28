@@ -1,0 +1,101 @@
+{
+  "frontendBaseline": "e395929",
+  "backendBaseline": "b97b9d1be54a2c37601e51990d66ccaf73d0203f",
+  "database": [
+    {
+      "db": "mandaria_v118_web_20261007_test",
+      "version": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit"
+    }
+  ],
+  "migrations": [
+    {
+      "migration_name": "20261007000100_location_tracking"
+    },
+    {
+      "migration_name": "20261007000200_location_policy_epoch"
+    }
+  ],
+  "backendLocationDistSha256": "68b142d137ad8da653b429fed840bab6ff2920261a9addd64d169a5201033704",
+  "frontendTests": {
+    "uniquePassed": 177,
+    "locationCases": 29,
+    "files": 7
+  },
+  "realBrowser": {
+    "results": [
+      {
+        "name": "Owner real TO_PICKUP location and accuracy",
+        "result": "PASS"
+      },
+      {
+        "name": "Real shared link anonymous; fragment removed; recipient hidden before pickup",
+        "result": "PASS"
+      },
+      {
+        "name": "Recipient sees real GPS only after PICKED_UP",
+        "result": "PASS"
+      },
+      {
+        "name": "Reload cannot restore shared token; mobile and keyboard",
+        "result": "PASS"
+      },
+      {
+        "name": "Real lost issuance and reload => APPLIED_SECRET_UNAVAILABLE without replay",
+        "result": "PASS"
+      },
+      {
+        "name": "Real revoke response loss => APPLIED_REVOKED and current metadata",
+        "result": "PASS"
+      },
+      {
+        "name": "Reopen original fragment in same document after reload (regression)",
+        "result": "PASS"
+      },
+      {
+        "name": "Real revoked link: generic error and GPS withdrawn",
+        "result": "PASS"
+      },
+      {
+        "name": "Real PENDING_OR_UNKNOWN survives reload without retransmission",
+        "result": "PASS"
+      },
+      {
+        "name": "Real technical revoke fences delayed ISSUE; SUPERSEDED then late POST409",
+        "result": "PASS"
+      },
+      {
+        "name": "Real browser storage privacy and no pageerror",
+        "result": "PASS"
+      }
+    ],
+    "mechanism": "Actual Nest and PostgreSQL. Proxy truncates real responses or holds the original request before forwarding. No Playwright API fixtures.",
+    "intermediateFailure": [
+      {
+        "step": "lost revocation",
+        "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText(/El enlace no está disponible/) to be visible\u001b[22m\n"
+      }
+    ],
+    "correction": "Consume reopened fragment on hashchange; final browser regression passed.",
+    "finalErrors": [],
+    "physicalOperations": false,
+    "externalServices": false
+  },
+  "quality": {
+    "types": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "warning": "Existing main chunk >500kB"
+  },
+  "limitations": [
+    "No configured cartographic map",
+    "APP DRIVER not implemented",
+    "Transfer/incident/terminal and exact expiry: frontend fixtures, not new real browser runs",
+    "No deployed hosting, capacity or GPS-device validation"
+  ],
+  "evidence": [
+    "test-results/v118-real/owner-desktop.png",
+    "test-results/v118-real/recipient-mobile.png",
+    "test-results/v118-real/owner-reconciled.png",
+    "test-results/v118-real/revoked-mobile.png"
+  ]
+}

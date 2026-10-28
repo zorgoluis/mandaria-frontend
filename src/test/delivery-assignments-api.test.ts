@@ -183,6 +183,8 @@ it('labels assignments, reasons and availability without inventing presence', ()
     CANCELLED: 'Cancelado',
     // V1.11: a successful close, never confused with a cancellation.
     COMPLETED: 'Entrega completada',
+    RETURNED: 'Devuelto al origen',
+    TRANSFERRED: 'Custodia transferida',
   })
   expect(endReasonLabels.DELIVERY_CANCELLED).toBe('El servicio fue cancelado')
   // V1.8 has no realtime presence: a driver is never described as online.

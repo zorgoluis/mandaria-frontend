@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-06",
+  "frontendBaseline": "e90ca6c",
+  "backendBaseline": "609f6970535ff48237046dd91f74e60cb408c4d9",
+  "backend": "local A–E and migration40 implementation, not a deployed release",
+  "database": "mandaria_v117_browser_20261006_test",
+  "postgres": "18.6 at 127.0.0.1:65063",
+  "migration": "20261006000300_human_command_reconciliation",
+  "chain": "Chromium -> Vite4178 -> HTTP transport proxy43172 -> real Nest43171 -> PostgreSQL65063",
+  "adapters": {
+    "routing": "backend local_fake (actual durable admission, pricing and transaction services)",
+    "mail": "backend local_outbox in private temporary directory"
+  },
+  "passed": [
+    {
+      "name": "1 Registro, confirmación desde correo local y acceso PERSONAL",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/initial-results.json"
+    },
+    {
+      "name": "2 PERSONAL: cotización, conversión, consentimiento y consulta",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/initial-results.json"
+    },
+    {
+      "name": "7 Consentimiento desde sesión limpia con MDR propia y sin vínculo MPQ local",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/initial-results.json"
+    },
+    {
+      "name": "3 Segunda solicitud PERSONAL bloqueada; cancelación legal confirmada",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/business-defect-results.json"
+    },
+    {
+      "name": "4 BUSINESS: dos solicitudes simultáneas y pagadores REQUESTER/RECIPIENT",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "name": "5 Respuesta MPQ aplicada perdida, recarga sin cuerpo y recuperación APPLIED",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "name": "6 Cierre explícito, timeout real, bloqueo/reload y rechazo del POST original tardío",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "name": "8 Recibo REQUESTER original separado de política RECIPIENT posterior",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/results.json"
+    },
+    {
+      "name": "9 Cambio de cliente/administrador conserva marcador sin acceso a intento ajeno",
+      "result": "PASS",
+      "evidence": "test-results/v117-browser-real/results.json"
+    }
+  ],
+  "intermediate": [
+    {
+      "name": "3 personal limit and cancel",
+      "result": "FAIL",
+      "errorType": "TimeoutError",
+      "evidence": "test-results/v117-browser-real/initial-results.json"
+    },
+    {
+      "name": "4 business multiple payers",
+      "result": "FAIL",
+      "errorType": "TimeoutError",
+      "evidence": "test-results/v117-browser-real/business-defect-results.json"
+    },
+    {
+      "name": "9 admin switch",
+      "result": "FAIL",
+      "errorType": "TimeoutError",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    }
+  ],
+  "faults": [
+    {
+      "method": "POST",
+      "path": "/api/v1/customer/delivery-prequotes",
+      "status": 201,
+      "mode": "lose",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/customer/command-attempt",
+      "status": 200,
+      "state": "APPLIED",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/customer/command-attempt",
+      "status": 200,
+      "state": "PENDING_OR_UNKNOWN",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/customer/command-attempt",
+      "status": 200,
+      "state": "PENDING_OR_UNKNOWN",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/customer/command-attempt/close",
+      "status": 200,
+      "state": "CLOSED_NO_EFFECTS",
+      "mode": "timeout",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/customer/command-attempt",
+      "status": 200,
+      "state": "CLOSED_NO_EFFECTS",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/customer/delivery-prequotes",
+      "status": 409,
+      "code": "COMMAND_ATTEMPT_CLOSED",
+      "mode": "delay-request",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/customer/command-attempt",
+      "status": 200,
+      "state": "CLOSED_NO_EFFECTS",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/integrations/0601e61a-359b-497b-9aee-f8e077b3e03e/shipping-policy",
+      "status": 200,
+      "mode": "lose",
+      "evidence": "test-results/v117-browser-real/transport-results.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/integrations/0601e61a-359b-497b-9aee-f8e077b3e03e/shipping-policy",
+      "status": 200,
+      "mode": "partial-response",
+      "keyHash": "9a9a958adfc2d85ac482993c1080a2d2be69f005767552dfa649a822b58f77b1",
+      "evidence": "test-results/v117-browser-real/results.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/integrations/0601e61a-359b-497b-9aee-f8e077b3e03e/shipping-policy/attempt",
+      "status": 200,
+      "state": "APPLIED",
+      "policy": {
+        "payer": "REQUESTER",
+        "revision": 4
+      },
+      "keyHash": "9a9a958adfc2d85ac482993c1080a2d2be69f005767552dfa649a822b58f77b1",
+      "evidence": "test-results/v117-browser-real/results.json"
+    }
+  ],
+  "databaseAudit": {
+    "requests": [
+      {
+        "publicId": "MDR-000001",
+        "type": "PERSONAL",
+        "status": "CANCELLED",
+        "payer": "REQUESTER",
+        "dueAt": "PICKUP",
+        "lifecycleClosed": true
+      },
+      {
+        "publicId": "MDR-000002",
+        "type": "BUSINESS",
+        "status": "CREATED",
+        "payer": "REQUESTER",
+        "dueAt": "PICKUP",
+        "lifecycleClosed": false
+      },
+      {
+        "publicId": "MDR-000003",
+        "type": "BUSINESS",
+        "status": "CREATED",
+        "payer": "RECIPIENT",
+        "dueAt": "DELIVERY",
+        "lifecycleClosed": false
+      }
+    ],
+    "assignments": 0,
+    "shippingCollections": 0,
+    "b2bEvents": 0
+  },
+  "quality": {
+    "testsPassed": 87,
+    "testFiles": 4,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "buildWarning": "Root chunk658.10kB"
+  },
+  "hashes": {
+    "src/customer/pages.tsx": "2fe2133d44d6eb9d603081159c01824cf1eb91ffd4941e25e40ecff6be13e398",
+    "src/services/api.ts": "441d935682d3a8ecebc16a1d00aac858125262af1233e1a26f70531f91658d28",
+    "scripts/customer-real-harness.mjs": "d6cdbd6fe0467d747be36fc21344dfd49a49a8b4d4458909cd99cff466c706d3",
+    "scripts/verify-customer-real.mjs": "d7fb2e1faf0f8d6169082238647da5366e8283aa98068eb2fefd046840cf36fc"
+  },
+  "limitations": [
+    "Scenarios completed across resumed runs, not one uninterrupted all-green run.",
+    "No external mail or routing provider, mobile real-backend run, physical collection or delivery.",
+    "Abrupt close before headers caused a Chromium transport retry; final policy case uses partial actual response until client timeout, one POST proven by original-key hash.",
+    "No full A–E certification or activation."
+  ]
+}

@@ -1,0 +1,978 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-operation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-services/71b11458-c517-4e14-904b-3147a97cd402"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-services/71b11458-c517-4e14-904b-3147a97cd402"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-services/71b11458-c517-4e14-904b-3147a97cd402"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/c1ebd961-fd0c-4ca5-a0cd-d28bee849b3f"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-services/71b11458-c517-4e14-904b-3147a97cd402"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-declarations"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/13246ea2-f561-47ad-bc43-18d1c94ee207"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/13246ea2-f561-47ad-bc43-18d1c94ee207"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/13246ea2-f561-47ad-bc43-18d1c94ee207"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/disputes"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/bdc7ad2e-4371-4e45-9b88-2a4233ceb0e4"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-declarations"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/99874b6e-c05d-4e1b-bcc2-e03c0805e0f0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/fleet-assistance-attempts/99874b6e-c05d-4e1b-bcc2-e03c0805e0f0/close"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/99874b6e-c05d-4e1b-bcc2-e03c0805e0f0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/contributions"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/74161b73-032c-44c3-8ef4-c1cab5f66465"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/contributions"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/da10e7a7-3243-4519-8b56-4d02ed403c19"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/99d5b610-6dec-4826-97c8-b350d412bff7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence-uploads"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/682844f7-2929-4614-9d67-042912afa750"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/682844f7-2929-4614-9d67-042912afa750"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/682844f7-2929-4614-9d67-042912afa750"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/682844f7-2929-4614-9d67-042912afa750"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence-uploads/18cc39a8-f13f-4281-a678-eb50e96b9968/access"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/682844f7-2929-4614-9d67-042912afa750"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/b8bd8ad4-6c92-4692-ad86-14a4cc9e050c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/b8bd8ad4-6c92-4692-ad86-14a4cc9e050c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/b8bd8ad4-6c92-4692-ad86-14a4cc9e050c"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/84ad85aa-4b78-4103-b220-3ed4850225dc"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence/a79cf084-3650-475e-9cef-a83e2d389681/content"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/custody-incidents"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/evidence/a79cf084-3650-475e-9cef-a83e2d389681/content"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/custody-incidents"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/5092a2f9-7917-41ea-bcf0-4a717d898d81"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7/reviews"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/35374950-90b6-4213-90be-60457d74c7a4"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7/reviews"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/e9b32cca-be81-42f6-8ba7-1e54fa522777"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7/reviews"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/e54294b8-d9be-4058-b639-1624b01a7199"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7/apply"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/9d8edaeb-3577-4b47-9de1-5c999d6caaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/close"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/aee2f2c1-0713-4aab-a06f-a58470d6f35b"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/aee2f2c1-0713-4aab-a06f-a58470d6f35b"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/contributions"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/de9a007c-7a49-4343-a1fe-f0cef9f75f92"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/fleet-assistance-attempts/de9a007c-7a49-4343-a1fe-f0cef9f75f92/close"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/de9a007c-7a49-4343-a1fe-f0cef9f75f92"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/dispatches/71b11458-c517-4e14-904b-3147a97cd402/assignments"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/proposals/06b50fe3-e6ba-43d6-8443-3af60b2fdaa7"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/74161b73-032c-44c3-8ef4-c1cab5f66465"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/74161b73-032c-44c3-8ef4-c1cab5f66465"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/eb2678b7-a78e-4178-8932-dc394751a2a7/movement-context"
+  }
+]

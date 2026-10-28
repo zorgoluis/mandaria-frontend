@@ -1,3 +1,4 @@
+import { IndependentOfferZones } from '../independent-zones/panel'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -427,6 +428,7 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
         ownerName={profile.driver.name}
         missingDescription="Este repartidor todavía no tiene cuenta propia de créditos: la recibe al aprobarse su habilitación independiente. No es un saldo en cero."
       />
+      <IndependentOfferZones profileId={profile.id} />
       <IndependentVehicles driverId={profile.driverId} />
       {closing && (
         <CloseDialog

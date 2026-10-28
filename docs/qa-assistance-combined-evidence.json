@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-26",
+  "timezone": "America/Mexico_City",
+  "branch": "QA",
+  "head": "59249641962c6074e817e2277a98e4d3af540515",
+  "webVersion": "1.11.0",
+  "initialWorkingTree": "clean",
+  "commits": {
+    "EXISTING_RELEASE": "79e938db6c030150d4d287690571260521d3ed6f",
+    "ACCESS_RECOVERED": "f52b782ed792332dc845977c38cefb2653f8634c",
+    "UNREACHABLE": "59249641962c6074e817e2277a98e4d3af540515"
+  },
+  "freshChecks": [
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": 1597,
+      "testFiles": 79,
+      "durationSeconds": 110.08,
+      "log": "global.txt"
+    },
+    {
+      "command": "npm run typecheck:test",
+      "exitCode": 0,
+      "log": "types.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "log": "lint.txt"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "build.txt",
+      "warning": "Existing chunk >500 kB"
+    }
+  ],
+  "logDirectory": "docs/evidence/qa-assistance-combined-2026-10-26",
+  "hashes": [
+    {
+      "path": "docs/evidence/qa-assistance-combined-2026-10-26/global.txt",
+      "sha256": "ab5cdd97b1105b11a1c76a88383d67f6c907e5f544cb098e5b96f522801d7a7c"
+    },
+    {
+      "path": "docs/evidence/qa-assistance-combined-2026-10-26/types.txt",
+      "sha256": "72a31669e3055c77bc527272330cce8d3f57cbacbe4ce8e2c67e2fec8683c5b0"
+    },
+    {
+      "path": "docs/evidence/qa-assistance-combined-2026-10-26/lint.txt",
+      "sha256": "1b882ecabc061f04aff9c631b2766f80f89a23da75c2e557e53276afc0ef49cb"
+    },
+    {
+      "path": "docs/evidence/qa-assistance-combined-2026-10-26/build.txt",
+      "sha256": "da4c6885dba9204ae0f92dfb5d2267bb1984f56e555e94c8649d39541f4ad851"
+    }
+  ],
+  "executionNotes": [
+    "Full global suite, unchanged Vitest configuration and deadlines.",
+    "npm test ran outside sandbox due to previously documented temporary-file ENOENT; no new failed run.",
+    "Logs normalized to UTF-8/LF and trailing whitespace removed; results preserved."
+  ],
+  "historicalHttp": {
+    "rerunThisTask": false,
+    "reports": [
+      "docs/existing-release-web-evidence.json",
+      "docs/access-recovered-web-evidence.json",
+      "docs/unreachable-release-web-evidence.json"
+    ],
+    "lastCombinedCheckCount": 16
+  },
+  "correctionsRequired": false,
+  "productChanges": false,
+  "backendOrMobileChanges": false,
+  "versionChanged": false,
+  "commitCreated": false,
+  "push": false,
+  "deployment": false,
+  "limits": [
+    "Web mocked tests do not constitute a new HTTP execution or Android UI verification.",
+    "Historical HTTP coverage limits remain: exhaustive proofSource combinations, approval expiration/revocation, custody/economics and remote operation."
+  ],
+  "commitReview": {
+    "date": "2026-10-26",
+    "baseCommit": "59249641962c6074e817e2277a98e4d3af540515",
+    "verifiedLogHashes": 4,
+    "findings": [],
+    "testsRerun": false,
+    "resultsReusedFromPreviousVerification": true,
+    "localCommitAuthorized": true,
+    "versionChanged": false,
+    "push": false,
+    "deployment": false
+  }
+}

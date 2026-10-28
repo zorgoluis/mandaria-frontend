@@ -1,3 +1,5 @@
+import { FleetContext } from '../fleet/permissions'
+import { fleetContext } from './fleet-fixture'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -89,7 +91,9 @@ function mount(
         <MemoryRouter initialEntries={[path]}>
           <FeedbackProvider>
             <ExecutionRecovery />
-            {children}
+            <FleetContext.Provider value={fleetContext()}>
+              {children}
+            </FleetContext.Provider>
           </FeedbackProvider>
         </MemoryRouter>
       </AuthContext.Provider>
@@ -191,7 +195,9 @@ it('keeps legacy without invented progress', async () => {
     <ExecutionPanel scope={{ surface: 'admin', dispatchId: 'dispatch' }} />,
     'SUPER_ADMIN',
   )
-  expect(await screen.findByText(/Sin proyección detallada confirmada/)).toBeInTheDocument()
+  expect(
+    await screen.findByText(/Sin proyección detallada confirmada/),
+  ).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Registrar:/ })).toBeNull()
 })
 it('SUPER_ADMIN cannot advance even with an inconsistent allowedActions response', async () => {
@@ -808,4 +814,69 @@ it('receipt lookup refuses a different actor', async () => {
     }),
   )
   expect(screen.getByText('Incidencia anterior')).toBeInTheDocument()
+})
+
+it.each(['DELIVERED', 'RETURNED'] as const)(
+  'highlights only the final custody state %s while preserving all phases',
+  (custodyStatus) => {
+    const { container } = mount(
+      <ExecutionProgress
+        execution={{
+          ...executionFixture,
+          phase: 'AT_DROPOFF',
+          custodyStatus,
+          activeAssignmentId: null,
+          allowedActions: [],
+          revision: 7,
+        }}
+      />,
+    )
+    const current = container.querySelectorAll('[aria-current="step"]')
+    expect(current).toHaveLength(1)
+    expect(current[0]).toHaveTextContent(
+      custodyStatus === 'DELIVERED'
+        ? 'Entrega confirmada · Entregado'
+        : 'Sin entrega al destinatario · Devuelto al origen',
+    )
+    expect(screen.queryByText(/Fase actual/)).toBeNull()
+    expect(screen.getByText('En el destino').closest('li')).not.toHaveAttribute(
+      'aria-current',
+    )
+    expect(container.querySelectorAll('.execution-phases li')).toHaveLength(6)
+    if (custodyStatus === 'RETURNED')
+      expect(screen.queryByText('Entrega confirmada · Entregado')).toBeNull()
+  },
+)
+it('keeps AT_DROPOFF current without inferring delivery from absent assignment or actions', () => {
+  const { container, rerender } = render(
+    <ExecutionProgress
+      execution={{
+        ...executionFixture,
+        phase: 'AT_DROPOFF',
+        custodyStatus: 'HELD',
+        activeAssignmentId: null,
+        allowedActions: [],
+      }}
+    />,
+  )
+  expect(container.querySelector('[aria-current="step"]')).toHaveTextContent(
+    'En el destino · Fase actual',
+  )
+  expect(
+    screen.getByText('Entrega al destinatario · Sin confirmar'),
+  ).not.toHaveAttribute('aria-current')
+  rerender(
+    <ExecutionProgress
+      execution={{
+        ...executionFixture,
+        phase: 'AT_DROPOFF',
+        custodyStatus: 'DELIVERED',
+      }}
+    />,
+  )
+  expect(container.querySelectorAll('[aria-current="step"]')).toHaveLength(1)
+  expect(container.querySelector('[aria-current="step"]')).toHaveTextContent(
+    'Entrega confirmada · Entregado',
+  )
+  expect(screen.queryByText(/Fase actual/)).toBeNull()
 })

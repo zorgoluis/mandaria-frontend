@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-06",
+  "frontendBaseline": "e90ca6c",
+  "frontendBranch": "codex/merge-main-qa",
+  "backendBaseline": "609f6970535ff48237046dd91f74e60cb408c4d9",
+  "backend": "local working implementation A–E and reconciliation, not a deployed release",
+  "node": "v24.15.0",
+  "postgres": "18.6 loopback 127.0.0.1:65063",
+  "database": "mandaria_frontend_reconciliation_20261006_test",
+  "template": "mandaria_v117_recovery2_clean_test",
+  "migration": "20261006000300_human_command_reconciliation",
+  "hashes": {
+    "docs/openapi.json": "9d329cd18e5a8728bc443f13de55ae4fc3d64291c12297f0728208fba32c842e",
+    "docs/V1.17-COMMAND-RECONCILIATION.md": "60013dd56a3f09f754f4a850f041d81fd4ee007d3890576c3ca4bcb64b8d8078",
+    "src/customers/command-attempts.service.ts": "740805e0a88e06e4056f37d5c81d90e482190b68227b408d86264aab520f26c4",
+    "dist/customers/command-attempts.service.js": "f9a2485dc89319df2fabfca50add46451cb26dedd5097699bbf39cb703afd353",
+    "test/direct-demand.e2e-spec.ts": "69330309e5fbf94ee94eb142a6cece5e0a64118dc942d81802df44e1b849fca1"
+  },
+  "reports": [
+    {
+      "report": "test-results/v117-real-reconciliation.json",
+      "success": true,
+      "passed": 4,
+      "cases": [
+        "V1.17 direct demand, quota, shipping declaration and durable recovery recovers original create, conversion and acceptance after response loss and app restart without bodies",
+        "V1.17 direct demand, quota, shipping declaration and durable recovery GET is read only; explicit close fences delayed create, conversion and acceptance without freeing quota",
+        "V1.17 direct demand, quota, shipping declaration and durable recovery policy recovery proves original audit revision after later change; scope and late POST are fenced",
+        "V1.17 direct demand, quota, shipping declaration and durable recovery close fences an in-flight routing worker while retaining consumed budget and durable recovery"
+      ]
+    },
+    {
+      "report": "test-results/v117-real-consent-context.json",
+      "success": true,
+      "passed": 1,
+      "cases": [
+        "V1.17 direct demand, quota, shipping declaration and durable recovery recovers exact final terms and original MQ from own MDR on another device without renewing TTL"
+      ]
+    }
+  ],
+  "scope": "Existing backend HTTP E2E using Nest and real PostgreSQL. Routing deterministic double, mail local_outbox. Browser validation uses separate synthetic intercepted API fixtures; not browser-to-real-backend certification."
+}

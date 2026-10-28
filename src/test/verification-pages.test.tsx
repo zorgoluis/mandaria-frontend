@@ -465,11 +465,14 @@ it('late evidence response after leaving never creates a preview', async () => {
   await act(async () => resolve(new Blob(['synthetic'])))
   expect(create).not.toHaveBeenCalled()
 })
-it('main incident route never calls QA API', async () => {
+it('QA keeps the detailed custody incidents page', async () => {
   mount(<App />, 'SUPER_ADMIN', '/custody-incidents')
   expect(
-    await screen.findByText(/ejecución detallada no está disponible/),
+    await screen.findByRole('heading', { name: 'Incidencias de custodia' }),
   ).toBeInTheDocument()
+  expect(
+    screen.queryByText(/ejecución detallada no está disponible/),
+  ).not.toBeInTheDocument()
 })
 it('documentary frame is isolated by route and user', async () => {
   mount(

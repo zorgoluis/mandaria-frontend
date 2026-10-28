@@ -1,3 +1,4 @@
+import { ShippingPaymentBlock } from '../shipping/Payment'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { DetailedPayment } from '../execution/payment'
 import type { ExecutionFields } from '../execution/types'
@@ -72,6 +73,13 @@ export function PaymentContextBlock({
   const mode = payment.goodsPaymentMode
     ? paymentModes[payment.goodsPaymentMode]
     : undefined
+  if (executionFields?.shippingPayment != null && !executionFields.execution)
+    return (
+      <ShippingPaymentBlock
+        value={executionFields.shippingPayment}
+        offer={beforeAssigning}
+      />
+    )
   if (executionFields?.execution)
     return (
       <DetailedPayment

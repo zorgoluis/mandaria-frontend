@@ -29,7 +29,9 @@ export function sessionIdentity(value: unknown): SessionIdentity {
     const u = r.identity
     if (
       typeof u.email === 'string' &&
-      ['DRIVER', 'PROVIDER_ADMIN', 'SUPER_ADMIN'].includes(u.role) &&
+      ['DRIVER', 'PROVIDER_ADMIN', 'SUPER_ADMIN', 'CUSTOMER'].includes(
+        u.role,
+      ) &&
       u.active === true &&
       (u.emailVerifiedAt === null || typeof u.emailVerifiedAt === 'string') &&
       typeof u.createdAt === 'string' &&

@@ -107,9 +107,11 @@ it('public artifact includes only reviewed B2B paths and no admin security or en
       (n, methods) => n + Object.keys(methods).length,
       0,
     ),
-  ).toBe(15)
+  ).toBe(20)
   expect(
-    Object.keys(spec.paths).some((p) => /admin|provider|driver|auth\//.test(p)),
+    Object.keys(spec.paths).some((p) =>
+      /admin|provider|driver|customer|shared|auth\//.test(p),
+    ),
   ).toBe(false)
   expect(Object.keys(spec.components.securitySchemes)).toEqual([
     'integration-bearer',
@@ -253,4 +255,58 @@ it('comparison example accepts first validated snapshot but never compares diffe
       previous: { publicId: 'MDR-000124', publicVersion: '1' },
     }),
   ).toBe(false)
+})
+it('renders automatic search schemas from the downloaded contract and derives the operation count', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+    new Response(publicFile('openapi-b2b.json')),
+  )
+  mount('/developers/reference')
+  expect(
+    await screen.findByText('20 operaciones públicas (método + ruta).'),
+  ).toBeInTheDocument()
+  for (const name of [
+    'IntegrationMeResponse',
+    'DispatchSearchResponse',
+    'DeliveryStatusResponse',
+  ]) {
+    const details = screen.getByText(name).closest('details')!
+    const shown = JSON.parse(details.querySelector('code')!.textContent!)
+    expect(shown).toEqual(
+      JSON.parse(publicFile('openapi-b2b.json')).components.schemas[name],
+    )
+  }
+})
+it('automatic search guide uses public summaries and never calls the documented server', async () => {
+  const f = vi
+    .spyOn(globalThis, 'fetch')
+    .mockImplementation(
+      async (input) =>
+        new Response(publicFile(String(input).split('/developers/assets/')[1])),
+    )
+  mount('/developers/search')
+  await screen.findByText(/RETRY_PENDING/)
+  expect(screen.getByText(/legacy/)).toBeInTheDocument()
+  expect(
+    screen.getByRole('link', { name: 'Contrato, ejemplos y operación' }),
+  ).toHaveAttribute('href', '/developers/search')
+  expect(
+    f.mock.calls.every(([url]) =>
+      String(url).startsWith('/developers/assets/'),
+    ),
+  ).toBe(true)
+})
+it('public guide links lead to approved GPS and search pages without exposing internal handoffs', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+    new Response(publicFile('B2B-PUBLIC-GUIDE.md')),
+  )
+  mount('/developers/prequotes')
+  expect(
+    await screen.findByRole('link', {
+      name: 'Contrato B2B y ejemplo completo',
+    }),
+  ).toHaveAttribute('href', '/developers/location')
+  expect(
+    screen.getByRole('link', { name: 'Contrato, ejemplos y operación' }),
+  ).toHaveAttribute('href', '/developers/search')
+  expect(document.querySelector('a[href*="HANDOFF"]')).toBeNull()
 })

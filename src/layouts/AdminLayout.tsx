@@ -1,6 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
+import { customer } from '../customer/service'
+import { profileInitials } from '../customer/profile-format'
+import { CustomerOperationNotice } from '../customer/pages'
 import { useEffect, useRef, useState } from 'react'
-import { HistoricalOperationsNotice } from '../verification/legacy'
-import { NavLink, Outlet, Link } from 'react-router-dom'
+import { ExecutionRecovery } from '../execution/components'
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   PlugZap,
@@ -30,6 +34,18 @@ import { useFeedback } from '../components/feedback-context'
 import { errorMessage } from '../services/errors'
 export function AdminLayout() {
   const { user, logout } = useAuth()
+  const { pathname } = useLocation()
+  // Observe the existing profile cache; do not add requests for operational users.
+  const profile = useQuery({
+    queryKey: ['customer', user?.id, 'profile'],
+    queryFn: customer.profile,
+    enabled: false,
+  })
+  const displayName = profile.data?.active
+    ? profile.data.displayName
+    : user?.email
+  const profilePath =
+    user?.role === 'CUSTOMER' ? '/customer/profile' : '/profile'
   const notify = useFeedback()
   const [open, setOpen] = useState(false)
   const [menu, setMenu] = useState(false)
@@ -64,6 +80,8 @@ export function AdminLayout() {
   }, [open])
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
+    { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
+    { to: '/customer/business', label: 'Cuenta Negocio', icon: Building2 },
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ...(['DRIVER', 'PROVIDER_ADMIN'].includes(user?.role || '')
       ? [
@@ -76,7 +94,22 @@ export function AdminLayout() {
       : []),
     ...(admin
       ? [
+          {
+            to: '/admin/fleet-assistance',
+            label: 'Asistencia y conciliación',
+            icon: BadgeCheck,
+          },
+          {
+            to: '/admin/fleet-exits',
+            label: 'Salidas de flotilla',
+            icon: BadgeCheck,
+          },
           { to: '/integrations', label: 'Integraciones', icon: PlugZap },
+          {
+            to: '/admin/customer-business-applications',
+            label: 'Solicitudes Negocio',
+            icon: Building2,
+          },
           { to: '/providers', label: 'Proveedores', icon: Building2 },
           { to: '/users', label: 'Administradores', icon: UsersRound },
           { to: '/invitations', label: 'Invitaciones', icon: MailPlus },
@@ -90,11 +123,26 @@ export function AdminLayout() {
         ? [
             { to: '/provider/profile', label: 'Mi proveedor', icon: Building2 },
             {
+              to: '/fleet-exits',
+              label: 'Salidas de flotilla',
+              icon: BadgeCheck,
+            },
+            {
               to: '/provider/verification',
               label: 'Verificación documental',
               icon: BadgeCheck,
             },
+            {
+              to: '/fleet-assistance',
+              label: 'Asistencia y conciliación',
+              icon: BadgeCheck,
+            },
             { to: '/services', label: 'Servicios', icon: Send },
+            {
+              to: '/fleet-services',
+              label: 'Envíos de mi flotilla',
+              icon: Send,
+            },
             { to: '/provider/credits', label: 'Créditos', icon: Coins },
           ]
         : []),
@@ -126,6 +174,11 @@ export function AdminLayout() {
             to: '/dispatches',
             label: 'Despachos',
             icon: Send,
+          },
+          {
+            to: '/custody-incidents',
+            label: 'Incidencias de custodia',
+            icon: BadgeCheck,
           },
           {
             to: '/admin/verification-cases',
@@ -164,7 +217,7 @@ export function AdminLayout() {
           { to: '/driver/credits', label: 'Créditos', icon: Coins },
         ]
       : []),
-    { to: '/profile', label: 'Mi perfil', icon: UserRound },
+    { to: profilePath, label: 'Mi perfil', icon: UserRound },
     ...(admin
       ? [{ to: '/settings', label: 'Configuración', icon: Settings2 }]
       : []),
@@ -199,7 +252,22 @@ export function AdminLayout() {
         <span className="nav-label">ESPACIO DE TRABAJO</span>
         <nav aria-label="Navegación principal">
           {links.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} onClick={() => setOpen(false)}>
+            <NavLink
+              key={to}
+              to={to}
+              end={
+                to === '/customer' &&
+                (pathname === '/customer/profile' ||
+                  pathname.startsWith('/customer/business'))
+              }
+              className={({ isActive }) =>
+                isActive ||
+                (to === profilePath && pathname === '/customer/profile')
+                  ? 'active'
+                  : undefined
+              }
+              onClick={() => setOpen(false)}
+            >
               <Icon size={19} />
               <span>{label}</span>
             </NavLink>
@@ -237,17 +305,17 @@ export function AdminLayout() {
               aria-expanded={menu}
             >
               <span className="avatar">
-                {user?.email.slice(0, 2).toUpperCase()}
+                {profileInitials(displayName ?? '')}
               </span>
               <span className="user-info">
-                <strong>{user?.email}</strong>
+                <strong>{displayName}</strong>
                 <small>{labels[user?.role ?? ''] ?? 'Usuario'}</small>
               </span>
               <ChevronDown size={15} />
             </button>
             {menu && (
               <div className="user-dropdown">
-                <Link to="/profile" onClick={() => setMenu(false)}>
+                <Link to={profilePath} onClick={() => setMenu(false)}>
                   <UserRound size={16} />
                   Mi perfil
                 </Link>
@@ -270,7 +338,8 @@ export function AdminLayout() {
           </div>
         </header>
         <main id="main-content">
-          <HistoricalOperationsNotice />
+          <ExecutionRecovery />
+          <CustomerOperationNotice />
           <Outlet />
         </main>
         <footer className="app-footer">

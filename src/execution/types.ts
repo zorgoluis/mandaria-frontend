@@ -1,3 +1,4 @@
+import type { ShippingPayment } from '../shipping/Payment'
 import type { Page } from '../types/api'
 export const phases = [
   'TO_PICKUP',
@@ -27,6 +28,7 @@ export interface Execution {
 }
 export type TrackingMode = 'LEGACY' | 'DETAILED' | null
 export interface ExecutionFields {
+  shippingPayment?: ShippingPayment | null
   trackingMode?: TrackingMode
   execution?: Execution
   collectionActionAllowed?: boolean

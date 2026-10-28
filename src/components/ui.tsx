@@ -172,6 +172,8 @@ export function ActionForm({
   onCancel,
   cancelLabel = 'Cancelar',
   initialDirty = false,
+  submitDisabled = false,
+  submitPlacement,
 }: {
   children: ReactNode
   onSubmit: (data: FormData) => Promise<void>
@@ -179,6 +181,8 @@ export function ActionForm({
   onCancel?: () => void
   cancelLabel?: string
   initialDirty?: boolean
+  submitDisabled?: boolean
+  submitPlacement?: (controls: ReactNode) => ReactNode
 }) {
   const [busy, setBusy] = useState(false)
   // initialDirty only enables submitting untouched forms (login, confirmations). The
@@ -197,7 +201,7 @@ export function ActionForm({
   }, [dirty])
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (busy) return
+    if (busy || submitDisabled) return
     const data = new FormData(event.currentTarget)
     setBusy(true)
     setError(null)
@@ -210,6 +214,29 @@ export function ActionForm({
       setBusy(false)
     }
   }
+  const controls = (
+    <div className="form-actions">
+      {dirty && <small>Cambios sin guardar</small>}
+      {onCancel && (
+        <button
+          type="button"
+          className="button secondary"
+          disabled={busy}
+          onClick={onCancel}
+        >
+          {cancelLabel}
+        </button>
+      )}
+      <button
+        className="button"
+        disabled={busy || submitDisabled || !(dirty || initialDirty)}
+        type="submit"
+      >
+        {busy && <LoaderCircle size={16} className="spin" />}
+        {busy ? 'Guardando…' : submitLabel}
+      </button>
+    </div>
+  )
   return (
     <form
       onSubmit={(event) => {
@@ -219,33 +246,14 @@ export function ActionForm({
     >
       <fieldset disabled={busy} className="form-fields">
         {children}
+        {submitPlacement?.(controls)}
       </fieldset>
       {!!error && (
         <p className="inline-error" role="alert">
           {errorMessage(error)}
         </p>
       )}
-      <div className="form-actions">
-        {dirty && <small>Cambios sin guardar</small>}
-        {onCancel && (
-          <button
-            type="button"
-            className="button secondary"
-            disabled={busy}
-            onClick={onCancel}
-          >
-            {cancelLabel}
-          </button>
-        )}
-        <button
-          className="button"
-          disabled={busy || !(dirty || initialDirty)}
-          type="submit"
-        >
-          {busy && <LoaderCircle size={16} className="spin" />}
-          {busy ? 'Guardando…' : submitLabel}
-        </button>
-      </div>
+      {!submitPlacement && controls}
     </form>
   )
 }

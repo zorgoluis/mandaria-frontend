@@ -55,6 +55,7 @@ export interface DriverSelf {
    */
   activeDeliveryAssignment:
     | (ExecutionFields & {
+        shippingPayment?: import('../shipping/Payment').ShippingPayment | null
         collectionInstructions?: CollectionInstructions
         id: string
         mode: 'FLEET' | 'INDEPENDENT'

@@ -1,3 +1,4 @@
+import { SharedTracking } from '../location/components'
 import { DeveloperPortal } from '../developers/pages'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -23,6 +24,7 @@ export function Root() {
 export function RootRoutes() {
   return (
     <Routes>
+      <Route path="/track" element={<SharedTracking />} />
       <Route path="/developers/*" element={<DeveloperPortal />} />
       <Route
         path="*"

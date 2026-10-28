@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-23",
+  "workspace": "C:/Users/zorgl/Documents/mandaria-frontend",
+  "branch": "QA",
+  "base": "58f4d519eed500e96e0aa9586e93e47ba377dff7",
+  "contracts": {
+    "fleet": "1.0.0",
+    "independent": "1.1.0"
+  },
+  "verification": {
+    "finalFocused": {
+      "files": 9,
+      "passed": 296,
+      "failed": 0,
+      "log": ".tmp/fleet-final-tests.log"
+    },
+    "fullEarlierSnapshot": {
+      "files": 70,
+      "passed": 1352,
+      "failed": 20,
+      "total": 1372,
+      "knownFailures": {
+        "delivery-assignments.test.tsx": 17,
+        "delivery-assignments-api.test.ts": 1,
+        "flows.test.tsx": 2
+      },
+      "baselineEvidence": "VERIFICATION.md entry 2026-10-21; no new clean-baseline execution",
+      "log": ".tmp/fleet-full-tests.log"
+    },
+    "build": "PASS with existing chunk >500kB warning",
+    "testTypes": "PASS",
+    "lint": "PASS",
+    "diffCheck": "PASS",
+    "browser": {
+      "synthetic": true,
+      "checks": [
+        "private-detail-1280",
+        "spending-confirmation-keyboard-1280",
+        "private-detail-320",
+        "spending-confirmation-keyboard-320"
+      ],
+      "unexpected": [],
+      "errors": [],
+      "complete": true
+    },
+    "realWebBackendHttp": "NOT EXECUTED: no running isolated API identified",
+    "backendPriorEvidence": "109 E2E/736 unit tests are historical backend-only, not counted"
+  },
+  "constraints": {
+    "deployment": false,
+    "realProviderActivation": false,
+    "backendModified": false,
+    "driverAppModified": false,
+    "envModified": false,
+    "dockerUsed": false,
+    "commit": false,
+    "push": false,
+    "otherAgentsMessaged": false
+  },
+  "sources": {
+    "src/app/App.tsx": "f90d4df34376ab4d433d484220ca33f58f4785421f68b3cc182b18eaa2f1fca6",
+    "src/delivery-assignments/panel.tsx": "5725d2e60d4f05be5608c039a207d985bd9ec57d8c80a1d762a5aa92b6b85440",
+    "src/dispatch/components.tsx": "530212c9d089ef057c4e263b31d2cafb63d3310b846b561d0e45773714651b57",
+    "src/dispatch/pages.tsx": "aa474bb8074d039207f676b6046c97725f7aaaa4ae57c8cb16ce1cb204478a51",
+    "src/drivers/pages.tsx": "d376bdb6fbe220eac91835b995abf9b94811f6eccd1c1e15afe931a0bf4b4fd7",
+    "src/execution/components.tsx": "bd745348e2506a633808365a006913b83ee4905e3f7deb7c9e8b911548ae057c",
+    "src/layouts/AdminLayout.tsx": "faa26428e9c2f16ed8dabf5414baafed8ce6f0a058e71ffed5c2dd40447fe5f2",
+    "src/logistics/components.tsx": "f36229adfd60e1798dcd0d152f60661366b4ed53b3cb628fc7551ad8d8edbc18",
+    "src/test/credits.test.tsx": "b3649f7d0af390f24605f301e5c5617e11452f04bd28daea24998c92e4202ef5",
+    "src/test/delivery-assignments.test.tsx": "7cccf740192fda88fe838b3c6fd61ce6ebe75c3b7dc48cb2822d62125315ecb1",
+    "src/test/delivery-completion.test.tsx": "2a49b1b7354481bc210249d777e7619b1d8bd56ec284cf8fe02dd45c2f91fdcf",
+    "src/test/dispatch.test.tsx": "bcc389cfd70cf37e2a037a6eb31ddd7f80765ebcaec35e97bab0c2e131de9c1f",
+    "src/test/execution.test.tsx": "7b48a2336e616c10bccd8ce5c6cadd65d9adc27e546a490812639d8dffcd57dd",
+    "src/test/flows.test.tsx": "cbf6c59b7420cbab6d4bd53a0b0896a4e026982da06780a191d2b3266a2b5cc7",
+    "src/test/invitations.test.tsx": "b2ea9e4205f8a0c7150645d9a84ab42ae9d3dbc9c16528037cbfa020313a7755",
+    "src/test/logistics.test.tsx": "27bc9e4b6494d41c66c69b457cd81abeb067aed8cb2aa8d733761c847c6a90c6",
+    "src/vehicles/pages.tsx": "0d3fc0bcee9ebfc9d9773812ccf211ee7f7db3c1b22bf59194f175a96f6017ee",
+    "src/fleet/gate.tsx": "149f8911eb0ca6ad6c03629bcb7e8df3cc173d795c02d8f341189e2fdf0de146",
+    "src/fleet/pages.tsx": "38327b6779510154284051432fc106d4172563dced54d413a9606608f195bc93",
+    "src/fleet/permissions.ts": "cdc4d75fb9ed38404c34463210de89022c03b2b88c34d8c12af066b50a4b4245",
+    "src/fleet/resources.tsx": "896af57681bbe848b372cc37a71598c7f7dd6307ecc16bd6b8bc028a144f1e27",
+    "src/fleet/service.ts": "ed7cf1dc9777a40663ddb53c56627a5fda620e5bdde5af02c2b7f82cbacd5056",
+    "src/fleet/spending.tsx": "dab730a6e35854b517a4581a613b1e3897c30d29e6a3a7546e9cd3d43ebd556a",
+    "src/fleet/types.ts": "6fd4ff5c8968d0c95f93e546b3ce28083bc079e5c4137b34e900605e0af90f58",
+    "src/test/fleet.test.tsx": "45076fa8c0cc3f1a013f13d4bd2ac97c35e92ba894e54a62663de39440e6b7bc",
+    "src/test/fleet-api.test.ts": "506331e91b0d4922f2ab81b34696e414ac3e4e8506c568692f29af23a5b32897",
+    "src/test/fleet-fixture.ts": "0261e6d87829e6d6a463e6c27467e664d8a35193607dc5ea4d7a7c8d940bfc99",
+    "scripts/verify-fleet-web.mjs": "420e6c7dbcf8bbe2a30386bafda7fd583fa265f13af6ccbd928caee7b9c9cae2"
+  },
+  "backendReadOnlySources": {
+    "docs/FLEET-DIRECT-TAKE-CONTRACT.md": "df8b24238a64f9e1ce4625374d0218b0931cb4dadade0d3600f586dbd15844d0",
+    "docs/FLEET-DIRECT-TAKE-IMPLEMENTATION.md": "188fc605cbc9a339e75ff963c40c3ee0f5468d300b6ddf8de888d30e67670e80",
+    "docs/FLEET-DIRECT-TAKE-HANDOFF.md": "685cb379ba093861f438f0f26c3d890ba9cdaeb07288b1a00eb6dcc8c1b95459",
+    "docs/INDEPENDENT-OFFERS-CONTRACT.md": "dbfc3e27fb7034a9be280715ea064589921114ea907cac8d9fae3bbc6112e21a",
+    "docs/openapi.json": "f2ae2d1d0d4037a4fbbe0d14106a7fa93a5dfa6c34b0edea00ee2f26d67fa5ae",
+    "docs/API_ACCESS.md": "a8fc8d1890e72422afea795107459c793f8b5a6f167472b935e1aab680b01046",
+    "docs/checks/fleet-direct-take-verification.json": "e503be63bcd32eb6d3069023f5eb7ca69e1efe399b968ec566e695cb6821b4f4",
+    "src/fleet-offers/fleet.controller.ts": "32e704f3fc1a73a3382fd2b1a21163f3ddc09a02c8aa6fa256cb2e2323158f8c",
+    "src/fleet-offers/fleet.dto.ts": "aadd0b7d34625f6c8b9ba71e4627869248244ab0615134c60ee0bf5d1e7f7613",
+    "src/fleet-offers/fleet.service.ts": "2efc3aef148132a4238f0659be8f4ab7a06f11fe3921f61811f0e99bccba1dc7",
+    "prisma/schema.prisma": "0e68b129f6418e88be4cc7ff5c6c5be015e2401ff84ee47617d8240d345ef886"
+  },
+  "artifacts": {
+    "test-results/fleet-web/detail-1280.png": "7cc4332b09f21690009fada277d5761dafdd3817e4a85ce5b3a089441a9e04c6",
+    "test-results/fleet-web/detail-320.png": "419e98e4152cbe86247f67ab4120c07f7172463b9fb75c11c015286b3e88380a",
+    "test-results/fleet-web/spending-1280.png": "4b855b9a33a87bf4aa0209b36119843aea28af1bbed808d2c148ad5faaddf964",
+    "test-results/fleet-web/spending-320.png": "b9c2dfac32072edc5c7a387c11393e4ef6f603dad715a7574b4b9291ce6e5563",
+    "test-results/fleet-web/report.json": "8d37f72d423305dc11963f9ac98a818c115d3d21ef60fa1c992fe0299d8b2134"
+  }
+}

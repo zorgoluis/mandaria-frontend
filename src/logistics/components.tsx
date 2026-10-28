@@ -37,12 +37,13 @@ function ProviderSelector({
   role: LogisticsRole
   children: (provider: ProviderContext) => ReactNode
 }) {
+  const { user } = useAuth()
   const [params, setParams] = useSearchParams()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const selected = params.get('providerId')
   const query = useQuery({
-    queryKey: ['logistics-provider-options', role, page, search],
+    queryKey: ['logistics-provider-options', role, user?.id, page, search],
     queryFn: async ({ signal }) =>
       role === 'SUPER_ADMIN'
         ? providers.list({ page, pageSize: 20, search }, signal)
@@ -122,7 +123,7 @@ function ProviderSelector({
       </div>
       {id ? (
         <ResolvedProvider
-          key={`${role}:${id}`}
+          key={`${user?.id}:${role}:${id}`}
           scope={{ role, providerId: id }}
         >
           {children}
@@ -143,8 +144,10 @@ function ResolvedProvider({
   scope: Scope
   children: (provider: ProviderContext) => ReactNode
 }) {
+  const { user } = useAuth()
   const query = useQuery({
-    queryKey: ['logistics-provider', scope.role, scope.providerId],
+    queryKey: ['logistics-provider', scope.role, user?.id, scope.providerId],
+    gcTime: 0,
     queryFn: async ({ signal }) =>
       scope.role === 'SUPER_ADMIN'
         ? providers.get(scope.providerId, signal)

@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-23",
+  "timezone": "America/Mexico_City",
+  "repository": "C:/Users/zorgl/Documents/mandaria-frontend",
+  "branch": "QA",
+  "base": "7488fc881fbe99f887c24948db2ee0d3e169b95f",
+  "status": "available flows implemented; incomplete for documented missing authorized references",
+  "deployed": false,
+  "report": "docs/FLEET-ASSISTANCE-WEB-CURRENT.md",
+  "previousManifest": "docs/evidence/fleet-assistance-2026-10-23/manifest-initial.json",
+  "validations": {
+    "lint": "PASS full; focused rerun after final upload transition fix",
+    "visual": [
+      "owner 1280",
+      "owner 320",
+      "admin 1280"
+    ],
+    "typecheckTest": "PASS",
+    "fullSuite": "not rerun; historical failures not resolved",
+    "webFocused": {
+      "failed": 0,
+      "files": 6,
+      "passed": 119
+    },
+    "build": "PASS; existing chunk size warning",
+    "http": {
+      "backendUnchanged": true,
+      "processClosed": true,
+      "complete": true,
+      "comparedSourceFiles": 366,
+      "databaseStopped": true,
+      "report": "docs/evidence/fleet-assistance-current-2026-10-23/report.json",
+      "checks": 14,
+      "runtimeCompiledFromCurrentSources": true
+    }
+  },
+  "privacy": {
+    "persistedImageBytes": false,
+    "fingerprintCheckedOnReselection": true,
+    "atomicUploadTransition": true
+  },
+  "limitations": [
+    "admin contactSourceRef redacted",
+    "initial participation ID absent without prior obligation references",
+    "owner parties and movements absent; DRIVER movementContext is not provider authority",
+    "authorized new session/release/shipping/internal record selectors unavailable",
+    "admin FLEET CREATE selector unavailable",
+    "complete physical/economic resolution not verified end to end",
+    "production activation/storage/retention remain pending"
+  ],
+  "sourceSha256": {
+    "src/assistance/attempts.ts": "e7bc3b41fbef6d83c24bfec42530bda9e7259dd11e8a8035553f8fba7540e4b7",
+    "src/assistance/command-context.ts": "d62064a6172667e17180107f64406f1f8ccf65e0e42bdfae525612484301cd21",
+    "src/assistance/commands.tsx": "1ed960b952f1bcfe223dba3cc8ba34ea541b26dea1a65dad1f863f98a3f7dde3",
+    "src/assistance/contract.ts": "cc53c8ce518cf5ecbca838234d6830529c809d515f1756b8ee0c591469f189ea",
+    "src/assistance/form-model.ts": "41d956c73aecfd4d039a68c2e318030f45c046345b12b2b7de3450b8adbd6f24",
+    "src/assistance/forms.tsx": "61d8b8c0b7a6b6f18f09ce0a3ac71389c6b1e7a2ec7d93f7cf1c900724fd75d8",
+    "src/assistance/hashes.ts": "5de2f723128cb3399e3c603f10213f7368f8c3ac38d98b75d469cb3035b5e7e3",
+    "src/assistance/messages.ts": "559d44ef7c24196e62c7e0434eb204118f766cf0e0eae14778e89be5d303d7fb",
+    "src/assistance/pages.tsx": "686c53bd86d611851dff29c3a25fdef7d08a1bb9d919f521aa744b6e4871f302",
+    "src/assistance/service.ts": "8225349b7e6573bf25a0e2af4006325c628e210a6b771690f90d394fdffd599f",
+    "src/assistance/types.ts": "5fdbb8de531f8252bbb3f5b4215eabc41dbe07d00ae308f94d82ed2264d588ad",
+    "src/assistance/workbench.tsx": "a4e63a9801e7682b8af04fcfa04949b26ec7b8fd6ca881b9186183587465a9ca",
+    "src/app/App.tsx": "837719eaf8f49437ea088bbbb9f2ebe0e5e8c77d04ab4d8600c8ff89a9186588",
+    "src/layouts/AdminLayout.tsx": "605cd9c8a2c862f25409f256876c47507d034cf49ba2118f27890502ab60f88f",
+    "src/fleet/pages.tsx": "416ad5a7234b8dc9f89b7319b56676e62d9066249121fe948c42bf405727d441",
+    "src/services/api.ts": "bff34a18998af9699e91fb8801dd26dd142b8169dcbab922945de607f240d76f",
+    "src/test/assistance.test.tsx": "e05ad8afcf91dd8012a6b37a898f03afeb1a9c059e2dc1eb0ba5d2405daa71d8",
+    "src/test/assistance-api.test.ts": "73d7013db7dc7260c395a96ee86aa2aa2569efb1da23c0a6a41949f0f79003ea",
+    "src/test/assistance-fixture.ts": "bf702123fb9f386afcdbd7842494e87e6924eabf9de544c1c965f9bc76125928",
+    "src/test/flows.test.tsx": "5e1adae62a4c98fa3018c468547dfaaa08e317bd080ed61c3d2891d6cba52b86",
+    "scripts/assistance-http-wsl.mjs": "26074fe5d59101f7a933d2d234c5abe57e38f0ea09172f7bbf878ed939af0fff",
+    "scripts/verify-assistance-http.mjs": "3552c41966f96d7c31b8432f9df5c64328d0bb975a7287d38fa898f2854e7f35"
+  },
+  "backendDocumentationSha256": {
+    "FLEET-ASSISTED-RECOVERY-CONTRACT.md": "b28e2f584e3668836efa69c23e9da88013b53bad18172437d1c8dc726f645360",
+    "FLEET-ASSISTED-RECOVERY-TECHNICAL-SPEC.md": "7e0d76e6a7d3008e18efd5a1e3f79927815fc46545f7cc26fe29df43f49ae931",
+    "FLEET-ASSISTED-RECOVERY-IMPLEMENTATION.md": "2d924a139028e8d62b8ab5965e2e18576f230b046c593ccc827ca3964e42fc83",
+    "FLEET-ASSISTED-RECOVERY-TEST-MATRIX.md": "47e5f38229a93caaef4308f6e30d80299a762bad24cfa6789ba48f50ff1e928b",
+    "FLEET-ASSISTANCE-WEB-AGENT-PROMPT.md": "a63a772e11787ab17ae602eff5d27b933283da143577145a6c68c31aeffa54ea",
+    "FLEET-ASSISTANCE-DRIVER-MOVEMENTS-HANDOFF.md": "914493a7c101a3a6a7c0c64b001a7d03e0ee9749b4b7a4582f1830fbe1d7255b",
+    "openapi.json": "3bc3b190ef0d2803efb63935b4a9ef101b0591f6ab9eb9b1a30e92715db094e4",
+    "API_ACCESS.md": "3419ac7aaa6a93bbde577392e19057d9cb444e3604e48931842a43cd822f8c68",
+    "FLEET-DIRECT-TAKE-CONTRACT.md": "37d49676ec470ad4c405c725c3a45a6a3bb983f9f53a4bdfdd8d5b1530e60c6d",
+    "INDEPENDENT-OFFERS-CONTRACT.md": "dbfc3e27fb7034a9be280715ea064589921114ea907cac8d9fae3bbc6112e21a",
+    "checks/fleet-assistance-participant-verification.json": "fdc75962faa6fb60fccb51251351f18a5008e543c5eff701dd3bb0e071022d57"
+  },
+  "artifactSha256": {
+    "admin-1280.png": "57400484a0000b3360482253c2cc14fbb1da44c88852da87f2da959d8281f867",
+    "owner-1280.png": "12ebed6aa2ca73aecdb232665fbaa9ff2bf709031e36803aa946355f145719a4",
+    "owner-320.png": "a32c93a50b1de9d624de64b1c4d355bbfb47514382bccddabc6184684e40e962",
+    "report.json": "0873e5490297a4084ca19b8733110267ff17c022b719fb32180135a406ebe4d8"
+  },
+  "committedAtVerification": false,
+  "localCommitReview": {
+    "branch": "QA",
+    "push": false,
+    "sourceAndArtifactHashesMatch": true,
+    "deploy": false,
+    "codeChangedSinceValidation": false,
+    "authorized": true
+  }
+}

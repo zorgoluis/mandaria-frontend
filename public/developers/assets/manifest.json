@@ -1,10 +1,24 @@
 {
-  "source": "Mandaria Backend / B2B-FRONTEND-HANDOFF.md",
-  "files": {
-    "openapi-b2b.json": "6ecc0667e86456a1e152e95e8f51ad9d58d699cb92a9745e4563153a4cf00880",
-    "B2B-PUBLIC-GUIDE.md": "c21e0aa513ba59a5e5344275b39e8a543985e6bf54dfbeee0bb7fe12d7c4ffd3",
+  "source": "Mandaria public B2B artifacts",
+  "notice": "Borrador para revisión — no enviado/no publicado",
+  "sourceHashes": {
+    "openapi-b2b.json": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c",
+    "B2B-PUBLIC-GUIDE.md": "431921966e37953cc0f1a8da4fbc82f1e736f77c373a9acae5e700f6f65c43aa",
     "B2B-WEBHOOKS.md": "fd533d9aab41282cc028b90562758b1fe6c214fa9c07b1a1a3f4b37a504ed7ae",
     "examples/b2b-flow.json": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57",
     "examples/verify-mandaria-webhook.mjs": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"
-  }
+  },
+  "linkReplacements": {
+    "V1.18-B2B.md": "B2B-PUBLIC-GUIDE.md#v118--gps-y-enlaces-temporales-backend-local-sin-activar",
+    "AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md": "B2B-PUBLIC-GUIDE.md#búsqueda-automática-opcional-después-de-aceptar",
+    "PUBLIC-B2B-TRACKING.md": "B2B-PUBLIC-GUIDE.md#fotografía-pública-versionada--disponible-en-checkout-qa-no-desplegada"
+  },
+  "files": {
+    "openapi-b2b.json": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c",
+    "B2B-PUBLIC-GUIDE.md": "42c7c39f4d3a94473555b28a8f2bedf15725a102ef153e06c2237bce8b5ee80f",
+    "B2B-WEBHOOKS.md": "21d15e1f79245b8dc9e45502519890d636ed28330fd5a6ebd7557983b77cd389",
+    "examples/b2b-flow.json": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57",
+    "examples/verify-mandaria-webhook.mjs": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"
+  },
+  "contractVersion": "1.13.3"
 }

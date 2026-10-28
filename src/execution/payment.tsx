@@ -1,3 +1,4 @@
+import { ShippingPaymentBlock } from '../shipping/Payment'
 import { CollectionInstructionsBlock } from '../collection-instructions/CollectionInstructionsBlock'
 import { InfoGrid } from '../components/ui'
 import type { ExecutionFields } from './types'
@@ -30,9 +31,25 @@ export function DetailedPayment({
         Actualizando permisos e instrucciones económicas…
       </p>
     )
+
   return (
     <div className="collection-instructions">
-      {value !== undefined ? (
+      {fields.shippingPayment != null ? (
+        <>
+          <ShippingPaymentBlock
+            value={fields.shippingPayment}
+            collectionActionAllowed={fields.collectionActionAllowed === true}
+          />
+          <InfoGrid
+            items={[
+              [
+                'Mercancía de referencia',
+                goods ? `${goods.amount} ${goods.currency}` : 'No informada',
+              ],
+            ]}
+          />
+        </>
+      ) : value !== undefined ? (
         <CollectionInstructionsBlock
           value={value}
           collectionActionAllowed={fields.collectionActionAllowed === true}
@@ -51,11 +68,13 @@ export function DetailedPayment({
           ]}
         />
       )}
-      <p>
-        {fields.collectionActionAllowed === true
-          ? 'El servidor permite el cobro en esta etapa según las condiciones contractuales recibidas.'
-          : 'No cobrar en esta etapa.'}
-      </p>
+      {fields.shippingPayment == null && (
+        <p>
+          {fields.collectionActionAllowed === true
+            ? 'El servidor permite el cobro en esta etapa según las condiciones contractuales recibidas.'
+            : 'No cobrar en esta etapa.'}
+        </p>
+      )}
       <p>
         {fields.advanceToOriginAllowed === true && advance
           ? `Adelanto contractual al origen: ${advance.amount} ${advance.currency}.`

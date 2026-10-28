@@ -1,3 +1,31 @@
+import { AssistancePage } from '../assistance/pages'
+import { FleetExitsPage, PrivateExitRecovery } from '../fleet-exit/pages'
+import { FleetServicesPage } from '../fleet/pages'
+import {
+  BusinessCustomerPage,
+  BusinessAdminPage,
+  BusinessAdminDetail,
+} from '../customer-business/pages'
+import { consumeAccessFragment } from '../customer/access'
+import {
+  CustomerArea,
+  CustomerHome,
+  NewRequest,
+  CustomerRequest,
+} from '../customer/pages'
+import {
+  CustomerProfile,
+  CustomerAccess,
+  CustomerRegistration,
+  PasswordRecovery,
+} from '../customer/identity'
+const accessChallenge =
+  window.location.pathname === '/customer/access'
+    ? consumeAccessFragment()
+    : { token: '', purpose: '' }
+const clearAccessChallenge = () => {
+  accessChallenge.token = ''
+}
 import {
   VerificationLayout,
   DriverOnboarding,
@@ -21,7 +49,8 @@ import {
   PrivateDeletion,
 } from '../deletion/pages'
 import { WebhookEventPage, WebhookHealthPage } from '../webhooks/pages'
-import { Component, type ReactNode } from 'react'
+import { IncidentsPage, IncidentPage } from '../execution/incidents'
+import { Component, useEffect, type ReactNode } from 'react'
 import {
   Link,
   Navigate,
@@ -94,7 +123,8 @@ export function Protected({ roles }: { roles?: Role[] }) {
     if (
       !roles &&
       (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
-        route.pathname === '/privacy/active-service')
+        route.pathname === '/privacy/active-service' ||
+        route.pathname === '/privacy/fleet-exit-recovery')
     )
       return <Outlet />
     return <Navigate to="/privacy/deletion" replace />
@@ -121,7 +151,9 @@ export function Protected({ roles }: { roles?: Role[] }) {
             route.pathname,
           )
             ? '/login?next=onboarding'
-            : '/login'
+            : route.pathname.startsWith('/customer/business')
+              ? '/login?next=business'
+              : '/login'
         }
         replace
       />
@@ -131,11 +163,28 @@ export function Protected({ roles }: { roles?: Role[] }) {
 }
 export function App() {
   const location = useLocation()
+  useEffect(() => {
+    if (location.pathname !== '/customer/access') {
+      accessChallenge.token = ''
+      accessChallenge.purpose = ''
+    }
+  }, [location.pathname])
   const auth = useAuth()
   if (auth.loading && location.pathname !== '/privacy/deletion-access')
     return <Loading />
   return (
     <Routes>
+      <Route path="/customer/register" element={<CustomerRegistration />} />
+      <Route path="/customer/recovery" element={<PasswordRecovery />} />
+      <Route
+        path="/customer/access"
+        element={
+          <CustomerAccess
+            challenge={{ ...accessChallenge }}
+            onConsumed={clearAccessChallenge}
+          />
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route
         path="/privacy/deletion-access"
@@ -151,6 +200,10 @@ export function App() {
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/fleet-exit-recovery"
+            element={<PrivateExitRecovery />}
+          />
           <Route
             path="/privacy/active-service"
             element={<RestrictedActiveService />}
@@ -171,6 +224,23 @@ export function App() {
         </Route>
         <Route element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route element={<CustomerArea />}>
+            <Route path="customer" element={<CustomerHome />} />
+            <Route path="customer/profile" element={<CustomerProfile />} />
+            <Route
+              path="customer/business"
+              element={<BusinessCustomerPage key={location.pathname} />}
+            />
+            <Route
+              path="customer/business/:id"
+              element={<BusinessCustomerPage key={location.pathname} />}
+            />
+            <Route path="customer/new" element={<NewRequest />} />
+            <Route
+              path="customer/requests/:publicId"
+              element={<CustomerRequest key={location.pathname} />}
+            />
+          </Route>
           <Route element={<VerificationLayout />}>
             <Route element={<Protected roles={['DRIVER', 'PROVIDER_ADMIN']} />}>
               <Route
@@ -221,7 +291,9 @@ export function App() {
                     ? '/driver/onboarding'
                     : auth.user?.role === 'PROVIDER_ADMIN'
                       ? '/provider/verification'
-                      : '/admin/verification-cases'
+                      : auth.user?.role === 'SUPER_ADMIN'
+                        ? '/admin/verification-cases'
+                        : '/dashboard'
                 }
                 replace
               />
@@ -246,6 +318,36 @@ export function App() {
             />
           </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
+            <Route
+              path="admin/fleet-assistance"
+              element={<AssistancePage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-exits"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-exits/:id"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-assistance/:id"
+              element={
+                <AssistancePage surface="admin" key={location.pathname} />
+              }
+            />
+            <Route
+              path="admin/customer-business-applications"
+              element={<BusinessAdminPage />}
+            />
+            <Route
+              path="admin/customer-business-applications/:id"
+              element={<BusinessAdminDetail key={location.pathname} />}
+            />
+            <Route
+              path="admin/customer-business-access/:accountId"
+              element={<BusinessAdminDetail key={location.pathname} />}
+            />
             <Route path="integrations" element={<IntegrationsPage />} />
             <Route
               path="integrations/:id/webhooks/:eventId"
@@ -287,24 +389,10 @@ export function App() {
               element={<QuoteDetail key={location.pathname} />}
             />
             <Route path="dispatches" element={<AdminDispatchesPage />} />
-            <Route
-              path="custody-incidents"
-              element={
-                <p>
-                  La ejecución detallada no está disponible en este backend
-                  main. Conserva los intentos pendientes y consulta el entorno
-                  donde se iniciaron.
-                </p>
-              }
-            />
+            <Route path="custody-incidents" element={<IncidentsPage />} />
             <Route
               path="custody-incidents/:dispatchId/:incidentId"
-              element={
-                <p>
-                  Incidencia detallada no disponible en este backend main. No se
-                  cerró ni repitió ningún intento.
-                </p>
-              }
+              element={<IncidentPage key={location.pathname} />}
             />
             <Route
               path="dispatches/:id"
@@ -353,10 +441,33 @@ export function App() {
             <Route path="driver/credits" element={<DriverCreditsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
+            <Route
+              path="fleet-exits"
+              element={<FleetExitsPage surface="provider" />}
+            />
+            <Route
+              path="fleet-exits/:id"
+              element={<FleetExitsPage surface="provider" />}
+            />
             <Route path="provider/profile" element={<MyProvider />} />
             {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
+            <Route
+              path="fleet-assistance"
+              element={<AssistancePage surface="provider" />}
+            />
+            <Route
+              path="fleet-assistance/:id"
+              element={
+                <AssistancePage surface="provider" key={location.pathname} />
+              }
+            />
             <Route path="provider/credits" element={<MyCreditsPage />} />
             {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
+            <Route path="fleet-services" element={<FleetServicesPage />} />
+            <Route
+              path="fleet-services/:id"
+              element={<FleetServicesPage key={location.pathname} />}
+            />
             <Route path="services" element={<ProviderServicesPage />} />
             <Route
               path="services/:id"

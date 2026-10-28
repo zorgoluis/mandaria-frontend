@@ -1,4 +1,5 @@
 export class ApiError extends Error {
+  retryAfterMs = 0
   status: number
   /** Stable backend code (DomainException), e.g. OUT_OF_SERVICE_AREA. Never shown raw. */
   code: string | null
@@ -35,6 +36,66 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    BUSINESS_APPROVAL_REQUIRED:
+      'Negocio requiere una solicitud y aprobación administrativa. No puedes activar ese acceso desde el perfil.',
+    BUSINESS_REVIEW_REQUIRED:
+      'Tu cuenta Negocio requiere revisión antes de generar nueva demanda.',
+    BUSINESS_ACCESS_RESTRICTED:
+      'El acceso Negocio está restringido; tus servicios comprometidos conservan las operaciones autorizadas.',
+    BUSINESS_APPLICATION_REVISION_CONFLICT:
+      'La solicitud cambió. Consulta su estado vigente antes de preparar una nueva intención.',
+    BUSINESS_APPLICATION_NOT_PENDING:
+      'La solicitud ya no está pendiente. Consulta su resolución vigente.',
+    BUSINESS_REAPPLICATION_REQUIRES_ADMIN:
+      'Sólo SUPER_ADMIN puede habilitar una nueva solicitud después de una revocación.',
+    BUSINESS_ACCESS_ALREADY_ACTIVE:
+      'La cuenta ya tiene acceso Negocio activo. Consulta el estado actual.',
+    BUSINESS_APPLICATION_PENDING:
+      'Ya existe una solicitud Negocio pendiente en esta cuenta.',
+    BUSINESS_GRANT_NOT_ACTIVE:
+      'El acceso que intentas revocar ya no está activo. Consulta el estado actual.',
+    BUSINESS_REAPPLICATION_NOT_BLOCKED:
+      'La readmisión ya no está bloqueada. Consulta el estado actual.',
+    BUSINESS_REVOCATION_MISMATCH:
+      'La revocación cambió. No se habilitó la readmisión; consulta el acceso actual.',
+    BUSINESS_ATTEMPT_CLOSED:
+      'El intento original quedó cerrado. Consulta su recibo antes de preparar otra intención.',
+    BUSINESS_RATE_LIMITED:
+      'Se alcanzó el límite técnico de solicitudes y retiros. Respeta Retry-After; no se reenviará automáticamente.',
+
+    COMMAND_ATTEMPT_CLOSED:
+      'La clave original fue cerrada. Consulta el recibo antes de preparar explícitamente otra intención; no reenvíes este comando.',
+    COMMAND_ATTEMPT_SCOPE_CONFLICT:
+      'La clave pertenece a otra operación o referencia. Conserva el marcador y solicita revisión.',
+    CUSTOMER_ADMISSION_DISABLED:
+      'El registro de nuevos clientes está deshabilitado.',
+    CUSTOMER_CONTACT_NOT_VERIFIED:
+      'Verifica el correo de tu cuenta antes de continuar.',
+    CUSTOMER_ACCESS_DENIED:
+      'Se requiere un perfil cliente propio, activo y verificado.',
+    CUSTOMER_ACTIVE_REQUEST_LIMIT:
+      'Ya tienes una solicitud activa. Continúala antes de iniciar otra.',
+    CUSTOMER_ACTIVE_REQUESTS:
+      'El cambio de tipo requiere cerrar las solicitudes activas.',
+    PROFILE_REVISION_CONFLICT:
+      'El perfil cambió. Consulta la revisión actual antes de modificarlo.',
+    PROFILE_ALREADY_EXISTS:
+      'Tu cuenta ya tiene un perfil cliente. Consulta el perfil actual.',
+    SHIPPING_POLICY_CHANGED:
+      'La política de envío cambió. Consulta tus solicitudes antes de renovar la precotización.',
+    SHIPPING_POLICY_REVISION_CONFLICT:
+      'Otro administrador modificó la política. Consulta la revisión vigente.',
+    SHIPPING_PAYER_NOT_ALLOWED:
+      'Este pagador no está permitido para tu cuenta.',
+    SHIPPING_PAYER_CONTACT_REQUIRED:
+      'Indica quién pagará el envío en recogida y su contacto.',
+    SHIPPING_TERMS_MISMATCH:
+      'Los términos no coinciden. Consulta los términos finales de la solicitud.',
+    CUSTOMER_AUTHORIZATION_MISMATCH:
+      'El consentimiento no corresponde a esta cotización. Revisa sus condiciones.',
+    ACCESS_TOKEN_INVALID:
+      'El enlace es inválido o ya fue utilizado. Intenta iniciar sesión o recuperar tu acceso.',
+    ACCESS_TOKEN_EXPIRED: 'El enlace venció. Solicita otro enlace.',
     VERIFICATION_DOCUMENTS_PENDING:
       'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
     VERIFICATION_REVIEW_REQUIRED:

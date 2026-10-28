@@ -1,0 +1,81 @@
+✔ backend, public asset and package contract are semantically identical and versions coherent (14.0216ms)
+✔ exact independently reviewed method/path and schema allowlists; no human operations (4.0891ms)
+✔ every internal reference resolves, with no external reference or duplicate API prefix (2.3988ms)
+✔ optional search schemas and legacy semantics are represented without new webhook events (1.3884ms)
+✔ public Markdown relative links resolve to packaged files and real headings (5.5466ms)
+✔ signature helper unchanged and verifies original bytes, tamper and duplicate headers safely (1.3293ms)
+✔ actual ZIP extracts through Windows ZIP implementation; exact allowlist, hashes and reproducible bytes (1379.8007ms)
+✖ HTTPS /developers serves the SPA without probing the physical directory (1.9061ms)
+✖ HTTPS /developers/ serves the SPA without probing the physical directory (0.4251ms)
+✖ real assets, missing JSON and deep SPA routes retain their policies (5.3064ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 7
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1540.1778
+
+✖ failing tests:
+
+test at scripts\check-developers-entry.test.mjs:10:3
+✖ HTTPS /developers serves the SPA without probing the physical directory (1.9061ms)
+  AssertionError [ERR_ASSERTION]: one exact HTTPS location required
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///C:/Users/zorgl/Documents/mandaria-frontend/scripts/check-developers-entry.test.mjs:12:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\check-developers-entry.test.mjs:10:3
+✖ HTTPS /developers/ serves the SPA without probing the physical directory (0.4251ms)
+  AssertionError [ERR_ASSERTION]: one exact HTTPS location required
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///C:/Users/zorgl/Documents/mandaria-frontend/scripts/check-developers-entry.test.mjs:12:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\check-developers-entry.test.mjs:20:1
+✖ real assets, missing JSON and deep SPA routes retain their policies (5.3064ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(asset)
+
+      at TestContext.<anonymous> (file:///C:/Users/zorgl/Documents/mandaria-frontend/scripts/check-developers-entry.test.mjs:23:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

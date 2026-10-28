@@ -1,0 +1,690 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-affiliations/8796fd6b-46a6-4032-a9bd-f2470283ccf2/exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/f95fb979-0b34-4e9e-a61e-7aa7801b1b9a"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/f95fb979-0b34-4e9e-a61e-7aa7801b1b9a"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0/recheck"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-affiliations/056ee71c-4108-48b6-963f-8934bf770fbc/exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/46eff729-27e3-4d30-bdf8-ca4b7233dccc"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/fleet-exit-attempts/46eff729-27e3-4d30-bdf8-ca4b7233dccc/close"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-affiliations/056ee71c-4108-48b6-963f-8934bf770fbc/exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/1d301757-6f44-426b-8b8e-db27ff74338c"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c/movement-declarations"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c/movement-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-assistance-attempts/81669666-8632-4e14-8b62-507b8532ef90"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c/disputes"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-assistance-cases/64978b05-5b4e-4feb-89b9-919758ccc08c/movement-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/1d301757-6f44-426b-8b8e-db27ff74338c"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0/recheck"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/fleet-exit-requests/f19c5825-f733-4648-a498-068900c93ba0"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/d9a98b8c-1579-44df-b311-78109b71dd3a/fleet-affiliation-context"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/credits"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/vehicles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/credits/ledger"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/service-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/service-zones"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/credits"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/vehicles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/drivers/7c01609f-a60e-4bc9-831b-a9962cdefe01/independent/credits/ledger"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/service-zones"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/service-zones"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/service-zones"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/independent-drivers/29879140-4bcc-4dc9-995c-ff59330976bc/offer-zones"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/1d301757-6f44-426b-8b8e-db27ff74338c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/fcf6e06c-7b77-4524-be48-7ed8624b88be"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/1d301757-6f44-426b-8b8e-db27ff74338c"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests/1d301757-6f44-426b-8b8e-db27ff74338c"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/fcf6e06c-7b77-4524-be48-7ed8624b88be"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profiles"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/profile"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-requests"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/provider/fleet-exit-notices"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/fleet-exit-attempts/fcf6e06c-7b77-4524-be48-7ed8624b88be"
+  }
+]

@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-26",
+  "branch": "QA",
+  "baseCommit": "8dc67e6",
+  "webVersion": "1.11.0",
+  "backend": {
+    "head": "f2f942e046901551f4e4d144479d6b5bbeac0014",
+    "version": "1.13.3",
+    "readOnly": true,
+    "gitPublication": "Reported by owner; local QA commit matched. No remote service verification."
+  },
+  "comparison": {
+    "backendVersion": "1.13.3",
+    "previousWebVersion": "1.13.1",
+    "publicOnlyVersionDifference": true,
+    "internal1132To1133OnlyVersionDifference": true,
+    "public1132To1133OnlyVersionDifference": true,
+    "administrativeSchemaEqual": true,
+    "route": "/api/v1/admin/fleet-assistance-cases/{id}/administrative-references/{section}",
+    "operations": 20,
+    "schemas": 50,
+    "servers": [
+      {
+        "url": "https://mandaria.com.mx",
+        "description": "Origen público confirmado por el propietario. Las rutas ya incluyen /api/v1; no añadir ese prefijo a servers.url."
+      }
+    ]
+  },
+  "package": {
+    "output": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\.tmp\\b2b-integrator-package-2026-10-26",
+    "zip": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\.tmp\\b2b-integrator-package-2026-10-26.zip",
+    "files": 11,
+    "sha256": "a914ace0310c2afa17afde9974ec731f2d75a9fc7e1b4d299be281a2ec6e69c4",
+    "contractVersion": "1.13.3"
+  },
+  "packageExtraction": "Real ZIP extracted by existing test with exact 11-file allowlist, 10 content hashes and deterministic regeneration",
+  "freshChecks": {
+    "portalAndAssistanceTests": 118,
+    "files": 5,
+    "durationSeconds": 10.61,
+    "packageTests": 10,
+    "types": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "browser": "PASS: 16 routes, 10 downloads, no external/API requests",
+    "scriptAndManifestFormat": "PASS",
+    "whitespace": "PASS"
+  },
+  "priorEvidencePreserved": {
+    "approvalLifecycleHashes": 9,
+    "global1597": "Historical, not rerun",
+    "http16": "Historical, not rerun"
+  },
+  "knownLimitations": [
+    "OpenAPI formatting differs from Prettier, reproduced on pre-sync HEAD. Exact authorized generator formatting retained.",
+    "Known build chunk >500 kB warning.",
+    "No temporal approval TTL; revocation, material invalidation and cursor expiry are distinct.",
+    "No remote availability, integrator acceptance or Android UI accreditation."
+  ],
+  "hashes": [
+    {
+      "path": "public/developers/assets/openapi-b2b.json",
+      "sha256": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c"
+    },
+    {
+      "path": "public/developers/assets/manifest.json",
+      "sha256": "8287550f4ad78c3abe52bb316f750b1f0e8280afd75ad18ce95567cbcce2f83f"
+    },
+    {
+      "path": "scripts/package-b2b-integrators.mjs",
+      "sha256": "71db6a117469cdaa1831d9a7926313d0cde9a0c306d922cf4987f23e53e2bca4"
+    },
+    {
+      "path": "docs/b2b-integrator-package/README.md",
+      "sha256": "89b8e85a2e9e73e5e58f5f5935bad53205a3d3f7732596a090063223c27853d9"
+    },
+    {
+      "path": "docs/b2b-integrator-package/CHANGELOG.md",
+      "sha256": "430ba0eaf1e8c1100b5c692ec809decd17b2ecfa305d672008004beed1f352f3"
+    },
+    {
+      "path": "docs/b2b-integrator-package/COMMUNICATION.md",
+      "sha256": "72813bd3665cf70377801dd65419465d92ee4dc2f77cbd8176acfac248c9247c"
+    },
+    {
+      "path": "docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md",
+      "sha256": "ee9298af909255d81199363c6758fa85a6a1582443f1939cba6c9242d0cbf152"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/browser-report.json",
+      "sha256": "60c2ed5af125f01b6f2a0c7fd2bbbfb15ab60b64c68a2801bb2478d0b8eb34c3"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/browser.txt",
+      "sha256": "60c2ed5af125f01b6f2a0c7fd2bbbfb15ab60b64c68a2801bb2478d0b8eb34c3"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/build.txt",
+      "sha256": "f04cb3270422b69201531322a37c8342bde546a1851cf81ccb8184784cc18043"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/comparison.json",
+      "sha256": "2e1cc7a8058db5857e08e72f7dff71fc228150bdf37da511ae266a5dd2334551"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/desktop-reference.png",
+      "sha256": "f0dbc473627e62e42622fdffbb523b97b4bf864e3b2c9d49eb18fff52523ce19"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/desktop-search.png",
+      "sha256": "837aa334f9a43e445e128605c8388f2d4202061da1cff2a3695b12df7cc8b2d4"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/focused.txt",
+      "sha256": "0d6cfc48bd2062c47198569bc04e857f23353e62f6c5a646deabd79a464aa8a6"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/format-baseline.txt",
+      "sha256": "ab3b8591d1e479490fef31a4077420ad5af943632d821912d7e50363ff3c4e63"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/format-final.txt",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/format.txt",
+      "sha256": "c0455b104c29da787612847b7461174b14a8f84375fc80dcb80b7e1e7a9d1c6c"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/lint.txt",
+      "sha256": "1b882ecabc061f04aff9c631b2766f80f89a23da75c2e557e53276afc0ef49cb"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/mobile-reference.png",
+      "sha256": "16b3685b05347190940ac0dc77ea818b3ecf74248f699eb6b5d73a6433bdbdb5"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/mobile-search.png",
+      "sha256": "678116a79e2d72d53a9d2c0d3c88234ecde9176655d40648d632fce8f9edf867"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/package-tests.txt",
+      "sha256": "1f5b113a9dfbbd37777c4f0bc14525f9adc803802aa871d51e489978d85e0824"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/package.json",
+      "sha256": "0763e0dd8f942e0163bf172b5ca304aed7bc8ba63c9b8395750b23d0ac2d93d3"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/sync.txt",
+      "sha256": "4c830515723c5b94482a5325d0d3f5a674fd7e3a267ac1693b7301baf5f4fa70"
+    },
+    {
+      "path": "docs/evidence/backend-1133-sync-2026-10-26/types.txt",
+      "sha256": "72a31669e3055c77bc527272330cce8d3f57cbacbe4ce8e2c67e2fec8683c5b0"
+    }
+  ],
+  "backendOrMobileModified": false,
+  "versionChanged": false,
+  "dependenciesChanged": false,
+  "commit": false,
+  "push": false,
+  "deployment": false,
+  "sent": false,
+  "commitReview": {
+    "date": "2026-10-26",
+    "baseCommit": "8dc67e6",
+    "verifiedSyncHashes": 24,
+    "verifiedApprovalHashes": 9,
+    "zipHashVerified": true,
+    "testsRerun": false,
+    "findings": [],
+    "localCommitAuthorized": true,
+    "approvalChangesExcluded": true,
+    "versionChanged": false,
+    "push": false,
+    "deployment": false
+  }
+}
