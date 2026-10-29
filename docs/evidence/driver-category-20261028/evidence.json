@@ -1,0 +1,75 @@
+{
+  "scope": "Disposable loopback PostgreSQL, synthetic fixtures only",
+  "root": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\test-results\\category-http-1793222823526\\.tmp\\driver-category-verification-1793222895665",
+  "migration": "20261028000100_driver_category_exclusivity",
+  "suites": "category-migration-concurrency-http",
+  "postgresRuntime": "Mandaria-Postgres/PostgreSQL18",
+  "steps": [
+    {
+      "name": "prepare-wsl",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "initdb",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "start",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "create-mandaria_offers_fresh_test",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "create-mandaria_offers_upgrade_test",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "fresh",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "schema-snapshot",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "baseline",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "legacy-fixture",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "upgrade",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "category-cases",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "stop",
+      "exit": 0,
+      "error": null
+    },
+    {
+      "name": "postgres-log",
+      "exit": 0,
+      "error": null
+    }
+  ],
+  "complete": true
+}

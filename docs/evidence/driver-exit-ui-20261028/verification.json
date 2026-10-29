@@ -1,0 +1,85 @@
+{
+  "recordedAt": "2026-10-28T22:31:50.804Z",
+  "branch": "main",
+  "base": "ffb07b1",
+  "webVersion": "1.11.0",
+  "scope": "Frontend tests and browser with mocked HTTP; no new live backend integration",
+  "backend": {
+    "statusCommand": "node C:/Users/zorgl/Documents/mandaria-backend/scripts/mandaria-interactive.mjs status",
+    "state": "offline",
+    "postgresRunning": false,
+    "liveUrl": null,
+    "servedBuild": null,
+    "effectiveFlags": null,
+    "migrationsApplied": null
+  },
+  "checks": [
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --reporter=json --outputFile=test-results/category-exit-global.json",
+      "passed": 1618,
+      "failed": 0,
+      "pending": 0,
+      "files": 80,
+      "reportSha256": "1a5def157ccb9dff3ee6af6050e822399e37deaa6c068901d5f17694ab8b2bb8"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run src/test/fleet-exit.test.tsx src/test/fleet-exit-api.test.ts --reporter=json --outputFile=test-results/driver-exit-focused-final2.json",
+      "passed": 68,
+      "failed": 0,
+      "pending": 0,
+      "files": 2
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -b",
+      "exitCode": 0
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.test.json",
+      "exitCode": 0
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js . --ignore-pattern 'test-results/**' --ignore-pattern '.tmp/**'",
+      "exitCode": 0
+    },
+    {
+      "command": "Vite build API with configFile:false, envDir:false, React plugin, define VITE_API_URL http://127.0.0.1:4269 and outDir test-results/driver-exit-build",
+      "exitCode": 0,
+      "modules": 2420,
+      "warning": "chunk >500 kB"
+    },
+    {
+      "command": "node scripts/verify-category-exit-ui.mjs",
+      "exitCode": 0,
+      "passed": 5,
+      "failed": 0,
+      "http": "MOCKED ONLY"
+    }
+  ],
+  "pending": [
+    "Dedicated updated backend + supplied legacy fixture",
+    "Current live HTTP matrix",
+    "First independent enablement without canonical profile",
+    "Durable independent RELEASE protocol integration",
+    "Android acceptance"
+  ],
+  "sha256": {
+    "src/app/App.tsx": "f2df924960b031f5d2c74e3cadca2c5ccda76c7cda8b4b6d24dac36e71ba81fa",
+    "src/driver-portal/pages.tsx": "cd68b6e4fa83a6a121cf2efc87c39981801a3289576ecdcf22f55d031ce85df6",
+    "src/driver-category/components.tsx": "5d282a0b39519a134f9843dde8bd44e3b1545a4e812351a069d06b169660ed77",
+    "src/fleet-exit/types.ts": "4ca006b3e810c2267e3d2513b8ae767586110a1f1c400a860c9c56f4f8c83b56",
+    "src/fleet-exit/service.ts": "faac684c8ba7380362c93c85b5db633f88790bd25fdea1bf45fb54c72253cdfe",
+    "src/fleet-exit/attempts.ts": "045b68b1617dd99f4cf851d4463de642545d99365bc43461f14c50713c78f2e3",
+    "src/fleet-exit/pages.tsx": "957268ec34bf7c071c3402bb7742f5243cd627342226ec73416c75c9b13026df",
+    "src/fleet-exit/commands.tsx": "4af31cb2b149373788717ae3c4a051f8615c86a6670ca9d26c8e9e2a0807c20e",
+    "src/test/fleet-exit.test.tsx": "e4da0f85b79e46b7f2a050cf5db327360346232fb9f53299bb0022cda1bbfb8c",
+    "src/test/fleet-exit-api.test.ts": "9f98cc7fd7a5aadba8735c0ec40db83d12a7d1e4f7b2e2ced183771a33090c02",
+    "scripts/verify-category-exit-ui.mjs": "d0b673ac88af55238b40e2e295dfd8cf099e4d6955bf3c4c08d1fef0af071097",
+    "scripts/prepare-category-http.mjs": "d6f21f25125696b032c569a4188e921e28ac44de32831e345e43d6b1b65918dc",
+    "docs/evidence/driver-exit-ui-20261028/results.json": "06efc3154b0722e8d24669caff26f7ec24243c8b10e550787f728e1a07839888",
+    "docs/evidence/driver-exit-ui-20261028/01-active-mock.png": "5235b0105a50101c7efe64815b10f18cdce1b3cf31c53bac69633db4912c89dd",
+    "docs/evidence/driver-exit-ui-20261028/02-pending-recovered-mock.png": "2be35b4939ad1ce395a1ebdbe49f43030ac59dbe56a6053494eb8207be2c38ae",
+    "docs/evidence/driver-exit-ui-20261028/03-ended-none-mock.png": "2acaecac068936771dcdbedb07b124a4af481a16719f763d16e1b0fa7fbc301e",
+    "docs/evidence/driver-exit-ui-20261028/04-independent-suspended-mock.png": "9b34c3b279034c5e826f7519db7b7a79279ebdcaf2b678b76821afea4bb0aba5",
+    "docs/evidence/driver-exit-ui-20261028/05-review-required-mock.png": "22c39d8bc3074e447ba4b93a28d68c9e66708cdee3c33f0008c7cfdac8fdea04"
+  }
+}

@@ -109,8 +109,8 @@ export function PrivacyLayout() {
       <nav aria-label="Privacidad">
         <Link to="/privacy/deletion">Mis solicitudes</Link>
         <Link to="/privacy/deletion-access">Canal privado sin sesión</Link>
-        <Link to="/privacy/fleet-exit-recovery">
-          Recuperar salida de flotilla
+        <Link to="/privacy/independent-recovery">
+          Recuperar operación independiente
         </Link>
         {user?.role === 'SUPER_ADMIN' && (
           <Link to="/admin/privacy/deletion">Revisión administrativa</Link>

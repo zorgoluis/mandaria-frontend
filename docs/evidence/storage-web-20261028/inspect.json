@@ -1,0 +1,221 @@
+{
+  "stage": "inspect",
+  "checkedAt": "2026-10-29T03:58:27.368Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 3,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    {
+      "readAt": "2026-10-29T03:58:25.312Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 3,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "CREATED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T03:58:26.293Z",
+      "id": "59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "resourceId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+      "status": "DRAFT",
+      "revision": 2,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": []
+    }
+  ],
+  "errors": [],
+  "http": [
+    {
+      "at": "2026-10-29T03:58:24.179Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.193Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.613Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.626Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.677Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.691Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.768Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:24.794Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.688Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.699Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.731Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.747Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.763Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:25.789Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.616Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.629Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.672Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.679Z",
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.691Z",
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.696Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.702Z",
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T03:58:26.702Z",
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    }
+  ]
+}

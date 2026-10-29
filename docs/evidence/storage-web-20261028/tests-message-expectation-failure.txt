@@ -1,0 +1,237 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/independent-vehicle-plate.test.tsx (2 tests | 1 failed) 1202ms
+   × retains the dialog on a server rejection, without claiming success 1034ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/independent-vehicle-plate.test.tsx > retains the dialog on a server rejection, without claiming success
+TestingLibraryElementError: Unable to find an element with the text: Rechazo del servidor. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <button
+      class="button secondary small"
+    >
+      Editar placa
+    </button>
+    <dialog
+      aria-labelledby="_r_3_"
+      open=""
+    >
+      <div
+        class="modal-heading"
+      >
+        <h2
+          id="_r_3_"
+        >
+          Placa de MOTO
+        </h2>
+        <button
+          aria-label="Cerrar diálogo"
+          class="icon-button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <p>
+        Actualizar la placa conserva el vehículo y su historial. Si ya se presentó un expediente, el cambio puede impedir su aprobación por diferencia con los datos presentados. No aprueba documentos ni activa la unidad.
+      </p>
+      <form>
+        <fieldset
+          class="form-fields"
+        >
+          <label
+            class="field"
+          >
+            <span
+              id="_r_4_"
+            >
+              Placa del vehículo
+            </span>
+            <input
+              aria-labelledby="_r_4_"
+              maxlength="15"
+              name="plate"
+              required=""
+              value=""
+            />
+          </label>
+        </fieldset>
+        <p
+          class="inline-error"
+          role="alert"
+        >
+          No fue posible completar la operación. Inténtalo nuevamente.
+        </p>
+        <div
+          class="form-actions"
+        >
+          <small>
+            Cambios sin guardar
+          </small>
+          <button
+            class="button secondary"
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            class="button"
+            type="submit"
+          >
+            Guardar placa
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <button
+      class="button secondary small"
+    >
+      Activar
+    </button>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <button
+      class="button secondary small"
+    >
+      Editar placa
+    </button>
+    <dialog
+      aria-labelledby="_r_3_"
+      open=""
+    >
+      <div
+        class="modal-heading"
+      >
+        <h2
+          id="_r_3_"
+        >
+          Placa de MOTO
+        </h2>
+        <button
+          aria-label="Cerrar diálogo"
+          class="icon-button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <p>
+        Actualizar la placa conserva el vehículo y su historial. Si ya se presentó un expediente, el cambio puede impedir su aprobación por diferencia con los datos presentados. No aprueba documentos ni activa la unidad.
+      </p>
+      <form>
+        <fieldset
+          class="form-fields"
+        >
+          <label
+            class="field"
+          >
+            <span
+              id="_r_4_"
+            >
+              Placa del vehículo
+            </span>
+            <input
+              aria-labelledby="_r_4_"
+              maxlength="15"
+              name="plate"
+              required=""
+              value=""
+            />
+          </label>
+        </fieldset>
+        <p
+          class="inline-error"
+          role="alert"
+        >
+          No fue posible completar la operación. Inténtalo nuevamente.
+        </p>
+        <div
+          class="form-actions"
+        >
+          <small>
+            Cambios sin guardar
+          </small>
+          <button
+            class="button secondary"
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            class="button"
+            type="submit"
+          >
+            Guardar placa
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <button
+      class="button secondary small"
+    >
+      Activar
+    </button>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/independent-vehicle-plate.test.tsx:67:23
+     65|   })
+     66|   fireEvent.click(screen.getByRole('button', { name: 'Guardar placa' }…
+     67|   expect(await screen.findByText('Rechazo del servidor')).toBeVisible()
+       |                       ^
+     68|   expect(screen.getByRole('dialog')).toBeVisible()
+     69|   expect(refreshIndependent).not.toHaveBeenCalled()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 14 passed (15)
+   Start at  22:08:49
+   Duration  3.53s (environment 44%, tests 23%, transform 17%, setup 9%, import 6%)

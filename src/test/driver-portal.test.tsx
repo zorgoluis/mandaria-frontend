@@ -1,3 +1,6 @@
+import { independentStore } from '../driver-portal/attempts'
+import { reception } from '../driver-portal/reception-service'
+import type { DriverCategory } from '../driver-category/contract'
 import { collectionFixture } from './collection-fixture'
 import { executionFixture, detailFixture } from './execution-fixture'
 import { executionApi } from '../execution/service'
@@ -27,6 +30,17 @@ import type {
 import type { IndependentDriverProfile } from '../independent-drivers/types'
 import type { Role } from '../types/api'
 
+vi.mock('../driver-portal/attempts', async (original) => {
+  const m = await original<typeof import('../driver-portal/attempts')>()
+  m.independentStore.list = vi.fn()
+  m.independentStore.save = vi.fn()
+  m.independentStore.clear = vi.fn()
+  return m
+})
+vi.mock('../driver-portal/reception-service', async (original) => ({
+  ...(await original<typeof import('../driver-portal/reception-service')>()),
+  reception: { get: vi.fn() },
+}))
 vi.mock('../independent-zones/service', () => ({
   offerZones: { get: vi.fn(), put: vi.fn() },
 }))
@@ -97,6 +111,15 @@ vi.mock('../credits/service', () => ({
   movementKey: () => 'test-key',
 }))
 
+const canonical: DriverCategory = {
+  contractVersion: '1.0.0',
+  categoryRevision: '9007199254740993',
+  category: 'INDEPENDENT',
+  providerId: null,
+  independentMembershipState: 'CURRENT',
+  independentApprovalStatus: 'APPROVED',
+  resolutionRequired: false,
+}
 const stamp = '2026-09-20T12:00:00Z'
 const DRIVER_ID = '11111111-1111-4111-8111-111111111111'
 const PROVIDER = '22222222-2222-4222-8222-222222222222'
@@ -132,6 +155,7 @@ const vehicle = (
 })
 function me(over: Partial<DriverSelf> = {}): DriverSelf {
   return {
+    driverCategory: canonical,
     id: DRIVER_ID,
     name: 'Carlos',
     status: 'ACTIVE',
@@ -232,6 +256,7 @@ function profile(
   over: Partial<IndependentDriverProfile> = {},
 ): IndependentDriverProfile {
   return {
+    driverCategory: canonical,
     id: '77777777-7777-4777-8777-777777777777',
     driverId: DRIVER_ID,
     status: 'APPROVED',
@@ -347,7 +372,7 @@ it('current independent custodian continues detailed execution despite commercia
   })
   mount('/driver/my-service')
   expect(
-    await screen.findByText(/En la web, el progreso es de consulta/),
+    await screen.findByText(/este panel conserva el historial/),
   ).toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
@@ -359,6 +384,16 @@ it('current independent custodian continues detailed execution despite commercia
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.spyOn(executionApi, 'detail').mockResolvedValue({
+    execution: executionFixture,
+    events: { items: [], total: 0, totalPages: 1, page: 1, pageSize: 20 },
+  })
+  vi.mocked(independentStore.list).mockResolvedValue([])
+  vi.mocked(independentStore.save).mockResolvedValue()
+  vi.mocked(reception.get).mockResolvedValue({
+    state: 'READY',
+    canAttemptTake: true,
+  } as never)
   vi.mocked(offerZones.get).mockResolvedValue({ revision: '0', zoneIds: [] })
   vi.mocked(zoneStore.read).mockResolvedValue(null)
   vi.mocked(independentCreditsAdmin.account).mockResolvedValue(creditAccount)
@@ -481,7 +516,14 @@ describe('payment context', () => {
 
 describe('take', () => {
   it('sends one atomic call with the chosen vehicle and refetches afterwards', async () => {
-    vi.mocked(driverPortal.take).mockResolvedValue(taken)
+    vi.mocked(driverPortal.take).mockResolvedValue({
+      operation: 'TAKE',
+      dispatchId: DISPATCH,
+      assignmentId: DISPATCH,
+      dispatchStatus: 'CLAIMED',
+      assignmentStatus: 'ACTIVE',
+      credits: { awardEntryId: null, refundEntryId: null, amount: 0 },
+    })
     vi.mocked(driverPortal.me)
       .mockResolvedValueOnce(me())
       .mockResolvedValue(
@@ -501,7 +543,11 @@ describe('take', () => {
     await user.selectOptions(await dialog().findByLabelText('Vehículo'), MOTO)
     await user.click(dialog().getByRole('button', { name: 'CONFIRMAR' }))
     await waitFor(() =>
-      expect(driverPortal.take).toHaveBeenCalledWith(DISPATCH, MOTO),
+      expect(driverPortal.take).toHaveBeenCalledWith(
+        DISPATCH,
+        MOTO,
+        expect.any(String),
+      ),
     )
     expect(driverPortal.take).toHaveBeenCalledTimes(1)
     // The driver's own state is read back instead of assumed.
@@ -656,13 +702,31 @@ describe('my service', () => {
     ])
       expect(screen.queryByRole('button', { name: label })).toBeNull()
     expect(
-      screen.getByText(
-        /el repartidor registra avances y entrega desde la app/i,
-      ),
+      screen.getByText(/registra los hitos y confirma la entrega/i),
     ).toBeInTheDocument()
   })
   it('releases with a reason and warns it returns to others', async () => {
-    vi.mocked(driverPortal.release).mockResolvedValue(dispatch())
+    vi.mocked(driverPortal.release).mockResolvedValue({
+      operation: 'RELEASE',
+      dispatchId: DISPATCH,
+      assignmentId: DISPATCH,
+      dispatchStatus: 'OPEN',
+      assignmentStatus: 'CANCELLED',
+      credits: { awardEntryId: null, refundEntryId: null, amount: 0 },
+    })
+    vi.mocked(driverPortal.get).mockResolvedValue({
+      ...taken,
+      trackingMode: 'DETAILED',
+      access: 'OWNER',
+      execution: {
+        ...executionFixture,
+        activeAssignmentId: 'assignment-1',
+        phase: null,
+        custodyStatus: 'NOT_COLLECTED',
+        openIncidentId: null,
+        allowedActions: ['ORDINARY_ASSIGNMENT_OPERATIONS'],
+      },
+    })
     mount('/driver/my-service')
     const user = userEvent.setup()
     await user.click(
@@ -680,6 +744,7 @@ describe('my service', () => {
         DISPATCH,
         'PERSONAL_EMERGENCY',
         undefined,
+        expect.any(String),
       ),
     )
     await waitFor(() =>
@@ -687,6 +752,19 @@ describe('my service', () => {
     )
   })
   it('requires a detail for OTHER before calling the API', async () => {
+    vi.mocked(driverPortal.get).mockResolvedValue({
+      ...taken,
+      trackingMode: 'DETAILED',
+      access: 'OWNER',
+      execution: {
+        ...executionFixture,
+        activeAssignmentId: 'assignment-1',
+        phase: null,
+        custodyStatus: 'NOT_COLLECTED',
+        openIncidentId: null,
+        allowedActions: ['ORDINARY_ASSIGNMENT_OPERATIONS'],
+      },
+    })
     mount('/driver/my-service')
     const user = userEvent.setup()
     await user.click(
@@ -712,14 +790,14 @@ describe('super admin administration', () => {
       }),
     ).toBeInTheDocument()
     expect(
-      screen.getAllByText(/capacidad operativa adicional/i).length,
+      screen.getAllByText(/pertenencias excluyentes/i).length,
     ).toBeGreaterThan(0)
     const row = within(await screen.findByRole('table')).getAllByRole('row')[1]
     expect(row).toHaveTextContent('Carlos')
     expect(row).toHaveTextContent('Habilitado')
     expect(row).not.toHaveTextContent('APPROVED')
   })
-  it('enables an existing eligible driver without creating accounts', async () => {
+  it('consults a known profile without offering affiliated candidates or enabling implicitly', async () => {
     vi.mocked(providers.list).mockResolvedValue(
       page([
         {
@@ -753,23 +831,12 @@ describe('super admin administration', () => {
     mount('/independent-drivers', 'SUPER_ADMIN')
     const user = userEvent.setup()
     await user.click(
-      await screen.findByRole('button', { name: 'Habilitar repartidor' }),
+      await screen.findByRole('button', { name: 'Consultar candidato' }),
     )
-    await user.selectOptions(
-      await dialog().findByLabelText('Proveedor'),
-      PROVIDER,
-    )
-    await user.selectOptions(
-      await dialog().findByLabelText('Repartidor'),
-      DRIVER_ID,
-    )
-    await user.click(dialog().getByRole('button', { name: 'Habilitar' }))
-    await waitFor(() =>
-      expect(independentDrivers.enable).toHaveBeenCalledWith(
-        DRIVER_ID,
-        undefined,
-      ),
-    )
+    await user.type(dialog().getByLabelText('Driver ID'), DRIVER_ID)
+    await user.click(dialog().getByRole('button', { name: 'Consultar perfil' }))
+    await screen.findByRole('region', { name: 'Categoría vigente' })
+    expect(independentDrivers.enable).not.toHaveBeenCalled()
   })
   it('suspends with a mandatory reason and never changes the state locally first', async () => {
     vi.mocked(independentDrivers.suspend).mockResolvedValue(
@@ -1116,4 +1183,56 @@ it('does not load zones or create a profile when the independent profile is abse
   await screen.findByRole('alert')
   expect(offerZones.get).not.toHaveBeenCalled()
   expect(independentDrivers.enable).not.toHaveBeenCalled()
+})
+
+describe('exclusive category UI', () => {
+  it.each(['FLEET', 'NONE', 'REVIEW_REQUIRED'] as const)(
+    'blocks taking for %s despite historical APPROVED',
+    async (category) => {
+      vi.mocked(driverPortal.me).mockResolvedValue(
+        me({
+          driverCategory: {
+            ...canonical,
+            category,
+            resolutionRequired: category === 'REVIEW_REQUIRED',
+            providerId: category === 'FLEET' ? PROVIDER : null,
+          },
+        }),
+      )
+      mount('/driver/services')
+      await screen.findByRole('heading', {
+        name: 'Todavía no puedes tomar servicios',
+      })
+      expect(driverPortal.available).not.toHaveBeenCalled()
+      expect(driverPortal.take).not.toHaveBeenCalled()
+    },
+  )
+  it('does not approve a fleet historical profile and never offers a suspension conversion', async () => {
+    vi.mocked(independentDrivers.get).mockResolvedValue(
+      profile({
+        status: 'SUSPENDED',
+        driverCategory: {
+          ...canonical,
+          category: 'FLEET',
+          providerId: PROVIDER,
+          independentMembershipState: 'HISTORICAL',
+        },
+      }),
+    )
+    mount('/independent-drivers/' + DRIVER_ID, 'SUPER_ADMIN')
+    expect(
+      await screen.findByRole('button', { name: 'Habilitar' }),
+    ).toBeDisabled()
+    expect(independentDrivers.enable).not.toHaveBeenCalled()
+    expect(screen.queryByRole('button', { name: 'Suspender' })).toBeNull()
+  })
+  it('does not enable when canonical category is missing', async () => {
+    vi.mocked(independentDrivers.get).mockResolvedValue(
+      profile({ status: 'SUSPENDED', driverCategory: undefined }),
+    )
+    mount('/independent-drivers/' + DRIVER_ID, 'SUPER_ADMIN')
+    expect(
+      await screen.findByRole('button', { name: 'Habilitar' }),
+    ).toBeDisabled()
+  })
 })

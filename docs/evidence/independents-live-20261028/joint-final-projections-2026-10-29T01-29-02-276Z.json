@@ -1,0 +1,290 @@
+{
+  "at": "2026-10-29T01:29:07.043Z",
+  "dispatchId": "4daacb2e-8904-4113-8cc2-88f247d1863e",
+  "assignmentIdProvided": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+  "responses": [
+    {
+      "at": "2026-10-29T01:29:05.282Z",
+      "path": "/api/v1/admin/dispatches/4daacb2e-8904-4113-8cc2-88f247d1863e",
+      "query": "",
+      "status": 200,
+      "body": {
+        "id": "4daacb2e-8904-4113-8cc2-88f247d1863e",
+        "status": "DELIVERED",
+        "openedAt": "2026-10-29T00:50:38.328Z",
+        "expiresAt": "2026-10-29T01:50:38.328Z",
+        "claimedByProviderId": null,
+        "claimedByIndependentDriverId": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+        "claimMode": "INDEPENDENT",
+        "claimedAt": "2026-10-29T01:01:45.032Z",
+        "expiredAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "deliveredAt": "2026-10-29T01:23:13.111Z",
+        "deliveredByUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+        "createdAt": "2026-10-29T00:50:38.345Z",
+        "updatedAt": "2026-10-29T01:23:13.118Z",
+        "deliveryRequest": {
+          "publicId": "MDR-000001",
+          "status": "CREATED",
+          "integrationClientId": "6008f28b-ab07-44e1-8c86-eaf2fb6bab69"
+        },
+        "deliveryQuote": {
+          "publicId": "MQ-000001",
+          "serviceType": "LOCAL_DELIVERY",
+          "serviceZone": {
+            "id": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+            "code": "E2E_IND_ATTEMPT_ZONE_306F30E89D",
+            "name": "Zona 306F30E89D"
+          },
+          "amount": "60.00",
+          "currency": "MXN"
+        },
+        "activeAssignment": null,
+        "noProviderAvailable": false,
+        "openToIndependentDrivers": false,
+        "candidates": [],
+        "goods": {
+          "paymentMode": "PREPAID",
+          "value": "800.00",
+          "currency": "MXN",
+          "driverAdvancesGoods": false,
+          "driverAdvanceAmount": null
+        },
+        "creditSnapshots": [
+          {
+            "id": "baf4fead-ecc0-47a3-8ba3-b697a148b035",
+            "actorType": "PROVIDER",
+            "serviceType": "LOCAL_DELIVERY",
+            "creditPolicyId": "1e5a4036-c496-4c01-a1dd-21509afffafa",
+            "policyVersion": 1,
+            "calculationType": "PER_KM",
+            "distanceMeters": 4200,
+            "billableKm": 5,
+            "creditsPerKm": 1,
+            "minimumCredits": 3,
+            "calculatedCredits": 5,
+            "flatCredits": null,
+            "appliedRangeId": null,
+            "appliedRangePosition": null,
+            "appliedRangeMinDistanceMeters": null,
+            "appliedRangeMaxDistanceMeters": null,
+            "credits": 5,
+            "createdAt": "2026-10-29T00:50:38.361Z"
+          },
+          {
+            "id": "4c1111a8-8005-4387-b7cc-2ceff88b3ec2",
+            "actorType": "INDEPENDENT_DRIVER",
+            "serviceType": "LOCAL_DELIVERY",
+            "creditPolicyId": "0873c48a-fd29-43f8-9f78-5074f35893a7",
+            "policyVersion": 1,
+            "calculationType": "PER_KM",
+            "distanceMeters": 4200,
+            "billableKm": 5,
+            "creditsPerKm": 1,
+            "minimumCredits": 3,
+            "calculatedCredits": 5,
+            "flatCredits": null,
+            "appliedRangeId": null,
+            "appliedRangePosition": null,
+            "appliedRangeMinDistanceMeters": null,
+            "appliedRangeMaxDistanceMeters": null,
+            "credits": 5,
+            "createdAt": "2026-10-29T00:50:38.369Z"
+          }
+        ],
+        "legacyWithoutCreditSnapshots": false,
+        "creditEnforcementMode": "ENFORCED",
+        "trackingMode": "DETAILED"
+      }
+    },
+    {
+      "at": "2026-10-29T01:29:05.290Z",
+      "path": "/api/v1/admin/dispatches/4daacb2e-8904-4113-8cc2-88f247d1863e/assignments",
+      "query": "",
+      "status": 200,
+      "body": [
+        {
+          "id": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+          "dispatchId": "4daacb2e-8904-4113-8cc2-88f247d1863e",
+          "providerId": null,
+          "status": "COMPLETED",
+          "assignedAt": "2026-10-29T01:01:45.032Z",
+          "assignedByUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+          "endedAt": "2026-10-29T01:23:13.111Z",
+          "endedByUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+          "endReason": null,
+          "endReasonDetail": null,
+          "driver": {
+            "id": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+            "name": "carlos"
+          },
+          "vehicle": {
+            "id": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+            "identifier": "CARLOS-306F30E89D",
+            "type": "MOTORCYCLE",
+            "plate": null
+          },
+          "provider": null
+        }
+      ]
+    },
+    {
+      "at": "2026-10-29T01:29:05.297Z",
+      "path": "/api/v1/admin/dispatches/4daacb2e-8904-4113-8cc2-88f247d1863e/execution",
+      "query": "?page=1&pageSize=20",
+      "status": 200,
+      "body": {
+        "execution": {
+          "trackingMode": "DETAILED",
+          "revision": 7,
+          "phase": "AT_DROPOFF",
+          "activeAssignmentId": null,
+          "custodyStatus": "DELIVERED",
+          "openIncidentId": null,
+          "allowedActions": [],
+          "lastRecordedAt": "2026-10-29T01:23:13.130Z"
+        },
+        "events": {
+          "items": [
+            {
+              "kind": "DELIVERED",
+              "phase": 5,
+              "revision": 7,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:23:13.130Z"
+            },
+            {
+              "kind": "ADVANCED",
+              "phase": 5,
+              "revision": 6,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:20:48.146Z"
+            },
+            {
+              "kind": "ADVANCED",
+              "phase": 4,
+              "revision": 5,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:14:47.716Z"
+            },
+            {
+              "kind": "ADVANCED",
+              "phase": 3,
+              "revision": 4,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:08:18.465Z"
+            },
+            {
+              "kind": "ADVANCED",
+              "phase": 2,
+              "revision": 3,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:03:19.750Z"
+            },
+            {
+              "kind": "ADVANCED",
+              "phase": 1,
+              "revision": 2,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:01:53.018Z"
+            },
+            {
+              "kind": "ASSIGNED",
+              "phase": 0,
+              "revision": 1,
+              "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+              "actorUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b",
+              "actorRole": "DRIVER",
+              "source": "SELF_REPORT",
+              "recordedAt": "2026-10-29T01:01:45.067Z"
+            }
+          ],
+          "total": 7,
+          "page": 1,
+          "pageSize": 20,
+          "totalPages": 1
+        }
+      }
+    },
+    {
+      "at": "2026-10-29T01:29:06.376Z",
+      "path": "/api/v1/admin/drivers/06c6bde2-3238-40f8-bedd-5fa5c11622a7/independent/credits",
+      "query": "",
+      "status": 200,
+      "body": {
+        "id": "6464d89b-1e3e-48a9-949e-01764cb5234f",
+        "ownerType": "INDEPENDENT_DRIVER",
+        "providerId": null,
+        "independentDriverProfileId": "16f915e8-8e6f-4739-9cc8-c02cbd85023f",
+        "balance": 95,
+        "createdAt": "2026-10-29T00:21:38.508Z",
+        "updatedAt": "2026-10-29T01:01:45.015Z"
+      }
+    },
+    {
+      "at": "2026-10-29T01:29:06.396Z",
+      "path": "/api/v1/admin/drivers/06c6bde2-3238-40f8-bedd-5fa5c11622a7/independent/credits/ledger",
+      "query": "?page=1&pageSize=20",
+      "status": 200,
+      "body": {
+        "items": [
+          {
+            "id": "e878e804-7232-449e-9c9b-9ab8b596a271",
+            "sequence": 4,
+            "type": "SERVICE_AWARD",
+            "amount": -5,
+            "balanceBefore": 100,
+            "balanceAfter": 95,
+            "rechargeMethod": null,
+            "externalReference": null,
+            "reason": null,
+            "referenceType": "DISPATCH",
+            "referenceId": "4daacb2e-8904-4113-8cc2-88f247d1863e",
+            "createdAt": "2026-10-29T01:01:45.073Z",
+            "creditAccountId": "6464d89b-1e3e-48a9-949e-01764cb5234f",
+            "createdByUserId": "e2df19bd-450b-4d79-abba-5a7fc9d03f5b"
+          },
+          {
+            "id": "61ad88fb-7192-4209-bdf3-b876af46fd3b",
+            "sequence": 1,
+            "type": "RECHARGE",
+            "amount": 100,
+            "balanceBefore": 0,
+            "balanceAfter": 100,
+            "rechargeMethod": "OTHER",
+            "externalReference": null,
+            "reason": "E2E funding",
+            "referenceType": null,
+            "referenceId": null,
+            "createdAt": "2026-10-29T00:21:38.827Z",
+            "creditAccountId": "6464d89b-1e3e-48a9-949e-01764cb5234f",
+            "createdByUserId": "2c5ab81e-78bb-4485-94ba-f57afc7e44a5"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "pageSize": 20,
+        "totalPages": 1
+      }
+    }
+  ]
+}

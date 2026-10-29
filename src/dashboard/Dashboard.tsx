@@ -42,6 +42,34 @@ export function Dashboard() {
   )
 }
 function AdminDashboard() {
+  return (
+    <>
+      <PageTitle
+        title="Operación independiente"
+        description="Expediente, habilitación comercial y recepción se revisan por separado."
+      />
+      <section className="panel panel-body">
+        <Link to="/independent-drivers">
+          Revisar independientes y zonas propias
+        </Link>
+        <p>
+          <Link to="/admin/verification-cases">
+            Revisar expediente, términos y licencia
+          </Link>
+        </p>
+        <p>
+          <Link to="/dispatches">Consultar despachos e historial</Link>
+        </p>
+        <p>
+          <Link to="/custody-incidents">Resolver incidencias autorizadas</Link>
+        </p>
+      </section>
+      <DeliveryRequestCounts />
+    </>
+  )
+}
+/** Preserved historical fleet dashboard; not part of current operational navigation. */
+export function HistoricalProviderDashboard() {
   const recent = useQuery({
     queryKey: ['providers', 'dashboard'],
     queryFn: ({ signal }) => providers.list({ pageSize: 5 }, signal),

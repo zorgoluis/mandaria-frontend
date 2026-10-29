@@ -1,0 +1,299 @@
+{
+  "stage": "approve",
+  "checkedAt": "2026-10-29T04:04:39.216Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 3,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    {
+      "uiAdminApproval": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "at": "2026-10-29T04:04:32.338Z"
+    }
+  ],
+  "errors": [
+    {
+      "kind": "stage",
+      "message": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: / · Aprobado$/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: / · Aprobado$/ }) with timeout 5000ms\n  - waiting for getByRole('heading', { name: / · Aprobado$/ })\n"
+    }
+  ],
+  "http": [
+    {
+      "at": "2026-10-29T04:04:27.583Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:27.597Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:27.998Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:28.008Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:28.037Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:28.051Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:28.081Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:28.105Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.304Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.314Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.368Z",
+      "method": "GET",
+      "path": "/api/v1/admin/partner-applications",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.369Z",
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.369Z",
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.707Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.717Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.752Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.764Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:29.797Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:30.396Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/229c9de1-4d6c-427c-bf3a-23a3ab593eec/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:30.739Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/7127e9f0-962b-403e-81fa-c56a57204212/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:31.013Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/beb398aa-e040-4371-a497-63c818dae5ca/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:31.293Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/2a631d16-42fe-4017-9beb-cf24a327c574/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.084Z",
+      "method": "POST",
+      "path": "/api/v1/admin/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/decision",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.096Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.111Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.124Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.139Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.625Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.634Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.660Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.679Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:32.698Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:33.297Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/attachments/cedb4a1c-b3f9-47fd-b368-f6b70ca9efe7/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:33.660Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/attachments/0c6f5505-53b5-4423-80dc-3b903502d633/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:34.261Z",
+      "method": "POST",
+      "path": "/api/v1/admin/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/decision",
+      "status": 409,
+      "code": "VERIFICATION_PLATE_REQUIRED"
+    },
+    {
+      "at": "2026-10-29T04:04:34.275Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:34.289Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:34.303Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:04:34.315Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    }
+  ]
+}

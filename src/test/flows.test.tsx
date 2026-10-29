@@ -245,14 +245,9 @@ describe('auth and permissions UX', () => {
       'Dashboard',
       'Representación legal',
       'Mi proveedor',
-      'Salidas de flotilla',
       'Verificación documental',
-      'Asistencia y conciliación',
       'Servicios',
-      'Envíos de mi flotilla',
       'Créditos',
-      'Repartidores',
-      'Vehículos',
       'Mi perfil',
     ])
     expect(providers.list).not.toHaveBeenCalled()
@@ -275,8 +270,8 @@ describe('auth and permissions UX', () => {
       await screen.findByRole('link', { name: 'Integraciones' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: 'Proveedores' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('link', { name: 'Proveedores' }),
+    ).not.toBeInTheDocument()
     expect(
       within(screen.getByRole('navigation', { name: 'Navegación principal' }))
         .getAllByRole('link')
@@ -285,16 +280,9 @@ describe('auth and permissions UX', () => {
       'Mis envíos',
       'Cuenta Negocio',
       'Dashboard',
-      'Asistencia y conciliación',
-      'Salidas de flotilla',
       'Integraciones',
       'Solicitudes Negocio',
-      'Proveedores',
       'Administradores',
-      'Invitaciones',
-      'Solicitudes de socio',
-      'Repartidores',
-      'Vehículos',
       'Solicitudes',
       'Cotizaciones',
       'Zonas de servicio',

@@ -1,0 +1,22 @@
+Zonas, disponibilidad y turno
+Mi expediente
+Zonas y turno
+Servicios
+Mi servicio
+Mis vehículos
+Créditos
+
+Elige una zona propia autorizada e inicia el turno explícitamente. Aprobación, expediente y disponibilidad son requisitos separados. No se hereda cobertura de flotilla.
+
+Recepción: PAUSED · DOCUMENTARY_REQUIREMENTS. Revisión 1.
+
+Turno: Sin turno. No se autoriza tomar. PREVIEW sólo permite consultar.
+
+Zona autorizada
+Selecciona zona
+Seleccionar zonaIniciar turnoRenovar turnoDetener turnoPonerme disponiblePonerme fuera de línea
+Ofertas del turno
+
+Consulta la recepción y actualiza para obtener las ofertas vigentes.
+
+Actualizar recepción y ofertas

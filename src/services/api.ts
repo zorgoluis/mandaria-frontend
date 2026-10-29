@@ -6,6 +6,13 @@ import { ApiError, normalizeError } from './errors'
 const key = 'mandaria.refresh'
 let accessToken: string | null = null
 let generation = 0
+/** Fence async preparation (IndexedDB/locks) against a logout/account switch. */
+export const sessionFence = () => {
+  const original = generation
+  return () => {
+    if (generation !== original) throw normalizeError(401, null)
+  }
+}
 let refreshing: Promise<SessionIdentity> | null = null
 const listeners = new Set<() => void>()
 const identityListeners = new Set<(identity: SessionIdentity) => void>()

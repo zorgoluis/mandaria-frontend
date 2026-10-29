@@ -209,10 +209,14 @@ it('rejects extra command fields and wrong roles/recovery resource', async () =>
     } as never),
   ).toThrow()
   expect(() =>
-    validateBody('START', {
-      expectedAffiliationRevision: '1',
-      reasonCode: 'VOLUNTARY_EXIT',
-    } as never),
+    validateBody(
+      'START',
+      {
+        expectedAffiliationRevision: '1',
+        reasonCode: 'VOLUNTARY_EXIT',
+      } as never,
+      'provider',
+    ),
   ).toThrow()
   await expect(
     exits.attempt(eid.key, {
@@ -243,4 +247,51 @@ it('does not claim every 404 is an old server', () => {
     'cuenta',
   )
   expect(exitError(new ApiError(404, ''))).toContain('Ruta o recurso')
+})
+
+it('driver uses own routes and header key without provider query or requestId body', async () => {
+  const scope = { actor: 'driver-own', surface: 'driver' as const }
+  vi.mocked(api).mockResolvedValue(exitContext())
+  vi.mocked(apiOnce).mockResolvedValue(exitReceipt())
+  await exits.context(scope, '')
+  const body = {
+    expectedAffiliationRevision: '9007199254740993',
+    reasonCode: 'VOLUNTARY_EXIT' as const,
+  }
+  await exits.send(scope, 'START', eid.affiliation, eid.key, body)
+  expect(api).toHaveBeenCalledWith(
+    '/driver/fleet-affiliation-context',
+    'GET',
+    undefined,
+    undefined,
+  )
+  expect(apiOnce).toHaveBeenCalledWith(
+    '/driver/fleet-affiliations/' + eid.affiliation + '/exit-requests',
+    'POST',
+    body,
+    undefined,
+    { 'Idempotency-Key': eid.key },
+  )
+  await expect(
+    exits.send(scope, 'START', eid.affiliation, eid.key, {
+      expectedAffiliationRevision: '1',
+      reasonCode: 'PROVIDER_REMOVAL',
+    }),
+  ).rejects.toThrow()
+  await expect(
+    exits.send(exitScope, 'START', eid.affiliation, eid.key, {
+      expectedAffiliationRevision: '1',
+      reasonCode: 'VOLUNTARY_EXIT',
+    }),
+  ).rejects.toThrow()
+  await expect(
+    exits.list(scope, { providerId: eid.provider }),
+  ).rejects.toThrow()
+  const intent = makeIntent(scope, 'START', eid.affiliation, body)
+  expect(intent.path).toBe(
+    '/driver/fleet-affiliations/' + eid.affiliation + '/exit-requests',
+  )
+  expect(
+    (await decryptIntent(await encryptIntent(intent), scope)).body,
+  ).toEqual(body)
 })

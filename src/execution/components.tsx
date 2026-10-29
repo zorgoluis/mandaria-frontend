@@ -347,8 +347,9 @@ export function ExecutionPanel({
     <>
       <ExecutionProgress execution={e} />
       <p className="notice">
-        El repartidor registra los avances y la entrega detallada desde la app.
-        En la web, el progreso es de consulta.
+        {scope.surface === 'driver'
+          ? 'Registra tus operaciones autorizadas desde Mi servicio; este panel conserva el historial.'
+          : 'Los hitos y la entrega corresponden al conductor asignado. Este panel administrativo es de consulta.'}
       </p>
       <section className="panel">
         <div className="panel-toolbar">

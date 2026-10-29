@@ -1,3 +1,5 @@
+import { independentDrivers } from '../independent-drivers/service'
+import { categoryBlock } from '../driver-category/contract'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   useInfiniteQuery,
@@ -24,17 +26,32 @@ import {
   type Intent,
   type Scope,
 } from './intent'
-export function IndependentOfferZones({ profileId }: { profileId: string }) {
+export function IndependentOfferZones({
+  profileId,
+  driverId,
+  canEdit = false,
+}: {
+  profileId: string
+  driverId?: string
+  canEdit?: boolean
+}) {
   const { user } = useAuth()
   return user?.role === 'SUPER_ADMIN' ? (
     <Editor
       key={`${user.id}:${profileId}`}
       actor={user.id}
+      driverId={driverId}
+      canEdit={canEdit}
       profileId={profileId}
     />
   ) : null
 }
-function Editor({ actor, profileId }: Scope) {
+function Editor({
+  actor,
+  profileId,
+  driverId,
+  canEdit,
+}: Scope & { driverId?: string; canEdit: boolean }) {
   const scope = useMemo(() => ({ actor, profileId }), [actor, profileId]),
     client = useQueryClient(),
     live = useRef(true),
@@ -239,10 +256,17 @@ function Editor({ actor, profileId }: Scope) {
           )}
         </div>
       )}
+      {!canEdit && (
+        <p>
+          Las zonas del perfil histórico no conceden autorización vigente. No se
+          permiten nuevas autorizaciones mientras la categoría sea incompatible;
+          la recuperación de intenciones previas se conserva.
+        </p>
+      )}
       {!pending && (
         <button
           className="button"
-          disabled={blocked}
+          disabled={blocked || !canEdit}
           onClick={() => {
             if (q.isSuccess) {
               setDraft(structuredClone(q.data))
@@ -253,7 +277,7 @@ function Editor({ actor, profileId }: Scope) {
           Editar autorizaciones de zonas
         </button>
       )}
-      {draft && !blocked && !denied && (
+      {draft && !blocked && !denied && canEdit && (
         <ZoneForm
           key={draft.revision}
           actor={actor}
@@ -262,7 +286,7 @@ function Editor({ actor, profileId }: Scope) {
           onCancel={() => setDraft(null)}
         />
       )}
-      {confirm && !blocked && (
+      {confirm && !blocked && canEdit && (
         <Confirm
           title={
             confirm.zoneIds.length
@@ -277,6 +301,19 @@ function Editor({ actor, profileId }: Scope) {
           onClose={() => setConfirm(null)}
           onConfirm={() =>
             run(async () => {
+              if (driverId) {
+                const profile = await independentDrivers.get(driverId)
+                if (
+                  profile.id !== profileId ||
+                  profile.driverCategory?.category !== 'INDEPENDENT' ||
+                  profile.driverCategory.independentMembershipState !==
+                    'CURRENT'
+                )
+                  throw Error(
+                    categoryBlock(profile.driverCategory) ??
+                      'Categoría incompatible con nuevas autorizaciones.',
+                  )
+              }
               const i = makeIntent(scope, confirm)
               await zoneStore.save(i)
               if (!live.current) return

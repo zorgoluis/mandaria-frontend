@@ -239,6 +239,15 @@ const vehicle: DriverVehicle = {
 }
 function me(over: Partial<DriverSelf> = {}): DriverSelf {
   return {
+    driverCategory: {
+      contractVersion: '1.0.0',
+      categoryRevision: '1',
+      category: 'INDEPENDENT',
+      providerId: null,
+      independentMembershipState: 'CURRENT',
+      independentApprovalStatus: 'APPROVED',
+      resolutionRequired: false,
+    },
     id: DRIVER_ID,
     name: 'Carlos',
     status: 'ACTIVE',

@@ -1,3 +1,7 @@
+import { categories } from '../driver-category/service'
+import { useAuth } from '../auth/context'
+import { canApprove } from '../driver-category/contract'
+import { CategorySummary } from '../driver-category/components'
 import { IndependentOfferZones } from '../independent-zones/panel'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -21,8 +25,6 @@ import {
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
 import { date, labels } from '../utils/format'
-import { providers } from '../providers/service'
-import { drivers as providerDrivers } from '../drivers/service'
 import { vehicleTypes } from '../logistics/types'
 import { independentDrivers } from './service'
 import { AdminCreditsPanel } from '../credits/components'
@@ -53,15 +55,15 @@ const reasonOf = (raw: string) => {
   return reason
 }
 
-/** A DRIVER is the account and the person; independent is an added operational capability. */
+/** Category, approval and historical profile are separate dimensions. */
 function CapabilityNote() {
   return (
     <p className="notice capability-note">
       <Info size={16} aria-hidden="true" />
-      Un repartidor es una cuenta y una persona. La habilitación independiente
-      es una capacidad operativa adicional que Mandaria concede: le permite
-      tomar servicios por su cuenta, con sus propios vehículos, sin dejar de
-      pertenecer a su proveedor.
+      Flotilla e independiente son pertenencias excluyentes. Suspender o
+      rechazar no termina la pertenencia independiente. La salida de flotilla
+      debe completarse antes de una habilitación expresa, sin transferir
+      recursos ni iniciar recepción.
     </p>
   )
 }
@@ -89,7 +91,7 @@ export function IndependentDriversPage() {
         description="Quién puede tomar servicios por su cuenta, con sus propios vehículos."
         action={
           <button className="button" onClick={() => setEnabling(true)}>
-            Habilitar repartidor
+            Consultar candidato
           </button>
         }
       />
@@ -131,12 +133,19 @@ export function IndependentDriversPage() {
         ) : query.isPending ? (
           <Loading />
         ) : query.isError ? (
-          <ErrorState
-            error={query.error}
-            retry={() => {
-              void query.refetch()
-            }}
-          />
+          <>
+            <p>
+              Si el Driver aún no tiene perfil, esta API responde 404. La
+              categoría se consulta por separado para un Driver conocido; no se
+              deduce de la ausencia del perfil.
+            </p>
+            <ErrorState
+              error={query.error}
+              retry={() => {
+                void query.refetch()
+              }}
+            />
+          </>
         ) : query.data.items.length ? (
           <>
             <Table
@@ -165,6 +174,11 @@ export function IndependentDriversPage() {
                       label={independentStatusLabels[row.status]}
                     />
                   ),
+                },
+                {
+                  label: 'Categoría vigente',
+                  render: (row) =>
+                    row.driverCategory?.category ?? 'Sin confirmar',
                 },
                 {
                   label: 'Habilitado',
@@ -217,105 +231,34 @@ export function IndependentDriversPage() {
 }
 
 /**
- * V1.9 never creates accounts: it grants a capability to a Driver that already exists. The
- * candidate is chosen from a provider's real driver list, the only enumeration the API offers.
+ * No independent candidate catalog exists. Do not offer affiliated drivers for approval.
  */
 function EnableDialog({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate()
-  const notify = useFeedback()
-  const [providerId, setProviderId] = useState('')
   const [driverId, setDriverId] = useState('')
-  const providerList = useQuery({
-    queryKey: ['independent-enable', 'providers'],
-    queryFn: ({ signal }) =>
-      providers.list({ page: 1, pageSize: 100, status: 'ACTIVE' }, signal),
-  })
-  const driverList = useQuery({
-    queryKey: ['independent-enable', 'drivers', providerId],
-    queryFn: ({ signal }) =>
-      providerDrivers.list(
-        { role: 'SUPER_ADMIN', providerId },
-        { page: 1, pageSize: 100 },
-        signal,
-      ),
-    enabled: UUID.test(providerId),
-  })
-  const eligible = (driverList.data?.items ?? []).filter(
-    (driver) => driver.status === 'ACTIVE',
-  )
   return (
-    <Modal title="Habilitar repartidor independiente" onClose={onClose}>
-      <p className="modal-description">
-        Elige un repartidor que ya exista y esté activo. Mandaria no crea
-        cuentas aquí: sólo le concede la capacidad de operar por su cuenta.
+    <Modal title="Consultar candidato independiente" onClose={onClose}>
+      <p>
+        No se ofrecen conductores afiliados para habilitación independiente.
+        Consulta un Driver conocido; el perfil histórico no concede pertenencia.
+        El servidor aún no ofrece un catálogo administrativo de candidatos sin
+        perfil.
       </p>
       <ActionForm
         initialDirty
-        submitLabel="Habilitar"
-        cancelLabel="Volver"
-        onCancel={onClose}
-        onSubmit={async (data) => {
+        submitLabel="Consultar perfil"
+        onSubmit={async () => {
           if (!UUID.test(driverId))
-            throw new ApiError(400, 'Elige un repartidor.')
-          const raw = String(data.get('reason') ?? '').trim()
-          const reason = raw ? reasonOf(raw) : undefined
-          await independentDrivers.enable(driverId, reason)
-          await refreshIndependent(driverId)
-          notify('Repartidor habilitado como independiente.')
-          navigate(`/independent-drivers/${driverId}`)
+            throw new ApiError(400, 'Indica un Driver ID válido.')
+          navigate('/independent-drivers/' + driverId)
+          onClose()
         }}
       >
-        <Field label="Proveedor" hint="Sólo para localizar al repartidor.">
-          <select
-            value={providerId}
-            disabled={providerList.isPending}
-            onChange={(event) => {
-              setProviderId(event.target.value)
-              setDriverId('')
-            }}
-          >
-            <option value="">
-              {providerList.isPending
-                ? 'Cargando proveedores…'
-                : 'Selecciona un proveedor'}
-            </option>
-            {providerList.data?.items.map((provider) => (
-              <option key={provider.id} value={provider.id}>
-                {provider.name}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field
-          label="Repartidor"
-          hint="Sólo aparecen repartidores activos; el backend vuelve a comprobarlo."
-        >
-          <select
+        <Field label="Driver ID">
+          <input
             value={driverId}
-            disabled={!UUID.test(providerId) || driverList.isPending}
-            onChange={(event) => setDriverId(event.target.value)}
-          >
-            <option value="">
-              {!UUID.test(providerId)
-                ? 'Elige antes un proveedor'
-                : driverList.isPending
-                  ? 'Cargando repartidores…'
-                  : eligible.length
-                    ? 'Selecciona un repartidor'
-                    : 'Este proveedor no tiene repartidores activos'}
-            </option>
-            {eligible.map((driver) => (
-              <option key={driver.id} value={driver.id}>
-                {driver.name}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field
-          label="Motivo (opcional)"
-          hint={`Entre ${REASON_MIN} y ${REASON_MAX} caracteres. Queda en la auditoría: no incluyas datos personales.`}
-        >
-          <textarea name="reason" maxLength={REASON_MAX} rows={3} />
+            onChange={(e) => setDriverId(e.target.value.trim())}
+          />
         </Field>
       </ActionForm>
     </Modal>
@@ -324,6 +267,8 @@ function EnableDialog({ onClose }: { onClose: () => void }) {
 
 export function IndependentDriverDetail() {
   const { driverId = '' } = useParams()
+  const { user } = useAuth()
+  if (user?.role !== 'SUPER_ADMIN') return <ErrorPage code={403} />
   if (!UUID.test(driverId)) return <ErrorPage code={404} />
   return <ProfileRecord key={driverId} driverId={driverId} />
 }
@@ -332,7 +277,10 @@ function ProfileRecord({ driverId }: { driverId: string }) {
     queryKey: independentKeys.detail(driverId),
     queryFn: ({ signal }) => independentDrivers.get(driverId, signal),
     staleTime: 0,
+    refetchInterval: 15000,
   })
+  if (query.error instanceof ApiError && query.error.status === 404)
+    return <MissingProfile driverId={driverId} />
   if (query.isPending || query.isError)
     return (
       <>
@@ -359,6 +307,7 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
   const notify = useFeedback()
   const [closing, setClosing] = useState<'suspend' | 'reject' | null>(null)
   const [reEnabling, setReEnabling] = useState(false)
+  const [reason, setReason] = useState('')
   const approved = profile.status === 'APPROVED'
   return (
     <>
@@ -367,7 +316,7 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
         description={`Habilitación independiente · cuenta ${driverStatusLabels[profile.driver.status]}`}
         back="/independent-drivers"
         action={
-          approved ? (
+          approved && profile.driverCategory?.category === 'INDEPENDENT' ? (
             <div className="row-actions">
               <button
                 className="button secondary destructive"
@@ -383,12 +332,17 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
               </button>
             </div>
           ) : (
-            <button className="button" onClick={() => setReEnabling(true)}>
+            <button
+              className="button"
+              disabled={!canApprove(profile.driverCategory)}
+              onClick={() => setReEnabling(true)}
+            >
               Habilitar
             </button>
           )
         }
       />
+      <CategorySummary value={profile.driverCategory} />
       <section className="panel" aria-labelledby="independent-summary">
         <div className="panel-toolbar">
           <h2 id="independent-summary">Habilitación</h2>
@@ -428,7 +382,14 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
         ownerName={profile.driver.name}
         missingDescription="Este repartidor todavía no tiene cuenta propia de créditos: la recibe al aprobarse su habilitación independiente. No es un saldo en cero."
       />
-      <IndependentOfferZones profileId={profile.id} />
+      <IndependentOfferZones
+        profileId={profile.id}
+        driverId={profile.driverId}
+        canEdit={
+          profile.driverCategory?.category === 'INDEPENDENT' &&
+          profile.driverCategory.independentMembershipState === 'CURRENT'
+        }
+      />
       <IndependentVehicles driverId={profile.driverId} />
       {closing && (
         <CloseDialog
@@ -438,15 +399,42 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
           onClose={() => setClosing(null)}
         />
       )}
+      {canApprove(profile.driverCategory) && (
+        <Field label="Motivo de habilitación">
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            maxLength={REASON_MAX}
+          />
+        </Field>
+      )}
       {reEnabling && (
         <Confirm
           title="Habilitar repartidor"
           label="Habilitar"
-          description={`${profile.driver.name} podrá volver a tomar servicios por su cuenta, con sus propios vehículos.`}
+          description={`Se revisará la categoría vigente de ${profile.driver.name}. La aprobación no inicia recepción ni transfiere recursos. Motivo: ${reason}`}
           onClose={() => setReEnabling(false)}
           onConfirm={async () => {
-            await independentDrivers.enable(profile.driverId)
-            await refreshIndependent(profile.driverId)
+            const fresh = await independentDrivers.get(profile.driverId)
+            if (
+              !canApprove(fresh.driverCategory) ||
+              fresh.driverCategory?.categoryRevision !==
+                profile.driverCategory?.categoryRevision
+            ) {
+              await refreshIndependent(profile.driverId)
+              throw new ApiError(
+                409,
+                'La categoría cambió o impide habilitar. Revisa el estado vigente.',
+              )
+            }
+            try {
+              await independentDrivers.enable(
+                profile.driverId,
+                reasonOf(reason),
+              )
+            } finally {
+              await refreshIndependent(profile.driverId)
+            }
             notify('Habilitación restablecida.')
           }}
         />
@@ -589,7 +577,7 @@ function IndependentVehicles({ driverId }: { driverId: string }) {
   )
 }
 
-function VehicleStatusAction({
+export function VehicleStatusAction({
   driverId,
   vehicle,
 }: {
@@ -598,26 +586,78 @@ function VehicleStatusAction({
 }) {
   const notify = useFeedback()
   const [busy, setBusy] = useState(false)
+  const [editingPlate, setEditingPlate] = useState(false)
   const active = vehicle.status === 'ACTIVE'
   return (
-    <button
-      className="button secondary small"
-      disabled={busy}
-      onClick={async () => {
-        setBusy(true)
-        try {
-          await independentDrivers.updateVehicle(driverId, vehicle.id, {
-            status: active ? 'INACTIVE' : 'ACTIVE',
-          })
-          await refreshIndependent(driverId)
-          notify(active ? 'Vehículo desactivado.' : 'Vehículo activado.')
-        } finally {
-          setBusy(false)
-        }
-      }}
-    >
-      {active ? 'Desactivar' : 'Activar'}
-    </button>
+    <>
+      <button
+        className="button secondary small"
+        onClick={() => setEditingPlate(true)}
+      >
+        Editar placa
+      </button>
+      {editingPlate && (
+        <Modal
+          title={'Placa de ' + vehicle.identifier}
+          onClose={() => setEditingPlate(false)}
+        >
+          <p>
+            Actualizar la placa conserva el vehículo y su historial. Si ya se
+            presentó un expediente, el cambio puede impedir su aprobación por
+            diferencia con los datos presentados. No aprueba documentos ni activa
+            la unidad.
+          </p>
+          <ActionForm
+            submitLabel="Guardar placa"
+            onCancel={() => setEditingPlate(false)}
+            onSubmit={async (data) => {
+              const plate = String(data.get('plate') || '')
+                .trim()
+                .toUpperCase()
+              if (!/^[A-Z0-9][A-Z0-9 -]{0,14}$/.test(plate))
+                throw new Error(
+                  'Indica una placa de hasta 15 caracteres: letras, números, espacios o guiones.',
+                )
+              await independentDrivers.updateVehicle(driverId, vehicle.id, {
+                plate,
+              })
+              await refreshIndependent(driverId)
+              notify(
+                'Placa actualizada. Revisa el expediente antes de decidir.',
+              )
+              setEditingPlate(false)
+            }}
+          >
+            <Field label="Placa del vehículo">
+              <input
+                name="plate"
+                required
+                maxLength={15}
+                defaultValue={vehicle.plate || ''}
+              />
+            </Field>
+          </ActionForm>
+        </Modal>
+      )}
+      <button
+        className="button secondary small"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true)
+          try {
+            await independentDrivers.updateVehicle(driverId, vehicle.id, {
+              status: active ? 'INACTIVE' : 'ACTIVE',
+            })
+            await refreshIndependent(driverId)
+            notify(active ? 'Vehículo desactivado.' : 'Vehículo activado.')
+          } finally {
+            setBusy(false)
+          }
+        }}
+      >
+        {active ? 'Desactivar' : 'Activar'}
+      </button>
+    </>
   )
 }
 
@@ -707,3 +747,79 @@ function VehicleDialog({
 }
 
 export type { IndependentStatus }
+
+function MissingProfile({ driverId }: { driverId: string }) {
+  const query = useQuery({
+    queryKey: ['driver-category', driverId],
+    queryFn: ({ signal }) => categories.get(driverId, signal),
+    retry: false,
+    staleTime: 0,
+  })
+  const [reason, setReason] = useState(''),
+    [confirm, setConfirm] = useState(false)
+  return (
+    <>
+      <PageTitle
+        title="Driver sin perfil independiente"
+        back="/independent-drivers"
+      />
+      {query.isPending ? (
+        <Loading />
+      ) : query.isError ? (
+        <ErrorState error={query.error} retry={() => void query.refetch()} />
+      ) : (
+        <>
+          <CategorySummary value={query.data} />
+          <p>
+            Referencia autorizada: {driverId}. Aprobación comercial separada de
+            expediente, licencia, términos, vehículo, créditos y turno.
+          </p>
+          {canApprove(query.data) && (
+            <>
+              <Field label="Motivo de habilitación">
+                <textarea
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  maxLength={REASON_MAX}
+                />
+              </Field>
+              <button
+                disabled={query.isFetching}
+                onClick={() => setConfirm(true)}
+              >
+                Habilitar independiente
+              </button>
+            </>
+          )}
+          {confirm && (
+            <Confirm
+              title="Habilitar independiente"
+              description="La aprobación no inicia turno ni concede requisitos documentales. Se revalidará la categoría en el servidor."
+              onClose={() => setConfirm(false)}
+              onConfirm={async () => {
+                const fresh = await categories.get(driverId)
+                if (
+                  !canApprove(fresh) ||
+                  fresh.categoryRevision !== query.data.categoryRevision
+                ) {
+                  await query.refetch()
+                  throw new ApiError(
+                    409,
+                    'La categoría cambió; revisa antes de confirmar.',
+                  )
+                }
+                try {
+                  await independentDrivers.enable(driverId, reasonOf(reason))
+                  setConfirm(false)
+                } finally {
+                  await query.refetch()
+                  await refreshIndependent(driverId)
+                }
+              }}
+            />
+          )}
+        </>
+      )}
+    </>
+  )
+}

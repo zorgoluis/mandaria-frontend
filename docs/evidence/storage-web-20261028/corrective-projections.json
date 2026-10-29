@@ -1,0 +1,72 @@
+[
+  {
+    "path": "/driver/me",
+    "body": {
+      "providerId": null,
+      "id": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "name": "Aceptación Web Sintética",
+      "displayName": null,
+      "status": "ACTIVE",
+      "availability": "OFFLINE",
+      "provider": null,
+      "currentAssignment": null,
+      "driverCategory": {
+        "contractVersion": "1.0.0",
+        "categoryRevision": "2",
+        "category": "INDEPENDENT",
+        "providerId": null,
+        "independentMembershipState": "CURRENT",
+        "independentApprovalStatus": "APPROVED",
+        "resolutionRequired": false
+      },
+      "verification": {
+        "identityStatus": "APPROVED",
+        "policyVersion": "LOCAL-TEST-1",
+        "environment": "LOCAL_TEST",
+        "canAdmitIdentity": true,
+        "blockingReasons": []
+      },
+      "activeDeliveryAssignment": null,
+      "independent": {
+        "id": "02b893dd-c45c-4c1f-ba25-aa883e75ba94",
+        "status": "APPROVED",
+        "membershipState": "CURRENT",
+        "approvedAt": "2026-10-29T04:04:32.169Z",
+        "suspendedAt": null,
+        "reason": null,
+        "canTakeServices": true
+      }
+    }
+  },
+  {
+    "path": "/driver/credits",
+    "body": {
+      "id": "8c3ad1bc-dd35-4769-b773-49de5659133e",
+      "ownerType": "INDEPENDENT_DRIVER",
+      "providerId": null,
+      "independentDriverProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94",
+      "balance": 0,
+      "createdAt": "2026-10-29T04:04:32.130Z",
+      "updatedAt": "2026-10-29T04:04:32.130Z"
+    }
+  },
+  {
+    "path": "/driver/offer-reception",
+    "body": {
+      "schemaVersion": 1,
+      "revision": "2",
+      "serverTime": "2026-10-29T04:23:29.520Z",
+      "allowedZones": [],
+      "selectedZoneId": null,
+      "shift": null,
+      "state": "OFF",
+      "reason": "RECEPTION_DISABLED",
+      "canAttemptTake": false,
+      "limits": {
+        "defaultMinutes": 480,
+        "minMinutes": 60,
+        "maxMinutes": 720
+      }
+    }
+  }
+]

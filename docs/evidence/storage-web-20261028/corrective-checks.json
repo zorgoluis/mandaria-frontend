@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-29T04:23:31.500Z",
+  "result": "PASS scoped LOCAL_TEST corrective approval and preservation",
+  "oldCase": "59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+  "correctiveCase": "9864ae95-25d7-49d9-84b7-5a6a573b5ea7",
+  "oldRevision": 8,
+  "newRevision": 8,
+  "identityRevision": 14,
+  "unitId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+  "unitStatus": "ACTIVE",
+  "plate": "SYN-WEB-01",
+  "availability": "OFFLINE",
+  "credits": 0,
+  "reception": {
+    "schemaVersion": 1,
+    "revision": "2",
+    "serverTime": "2026-10-29T04:23:29.520Z",
+    "allowedZones": [],
+    "selectedZoneId": null,
+    "shift": null,
+    "state": "OFF",
+    "reason": "RECEPTION_DISABLED",
+    "canAttemptTake": false,
+    "limits": {
+      "defaultMinutes": 480,
+      "minMinutes": 60,
+      "maxMinutes": 720
+    }
+  }
+}

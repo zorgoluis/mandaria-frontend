@@ -1,0 +1,205 @@
+{
+  "source": "Backend OpenAPI read only; not live availability",
+  "paths": [
+    "/api/v1/driver/offer-reception",
+    "/api/v1/driver/fleet-offer-reception",
+    "/api/v1/admin/drivers/{driverId}/category",
+    "/api/v1/driver/dispatches/{dispatchId}/independent-attempt",
+    "/api/v1/driver/dispatches/{dispatchId}/independent-attempt/close",
+    "/api/v1/driver/dispatches/{dispatchId}/execution-completion"
+  ],
+  "schemas": [
+    {
+      "name": "IndependentCommandResponse",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "TAKE",
+              "RELEASE"
+            ]
+          },
+          "dispatchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dispatchStatus": {
+            "type": "string",
+            "enum": [
+              "CLAIMED",
+              "OPEN",
+              "EXPIRED"
+            ],
+            "description": "Estado al confirmar el intento; no sustituye la fotografía actual."
+          },
+          "assignmentStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CANCELLED"
+            ]
+          },
+          "credits": {
+            "$ref": "#/components/schemas/IndependentAttemptCreditsResponse"
+          }
+        },
+        "required": [
+          "operation",
+          "dispatchId",
+          "assignmentId",
+          "dispatchStatus",
+          "assignmentStatus",
+          "credits"
+        ]
+      }
+    },
+    {
+      "name": "IndependentAttemptResponse",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "TAKE",
+              "RELEASE"
+            ]
+          },
+          "dispatchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "APPLIED",
+              "PENDING_OR_UNKNOWN",
+              "CLOSED_NO_EFFECTS"
+            ]
+          },
+          "result": {
+            "nullable": true,
+            "description": "Sólo el resultado histórico del actor autenticado. Nunca datos del ejecutor actual.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IndependentCommandResponse"
+              }
+            ]
+          },
+          "canPrepareNewAttempt": {
+            "type": "boolean",
+            "description": "true sólo tras cierre durable. Permite preparar, no enviar automáticamente; elegibilidad se revalida al comando."
+          }
+        },
+        "required": [
+          "operation",
+          "dispatchId",
+          "state",
+          "result",
+          "canPrepareNewAttempt"
+        ]
+      }
+    },
+    {
+      "name": "OfferReceptionResponse",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "revision": {
+            "type": "string",
+            "example": "1"
+          },
+          "serverTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "allowedZones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfferZoneResponse"
+            }
+          },
+          "selectedZoneId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "shift": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OfferShiftResponse"
+              }
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "PAUSED",
+              "PREVIEW",
+              "READY"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "FEATURE_DISABLED",
+              "ACCOUNT_RESTRICTED",
+              "INDEPENDENT_NOT_APPROVED",
+              "INCIDENT_BLOCKING",
+              "DOCUMENTARY_REQUIREMENTS",
+              "RECEPTION_DISABLED",
+              "SHIFT_EXPIRED",
+              "ZONE_REQUIRED",
+              "ZONE_DISABLED",
+              "ACTIVE_FLEET",
+              "ACTIVE_LEGACY_OR_UNKNOWN",
+              "ACTIVE_DELIVERY",
+              "ARRIVED_PREVIEW",
+              "ELIGIBLE",
+              "AVAILABILITY_REQUIRED"
+            ]
+          },
+          "canAttemptTake": {
+            "type": "boolean"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/OfferLimitsResponse"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only mutation receipts"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "revision",
+          "serverTime",
+          "allowedZones",
+          "selectedZoneId",
+          "shift",
+          "state",
+          "reason",
+          "canAttemptTake",
+          "limits"
+        ]
+      }
+    }
+  ]
+}

@@ -20,6 +20,11 @@ const id = (v: string) => {
   return encodeURIComponent(v)
 }
 function scoped(s: Scope, route: string, filters: Filters = {}) {
+  if (
+    s.surface === 'driver' &&
+    (s.providerId || filters.providerId || filters.driverId)
+  )
+    throw Error('La consulta DRIVER sólo admite el contexto propio.')
   if (s.surface === 'provider' && !uuid(s.providerId))
     throw Error('Selecciona un proveedor autorizado.')
   const q = queryString({
@@ -36,7 +41,7 @@ export function commandPath(
   operation: Operation,
   resourceId: string,
 ) {
-  if (operation === 'START' && s.surface !== 'provider')
+  if (operation === 'START' && s.surface === 'admin')
     throw Error('SUPER_ADMIN no inicia salidas.')
   return scoped(
     s,
@@ -45,14 +50,21 @@ export function commandPath(
       : `fleet-exit-requests/${id(resourceId)}/recheck`,
   )
 }
-export function validateBody(op: Operation, body: Body) {
+export function validateBody(
+  op: Operation,
+  body: Body,
+  surface?: Scope['surface'],
+) {
   const keys = Object.keys(body).sort().join(',')
   if (
     op === 'START'
       ? keys !== 'expectedAffiliationRevision,reasonCode' ||
         !('expectedAffiliationRevision' in body) ||
         !revision(body.expectedAffiliationRevision) ||
-        body.reasonCode !== 'PROVIDER_REMOVAL'
+        !['PROVIDER_REMOVAL', 'VOLUNTARY_EXIT'].includes(body.reasonCode) ||
+        (surface !== undefined &&
+          body.reasonCode !==
+            (surface === 'driver' ? 'VOLUNTARY_EXIT' : 'PROVIDER_REMOVAL'))
       : keys !== 'expectedExitRevision' ||
         !('expectedExitRevision' in body) ||
         !revision(body.expectedExitRevision)
@@ -64,7 +76,12 @@ export const exits = {
     const c = parse<Context>(
       'context',
       await api(
-        scoped(s, `drivers/${id(driverId)}/fleet-affiliation-context`),
+        scoped(
+          s,
+          s.surface === 'driver'
+            ? 'fleet-affiliation-context'
+            : `drivers/${id(driverId)}/fleet-affiliation-context`,
+        ),
         'GET',
         undefined,
         signal,
@@ -101,7 +118,7 @@ export const exits = {
     key: string,
     body: Body,
   ) => {
-    validateBody(op, body)
+    validateBody(op, body, s.surface)
     return parse<CommandResult>(
       'command',
       await apiOnce(commandPath(s, op, resourceId), 'POST', body, undefined, {
@@ -128,4 +145,4 @@ export const exits = {
 }
 
 export const exitLink = (s: Scope, id?: string) =>
-  `${s.surface === 'admin' ? '/admin' : ''}/fleet-exits${id ? '/' + encodeURIComponent(id) : ''}${s.providerId ? '?providerId=' + encodeURIComponent(s.providerId) : ''}`
+  `${s.surface === 'admin' ? '/admin' : s.surface === 'driver' ? '/driver' : ''}/fleet-exits${id ? '/' + encodeURIComponent(id) : ''}${s.providerId ? '?providerId=' + encodeURIComponent(s.providerId) : ''}`

@@ -1,3 +1,5 @@
+import { IndependentRecovery } from '../driver-portal/recovery'
+import { ReceptionPage } from '../driver-portal/reception'
 import { AssistancePage } from '../assistance/pages'
 import { FleetExitsPage, PrivateExitRecovery } from '../fleet-exit/pages'
 import { FleetServicesPage } from '../fleet/pages'
@@ -124,7 +126,8 @@ export function Protected({ roles }: { roles?: Role[] }) {
       !roles &&
       (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
         route.pathname === '/privacy/active-service' ||
-        route.pathname === '/privacy/fleet-exit-recovery')
+        route.pathname === '/privacy/fleet-exit-recovery' ||
+        route.pathname === '/privacy/independent-recovery')
     )
       return <Outlet />
     return <Navigate to="/privacy/deletion" replace />
@@ -200,6 +203,10 @@ export function App() {
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/independent-recovery"
+            element={<IndependentRecovery />}
+          />
           <Route
             path="/privacy/fleet-exit-recovery"
             element={<PrivateExitRecovery />}
@@ -431,6 +438,15 @@ export function App() {
               path="driver"
               element={<Navigate to="/driver/services" replace />}
             />
+            <Route
+              path="driver/fleet-exits"
+              element={<FleetExitsPage surface="driver" />}
+            />
+            <Route
+              path="driver/fleet-exits/:id"
+              element={<FleetExitsPage surface="driver" />}
+            />
+            <Route path="driver/reception" element={<ReceptionPage />} />
             <Route path="driver/services" element={<AvailableServicesPage />} />
             <Route
               path="driver/services/:id"

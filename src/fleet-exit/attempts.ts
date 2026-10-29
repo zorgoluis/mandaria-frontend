@@ -25,7 +25,7 @@ export function makeIntent(
   resourceId: string,
   body: Body,
 ): Intent {
-  validateBody(operation, body)
+  validateBody(operation, body, scope.surface)
   if (!uuid(resourceId)) throw Error('Recurso inválido')
   return JSON.parse(
     JSON.stringify({
@@ -56,7 +56,7 @@ export function assertIntent(i: Intent, s: Scope) {
     throw Error(
       'Selecciona la misma cuenta, entorno y proveedor de la intención.',
     )
-  validateBody(i.operation, i.body)
+  validateBody(i.operation, i.body, s.surface)
 }
 export async function encryptIntent(i: Intent): Promise<Encrypted> {
   assertIntent(i, i.scope)
@@ -131,7 +131,7 @@ export const intentStore = {
         const [environment, owner, surface, providerId] = JSON.parse(String(k))
         return environment === env.apiUrl &&
           owner === actor &&
-          ['provider', 'admin'].includes(surface)
+          ['provider', 'admin', 'driver'].includes(surface)
           ? [{ actor, surface, ...(providerId ? { providerId } : {}) }]
           : []
       })

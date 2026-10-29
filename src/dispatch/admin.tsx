@@ -313,7 +313,7 @@ export function AdminDispatchDetail() {
           <p className="panel-note warning">
             {item.search
               ? 'Sin candidatos de proveedor ofrecidos en esta ventana. El estado de búsqueda lo confirma Mandaria.'
-              : 'Ningún proveedor puede tomarlo: no quedan candidatos ofrecidos. Expirará al vencer la ventana.'}
+              : 'No quedan candidatos de flotilla ofrecidos. Esto no indica ausencia de independientes; su elegibilidad se consulta por separado.'}
           </p>
         )}
       </section>

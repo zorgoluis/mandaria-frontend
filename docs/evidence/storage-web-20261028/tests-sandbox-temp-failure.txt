@@ -1,0 +1,23 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/independent-vehicle-plate.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/independent-vehicle-plate.test.tsx [ src/test/independent-vehicle-plate.test.tsx ]
+Error: ENOENT: no such file or directory, open 'C:\Users\zorgl\AppData\Local\Packages\sandbox.{f8f0076a-5c86-4b51-8c6f-9832e511204b}\AC\Temp\HvXOw49EHKFDOeLgfPb1Q\client\9429c7f114ba24b44d65f5b040f3e613cdc15585'
+ ❯ src/driver-category/service.ts:1:1
+      1| import { api, apiOnce } from '../services/api'
+       | ^
+      2| import { validCategory, type DriverCategory } from './contract'
+      3| export interface CategoryCommand {
+ ❯ src/independent-drivers/pages.tsx:1:1
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  13 passed (13)
+   Start at  22:07:22
+   Duration  3.92s (environment 70%, setup 19%, transform 8%, import 3%)

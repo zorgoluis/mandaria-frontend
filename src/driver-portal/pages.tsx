@@ -1,3 +1,8 @@
+import { DriverExecutionActions } from './execution'
+import { reception, ready } from './reception-service'
+import { startIndependent } from './attempts'
+import { categoryBlock } from '../driver-category/contract'
+import { CategorySummary } from '../driver-category/components'
 import { ShippingPaymentBlock } from '../shipping/Payment'
 import { SearchStatus } from '../dispatch/SearchStatus'
 import { searchAllowsTake, dispatchPollInterval } from '../dispatch/search'
@@ -92,7 +97,9 @@ export function DriverPortal({
         }}
       />
     )
-  const blocked = portalBlock(query.data.independent)
+  const blocked =
+    categoryBlock(query.data.driverCategory) ??
+    portalBlock(query.data.independent)
   if (blocked && !(query.data.activeDeliveryAssignment?.mode === 'INDEPENDENT'))
     return (
       <div className="panel">
@@ -141,12 +148,15 @@ export function DriverPortal({
           servicio comprometido mantiene sus acciones autorizadas.
         </p>
       )}
+      <CategorySummary value={query.data.driverCategory} />
       {children(query.data)}
     </>
   )
 }
 
 const tabs = [
+  { to: '/driver/onboarding', label: 'Mi expediente', icon: Bike },
+  { to: '/driver/reception', label: 'Zonas y turno', icon: PackageSearch },
   { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
   { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
   { to: '/driver/vehicles', label: 'Mis vehículos', icon: Wallet },
@@ -445,6 +455,14 @@ function ServiceContent({
 }) {
   const now = useNow(!!dispatch.search && dispatch.status === 'OPEN')
   const [taking, setTaking] = useState(false)
+  const receptionQuery = useQuery({
+    queryKey: ['offer-reception', me.id],
+    queryFn: reception.get,
+    staleTime: 0,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
+    retry: false,
+  })
   const { service, paymentContext } = dispatch
   const mine =
     dispatch.trackingMode === 'DETAILED'
@@ -463,6 +481,9 @@ function ServiceContent({
             <button
               className="button"
               disabled={
+                receptionQuery.isError ||
+                !ready(receptionQuery.data) ||
+                receptionQuery.isFetching ||
                 busyElsewhere ||
                 dispatch.trackingMode === undefined ||
                 !searchAllowsTake(dispatch.search, now)
@@ -639,6 +660,7 @@ function TakeDialog({
 }) {
   const navigate = useNavigate()
   const notify = useFeedback()
+  const { user } = useAuth()
   const [vehicleId, setVehicleId] = useState('')
   const [gone, setGone] = useState(false)
   const [waiting, setWaiting] = useState<string | null>(null)
@@ -706,8 +728,39 @@ function TakeDialog({
               if (!vehicleId)
                 throw new ApiError(400, 'Elige el vehículo que vas a usar.')
               try {
-                await driverPortal.take(dispatch.id, vehicleId)
+                const fresh = await driverPortal.me()
+                const r = await reception.get()
+                const blocked =
+                  categoryBlock(fresh.driverCategory) ??
+                  (!ready(r)
+                    ? 'La recepción no está READY. Revisa zona, turno y disponibilidad.'
+                    : null)
+                if (blocked || !fresh.independent?.canTakeServices) {
+                  await refreshDriverPortal(dispatch.id)
+                  throw new ApiError(
+                    409,
+                    blocked ?? 'El servidor no autoriza nuevas tomas.',
+                  )
+                }
+                if (!user || user.role !== 'DRIVER')
+                  throw new ApiError(403, 'Sesión DRIVER requerida.')
+                await startIndependent(
+                  {
+                    actor: user.id,
+                    dispatchId: dispatch.id,
+                    operation: 'TAKE',
+                  },
+                  { vehicleId },
+                )
               } catch (error) {
+                if (
+                  error instanceof ApiError &&
+                  [
+                    'DRIVER_CATEGORY_CONFLICT',
+                    'DRIVER_CATEGORY_REVIEW_REQUIRED',
+                  ].includes(error.code ?? '')
+                )
+                  await refreshDriverPortal(dispatch.id)
                 if (
                   error instanceof ApiError &&
                   error.code === 'DISPATCH_RETRY_PENDING'
@@ -927,41 +980,58 @@ function MyService({ me }: { me: DriverSelf }) {
                   MARCAR COMO ENTREGADO
                 </button>
               )}
-              {(legacyProjection(query.data) ||
-                (query.data.trackingMode === 'DETAILED' &&
-                  !!query.data.execution &&
-                  query.data.execution.allowedActions.includes(
-                    'ORDINARY_ASSIGNMENT_OPERATIONS',
-                  ) &&
-                  !query.data.execution.openIncidentId &&
-                  query.data.execution.activeAssignmentId === active.id)) && (
-                <button
-                  className="button secondary destructive full"
-                  disabled={busy || query.isFetching}
-                  onClick={() => setReleasing(true)}
-                >
-                  LIBERAR SERVICIO
-                </button>
-              )}
+              {query.data.trackingMode === 'DETAILED' &&
+                !!query.data.execution &&
+                query.data.execution.allowedActions.includes(
+                  'ORDINARY_ASSIGNMENT_OPERATIONS',
+                ) &&
+                !query.data.execution.openIncidentId &&
+                query.data.execution.activeAssignmentId === active.id &&
+                query.data.execution.custodyStatus === 'NOT_COLLECTED' &&
+                !['PICKED_UP', 'TO_DROPOFF', 'AT_DROPOFF'].includes(
+                  query.data.execution.phase ?? '',
+                ) &&
+                query.data.shippingPayment?.evidenceStatus !== 'DECLARED' && (
+                  <button
+                    className="button secondary destructive full"
+                    disabled={busy || query.isFetching}
+                    onClick={() => setReleasing(true)}
+                  >
+                    LIBERAR SERVICIO
+                  </button>
+                )}
             </div>
             <p className="panel-note">
-              En servicios detallados, el repartidor registra avances y entrega
-              desde la app. El cierre web sólo está disponible para servicios
-              anteriores sin ejecución detallada.
+              Registra los hitos y confirma la entrega en el panel de ejecución.
+              Se conservan los controles de custodia y cobro.
             </p>
           </section>
+          {query.data.trackingMode === 'DETAILED' && query.data.execution && (
+            <DriverExecutionActions
+              dispatchId={query.data.id}
+              e={query.data.execution}
+              payment={query.data.shippingPayment}
+            />
+          )}
           {query.data.trackingMode === 'DETAILED' && (
             <ExecutionPanel
               scope={{ surface: 'driver', dispatchId: query.data.id }}
             />
           )}
           {releasing &&
-            (legacyProjection(query.data) ||
-              (query.data.trackingMode === 'DETAILED' &&
-                !!query.data.execution &&
-                query.data.execution.allowedActions.includes(
-                  'ORDINARY_ASSIGNMENT_OPERATIONS',
-                ))) && (
+            !query.isFetching &&
+            query.data.trackingMode === 'DETAILED' &&
+            !!query.data.execution &&
+            query.data.execution.activeAssignmentId === active.id &&
+            query.data.execution.custodyStatus === 'NOT_COLLECTED' &&
+            !query.data.execution.openIncidentId &&
+            !['PICKED_UP', 'TO_DROPOFF', 'AT_DROPOFF'].includes(
+              query.data.execution.phase ?? '',
+            ) &&
+            query.data.shippingPayment?.evidenceStatus !== 'DECLARED' &&
+            query.data.execution.allowedActions.includes(
+              'ORDINARY_ASSIGNMENT_OPERATIONS',
+            ) && (
               <ReleaseDialog
                 dispatchId={query.data.id}
                 onClose={() => setReleasing(false)}
@@ -1041,6 +1111,7 @@ function ReleaseDialog({
   dispatchId: string
   onClose: () => void
 }) {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const notify = useFeedback()
   const [reason, setReason] = useState<ReleaseReason>('CANNOT_COMPLETE')
@@ -1067,8 +1138,13 @@ function ReleaseDialog({
               400,
               `Describe el motivo con entre ${REASON_DETAIL_MIN} y ${REASON_DETAIL_MAX} caracteres.`,
             )
-          await driverPortal.release(dispatchId, reason, raw || undefined)
-          await refreshDriverPortal(dispatchId)
+          if (!user || user.role !== 'DRIVER')
+            throw new ApiError(403, 'Sesión DRIVER requerida.')
+          await startIndependent(
+            { actor: user.id, dispatchId, operation: 'RELEASE' },
+            { reason, ...(raw ? { reasonDetail: raw } : {}) },
+          )
+          await refreshDriverPortal()
           notify('Servicio liberado.')
           onClose()
           navigate('/driver/services')

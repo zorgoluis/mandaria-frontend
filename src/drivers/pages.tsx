@@ -227,6 +227,12 @@ function CreateDriver({ scope }: { scope: ProviderContext }) {
     )
   return (
     <div className="panel form-panel">
+      <p>
+        El alta no convierte un independiente en repartidor de flotilla.
+        Suspender o rechazar su perfil no termina esa pertenencia; no existe
+        incorporación de un Driver existente a otra flotilla desde este
+        recorrido.
+      </p>
       <ActionForm
         submitLabel="Crear repartidor"
         onSubmit={async (data) => {

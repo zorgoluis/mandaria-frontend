@@ -222,7 +222,8 @@ describe('SUPER_ADMIN navigation and list', () => {
     const links = within(nav)
       .getAllByRole('link')
       .map((link) => link.textContent)
-    expect(links.indexOf('Solicitudes')).toBe(links.indexOf('Vehículos') + 1)
+    expect(links).toContain('Solicitudes')
+    expect(links).not.toContain('Vehículos')
     await userEvent
       .setup()
       .click(within(nav).getByRole('link', { name: 'Solicitudes' }))

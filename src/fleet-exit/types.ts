@@ -1,6 +1,6 @@
 export interface Scope {
   actor: string
-  surface: 'provider' | 'admin'
+  surface: 'provider' | 'admin' | 'driver'
   providerId?: string
 }
 export type Operation = 'START' | 'RECHECK'
@@ -101,5 +101,8 @@ export type CommandResult =
       redacted: true
     })
 export type Body =
-  | { expectedAffiliationRevision: string; reasonCode: 'PROVIDER_REMOVAL' }
+  | {
+      expectedAffiliationRevision: string
+      reasonCode: 'PROVIDER_REMOVAL' | 'VOLUNTARY_EXIT'
+    }
   | { expectedExitRevision: string }

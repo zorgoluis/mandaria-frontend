@@ -1,0 +1,3 @@
+
+> mandaria-web@1.11.0 typecheck:test
+> tsc --project tsconfig.test.json

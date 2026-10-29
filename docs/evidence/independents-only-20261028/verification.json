@@ -1,0 +1,102 @@
+{
+  "recordedAt": "2026-10-29T00:09:44.399Z",
+  "webVersion": "1.11.0",
+  "branch": "main",
+  "base": "ffb07b1",
+  "backend": {
+    "command": "node C:/Users/zorgl/Documents/mandaria-backend/scripts/mandaria-interactive.mjs status",
+    "state": "offline",
+    "postgresRunning": false,
+    "liveUrl": null,
+    "servedBuild": null,
+    "effectiveFlags": null,
+    "appliedMigrations": null
+  },
+  "checks": [
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --reporter=default --reporter=json --outputFile=test-results/independents-global-final-complete.json",
+      "exitCode": 0,
+      "passed": 1633,
+      "total": 1633,
+      "files": 81,
+      "skipped": 0,
+      "durationSeconds": 154.53
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -b",
+      "exitCode": 0
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.test.json",
+      "exitCode": 0
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js . --ignore-pattern 'test-results/**' --ignore-pattern '.tmp/**'",
+      "exitCode": 0
+    },
+    {
+      "command": "Vite build API configFile:false envDir:false React plugin VITE_API_URL http://127.0.0.1:4270 outDir test-results/independents-build-final",
+      "exitCode": 0,
+      "modules": 2425,
+      "warning": "chunk >500kB"
+    },
+    {
+      "command": "node scripts/verify-independents-only-ui.mjs",
+      "exitCode": 0,
+      "scope": "HTTP MOCKED ONLY; existing Chromium, isolated Vite",
+      "passed": 8,
+      "errors": 0
+    }
+  ],
+  "notExecuted": [
+    "Live Nest/PostgreSQL UI acceptance",
+    "Real onboarding-to-delivery",
+    "Two live sessions/revocation/cursor expiry/concurrency",
+    "Android/FCM/production"
+  ],
+  "sha256": {
+    "src/app/App.tsx": "9ec3688859809af0ae72165a4d8208b3a2c5d388cf1754bb8000cc14a40abd3d",
+    "src/layouts/AdminLayout.tsx": "e34206500fdbb21f6d2f355e256ac2bfc9617c3ae8a950ac26409e395bda3307",
+    "src/dashboard/Dashboard.tsx": "393323f8e28bbac495184925ff08c725e99d6bc6ef3428dbfbca1bd7169cb952",
+    "src/deletion/ActiveService.tsx": "74b5e4cb0ac34b86b1e0638fe0a9331c56b9d5c5b93d1d9ec3817f9c2933e8a3",
+    "src/deletion/pages.tsx": "2c667d8215f746dadb67193f8dce20ca6b7236ec8e52a85882cf0b12905e6c3f",
+    "src/dispatch/admin.tsx": "1e8fe632c8348932b6d4420c8162bcfe72e4bf934c48f31250dc97d5f0fd39bc",
+    "src/execution/components.tsx": "d4e63ac12a8fc22e7ebf32a8a715cc9acb33f7ff1bdfbefabdc99b27825106a3",
+    "src/services/api.ts": "fd032114360f2b962ad1ca3fb4c87d21330749ada63685b9cb313f4f6aba929b",
+    "src/services/errors.ts": "48f62e134cc94016111933fe04b7d3e6d786c08ef522d6f31258d1a393a36f80",
+    "src/independent-drivers/pages.tsx": "4e4ade7a13ac2dc5587b41fc9cd00306278b88d5e3ebcfccaac4ffa8cb0a46b8",
+    "src/test/independent-operations.test.ts": "25bfc2cca50cb63c8686e1a3f018e3d28673625680f11533596b55166c72e6ba",
+    "src/test/driver-portal.test.tsx": "d90c79ff5c2d676f85855b3e4b3d25ed31485f61150a7dfe06e1d5c90ce927fd",
+    "src/test/independent-drivers-api.test.ts": "acc4656d86ef5fcf2a2065a7aee618e50cf0757d3b91c3630edb2785053e4db8",
+    "scripts/verify-independents-only-ui.mjs": "7ed45693a13c1b0eb9340af3ecb677b6f7d4230bc1f9abfe47caaf1979ee6153",
+    "docs/INDEPENDENTS-ONLY-WEB-20261028.md": "03b9f3e0f58822f643ba719dfd06f60f20e6bd58b5a2423510686e71885dcdfe",
+    "src/driver-portal/attempt-api.ts": "172230c47e78f52f687584150228c63c0d5b398f7abef9dd8eab7ad86ec778c3",
+    "src/driver-portal/attempts.ts": "ed7a874c29cbbe8819f7a6557a7fd5215941a415e8bd694d163d758d659e38f1",
+    "src/driver-portal/execution.tsx": "c5410faea904748aa4892b06e02957ff4feeb1c93f468f4343b43f9c895f3bf6",
+    "src/driver-portal/format.ts": "bcd3163cad2b4f69f19b8ec4d32d99dd0c71c0af1aa99986bce6a2349cc0461a",
+    "src/driver-portal/pages.tsx": "8b8c13dfde982615fe209a1e091b91a9b1bdd8fb6af250be092c67f68dce4ee7",
+    "src/driver-portal/queries.ts": "50c68516167fc4e9c853bde4cea05967f59f610e21adb54aa4d3330fa563ce30",
+    "src/driver-portal/reception-intent.ts": "a6c2e60b05a2cf436b4795715b47ba28ea8cfa21a9e2cc6f4725f56997bdb7e8",
+    "src/driver-portal/reception-service.ts": "1b809208ea49e24206cae75e6158eaca6c2ff719597211cf684b3c0743ea8b9c",
+    "src/driver-portal/reception.tsx": "c7fdfcb347ec38e904bacc7648e6b0b631cac201ae6f09501045f74ac7a00258",
+    "src/driver-portal/recovery.tsx": "7cbd9b1c6699d3b3f781e6fd56ad05d4a134869512a3f79248c79164903b75af",
+    "src/driver-portal/service.ts": "b32fa218997b0510b6f45a17f6803381d2328d4c32e27b94200735931ed68048",
+    "src/driver-portal/types.ts": "289c2ec5ace597efc21fc6f3ce24e36ce0e265a335f19ac957f7e304225c0f40",
+    "src/driver-category/components.tsx": "5d282a0b39519a134f9843dde8bd44e3b1545a4e812351a069d06b169660ed77",
+    "src/driver-category/contract.ts": "862712c445cd8259992e105bd84b93fb29365ec9020069c6fa6116411dda6f44",
+    "src/driver-category/intent.ts": "ccb54cfd224bcb3214e57df83a2210851335104c9dc2fc5dd3e05c72a8215f69",
+    "src/driver-category/reconcile.tsx": "28f15f21cb8d28a42b46d230735facf62fd3c05e893db0c6b1747a6c110bb942",
+    "src/driver-category/service.ts": "bf5ad5589eebc8e1a411e684b373aac3fbc87077a722001bd6d3474676e5e1e9",
+    "docs/evidence/independents-only-20261028/01-reception-mock.png": "c28fef7be989d2619968986dedf8ecc48e02bc63f533b3dfd924d7c5f2cb38cb",
+    "docs/evidence/independents-only-20261028/02-take-recovered-mock.png": "a4a1fca1767d981170afa2ae2680439179044b4189767766fca0076e989d3415",
+    "docs/evidence/independents-only-20261028/03-release-receipt-mock.png": "6dc5e47231ee3b28f50961aad06cc5c14a6d54379612fd5e503f8b76b3fdebfc",
+    "docs/evidence/independents-only-20261028/04-preview-mock.png": "727dd577fc22dfbc82ce65e92793601017007216d2755693d58e19cb26c1758d",
+    "docs/evidence/independents-only-20261028/05-none-without-profile-mock.png": "0627b946d8c965dd5f62406b42394e1b86939f8e8e3ea6506023c0b46a3833b1",
+    "docs/evidence/independents-only-20261028/06-detailed-at-dropoff-mock.png": "1bfd5fe840d723da4fb6e0ad1ea3132b39253e689da9c354f3364e3d8aebc41f",
+    "docs/evidence/independents-only-20261028/07-collected-blocks-release-mock.png": "d16d2aa41f6c2b5bd9fd4a55d489a5d0a1f71e2d43494b94ae1c051499fedd14",
+    "docs/evidence/independents-only-20261028/browser.json": "d58d237497f0d247a45bdb109852d9138fe7fd3dcb14896598e9bdf3b5e52f2a",
+    "docs/evidence/independents-only-20261028/contract-check.json": "efebf908d8ef8f3c858df3b9237d3c423462bd1ac3737fb529c74b3e94a54a2f",
+    "docs/evidence/independents-only-20261028/global-summary.json": "17dca8c775af88a0f0aac6562ecf6c519f928ed2692bc942097ba1dae79fbb6d",
+    "docs/evidence/independents-only-20261028/global.log": "89e86bff466737e29e90ddcb1b9d2daa760c794d9fe063886b232dd8b1d1a751"
+  }
+}

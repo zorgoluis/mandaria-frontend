@@ -1,0 +1,14 @@
+{
+  "scope": "Actual Web service modules -> fetch -> Nest -> isolated PostgreSQL; no browser or Android UI claim",
+  "checks": [
+    "Web auth and canonical independent profile via real Nest HTTP",
+    "Web approval rejects current fleet with public conflict",
+    "Suspension preserves membership and blocks Web taking eligibility",
+    "Web applies fresh reconciliation, rejects stale revision and recovers exact receipt",
+    "Web reconciliation receipt replay exact and reused key conflict",
+    "DRIVER self category; admin profile and reconciliation forbidden after account switch"
+  ],
+  "passed": 6,
+  "failed": 0,
+  "synthetic": true
+}

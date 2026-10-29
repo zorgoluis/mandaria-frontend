@@ -1,0 +1,76 @@
+PASS upgrade quarantines legacy dual without selecting category
+PASS migration clears dormant reception that old NONE selection had disabled
+PASS fleet cannot approve independent
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(5) {
+  event: 'INDEPENDENT_DRIVER_SUSPENDED',
+  profileId: '9fd34a8e-d3ec-4f98-8239-595a49031fbb',
+  driverId: '33333333-3333-4333-8333-333333333333',
+  actorUserId: '77777777-7777-4777-8777-777777777777',
+  reason: 'synthetic suspension'
+}
+PASS suspension cannot resolve category
+PASS explicit reconciliation retains history and replays lost response, including reordered JSON
+PASS reused key different body rejected
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '90e21ddc-7edb-4977-92fc-729a23ba0a46',
+  driverId: '0232889a-16e9-4245-a096-d8e92476f186',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(5) {
+  event: 'INDEPENDENT_DRIVER_SUSPENDED',
+  profileId: '90e21ddc-7edb-4977-92fc-729a23ba0a46',
+  driverId: '0232889a-16e9-4245-a096-d8e92476f186',
+  actorUserId: '77777777-7777-4777-8777-777777777777',
+  reason: 'synthetic'
+}
+PASS suspended independent cannot join fleet
+PASS persistent reverse affiliation guard
+PASS persistent profile guard
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '0d5f8b0a-ce5b-4aae-b71e-b35ce5777571',
+  driverId: '3b79a68e-0f7c-4a7e-b963-d3b3b8aa0090',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '03215318-f3fc-4402-9389-0e36fd5ccdf4',
+  driverId: 'e8dd11db-a8c8-4336-a557-839bd0a10aaf',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '26d55d06-4cd4-4196-a52f-93c3f5185add',
+  driverId: '8f9273a7-b48b-4dde-bc6a-60d133290e92',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+[Nest] 17800  - 28/10/2026, 3:28:54 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '19f5bb94-08df-4615-9d03-184ff96c866b',
+  driverId: '6762914a-db3d-490f-8791-1a659a1586de',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+PASS four concurrent approval/affiliation races preserve exclusion
+[Nest] 17800  - 28/10/2026, 3:28:55 p.m.     LOG [DriversService] Object(5) {
+  event: 'DRIVER_CREATED',
+  providerId: '22222222-2222-4222-8222-222222222222',
+  driverId: 'e9761741-a1b1-470a-b3d0-29f1d5fea7b8',
+  userId: '246aaaef-aca7-4691-bc11-0544cb9646ac',
+  actorId: '77777777-7777-4777-8777-777777777777'
+}
+PASS four concurrent initial ingress races, alternating request order, one membership only
+PASS no affiliation is not independent
+PASS legacy resolution is not general independent closure
+PASS controlled pending-exit fixture retains fleet category and fences independent approval/TAKE; real recheck completes
+[Nest] 17800  - 28/10/2026, 3:28:56 p.m.     LOG [IndependentDriversService] Object(4) {
+  event: 'INDEPENDENT_DRIVER_ENABLED',
+  profileId: '47e1b6ea-d86d-482b-8db1-9d7c854bbcc7',
+  driverId: 'ee94a729-86d5-47ea-8eef-9a43d69ff1e7',
+  actorUserId: '77777777-7777-4777-8777-777777777777'
+}
+PASS voluntary fleet exit completes to NONE; explicit approval required, reception stays off
+Respecting HTTP Retry-After before Web login
+Web HTTP groups PASS 6
+PASS Nest HTTP: login/two sessions, canonical category, OFF flags, old mode409, ownership/role401/403 and incompatible approval409
+{"passed":16,"scope":"synthetic PostgreSQL with real guards; no UI claims"}

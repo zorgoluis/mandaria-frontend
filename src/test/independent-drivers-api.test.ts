@@ -76,14 +76,27 @@ it('uses the real V1.9 admin endpoints for the independent capability', async ()
 it('takes a service with a single atomic call and never claims separately', async () => {
   const fetcher = vi
     .spyOn(globalThis, 'fetch')
-    .mockImplementation(async () => new Response('{}', { status: 200 }))
+    .mockImplementation(
+      async (url) =>
+        new Response(
+          JSON.stringify({
+            operation: String(url).endsWith('/take') ? 'TAKE' : 'RELEASE',
+            dispatchId: DISPATCH,
+            assignmentId: DRIVER,
+            dispatchStatus: 'OPEN',
+            assignmentStatus: 'CANCELLED',
+            credits: { awardEntryId: null, refundEntryId: null, amount: 0 },
+          }),
+          { status: 200 },
+        ),
+    )
   await driverPortal.me()
   await driverPortal.vehicles()
   await driverPortal.available(1, 20)
   await driverPortal.get(DISPATCH)
-  await driverPortal.take(DISPATCH, VEHICLE)
-  await driverPortal.release(DISPATCH, 'CANNOT_COMPLETE')
-  await driverPortal.release(DISPATCH, 'OTHER', 'Se me averió la moto')
+  await driverPortal.take(DISPATCH, VEHICLE, DRIVER)
+  await driverPortal.release(DISPATCH, 'CANNOT_COMPLETE', undefined, DRIVER)
+  await driverPortal.release(DISPATCH, 'OTHER', 'Se me averió la moto', DRIVER)
   const calls = fetcher.mock.calls
   const paths = calls.map(([url]) => new URL(String(url)).pathname)
   expect(paths).toEqual([
@@ -122,7 +135,9 @@ it.each([400, 401, 403, 404, 409, 429, 500])(
           status,
         }),
     )
-    await expect(driverPortal.take(DISPATCH, VEHICLE)).rejects.toMatchObject({
+    await expect(
+      driverPortal.take(DISPATCH, VEHICLE, DRIVER),
+    ).rejects.toMatchObject({
       status,
       message: normalizeError(status, null).message,
     })

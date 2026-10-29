@@ -101,6 +101,8 @@ export function ExitCommands({
         'logistics',
         'assistance',
         'independent-drivers',
+        'driver-portal',
+        'independent-offer-zones',
       ].map((k) => client.invalidateQueries({ queryKey: [k] })),
     )
   }
@@ -328,7 +330,9 @@ export function ExitCommands({
         <Confirm
           title={
             draft.operation === 'START'
-              ? 'Confirmar retiro de flotilla'
+              ? scope.surface === 'driver'
+                ? 'Confirmar mi salida voluntaria'
+                : 'Confirmar retiro de flotilla'
               : 'Confirmar reevaluación'
           }
           description={

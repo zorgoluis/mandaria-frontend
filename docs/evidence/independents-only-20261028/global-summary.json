@@ -1,0 +1,494 @@
+{
+  "total": 1633,
+  "passed": 1633,
+  "failed": 0,
+  "skipped": 0,
+  "files": [
+    {
+      "path": "test/admin-reference-access.test.tsx",
+      "passed": 5,
+      "total": 5,
+      "status": "passed"
+    },
+    {
+      "path": "test/admin-references.test.tsx",
+      "passed": 25,
+      "total": 25,
+      "status": "passed"
+    },
+    {
+      "path": "test/api.test.ts",
+      "passed": 24,
+      "total": 24,
+      "status": "passed"
+    },
+    {
+      "path": "test/assistance-api.test.ts",
+      "passed": 19,
+      "total": 19,
+      "status": "passed"
+    },
+    {
+      "path": "test/assistance.test.tsx",
+      "passed": 44,
+      "total": 44,
+      "status": "passed"
+    },
+    {
+      "path": "test/business-pages.test.tsx",
+      "passed": 26,
+      "total": 26,
+      "status": "passed"
+    },
+    {
+      "path": "test/business-recovery.test.ts",
+      "passed": 16,
+      "total": 16,
+      "status": "passed"
+    },
+    {
+      "path": "test/business-service.test.ts",
+      "passed": 13,
+      "total": 13,
+      "status": "passed"
+    },
+    {
+      "path": "test/collection-instructions.test.tsx",
+      "passed": 22,
+      "total": 22,
+      "status": "passed"
+    },
+    {
+      "path": "test/credits-api.test.ts",
+      "passed": 22,
+      "total": 22,
+      "status": "passed"
+    },
+    {
+      "path": "test/credits.test.tsx",
+      "passed": 24,
+      "total": 24,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-address.test.tsx",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-autocomplete.test.tsx",
+      "passed": 4,
+      "total": 4,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-contact.test.tsx",
+      "passed": 6,
+      "total": 6,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-conversion-design.test.tsx",
+      "passed": 8,
+      "total": 8,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-location.test.tsx",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-profile-design.test.tsx",
+      "passed": 8,
+      "total": 8,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-quote-design.test.tsx",
+      "passed": 4,
+      "total": 4,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-reconciliation.test.tsx",
+      "passed": 23,
+      "total": 23,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-registration-design.test.tsx",
+      "passed": 6,
+      "total": 6,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-request-design.test.tsx",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-service.test.ts",
+      "passed": 18,
+      "total": 18,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-shipments-design.test.tsx",
+      "passed": 6,
+      "total": 6,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer-tracking.test.ts",
+      "passed": 1,
+      "total": 1,
+      "status": "passed"
+    },
+    {
+      "path": "test/customer.test.tsx",
+      "passed": 26,
+      "total": 26,
+      "status": "passed"
+    },
+    {
+      "path": "test/deletion-pages.test.tsx",
+      "passed": 32,
+      "total": 32,
+      "status": "passed"
+    },
+    {
+      "path": "test/deletion-service.test.ts",
+      "passed": 23,
+      "total": 23,
+      "status": "passed"
+    },
+    {
+      "path": "test/deletion-v2.test.tsx",
+      "passed": 57,
+      "total": 57,
+      "status": "passed"
+    },
+    {
+      "path": "test/delivery-assignments-api.test.ts",
+      "passed": 12,
+      "total": 12,
+      "status": "passed"
+    },
+    {
+      "path": "test/delivery-assignments.test.tsx",
+      "passed": 22,
+      "total": 22,
+      "status": "passed"
+    },
+    {
+      "path": "test/delivery-completion.test.tsx",
+      "passed": 41,
+      "total": 41,
+      "status": "passed"
+    },
+    {
+      "path": "test/delivery-requests-api.test.ts",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/delivery-requests.test.tsx",
+      "passed": 31,
+      "total": 31,
+      "status": "passed"
+    },
+    {
+      "path": "test/developers.test.tsx",
+      "passed": 25,
+      "total": 25,
+      "status": "passed"
+    },
+    {
+      "path": "test/dispatch-api.test.ts",
+      "passed": 8,
+      "total": 8,
+      "status": "passed"
+    },
+    {
+      "path": "test/dispatch-search.test.tsx",
+      "passed": 8,
+      "total": 8,
+      "status": "passed"
+    },
+    {
+      "path": "test/dispatch.test.tsx",
+      "passed": 55,
+      "total": 55,
+      "status": "passed"
+    },
+    {
+      "path": "test/documentary-availability.test.tsx",
+      "passed": 29,
+      "total": 29,
+      "status": "passed"
+    },
+    {
+      "path": "test/driver-category.test.ts",
+      "passed": 11,
+      "total": 11,
+      "status": "passed"
+    },
+    {
+      "path": "test/driver-portal.test.tsx",
+      "passed": 45,
+      "total": 45,
+      "status": "passed"
+    },
+    {
+      "path": "test/execution-attempt-service.test.ts",
+      "passed": 5,
+      "total": 5,
+      "status": "passed"
+    },
+    {
+      "path": "test/execution-reconciliation.test.ts",
+      "passed": 24,
+      "total": 24,
+      "status": "passed"
+    },
+    {
+      "path": "test/execution.test.tsx",
+      "passed": 40,
+      "total": 40,
+      "status": "passed"
+    },
+    {
+      "path": "test/fleet-api.test.ts",
+      "passed": 3,
+      "total": 3,
+      "status": "passed"
+    },
+    {
+      "path": "test/fleet-exit-api.test.ts",
+      "passed": 29,
+      "total": 29,
+      "status": "passed"
+    },
+    {
+      "path": "test/fleet-exit.test.tsx",
+      "passed": 39,
+      "total": 39,
+      "status": "passed"
+    },
+    {
+      "path": "test/fleet.test.tsx",
+      "passed": 31,
+      "total": 31,
+      "status": "passed"
+    },
+    {
+      "path": "test/flows.test.tsx",
+      "passed": 47,
+      "total": 47,
+      "status": "passed"
+    },
+    {
+      "path": "test/google-loader.test.ts",
+      "passed": 4,
+      "total": 4,
+      "status": "passed"
+    },
+    {
+      "path": "test/google-map.test.tsx",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/image-retention.test.tsx",
+      "passed": 36,
+      "total": 36,
+      "status": "passed"
+    },
+    {
+      "path": "test/independent-drivers-api.test.ts",
+      "passed": 13,
+      "total": 13,
+      "status": "passed"
+    },
+    {
+      "path": "test/independent-operations.test.ts",
+      "passed": 15,
+      "total": 15,
+      "status": "passed"
+    },
+    {
+      "path": "test/independent-zones-api.test.ts",
+      "passed": 15,
+      "total": 15,
+      "status": "passed"
+    },
+    {
+      "path": "test/independent-zones.test.tsx",
+      "passed": 18,
+      "total": 18,
+      "status": "passed"
+    },
+    {
+      "path": "test/integration-credentials-api.test.ts",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/invitations-api.test.ts",
+      "passed": 11,
+      "total": 11,
+      "status": "passed"
+    },
+    {
+      "path": "test/invitations.test.tsx",
+      "passed": 47,
+      "total": 47,
+      "status": "passed"
+    },
+    {
+      "path": "test/location.test.tsx",
+      "passed": 29,
+      "total": 29,
+      "status": "passed"
+    },
+    {
+      "path": "test/logistics-api.test.ts",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "path": "test/logistics.test.tsx",
+      "passed": 44,
+      "total": 44,
+      "status": "passed"
+    },
+    {
+      "path": "test/onboarding-production.test.tsx",
+      "passed": 30,
+      "total": 30,
+      "status": "passed"
+    },
+    {
+      "path": "test/partner-applications.test.tsx",
+      "passed": 25,
+      "total": 25,
+      "status": "passed"
+    },
+    {
+      "path": "test/pricing-api.test.ts",
+      "passed": 16,
+      "total": 16,
+      "status": "passed"
+    },
+    {
+      "path": "test/pricing.test.tsx",
+      "passed": 26,
+      "total": 26,
+      "status": "passed"
+    },
+    {
+      "path": "test/provider-historical-attempt.test.tsx",
+      "passed": 12,
+      "total": 12,
+      "status": "passed"
+    },
+    {
+      "path": "test/provider-movements.test.tsx",
+      "passed": 25,
+      "total": 25,
+      "status": "passed"
+    },
+    {
+      "path": "test/public-tracking-design.test.tsx",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/quotes-api.test.ts",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "path": "test/quotes.test.tsx",
+      "passed": 18,
+      "total": 18,
+      "status": "passed"
+    },
+    {
+      "path": "test/representatives.test.tsx",
+      "passed": 29,
+      "total": 29,
+      "status": "passed"
+    },
+    {
+      "path": "test/retention-projection.test.tsx",
+      "passed": 8,
+      "total": 8,
+      "status": "passed"
+    },
+    {
+      "path": "test/service-coverage-api.test.ts",
+      "passed": 9,
+      "total": 9,
+      "status": "passed"
+    },
+    {
+      "path": "test/service-coverage.test.tsx",
+      "passed": 19,
+      "total": 19,
+      "status": "passed"
+    },
+    {
+      "path": "test/session-compatibility.test.tsx",
+      "passed": 10,
+      "total": 10,
+      "status": "passed"
+    },
+    {
+      "path": "test/verification-pages.test.tsx",
+      "passed": 45,
+      "total": 45,
+      "status": "passed"
+    },
+    {
+      "path": "test/verification-recovery.test.ts",
+      "passed": 14,
+      "total": 14,
+      "status": "passed"
+    },
+    {
+      "path": "test/verification-service.test.ts",
+      "passed": 22,
+      "total": 22,
+      "status": "passed"
+    },
+    {
+      "path": "test/verification-upload.test.tsx",
+      "passed": 11,
+      "total": 11,
+      "status": "passed"
+    },
+    {
+      "path": "test/webhooks-api.test.ts",
+      "passed": 7,
+      "total": 7,
+      "status": "passed"
+    },
+    {
+      "path": "test/webhooks.test.tsx",
+      "passed": 22,
+      "total": 22,
+      "status": "passed"
+    }
+  ]
+}

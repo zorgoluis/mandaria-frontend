@@ -45,7 +45,7 @@ function app(actor = 'admin', role: Role = 'SUPER_ADMIN') {
       >
         <MemoryRouter>
           <FeedbackProvider>
-            <IndependentOfferZones profileId={profile} />
+            <IndependentOfferZones profileId={profile} canEdit />
           </FeedbackProvider>
         </MemoryRouter>
       </AuthContext.Provider>

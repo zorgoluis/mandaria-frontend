@@ -610,7 +610,7 @@ describe('driver invitations', () => {
 })
 
 describe('role visibility and route protection', () => {
-  it('SUPER_ADMIN navigation offers invitations', async () => {
+  it('SUPER_ADMIN navigation hides invitations while historical routes remain protected', async () => {
     mount('/dashboard')
     const nav = within(
       screen.getByRole('navigation', { name: 'Navegación principal' }),
@@ -618,7 +618,7 @@ describe('role visibility and route protection', () => {
     expect(
       nav.getByRole('link', { name: 'Administradores' }),
     ).toBeInTheDocument()
-    expect(nav.getByRole('link', { name: 'Invitaciones' })).toBeInTheDocument()
+    expect(nav.queryByRole('link', { name: 'Invitaciones' })).not.toBeInTheDocument()
   })
   it.each(['PROVIDER_ADMIN', 'DRIVER'] as Role[])(
     '%s cannot see or open user administration',

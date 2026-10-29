@@ -1,3 +1,15 @@
+## 2026-10-28 — Aceptación local independiente actualizada
+
+Backend1.13.5 local conectado: observación de MDR-000001 entregado y cargo único; onboarding original con identidad/licencia aprobadas y motocicleta aprobada mediante correctivo autorizado. Disponibilidad OFFLINE, recepción OFF; no producción. [Evidencia HTTP/UI y límites](docs/INDEPENDENTS-LIVE-WEB-20261028.md) · [Correctivo documental](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Las entradas inferiores preservan resultados y bloqueos históricos. Web1.11.0 sin cambio de versión.
+
+## 2026-10-28 — Operación independiente actual
+
+Navegación sin flotilla; categoría administrativa NONE sin perfil, TAKE/RELEASE durables, zonas/turno/READY y ejecución detallada propia. Global1633/1633 y8 escenarios de navegador con HTTP simulado; backend conocido offline, aceptación HTTP real pendiente. [Alcance y handoff](docs/INDEPENDENTS-ONLY-WEB-20261028.md). Las entradas inferiores son históricas; Web1.11.0 sin despliegue.
+
+## 2026-10-28 — Categorías excluyentes 1.0.0
+
+Integración Web de categoría canónica, conciliación de legado y bloqueos compatibles. Global1613/1613, focal128/128 y HTTP Web6/6 PASS; primera habilitación sin perfil sigue bloqueada por lectura administrativa faltante. [Alcance, evidencia y límites](docs/DRIVER-CATEGORY-EXCLUSIVITY-WEB.md). Web1.11.0, sin despliegue; historia inferior conservada.
+
 ## 2026-10-26 — Compatibilidad backend 1.13.3
 
 Contrato público actualizado sólo en info.version, sin API B2B nueva ni integración FCM Web. Paquete local regenerado y ZIP verificado; 118 pruebas focalizadas, 10 de paquete, tipos/lint/build y navegador local PASS. [Informe y evidencia](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md). Web1.11.0 intacta; sin disponibilidad remota acreditada, envío, commit/push o despliegue. Historia inferior preservada.
@@ -654,3 +666,5 @@ ni Spaces. [Cambios, evidencia y límites](docs/DOCUMENT-DELETION-COMPATIBILITY-
 ### Estado revisado para publicación — 2026-10-17
 
 La baja admite seguimiento y constancias parciales; la sesión restringida usa projection=session y la recuperación administrativa usa GET sin repetir la mutación. La entrega LEGACY restringida y el recibo realmente depurado tienen evidencia de navegador/backend/PostgreSQL aislados en [el informe de compatibilidad](docs/DOCUMENT-DELETION-COMPATIBILITY-WEB.md). Las afirmaciones anteriores fechadas sobre integración pendiente son históricas. Drenaje real en Spaces pendiente: no se acredita eliminación total ni aptitud productiva. Publicación de código en feature/driver-verification no equivale a activación o despliegue.
+
+Continuación categorías/salida DRIVER: [matriz actual y prerrequisitos backend](docs/DRIVER-CATEGORY-FLEET-EXIT-WEB-20261028.md). La transición independiente→flotilla permanece bloqueada por decisión de negocio. Las nuevas capturas usan HTTP simulado; entorno backend conocido offline, integración HTTP actual pendiente.

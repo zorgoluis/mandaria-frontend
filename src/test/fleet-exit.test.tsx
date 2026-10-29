@@ -1,3 +1,4 @@
+import { driverPortal } from '../driver-portal/service'
 import { beforeEach, expect, it, vi } from 'vitest'
 import {
   render,
@@ -37,6 +38,7 @@ import {
 } from './fleet-exit-fixture'
 import type { Attempt } from '../fleet-exit/types'
 import type { Role } from '../types/api'
+vi.mock('../driver-portal/service', () => ({ driverPortal: { me: vi.fn() } }))
 vi.mock('../fleet-exit/service', async (orig) => ({
   ...(await orig<typeof import('../fleet-exit/service')>()),
   exits: { context: vi.fn(), detail: vi.fn(), list: vi.fn(), notices: vi.fn() },
@@ -86,7 +88,7 @@ function wrap(node: ReactNode, path = '/', role: Role = 'PROVIDER_ADMIN') {
 }
 function page(
   role: Role = 'PROVIDER_ADMIN',
-  surface: 'provider' | 'admin' = 'provider',
+  surface: 'provider' | 'admin' | 'driver' = 'provider',
   path = `/exits?providerId=${eid.provider}&driverId=${eid.driver}`,
 ) {
   return render(
@@ -110,6 +112,17 @@ const empty = {
 }
 beforeEach(() => {
   vi.resetAllMocks()
+  vi.mocked(driverPortal.me).mockResolvedValue({
+    driverCategory: {
+      contractVersion: '1.0.0',
+      categoryRevision: '1',
+      category: 'FLEET',
+      providerId: eid.provider,
+      independentMembershipState: null,
+      independentApprovalStatus: null,
+      resolutionRequired: false,
+    },
+  } as never)
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   vi.mocked(intentStore.read).mockResolvedValue(null)
   vi.mocked(intentStore.save).mockResolvedValue()
@@ -564,3 +577,50 @@ it('COMPLETED receipt survives the expected ex-driver context404 without restori
     screen.queryByRole('button', { name: 'Solicitar retiro de flotilla' }),
   ).not.toBeInTheDocument()
 })
+
+it('DRIVER requests voluntary exit without owner approval and persists original scope before sending', async () => {
+  page(
+    'DRIVER',
+    'driver',
+    '/exits?driverId=' + eid.driver + '&providerId=' + eid.provider,
+  )
+  const button = await screen.findByRole('button', {
+    name: 'Solicitar mi salida voluntaria',
+  })
+  expect(exits.context).toHaveBeenCalledWith(
+    expect.objectContaining({ surface: 'driver', providerId: undefined }),
+    '',
+    expect.anything(),
+  )
+  expect(providers.profiles).not.toHaveBeenCalled()
+  fireEvent.click(button)
+  const modal = await screen.findByRole('dialog', {
+    name: 'Confirmar mi salida voluntaria',
+  })
+  const confirm = within(modal).getByRole('button', { name: 'Confirmar' })
+  fireEvent.click(confirm)
+  fireEvent.click(confirm)
+  await waitFor(() => expect(sendIntent).toHaveBeenCalledTimes(1))
+  expect(intentStore.save).toHaveBeenCalledTimes(1)
+  expect(vi.mocked(sendIntent).mock.calls[0][0]).toMatchObject({
+    scope: { surface: 'driver' },
+    resourceType: 'AFFILIATION',
+    resourceId: eid.affiliation,
+    body: {
+      expectedAffiliationRevision: '9007199254740993',
+      reasonCode: 'VOLUNTARY_EXIT',
+    },
+  })
+  expect(vi.mocked(intentStore.save).mock.invocationCallOrder[0]).toBeLessThan(
+    vi.mocked(sendIntent).mock.invocationCallOrder[0],
+  )
+  expect(screen.queryByText('Salida completada')).toBeNull()
+})
+it.each(['PROVIDER_ADMIN', 'SUPER_ADMIN', 'CUSTOMER'] as Role[])(
+  'rejects driver exit route for %s',
+  (role) => {
+    page(role, 'driver', '/exits')
+    expect(screen.getByRole('heading', { name: 'Sin permisos' })).toBeVisible()
+    expect(exits.context).not.toHaveBeenCalled()
+  },
+)

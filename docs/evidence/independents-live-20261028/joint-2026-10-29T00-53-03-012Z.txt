@@ -1,0 +1,57 @@
+Volver
+Despacho de MDR-000001
+
+Entrega local · Zona 306F30E89D
+
+Resumen
+Disponible
+Solicitud
+MDR-000001
+Cotización
+MQ-000001
+Abierto
+28 oct 2026, 6:50 p.m.
+Vence
+28 oct 2026, 7:50 p.m.
+Tomado por (histórico)
+—
+Tomado
+—
+
+No quedan candidatos de flotilla ofrecidos. Esto no indica ausencia de independientes; su elegibilidad se consulta por separado.
+
+Cobro y mercancía
+COSTO DEL ENVÍO
+$60.00 MXN
+VALOR DE MERCANCÍA
+$800.00 MXN
+Mercancía prepagada
+Costo en créditos
+
+Congelado al abrirse el despacho, por actor
+
+Actor	Costo	Política	Distancia	Detalle
+Proveedor	5 créditos	v1 · Por kilómetro	4.2 km (4,200 m)	5 km cobrados
+Repartidor independiente	5 créditos	v1 · Por kilómetro	4.2 km (4,200 m)	5 km cobrados
+
+Los créditos son una unidad interna de Mandaria: no son pesos y no se suman al cobro del envío. El cobro real de un servicio aparece como movimiento en la cuenta de créditos de quien se lo adjudicó.
+
+Candidatos
+
+Proveedores a los que se ofreció al abrirse
+
+Sin candidatos
+
+Ningún proveedor tenía cobertura activa para esta zona y servicio.
+
+Asignaciones
+
+Historial de ejecutores, de la asignación más reciente a la más antigua
+
+Sin asignaciones
+
+El proveedor que tomó el servicio todavía no asignó repartidor.
+
+Lectura y auditoría. Asignar, reasignar y cancelar corresponden al proveedor dueño del servicio.
+
+No se pudo consultar la ejecución detallada. Esta respuesta no autoriza un cierre legacy.

@@ -1,3 +1,5 @@
+import { DriverExecutionRecovery } from '../driver-portal/execution'
+import { IndependentRecovery } from '../driver-portal/recovery'
 import { useQuery } from '@tanstack/react-query'
 import { customer } from '../customer/service'
 import { profileInitials } from '../customer/profile-format'
@@ -211,6 +213,7 @@ export function AdminLayout() {
             label: 'Mi verificación',
             icon: BadgeCheck,
           },
+          { to: '/driver/reception', label: 'Zonas y turno', icon: MapPinned },
           { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
           { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
           { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
@@ -251,27 +254,43 @@ export function AdminLayout() {
         </button>
         <span className="nav-label">ESPACIO DE TRABAJO</span>
         <nav aria-label="Navegación principal">
-          {links.map(({ to, label, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={
-                to === '/customer' &&
-                (pathname === '/customer/profile' ||
-                  pathname.startsWith('/customer/business'))
-              }
-              className={({ isActive }) =>
-                isActive ||
-                (to === profilePath && pathname === '/customer/profile')
-                  ? 'active'
-                  : undefined
-              }
-              onClick={() => setOpen(false)}
-            >
-              <Icon size={19} />
-              <span>{label}</span>
-            </NavLink>
-          ))}
+          {links
+            .filter(
+              (link) =>
+                ![
+                  '/providers',
+                  '/drivers',
+                  '/vehicles',
+                  '/invitations',
+                  '/admin/fleet-assistance',
+                  '/admin/fleet-exits',
+                  '/fleet-assistance',
+                  '/fleet-exits',
+                  '/fleet-services',
+                  '/admin/partner-applications',
+                ].includes(link.to),
+            )
+            .map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={
+                  to === '/customer' &&
+                  (pathname === '/customer/profile' ||
+                    pathname.startsWith('/customer/business'))
+                }
+                className={({ isActive }) =>
+                  isActive ||
+                  (to === profilePath && pathname === '/customer/profile')
+                    ? 'active'
+                    : undefined
+                }
+                onClick={() => setOpen(false)}
+              >
+                <Icon size={19} />
+                <span>{label}</span>
+              </NavLink>
+            ))}
         </nav>
         <div className="sidebar-bottom">
           <Link to="/privacy/deletion">Baja y privacidad</Link>
@@ -340,6 +359,8 @@ export function AdminLayout() {
         <main id="main-content">
           <ExecutionRecovery />
           <CustomerOperationNotice />
+          <DriverExecutionRecovery />
+          <IndependentRecovery />
           <Outlet />
         </main>
         <footer className="app-footer">

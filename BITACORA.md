@@ -1,3 +1,71 @@
+## 2026-10-28 — Verificación previa al commit y push autorizados
+
+Usuario autoriza commit/push a rama actual main, ampliando restricciones previas. Diff revisado y archivos nuevos comprobados sin JWT/claves privadas/URLs firmadas completas; .env y test-results excluidos. Nueva suite GLOBAL1635/1635 PASS,82 archivos,0 omitidas,91.04s mediante comando directo Vitest. Dos intentos previos incompletos conservados localmente; no se cuentan como PASS. Tipos/lint Web/build anteriores permanecen identificados como históricos. [Resultado nuevo](docs/evidence/storage-web-20261028/commit-global-verification.json). Versión1.11.0 intacta; sin despliegue solicitado o ejecutado. Incluye implementación independiente acumulada y evidencia local de servicio/correctivo, preservando historial.
+
+## 2026-10-28 — Correctivo motocicleta aprobado con autorización expresa
+
+Anterior59d9cf1d-bad3-4377-962c-e9e4937fb76a WITHDRAWN/revisión8; correctivo real9864ae95-25d7-49d9-84b7-5a6a573b5ea7 APPROVED/revisión8. Misma motocicleta6a072e1f-c9ae-446a-b31b-c592427aa721/placa SYN-WEB-01 ahora ACTIVE por decisión documental; identidad/licencia original APPROVED/revisión14 sin cambios. Flujo UI/HTTP real, dos adjuntos nuevos validados, revisión SUPER_ADMIN y negativo DRIVER403 separado. Historial conservado. Driver OFFLINE, saldo0, zonas vacías/turno nulo; recepción OFF/RECEPTION_DISABLED, no READY.
+
+Corrective-final y aserciones de conservación PASS; sintaxis/diff-check exit0. Fallos de origen/caché/throttling del harness conservados sin repetir mutaciones. Sólo harness/evidencia/docs nuevos; pruebas producto anteriores históricas. [Informe y capturas](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Sin servicios/Carlos/Coita/backend/móvil, versión, commit/push/deploy. Recursos propios cerrados, backend intacto.
+
+## 2026-10-28 — Continuación documental original, aprobación parcial
+
+Recuperado CREATE_UPLOAD original con clave proporcionada por usuario y GET de intento desde UI; adjunto vencido retirado explícitamente. Seis imágenes sintéticas nuevas subidas por PUT real/complete y visualizadas por DRIVER/SUPER_ADMIN. Identidad original APPROVED/revisión14, licencia MOTORCYCLE hasta2027-10-28; mismo vehículo/expedientes. Motocicleta SUBMITTED/revisión7, INACTIVE: primer409 VERIFICATION_PLATE_REQUIRED; placa completada por UI administrativa nueva sobre vehículo original; decisión posterior409 VERIFICATION_MATERIAL_CHANGED por snapshot ya presentado. No se sustituyó ni retiró el expediente para eludir la restricción. Recepción PAUSED/DOCUMENTARY_REQUIREMENTS, OFFLINE, saldo0, sin zona/turno.
+
+Cambio Web: edición limitada de placa propia SUPER_ADMIN y aviso sobre expedientes presentados.15/15 focalizadas, tipos producto/tests y build exit0; sin suite global nueva. npm run lint sin exclusiones encontró824 errores en copias backend previas bajo test-results; no se alteraron esas copias. Resultado del lint Web delimitado en informe. [Informe, bloqueos, comandos y evidencia](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Sin backend/móvil/servicios/FCM/GPS, versión, commit/push/deploy. Navegador/Vite propios cerrados; backend compartido conservado.
+
+## 2026-10-28 — Cierre observado del recorrido conjunto Carlos
+
+HTTP/UI real SUPER_ADMIN a19:29 México: MDR-000001/MQ-000001, dispatch4daacb2e-8904-4113-8cc2-88f247d1863e DELIVERED; asignación abdbca5b-7c75-4a42-9182-5acbbc9f0225 COMPLETED a19:23:13.111. Ejecución revisión7/custodia DELIVERED, cinco avances y entrega en historial. Libro completo de Carlos:2 registros/1 página, recarga100 y único SERVICE_AWARD -5 del despacho, saldo95, cero SERVICE_REFUND. Movimiento e878e804-7232-449e-9c9b-9ab8b596a271. Observación posterior, sin comandos operativos Web ni atribuir taps Android a Web.
+
+joint-final exit0; aserciones sobre respuestas y node --check exit0. [Evidencia, capturas y correlaciones](docs/INDEPENDENTS-LIVE-WEB-20261028.md). Acredita cierre/cargo/sin reembolso a la consulta; no cobro físico ni onboarding completo. STORAGE_UNAVAILABLE y servicio separado Pedro pendientes. Conservados versión/cambios previos; sin backend/móvil, commit/push o despliegue.
+
+## 2026-10-28 — Despacho conjunto real observado, aún sin asignación
+
+SUPER_ADMIN UI/HTTP confirmó MDR-000001 / MQ-000001, dispatchId4daacb2e-8904-4113-8cc2-88f247d1863e a18:53 México: Disponible, sin asignaciones, vigencia hasta19:50. Detalle/asignaciones200; ejecución404, sin acreditar hitos ni finalización. Cero comandos operativos Web; Carlos/Coita intactos. observe-joint exit0, captura y trazas en [informe HTTP real](docs/INDEPENDENTS-LIVE-WEB-20261028.md). READY/socket Carlos comunicado por usuario, no ejecutado por Web. Sin versión/commit/push/despliegue; pendientes documentales anteriores preservados.
+
+## 2026-10-28 — Aceptación HTTP/UI contra backend1.13.5 encendido
+
+Nueva evidencia real, separada de1633 unitarias/8 simuladas históricas: sa/Pedro login, NONE canónico+perfil404, PENDING/suspendido, recursos propios, Pedro READY por UI y feed vacío con poll. Registro público nuevo confirmado mediante outbox, términos aceptados, identidad/licencia y vehículo propio en borradores; SUPER_ADMIN leyó el expediente nuevo.
+
+Bloqueo real: POST verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads →503 STORAGE_UNAVAILABLE a2026-10-29T00:37:04.884Z; dejó carga incompleta/revisión3. Sin repetir ni aprobar/bypassear. Presentación y decisión pendientes de almacenamiento backend. Web preparado para observar despacho conjunto; no se recibieron referencias, no se creó/tomó servicio ni actuó por Carlos. TAKE/RELEASE Pedro reservado para otro servicio posterior autorizado.
+
+[Informe, comandos, capturas, correlaciones y pendientes](docs/INDEPENDENTS-LIVE-WEB-20261028.md). Status/manifest comprobados antes de mutar; backend compartido intacto. Sólo harness/evidencia/continuidad nuevos; cambios previos preservados, Web1.11.0/main sin commit/push/deploy. No nueva suite global en este turno; node --check y git diff --check exit0. Historia inferior conservada.
+
+## 2026-10-28 — Operación Web sólo con independientes
+
+Decisión nueva: la experiencia visible se centra en expediente/aprobación, vehículo propio, créditos, zonas/turno, ofertas, servicio e historial. Flotilla/salida/invitaciones se ocultan de navegación, conservando implementación histórica, permisos y recuperación. Nueva lectura SUPER_ADMIN de categoría resuelve NONE sin perfil;404 de perfil no concede autoridad. FLEET/REVIEW_REQUIRED bloqueados. Primera habilitación exige referencia autorizada, motivo, revisión fresca y validación transaccional existente.
+
+TAKE/RELEASE migrados a Idempotency-Key durable, body exacto y recibo keyed, separados por entorno/actor/despacho/operación. IndexedDB cifrado antes de POST, sin reenvío automático; GET/close recuperan clave original aun después de perder acceso al despacho. Cuenta restringida dispone de recuperación propia. Zonas/recepción, turno explícito y disponibilidad desde servidor; READY/PREVIEW separados, feed HTTP paginado y resnapshot. Cinco hitos, entrega detallada, declaración de efectivo e incidencia sólo DRIVER propio, revisión/assignmentId/clave; RELEASE bloqueado por custodia/cobro/incidencia. NoProviderAvailable no excluye independientes.
+
+Nueva suite GLOBAL final1633/1633 PASS,81 archivos,0 omitidas;8 escenarios Chromium PASS con HTTP totalmente simulado, incluidas respuesta perdida/recarga/recibo de TAKE y RELEASE, NONE administrativo, PREVIEW, cinco hitos/completion y cobro. Capturas/contratos/huellas/comandos: [evidencia](docs/evidence/independents-only-20261028/verification.json). Tipos producto/tests, lint y build aislado verificados separadamente; warning conocido chunk>500kB. Se conservan corridas fallidas e incompletas, sin presentarlas como PASS ni sumar repeticiones.
+
+Backend supervisor vuelve a informar offline/PostgreSQLfalse: URL/build/migraciones/flags vivos no acreditados. No se arrancó/resembró la instancia compartida. HTTP real actual PENDIENTE. Las59 pruebas backend de readiness y cifras previas siguen históricas, no aceptación Web ni Android/FCM. [Implementación, matriz y handoff](docs/INDEPENDENTS-ONLY-WEB-20261028.md). Requiere instancia sintética dedicada identificada y pedido originado por su cliente titular; no se inventa MDR ni usa servicio reservado. Web1.11.0/main intactos; sin backend/móvil, datos reales, configuración remota, Docker, commit/push, mensajes automáticos o despliegue. Historia inferior preservada.
+
+## 2026-10-28 — Categorías y salida voluntaria DRIVER; entorno integrado pendiente
+
+Continuación sin commit sobre main/ffb07b1, Web1.11.0 intacta. Añadidas navegación/rutas propias DRIVER, START VOLUNTARY_EXIT sin veto, recuperación durable por AFFILIATION sin exitId y motivo por rol; proveedor conserva OWNER/ADMIN y SUPER_ADMIN sin START. Independiente→flotilla bloqueado expresamente, incluso suspendido/rechazado. Se conservan cambios pendientes de categorías, zonas, asistencia y ejecución.
+
+Verificación nueva: global1618/1618 en80 archivos,0 omitidas; focal68/68 en2 archivos; tipos producto/tests, lint y build aislado PASS. Chromium con HTTP simulado:5 escenarios PASS,0 errores de página, capturas de ACTIVE, APPLIED/PENDING recuperado tras recarga/respuesta perdida, ENDED/NONE, independiente suspendido y REVIEW_REQUIRED. No son pruebas HTTP reales. Warning conocido de chunk>500kB conservado.
+
+Supervisor backend consultado sólo en lectura: offline/PostgreSQLfalse. URL/build/migraciones/flags vivos NO acreditados; no se reiniciaron compartidos. Harness SQL legado histórico deshabilitado; se requiere fixture backend. Los185 casos backend y6 grupos Web previos siguen siendo históricos. [Matriz, archivos, limitaciones y prerrequisitos](docs/DRIVER-CATEGORY-FLEET-EXIT-WEB-20261028.md), [resultados nuevos](docs/evidence/driver-exit-ui-20261028/verification.json). Pendientes explícitos: matriz HTTP actual, primera habilitación sin perfil canónico y recuperación durable RELEASE independiente (variante histórica sin clave aún vigente). Sin cambios backend/móvil/Coita, datos reales, versión, commit/push, despliegue ni mensajes.
+
+## 2026-10-28 — Integración Web de categorías excluyentes 1.0.0
+
+Backend ya publica contrato/handoff y migración66; se supera el bloqueo documental anterior sin eliminar historia. Web sobre main/ffb07b1, versión1.11.0 intacta. Nueva lectura canónica driverCategory separa pertenencia, aprobación e historial; no habilita por providerId ausente ni por APPROVED histórico. Se retira el selector de afiliados para aprobación independiente, se revalida rehabilitación y TAKE, se restringen nuevas ediciones de zonas incompatibles y se conserva ejecución/recuperación autorizada. SUPER_ADMIN dispone de conciliación explícita de legado con motivo, revisión y requestId, intención cifrada durable y replay exacto. Sin selector MODE nuevo ni baja/reafiliación inventada.
+
+Resultados NUEVOS: suite global1613/1613 en80 archivos,0 omitidas; focal final posterior a ajustes menores128/128 en5 archivos. Tipos producto/tests, lint de todo código propio (excluye snapshots test-results/.tmp) y build aislado sin .env PASS; warning conocido chunk>500kB. Primera global1612/1613: fixture de finalización sin categoría canónica corregido, sin relajar permisos/tiempos ni omitir tests. HTTP Web6/6 grupos usando módulos reales→fetch→Nest/PostgreSQL WSL sintético, incluida aplicación de conciliación, conflicto y replay;16 grupos del runner backend reejecutados y atribuidos separadamente. Cluster/Nest propios cerrados;382 fuentes src/prisma coinciden con original. No navegador/Android acreditados por estas llamadas.
+
+[Implementación, evidencia y handoff](docs/DRIVER-CATEGORY-EXCLUSIVITY-WEB.md), [manifiesto](docs/evidence/driver-category-20261028/verification.json). Bloqueo real: primera habilitación sin perfil, porque lectura administrativa canónica devuelve404 y no hay catálogo de candidatos; no se habilita a ciegas. No existen baja independiente general ni reafiliación existente. Pendientes navegador con recarga/dos pestañas, UI Driver, sockets multiinstancia y matriz integrada nueva con ACTIVE/TAKE tardío/asistencia. Fallos iniciales del harness y límites de fixture EXIT_PENDING documentados; HTTP/GPS anteriores históricos. Sin backend/móvil, configuración remota, datos reales, versión, commit/push, despliegue ni mensajes a agentes. Cambios previos de impacto/continuidad preservados.
+
+## 2026-10-28 — Categorías excluyentes: impacto Web, contrato pendiente
+
+Solicitud: Prompt2 del adjunto, exclusión de pertenencia FLEET/independiente, no prioridad entre capacidades. Revisión documental sobre main/ffb07b1 (árbol inicial limpio); no cambio de rama. Backend legible conserva F4/offer-mode y approve de perfil como capacidad adicional; no se encontró contrato revisado ni DTO canónico de pertenencia/cierre independiente. Se aplicó alternativa explícita del usuario: impacto y pendientes, sin implementar APIs inferidas.
+
+Nuevo [informe de impacto y handoff](docs/DRIVER-EXCLUSIVE-CATEGORIES-WEB-IMPACT-20261028.md): incoherencias por ruta/campo/regla, archivos afectados, privacidad, concurrencia, recuperación, matriz de pruebas y siete requisitos de desbloqueo. Suspensión no es baja; EXIT_PENDING sigue FLEET; ENDED no aprueba independiente. Política de proveedor y ejecución/RELEASE/asistencia/movementContext preservados.
+
+Comprobaciones nuevas: lectura de fuentes y documentación, revisión de diff. Sin pruebas funcionales/HTTP/mocks, tipos/lint/build nuevos; cifras previas históricas. Git backend no legible en sandbox, sin inferir su HEAD; fuentes sí consultadas. Sólo documentación Web y continuidad, sin código, backend/Android, configuración/versiones, mensajes, commit/push o despliegue. Historia conservada.
+
 ## 2026-10-26 — Revisión final y commit local QA de MDR-000001
 
 Diff revisado sobre QA5173644: supervisor local de preparación, evidencia UI de reclamo/asignación, dos muestras GPS y continuidad. Sin cambios de producto, dependencias, configuración ni versión (Web1.11.0). Las menciones históricas «pendiente»/«sin commit» describen sus etapas originales; este commit incorpora el cierre posterior sin sobrescribirlas.

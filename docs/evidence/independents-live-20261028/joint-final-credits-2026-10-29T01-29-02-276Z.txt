@@ -1,0 +1,86 @@
+Volver
+carlos
+
+Habilitación independiente · cuenta Activo
+
+Rechazar
+Suspender
+Categoría vigente
+
+INDEPENDENT · Revisión 1
+
+Pertenencia independiente: CURRENT. Aprobación: APPROVED.
+
+Independiente vigente. Zonas, requisitos y recepción se verifican por separado.
+
+La transición de independiente a flotilla está bloqueada por decisión de negocio. Suspender o rechazar no habilita esa transición.
+
+Habilitación
+Habilitado
+Estado
+Puede tomar servicios por su cuenta, con sus propios vehículos.
+Cuenta del repartidor
+Activo · Disponible
+Habilitado
+28 oct 2026, 6:21 p.m.
+Suspendido
+—
+Rechazado
+—
+Motivo
+Sin motivo registrado
+
+Flotilla e independiente son pertenencias excluyentes. Suspender o rechazar no termina la pertenencia independiente. La salida de flotilla debe completarse antes de una habilitación expresa, sin transferir recursos ni iniciar recepción.
+
+Suspender o rechazar con un servicio en curso se rechaza: Mandaria prefiere no cancelar en silencio una entrega en marcha.
+
+Créditos Mandaria
+
+Saldo, recargas, cargos por servicio y ajustes
+
+Registrar recarga
+Ajuste administrativo
+SALDO ACTUAL
+95 créditos
+Cuenta del repartidor independiente
+Actualizado 28 oct 2026, 7:01 p.m.
+Los créditos son una unidad interna de Mandaria: no son pesos ni sustituyen el cobro del envío.
+
+Mandaria no procesa pagos: la recarga registra créditos después de confirmar el pago fuera del sistema.
+
+Fecha	Movimiento	Créditos	Saldo resultante
+28 oct 2026, 7:01 p.m.
+Cargo por servicio
+Servicio del despacho
+Registrado por e2df19bd-450b-4d79-abba-5a7fc9d03f5b
+	-5 créditos	95 créditos
+28 oct 2026, 6:21 p.m.
+Recarga
+E2E funding
+Otro medio
+Registrado por 2c5ab81e-78bb-4485-94ba-f57afc7e44a5
+	+100 créditos	100 créditos
+Zonas propias autorizadas
+
+Autoriza zonas del catálogo al perfil independiente. No aprueba la habilitación, levanta restricciones, hereda cobertura de flotilla, selecciona zona ni inicia turno.
+
+Revisión vigente: 1 · 1 zonas autorizadas.
+
+Esta lectura no identifica quién aplicó un cambio ni resuelve por sí sola una intención incierta.
+
+Consultar zonas vigentesEditar autorizaciones de zonas
+Vehículos propios
+
+Del repartidor, no del proveedor
+
+Agregar vehículo
+Vehículo	Estado	Detalle	Placa	Acciones
+
+CARLOS-306F30E89D
+Motocicleta
+
+Activo	—	—	Desactivar
+
+La pertenencia es excluyente: un vehículo independiente nunca pertenece a un proveedor. Desactivar uno que está ejecutando un servicio se rechaza.
+
+Motivo de habilitación

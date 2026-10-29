@@ -1,0 +1,85 @@
+{
+  "dateLocal": "2026-10-28",
+  "timezone": "America/Mexico_City",
+  "contractVersion": "1.0.0",
+  "webVersion": "1.11.0",
+  "branch": "main",
+  "base": "ffb07b1",
+  "http": {
+    "webGroups": 6,
+    "failed": 0,
+    "backendRunnerGroups": 16,
+    "separateAttribution": true,
+    "scope": "Real frontend service modules through fetch to isolated Nest/PostgreSQL; no browser UI or Android acceptance",
+    "closed": true,
+    "newReconciliationDriverId": "99999999-9999-4999-8999-999999999999"
+  },
+  "global": {
+    "passed": 1613,
+    "failed": 0,
+    "pending": 0,
+    "files": 80
+  },
+  "sourceCount": 382,
+  "snapshot": "test-results/category-http-1793222823526",
+  "run": "test-results/category-http-1793222823526/.tmp/driver-category-verification-1793222895665",
+  "files": {
+    "backend-source-hashes.json": "9944cee239a6a5fe35a16b841c4fe0416dfca779410a93a936f17e6080a45185",
+    "category-cases.txt": "5eab0bf046b4babb4f3eb8a87c815cdf098f3cc2e4ca564e2b402af8b5f9acd1",
+    "evidence.json": "c984af44d816a08e38da2017decf41954130dff9448b33dba65faf36f5054bfa",
+    "web-category-http.json": "4e6dffac261f1077b15dba8a164561789228ddee231a62753900b7e379734168"
+  },
+  "limitations": [
+    "No first enable UI for absent independent profile: admin canonical read returns 404",
+    "No general independent closure or reassociation endpoint",
+    "Backend controlled EXIT_PENDING fixture is not active-delivery end-to-end",
+    "No new active-service/late TAKE/assistance integrated matrix or multiinstance socket acceptance",
+    "Initial failures preserved in test-results; focused regression after final small UI/validation edits reported separately"
+  ],
+  "finalFocused": {
+    "passed": 128,
+    "failed": 0,
+    "pending": 0,
+    "files": 5,
+    "afterLastMinorChanges": true
+  },
+  "typecheck": "PASS product and tests",
+  "lint": "PASS own full source/scripts/tests; excludes disposable test-results/.tmp snapshots",
+  "build": "PASS isolated envDir:false; existing chunk warning >500kB",
+  "commands": {
+    "global": "node node_modules/vitest/vitest.mjs run --reporter=json --outputFile=test-results/category-global-final.json",
+    "focused": "node node_modules/vitest/vitest.mjs run src/test/driver-category.test.ts src/test/driver-portal.test.tsx src/test/delivery-completion.test.tsx src/test/independent-zones.test.tsx src/test/independent-drivers-api.test.ts --reporter=json --outputFile=test-results/category-final-focused.json",
+    "http": "node scripts/verify-driver-category-local.mjs --run --wsl (inside prepared snapshot)",
+    "types": [
+      "node node_modules/typescript/bin/tsc -b",
+      "node node_modules/typescript/bin/tsc --project tsconfig.test.json"
+    ],
+    "lint": "node node_modules/eslint/bin/eslint.js . --ignore-pattern 'test-results/**' --ignore-pattern '.tmp/**'"
+  },
+  "reportHashes": {
+    "global": "538a76ff5b659397c9f42eccc66fe2a407f3735e429652b2f144387633a089cc",
+    "focused": "63f280304d561c3deb4808b3c601669500ba42cbb8a308b232833f84b2af37ba"
+  },
+  "webSourceHashes": {
+    "scripts/category-http-client.ts": "902964ea357269c89866bfa8a51427446a52004bd1377e35fd7e9d7cf065f12e",
+    "scripts/prepare-category-http.mjs": "d78f3505d76abc93eddb835a22910da92f999e1d7025acf19fe56a522c5e1fe7",
+    "src/driver-category/components.tsx": "13b8f9b7bcc9a8d6699bff2de5302c8df35adf5ef3e76f689684b87def2f9f9d",
+    "src/driver-category/contract.ts": "aefba1d569fa3f44dc1cabd67a4a30163b2420ec9f65d7bc12b10690730e4b04",
+    "src/driver-category/intent.ts": "ccb54cfd224bcb3214e57df83a2210851335104c9dc2fc5dd3e05c72a8215f69",
+    "src/driver-category/reconcile.tsx": "28f15f21cb8d28a42b46d230735facf62fd3c05e893db0c6b1747a6c110bb942",
+    "src/driver-category/service.ts": "b96bb7320ef721c54d79bf06ee98912e3c4d5531ee274b6bb7a44d3962d532c5",
+    "src/test/driver-category.test.ts": "8722ecc336b1344010c8ba36cdca625498434e84f1309f95d5883930427e6f4e",
+    "src/driver-portal/pages.tsx": "58179ad6114723799f60a60b2015ad0645a89e02eb1c2041bb8ae625a6ef2dcd",
+    "src/driver-portal/types.ts": "289c2ec5ace597efc21fc6f3ce24e36ce0e265a335f19ac957f7e304225c0f40",
+    "src/drivers/pages.tsx": "fd4000e0909f7a42e59e4547c0f61ab015ba0157aa585dc1724c8da1819bd1a1",
+    "src/fleet-exit/pages.tsx": "1d4b4aee4a11258638968ddfcaa3a9018610e94a8b44a5bed64d54544164b9d5",
+    "src/independent-drivers/pages.tsx": "97b34868ae853eb99026ed1bc0633d9ae062cb6edfdd0620c706ccff1949fcff",
+    "src/independent-drivers/queries.ts": "050770b0b1d51b744197d55618abd0a3a08c04c27c36cb7bce5fc720df62fc3e",
+    "src/independent-drivers/types.ts": "1422d9a0369e7f3ed47d62bc6df12f9aa43c745f14cd584c30b96751005947a7",
+    "src/independent-zones/panel.tsx": "19dd42d621b577d0418a44fbfda83bda29a152968d392b6816efc6464a77003c",
+    "src/services/errors.ts": "65a9df1cf2641f9141522b44c217d2cef2339b3657a620d5354564ec2fab725f",
+    "src/test/delivery-completion.test.tsx": "87ff5f16dcdeb37aa8ff3bf73130038be335543e3f425ac2ddab23fbceaca8ff",
+    "src/test/driver-portal.test.tsx": "a85fb374c1234a42d7c66be30c7f905fb07269019b6517bb5acad3cc64651ac9",
+    "src/test/independent-zones.test.tsx": "8cd36f8e67c6b35cc59658ac7a97cb871c1c0b2a091853f8264c98f4454cbd00"
+  }
+}

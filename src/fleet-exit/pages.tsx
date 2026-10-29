@@ -1,3 +1,5 @@
+import { driverPortal } from '../driver-portal/service'
+import { CategorySummary } from '../driver-category/components'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
@@ -43,7 +45,12 @@ export function FleetExitsPage({ surface }: { surface: Scope['surface'] }) {
   const { user } = useAuth()
   if (
     !user ||
-    user.role !== (surface === 'admin' ? 'SUPER_ADMIN' : 'PROVIDER_ADMIN')
+    user.role !==
+      (surface === 'admin'
+        ? 'SUPER_ADMIN'
+        : surface === 'driver'
+          ? 'DRIVER'
+          : 'PROVIDER_ADMIN')
   )
     return <ErrorPage code={403} />
   return (
@@ -67,7 +74,8 @@ export function FleetExitsPage({ surface }: { surface: Scope['surface'] }) {
 function Area({ actor, surface, providerId }: Scope) {
   const { id } = useParams(),
     [params] = useSearchParams()
-  const driverId = params.get('driverId') ?? undefined
+  const driverId =
+    surface === 'driver' ? undefined : (params.get('driverId') ?? undefined)
   const scope = useMemo(
     () => ({ actor, surface, providerId }),
     [actor, surface, providerId],
@@ -83,7 +91,10 @@ function Area({ actor, surface, providerId }: Scope) {
         <ExitDetail scope={scope} id={id} />
       ) : (
         <>
-          {driverId && <Affiliation scope={scope} driverId={driverId} />}
+          {surface === 'driver' && <DriverCategoryPanel actor={actor} />}
+          {(driverId || surface === 'driver') && (
+            <Affiliation scope={scope} driverId={driverId ?? ''} />
+          )}
           <ExitList scope={scope} driverId={driverId} />
           <Notices scope={scope} />
         </>
@@ -98,6 +109,8 @@ function Affiliation({ scope, driverId }: { scope: Scope; driverId: string }) {
     retry: false,
     gcTime: 0,
     staleTime: 0,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
   })
   if (q.isError)
     return (
@@ -147,7 +160,7 @@ export function ContextPanel({
           <Link to={exitLink(scope, c.exit.id)}>Consultar salida</Link>
         </>
       )}
-      {scope.surface === 'provider' &&
+      {scope.surface !== 'admin' &&
         (c.capabilities.canRequestExit &&
         c.capabilities.requestExitReason === null &&
         c.affiliation ? (
@@ -157,11 +170,16 @@ export function ContextPanel({
             onClick={() =>
               cmd.prepare('START', c.affiliation!.id, {
                 expectedAffiliationRevision: c.affiliation!.revision,
-                reasonCode: 'PROVIDER_REMOVAL',
+                reasonCode:
+                  scope.surface === 'driver'
+                    ? 'VOLUNTARY_EXIT'
+                    : 'PROVIDER_REMOVAL',
               })
             }
           >
-            Solicitar retiro de flotilla
+            {scope.surface === 'driver'
+              ? 'Solicitar mi salida voluntaria'
+              : 'Solicitar retiro de flotilla'}
           </button>
         ) : (
           <p>
@@ -169,6 +187,13 @@ export function ContextPanel({
               'No está autorizada una nueva solicitud.'}
           </p>
         ))}
+      {scope.surface === 'driver' && (
+        <p>
+          Tu salida voluntaria no requiere aprobación del dueño. La transición
+          de independiente a flotilla permanece bloqueada; no se ofrece
+          conversión.
+        </p>
+      )}
       {scope.surface === 'admin' && (
         <>
           <p>
@@ -178,6 +203,11 @@ export function ContextPanel({
           {c.independent && (
             <section aria-label="Elegibilidad independiente">
               <h3>Elegibilidad independiente</h3>
+              <p>
+                EXIT_PENDING conserva pertenencia a flotilla. Completar la
+                salida no aprueba una categoría independiente ni inicia
+                recepción; el perfil histórico no concede autorización.
+              </p>
               <p>
                 Perfil: {c.independent.profileState}.{' '}
                 {c.independent.canOperate
@@ -230,7 +260,7 @@ export function SummaryPanel({ scope, item }: { scope: Scope; item: Summary }) {
               {reasons[b.code] ??
                 'La operación requiere revisión; no se fuerza la salida.'}
             </p>
-            {b.assistanceCaseId && (
+            {scope.surface !== 'driver' && b.assistanceCaseId && (
               <Link
                 to={`${scope.surface === 'admin' ? '/admin' : ''}/fleet-assistance/${encodeURIComponent(b.assistanceCaseId)}${scope.providerId ? '?providerId=' + scope.providerId : ''}`}
               >
@@ -306,11 +336,19 @@ function ExitDetail({ scope, id }: { scope: Scope; id: string }) {
         ventana de consulta de salidas completadas es de doce meses. No implica
         borrado de datos.
       </p>
-      <Link
-        to={`${scope.surface === 'admin' ? '/admin' : ''}/fleet-assistance${scope.providerId ? '?providerId=' + scope.providerId : ''}`}
-      >
-        Asistencia y conciliación histórica
-      </Link>
+      {scope.surface !== 'driver' && (
+        <Link
+          to={`${scope.surface === 'admin' ? '/admin' : ''}/fleet-assistance${scope.providerId ? '?providerId=' + scope.providerId : ''}`}
+        >
+          Asistencia y conciliación histórica
+        </Link>
+      )}
+      {scope.surface === 'driver' && (
+        <>
+          <DriverCategoryPanel actor={scope.actor} />
+          <Affiliation scope={scope} driverId="" />
+        </>
+      )}
       {scope.surface === 'admin' && (
         <Affiliation scope={scope} driverId={d.driverId} />
       )}
@@ -500,9 +538,11 @@ function PrivateRecovery({ actor }: { actor: string }) {
             <option value="">Seleccionar</option>
             {scopes.map((s, n) => (
               <option key={JSON.stringify(s)} value={String(n)}>
-                {s.surface === 'admin'
-                  ? 'Administración'
-                  : `Proveedor ${s.providerId?.slice(0, 8)}`}
+                {s.surface === 'driver'
+                  ? 'Conductor propio'
+                  : s.surface === 'admin'
+                    ? 'Administración'
+                    : `Proveedor ${s.providerId?.slice(0, 8)}`}
               </option>
             ))}
           </select>
@@ -514,5 +554,26 @@ function PrivateRecovery({ actor }: { actor: string }) {
           <ExitCommands key={JSON.stringify(s)} scope={s} restricted />
         ))}
     </>
+  )
+}
+
+function DriverCategoryPanel({ actor }: { actor: string }) {
+  const q = useQuery({
+    queryKey: ['driver-portal', 'me', actor],
+    queryFn: ({ signal }) => driverPortal.me(signal),
+    staleTime: 0,
+    retry: false,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
+  })
+  return q.isPending ? (
+    <Loading />
+  ) : q.isError ? (
+    <p role="alert">
+      No se confirmó la categoría vigente. La recuperación de salida sigue
+      disponible.
+    </p>
+  ) : (
+    <CategorySummary value={q.data.driverCategory} />
   )
 }
