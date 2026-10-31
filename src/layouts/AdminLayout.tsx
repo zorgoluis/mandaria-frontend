@@ -222,8 +222,6 @@ export function AdminLayout() {
             icon: BadgeCheck,
           },
           { to: '/driver/reception', label: 'Zonas y turno', icon: MapPinned },
-          { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
-          { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
           { to: '/driver/vehicles', label: 'Mis vehículos', icon: Truck },
           { to: '/driver/credits', label: 'Créditos', icon: Coins },
         ]

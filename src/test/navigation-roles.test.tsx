@@ -46,9 +46,7 @@ it.each<Role>(['SUPER_ADMIN', 'PROVIDER_ADMIN', 'DRIVER', 'CUSTOMER'])(
     expect(!!nav.queryByRole('link', { name: 'Despachos' })).toBe(
       role === 'SUPER_ADMIN',
     )
-    expect(
-      !!nav.queryByRole('link', { name: 'Mi servicio' }),
-    ).toBe(role === 'DRIVER')
+    expect(!!nav.queryByRole('link', { name: 'Mi servicio' })).toBe(false)
     expect(!!nav.queryByRole('link', { name: 'Mi proveedor' })).toBe(
       role === 'PROVIDER_ADMIN',
     )

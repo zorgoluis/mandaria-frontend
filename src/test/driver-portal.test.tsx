@@ -976,7 +976,13 @@ describe('role isolation', () => {
       'Despachos',
     ])
       expect(links).not.toContain(forbidden)
-    expect(links).toContain('Mi servicio')
+    expect(links).not.toContain('Mi servicio')
+    expect(links).not.toContain('Servicios')
+    const tabs = within(
+      screen.getByRole('navigation', { name: 'Portal del repartidor' }),
+    )
+    expect(tabs.queryByRole('link', { name: 'Servicios' })).toBeNull()
+    expect(tabs.queryByRole('link', { name: 'Mi servicio' })).toBeNull()
   })
 })
 

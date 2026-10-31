@@ -1,16 +1,11 @@
 import { sessionFence } from '../services/api'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { ErrorPage, ErrorState, Loading, Field } from '../components/ui'
 import { ApiError, errorMessage } from '../services/errors'
-import {
-  reception,
-  feed,
-  ready,
-  type ReceptionCommand,
-} from './reception-service'
+import { reception, ready, type ReceptionCommand } from './reception-service'
 import {
   receptionStore,
   makeIntent,
@@ -18,6 +13,9 @@ import {
   locked,
   type Intent,
 } from './reception-intent'
+import { driverPortal } from './service'
+import { MapPin } from 'lucide-react'
+import './reception.css'
 import { PortalTabs } from './pages'
 export function ReceptionPage() {
   const { user } = useAuth()
@@ -37,16 +35,15 @@ function Panel({ actor }: { actor: string }) {
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: 'always',
   })
-  const offers = useQuery({
-    queryKey: ['independent-feed', actor, q.data?.revision],
-    queryFn: feed,
-    enabled: !!q.data && ['READY', 'PREVIEW'].includes(q.data.state),
-    retry: false,
+  const me = useQuery({
+    queryKey: ['reception-driver', actor],
+    queryFn: ({ signal }) => driverPortal.me(signal),
     staleTime: 0,
+    retry: false,
     refetchInterval: 15000,
     refetchOnWindowFocus: 'always',
-    refetchOnReconnect: 'always',
   })
+  const actionLock = useRef(false)
   const [zone, setZone] = useState(''),
     [pending, setPending] = useState<Intent | null>(null),
     [loaded, setLoaded] = useState(false),
@@ -73,6 +70,8 @@ function Panel({ actor }: { actor: string }) {
     }
   }, [actor])
   async function send(action: ReceptionCommand['action']) {
+    if (actionLock.current) return
+    actionLock.current = true
     const authorize = sessionFence()
     setBusy(true)
     setError('')
@@ -102,93 +101,234 @@ function Panel({ actor }: { actor: string }) {
           throw e
         } finally {
           await q.refetch()
-          await offers.refetch()
+          await me.refetch()
         }
       })
     } catch (e) {
-      setError(errorMessage(e))
+      setError(
+        e instanceof ApiError && e.code === 'REVISION_CONFLICT'
+          ? 'El estado cambió; se actualizó la información'
+          : errorMessage(e),
+      )
     } finally {
       setBusy(false)
+      actionLock.current = false
+    }
+  }
+  const data = q.data
+  const selected = data?.allowedZones.find((z) => z.id === data.selectedZoneId)
+  const availability = me.data?.availability
+  const baseDisabled =
+    !loaded ||
+    busy ||
+    !!pending ||
+    q.isFetching ||
+    q.isError ||
+    me.isError ||
+    !me.data
+  const reason = !loaded
+    ? 'Recuperando operaciones pendientes.'
+    : pending
+      ? 'Revisa la intención pendiente antes de cambiar.'
+      : busy || q.isFetching
+        ? 'Actualizando información.'
+        : !selected
+          ? 'Selecciona una zona autorizada.'
+          : 'La recepción y el modo se validan en el servidor.'
+  async function changeAvailability(value: 'AVAILABLE' | 'OFFLINE') {
+    if (actionLock.current || baseDisabled || !selected) return
+    actionLock.current = true
+    setBusy(true)
+    setError('')
+    const authorize = sessionFence()
+    try {
+      authorize()
+      await reception.availability(value)
+      authorize()
+    } catch (e) {
+      setError(errorMessage(e))
+    } finally {
+      await Promise.all([q.refetch(), me.refetch()])
+      setBusy(false)
+      actionLock.current = false
     }
   }
   return (
-    <>
-      <h1>Zonas, disponibilidad y turno</h1>
+    <div className="reception-page">
+      <header>
+        <h1>Zonas y disponibilidad</h1>
+        <p>
+          Elige una zona propia autorizada y define tu disponibilidad.
+          Aprobación, expediente y disponibilidad son requisitos separados. No
+          se hereda cobertura de flotilla.
+        </p>
+      </header>
       <PortalTabs />
-      <p>
-        Elige una zona propia autorizada e inicia el turno explícitamente.
-        Aprobación, expediente y disponibilidad son requisitos separados. No se
-        hereda cobertura de flotilla.
-      </p>
       {q.isPending ? (
         <Loading />
       ) : q.isError ? (
         <ErrorState error={q.error} retry={() => void q.refetch()} />
       ) : (
-        <>
-          <p>
-            Recepción: {q.data.state} · {q.data.reason}. Revisión{' '}
-            {q.data.revision}.
-          </p>
-          <p>
-            Turno: {q.data.shift?.expiresAt ?? 'Sin turno'}.{' '}
-            {ready(q.data)
-              ? 'Puedes intentar tomar una oferta; el servidor vuelve a validar.'
-              : 'No se autoriza tomar. PREVIEW sólo permite consultar.'}
-          </p>
-          <Field label="Zona autorizada">
-            <select
-              value={zone || q.data.selectedZoneId || ''}
-              onChange={(e) => setZone(e.target.value)}
-              disabled={busy || !!pending}
-            >
-              <option value="">Selecciona zona</option>
-              {q.data.allowedZones.map((z) => (
-                <option key={z.id} value={z.id}>
-                  {z.name}
-                </option>
-              ))}
-            </select>
-          </Field>
-          {!pending &&
-            (['SELECT_ZONE', 'START', 'RENEW', 'STOP'] as const).map((a, n) => (
-              <button
-                className="button secondary"
-                key={a}
-                disabled={!loaded || busy || q.isFetching}
-                onClick={() => void send(a)}
-              >
-                {
-                  [
-                    'Seleccionar zona',
-                    'Iniciar turno',
-                    'Renovar turno',
-                    'Detener turno',
-                  ][n]
-                }
-              </button>
-            ))}
-          {(['AVAILABLE', 'OFFLINE'] as const).map((a, n) => (
-            <button
-              className="button secondary"
-              key={a}
-              disabled={busy || !!pending}
-              onClick={async () => {
-                setBusy(true)
-                try {
-                  await reception.availability(a)
-                  await q.refetch()
-                } catch (e) {
-                  setError(errorMessage(e))
-                } finally {
-                  setBusy(false)
-                }
-              }}
-            >
-              {['Ponerme disponible', 'Ponerme fuera de línea'][n]}
-            </button>
-          ))}
-        </>
+        data && (
+          <>
+            <div className="reception-statuses" aria-live="polite">
+              <section>
+                <span>Recepción</span>
+                <strong className={'reception-dot state-' + data.state}>
+                  {
+                    {
+                      OFF: 'Apagada',
+                      PAUSED: 'Pausada',
+                      PREVIEW: 'Vista previa',
+                      READY: 'Encendida',
+                    }[data.state]
+                  }
+                </strong>
+                <small>
+                  {data.state} · Revisión {data.revision} · {data.reason}
+                </small>
+              </section>
+              <section>
+                <span>Modo</span>
+                <strong
+                  className={
+                    'reception-dot ' + (ready(data) ? 'state-READY' : '')
+                  }
+                >
+                  {ready(data)
+                    ? 'Puede intentar tomar ofertas'
+                    : 'Solo consulta'}
+                </strong>
+                <small>
+                  {data.state === 'PREVIEW' ? 'PREVIEW · ' : ''}
+                  {ready(data)
+                    ? 'Autorización sujeta a validación del servidor'
+                    : 'No se autoriza tomar'}
+                </small>
+              </section>
+            </div>
+            <div className="reception-columns">
+              <section className="reception-card reception-zone">
+                <h2>
+                  <span className="reception-step">1</span>Zona autorizada
+                </h2>
+                {data.allowedZones.length ? (
+                  <>
+                    <div className="reception-zone-row">
+                      <Field label="Zona autorizada">
+                        <span className="reception-select">
+                          <MapPin aria-hidden="true" />
+                          <select
+                            aria-label="Zona autorizada"
+                            value={zone || data.selectedZoneId || ''}
+                            disabled={baseDisabled}
+                            onChange={(e) => setZone(e.target.value)}
+                          >
+                            <option value="">Selecciona zona</option>
+                            {data.allowedZones.map((z) => (
+                              <option key={z.id} value={z.id}>
+                                {z.name}
+                              </option>
+                            ))}
+                          </select>
+                        </span>
+                      </Field>
+                      <button
+                        className="button"
+                        aria-describedby="reception-reason"
+                        disabled={
+                          baseDisabled ||
+                          !zone ||
+                          zone === data.selectedZoneId ||
+                          !data.allowedZones.some((z) => z.id === zone)
+                        }
+                        onClick={() => void send('SELECT_ZONE')}
+                      >
+                        Seleccionar zona
+                      </button>
+                    </div>
+                    <small>
+                      Solo aparecen zonas propias autorizadas para tu cuenta.
+                    </small>
+                  </>
+                ) : (
+                  <p>
+                    No tienes zonas propias autorizadas.{' '}
+                    <Link to="/driver/onboarding">Ver mi expediente</Link>
+                  </p>
+                )}
+              </section>
+              <aside className="reception-aside">
+                <section
+                  className="reception-card reception-availability"
+                  aria-live="polite"
+                >
+                  <h2>Disponibilidad</h2>
+                  <strong className="reception-current">
+                    {availability === 'AVAILABLE'
+                      ? 'Disponible'
+                      : availability === 'OFFLINE'
+                        ? 'Fuera de línea'
+                        : availability === 'BUSY'
+                          ? 'Ocupado'
+                          : 'Sin confirmar'}
+                  </strong>
+                  <p>Zona: {selected?.name || 'Sin zona seleccionada'}</p>
+                  {me.isError && (
+                    <ErrorState
+                      error={me.error}
+                      retry={() => void me.refetch()}
+                    />
+                  )}
+                  <div
+                    role="radiogroup"
+                    aria-label="Disponibilidad"
+                    className="reception-switch"
+                  >
+                    {(['AVAILABLE', 'OFFLINE'] as const).map((v) => (
+                      <label
+                        key={v}
+                        className={availability === v ? 'selected' : ''}
+                      >
+                        <input
+                          type="radio"
+                          name="availability"
+                          value={v}
+                          checked={availability === v}
+                          disabled={baseDisabled || !selected || me.isFetching}
+                          aria-describedby="reception-reason"
+                          onChange={() => void changeAvailability(v)}
+                        />
+                        {v === 'AVAILABLE' ? 'Disponible' : 'Fuera de línea'}
+                      </label>
+                    ))}
+                  </div>
+                  <small id="reception-reason">{reason}</small>
+                </section>
+                <section className="reception-card">
+                  <h2>Para recibir ofertas</h2>
+                  <ul className="reception-checklist">
+                    {[
+                      [!!selected, 'Zona autorizada seleccionada'],
+                      [availability === 'AVAILABLE', 'Disponible'],
+                      [ready(data), 'Modo con autorización para tomar'],
+                    ].map(([ok, label]) => (
+                      <li key={String(label)}>
+                        <span
+                          className={ok ? 'complete' : ''}
+                          aria-label={ok ? 'Cumplido' : 'Pendiente'}
+                        >
+                          {ok ? '✓' : ''}
+                        </span>
+                        {label}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </aside>
+            </div>
+          </>
+        )
       )}
       {pending && (
         <section className="notice">
@@ -221,49 +361,16 @@ function Panel({ actor }: { actor: string }) {
         </section>
       )}
       {error && <p role="alert">{error}</p>}
-      <h2>Ofertas del turno</h2>
-      {offers.isError ? (
-        <ErrorState
-          error={offers.error}
-          retry={() => {
-            void q.refetch()
-            void offers.refetch()
-          }}
-        />
-      ) : !offers.isFetching &&
-        offers.data &&
-        offers.data.receptionRevision === q.data?.revision ? (
-        <>
-          {offers.data.items.map((o) => (
-            <p key={o.dispatchId}>
-              <Link to={'/driver/services/' + o.dispatchId}>
-                Consultar oferta {o.dispatchId}
-              </Link>{' '}
-              · vence {o.expiresAt}
-            </p>
-          ))}
-          {offers.data.nextPageToken && (
-            <p>
-              Se muestran las primeras100 ofertas; actualiza para una fotografía
-              nueva.
-            </p>
-          )}
-        </>
-      ) : (
-        <p>
-          Consulta la recepción y actualiza para obtener las ofertas vigentes.
-        </p>
-      )}
       <button
-        className="button secondary"
-        disabled={busy}
+        className="button secondary reception-refresh"
+        disabled={busy || q.isFetching || me.isFetching}
         onClick={() => {
           void q.refetch()
-          void offers.refetch()
+          void me.refetch()
         }}
       >
-        Actualizar recepción y ofertas
+        Actualizar estado
       </button>
-    </>
+    </div>
   )
 }

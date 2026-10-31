@@ -1,3 +1,31 @@
+## 2026-10-31 — Verificación conjunta de Zonas y navegación DRIVER
+
+Diff revisado: Zonas y disponibilidad sin gestión nueva de turno ni feed/ofertas; Servicios y Mi servicio retirados del menú principal y PortalTabs del repartidor. Se conservan contratos, revisiones string, recuperación de intenciones y permisos de otros roles. No se elimina el acceso por rutas históricas. No fue necesario corregir código adicional.
+
+Suite GLOBAL nueva **1647/1647 PASS,84 archivos,110.77 s**, sin fallos ni omisiones. Tipos producto/tests, lint global y build PASS. Aviso de bundle Root1206.22 kB conservado. Nueva ejecución visual sintética:6 capturas1280/320, sin errores,desbordamiento ni mutaciones; no acredita backend real. [Comandos y resultados](docs/evidence/reception-combined-20261031/verification.json) · [Global](docs/evidence/reception-combined-20261031/global.txt) · [Visual](docs/evidence/reception-combined-20261031/visual.json).
+
+Usuario autoriza commit/push del conjunto a main en github.com/zorgoluis/mandaria-frontend, sin force. Versión1.11.0 intacta, sin despliegue/backend/móvil. Historial y evidencias anteriores preservados.
+
+## 2026-10-31 — Zonas y disponibilidad
+
+Pantalla DRIVER rediseñada: franja de recepción/modo, selección de zona autorizada, disponibilidad real de /driver/me y checklist. Sin controles nuevos de turno ni consulta/listado de ofertas. Servicios/Mi servicio permanecen ocultos conforme a aclaración anterior, aunque el adjunto los enumeraba. Se conserva recuperación explícita de intenciones pendientes anteriores; no se crean START/RENEW/STOP desde esta pantalla. Selección de zona usa revisión string y requestId durable; conflicto refresca e informa sin nueva intención automática. Disponibilidad usa PATCH /driver/availability {availability}, sin campo de revisión que su DTO no admite; refresca ambas proyecciones. Recepción real OFF/PAUSED/PREVIEW/READY: no se inventa un modo LIVE. READY y canAttemptTake deben coincidir para indicar autorización de intento. Datos desconocidos/errores no habilitan cambios.
+
+Nueva verificación:64/64 pruebas en3 archivos (reception-design,independent-operations,driver-portal),20.96 s; tsc -b, tsc --project tsconfig.test.json, lint de reception.tsx y reception-design.test.tsx y vite build PASS. Aviso conocido de chunk Root1206.22 kB preservado. Primer fixture excedía bigint del contrato: corregido a9007199254740993 sin tocar validador; nueva ejecución completa verde.
+
+Arnés node scripts/verify-reception-redesign.mjs PASS,6 capturas1280/320 para OFF,READY y sin zonas; sin desbordamiento,errores ni mutaciones. HTTP simulado: no acredita backend real. [Reporte](docs/evidence/reception-ui-20261031/report.json) · [Tests](docs/evidence/reception-ui-20261031/tests.txt). Suite global anterior histórica. Cambios previos preservados; sin versión,commit/push,backend ni despliegue.
+
+## 2026-10-31 — Corrección: servicios sólo en navegación de la app Driver
+
+Aclaración del usuario: no se desea unificar Servicios/Mi servicio en Web, sino retirar ambas opciones del menú DRIVER y del contenedor PortalTabs. Retiradas ambas; deshecha la selección automática añadida en el turno anterior. No se eliminan endpoints ni rutas existentes, ni cambian permisos u otros roles. Esta entrada sustituye el alcance de la entrada inferior de acceso único.
+
+Verificación:96/96 pruebas,3 archivos (driver-portal,navigation-roles,flows),19.45 s; tsc -b y lint de archivos afectados PASS. Evidencia local:test-results/driver-app-navigation.txt. Sin versión,commit,push ni despliegue.
+
+## 2026-10-31 — Acceso único a Servicios para DRIVER
+
+Retirada opción duplicada Mi servicio del menú principal y de PortalTabs. Servicios muestra directamente el servicio activo cuando existe; sin asignación muestra disponibles. Se conserva la ruta anterior y sus acciones para enlaces existentes; Servicios permanece resaltado. Sin cambio de permisos, comandos o APIs.
+
+Verificación nueva:96/96 pruebas en3 archivos (driver-portal,navigation-roles,flows),18.61 s. Comando: node node_modules/vitest/vitest.mjs run src/test/driver-portal.test.tsx src/test/navigation-roles.test.tsx src/test/flows.test.tsx. Tipos tsc -b y lint de archivos afectados PASS. Evidencia local:test-results/unified-driver-services-final.txt. Suite global anterior histórica; no repetida aquí. Sin versión, commit,push ni despliegue.
+
 ## 2026-10-31 — Verificación conjunta y publicación autorizada
 
 Mi verificación, Identidad y Unidad revisadas juntas con navegación por rol y evidencia. Suite GLOBAL nueva: **1643/1643 PASS,83 archivos,139.55 s**, sin omisiones. Tipos producto y tests, lint global y build PASS; aviso conocido Root1204.62 kB preservado. Lint ahora excluye únicamente artefactos generados test-results además de dist, evitando analizar copias temporales de backend.

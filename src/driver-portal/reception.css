@@ -1,0 +1,328 @@
+.reception-page {
+  background: #f4f6f5;
+  color: #1b2a27;
+  font-family: Figtree, sans-serif;
+  padding: 40px 48px 56px;
+  display: grid;
+  gap: 32px;
+}
+.reception-page h1 {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+}
+.reception-page p {
+  color: #5f6e6a;
+  line-height: 1.6;
+  margin: 0;
+  text-wrap: pretty;
+}
+.reception-page header p {
+  max-width: 860px;
+}
+.reception-page h2 {
+  margin: 0;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.reception-page small {
+  color: #8a9894;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.reception-page .driver-tabs {
+  background: white;
+  border-radius: 999px;
+  padding: 5px;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+}
+.reception-page .driver-tabs a {
+  border: 0;
+  background: transparent;
+  color: #3d4b47;
+  min-height: 42px;
+  padding: 0 20px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.reception-page .driver-tabs a.active {
+  background: #156b5c;
+  color: white;
+}
+.reception-statuses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.reception-statuses section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: grid;
+  gap: 10px;
+}
+.reception-statuses section > span {
+  color: #8a9894;
+  font-size: 12px;
+  font-weight: 600;
+}
+.reception-dot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+}
+.reception-dot::before {
+  content: '';
+  flex: 0 0 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #8a9894;
+  box-shadow: 0 0 0 4px #f1f4f3;
+}
+.reception-dot.state-OFF::before {
+  background: #9b3b2e;
+  box-shadow: 0 0 0 4px #fbefed;
+}
+.reception-dot.state-READY::before {
+  background: #156b5c;
+  box-shadow: 0 0 0 4px #e7f2ef;
+}
+.reception-dot.state-PAUSED::before {
+  background: #e0a14a;
+  box-shadow: 0 0 0 4px #fff4e0;
+}
+.reception-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+}
+.reception-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  display: grid;
+  gap: 20px;
+  box-shadow: 0 1px 2px rgba(15, 61, 53, 0.06);
+  min-width: 0;
+}
+.reception-step {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e7f2ef;
+  color: #156b5c;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.reception-zone-row {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.reception-zone-row .field {
+  flex: 1;
+  min-width: 0;
+}
+.reception-select {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e2e8e6;
+  border-radius: 999px;
+  padding: 0 16px;
+  height: 52px;
+  gap: 10px;
+}
+.reception-select svg {
+  width: 20px;
+  color: #156b5c;
+  flex-shrink: 0;
+}
+.reception-page .reception-select select {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-weight: 600;
+}
+.reception-page .button {
+  border-radius: 999px;
+  min-height: 48px;
+}
+.reception-zone-row .button {
+  background: #e7f2ef;
+  color: #13594d;
+  border: 0;
+  min-height: 52px;
+}
+.reception-aside {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 16px;
+}
+.reception-aside .reception-card {
+  padding: 28px;
+  box-shadow: 0 3px 10px rgba(15, 61, 53, 0.08);
+}
+.reception-aside h2 {
+  font-size: 16px;
+}
+.reception-availability {
+  background: #156b5c;
+  color: white;
+}
+.reception-availability h2,
+.reception-availability p,
+.reception-availability small {
+  color: #cfe7e0;
+}
+.reception-availability h2 {
+  font-size: 13px;
+}
+.reception-current {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.reception-switch {
+  display: flex;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.reception-switch label {
+  flex: 1;
+  border-radius: 999px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.reception-switch .selected {
+  background: white;
+  color: #156b5c;
+}
+.reception-switch input {
+  width: 14px;
+  height: 14px;
+  accent-color: #156b5c;
+}
+.reception-switch label:has(:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.reception-checklist {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.reception-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.reception-checklist span {
+  flex: 0 0 22px;
+  height: 22px;
+  border: 2px solid #d3dcd9;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.reception-checklist .complete {
+  background: #156b5c;
+  color: white;
+  border-color: #156b5c;
+}
+.reception-page :focus-visible {
+  outline: 2px solid #156b5c;
+  outline-offset: 2px;
+}
+.reception-availability :focus-visible {
+  outline-color: white;
+}
+.reception-refresh {
+  justify-self: start;
+}
+@media (max-width: 1100px) {
+  .reception-page {
+    padding: 32px 24px;
+  }
+  .reception-columns {
+    display: flex;
+    flex-direction: column;
+  }
+  .reception-aside {
+    position: static;
+    order: -1;
+    width: 100%;
+  }
+  .reception-zone {
+    width: 100%;
+  }
+  .reception-statuses {
+    grid-template-columns: 1fr;
+  }
+  .reception-page .driver-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+@media (max-width: 600px) {
+  .reception-page {
+    padding: 24px 12px;
+    gap: 24px;
+  }
+  .reception-page h1 {
+    font-size: 30px;
+  }
+  .reception-card,
+  .reception-aside .reception-card {
+    padding: 22px;
+  }
+  .reception-zone-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.reception-page .driver-tabs {
+  display: flex;
+  flex-wrap: wrap;
+}
+.reception-page .driver-tabs a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.reception-zone-row .field {
+  margin: 0;
+}
+@media (max-width: 1100px) {
+  .reception-page .driver-tabs {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .reception-page .driver-tabs a {
+    flex: 0 0 auto;
+  }
+}

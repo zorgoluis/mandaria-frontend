@@ -157,8 +157,6 @@ export function DriverPortal({
 const tabs = [
   { to: '/driver/onboarding', label: 'Mi expediente', icon: Bike },
   { to: '/driver/reception', label: 'Zonas y turno', icon: PackageSearch },
-  { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
-  { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
   { to: '/driver/vehicles', label: 'Mis vehículos', icon: Wallet },
   { to: '/driver/credits', label: 'Créditos', icon: Coins },
 ] as const

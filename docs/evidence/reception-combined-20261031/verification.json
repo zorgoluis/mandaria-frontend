@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-31",
+  "branch": "main",
+  "version": "1.11.0",
+  "scope": [
+    "Zonas y disponibilidad",
+    "Remove Servicios and Mi servicio from DRIVER navigation"
+  ],
+  "global": {
+    "command": "node node_modules/vitest/vitest.mjs run",
+    "files": 84,
+    "passed": 1647,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 110.77
+  },
+  "checks": [
+    {
+      "command": "node node_modules/typescript/bin/tsc -b",
+      "result": "PASS"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.test.json",
+      "result": "PASS"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js .",
+      "result": "PASS"
+    },
+    {
+      "command": "node node_modules/vite/bin/vite.js build",
+      "result": "PASS",
+      "modules": 2429,
+      "warning": "Root chunk 1206.22 kB exceeds 500 kB"
+    },
+    {
+      "command": "node scripts/verify-reception-redesign.mjs",
+      "result": "PASS",
+      "report": "visual.json",
+      "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+      "screenshots": 6
+    }
+  ],
+  "limits": [
+    "No backend or mobile modifications",
+    "No version change or deployment",
+    "Existing direct routes retained; menu entries removed"
+  ]
+}
