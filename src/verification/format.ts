@@ -46,7 +46,7 @@ export const labels: Record<string, string> = {
   INE_BACK: 'INE: reverso',
   LICENSE: 'Licencia del conductor',
   REGISTRATION_CARD: 'Tarjeta de circulación',
-  OWNERSHIP_PROOF: 'Comprobante de propiedad',
+  OWNERSHIP_PROOF: 'Adjunto histórico (ya no solicitado)',
   RENTAL_CONTRACT: 'Contrato de arrendamiento',
   OWNER_AUTHORIZATION: 'Autorización del titular',
   IDENTITY_MATCH: 'Identidad concordante',
@@ -120,6 +120,8 @@ const errors: Record<string, string> = {
     'La carga caducó. Consulta su estado y retira la referencia incompleta antes de preparar otra carga explícita.',
   VERIFICATION_DOCUMENTS_PENDING:
     'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
+  VERIFICATION_CATEGORY_RETIRED:
+    'Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.',
   VERIFICATION_OPEN_CASE_EXISTS:
     'Ya existe un expediente abierto para este recurso. Continúa desde el listado.',
   STORAGE_UNAVAILABLE:

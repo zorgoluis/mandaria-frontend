@@ -1,3 +1,4 @@
+import { unitRequirements } from './unit-requirements'
 import { AcceptanceHistory } from './acceptance-history'
 import { CaseRetention, CaseRetentionLookup } from './retention'
 import { useState } from 'react'
@@ -773,21 +774,19 @@ function CaseContent({
     ['DRIVER_IDENTITY', 'VEHICLE'].includes(record.subjectType)
   const unit = record.subjectType === 'VEHICLE'
   const requiredCategories = unit
-    ? [
-        ...requirements.vehicle.required.filter(
-          (c) =>
-            c !== 'REGISTRATION_CARD' ||
-            record.registrationCardRequired !== false,
-        ),
-        requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
-      ]
+    ? unitRequirements(requirements, record).categories
     : [
         ...requirements.identity.required,
         ...(record.data.license
           ? [requirements.identity.motorizedLicense]
           : []),
       ]
-  const completeCount = requiredCategories.filter((c) =>
+  const ownershipContractBlocked =
+    unit && unitRequirements(requirements, record).blocked
+  const displayedCategories = requiredCategories.filter(
+    (c) => c !== 'OWNERSHIP_PROOF',
+  )
+  const completeCount = displayedCategories.filter((c) =>
     record.attachments.some(
       (a) => a.category === c && a.status === 'VALIDATED',
     ),
@@ -801,11 +800,10 @@ function CaseContent({
     : !!(
         record.data.fullName?.trim() &&
         record.data.contactPhone?.trim() &&
-        record.data.operatingCity?.trim() &&
         record.data.documentType === 'INE'
       )
   const checklistComplete =
-    dataComplete && completeCount === requiredCategories.length
+    dataComplete && completeCount === displayedCategories.length
   const command = useCommand()
   const [confirm, setConfirm] = useState<'SUBMIT' | 'WITHDRAW' | null>(null)
   const canWrite =
@@ -921,7 +919,10 @@ function CaseContent({
               </dl>
               {record.data.license && (
                 <p>
-                  Licencia: {record.data.license.issuer} ·{' '}
+                  Licencia:{' '}
+                  {record.data.license.issuer
+                    ? record.data.license.issuer + ' · '
+                    : ''}
                   {record.data.license.category} · vence{' '}
                   {date(record.data.license.expiresAt)} ·{' '}
                   {record.data.license.vehicleTypes.join(', ')}
@@ -953,7 +954,7 @@ function CaseContent({
                 key={record.revision}
                 record={record}
                 requirements={requirements}
-                disabled={!runtimeReady}
+                disabled={!runtimeReady || ownershipContractBlocked}
               />
             )}
           <section className="panel panel-body">
@@ -1000,7 +1001,7 @@ function CaseContent({
                   <p>
                     Evidencias:{' '}
                     <strong>
-                      {completeCount} de {requiredCategories.length}
+                      {completeCount} de {displayedCategories.length}
                     </strong>
                   </p>
                   {record.submittedAt && (
@@ -1008,13 +1009,21 @@ function CaseContent({
                   )}
                 </>
               )}
+              {ownershipContractBlocked && (
+                <p role="alert">
+                  La presentación está pendiente de una actualización de
+                  requisitos del servidor. No cargues documentos adicionales
+                  para resolver este bloqueo.
+                </p>
+              )}
               {currentEvidence && record.status === 'DRAFT' && (
                 <button
                   disabled={
                     blocked ||
                     command.blocked ||
                     command.busy ||
-                    (designed && !checklistComplete)
+                    (designed && !checklistComplete) ||
+                    ownershipContractBlocked
                   }
                   onClick={() => setConfirm('SUBMIT')}
                 >
@@ -1046,7 +1055,10 @@ function CaseContent({
           }
           onClose={() => setConfirm(null)}
           onConfirm={async () => {
-            if (!runtimeReady || (confirm === 'SUBMIT' && blocked))
+            if (
+              !runtimeReady ||
+              (confirm === 'SUBMIT' && (blocked || ownershipContractBlocked))
+            )
               throw new Error(
                 'Consulta los requisitos vigentes antes de continuar.',
               )

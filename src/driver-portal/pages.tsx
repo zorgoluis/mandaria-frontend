@@ -1,3 +1,5 @@
+import './reception.css'
+import './vehicles.css'
 import { DriverExecutionActions } from './execution'
 import { reception, ready } from './reception-service'
 import { startIndependent } from './attempts'
@@ -19,6 +21,9 @@ import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
   AlertTriangle,
+  Car,
+  Truck,
+  FileCheck,
   Bike,
   PackageSearch,
   Coins,
@@ -75,7 +80,9 @@ const PAGE_SIZE = 20
  */
 export function DriverPortal({
   children,
+  showCategorySummary = true,
 }: {
+  showCategorySummary?: boolean
   children: (me: DriverSelf) => ReactNode
 }) {
   const { user } = useAuth()
@@ -148,7 +155,9 @@ export function DriverPortal({
           servicio comprometido mantiene sus acciones autorizadas.
         </p>
       )}
-      <CategorySummary value={query.data.driverCategory} />
+      {showCategorySummary && (
+        <CategorySummary value={query.data.driverCategory} />
+      )}
       {children(query.data)}
     </>
   )
@@ -1182,56 +1191,151 @@ function ReleaseDialog({
 }
 
 export function DriverVehiclesPage() {
-  return <DriverPortal>{() => <DriverVehicles />}</DriverPortal>
+  return (
+    <DriverPortal showCategorySummary={false}>
+      {(me) => <DriverVehicles me={me} />}
+    </DriverPortal>
+  )
 }
-function DriverVehicles() {
+function DriverVehicles({ me }: { me: DriverSelf }) {
   const query = useQuery({
     queryKey: driverKeys.vehicles,
     queryFn: ({ signal }) => driverPortal.vehicles(signal),
   })
+  const records = query.isSuccess ? query.data : undefined
+  const active = records?.filter((v) => v.status === 'ACTIVE').length
   return (
-    <>
-      <PageTitle
-        title="Mis vehículos"
-        description="Los tuyos, no los de tu proveedor."
-      />
-      <PortalTabs />
-      <div className="panel">
-        {query.isPending ? (
-          <Loading />
-        ) : query.isError ? (
-          <ErrorState
-            error={query.error}
-            retry={() => {
-              void query.refetch()
-            }}
-          />
-        ) : query.data.length ? (
-          <ul className="driver-vehicle-list">
-            {query.data.map((vehicle) => (
-              <li key={vehicle.id}>
-                <div>
-                  <strong>{vehicle.identifier}</strong>
-                  <small>{labels[vehicle.type] ?? vehicle.type}</small>
-                  {vehicleDetail(vehicle) && (
-                    <small>{vehicleDetail(vehicle)}</small>
-                  )}
-                </div>
-                <Badge value={vehicle.status} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Empty
-            title="No tienes vehículos registrados"
-            description="Mandaria registra los vehículos de los repartidores independientes. Pide que agreguen el tuyo."
-          />
-        )}
-        <p className="panel-note">
-          Sólo puedes tomar un servicio con un vehículo activo. Para registrar o
-          cambiar uno, contacta a Mandaria.
+    <div className="reception-page vehicles-page">
+      <header>
+        <h1>Mis vehículos</h1>
+        <p>
+          Consulta tus vehículos propios y su estado actual. La aprobación
+          documental, la disponibilidad y la habilitación para operar son
+          requisitos separados.
         </p>
+      </header>
+      <PortalTabs />
+      <div className="reception-statuses vehicles-summary" aria-live="polite">
+        <section>
+          <span>Vehículos registrados</span>
+          <strong>{records?.length ?? '—'}</strong>
+          <small>Tus unidades propias registradas</small>
+        </section>
+        <section>
+          <span>Activos</span>
+          <strong>{active ?? '—'}</strong>
+          <small>El estado activo no sustituye los demás requisitos</small>
+        </section>
+        <section>
+          <span>Otros estados</span>
+          <strong>{records ? records.length - (active ?? 0) : '—'}</strong>
+          <small>Consulta el estado de cada unidad</small>
+        </section>
       </div>
-    </>
+      <div className="reception-columns vehicles-columns">
+        <section
+          className="reception-card vehicles-inventory"
+          aria-labelledby="vehicles-inventory-title"
+        >
+          <div className="vehicles-toolbar">
+            <h2 id="vehicles-inventory-title">
+              <span className="reception-step">
+                <Car size={20} aria-hidden="true" />
+              </span>
+              Tus unidades
+            </h2>
+            <button
+              className="button secondary"
+              disabled={query.isFetching}
+              onClick={() => void query.refetch()}
+            >
+              <RefreshCw size={16} aria-hidden="true" />
+              Actualizar
+            </button>
+          </div>
+          {query.isPending ? (
+            <Loading />
+          ) : query.isError ? (
+            <ErrorState
+              error={query.error}
+              retry={() => void query.refetch()}
+            />
+          ) : query.data.length ? (
+            <ul className="vehicles-cards">
+              {query.data.map((vehicle) => {
+                const Icon =
+                  vehicle.type === 'BICYCLE' || vehicle.type === 'MOTORCYCLE'
+                    ? Bike
+                    : vehicle.type === 'TRUCK' || vehicle.type === 'VAN'
+                      ? Truck
+                      : Car
+                return (
+                  <li key={vehicle.id}>
+                    <div className="vehicles-card-header">
+                      <span className="vehicles-icon">
+                        <Icon aria-hidden="true" size={26} />
+                      </span>
+                      <div>
+                        <h3>{vehicle.identifier}</h3>
+                        <span className="vehicles-type">
+                          {labels[vehicle.type] ?? vehicle.type}
+                        </span>
+                      </div>
+                      <Badge value={vehicle.status} />
+                    </div>
+                    {vehicleDetail(vehicle) && (
+                      <p className="vehicles-detail">
+                        {vehicleDetail(vehicle)}
+                      </p>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <div className="vehicles-empty">
+              <Car size={40} aria-hidden="true" />
+              <h3>No tienes vehículos registrados</h3>
+              <p>
+                Consulta el registro y la documentación de tus unidades en Mi
+                verificación.
+              </p>
+              <Link className="button secondary" to="/driver/onboarding">
+                Ver mi expediente
+              </Link>
+            </div>
+          )}
+        </section>
+        <aside className="reception-aside vehicles-aside">
+          <CategorySummary value={me.driverCategory} />
+          <section className="reception-card vehicles-documentation">
+            <FileCheck size={28} aria-hidden="true" />
+            <h2>Verificación de tus unidades</h2>
+            <p>
+              Consulta tus expedientes, requisitos y evidencias en Mi
+              verificación. Cargar documentos no activa automáticamente un
+              vehículo.
+            </p>
+            <Link className="button" to="/driver/onboarding">
+              Ir a Mi verificación
+            </Link>
+          </section>
+          <section className="reception-card">
+            <h2>Antes de operar</h2>
+            <p>
+              Sólo puedes operar con un vehículo activo. El servidor vuelve a
+              comprobar los requisitos vigentes.
+            </p>
+            <p>
+              Esta lista corresponde a tus vehículos propios. No incluye
+              unidades de la flotilla.
+            </p>
+            <small>
+              Los servicios se consultan y gestionan desde la app Driver.
+            </small>
+          </section>
+        </aside>
+      </div>
+    </div>
   )
 }

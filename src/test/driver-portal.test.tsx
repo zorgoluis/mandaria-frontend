@@ -1242,3 +1242,34 @@ describe('exclusive category UI', () => {
     ).toBeDisabled()
   })
 })
+
+describe('vehicles design', () => {
+  it('keeps backend identifiers, detail and status without edit actions', async () => {
+    vi.mocked(driverPortal.vehicles).mockResolvedValue([
+      { ...vehicle(MOTO, 'UNIDAD-SYN'), plate: 'SYN-01' },
+      vehicle(BICI, 'OTRA-SYN', 'SUSPENDED'),
+    ])
+    mount('/driver/vehicles')
+    expect(
+      await screen.findByRole('heading', { name: 'UNIDAD-SYN' }),
+    ).toBeVisible()
+    expect(screen.getByText(/Placa SYN-01/)).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'OTRA-SYN' })).toBeVisible()
+    expect(screen.queryByRole('button', { name: /Activar|Editar/ })).toBeNull()
+    expect(
+      screen.getByRole('link', { name: 'Ir a Mi verificación' }),
+    ).toHaveAttribute('href', '/driver/onboarding')
+  })
+  it('shows an empty state without inventing a vehicle', async () => {
+    vi.mocked(driverPortal.vehicles).mockResolvedValue([])
+    mount('/driver/vehicles')
+    expect(
+      await screen.findByRole('heading', {
+        name: 'No tienes vehículos registrados',
+      }),
+    ).toBeVisible()
+    expect(
+      screen.getByRole('link', { name: 'Ver mi expediente' }),
+    ).toHaveAttribute('href', '/driver/onboarding')
+  })
+})

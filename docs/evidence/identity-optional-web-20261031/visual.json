@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+  "checks": [
+    "draft-checklist-valid-change-invalid-file-retention-readonly-submitted"
+  ],
+  "screenshots": [
+    {
+      "file": "identity-draft-1280.png",
+      "width": 1280,
+      "sha256": "a5d7c7790f4ca782bc6411f7b2a640e857fbb21bb48c7d0d9806b03db052f375"
+    },
+    {
+      "file": "identity-draft-320.png",
+      "width": 320,
+      "sha256": "16f5fcd1e4e3cf31f793cb08bca99ac30d07cf64ec941875aec1d5c6f21f6cfe"
+    },
+    {
+      "file": "identity-invalid-file-1280.png",
+      "width": 1280,
+      "sha256": "4f57a0d9b4842b823eebfd83f9c63c9f0877db0d3cc73fe4371c4dab5b8b4642"
+    },
+    {
+      "file": "identity-invalid-file-320.png",
+      "width": 320,
+      "sha256": "ea7050c36b742a9df500adb2376f0057a2b934c655595184c64a1ba430c3a604"
+    },
+    {
+      "file": "identity-selected-1280.png",
+      "width": 1280,
+      "sha256": "d6883eed97ee8f6b58da27e5165837e903960b4af57a914e9990e43803036940"
+    },
+    {
+      "file": "identity-selected-320.png",
+      "width": 320,
+      "sha256": "ab8474b2cf51ecf9ee2f6739417260e69d26e5941459feb189d52eacf4dcb0a5"
+    },
+    {
+      "file": "identity-submitted-1280.png",
+      "width": 1280,
+      "sha256": "5d55c3c36f1caa2fd389e4a26bc06dfc08bd73b56856f01389d20eae48ddfe5d"
+    },
+    {
+      "file": "identity-submitted-320.png",
+      "width": 320,
+      "sha256": "43deb5192e0e9b40e51e6f5a0782cc2f97807dc207a4dc5b7f7a083f1b320804"
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "mutations": 0
+}

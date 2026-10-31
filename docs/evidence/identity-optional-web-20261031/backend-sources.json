@@ -1,0 +1,21 @@
+{
+  "kind": "READ_ONLY_LOCAL_SOURCE_REVIEW_NOT_HTTP",
+  "files": [
+    {
+      "path": "src/verification/verification-rules.ts",
+      "sha256": "5e5eddb2eba5772878fb875fd14a630bdb1f303ec4edda8b5d1dbfb615d0d4e0"
+    },
+    {
+      "path": "src/verification/verification.service.ts",
+      "sha256": "c3bdddc7845dde78bc02bd2aef7288a4496883221815ede97f963fdd50614a81"
+    },
+    {
+      "path": "src/verification/verification.responses.ts",
+      "sha256": "6b87768dc7d4c8649852ea8e61e41b8f335547560727cd24961d9ba7dd24b9b5"
+    },
+    {
+      "path": "docs/IDENTITY-OPTIONAL-LEGACY-FIELDS-HANDOFF-20261031.md",
+      "sha256": "c5193de66e79b783d1dd230c98b88f212ea32bf1bbd65d2e2a1c00d2e5d05da2"
+    }
+  ]
+}

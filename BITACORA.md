@@ -1,3 +1,50 @@
+## 2026-10-31 — Verificación conjunta: Mis vehículos, Identidad y Unidad
+
+Revisado el diff conjunto sobre main/d4bf431: diseño de Mis vehículos con datos/estados reales del servicio; identidad sin ciudad/emisor requeridos y conservación histórica; fechas de licencia/autorización sin hora visible y preservación del instante no editado; contrato OWNED=null sin comprobante y recuperación de recibos históricos. No se detectaron correcciones adicionales de producto necesarias. Web1.11.0 intacta; package.json/package-lock.json sin cambios.
+
+Verificación nueva: `npm test` PASS **1681/1681,84/84 archivos,96.21 s**, sin pruebas omitidas ni cambios de timeouts/configuración. Primera corrida incompleta:82 archivos/1658 pruebas pasaron y dos workers terminaron con código3221226505 en dispatch y delivery-requests; no se contó como verde. Repetición de la misma suite completa sin tipos/lint/build concurrentes PASS; causa exacta del cierre nativo no determinada. Logs inicial y final conservados. `npx tsc -b`, `npm run typecheck:test`, `npm run lint`, `npm run build` y `git diff --check` PASS. Aviso conocido de chunk Root1210.19 kB. [Evidencia conjunta](docs/evidence/combined-documentary-20261031/tests.txt) · [Primer intento](docs/evidence/combined-documentary-20261031/tests-initial-worker-crash.txt) · [Build](docs/evidence/combined-documentary-20261031/build.txt).
+
+Pruebas globales simuladas; capturas previas de Mis vehículos/Identidad conservadas, no reejecutadas ni atribuidas a HTTP real. Sigue pendiente aceptación real OWNED=null: última consulta local a37795 rechazó conexión; no se reinició entorno ni se modificó backend/Driver. Commit/push a origin/main autorizados por usuario para esta entrega; sin cambio de versión ni despliegue.
+
+## 2026-10-31 — Unidad propia: contrato OWNED=null integrado
+
+Web consume null explícito sin documento adicional y conserva bloqueo frente a OWNERSHIP_PROOF antiguo o contrato incompleto/malformado. Categorías y gates centralizados; bicicleta sin formulario vacío, tarjeta vigente para otros tipos, renta/préstamo intactos. CREATED histórico no se completa ni bloquea por sí solo; VALIDATED conserva consulta. Error CATEGORY_RETIRED explícito y recibos sin URL recuperables sin PUT, reintento automático ni nueva clave. Identidad opcional, fechas y Mis vehículos preservados.
+
+Nueva verificación simulada: 158/158 pruebas en cinco archivos,9.85 s; tipos producto/tests, lint global y build PASS (aviso conocido Root1210.19 kB). Prueba nueva de error tuvo selector ambiguo en dos intentos; corregido sin relajar comportamiento ni tiempos. No suite global ni aceptación HTTP/UI real: GET a127.0.0.1:37795/api/v1/verification-requirements rechaza conexión fuera del sandbox. No se obtuvo build/contrato efectivo ni se reinició el entorno. Requiere instancia sintética autorizada actualizada y operativa para alta/presentación/aprobación por UI. [Informe y límites](docs/UNIT-OWNERSHIP-PROOF-REMOVAL-20261031.md) · [Pruebas](docs/evidence/unit-ownership-null-20261031/tests.txt). Fuentes backend consultadas en sólo lectura; sus pruebas no se atribuyen a Web. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Unidad sin solicitud de comprobante de propiedad
+
+Web retira OWNERSHIP_PROOF de nuevas cargas, instrucciones y checklist; conserva adjuntos históricos y su consulta autorizada. No ofrece completar cargas CREATED de ese tipo. Backend todavía lo exige para OWNED: presentación bloqueada explícitamente hasta actualizar contrato, sin solicitar documentos adicionales. Backend consultado en sólo lectura, sin cambios ni nueva ejecución HTTP.
+
+Verificación focal nueva: 137/137 pruebas en cinco archivos, 10.14 s; tipos producto/tests, lint focal y build PASS. Aviso conocido de chunk Root1209.68 kB. Primer intento Vitest falló por temporales del sandbox; repetición fuera del sandbox PASS. No suite global ni aceptación HTTP en este turno. [Alcance y pendiente backend](docs/UNIT-OWNERSHIP-PROOF-REMOVAL-20261031.md) · [Evidencia](docs/evidence/unit-ownership-removal-20261031/tests.txt). Cambios pendientes de vehículos, fechas e identidad preservados. Sin versión, commit/push ni despliegue.
+## 2026-10-31 — Identidad sin ciudad ni emisor: integración Web completada
+
+Backend local comprobado en sólo lectura: reglas opcionales y preserveIdentityLegacyFields aplicado dentro de UPDATE_CASE. Handoff IDENTITY-OPTIONAL-LEGACY-FIELDS-HANDOFF-20261031 confirma conservación por omisión, rechazo de null/vacíos y hashes de comandos intactos. [Huellas de fuentes consultadas](docs/evidence/identity-optional-web-20261031/backend-sources.json). No se acredita despliegue ni nueva ejecución HTTP Web.
+
+Web retira ciudad/emisor del formulario y de payloads nuevos; tipos opcionales, checklist sin ciudad y lectura de licencia sin separadores vacíos cuando falta emisor. Datos históricos presentes siguen visibles en consulta. No se modifican marcadores, cuerpos de intentos previos, recibos ni recuperación. Se conservan cambios pendientes de Mis vehículos y fechas sin hora.
+
+Verificación nueva:134/134 pruebas en5 suites completas (verification-pages,verification-recovery,verification-service,verification-upload,onboarding-production),11.07 s. Incluye campos ausentes, payload omite incluso valores históricos, fixture original intacto, presentación sin campos legacy y consulta con/sin valores históricos. Tipos producto/tests, lint focal y build PASS; aviso conocido Root1209.26 kB. Visual identity-redesign PASS,8 capturas1280/320,HTTP simulado. [Tests](docs/evidence/identity-optional-web-20261031/tests.txt) · [Visual](docs/evidence/identity-optional-web-20261031/visual.json). Cifras backend del handoff no se atribuyen a Web. Sin versión,commit/push,backend/móvil ni despliegue.
+
+## 2026-10-31 — Licencia con fecha y simplificación de identidad pendiente
+
+Vencimiento de licencia solicita sólo fecha; hora interna al final del día local convertida a UTC. Fecha no modificada conserva timestamp histórico. Añadida explicación de emisor como autoridad expedidora. Ciudad y emisor no retirados: backend exige operatingCity y license.issuer no vacíos y devuelve VERIFICATION_DATA_INVALID400 al omitirlos. No se fabrican datos desde zonas ni se modifica backend. Contrato requerido en [IDENTITY-SIMPLIFICATION-20261031](docs/IDENTITY-SIMPLIFICATION-20261031.md).
+
+Verificación:50/50 pruebas de verification-pages,9.08 s; tsc -b y lint de forms/test PASS. Resultado local:test-results/license-date-only-tests.txt. Cambios previos de Mis vehículos y vencimiento de unidad preservados. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Vencimiento de autorización: sólo fecha
+
+Formulario de unidad solicita fecha opcional sin hora. Al elegir una fecha nueva, Web fija23:59:59.999 en hora local del navegador y convierte a UTC para el contrato existente. Si la fecha no cambia, conserva el timestamp guardado para no extender ni reducir autorizaciones al editar otros datos. Licencia mantiene su comportamiento anterior.
+
+Verificación:49/49 pruebas de verification-pages,9.91 s, incluidos fin de día y conservación exacta; tsc -b y lint de forms.tsx/verification-pages.test.tsx PASS. Resultado local:test-results/unit-date-only-tests.txt. Cambios pendientes de Mis vehículos preservados. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Mis vehículos: diseño documental
+
+Pantalla adaptada al estilo de Mi verificación y Zonas: cabecera, pestañas, resumen calculado desde GET /driver/vehicles, tarjetas con identificador/tipo/estado y detalles reales, actualización explícita y enlace al onboarding existente. Categoría vigente se presenta en la columna lateral conservando la misma guarda DriverPortal. Sin acciones nuevas de edición/activación ni cambios de validación, permisos o cliente API. Estados de carga/error/vacío separados; error no se presenta como cero vehículos. Menú sin Servicios/Mi servicio conservado.
+
+Verificación nueva:51/51 pruebas en2 suites completas,21.60 s, comando node node_modules/vitest/vitest.mjs run src/test/driver-portal.test.tsx src/test/navigation-roles.test.tsx. tsc -b, tsc --project tsconfig.test.json, eslint de pages.tsx y driver-portal.test.tsx y vite build PASS (2430 módulos; aviso conocido Root1209.47 kB). Suite global anterior histórica, no reejecutada.
+
+node scripts/verify-vehicles-redesign.mjs PASS:6 capturas1280/320, lista con estados ACTIVE/SUSPENDED, vacío,error confirmado con Reintentar, sin overflow/errores de página/mutaciones. HTTP simulado, no nueva aceptación backend. [Reporte](docs/evidence/vehicles-ui-20261031/report.json) · [Tests](docs/evidence/vehicles-ui-20261031/tests.txt). Sin versión,commit/push,backend ni despliegue.
+
 ## 2026-10-31 — Verificación conjunta de Zonas y navegación DRIVER
 
 Diff revisado: Zonas y disponibilidad sin gestión nueva de turno ni feed/ofertas; Servicios y Mi servicio retirados del menú principal y PortalTabs del repartidor. Se conservan contratos, revisiones string, recuperación de intenciones y permisos de otros roles. No se elimina el acceso por rutas históricas. No fue necesario corregir código adicional.

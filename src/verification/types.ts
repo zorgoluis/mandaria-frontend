@@ -17,10 +17,10 @@ export type Ownership = 'OWNED' | 'RENTED' | 'BORROWED'
 export interface IdentityData {
   fullName: string
   contactPhone: string
-  operatingCity: string
+  operatingCity?: string
   documentType: 'INE'
   license?: {
-    issuer: string
+    issuer?: string
     category: string
     expiresAt: string
     vehicleTypes: MotorType[]
@@ -218,7 +218,7 @@ export interface Requirements {
   identity: { required: string[]; motorizedLicense: string; checks: string[] }
   vehicle: {
     required: string[]
-    OWNED: string
+    OWNED: string | null
     RENTED: string
     BORROWED: string
     checks: string[]

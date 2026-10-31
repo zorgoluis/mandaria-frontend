@@ -34,10 +34,6 @@
 .identity-draft form > * {
   grid-column: 1 / -1;
 }
-.identity-draft form > :nth-child(2),
-.identity-draft form > :nth-child(3) {
-  grid-column: auto;
-}
 .identity-draft form > button {
   justify-self: end;
 }

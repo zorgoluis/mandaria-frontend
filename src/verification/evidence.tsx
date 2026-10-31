@@ -1,3 +1,4 @@
+import { unitRequirements } from './unit-requirements'
 import { EvidencePicker } from './evidence-picker'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../auth/context'
@@ -77,14 +78,7 @@ function EvidenceSession({
               ? [requirements.identity.motorizedLicense]
               : []),
           ]
-        : [
-            ...requirements.vehicle.required.filter(
-              (category) =>
-                category !== 'REGISTRATION_CARD' ||
-                record.registrationCardRequired !== false,
-            ),
-            requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
-          ]
+        : unitRequirements(requirements, record).categories
   return (
     <section className="panel panel-body">
       <h2>
@@ -114,7 +108,7 @@ function EvidenceSession({
           significa formato decodificado, no identidad aprobada.
         </p>
       )}
-      {canWrite && record.status === 'DRAFT' && (
+      {canWrite && record.status === 'DRAFT' && categories.length > 0 && (
         <Form
           label={
             record.environment === 'LOCAL_TEST'
@@ -134,6 +128,8 @@ function EvidenceSession({
             const file = d.get('file')
             if (!(file instanceof File))
               throw new Error('Selecciona una imagen.')
+            if (!categories.includes(String(d.get('category'))))
+              throw new Error('Categoría no disponible para nuevas cargas.')
             validateFile(file, requirements)
             if (record.attachments.length >= requirements.maxFiles)
               throw new Error(
@@ -159,7 +155,7 @@ function EvidenceSession({
                 )
               if (!upload.uploadUrl || !upload.expiresAt)
                 throw new Error(
-                  'No se recibió URL vigente. Consulta el adjunto incompleto.',
+                  'Operación registrada sin URL de carga vigente. Consulta el expediente; no se enviará el archivo ni se creará otra operación automáticamente.',
                 )
               await putEvidence(
                 upload.uploadUrl,
@@ -306,7 +302,8 @@ function EvidenceSession({
             )}
             {canWrite &&
               record.status === 'DRAFT' &&
-              a.status === 'CREATED' && (
+              a.status === 'CREATED' &&
+              a.category !== 'OWNERSHIP_PROOF' && (
                 <Form
                   label="Consultar y completar carga"
                   disabled={disabled || command.blocked || command.busy}

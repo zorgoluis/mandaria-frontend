@@ -7,6 +7,7 @@ import { useState, type ReactNode } from 'react'
 import { AuthContext } from '../auth/context'
 import { FeedbackProvider } from '../components/Feedback'
 import { Evidence } from '../verification/evidence'
+import { ApiError } from '../services/errors'
 import { verification, putEvidence } from '../verification/service'
 import {
   actor,
@@ -66,6 +67,59 @@ function deferred<T>() {
   })
   return { promise, resolve, reject }
 }
+it('does not offer ownership proof or complete legacy uploads, retaining historical evidence', async () => {
+  const record = {
+    ...caseFixture,
+    subjectType: 'VEHICLE' as const,
+    data: { ownershipEvidenceType: 'OWNED' as const },
+    attachments: ['CREATED', 'VALIDATED'].map((status, i) => ({
+      id: attachmentId + i,
+      category: 'OWNERSHIP_PROOF',
+      status: status as 'CREATED' | 'VALIDATED',
+      bytes: 100,
+      mime: 'image/png',
+      hash: null,
+      createdAt: caseFixture.createdAt,
+    })),
+  }
+  mount(<Evidence record={record} requirements={requirements} canWrite />)
+  expect(
+    screen.queryByRole('option', { name: /histórico|propiedad/i }),
+  ).toBeNull()
+  expect(
+    screen.getByRole('option', { name: 'Tarjeta de circulación' }),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'Consultar y completar carga' }),
+  ).toBeNull()
+  expect(
+    screen.getAllByText('Adjunto histórico (ya no solicitado)'),
+  ).toHaveLength(2)
+  expect(
+    screen.getByRole('button', { name: 'Ver evidencia' }),
+  ).toBeInTheDocument()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('does not show an empty upload form for OWNED bicycle with explicit null', () => {
+  mount(
+    <Evidence
+      record={{
+        ...caseFixture,
+        subjectType: 'VEHICLE',
+        registrationCardRequired: false,
+        data: { ownershipEvidenceType: 'OWNED' },
+      }}
+      requirements={{
+        ...requirements,
+        vehicle: { ...requirements.vehicle, OWNED: null },
+      }}
+      canWrite
+    />,
+  )
+  expect(screen.queryByRole('combobox')).toBeNull()
+  expect(screen.queryByRole('button', { name: /Cargar imagen/ })).toBeNull()
+})
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(verification.get).mockResolvedValue({ ...caseFixture, revision: 4 })
@@ -113,7 +167,11 @@ it.each([
     const record = category.startsWith('REPRESENT')
       ? { ...repCase, environment: 'LOCAL_TEST' as const }
       : category === 'REGISTRATION_CARD'
-        ? { ...caseFixture, subjectType: 'VEHICLE' as const }
+        ? {
+            ...caseFixture,
+            subjectType: 'VEHICLE' as const,
+            data: { ownershipEvidenceType: 'OWNED' as const },
+          }
         : {
             ...caseFixture,
             data: {
@@ -184,6 +242,42 @@ it.each([
     view.unmount()
   },
 )
+it.each(['retired', 'receipt'] as const)(
+  '%s never transfers bytes or issues another upload command',
+  async (mode) => {
+    if (mode === 'retired')
+      vi.mocked(verification.command).mockRejectedValue(
+        new ApiError(409, 'private', 'VERIFICATION_CATEGORY_RETIRED'),
+      )
+    else
+      vi.mocked(verification.command).mockResolvedValue({
+        id: attachmentId,
+        status: 'CREATED',
+        revision: 4,
+      })
+    const user = userEvent.setup()
+    mount(
+      <Evidence record={caseFixture} requirements={requirements} canWrite />,
+    )
+    const input = screen.getByLabelText(
+      'Imagen sintética *',
+    ) as HTMLInputElement
+    await user.upload(input, new File(['A'], 'A.png', { type: 'image/png' }))
+    fireEvent.submit(input.form!)
+    expect(
+      (
+        await screen.findAllByText(
+          mode === 'retired'
+            ? /Ese documento ya no se solicita/
+            : /Operación registrada sin URL/,
+        )
+      ).length,
+    ).toBeGreaterThan(0)
+    expect(verification.command).toHaveBeenCalledOnce()
+    expect(putEvidence).not.toHaveBeenCalled()
+  },
+)
+
 it('failure of A leaves B selected and names A in the error', async () => {
   const user = userEvent.setup(),
     transfer = deferred<void>()

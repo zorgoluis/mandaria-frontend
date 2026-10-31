@@ -1,0 +1,347 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/verification-upload.test.tsx (15 tests | 1 failed) 3209ms
+   × retired never transfers bytes or issues another upload command 1070ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/verification-upload.test.tsx > retired never transfers bytes or issues another upload command
+TestingLibraryElementError: Found multiple elements with the text: /Ese documento ya no se solicita/
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<p
+  role="alert"
+>
+  Carga de A.png: Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+</p>
+
+Ignored nodes: comments, script, style
+<span>
+  Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      class="panel panel-body"
+    >
+      <h2>
+        Evidencias privadas
+      </h2>
+      <p>
+        JPEG/PNG, máximo
+        10485760
+         bytes y
+
+        20000000
+         píxeles;
+        10
+         intentos por expediente, incluidos retirados. No PDF ni antimalware. VALIDATED significa formato decodificado, no identidad aprobada.
+      </p>
+      <form
+        class="verification-form"
+      >
+        <label
+          class="field"
+        >
+          <span
+            id="_r_s_"
+          >
+            Categoría *
+          </span>
+          <select
+            aria-labelledby="_r_s_"
+            name="category"
+          >
+            <option
+              value="FACE_PHOTO"
+            >
+              Fotografía de rostro
+            </option>
+            <option
+              value="INE_FRONT"
+            >
+              INE: frente
+            </option>
+            <option
+              value="INE_BACK"
+            >
+              INE: reverso
+            </option>
+          </select>
+        </label>
+        <label
+          class="field"
+        >
+          <span
+            id="_r_u_"
+          >
+            Imagen sintética *
+          </span>
+          <input
+            accept="image/jpeg,image/png"
+            aria-labelledby="_r_u_"
+            name="file"
+            required=""
+            type="file"
+          />
+        </label>
+        <p
+          role="alert"
+        >
+          Carga de A.png: Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+        </p>
+        <button
+          class="button"
+        >
+          Cargar imagen sintética
+        </button>
+      </form>
+      <p>
+        Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó incompleto, consulta o retira su referencia en el borrador.
+      </p>
+      <ul
+        class="verification-files"
+      />
+    </section>
+    <div
+      class="toast danger"
+      role="alert"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert lucide-alert-circle"
+        fill="none"
+        height="20"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <span>
+        Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+      </span>
+      <button
+        aria-label="Cerrar notificación"
+        class="icon-button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      class="panel panel-body"
+    >
+      <h2>
+        Evidencias privadas
+      </h2>
+      <p>
+        JPEG/PNG, máximo
+        10485760
+         bytes y
+
+        20000000
+         píxeles;
+        10
+         intentos por expediente, incluidos retirados. No PDF ni antimalware. VALIDATED significa formato decodificado, no identidad aprobada.
+      </p>
+      <form
+        class="verification-form"
+      >
+        <label
+          class="field"
+        >
+          <span
+            id="_r_s_"
+          >
+            Categoría *
+          </span>
+          <select
+            aria-labelledby="_r_s_"
+            name="category"
+          >
+            <option
+              value="FACE_PHOTO"
+            >
+              Fotografía de rostro
+            </option>
+            <option
+              value="INE_FRONT"
+            >
+              INE: frente
+            </option>
+            <option
+              value="INE_BACK"
+            >
+              INE: reverso
+            </option>
+          </select>
+        </label>
+        <label
+          class="field"
+        >
+          <span
+            id="_r_u_"
+          >
+            Imagen sintética *
+          </span>
+          <input
+            accept="image/jpeg,image/png"
+            aria-labelledby="_r_u_"
+            name="file"
+            required=""
+            type="file"
+          />
+        </label>
+        <p
+          role="alert"
+        >
+          Carga de A.png: Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+        </p>
+        <button
+          class="button"
+        >
+          Cargar imagen sintética
+        </button>
+      </form>
+      <p>
+        Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó incompleto, consulta o retira su referencia en el borrador.
+      </p>
+      <ul
+        class="verification-files"
+      />
+    </section>
+    <div
+      class="toast danger"
+      role="alert"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert lucide-alert-circle"
+        fill="none"
+        height="20"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <span>
+        Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.
+      </span>
+      <button
+        aria-label="Cerrar notificación"
+        class="icon-button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/verification-upload.test.tsx:267:18
+    265|     await user.upload(input, new File(['A'], 'A.png', { type: 'image/p…
+    266|     fireEvent.submit(input.form!)
+    267|     await screen.findByText(
+       |                  ^
+    268|       mode === 'retired'
+    269|         ? /Ese documento ya no se solicita/
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 156 passed (157)
+   Start at  17:39:09
+   Duration  11.34s (tests 32%, environment 30%, transform 22%, import 9%, setup 6%)

@@ -197,21 +197,26 @@ it('lost acceptance response shows blocker without a confirmed receipt', async (
 it('identity license sends exact types and ISO expiry', async () => {
   mount(<CaseForm record={caseFixture} />)
   fireEvent.click(screen.getByRole('checkbox', { name: /Declarar licencia/ }))
-  fireEvent.change(screen.getByLabelText('Emisor *'), {
-    target: { value: 'Emisor sintético' },
-  })
+  expect(screen.queryByLabelText('Emisor *')).toBeNull()
+  expect(screen.queryByLabelText('Ciudad de operación *')).toBeNull()
   fireEvent.change(screen.getByLabelText('Categoría *'), {
     target: { value: 'Categoría sintética' },
   })
-  fireEvent.change(screen.getByLabelText('Vencimiento, hora local *'), {
-    target: { value: '2027-10-13T12:00' },
+  fireEvent.change(screen.getByLabelText('Fecha de vencimiento *'), {
+    target: { value: '2027-10-13' },
   })
   fireEvent.click(screen.getByRole('checkbox', { name: 'Motocicleta' }))
   fireEvent.click(screen.getByRole('button', { name: 'Guardar datos' }))
   await waitFor(() => expect(verification.command).toHaveBeenCalled())
   expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
     expectedVersion: 3,
-    data: { documentType: 'INE', license: { vehicleTypes: ['MOTORCYCLE'] } },
+    data: {
+      documentType: 'INE',
+      license: {
+        vehicleTypes: ['MOTORCYCLE'],
+        expiresAt: new Date('2027-10-13T23:59:59.999').toISOString(),
+      },
+    },
   })
 })
 it.each(['OWNED', 'RENTED', 'BORROWED'] as const)(
@@ -302,33 +307,85 @@ it('SUPER_ADMIN reviews exact revision with unchecked checklist; rejection requi
     publicReason: 'Imagen sintética ilegible',
   })
 })
-it('terminal rejection offers new case, never edits reviewed snapshot', async () => {
+it.each(['DRIVER_IDENTITY', 'VEHICLE'] as const)(
+  'terminal %s rejection offers new case, never edits reviewed snapshot',
+  async (subjectType) => {
+    vi.mocked(verification.requirements).mockResolvedValue({
+      ...requirements,
+      vehicle: { ...requirements.vehicle, OWNED: null },
+    })
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      subjectType,
+      data:
+        subjectType === 'VEHICLE'
+          ? {
+              ownershipEvidenceType: 'OWNED',
+              declaredOwnerName: 'Sintético',
+              serialNumber: 'VIN123',
+            }
+          : caseFixture.data,
+      status: 'REJECTED',
+      publicReason: 'Corregir sintético',
+    })
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      'DRIVER',
+      '/verification/cases/' + caseId,
+    )
+    await screen.findByText(/Motivo de decisión/)
+    expect(screen.queryByRole('button', { name: 'Guardar datos' })).toBeNull()
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Preparar nueva corrección' }),
+      ).toBeEnabled(),
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Preparar nueva corrección' }),
+    )
+    await waitFor(() => expect(verification.command).toHaveBeenCalled())
+    expect(vi.mocked(verification.command).mock.calls[0][2]).toEqual({
+      subjectType,
+      subjectId: resource,
+    })
+  },
+)
+it('SUPER_ADMIN can review OWNED with the null contract and no ownership proof', async () => {
+  vi.mocked(verification.requirements).mockResolvedValue({
+    ...requirements,
+    vehicle: { ...requirements.vehicle, OWNED: null },
+  })
   vi.mocked(verification.get).mockResolvedValue({
     ...caseFixture,
-    status: 'REJECTED',
-    publicReason: 'Corregir sintético',
+    subjectType: 'VEHICLE',
+    status: 'SUBMITTED',
+    registrationCardRequired: false,
+    data: {
+      ownershipEvidenceType: 'OWNED',
+      declaredOwnerName: 'Sintético',
+      serialNumber: 'VIN123',
+    },
   })
   mount(
     <Routes>
       <Route path="/verification/cases/:id" element={<CaseDetail />} />
     </Routes>,
-    'DRIVER',
+    'SUPER_ADMIN',
     '/verification/cases/' + caseId,
   )
-  await screen.findByText(/Motivo de decisión/)
-  expect(screen.queryByRole('button', { name: 'Guardar datos' })).toBeNull()
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', { name: 'Preparar nueva corrección' }),
-    ).toBeEnabled(),
-  )
+  await screen.findByText('Decisión SUPER_ADMIN')
+  for (const checkbox of screen.getAllByRole('checkbox'))
+    fireEvent.click(checkbox)
   fireEvent.click(
-    screen.getByRole('button', { name: 'Preparar nueva corrección' }),
+    screen.getByRole('button', { name: 'Registrar decisión explícita' }),
   )
-  await waitFor(() => expect(verification.command).toHaveBeenCalled())
-  expect(vi.mocked(verification.command).mock.calls[0][2]).toEqual({
-    subjectType: 'DRIVER_IDENTITY',
-    subjectId: resource,
+  await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+  expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
+    decision: 'APPROVE',
+    passedChecks: requirements.vehicle.checks,
+    expectedVersion: 3,
   })
 })
 it('mail failure does not turn approved decision into rejection', async () => {
@@ -387,47 +444,50 @@ it('confirmation uses token in body and returns to safe login', async () => {
   expect(await screen.findByText('LOGIN SEGURO')).toBeInTheDocument()
   expect(JSON.stringify(localStorage)).not.toContain('synthetic-password')
 })
-it('PNG preview is revoked on unmount and never stored in query cache', async () => {
-  const revoke = vi.fn()
-  Object.defineProperty(URL, 'createObjectURL', {
-    configurable: true,
-    value: vi.fn(() => 'blob:synthetic'),
-  })
-  Object.defineProperty(URL, 'revokeObjectURL', {
-    configurable: true,
-    value: revoke,
-  })
-  vi.mocked(verification.access).mockResolvedValue(
-    new Blob(['synthetic'], { type: 'image/png' }),
-  )
-  const view = mount(
-    <Evidence
-      record={{
-        ...caseFixture,
-        attachments: [
-          {
-            id: attachmentId,
-            category: 'FACE_PHOTO',
-            status: 'VALIDATED',
-            mime: 'image/png',
-            bytes: 10,
-            hash: 'synthetic',
-            createdAt: terms.createdAt,
-          },
-        ],
-      }}
-      requirements={requirements}
-      canWrite={false}
-    />,
-  )
-  fireEvent.click(screen.getByRole('button', { name: 'Ver evidencia' }))
-  expect(await screen.findByAltText(/Evidencia privada/)).toBeInTheDocument()
-  expect(JSON.stringify(view.client.getQueryCache().getAll())).not.toContain(
-    'blob:',
-  )
-  view.unmount()
-  expect(revoke).toHaveBeenCalledWith('blob:synthetic')
-})
+it.each(['FACE_PHOTO', 'OWNERSHIP_PROOF'])(
+  '%s preview is revoked on unmount and never stored in query cache',
+  async (category) => {
+    const revoke = vi.fn()
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: vi.fn(() => 'blob:synthetic'),
+    })
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      configurable: true,
+      value: revoke,
+    })
+    vi.mocked(verification.access).mockResolvedValue(
+      new Blob(['synthetic'], { type: 'image/png' }),
+    )
+    const view = mount(
+      <Evidence
+        record={{
+          ...caseFixture,
+          attachments: [
+            {
+              id: attachmentId,
+              category,
+              status: 'VALIDATED',
+              mime: 'image/png',
+              bytes: 10,
+              hash: 'synthetic',
+              createdAt: terms.createdAt,
+            },
+          ],
+        }}
+        requirements={requirements}
+        canWrite={false}
+      />,
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Ver evidencia' }))
+    expect(await screen.findByAltText(/Evidencia privada/)).toBeInTheDocument()
+    expect(JSON.stringify(view.client.getQueryCache().getAll())).not.toContain(
+      'blob:',
+    )
+    view.unmount()
+    expect(revoke).toHaveBeenCalledWith('blob:synthetic')
+  },
+)
 it('late evidence response after leaving never creates a preview', async () => {
   let resolve!: (b: Blob) => void
   vi.mocked(verification.access).mockReturnValue(
@@ -544,11 +604,11 @@ it.each(['DRIVER_IDENTITY', 'VEHICLE'] as const)(
           ? {
               declaredOwnerName: 'Titular sintético',
               serialNumber: 'VIN123',
-              ownershipEvidenceType: 'OWNED',
+              ownershipEvidenceType: 'RENTED',
             }
           : caseFixture.data,
       attachments: (subjectType === 'VEHICLE'
-        ? ['REGISTRATION_CARD', 'OWNERSHIP_PROOF']
+        ? ['REGISTRATION_CARD', 'RENTAL_CONTRACT']
         : requirements.identity.required
       ).map((category, i) => ({
         id: 'evidence-' + i,
@@ -594,6 +654,164 @@ it.each(['DRIVER_IDENTITY', 'VEHICLE'] as const)(
     fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     expect(verification.command).toHaveBeenCalledOnce()
+  },
+)
+
+it('blocks submission when the server still requires ownership proof without asking for it', async () => {
+  vi.mocked(verification.get).mockResolvedValue({
+    ...caseFixture,
+    subjectType: 'VEHICLE',
+    data: {
+      declaredOwnerName: 'Titular sintético',
+      serialNumber: 'VIN123',
+      ownershipEvidenceType: 'OWNED',
+    },
+    attachments: ['REGISTRATION_CARD', 'OWNERSHIP_PROOF'].map(
+      (category, i) => ({
+        id: 'legacy-' + i,
+        category,
+        status: 'VALIDATED' as const,
+        bytes: 100,
+        mime: 'image/png',
+        hash: null,
+        createdAt: caseFixture.createdAt,
+      }),
+    ),
+  })
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'DRIVER',
+    '/verification/cases/' + caseId,
+  )
+  expect(
+    await screen.findByText(
+      /La presentación está pendiente de una actualización/,
+    ),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByRole('button', { name: 'Presentar para revisión' }),
+  ).toBeDisabled()
+  expect(screen.queryByText(/Comprobante de propiedad/i)).toBeNull()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+it.each([
+  ['OWNED', false, [], true],
+  ['OWNED', true, ['REGISTRATION_CARD'], true],
+  ['OWNED', true, [], false],
+  ['RENTED', true, ['REGISTRATION_CARD'], false],
+  ['RENTED', true, ['REGISTRATION_CARD', 'RENTAL_CONTRACT'], true],
+  ['BORROWED', true, ['REGISTRATION_CARD'], false],
+  ['BORROWED', true, ['REGISTRATION_CARD', 'OWNER_AUTHORIZATION'], true],
+] as const)(
+  'new unit contract %s registration=%s evidence=%j permits submit=%s',
+  async (
+    ownershipEvidenceType,
+    registrationCardRequired,
+    categories,
+    allowed,
+  ) => {
+    vi.mocked(verification.requirements).mockResolvedValue({
+      ...requirements,
+      vehicle: { ...requirements.vehicle, OWNED: null },
+    })
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      subjectType: 'VEHICLE',
+      registrationCardRequired,
+      data: {
+        declaredOwnerName: 'Titular sintético',
+        serialNumber: 'VIN123',
+        ownershipEvidenceType,
+      },
+      attachments: [
+        ...categories.map((category, i) => ({
+          id: 'evidence-' + i,
+          category,
+          status: 'VALIDATED' as const,
+          bytes: 100,
+          mime: 'image/png',
+          hash: null,
+          createdAt: caseFixture.createdAt,
+        })),
+        {
+          id: attachmentId,
+          category: 'OWNERSHIP_PROOF',
+          status: 'CREATED',
+          bytes: null,
+          mime: null,
+          hash: null,
+          createdAt: caseFixture.createdAt,
+        },
+      ],
+    })
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      'DRIVER',
+      '/verification/cases/' + caseId,
+    )
+    const submit = await screen.findByRole('button', {
+      name: 'Presentar para revisión',
+    })
+    await waitFor(() =>
+      allowed ? expect(submit).toBeEnabled() : expect(submit).toBeDisabled(),
+    )
+    expect(
+      screen.queryByText(/La presentación está pendiente de una actualización/),
+    ).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Consultar y completar carga' }),
+    ).toBeNull()
+    if (!registrationCardRequired)
+      expect(screen.queryByRole('button', { name: /Cargar imagen/ })).toBeNull()
+    if (allowed) {
+      fireEvent.click(submit)
+      fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+      await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+      expect(vi.mocked(verification.command).mock.calls[0][0].operation).toBe(
+        'SUBMIT',
+      )
+    }
+  },
+)
+
+it.each([undefined, '', 42, {}, 'OTHER'])(
+  'invalid OWNED=%j does not waive requirements',
+  async (value) => {
+    vi.mocked(verification.requirements).mockResolvedValue({
+      ...requirements,
+      vehicle: { ...requirements.vehicle, OWNED: value },
+    } as typeof requirements)
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      subjectType: 'VEHICLE',
+      registrationCardRequired: false,
+      data: {
+        declaredOwnerName: 'Sintético',
+        serialNumber: 'VIN123',
+        ownershipEvidenceType: 'OWNED',
+      },
+    })
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      'DRIVER',
+      '/verification/cases/' + caseId,
+    )
+    expect(
+      await screen.findByText(
+        /La presentación está pendiente de una actualización/,
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Presentar para revisión' }),
+    ).toBeDisabled()
+    expect(screen.queryByRole('button', { name: /Cargar imagen/ })).toBeNull()
   },
 )
 
@@ -1082,3 +1300,177 @@ it('unit uses the bicycle checklist and normalizes serial numbers on save', asyn
     data: { serialNumber: 'ABC456' },
   })
 })
+
+it.each([undefined, '2027-06-15T12:34:56.000Z'])(
+  'unit authorization requests only a date and preserves existing timestamp %s',
+  async (existing) => {
+    mount(
+      <CaseForm
+        record={{
+          ...caseFixture,
+          subjectType: 'VEHICLE',
+          data: {
+            declaredOwnerName: 'Titular',
+            serialNumber: 'VIN123',
+            ownershipEvidenceType: 'BORROWED',
+            ...(existing ? { authorizationExpiresAt: existing } : {}),
+          },
+        }}
+      />,
+    )
+    const input = screen.getByLabelText(
+      'Vencimiento de autorización (opcional)',
+    )
+    expect(input).toHaveAttribute('type', 'date')
+    if (!existing) fireEvent.change(input, { target: { value: '2027-06-15' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar datos' }))
+    await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+    expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
+      data: {
+        authorizationExpiresAt:
+          existing ?? new Date('2027-06-15T23:59:59.999').toISOString(),
+      },
+    })
+  },
+)
+
+it('preserves a saved license instant when its displayed date is unchanged', async () => {
+  const expiresAt = '2027-06-15T12:34:56.000Z'
+  mount(
+    <CaseForm
+      record={{
+        ...caseFixture,
+        data: {
+          ...caseFixture.data,
+          license: {
+            issuer: 'Emisor sintético',
+            category: 'A',
+            expiresAt,
+            vehicleTypes: ['MOTORCYCLE'],
+          },
+        },
+      }}
+    />,
+  )
+  expect(screen.getByLabelText('Fecha de vencimiento *')).toHaveAttribute(
+    'type',
+    'date',
+  )
+  fireEvent.click(screen.getByRole('button', { name: 'Guardar datos' }))
+  await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+  expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
+    data: { license: { expiresAt } },
+  })
+})
+
+it.each([false, true])(
+  'identity payload omits legacy fields even when historical values exist: %s',
+  async (legacy) => {
+    const record = {
+      ...caseFixture,
+      data: {
+        fullName: 'Persona',
+        contactPhone: '0000000000',
+        documentType: 'INE' as const,
+        ...(legacy ? { operatingCity: 'Ciudad histórica' } : {}),
+        license: {
+          category: 'A',
+          expiresAt: '2028-06-15T12:34:56.000Z',
+          vehicleTypes: ['MOTORCYCLE'] as ['MOTORCYCLE'],
+          ...(legacy ? { issuer: 'Emisor histórico' } : {}),
+        },
+      },
+    }
+    const original = structuredClone(record)
+    mount(<CaseForm record={record} />)
+    expect(screen.queryByLabelText(/Ciudad de operación/)).toBeNull()
+    expect(screen.queryByLabelText(/Emisor/)).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar datos' }))
+    await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+    const body = vi.mocked(verification.command).mock.calls[0][2] as {
+      data: Record<string, unknown>
+    }
+    expect(body.data).not.toHaveProperty('operatingCity')
+    expect(body.data.license).not.toHaveProperty('issuer')
+    expect(body.data.license).toMatchObject({
+      category: 'A',
+      expiresAt: record.data.license.expiresAt,
+      vehicleTypes: ['MOTORCYCLE'],
+    })
+    expect(record).toEqual(original)
+  },
+)
+it('identity without city or issuer can present a complete dossier', async () => {
+  vi.mocked(verification.get).mockResolvedValue({
+    ...caseFixture,
+    data: {
+      fullName: 'Persona',
+      contactPhone: '0000000000',
+      documentType: 'INE',
+      license: {
+        category: 'A',
+        expiresAt: '2028-06-15T12:00:00Z',
+        vehicleTypes: ['MOTORCYCLE'],
+      },
+    },
+    attachments: [
+      ...requirements.identity.required,
+      requirements.identity.motorizedLicense,
+    ].map((category, i) => ({
+      id: 'file-' + i,
+      category,
+      status: 'VALIDATED' as const,
+      bytes: 10,
+      mime: 'image/png',
+      hash: null,
+      createdAt: caseFixture.createdAt,
+    })),
+  })
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'DRIVER',
+    '/verification/cases/' + caseId,
+  )
+  const submit = await screen.findByRole('button', {
+    name: 'Presentar para revisión',
+  })
+  await waitFor(() => expect(submit).toBeEnabled())
+  fireEvent.click(submit)
+  fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+  await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+})
+it.each([false, true])(
+  'read-only identity tolerates absent legacy fields and preserves historical ones: %s',
+  async (legacy) => {
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      status: 'APPROVED',
+      data: {
+        fullName: 'Persona',
+        contactPhone: '0000000000',
+        documentType: 'INE',
+        ...(legacy ? { operatingCity: 'Ciudad histórica' } : {}),
+        license: {
+          category: 'A',
+          expiresAt: '2028-06-15T12:00:00Z',
+          vehicleTypes: ['MOTORCYCLE'],
+          ...(legacy ? { issuer: 'Emisor histórico' } : {}),
+        },
+      },
+    })
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      'DRIVER',
+      '/verification/cases/' + caseId,
+    )
+    await screen.findByRole('heading', { name: 'Datos presentados' })
+    expect(screen.queryByText('Ciudad histórica') !== null).toBe(legacy)
+    expect(screen.queryByText(/Emisor histórico/) !== null).toBe(legacy)
+    expect(screen.getByText(/Licencia:/)).not.toHaveTextContent('undefined')
+    expect(screen.getByText(/Licencia:/)).not.toHaveTextContent('Licencia: ·')
+  },
+)

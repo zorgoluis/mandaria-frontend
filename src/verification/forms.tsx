@@ -72,14 +72,16 @@ export function CaseForm({
             ? {
                 fullName: text(d, 'fullName'),
                 contactPhone: text(d, 'contactPhone'),
-                operatingCity: text(d, 'operatingCity'),
                 documentType: 'INE',
                 ...(license
                   ? {
                       license: {
-                        issuer: text(d, 'issuer'),
                         category: text(d, 'category'),
-                        expiresAt: utc(text(d, 'expiresAt')),
+                        expiresAt:
+                          text(d, 'expiresAt') ===
+                          local(record.data.license?.expiresAt).slice(0, 10)
+                            ? record.data.license!.expiresAt
+                            : utc(text(d, 'expiresAt') + 'T23:59:59.999'),
                         vehicleTypes: motorTypes.filter((t) =>
                           d.getAll('vehicleTypes').includes(t),
                         ),
@@ -95,9 +97,14 @@ export function CaseForm({
                 ownershipEvidenceType: ownership,
                 ...(text(d, 'authorizationExpiresAt')
                   ? {
-                      authorizationExpiresAt: utc(
-                        text(d, 'authorizationExpiresAt'),
-                      ),
+                      authorizationExpiresAt:
+                        text(d, 'authorizationExpiresAt') ===
+                        local(record.data.authorizationExpiresAt).slice(0, 10)
+                          ? record.data.authorizationExpiresAt!
+                          : utc(
+                              text(d, 'authorizationExpiresAt') +
+                                'T23:59:59.999',
+                            ),
                     }
                   : {}),
               }
@@ -142,15 +149,6 @@ export function CaseForm({
                 defaultValue={record.data.contactPhone}
               />
             </Field>
-            <Field label="Ciudad de operación *">
-              <input
-                name="operatingCity"
-                placeholder="Ej. Tuxtla Gutiérrez"
-                required
-                maxLength={150}
-                defaultValue={record.data.operatingCity}
-              />
-            </Field>
             <p>
               Identificación: INE. La fotografía de rostro y ambos lados se
               cargan por separado.
@@ -169,14 +167,6 @@ export function CaseForm({
             {license && (
               <fieldset>
                 <legend>Licencia personal</legend>
-                <Field label="Emisor *">
-                  <input
-                    name="issuer"
-                    required
-                    maxLength={150}
-                    defaultValue={record.data.license?.issuer}
-                  />
-                </Field>
                 <Field label="Categoría *">
                   <input
                     name="category"
@@ -185,18 +175,18 @@ export function CaseForm({
                     defaultValue={record.data.license?.category}
                   />
                 </Field>
-                <Field label="Vencimiento, hora local *">
+                <Field label="Fecha de vencimiento *">
                   <input
                     name="expiresAt"
-                    type="datetime-local"
+                    type="date"
                     required
-                    defaultValue={local(record.data.license?.expiresAt)}
+                    defaultValue={local(record.data.license?.expiresAt).slice(
+                      0,
+                      10,
+                    )}
                   />
                 </Field>
-                <p>
-                  Se envía el instante UTC. Sin equivalencias jurídicas
-                  automáticas ni gracia.
-                </p>
+                <p>El vencimiento se registra al final de la fecha elegida.</p>
                 {motorTypes.map((t) => (
                   <label className="verification-check" key={t}>
                     <input
@@ -277,29 +267,27 @@ export function CaseForm({
                   ? 'Indica hasta cuándo puedes usar esta unidad. Recomendado.'
                   : undefined
               }
-              label="Vencimiento de autorización, hora local (opcional)"
+              label="Vencimiento de autorización (opcional)"
             >
               <input
                 name="authorizationExpiresAt"
-                type="datetime-local"
-                defaultValue={local(record.data.authorizationExpiresAt)}
+                type="date"
+                defaultValue={local(record.data.authorizationExpiresAt).slice(
+                  0,
+                  10,
+                )}
               />
             </Field>
             <p>
-              {record.registrationCardRequired !== false &&
-                'Tarjeta de circulación y '}
-              {record.registrationCardRequired === false &&
-                'Bicicleta: no requiere tarjeta de circulación. Requiere '}
-              {
-                labels[
-                  ownership === 'OWNED'
-                    ? 'OWNERSHIP_PROOF'
-                    : ownership === 'RENTED'
-                      ? 'RENTAL_CONTRACT'
-                      : 'OWNER_AUTHORIZATION'
-                ]
-              }
-              . En flotilla la unidad no necesita pertenecer al conductor.
+              {record.registrationCardRequired === false
+                ? 'Bicicleta: no requiere tarjeta de circulación.'
+                : 'Tarjeta de circulación.'}
+              {ownership === 'RENTED'
+                ? ' ' + labels.RENTAL_CONTRACT + '.'
+                : ownership === 'BORROWED'
+                  ? ' ' + labels.OWNER_AUTHORIZATION + '.'
+                  : ''}{' '}
+              En flotilla la unidad no necesita pertenecer al conductor.
             </p>
           </>
         )}
