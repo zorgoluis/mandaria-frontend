@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { Field } from '../components/ui'
@@ -111,17 +111,50 @@ export function RegistrationConfirm() {
     </main>
   )
 }
-export function EmailVerification() {
+export function EmailVerification({
+  designed = false,
+}: {
+  designed?: boolean
+}) {
   const { restore, user } = useAuth()
   const client = useQueryClient()
   const [notice, setNotice] = useState('')
+  const [code, setCode] = useState('')
+  const [remaining, setRemaining] = useState(0)
+  useEffect(() => {
+    if (!remaining) return
+    const timer = window.setTimeout(
+      () => setRemaining((n) => Math.max(0, n - 1)),
+      1000,
+    )
+    return () => window.clearTimeout(timer)
+  }, [remaining])
+  if (designed && user?.emailVerifiedAt)
+    return (
+      <section className="panel panel-body documentary-email">
+        <h2>
+          <span className="documentary-step">1</span>Correo confirmado ✓
+        </h2>
+      </section>
+    )
   return (
-    <section className="panel panel-body">
-      <h2>Confirmación personal de correo</h2>
+    <section
+      className={'panel panel-body' + (designed ? ' documentary-email' : '')}
+    >
+      <h2>
+        {designed && <span className="documentary-step">1</span>}Confirmación
+        personal de correo
+      </h2>
       <Form
-        label="Solicitar código de correo"
+        label={
+          remaining
+            ? `Reenviar en ${remaining} s`
+            : 'Solicitar código de correo'
+        }
+        disabled={remaining > 0}
         onSubmit={async () => {
           await verification.emailRequest()
+          setRemaining(60)
           setNotice(
             'Solicitud recibida. Revisa tu correo; no se acredita entrega.',
           )
@@ -129,6 +162,7 @@ export function EmailVerification() {
       />
       <Form
         label="Confirmar correo de esta cuenta"
+        disabled={designed && (code.length < 43 || code.length > 128)}
         onSubmit={async (d) => {
           const result = await verification.emailConfirm(String(d.get('token')))
           if (result?.status !== 'EMAIL_VERIFIED')
@@ -150,8 +184,15 @@ export function EmailVerification() {
             minLength={43}
             maxLength={128}
             autoComplete="off"
+            placeholder="Código recibido por correo"
+            onChange={(e) => setCode(e.target.value)}
           />
         </Field>
+        {designed && (
+          <small>
+            Introduce el código completo del correo (43–128 caracteres).
+          </small>
+        )}
       </Form>
       {notice && <p role="status">{notice}</p>}
     </section>

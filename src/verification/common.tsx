@@ -157,7 +157,11 @@ export function Form({
   )
 }
 
-export function Recovery() {
+export function Recovery({
+  showAccountLink = true,
+}: {
+  showAccountLink?: boolean
+}) {
   const client = useQueryClient()
   const { user } = useAuth()
   const { items, unavailable } = useMarkers()
@@ -271,9 +275,11 @@ export function Recovery() {
           onConfirm={() => act(closing, true)}
         />
       )}
-      <p>
-        <Link to="/profile">Mi cuenta</Link>
-      </p>
+      {showAccountLink && (
+        <p>
+          <Link to="/profile">Mi cuenta</Link>
+        </p>
+      )}
     </>
   )
 }

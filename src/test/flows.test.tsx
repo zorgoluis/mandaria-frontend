@@ -240,8 +240,6 @@ describe('auth and permissions UX', () => {
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
-      'Mis envíos',
-      'Cuenta Negocio',
       'Dashboard',
       'Representación legal',
       'Mi proveedor',
@@ -277,8 +275,6 @@ describe('auth and permissions UX', () => {
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
-      'Mis envíos',
-      'Cuenta Negocio',
       'Dashboard',
       'Integraciones',
       'Solicitudes Negocio',

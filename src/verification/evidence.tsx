@@ -1,3 +1,4 @@
+import { EvidencePicker } from './evidence-picker'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../auth/context'
 import { Field } from '../components/ui'
@@ -7,6 +8,7 @@ import { useCommand } from './hooks'
 import { putEvidence, validateFile, verification } from './service'
 import type { Requirements, VerificationCase } from './types'
 type EvidenceProps = {
+  designed?: boolean
   record: VerificationCase
   requirements: Requirements
   canWrite: boolean
@@ -20,11 +22,14 @@ export function Evidence(props: EvidenceProps) {
 }
 function EvidenceSession({
   record,
+  designed = false,
   requirements,
   canWrite,
   disabled = false,
   removalDisabled = disabled,
 }: EvidenceProps) {
+  const [selectionVersion, setSelectionVersion] = useState(0)
+  const [selectionValid, setSelectionValid] = useState(false)
   const command = useCommand()
   const { user } = useAuth()
   const scope = user?.id + ':' + record.id
@@ -82,13 +87,33 @@ function EvidenceSession({
           ]
   return (
     <section className="panel panel-body">
-      <h2>Evidencias privadas</h2>
-      <p>
-        JPEG/PNG, máximo {requirements.maxBytes} bytes y{' '}
-        {requirements.maxPixels} píxeles; {requirements.maxFiles} intentos por
-        expediente, incluidos retirados. No PDF ni antimalware. VALIDATED
-        significa formato decodificado, no identidad aprobada.
-      </p>
+      <h2>
+        {designed && <span className="documentary-step">2</span>}Evidencias
+        privadas
+      </h2>
+      {designed ? (
+        <>
+          <div className="identity-limit-chips">
+            <span>JPEG / PNG</span>
+            <span>
+              Máx. {requirements.maxBytes / 1048576} MB ·{' '}
+              {requirements.maxPixels / 1000000} MP
+            </span>
+            <span>{requirements.maxFiles} intentos por expediente</span>
+          </div>
+          <p className="identity-note">
+            No PDF ni antimalware. VALIDATED significa formato decodificado, no
+            identidad aprobada.
+          </p>
+        </>
+      ) : (
+        <p>
+          JPEG/PNG, máximo {requirements.maxBytes} bytes y{' '}
+          {requirements.maxPixels} píxeles; {requirements.maxFiles} intentos por
+          expediente, incluidos retirados. No PDF ni antimalware. VALIDATED
+          significa formato decodificado, no identidad aprobada.
+        </p>
+      )}
       {canWrite && record.status === 'DRAFT' && (
         <Form
           label={
@@ -96,7 +121,15 @@ function EvidenceSession({
               ? 'Cargar imagen sintética'
               : 'Cargar imagen'
           }
-          disabled={disabled || command.blocked || command.busy || busy}
+          disabled={
+            disabled ||
+            command.blocked ||
+            command.busy ||
+            busy ||
+            (designed &&
+              (!selectionValid ||
+                record.attachments.length >= requirements.maxFiles))
+          }
           onSubmit={async (d) => {
             const file = d.get('file')
             if (!(file instanceof File))
@@ -152,35 +185,77 @@ function EvidenceSession({
                 `/verification-cases/${record.id}/uploads/${upload.id}/complete`,
                 { expectedVersion: latest.revision },
               )
+              if (current.current === owner) {
+                setSelectionValid(false)
+                setSelectionVersion((v) => v + 1)
+              }
             } finally {
               if (current.current === owner) setBusy(false)
             }
           }}
         >
-          <Field label="Categoría *">
-            <select name="category">
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {labels[c] || c}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field
-            label={
-              record.environment === 'LOCAL_TEST'
-                ? 'Imagen sintética *'
-                : 'Imagen *'
-            }
-          >
-            <input
-              name="file"
-              type="file"
-              accept="image/jpeg,image/png"
-              required
+          {designed ? (
+            <fieldset className="identity-categories">
+              <legend>Categoría *</legend>
+              <div role="radiogroup" aria-label="Categoría">
+                {categories.map((c, i) => (
+                  <label key={c}>
+                    <input
+                      type="radio"
+                      name="category"
+                      value={c}
+                      defaultChecked={i === 0}
+                    />
+                    {labels[c] || c}
+                    {record.attachments.some(
+                      (a) => a.category === c && a.status === 'VALIDATED',
+                    ) && ' ✓'}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ) : (
+            <Field label="Categoría *">
+              <select name="category">
+                {categories.map((c) => (
+                  <option key={c} value={c}>
+                    {labels[c] || c}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          )}
+          {designed ? (
+            <EvidencePicker
+              key={selectionVersion}
+              requirements={requirements}
+              busy={busy}
+              onValid={setSelectionValid}
             />
-          </Field>
+          ) : (
+            <Field
+              label={
+                record.environment === 'LOCAL_TEST'
+                  ? 'Imagen sintética *'
+                  : 'Imagen *'
+              }
+            >
+              <input
+                name="file"
+                type="file"
+                accept="image/jpeg,image/png"
+                required
+              />
+            </Field>
+          )}
         </Form>
+      )}
+      {designed && requirements.maxFiles - record.attachments.length <= 3 && (
+        <p role="status">
+          Intentos restantes:{' '}
+          {Math.max(0, requirements.maxFiles - record.attachments.length)} de{' '}
+          {requirements.maxFiles}
+        </p>
       )}
       {busy && (
         <button type="button" onClick={() => request.current?.abort()}>

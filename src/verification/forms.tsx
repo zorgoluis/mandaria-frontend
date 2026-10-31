@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Field } from '../components/ui'
 import { vehicleTypes } from '../logistics/types'
 import { labels as operationalLabels } from '../utils/format'
@@ -23,10 +23,14 @@ const local = (s?: string) =>
 export function CaseForm({
   record,
   disabled = false,
+  designed = false,
 }: {
+  designed?: boolean
   record: VerificationCase
   disabled?: boolean
 }) {
+  const original = useRef<string | null>(null)
+  const [validChange, setValidChange] = useState(false)
   const command = useCommand()
   const [license, setLicense] = useState(!!record.data.license)
   const [ownership, setOwnership] = useState<Ownership>(
@@ -34,11 +38,35 @@ export function CaseForm({
   )
   const identity = record.subjectType === 'DRIVER_IDENTITY'
   return (
-    <section className="panel panel-body">
-      <h2>Datos del borrador</h2>
+    <section
+      className={'panel panel-body' + (designed ? ' identity-draft' : '')}
+      ref={(node) => {
+        const form = node?.querySelector('form')
+        if (form && original.current === null)
+          original.current = JSON.stringify([...new FormData(form).entries()])
+      }}
+      onChange={(e) => {
+        const form = (e.target as HTMLElement).closest('form')
+        if (form)
+          setValidChange(
+            form.checkValidity() &&
+              JSON.stringify([...new FormData(form).entries()]) !==
+                original.current,
+          )
+      }}
+    >
+      <h2>
+        {designed && <span className="documentary-step">1</span>}Datos del
+        borrador
+      </h2>
       <Form
         label="Guardar datos"
-        disabled={disabled || command.blocked || command.busy}
+        disabled={
+          disabled ||
+          command.blocked ||
+          command.busy ||
+          (designed && !validChange)
+        }
         onSubmit={async (d) => {
           const data: IdentityData | UnitData = identity
             ? {
@@ -61,7 +89,9 @@ export function CaseForm({
               }
             : {
                 declaredOwnerName: text(d, 'declaredOwnerName'),
-                serialNumber: text(d, 'serialNumber'),
+                serialNumber: text(d, 'serialNumber')
+                  .replace(/\s/g, '')
+                  .toUpperCase(),
                 ownershipEvidenceType: ownership,
                 ...(text(d, 'authorizationExpiresAt')
                   ? {
@@ -79,6 +109,8 @@ export function CaseForm({
             throw new Error(
               'Selecciona al menos un tipo motorizado de la licencia.',
             )
+          if (!identity && !(data as UnitData).serialNumber)
+            throw new Error('Indica un número de serie válido.')
           await command.send(
             'UPDATE_CASE',
             record.id,
@@ -93,6 +125,7 @@ export function CaseForm({
             <Field label="Nombre completo *">
               <input
                 name="fullName"
+                placeholder="Como aparece en tu INE"
                 required
                 maxLength={150}
                 defaultValue={record.data.fullName}
@@ -101,6 +134,8 @@ export function CaseForm({
             <Field label="Teléfono de contacto *">
               <input
                 name="contactPhone"
+                inputMode="tel"
+                placeholder="10 dígitos"
                 required
                 minLength={5}
                 maxLength={30}
@@ -110,6 +145,7 @@ export function CaseForm({
             <Field label="Ciudad de operación *">
               <input
                 name="operatingCity"
+                placeholder="Ej. Tuxtla Gutiérrez"
                 required
                 maxLength={150}
                 defaultValue={record.data.operatingCity}
@@ -123,7 +159,10 @@ export function CaseForm({
               <input
                 type="checkbox"
                 checked={license}
-                onChange={(e) => setLicense(e.target.checked)}
+                onChange={(e) => {
+                  setLicense(e.target.checked)
+                  if (e.target.checked) setValidChange(false)
+                }}
               />
               Declarar licencia del conductor (necesaria para tipos motorizados)
             </label>
@@ -179,6 +218,7 @@ export function CaseForm({
             <Field label="Nombre del titular declarado *">
               <input
                 name="declaredOwnerName"
+                placeholder="Como aparece en la tarjeta de circulación"
                 required
                 maxLength={150}
                 defaultValue={record.data.declaredOwnerName}
@@ -187,24 +227,58 @@ export function CaseForm({
             <Field label="Número de serie *">
               <input
                 name="serialNumber"
+                placeholder="VIN o número de serie"
                 required
                 maxLength={150}
                 defaultValue={record.data.serialNumber}
               />
             </Field>
-            <Field label="Propiedad o uso autorizado *">
-              <select
-                value={ownership}
-                onChange={(e) => setOwnership(e.target.value as Ownership)}
-              >
-                {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
-                  <option key={v} value={v}>
-                    {labels[v]}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Vencimiento de autorización, hora local (opcional)">
+            {designed ? (
+              <fieldset className="field unit-ownership-field">
+                <legend>
+                  Propiedad o uso autorizado <span aria-hidden="true">*</span>
+                </legend>
+                <div
+                  role="radiogroup"
+                  aria-label="Propiedad o uso autorizado"
+                  className="unit-ownership"
+                >
+                  {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
+                    <label key={v}>
+                      <input
+                        type="radio"
+                        name="ownershipEvidenceType"
+                        value={v}
+                        checked={ownership === v}
+                        onChange={() => setOwnership(v)}
+                      />
+                      {labels[v]}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            ) : (
+              <Field label="Propiedad o uso autorizado *">
+                <select
+                  value={ownership}
+                  onChange={(e) => setOwnership(e.target.value as Ownership)}
+                >
+                  {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
+                    <option key={v} value={v}>
+                      {labels[v]}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            )}
+            <Field
+              hint={
+                ownership !== 'OWNED'
+                  ? 'Indica hasta cuándo puedes usar esta unidad. Recomendado.'
+                  : undefined
+              }
+              label="Vencimiento de autorización, hora local (opcional)"
+            >
               <input
                 name="authorizationExpiresAt"
                 type="datetime-local"

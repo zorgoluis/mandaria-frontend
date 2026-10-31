@@ -82,8 +82,16 @@ export function AdminLayout() {
   }, [open])
   const admin = user?.role === 'SUPER_ADMIN'
   const links = [
-    { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
-    { to: '/customer/business', label: 'Cuenta Negocio', icon: Building2 },
+    ...(user?.role === 'CUSTOMER'
+      ? [
+          { to: '/customer', label: 'Mis envíos', icon: PackageSearch },
+          {
+            to: '/customer/business',
+            label: 'Cuenta Negocio',
+            icon: Building2,
+          },
+        ]
+      : []),
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ...(['DRIVER', 'PROVIDER_ADMIN'].includes(user?.role || '')
       ? [
@@ -281,6 +289,8 @@ export function AdminLayout() {
                 }
                 className={({ isActive }) =>
                   isActive ||
+                  (to === '/driver/onboarding' &&
+                    pathname.startsWith('/verification/cases/')) ||
                   (to === profilePath && pathname === '/customer/profile')
                     ? 'active'
                     : undefined

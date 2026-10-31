@@ -1,0 +1,138 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/customer-registration-design.test.tsx (6 tests | 1 failed) 828ms
+   × sends exact normalized DTO without phone, no automatic retry and focuses generic acknowledgement 144ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/customer-registration-design.test.tsx > sends exact normalized DTO without phone, no automatic retry and focuses generic acknowledgement
+Error: expect(element).toHaveFocus()
+
+Expected element with focus:
+  <h1
+  tabindex="-1"
+>
+  Solicitud enviada
+</h1>
+Received element with focus:
+  <body>
+  <div>
+    <main
+      class="registration-page"
+    >
+      <aside
+        aria-label="Mandaria"
+        class="registration-brand"
+      >
+        <a
+          aria-label="Mandaria, inicio"
+          class="registration-logo"
+          data-discover="true"
+          href="/"
+        >
+          <img
+            alt=""
+            height="40"
+            src="/mandaria.svg"
+            width="40"
+          />
+          <strong>
+            mandaria
+            <b>
+              .
+            </b>
+          </strong>
+        </a>
+        <div
+          class="registration-motto"
+        >
+          <h2>
+            Logística que avanza contigo.
+          </h2>
+          <p>
+            Una operación conectada. La base de lo que viene.
+          </p>
+        </div>
+      </aside>
+      <section
+        aria-label="Registro de cliente"
+        class="registration-content"
+      >
+        <div
+          class="registration-column"
+        >
+          <div
+            class="registration-confirmation"
+          >
+            <span
+              class="registration-check"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-check"
+                fill="none"
+                height="28"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="28"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 6 9 17l-5-5"
+                />
+              </svg>
+            </span>
+            <h1
+              tabindex="-1"
+            >
+              Solicitud enviada
+            </h1>
+            <p>
+              Solicitud recibida. Si procede, recibirás un correo para continuar. Esta respuesta no confirma la aprobación del alta ni la entrega del mensaje.
+            </p>
+            <a
+              class="registration-secondary"
+              data-discover="true"
+              href="/login"
+            >
+              Ir a iniciar sesión
+            </a>
+            <button
+              class="registration-resend"
+            >
+              Reenviar solicitud con este perfil
+            </button>
+            <p
+              class="registration-help"
+            >
+              El reenvío utiliza los mismos datos. No confirma que exista una cuenta para este correo.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+ ❯ src/test/customer-registration-design.test.tsx:53:19
+     51|     name: 'Solicitud enviada',
+     52|   })
+     53|   expect(heading).toHaveFocus()
+       |                   ^
+     54|   expect(customer.register).toHaveBeenCalledExactlyOnceWith(
+     55|     {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 82 passed (83)
+      Tests  1 failed | 1642 passed (1643)
+   Start at  12:10:59
+   Duration  132.18s (environment 40%, tests 35%, import 10%, setup 8%, transform 6%)
+
+Environment  jsdom was created 83 times · 200.99s total, 40% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

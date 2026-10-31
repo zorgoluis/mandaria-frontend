@@ -29,22 +29,29 @@ import { documentaryAvailability, consultationError } from './availability'
 import { useRequirements, useTermsQuery } from './use-availability'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
+import './onboarding.css'
+import './identity-case.css'
+import { Bike, Car } from 'lucide-react'
+import { labels as vehicleLabels } from '../utils/format'
 import { RepresentativeCase } from './representatives'
 export function VerificationLayout() {
   const { user } = useAuth()
   const location = useLocation()
   return (
-    <div className="verification-area" key={user?.id}>
+    <div
+      className={`verification-area ${location.pathname === '/driver/onboarding' || (user?.role === 'DRIVER' && location.pathname.startsWith('/verification/cases/')) ? 'driver-documentary-area' : ''}`}
+      key={user?.id}
+    >
       {user?.role === 'SUPER_ADMIN' &&
       location.pathname === '/admin/verification-publications' ? (
         <aside className="notice">
           La publicación administrativa es independiente del alta documental y
           no activa la admisión.
         </aside>
-      ) : (
+      ) : location.pathname === '/driver/onboarding' ? null : (
         <Warning />
       )}
-      <Recovery />
+      <Recovery showAccountLink={location.pathname !== '/driver/onboarding'} />
       <Outlet key={user?.id + ':' + location.pathname + location.search} />
     </div>
   )
@@ -71,41 +78,83 @@ export function DriverOnboarding() {
   const receipt = q.data?.terms.acceptance ?? q.data?.terms.latestAcceptance
   const blocked =
     !state.canProceed || !onboardingState.canProceed || !currentAcceptance
+  const profileStatus =
+    q.data?.driver.independentProfile?.status || q.data?.driver.status
+  const statuses = [
+    {
+      label: '1 · Correo',
+      value: user?.emailVerifiedAt ? 'Confirmado' : 'Por confirmar',
+      tone: user?.emailVerifiedAt ? 'ok' : 'pending',
+    },
+    {
+      label: '2 · Términos',
+      value:
+        currentAcceptance && state.canProceed
+          ? 'Vigentes'
+          : state.kind === 'error'
+            ? 'Sin confirmar'
+            : 'Pendientes',
+      tone: currentAcceptance && state.canProceed ? 'ok' : 'pending',
+    },
+    {
+      label: '3 · Perfil',
+      value: q.isError
+        ? 'No disponible'
+        : labels[profileStatus || ''] || profileStatus || 'Consultando…',
+      tone: ['APPROVED', 'ACTIVE'].includes(profileStatus || '')
+        ? 'ok'
+        : ['REJECTED', 'SUSPENDED'].includes(profileStatus || '')
+          ? 'blocked'
+          : 'pending',
+    },
+    {
+      label: '4 · Nuevas asignaciones',
+      value: q.isError
+        ? 'Sin confirmar'
+        : q.data
+          ? q.data.enforcementEnabled
+            ? 'Control activo'
+            : 'Control parcial'
+          : 'Consultando…',
+      tone: q.data?.enforcementEnabled ? 'ok' : 'pending',
+    },
+  ]
   return (
-    <>
-      <h1>Mi verificación documental</h1>
-      <p>
-        Autenticación, correo confirmado, aprobación documental y habilitación
-        operativa son estados diferentes.
-      </p>
-      <EmailVerification />
-      <TermsPanel />
-      {q.isPending ? (
-        <Loading />
-      ) : q.isError ? (
-        <p role="alert">{consultationError(q.error)}</p>
-      ) : (
-        <>
-          <p>
-            Proveedor:{' '}
-            {q.data.driver.providerId
-              ? 'Vinculado a flotilla; expediente independiente separado'
-              : 'Independiente sin proveedor'}
-            . Perfil:{' '}
-            {labels[
-              q.data.driver.independentProfile?.status || q.data.driver.status
-            ] || q.data.driver.status}
-            .
-          </p>
-          <p>
-            Control de nuevas asignaciones:{' '}
-            {q.data.enforcementEnabled
-              ? 'activo; los recursos existentes también deben cumplir los requisitos'
-              : 'sin activar para recursos existentes; los nuevos independientes requieren revisión'}
-            . La aceptación no acredita licencia, vehículo ni crédito. Consulta
-            el servicio ya comprometido en{' '}
-            <Link to="/driver/my-service">Mi servicio</Link>.
-          </p>
+    <div className="driver-documentary">
+      <header className="documentary-heading">
+        <Link to="/profile">← Mi cuenta</Link>
+        <h1>Mi verificación documental</h1>
+        <p>
+          Autenticación, correo confirmado, aprobación documental y habilitación
+          operativa son estados diferentes.
+        </p>
+      </header>
+      <div className="documentary-statuses" aria-live="polite">
+        {statuses.map((s) => (
+          <div className="documentary-status" key={s.label}>
+            <span>{s.label}</span>
+            <strong className={'state-' + s.tone}>
+              <i aria-hidden="true" />
+              {s.value}
+            </strong>
+          </div>
+        ))}
+      </div>
+      <Warning />
+      {q.isError && <p role="alert">{consultationError(q.error)}</p>}
+      <div className="documentary-columns">
+        <div className="documentary-main">
+          <EmailVerification designed />
+          <TermsPanel
+            designed
+            accepted={
+              currentAcceptance &&
+              state.canProceed &&
+              onboardingState.canProceed
+                ? (q.data?.terms.acceptance ?? undefined)
+                : undefined
+            }
+          />
           {onboardingState.kind === 'missing_policy' &&
             state.kind !== 'missing_policy' && (
               <p role="alert">{onboardingState.text}</p>
@@ -118,7 +167,7 @@ export function DriverOnboarding() {
             </p>
           )}
           {state.mode === 'PRODUCTION' &&
-            q.data.subjects.some((s) =>
+            q.data?.subjects.some((s) =>
               s.cases.some((c) => c.environment !== 'PRODUCTION'),
             ) && (
               <p role="status">
@@ -129,18 +178,94 @@ export function DriverOnboarding() {
                 autorizada para preparar uno nuevo.
               </p>
             )}
-          {receipt && (
-            <p>
-              Comprobante personal {currentAcceptance ? 'vigente' : 'anterior'}:{' '}
-              <Link to={'/verification/acceptances/' + receipt.id}>
+          <section className="panel panel-body documentary-units">
+            <h2>
+              <span className="documentary-step">3</span>Unidades independientes
+            </h2>
+            {q.isPending ? (
+              <Loading />
+            ) : q.data?.driver.independentProfile ? (
+              <>
+                {q.data.driver.independentProfile.vehicles.map((v) => (
+                  <article className="documentary-unit" key={v.id}>
+                    <span
+                      className="documentary-vehicle-icon"
+                      aria-hidden="true"
+                    >
+                      {['MOTORCYCLE', 'BICYCLE'].includes(v.type) ? (
+                        <Bike />
+                      ) : (
+                        <Car />
+                      )}
+                    </span>
+                    <div>
+                      <h3>{v.identifier}</h3>
+                      <div className="documentary-chips">
+                        <span
+                          className={v.status === 'ACTIVE' ? 'chip-ok' : ''}
+                        >
+                          {vehicleLabels[v.status] || v.status}
+                        </span>
+                        <span>{vehicleLabels[v.type] || v.type}</span>
+                      </div>
+                    </div>
+                    <CreateCase
+                      area="driver"
+                      subjectType="VEHICLE"
+                      resourceId={v.id}
+                      label="Preparar expediente de esta unidad"
+                      disabled={blocked}
+                    />
+                  </article>
+                ))}
+                {!q.data.driver.independentProfile.vehicles.length && (
+                  <p>Aún no tienes unidades independientes registradas.</p>
+                )}
+                <NewUnit disabled={blocked} />
+              </>
+            ) : (
+              !q.isError && (
+                <p>
+                  Tu identidad de flotilla la presenta su administrador. Tu
+                  aceptación personal no puede sustituirla otra cuenta.
+                </p>
+              )
+            )}
+          </section>
+          <CaseList area="driver" designed />
+        </div>
+        <aside className="documentary-aside" aria-label="Resumen documental">
+          <section className="panel panel-body documentary-receipt">
+            <h2>
+              {receipt
+                ? 'Comprobante personal ' +
+                  (currentAcceptance ? 'vigente' : 'anterior')
+                : 'Tu verificación'}
+            </h2>
+            {receipt ? (
+              <Link
+                className="documentary-version"
+                to={'/verification/acceptances/' + receipt.id}
+              >
                 {receipt.version}
               </Link>
-              {!currentAcceptance &&
-                ' · No sustituye la aceptación de los términos vigentes.'}
-            </p>
-          )}
-          {q.data.driver.independentProfile ? (
-            <>
+            ) : (
+              <p>Sin comprobante confirmado</p>
+            )}
+            {q.data && (
+              <p>
+                Proveedor:{' '}
+                {q.data.driver.providerId
+                  ? 'Vinculado a flotilla; expediente independiente separado'
+                  : 'Independiente sin proveedor'}
+                <br />
+                Perfil: {labels[profileStatus || ''] || profileStatus}
+              </p>
+            )}
+            {!currentAcceptance && (
+              <p>No sustituye la aceptación de los términos vigentes.</p>
+            )}
+            {q.data?.driver.independentProfile && (
               <CreateCase
                 area="driver"
                 subjectType="DRIVER_IDENTITY"
@@ -148,41 +273,35 @@ export function DriverOnboarding() {
                 label="Preparar expediente de identidad independiente"
                 disabled={blocked}
               />
-              <NewUnit disabled={blocked} />
-              <h2>Unidades independientes</h2>
-              {q.data.driver.independentProfile.vehicles.map((v) => (
-                <section className="panel panel-body" key={v.id}>
-                  <h3>{v.identifier}</h3>
-                  <p>
-                    {v.status} · {v.type}
-                  </p>
-                  <CreateCase
-                    area="driver"
-                    subjectType="VEHICLE"
-                    resourceId={v.id}
-                    label="Preparar expediente de esta unidad"
-                    disabled={blocked}
-                  />
-                </section>
-              ))}
-            </>
-          ) : (
+            )}
+          </section>
+          <section className="panel panel-body">
+            <h2>Control de nuevas asignaciones</h2>
             <p>
-              Tu identidad de flotilla la presenta su administrador. Tu
-              aceptación personal no puede sustituirla otra cuenta.
+              {q.data
+                ? q.data.enforcementEnabled
+                  ? 'Activo; los recursos existentes también deben cumplir los requisitos.'
+                  : 'Sin activar para recursos existentes; los nuevos independientes requieren revisión.'
+                : 'Consulta pendiente.'}{' '}
+              La aceptación no acredita licencia, vehículo ni crédito. Consulta
+              el servicio ya comprometido en{' '}
+              <Link to="/driver/my-service">Mi servicio</Link>.
             </p>
-          )}
-        </>
-      )}
-      <AcceptanceHistory
-        key={user!.id}
-        currentId={currentAcceptance ? q.data?.terms.acceptance?.id : undefined}
-      />
-      <CaseList area="driver" />
-      <Notices area="driver" />
-    </>
+          </section>
+          <AcceptanceHistory
+            key={user!.id}
+            compact
+            currentId={
+              currentAcceptance ? q.data?.terms.acceptance?.id : undefined
+            }
+          />
+          <Notices area="driver" compact />
+        </aside>
+      </div>
+    </div>
   )
 }
+
 export function CreateCase({
   area,
   subjectType,
@@ -352,9 +471,11 @@ export function AdminVerification() {
 export function CaseList({
   area,
   providerId,
+  designed = false,
 }: {
   area: Area
   providerId?: string
+  designed?: boolean
 }) {
   const { user } = useAuth()
   const [page, setPage] = useState(1)
@@ -383,24 +504,50 @@ export function CaseList({
   return (
     <section className="panel panel-body">
       <h2>Expedientes e historial</h2>
-      <Field label="Estado del expediente">
-        <select
-          value={status}
-          onChange={(e) => {
-            setStatus(e.target.value)
-            setPage(1)
-          }}
+      {designed ? (
+        <div
+          className="documentary-filter"
+          role="radiogroup"
+          aria-label="Estado del expediente"
         >
-          <option value="">Todos</option>
-          {['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'WITHDRAWN'].map(
+          {['', 'APPROVED', 'SUBMITTED', 'DRAFT', 'REJECTED', 'WITHDRAWN'].map(
             (s) => (
-              <option key={s} value={s}>
-                {labels[s]}
-              </option>
+              <label key={s} className={status === s ? 'selected' : ''}>
+                <input
+                  type="radio"
+                  name="case-status"
+                  value={s}
+                  checked={status === s}
+                  onChange={() => {
+                    setStatus(s)
+                    setPage(1)
+                  }}
+                />
+                {s ? labels[s] : 'Todos'}
+              </label>
             ),
           )}
-        </select>
-      </Field>
+        </div>
+      ) : (
+        <Field label="Estado del expediente">
+          <select
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value)
+              setPage(1)
+            }}
+          >
+            <option value="">Todos</option>
+            {['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'WITHDRAWN'].map(
+              (s) => (
+                <option key={s} value={s}>
+                  {labels[s]}
+                </option>
+              ),
+            )}
+          </select>
+        </Field>
+      )}
       {area === 'admin' && (
         <details>
           <summary>Filtrar por proveedor</summary>
@@ -437,6 +584,44 @@ export function CaseList({
         <>
           {!q.data.items.length ? (
             <p>No hay expedientes en este ámbito.</p>
+          ) : designed ? (
+            <table className="documentary-table">
+              <thead>
+                <tr>
+                  <th>Expediente</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th>Nota</th>
+                </tr>
+              </thead>
+              <tbody>
+                {q.data.items.map((c) => (
+                  <tr key={c.id}>
+                    <td data-label="Expediente">
+                      <Link to={'/verification/cases/' + c.id}>
+                        Revisión {c.revision}
+                      </Link>
+                    </td>
+                    <td data-label="Estado">
+                      <span
+                        className={
+                          'documentary-badge ' +
+                          (c.status === 'APPROVED'
+                            ? 'chip-ok'
+                            : ['REJECTED'].includes(c.status)
+                              ? 'chip-blocked'
+                              : '')
+                        }
+                      >
+                        {labels[c.status] || c.status}
+                      </span>
+                    </td>
+                    <td data-label="Fecha">{date(c.createdAt)}</td>
+                    <td data-label="Nota">{c.publicReason || '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
             <ul className="verification-files">
               {q.data.items.map((c) => (
@@ -461,8 +646,15 @@ export function CaseList({
     </section>
   )
 }
-function Notices({ area }: { area: 'driver' | 'provider' }) {
+function Notices({
+  area,
+  compact = false,
+}: {
+  area: 'driver' | 'provider'
+  compact?: boolean
+}) {
   const { user } = useAuth()
+  const [expanded, setExpanded] = useState(false)
   const q = useQuery({
     queryKey: vkey(user!.id, 'notices', area),
     queryFn: ({ signal }) => verification.notices(area, signal),
@@ -481,15 +673,26 @@ function Notices({ area }: { area: 'driver' | 'provider' }) {
       ) : q.isError ? (
         <p role="alert">{message(q.error)}</p>
       ) : q.data.length ? (
-        q.data.map((n) => (
-          <p key={n.id}>
-            <Link to={'/verification/cases/' + n.caseId}>
-              {labels[n.case.status]}
-            </Link>{' '}
-            · {labels[n.status] || 'Estado de aviso consultado'} ·{' '}
-            {date(n.createdAt)} {n.case.publicReason}
-          </p>
-        ))
+        <>
+          {(compact && !expanded ? q.data.slice(0, 3) : q.data).map((n) => (
+            <p key={n.id}>
+              <Link to={'/verification/cases/' + n.caseId}>
+                {labels[n.case.status]}
+              </Link>{' '}
+              · {labels[n.status] || 'Estado de aviso consultado'} ·{' '}
+              {date(n.createdAt)} {n.case.publicReason}
+            </p>
+          ))}
+          {compact && q.data.length > 3 && (
+            <button
+              type="button"
+              aria-expanded={expanded}
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? 'Ver menos' : 'Ver todos'}
+            </button>
+          )}
+        </>
       ) : (
         <p>Sin avisos.</p>
       )}
@@ -536,11 +739,16 @@ export function CaseDetail() {
     )
   return (
     <>
-      <CaseRetention
-        key={user!.id + ':' + id + ':retention'}
-        record={q.data}
-        refreshing={q.isFetching}
-      />
+      {!(
+        user?.role === 'DRIVER' &&
+        ['DRIVER_IDENTITY', 'VEHICLE'].includes(q.data.subjectType)
+      ) && (
+        <CaseRetention
+          key={user!.id + ':' + id + ':retention'}
+          record={q.data}
+          refreshing={q.isFetching}
+        />
+      )}
       <CaseContent
         key={user!.id + ':' + q.data.id}
         record={q.data}
@@ -560,6 +768,44 @@ function CaseContent({
   runtimeReady: boolean
 }) {
   const { user } = useAuth()
+  const designed =
+    user?.role === 'DRIVER' &&
+    ['DRIVER_IDENTITY', 'VEHICLE'].includes(record.subjectType)
+  const unit = record.subjectType === 'VEHICLE'
+  const requiredCategories = unit
+    ? [
+        ...requirements.vehicle.required.filter(
+          (c) =>
+            c !== 'REGISTRATION_CARD' ||
+            record.registrationCardRequired !== false,
+        ),
+        requirements.vehicle[record.data.ownershipEvidenceType || 'OWNED'],
+      ]
+    : [
+        ...requirements.identity.required,
+        ...(record.data.license
+          ? [requirements.identity.motorizedLicense]
+          : []),
+      ]
+  const completeCount = requiredCategories.filter((c) =>
+    record.attachments.some(
+      (a) => a.category === c && a.status === 'VALIDATED',
+    ),
+  ).length
+  const dataComplete = unit
+    ? !!(
+        record.data.declaredOwnerName?.trim() &&
+        record.data.serialNumber?.trim() &&
+        record.data.ownershipEvidenceType
+      )
+    : !!(
+        record.data.fullName?.trim() &&
+        record.data.contactPhone?.trim() &&
+        record.data.operatingCity?.trim() &&
+        record.data.documentType === 'INE'
+      )
+  const checklistComplete =
+    dataComplete && completeCount === requiredCategories.length
   const command = useCommand()
   const [confirm, setConfirm] = useState<'SUBMIT' | 'WITHDRAW' | null>(null)
   const canWrite =
@@ -577,34 +823,57 @@ function CaseContent({
     record.environment === requirements.environment &&
     record.policyVersion === requirements.policyVersion
   return (
-    <>
-      <h1>
-        {labels[record.subjectType]} · {labels[record.status]}
-      </h1>
-      <p>
-        {provenance(record.environment)} · Checklist {record.policyVersion}.
-      </p>
-      {!currentEvidence && (
-        <p role="alert">
-          Expediente histórico o sin procedencia vigente acreditada. Para
-          continuar se requieren aceptaciones vigentes, un nuevo expediente,
-          nuevas evidencias y revisión. No se copian ni borran documentos
-          históricos. Puedes retirar un borrador abierto mediante la acción
-          autorizada.
+    <div
+      className={
+        designed
+          ? 'driver-documentary identity-case' + (unit ? ' unit-case' : '')
+          : undefined
+      }
+    >
+      {designed && <Link to="/driver/onboarding">← Mi verificación</Link>}
+      <header className="identity-heading">
+        <h1>
+          {designed ? (
+            <>
+              {unit ? 'Unidad' : 'Identidad'}{' '}
+              <span className={'identity-status status-' + record.status}>
+                {labels[record.status]}
+              </span>
+            </>
+          ) : (
+            <>
+              {labels[record.subjectType]} · {labels[record.status]}
+            </>
+          )}
+        </h1>
+        <p className={designed ? 'identity-limit-chips' : undefined}>
+          <span>{provenance(record.environment)}</span>
+          <span>Checklist {record.policyVersion}</span>
         </p>
-      )}
-      <p>
-        Revisión {record.revision}. Estado documental:{' '}
-        {labels[record.verificationStatus] || record.verificationStatus}.{' '}
-        {record.scope.providerId
-          ? 'Ámbito de flotilla'
-          : 'Ámbito independiente'}
-        .
-      </p>
-      <p>
-        Conserva los servicios comprometidos. La revisión no acredita cobro ni
-        modifica créditos.
-      </p>
+
+        {!currentEvidence && (
+          <p role="alert">
+            Expediente histórico o sin procedencia vigente acreditada. Para
+            continuar se requieren aceptaciones vigentes, un nuevo expediente,
+            nuevas evidencias y revisión. No se copian ni borran documentos
+            históricos. Puedes retirar un borrador abierto mediante la acción
+            autorizada.
+          </p>
+        )}
+        <p>
+          Revisión {record.revision}. Estado documental:{' '}
+          {labels[record.verificationStatus] || record.verificationStatus}.{' '}
+          {record.scope.providerId
+            ? 'Ámbito de flotilla'
+            : 'Ámbito independiente'}
+          .
+        </p>
+        <p>
+          Conserva los servicios comprometidos. La revisión no acredita cobro ni
+          modifica créditos.
+        </p>
+      </header>
+      {designed && <Warning />}
       {record.publicReason && (
         <p role="status">Motivo de decisión: {record.publicReason}</p>
       )}
@@ -614,114 +883,157 @@ function CaseContent({
       {user?.role === 'SUPER_ADMIN' && record.internalNote && (
         <p>Nota interna: {record.internalNote}</p>
       )}
-      {canWrite && currentEvidence && record.status === 'DRAFT' ? (
-        <CaseForm
-          key={record.id + ':' + record.revision}
-          record={record}
-          disabled={blocked}
-        />
-      ) : (
-        <section className="panel panel-body">
-          <h2>Datos presentados</h2>
-          <dl>
-            {Object.entries(record.data)
-              .filter(([k]) => k !== 'license')
-              .map(([k, v]) => (
-                <div key={k}>
-                  <dt>
-                    {(
-                      {
-                        fullName: 'Nombre',
-                        contactPhone: 'Teléfono',
-                        operatingCity: 'Ciudad',
-                        documentType: 'Identificación',
-                        declaredOwnerName: 'Titular',
-                        serialNumber: 'Serie',
-                        ownershipEvidenceType: 'Propiedad o uso',
-                        authorizationExpiresAt: 'Vencimiento de autorización',
-                      } as Record<string, string>
-                    )[k] || k}
-                  </dt>
-                  <dd>{typeof v === 'string' ? labels[v] || v : ''}</dd>
-                </div>
-              ))}
-          </dl>
-          {record.data.license && (
-            <p>
-              Licencia: {record.data.license.issuer} ·{' '}
-              {record.data.license.category} · vence{' '}
-              {date(record.data.license.expiresAt)} ·{' '}
-              {record.data.license.vehicleTypes.join(', ')}
-            </p>
+      <div className={designed ? 'identity-body' : undefined}>
+        <div className={designed ? 'identity-main' : undefined}>
+          {canWrite && currentEvidence && record.status === 'DRAFT' ? (
+            <CaseForm
+              key={record.id + ':' + record.revision}
+              record={record}
+              designed={designed}
+              disabled={blocked}
+            />
+          ) : (
+            <section className="panel panel-body">
+              <h2>Datos presentados</h2>
+              <dl>
+                {Object.entries(record.data)
+                  .filter(([k]) => k !== 'license')
+                  .map(([k, v]) => (
+                    <div key={k}>
+                      <dt>
+                        {(
+                          {
+                            fullName: 'Nombre',
+                            contactPhone: 'Teléfono',
+                            operatingCity: 'Ciudad',
+                            documentType: 'Identificación',
+                            declaredOwnerName: 'Titular',
+                            serialNumber: 'Serie',
+                            ownershipEvidenceType: 'Propiedad o uso',
+                            authorizationExpiresAt:
+                              'Vencimiento de autorización',
+                          } as Record<string, string>
+                        )[k] || k}
+                      </dt>
+                      <dd>{typeof v === 'string' ? labels[v] || v : ''}</dd>
+                    </div>
+                  ))}
+              </dl>
+              {record.data.license && (
+                <p>
+                  Licencia: {record.data.license.issuer} ·{' '}
+                  {record.data.license.category} · vence{' '}
+                  {date(record.data.license.expiresAt)} ·{' '}
+                  {record.data.license.vehicleTypes.join(', ')}
+                </p>
+              )}
+            </section>
           )}
-        </section>
-      )}
-      <Evidence
-        record={record}
-        requirements={requirements}
-        canWrite={canWrite && currentEvidence}
-        disabled={blocked}
-        removalDisabled={!runtimeReady}
-      />
-      {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
-        <section className="panel panel-body">
-          {currentEvidence && record.status === 'DRAFT' && (
-            <button
-              disabled={blocked || command.blocked || command.busy}
-              onClick={() => setConfirm('SUBMIT')}
-            >
-              Presentar para revisión
-            </button>
-          )}{' '}
-          <button
-            disabled={!runtimeReady || command.blocked || command.busy}
-            onClick={() => setConfirm('WITHDRAW')}
-          >
-            Retirar expediente
-          </button>
-        </section>
-      )}
-      {canWrite && ['REJECTED', 'WITHDRAWN'].includes(record.status) && (
-        <CreateCase
-          area={record.scope.providerId ? 'provider' : 'driver'}
-          subjectType={record.subjectType}
-          resourceId={record.resourceId}
-          label="Preparar nueva corrección"
-          disabled={blocked}
-        />
-      )}
-      {user?.role === 'SUPER_ADMIN' &&
-        currentEvidence &&
-        record.status === 'SUBMITTED' && (
-          <Decision
-            key={record.revision}
+          <Evidence
+            designed={designed}
             record={record}
             requirements={requirements}
-            disabled={!runtimeReady}
+            canWrite={canWrite && currentEvidence}
+            disabled={blocked}
+            removalDisabled={!runtimeReady}
           />
-        )}
-      <section className="panel panel-body">
-        <h2>Historial del expediente</h2>
-        <ul>
-          {record.events.map((e) => (
-            <li key={e.id}>
-              {(
-                {
-                  CREATE_CASE: 'Borrador creado',
-                  UPDATE_CASE: 'Datos guardados',
-                  CREATE_UPLOAD: 'Carga iniciada',
-                  COMPLETE_UPLOAD: 'Formato validado',
-                  REMOVE_ATTACHMENT: 'Referencia retirada',
-                  SUBMIT: 'Presentado',
-                  WITHDRAW: 'Retirado',
-                  DECIDE: 'Decisión registrada',
-                } as Record<string, string>
-              )[e.kind] || 'Actividad registrada'}{' '}
-              · {date(e.createdAt)}
-            </li>
-          ))}
-        </ul>
-      </section>
+          {canWrite && ['REJECTED', 'WITHDRAWN'].includes(record.status) && (
+            <CreateCase
+              area={record.scope.providerId ? 'provider' : 'driver'}
+              subjectType={record.subjectType}
+              resourceId={record.resourceId}
+              label="Preparar nueva corrección"
+              disabled={blocked}
+            />
+          )}
+          {user?.role === 'SUPER_ADMIN' &&
+            currentEvidence &&
+            record.status === 'SUBMITTED' && (
+              <Decision
+                key={record.revision}
+                record={record}
+                requirements={requirements}
+                disabled={!runtimeReady}
+              />
+            )}
+          <section className="panel panel-body">
+            <h2>Historial del expediente</h2>
+            {!record.events.length && (
+              <div className="identity-empty">
+                <strong>Sin movimientos todavía</strong>
+                <p>Los cambios del expediente aparecerán aquí.</p>
+              </div>
+            )}
+            <ul className="identity-events">
+              {[...record.events]
+                .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+                .map((e) => (
+                  <li key={e.id}>
+                    {(
+                      {
+                        CREATE_CASE: 'Borrador creado',
+                        UPDATE_CASE: 'Datos guardados',
+                        CREATE_UPLOAD: 'Carga iniciada',
+                        COMPLETE_UPLOAD: 'Formato validado',
+                        REMOVE_ATTACHMENT: 'Referencia retirada',
+                        SUBMIT: 'Presentado',
+                        WITHDRAW: 'Retirado',
+                        DECIDE: 'Decisión registrada',
+                      } as Record<string, string>
+                    )[e.kind] || 'Actividad registrada'}{' '}
+                    · {date(e.createdAt)}
+                  </li>
+                ))}
+            </ul>
+          </section>
+        </div>
+        <aside className={designed ? 'identity-aside' : undefined}>
+          {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
+            <section className="panel panel-body identity-submit">
+              {designed && (
+                <>
+                  <h2>Enviar expediente</h2>
+                  <p>
+                    Datos del borrador:{' '}
+                    <strong>{dataComplete ? 'Completo' : 'Pendiente'}</strong>
+                  </p>
+                  <p>
+                    Evidencias:{' '}
+                    <strong>
+                      {completeCount} de {requiredCategories.length}
+                    </strong>
+                  </p>
+                  {record.submittedAt && (
+                    <p>Enviado para revisión el {date(record.submittedAt)}</p>
+                  )}
+                </>
+              )}
+              {currentEvidence && record.status === 'DRAFT' && (
+                <button
+                  disabled={
+                    blocked ||
+                    command.blocked ||
+                    command.busy ||
+                    (designed && !checklistComplete)
+                  }
+                  onClick={() => setConfirm('SUBMIT')}
+                >
+                  Presentar para revisión
+                </button>
+              )}{' '}
+              <button
+                className="identity-withdraw"
+                disabled={!runtimeReady || command.blocked || command.busy}
+                onClick={() => setConfirm('WITHDRAW')}
+              >
+                Retirar expediente
+              </button>
+            </section>
+          )}
+
+          {designed && <CaseRetention record={record} compact />}
+        </aside>
+      </div>
       {confirm && (
         <Confirm
           title={
@@ -747,7 +1059,7 @@ function CaseContent({
           }}
         />
       )}
-    </>
+    </div>
   )
 }
 export function Decision({

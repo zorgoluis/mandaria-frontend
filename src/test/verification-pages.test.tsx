@@ -252,7 +252,7 @@ it('fleet driver can consult identity but cannot edit/upload its fleet dossier',
     'DRIVER',
     '/verification/cases/' + caseId,
   )
-  await screen.findByText(/Identidad · Borrador/)
+  await screen.findByRole('heading', { name: /Identidad.*Borrador/ })
   expect(screen.queryByRole('button', { name: 'Guardar datos' })).toBeNull()
   expect(
     screen.queryByRole('button', { name: 'Cargar imagen sintética' }),
@@ -489,6 +489,18 @@ it('documentary frame is isolated by route and user', async () => {
 })
 
 it('submit and withdraw require confirmation and current revision', async () => {
+  vi.mocked(verification.get).mockResolvedValue({
+    ...caseFixture,
+    attachments: requirements.identity.required.map((category, i) => ({
+      id: 'evidence-' + i,
+      category,
+      status: 'VALIDATED' as const,
+      bytes: 100,
+      mime: 'image/png',
+      hash: null,
+      createdAt: caseFixture.createdAt,
+    })),
+  })
   mount(
     <Routes>
       <Route path="/verification/cases/:id" element={<CaseDetail />} />
@@ -527,6 +539,26 @@ it.each(['DRIVER_IDENTITY', 'VEHICLE'] as const)(
     vi.mocked(verification.get).mockResolvedValue({
       ...caseFixture,
       subjectType,
+      data:
+        subjectType === 'VEHICLE'
+          ? {
+              declaredOwnerName: 'Titular sintético',
+              serialNumber: 'VIN123',
+              ownershipEvidenceType: 'OWNED',
+            }
+          : caseFixture.data,
+      attachments: (subjectType === 'VEHICLE'
+        ? ['REGISTRATION_CARD', 'OWNERSHIP_PROOF']
+        : requirements.identity.required
+      ).map((category, i) => ({
+        id: 'evidence-' + i,
+        category,
+        status: 'VALIDATED' as const,
+        bytes: 100,
+        mime: 'image/png',
+        hash: null,
+        createdAt: caseFixture.createdAt,
+      })),
     })
     vi.mocked(verification.command).mockRejectedValue(
       normalizeError(409, {
@@ -650,7 +682,7 @@ it('private dossier data is removed from query cache after leaving', async () =>
     'DRIVER',
     '/verification/cases/' + caseId,
   )
-  await screen.findByRole('heading', { name: 'Identidad · Borrador' })
+  await screen.findByRole('heading', { name: /Identidad.*Borrador/ })
   expect(view.client.getQueryCache().getAll().length).toBeGreaterThan(0)
   view.unmount()
   await waitFor(() =>
@@ -987,4 +1019,66 @@ it('history query is actor-scoped and removed after unmount', async () => {
       ]),
     ).toBeUndefined(),
   )
+})
+
+it('identity checklist blocks submission without validated categories', async () => {
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'DRIVER',
+    '/verification/cases/' + caseId,
+  )
+  expect(
+    await screen.findByRole('button', { name: 'Presentar para revisión' }),
+  ).toBeDisabled()
+  expect(screen.getByRole('button', { name: 'Guardar datos' })).toBeDisabled()
+  expect(
+    screen.getByRole('radiogroup', { name: 'Categoría' }),
+  ).toBeInTheDocument()
+  expect(screen.queryByRole('radio', { name: 'Licencia' })).toBeNull()
+  expect(
+    screen.getByRole('button', { name: /Conservación de imágenes/ }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('unit uses the bicycle checklist and normalizes serial numbers on save', async () => {
+  vi.mocked(verification.get).mockResolvedValue({
+    ...caseFixture,
+    subjectType: 'VEHICLE',
+    registrationCardRequired: false,
+    data: {
+      declaredOwnerName: 'Titular sintético',
+      serialNumber: 'ABC123',
+      ownershipEvidenceType: 'OWNED',
+    },
+  })
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'DRIVER',
+    '/verification/cases/' + caseId,
+  )
+  expect(
+    await screen.findByRole('heading', { name: /Unidad.*Borrador/ }),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('radio', { name: 'Tarjeta de circulación' }),
+  ).toBeNull()
+  expect(
+    screen.getByRole('button', { name: 'Presentar para revisión' }),
+  ).toBeDisabled()
+  fireEvent.change(screen.getByLabelText(/Número de serie/), {
+    target: { value: ' ab c 456 ' },
+  })
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'Guardar datos' })).toBeEnabled(),
+  )
+  fireEvent.click(screen.getByRole('button', { name: 'Guardar datos' }))
+  await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())
+  expect(vi.mocked(verification.command).mock.calls[0][2]).toMatchObject({
+    data: { serialNumber: 'ABC456' },
+  })
 })
