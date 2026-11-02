@@ -67,6 +67,7 @@ export const scopes = [
   'quotes:accept',
   'deliveries:create',
   'deliveries:read',
+  'deliveries:pickup-reference:write',
   'deliveries:location:read',
   'deliveries:tracking-links:manage',
   'deliveries:cancel',

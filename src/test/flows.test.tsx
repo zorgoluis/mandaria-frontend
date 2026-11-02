@@ -342,7 +342,7 @@ describe('auth and permissions UX', () => {
   })
 })
 describe('integrations', () => {
-  it('renders prequote scopes on existing credentials without granting other permissions', async () => {
+  it('renders existing PICKUP and prequote scopes without granting permissions', async () => {
     vi.mocked(integrations.credentials).mockResolvedValue([
       {
         id: 'credential-existing',
@@ -353,6 +353,7 @@ describe('integrations', () => {
           'prequotes:read',
           'prequotes:convert',
           'quotes:read',
+          'deliveries:pickup-reference:write',
         ],
         expiresAt: null,
         lastUsedAt: null,
@@ -367,6 +368,7 @@ describe('integrations', () => {
       'prequotes:read',
       'prequotes:convert',
       'quotes:read',
+      'deliveries:pickup-reference:write',
     ])
       expect(
         await screen.findByText(scope, { selector: 'code' }),
@@ -374,10 +376,22 @@ describe('integrations', () => {
     expect(screen.queryByText('quotes:accept', { selector: 'code' })).toBeNull()
     expect(integrations.createCredential).not.toHaveBeenCalled()
     expect(integrations.rotate).not.toHaveBeenCalled()
+    expect(integrations.revoke).not.toHaveBeenCalled()
   })
 
   it.each([
     { selected: [] },
+    { selected: ['deliveries:pickup-reference:write'] },
+    {
+      selected: [
+        'quotes:create',
+        'quotes:read',
+        'quotes:accept',
+        'deliveries:create',
+        'deliveries:read',
+        'deliveries:pickup-reference:write',
+      ],
+    },
     {
       selected: [
         'prequotes:convert',
@@ -388,6 +402,7 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
@@ -409,6 +424,7 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
@@ -441,14 +457,24 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
       ])
       for (const option of options) expect(option).not.toBeChecked()
+      expect(
+        new Set(options.map((o) => (o as HTMLInputElement).value)).size,
+      ).toBe(12)
       for (const scope of selected)
         await actor.click(screen.getByLabelText(scope))
       // New permissions also remain absent after checking and unchecking.
+      await actor.click(
+        screen.getByLabelText('deliveries:pickup-reference:write'),
+      )
+      await actor.click(
+        screen.getByLabelText('deliveries:pickup-reference:write'),
+      )
       await actor.click(screen.getByLabelText('prequotes:convert'))
       await actor.click(screen.getByLabelText('prequotes:convert'))
       // A permission checked and then unchecked must not be granted either.
@@ -471,6 +497,78 @@ describe('integrations', () => {
   it('lists clients', async () => {
     mount('/integrations')
     expect(await screen.findByText('Cliente Demo')).toBeInTheDocument()
+  })
+  it.each([400, 401, 403])(
+    'credential creation %s is not presented as success',
+    async (status) => {
+      vi.mocked(integrations.createCredential).mockRejectedValue(
+        new ApiError(status, 'Solicitud rechazada'),
+      )
+      mount('/integrations/integration-1')
+      const actor = userEvent.setup()
+      await actor.click(
+        await screen.findByRole('button', { name: 'Crear credencial' }),
+      )
+      await actor.click(
+        screen.getByLabelText('deliveries:pickup-reference:write'),
+      )
+      await actor.click(
+        screen.getByRole('button', { name: 'Generar credencial' }),
+      )
+      expect(
+        await within(screen.getByRole('dialog')).findByRole('alert'),
+      ).toHaveTextContent('Solicitud rechazada')
+      expect(screen.queryByLabelText('Client secret')).toBeNull()
+      expect(integrations.createCredential).toHaveBeenCalledOnce()
+      expect(integrations.rotate).not.toHaveBeenCalled()
+      expect(integrations.revoke).not.toHaveBeenCalled()
+    },
+  )
+  it('rotation preserves permissions contract and does not revoke the previous credential', async () => {
+    vi.mocked(integrations.credentials).mockResolvedValue([
+      {
+        id: 'credential-old',
+        clientId: integration.id,
+        status: 'ACTIVE',
+        scopes: ['deliveries:pickup-reference:write'],
+        expiresAt: null,
+        lastUsedAt: null,
+        revokedAt: null,
+        createdAt: stamp,
+        updatedAt: stamp,
+      },
+    ])
+    vi.mocked(integrations.rotate).mockResolvedValue({
+      clientId: 'credential-new',
+      integrationId: integration.id,
+      clientSecret: 'synthetic-rotated',
+    })
+    mount('/integrations/integration-1')
+    const actor = userEvent.setup()
+    await actor.click(await screen.findByRole('button', { name: 'Rotar' }))
+    expect(screen.getByRole('dialog')).toHaveTextContent(
+      'mismos permisos y expiración',
+    )
+    expect(integrations.rotate).not.toHaveBeenCalled()
+    await actor.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Confirmar',
+      }),
+    )
+    expect(await screen.findByLabelText('Client secret')).toHaveValue(
+      'synthetic-rotated',
+    )
+    expect(integrations.rotate).toHaveBeenCalledExactlyOnceWith(
+      integration.id,
+      'credential-old',
+    )
+    expect(integrations.revoke).not.toHaveBeenCalled()
+    expect(integrations.createCredential).not.toHaveBeenCalled()
+    expect(
+      JSON.stringify(localStorage) +
+        JSON.stringify(sessionStorage) +
+        JSON.stringify(queryClient.getQueryCache().getAll()),
+    ).not.toContain('synthetic-rotated')
   })
   it('creates only admitted fields', async () => {
     vi.mocked(integrations.create).mockResolvedValue(integration)

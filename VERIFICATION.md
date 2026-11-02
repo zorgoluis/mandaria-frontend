@@ -1,3 +1,15 @@
+## 2026-11-02 — Entrega Git de catálogo CASH/PICKUP
+
+Usuario autoriza commit y push a main de la corrección local y evidencia previamente verificadas (66 pruebas focalizadas, tipos, lint y build PASS). Revisado diff sin cambios adicionales de producto; origin/main coincide con base e6c3fb6. Versión1.11.0 intacta. No se reejecutan pruebas por esta operación Git. Los estados «local/no publicado» de informes y manifiesto inferiores describen el momento de captura; publicación de código no acredita despliegue en VM, que permanece pendiente. Sin force ni operación de credenciales reales.
+
+## 2026-11-02 — Catálogo administrativo CASH/PICKUP
+
+Añadido deliveries:pickup-reference:write a src/types/api.ts; catálogo/tipo/selector local de12 scopes alineado mediante comparación independiente con fuentes backend1.13.7. Los11 previos se conservan, selección opt-in, payload exacto/vacío y expiración intactos. Listado y rotación existentes correctos, sin mutaciones automáticas ni cambios de permisos reales. Único cambio de producto: catálogo; pruebas ampliadas en flows e integration-credentials-api.
+
+Nueva verificación focal:66/66 pruebas,2 archivos,21.80 s; tipos tests/producto, lint global y build PASS. Fallos iniciales de tests nuevos corregidos (Response reutilizada y selector de alertas ambiguo), sin tiempos relajados. Aviso conocido de chunk Root1210.22 kB. No suite global ni HTTP/UI real nuevo; resultados anteriores históricos. [Informe, comandos y límites](docs/CASH-PICKUP-SCOPES-WEB-20261102.md) · [Evidencia](docs/evidence/cash-pickup-scopes-20261102/tests.txt) · [Build/hash candidato](docs/evidence/cash-pickup-scopes-20261102/candidate.json).
+
+Web1.11.0 intacta, base e6c3fb6. Candidato local Root-DxG0CmoV.js; pendiente publicación autorizada. VM no inspeccionada: ausencia de los otros cinco CASH requiere revisar build servido, ruta/rol y assets, no se explica sólo por PICKUP. Sin backend/móvil/Coita, secretos/.env, flags, credenciales reales, commit/push ni despliegue.
+
 ## 2026-10-31 — Verificación conjunta: Mis vehículos, Identidad y Unidad
 
 Revisado el diff conjunto sobre main/d4bf431: diseño de Mis vehículos con datos/estados reales del servicio; identidad sin ciudad/emisor requeridos y conservación histórica; fechas de licencia/autorización sin hora visible y preservación del instante no editado; contrato OWNED=null sin comprobante y recuperación de recibos históricos. No se detectaron correcciones adicionales de producto necesarias. Web1.11.0 intacta; package.json/package-lock.json sin cambios.

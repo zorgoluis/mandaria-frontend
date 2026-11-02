@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "sha256": "BA1EE5051FF7798C9A145C3157B0D1FCC6262F4385B901EE86974C58DBF61609",
+      "file": "dist/index.html"
+    },
+    {
+      "sha256": "FA015635866AADC0D4172DC632D3EFADB6D5B8686727D2C515651A299E7ED99D",
+      "file": "dist/assets/index-B6NUcQI_.js"
+    },
+    {
+      "sha256": "F7ED78D0F1E65E739BC472974FD115E29FB75379CE441968FDF1C49836D0C872",
+      "file": "dist/assets/Root-DxG0CmoV.js"
+    },
+    {
+      "sha256": "8B02DF22229E911A7FC1753FE68B8C26D3A0711FBBD30E542E6420EBBBA4A73A",
+      "file": "src/types/api.ts"
+    }
+  ],
+  "status": "LOCAL_UNCOMMITTED_NOT_DEPLOYED",
+  "version": "1.11.0",
+  "base": "e6c3fb6fa554d8ccffd8195de7e387874fbd1045",
+  "date": "2026-11-02"
+}
