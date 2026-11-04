@@ -1,3 +1,7 @@
+## 2026-11-04 — Guía de documentos para Identidad y Unidad
+
+El repartidor puede identificar los datos pendientes, distinguir una carga incompleta de una imagen recibida y pasar a la confirmación cuando el expediente está listo. Para una unidad prestada, por ejemplo, la guía indica cómo completar la autorización aunque ya se haya recibido la tarjeta de circulación. Se actualizó el escenario visual de unidad propia para usar la política vigente. [Verificación y capturas](docs/evidence/identity-unit-guide-20261104/README.md).
+
 ## 2026-11-04 — Verificación conjunta de Mi verificación documental y código de entrega
 
 En `main` se verificaron juntos `dd39ff3` y `9fa1c06`. Se corrigió el fixture del cierre LEGACY del repartidor para declarar `NOT_REQUIRED` y se añadieron dos pruebas de bloqueo. La suite global pasó con 1.750 pruebas en 86 archivos. Tipos, lint y build aprobados. Los cambios locales de esta revisión se limitan a las pruebas y su documentación. [Ejecuciones y evidencia](docs/evidence/web-verification-delivery-joint-20261104/README.md).

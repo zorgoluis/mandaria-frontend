@@ -862,17 +862,20 @@ function CaseContent({
       (a) => a.category === c && a.status === 'VALIDATED',
     ),
   ).length
-  const dataComplete = unit
-    ? !!(
-        record.data.declaredOwnerName?.trim() &&
-        record.data.serialNumber?.trim() &&
-        record.data.ownershipEvidenceType
-      )
-    : !!(
-        record.data.fullName?.trim() &&
-        record.data.contactPhone?.trim() &&
-        record.data.documentType === 'INE'
-      )
+  const missingFields = (
+    unit
+      ? [
+          !record.data.declaredOwnerName?.trim() && 'nombre del titular',
+          !record.data.serialNumber?.trim() && 'número de serie',
+          !record.data.ownershipEvidenceType && 'propiedad o uso autorizado',
+        ]
+      : [
+          !record.data.fullName?.trim() && 'nombre completo',
+          !record.data.contactPhone?.trim() && 'teléfono de contacto',
+          record.data.documentType !== 'INE' && 'identificación INE',
+        ]
+  ).filter(Boolean)
+  const dataComplete = missingFields.length === 0
   const checklistComplete =
     dataComplete && completeCount === displayedCategories.length
   const command = useCommand()
@@ -891,6 +894,13 @@ function CaseContent({
     ['LOCAL_TEST', 'PRODUCTION'].includes(record.environment) &&
     record.environment === requirements.environment &&
     record.policyVersion === requirements.policyVersion
+  const submitDisabled =
+    blocked ||
+    command.blocked ||
+    command.busy ||
+    (designed && !checklistComplete) ||
+    ownershipContractBlocked
+  const missingDocuments = displayedCategories.length - completeCount
   return (
     <div
       className={
@@ -942,6 +952,65 @@ function CaseContent({
           modifica créditos.
         </p>
       </header>
+      {designed && currentEvidence && canWrite && record.status === 'DRAFT' && (
+        <section className="documentary-next" aria-label="Tu siguiente paso">
+          <div>
+            <h2>
+              {!submitDisabled
+                ? 'Listo para enviar a revisión'
+                : 'Tu siguiente paso'}
+            </h2>
+            {blocked ? (
+              <p>
+                {state.kind === 'loading'
+                  ? 'Consultando los requisitos de tu expediente…'
+                  : 'Revisa el aviso de disponibilidad antes de continuar.'}
+              </p>
+            ) : command.blocked || command.busy ? (
+              <p>
+                Consulta el estado de la operación pendiente antes de continuar.
+              </p>
+            ) : !dataComplete ? (
+              <p>Completa y guarda estos datos: {missingFields.join(', ')}.</p>
+            ) : ownershipContractBlocked ? (
+              <p>
+                Los requisitos de la unidad están pendientes de actualización.
+                Espera a que estén disponibles.
+              </p>
+            ) : missingDocuments > 0 ? (
+              <p>
+                {missingDocuments === 1
+                  ? 'Falta 1 documento'
+                  : `Faltan ${missingDocuments} documentos`}{' '}
+                por cargar correctamente. Consulta la lista del paso 2.
+              </p>
+            ) : (
+              <p>
+                Tus datos están guardados y los documentos requeridos están
+                completos. Confirma el envío para que el equipo los revise.
+              </p>
+            )}
+          </div>
+          {blocked || command.blocked || command.busy ? null : !dataComplete ? (
+            <a href="#datos-expediente">Ir a mis datos</a>
+          ) : !ownershipContractBlocked && missingDocuments > 0 ? (
+            <a href="#documentos-expediente">Ver documentos pendientes</a>
+          ) : !submitDisabled ? (
+            <a href="#envio-expediente">Ir al envío</a>
+          ) : null}
+        </section>
+      )}
+      {designed && record.status === 'SUBMITTED' && (
+        <p role="status">
+          Tu expediente ya está en revisión. Aquí podrás consultar la decisión.
+        </p>
+      )}
+      {designed && !canWrite && record.status === 'DRAFT' && (
+        <p>
+          El administrador de tu flotilla carga los documentos y envía este
+          expediente a revisión.
+        </p>
+      )}
       {designed && <Warning />}
       {record.publicReason && (
         <p role="status">Motivo de decisión: {record.publicReason}</p>
@@ -1061,7 +1130,11 @@ function CaseContent({
         </div>
         <aside className={designed ? 'identity-aside' : undefined}>
           {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
-            <section className="panel panel-body identity-submit">
+            <section
+              className="panel panel-body identity-submit"
+              id="envio-expediente"
+              tabIndex={-1}
+            >
               {designed && (
                 <>
                   <h2>Enviar expediente</h2>
@@ -1080,22 +1153,17 @@ function CaseContent({
                   )}
                 </>
               )}
-              {ownershipContractBlocked && (
-                <p role="alert">
-                  La presentación está pendiente de una actualización de
-                  requisitos del servidor. No cargues documentos adicionales
-                  para resolver este bloqueo.
-                </p>
-              )}
+              {ownershipContractBlocked &&
+                (!designed || record.data.ownershipEvidenceType) && (
+                  <p role="alert">
+                    La presentación está pendiente de una actualización de
+                    requisitos del servidor. No cargues documentos adicionales
+                    para resolver este bloqueo.
+                  </p>
+                )}
               {currentEvidence && record.status === 'DRAFT' && (
                 <button
-                  disabled={
-                    blocked ||
-                    command.blocked ||
-                    command.busy ||
-                    (designed && !checklistComplete) ||
-                    ownershipContractBlocked
-                  }
+                  disabled={submitDisabled}
                   onClick={() => setConfirm('SUBMIT')}
                 >
                   Presentar para revisión

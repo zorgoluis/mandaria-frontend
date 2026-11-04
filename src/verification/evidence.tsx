@@ -8,6 +8,17 @@ import { labels, message } from './format'
 import { useCommand } from './hooks'
 import { putEvidence, validateFile, verification } from './service'
 import type { Requirements, VerificationCase } from './types'
+const documentHints: Record<string, string> = {
+  FACE_PHOTO: 'Una foto de tu cara, de frente y con buena luz.',
+  INE_FRONT: 'Fotografía el lado de tu INE donde aparece tu rostro.',
+  INE_BACK: 'Fotografía el otro lado de tu INE. Incluye las cuatro esquinas.',
+  LICENSE: 'Sube una imagen legible de la licencia que registraste.',
+  REGISTRATION_CARD: 'Fotografía la tarjeta de circulación de esta unidad.',
+  RENTAL_CONTRACT:
+    'Sube una imagen legible del contrato de renta de esta unidad.',
+  OWNER_AUTHORIZATION:
+    'Sube la autorización del titular para usar esta unidad prestada.',
+}
 type EvidenceProps = {
   designed?: boolean
   record: VerificationCase
@@ -80,7 +91,11 @@ function EvidenceSession({
           ]
         : unitRequirements(requirements, record).categories
   return (
-    <section className="panel panel-body">
+    <section
+      className="panel panel-body"
+      id={designed ? 'documentos-expediente' : undefined}
+      tabIndex={designed ? -1 : undefined}
+    >
       <h2>
         {designed && <span className="documentary-step">2</span>}Evidencias
         privadas
@@ -88,7 +103,12 @@ function EvidenceSession({
       {designed ? (
         <>
           <div className="identity-limit-chips">
-            <span>JPEG / PNG</span>
+            <span>
+              {requirements.formats
+                .filter((f) => ['image/jpeg', 'image/png'].includes(f))
+                .map((f) => (f === 'image/jpeg' ? 'JPEG' : 'PNG'))
+                .join(' / ')}
+            </span>
             <span>
               Máx. {requirements.maxBytes / 1048576} MB ·{' '}
               {requirements.maxPixels / 1000000} MP
@@ -96,9 +116,18 @@ function EvidenceSession({
             <span>{requirements.maxFiles} intentos por expediente</span>
           </div>
           <p className="identity-note">
-            No PDF ni antimalware. VALIDATED significa formato decodificado, no
-            identidad aprobada.
+            Una vez cargada la imagen, el equipo revisará su contenido cuando
+            envíes el expediente.
           </p>
+          {record.subjectType === 'VEHICLE' &&
+            record.status === 'DRAFT' &&
+            !categories.length &&
+            !unitRequirements(requirements, record).blocked && (
+              <p>
+                Con los datos guardados de esta unidad, no se requieren
+                imágenes.
+              </p>
+            )}
         </>
       ) : (
         <p>
@@ -192,22 +221,48 @@ function EvidenceSession({
         >
           {designed ? (
             <fieldset className="identity-categories">
-              <legend>Categoría *</legend>
+              <legend>Elige el documento que vas a subir</legend>
               <div role="radiogroup" aria-label="Categoría">
-                {categories.map((c, i) => (
-                  <label key={c}>
-                    <input
-                      type="radio"
-                      name="category"
-                      value={c}
-                      defaultChecked={i === 0}
-                    />
-                    {labels[c] || c}
-                    {record.attachments.some(
-                      (a) => a.category === c && a.status === 'VALIDATED',
-                    ) && ' ✓'}
-                  </label>
-                ))}
+                {categories.map((c, i) => {
+                  const attachments = record.attachments.filter(
+                    (a) => a.category === c,
+                  )
+                  const received = attachments.some(
+                    (a) => a.status === 'VALIDATED',
+                  )
+                  const incomplete = attachments.some(
+                    (a) => a.status === 'CREATED',
+                  )
+                  const hint =
+                    incomplete && !received
+                      ? 'Usa «Consultar y completar carga» en el archivo de abajo.'
+                      : documentHints[c]
+                  return (
+                    <label key={c}>
+                      <input
+                        type="radio"
+                        name="category"
+                        value={c}
+                        defaultChecked={i === 0}
+                        aria-label={labels[c] || c}
+                        aria-describedby={'documento-' + c}
+                      />
+                      <span className="case-document">
+                        <strong>{labels[c] || c}</strong>
+                        <span id={'documento-' + c}>
+                          <b>
+                            {received
+                              ? 'Imagen recibida'
+                              : incomplete
+                                ? 'Carga incompleta'
+                                : 'Falta subir'}
+                          </b>
+                          {hint && ' · ' + hint}
+                        </span>
+                      </span>
+                    </label>
+                  )
+                })}
               </div>
             </fieldset>
           ) : (
@@ -251,6 +306,8 @@ function EvidenceSession({
           Intentos restantes:{' '}
           {Math.max(0, requirements.maxFiles - record.attachments.length)} de{' '}
           {requirements.maxFiles}
+          {record.attachments.length >= requirements.maxFiles &&
+            ' · Límite alcanzado. Si falta un documento, solicita orientación.'}
         </p>
       )}
       {busy && (

@@ -98,6 +98,7 @@ try {
     if (path === '/verification-requirements')
       body = {
         ...f.requirements,
+        vehicle: { ...f.requirements.vehicle, OWNED: null },
         environment: 'PRODUCTION',
         policyVersion: 'DOCUMENTARY-1',
       }
@@ -255,6 +256,8 @@ try {
   await expect(
     page.getByRole('radiogroup', { name: 'Categoría' }),
   ).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Tu siguiente paso' }))
+    .toContainText('Falta 1 documento')
   await shot('unit-draft')
   await page.getByRole('button', { name: /Conservación de imágenes/ }).click()
   await expect(page.getByText(/No se deducen fechas desde/)).toBeVisible()

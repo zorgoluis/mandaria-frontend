@@ -1,3 +1,7 @@
+## 2026-11-04 — Guía de Identidad y Unidad en Web 1.11.0
+
+Suite global aprobada con 1.751 pruebas en 86 archivos (130,20 s). Tipos de pruebas, lint global y build finalizaron con código 0. Vite mantiene el aviso de tamaño del chunk Root de 1.222,38 kB. Los dos recorridos de Chromium pasaron con HTTP simulado a 320 y 1280 px. [Comandos, resultados y capturas](docs/evidence/identity-unit-guide-20261104/README.md).
+
 ## 2026-11-04 — Regresión global en main tras integrar los dos cambios Web
 
 Web 1.11.0 sobre `9fa1c06` con `dd39ff3` incluido. La primera corrida de `npm test` detectó seis fallos en un fixture LEGACY. Tras explicitar su política de confirmación y cubrir los dos casos de bloqueo, `npm test` pasó con **1.750/1.750 pruebas en 86/86 archivos**, en 94,84 s. `npm run typecheck:test`, `npm run lint` y `npm run build` finalizaron con código 0. Vite conserva el aviso de tamaño del chunk Root (1.219,12 kB). [Resultados y comandos](docs/evidence/web-verification-delivery-joint-20261104/README.md).

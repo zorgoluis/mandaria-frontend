@@ -1327,6 +1327,14 @@ it('identity checklist blocks submission without validated categories', async ()
     await screen.findByRole('button', { name: 'Presentar para revisión' }),
   ).toBeDisabled()
   expect(screen.getByRole('button', { name: 'Guardar datos' })).toBeDisabled()
+  await waitFor(() =>
+    expect(
+      screen.getByRole('region', { name: 'Tu siguiente paso' }),
+    ).toHaveTextContent('Faltan 3 documentos'),
+  )
+  expect(
+    screen.getByRole('radio', { name: 'INE: reverso' }),
+  ).toHaveAccessibleDescription(/Falta subir.*otro lado de tu INE/)
   expect(
     screen.getByRole('radiogroup', { name: 'Categoría' }),
   ).toBeInTheDocument()
@@ -1335,6 +1343,55 @@ it('identity checklist blocks submission without validated categories', async ()
     screen.getByRole('button', { name: /Conservación de imágenes/ }),
   ).toHaveAttribute('aria-expanded', 'false')
   expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('explains the incomplete authorization on a borrowed unit using saved attachments', async () => {
+  const file = {
+    bytes: 12,
+    mime: 'image/png',
+    hash: null,
+    createdAt: caseFixture.createdAt,
+  }
+  vi.mocked(verification.get).mockResolvedValue({
+    ...caseFixture,
+    subjectType: 'VEHICLE',
+    data: {
+      declaredOwnerName: 'Titular',
+      serialNumber: 'VIN123',
+      ownershipEvidenceType: 'BORROWED',
+    },
+    attachments: [
+      {
+        ...file,
+        id: 'card',
+        category: 'REGISTRATION_CARD',
+        status: 'VALIDATED',
+      },
+      {
+        ...file,
+        id: 'authorization',
+        category: 'OWNER_AUTHORIZATION',
+        status: 'CREATED',
+      },
+    ],
+  })
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'DRIVER',
+    '/verification/cases/' + caseId,
+  )
+  expect(await screen.findByText(/Falta 1 documento por cargar/)).toBeVisible()
+  expect(
+    screen.getByRole('radio', { name: 'Autorización del titular' }),
+  ).toHaveAccessibleDescription(/Carga incompleta.*Consultar y completar carga/)
+  expect(
+    screen.getByRole('radio', { name: 'Tarjeta de circulación' }),
+  ).toHaveAccessibleDescription(/Imagen recibida/)
+  expect(
+    screen.getByRole('button', { name: 'Presentar para revisión' }),
+  ).toBeDisabled()
 })
 
 it('unit uses the bicycle checklist and normalizes serial numbers on save', async () => {
@@ -1361,6 +1418,11 @@ it('unit uses the bicycle checklist and normalizes serial numbers on save', asyn
   expect(
     screen.queryByRole('radio', { name: 'Tarjeta de circulación' }),
   ).toBeNull()
+  await waitFor(() =>
+    expect(
+      screen.getByRole('region', { name: 'Tu siguiente paso' }),
+    ).toHaveTextContent(/requisitos de la unidad están pendientes/),
+  )
   expect(
     screen.getByRole('button', { name: 'Presentar para revisión' }),
   ).toBeDisabled()
@@ -1513,6 +1575,8 @@ it('identity without city or issuer can present a complete dossier', async () =>
     name: 'Presentar para revisión',
   })
   await waitFor(() => expect(submit).toBeEnabled())
+  expect(screen.getByRole('heading', { name: 'Listo para enviar a revisión' })).toBeInTheDocument()
+  expect(screen.getByRole('radio', { name: 'Licencia del conductor' })).toHaveAccessibleDescription(/Imagen recibida/)
   fireEvent.click(submit)
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())

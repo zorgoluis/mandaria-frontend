@@ -40,6 +40,8 @@ export function CaseForm({
   return (
     <section
       className={'panel panel-body' + (designed ? ' identity-draft' : '')}
+      id={designed ? 'datos-expediente' : undefined}
+      tabIndex={designed ? -1 : undefined}
       ref={(node) => {
         const form = node?.querySelector('form')
         if (form && original.current === null)
