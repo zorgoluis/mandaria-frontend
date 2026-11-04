@@ -1,3 +1,7 @@
+## 2026-11-04 — Regresión global en main tras integrar los dos cambios Web
+
+Web 1.11.0 sobre `9fa1c06` con `dd39ff3` incluido. La primera corrida de `npm test` detectó seis fallos en un fixture LEGACY. Tras explicitar su política de confirmación y cubrir los dos casos de bloqueo, `npm test` pasó con **1.750/1.750 pruebas en 86/86 archivos**, en 94,84 s. `npm run typecheck:test`, `npm run lint` y `npm run build` finalizaron con código 0. Vite conserva el aviso de tamaño del chunk Root (1.219,12 kB). [Resultados y comandos](docs/evidence/web-verification-delivery-joint-20261104/README.md).
+
 ## 2026-11-03 — MDR-000001: entrega observada como CUSTOMER por HTTP real
 
 Verificación de lectura a 2026-11-04T05:32:18.085Z (23:32:18 CDMX del 3 de noviembre). Reserva DELIVERY-CODE-B2C-A09B99DCF2, API local42929/backend1.13.7 según manifiesto del responsable; Web4270/1.11.0. dispatch82770d25-8a2e-4adc-83bd-e6a253138785, assignment01e2f07c-1794-4449-94be-76a291e3b01d. No confundir con MDR-000001 histórico de octubre.

@@ -275,6 +275,7 @@ function driverDispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
   return {
     id: DISPATCH,
     trackingMode: 'LEGACY',
+    deliveryConfirmation: { policy: 'NOT_REQUIRED', method: null },
     status: 'CLAIMED',
     access: 'OWNER',
     serviceType: 'LOCAL_DELIVERY',
@@ -548,6 +549,20 @@ describe('provider completion', () => {
 
 describe('independent driver completion', () => {
   const portal = '/driver/my-service'
+  it.each([undefined, { policy: 'REQUIRED', method: null }] as const)(
+    'keeps legacy completion unavailable for confirmation metadata %j',
+    async (deliveryConfirmation) => {
+      vi.mocked(driverPortal.get).mockResolvedValue(
+        driverDispatch({ deliveryConfirmation }),
+      )
+      mount(portal, 'DRIVER')
+      await screen.findByText('Cocina El Fogón')
+      expect(
+        screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+      ).toBeNull()
+      expect(driverPortal.deliver).not.toHaveBeenCalled()
+    },
+  )
   it('offers the completion on my service and confirms it with a dialog', async () => {
     mount(portal, 'DRIVER')
     const user = userEvent.setup()

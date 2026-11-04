@@ -1,0 +1,11 @@
+ ❯ src/test/delivery-completion.test.tsx (41 tests | 6 failed) 14990ms
+     × offers the completion on my service and confirms it with a dialog 1075ms
+     × sends no body and no driver identity 1063ms
+     × cancelling the dialog calls no mutation 1065ms
+     × a fast double click sends a single request 1058ms
+     × represents no credit movement for the delivery 1064ms
+   × independent explicit mode LEGACY governs legacy close 1205ms
+ Test Files  1 failed | 85 passed (86)
+      Tests  6 failed | 1742 passed (1748)
+   Start at  17:37:34
+   Duration  186.75s (environment 39%, tests 38%, import 10%, setup 8%, transform 5%)

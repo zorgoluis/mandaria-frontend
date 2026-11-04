@@ -1,3 +1,7 @@
+## 2026-11-04 — Verificación conjunta de Mi verificación documental y código de entrega
+
+En `main` se verificaron juntos `dd39ff3` y `9fa1c06`. Se corrigió el fixture del cierre LEGACY del repartidor para declarar `NOT_REQUIRED` y se añadieron dos pruebas de bloqueo. La suite global pasó con 1.750 pruebas en 86 archivos. Tipos, lint y build aprobados. Los cambios locales de esta revisión se limitan a las pruebas y su documentación. [Ejecuciones y evidencia](docs/evidence/web-verification-delivery-joint-20261104/README.md).
+
 ## 2026-11-03 — MDR-000001: entrega observada como CUSTOMER por HTTP real
 
 Verificación de lectura a 2026-11-04T05:32:18.085Z (23:32:18 CDMX del 3 de noviembre). Reserva DELIVERY-CODE-B2C-A09B99DCF2, API local42929/backend1.13.7 según manifiesto del responsable; Web4270/1.11.0. dispatch82770d25-8a2e-4adc-83bd-e6a253138785, assignment01e2f07c-1794-4449-94be-76a291e3b01d. No confundir con MDR-000001 histórico de octubre.
