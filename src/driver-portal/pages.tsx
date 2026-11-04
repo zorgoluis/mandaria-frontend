@@ -852,6 +852,7 @@ function MyService({ me }: { me: DriverSelf }) {
     !query.isFetching &&
     !query.isError &&
     legacyProjection(query.data) &&
+    query.data.deliveryConfirmation?.policy === 'NOT_REQUIRED' &&
     active?.trackingMode === 'LEGACY' &&
     !active.execution &&
     active?.mode === 'INDEPENDENT' &&
@@ -1097,6 +1098,14 @@ function DeliverDialog({
         cancelLabel="Cancelar"
         onCancel={onClose}
         onSubmit={async () => {
+          const current = await driverPortal.get(dispatch.id)
+          if (
+            current.deliveryConfirmation?.policy !== 'NOT_REQUIRED' ||
+            current.trackingMode !== 'LEGACY' ||
+            !current.takenByMe ||
+            current.assignment?.id !== dispatch.assignment?.id
+          )
+            throw Error('La ejecución cambió; actualiza antes de confirmar.')
           await driverPortal.deliver(dispatch.id)
           // The backend frees me and my vehicle: the portal reads that back before closing.
           await refreshDriverPortal(dispatch.id)

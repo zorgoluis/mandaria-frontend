@@ -1,3 +1,4 @@
+import { DeliveryCode } from './DeliveryCode'
 import { hasBusinessContract } from '../customer-business/contract'
 import { MyShipments } from './MyShipments'
 import { ArrowLeft, Check, RefreshCw } from 'lucide-react'
@@ -555,6 +556,11 @@ export function CustomerRequest() {
       </div>
       <div className="request-grid">
         <div className="request-main">
+          <DeliveryCode
+            publicId={publicId}
+            metadata={state.data.deliveryConfirmation}
+            terminal={terminal}
+          />
           <div className="request-tracking" aria-live="polite">
             {state.data.executionProgress && (
               <section className="request-card request-progress">

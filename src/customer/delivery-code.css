@@ -1,0 +1,10 @@
+.delivery-code output {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  margin: 16px 0;
+}
+.delivery-code .button {
+  margin: 4px 8px 4px 0;
+}

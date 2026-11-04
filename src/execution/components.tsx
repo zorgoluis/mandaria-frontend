@@ -1,3 +1,4 @@
+import { confirmationLabel } from './delivery-confirmation'
 import { useFleetPermission } from '../fleet/permissions'
 import { HistoricalAdvanceRecovery } from './historical-recovery'
 import { useHistoricalMarkers } from './historical-store'
@@ -226,6 +227,7 @@ export function ExecutionProgress({
         <span>Revisión {e.revision}</span>
       </div>
       <div className="panel-body">
+        <p>{confirmationLabel(e.deliveryConfirmation)}</p>
         <ol className="execution-phases">
           {phases.map((p) => (
             <li

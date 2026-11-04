@@ -269,6 +269,24 @@ export async function inspectRetiredCommand(
         receipt.state === 'APPLIED'
           ? 'El recibo propio confirma el registro anterior. Se actualizaron las consultas; no se envió otra operación.'
           : 'Intento anterior cerrado sin efectos. No se repitió ninguna operación. El cierre técnico no revierte hechos físicos; los nuevos registros detallados corresponden a la app.'
+    } else if (
+      receipt.state === 'REJECTED' &&
+      receipt.assignmentId === body.assignmentId &&
+      receipt.operation === 'DELIVER' &&
+      operation === 'DELIVER' &&
+      ['DELIVERY_CODE_MISMATCH', 'DELIVERY_CODE_ATTEMPTS_BLOCKED'].includes(
+        receipt.code || '',
+      ) &&
+      Number.isFinite(receipt.retryAfter) &&
+      receipt.retryAfter! >= 0
+    ) {
+      message =
+        'Intento rechazado; no se confirmó la entrega. Consulta los requisitos vigentes antes de una nueva intención.'
+      if (receipt.canStartNewAttempt === true && receipt.retryAfter === 0)
+        pending = pending.filter((c) => c.key !== key)
+      else
+        message +=
+          ' La pausa o el estado vigente impiden preparar otra intención; vuelve a consultar.'
     } else
       message =
         'Pendiente de reconciliación. Conservamos el bloqueo; consulta nuevamente con la cuenta iniciadora. No se reenvió la operación.'

@@ -1,3 +1,21 @@
+## 2026-11-03 — MDR-000001: entrega observada como CUSTOMER por HTTP real
+
+Verificación de lectura a 2026-11-04T05:32:18.085Z (23:32:18 CDMX del 3 de noviembre). Reserva DELIVERY-CODE-B2C-A09B99DCF2, API local42929/backend1.13.7 según manifiesto del responsable; Web4270/1.11.0. dispatch82770d25-8a2e-4adc-83bd-e6a253138785, assignment01e2f07c-1794-4449-94be-76a291e3b01d. No confundir con MDR-000001 histórico de octubre.
+
+GET CUSTOMER /customer/delivery-requests/MDR-000001/status:200, DELIVERED, terminalOutcome DELIVERED y deliveredAt2026-11-04T05:30:40.031Z (23:30:40 CDMX), policy REQUIRED/method CODE_VERIFIED. GET detalle:200, status CREATED corresponde al recurso de solicitud; no sustituye el estado logístico de /status. UI real recargada como titular: Entregada/Entregada, Código de entrega verificado, servicio finalizado y sin control para consultar código. Cobro declarado60 MXN, conservado como declaración del conductor, no pago verificado.
+
+[Evidencia HTTP sanitizada](docs/evidence/delivery-confirmation-web-20261103/customer-terminal-http.json) · [Captura terminal](docs/evidence/delivery-confirmation-web-20261103/customer-terminal.png) · [Informe](docs/DELIVERY-CONFIRMATION-CODE-WEB-20261103.md). En esta comprobación: cero consultas de código, cero envíos al canal y cero comandos de cierre. Sólo login CUSTOMER y lecturas; sin mutaciones logísticas, SQL, cambios de producto o backend/Driver. No se repitieron suites/tipos/lint/build: los188 tests y cuatro capturas simuladas inferiores son históricos, no evidencia HTTP nueva. No acredita conteo de eventos, ledger/reembolso, UI Android ni toda la matriz negativa.
+
+Antecedente de coordinación: envío privado único a05:30:27.823Z, sin acuse ACCEPTED_FOR_UI confirmado; no reenviado. El resultado terminal se acredita ahora mediante lectura independiente, no mediante ese acuse. El bloqueo inicial de instancia queda superado sólo para este recorrido sintético; historial conservado. Sin versión, commit/push ni despliegue.
+
+## 2026-11-03 — Código de entrega B2C y Driver Web
+
+Integración local del contrato1.0.0: lectura CUSTOMER explícita y temporal/no-store; código string con ceros, sin persistencia/caché/URL. Metadatos REQUIRED/NOT_REQUIRED y CODE_VERIFIED/ADMIN_ASSISTED separados, históricos sin metadato legibles sin habilitar bypass. Driver detallado pide6dígitos ASCII al finalizar AT_DROPOFF, revalida asignación/revisión/permisos y conserva cobro/hitos. Recuperación DELIVER admite REJECTED por GET/close, respeta pausa y canStartNewAttempt, sin autoenvío ni cambiar cuerpo bajo una clave previa. TAKE/RELEASE no se amplían con ese estado. Legacy sólo cierra con NOT_REQUIRED explícito y relectura vigente.
+
+Verificación nueva:188/188 pruebas en9 archivos,18.58 s; tipos tests/producto, lint global, build y diff whitespace PASS. Aviso conocido de chunk Root1216.98 kB. Chromium local con HTTP simulado:4 capturas1280/390 con código enmascarado, cero mutaciones; no UI Android ni HTTP Nest. [Informe y matriz](docs/DELIVERY-CONFIRMATION-CODE-WEB-20261103.md) · [Pruebas](docs/evidence/delivery-confirmation-web-20261103/tests.txt) · [Visual](docs/evidence/delivery-confirmation-web-20261103/visual.json). No suite global nueva; resultados backend del handoff no se atribuyen a Web.
+
+HTTP real bloqueado por falta de instancia autorizada con build/flag/clave y fixtures dedicados confirmados para este contrato. No se usa la API previa de contraseñas como acreditación ni se reinicia/resembra/activa entorno. Web1.11.0 intacta sobre c7c1e8f. Sin backend/Driver nativo/Coita, datos reales, .env, Docker, versión, commit/push, despliegue ni mensajes externos. Historial preservado.
+
 ## 2026-11-03 — Entrega Git de política de contraseñas
 
 Revisado el diff final de8–128, sus pruebas y evidencia. Usuario autoriza commit/push a main; origin/main coincide con base171c851. Se conservan los resultados verificados de232 pruebas focalizadas, tipos, lint y build PASS; no se reejecutan por esta operación Git. Login histórico, APIs y versión1.11.0 intactos. La aceptación HTTP real sigue pendiente por indisponibilidad local documentada; publicar código no acredita despliegue. Sin force, backend/Driver ni despliegue. Las entradas inferiores conservan el estado local anterior a esta entrega.

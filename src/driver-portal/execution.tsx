@@ -1,12 +1,17 @@
-import { useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { useAuth } from '../auth/context'
 import { apiOnce, sessionFence } from '../services/api'
 import { env } from '../config/env'
 import { Confirm, Field } from '../components/ui'
-import { errorMessage } from '../services/errors'
+import { ApiError, errorMessage } from '../services/errors'
 import { refreshExecution } from '../execution/commands'
 import { executionApi } from '../execution/service'
-import { phases, type Execution } from '../execution/types'
+import { phases, type Execution, type DriverAttempt } from '../execution/types'
+import {
+  confirmation,
+  confirmationLabel,
+  deliveryCodeFormat,
+} from '../execution/delivery-confirmation'
 import { phaseLabels } from '../execution/format'
 import type { ShippingPayment } from '../shipping/Payment'
 type Op = 'ADVANCE' | 'DELIVER' | 'REPORT' | 'COLLECT_SHIPPING'
@@ -89,13 +94,14 @@ async function startExecution(
       undefined,
       { 'Idempotency-Key': m.key },
     )
+    authorize()
     await refreshExecution()
   })
 }
 export function DriverExecutionRecovery() {
-  const { user } = useAuth()
+  const { user, expired, loading } = useAuth()
   const raw = useSyncExternalStore(subscribe, snapshot)
-  if (user?.role !== 'DRIVER') return null
+  if (user?.role !== 'DRIVER' || expired || loading) return null
   let rows: Marker[]
   try {
     rows = read(raw)
@@ -118,18 +124,26 @@ export function DriverExecutionRecovery() {
   )
 }
 function Recovery({ marker: m }: { marker: Marker }) {
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+  const [rejection, setRejection] = useState<DriverAttempt | null>(null)
   const [state, setState] = useState(''),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [close, setClose] = useState(false)
   async function recover(closing = false) {
+    const authorize = sessionFence()
+    setState('')
+    setRejection(null)
+    setError('')
     setBusy(true)
     try {
-      const r = await apiOnce<{
-        state: string
-        assignmentId: string
-        operation: string
-      }>(
+      const r = await apiOnce<DriverAttempt>(
         `/driver/dispatches/${m.dispatchId}/assignments/${m.assignmentId}/attempt${closing ? '/close' : ''}?operation=${m.operation}`,
         closing ? 'POST' : 'GET',
         undefined,
@@ -139,17 +153,36 @@ function Recovery({ marker: m }: { marker: Marker }) {
       if (
         r.assignmentId !== m.assignmentId ||
         r.operation !== m.operation ||
-        !['APPLIED', 'CLOSED_NO_EFFECTS', 'PENDING_OR_UNKNOWN'].includes(
-          r.state,
-        )
+        ![
+          'APPLIED',
+          'CLOSED_NO_EFFECTS',
+          'PENDING_OR_UNKNOWN',
+          'REJECTED',
+        ].includes(r.state)
       )
         throw Error('Recibo incompatible.')
-      setState(r.state)
+      if (
+        r.state === 'REJECTED' &&
+        (m.operation !== 'DELIVER' ||
+          ![
+            'DELIVERY_CODE_MISMATCH',
+            'DELIVERY_CODE_ATTEMPTS_BLOCKED',
+          ].includes(r.code || '') ||
+          !Number.isFinite(r.retryAfter) ||
+          r.retryAfter! < 0 ||
+          typeof r.canStartNewAttempt !== 'boolean')
+      )
+        throw Error('Rechazo incompatible.')
+      authorize()
       await refreshExecution()
+      authorize()
+      if (!mounted.current) return
+      setState(r.state)
+      setRejection(r.state === 'REJECTED' ? r : null)
     } catch (e) {
-      setError(errorMessage(e))
+      if (mounted.current) setError(errorMessage(e))
     } finally {
-      setBusy(false)
+      if (mounted.current) setBusy(false)
     }
   }
   return (
@@ -160,6 +193,14 @@ function Recovery({ marker: m }: { marker: Marker }) {
         física.
       </p>
       {error && <p role="alert">{error}</p>}
+      {rejection && (
+        <p role="status">
+          Intento rechazado; no se confirmó la entrega.{' '}
+          {rejection.retryAfter! > 0
+            ? `Espera ${rejection.retryAfter} segundos y vuelve a consultar el intento. No se reenviará automáticamente.`
+            : 'Consulta el estado vigente antes de preparar otra intención.'}
+        </p>
+      )}
       <button
         className="button secondary"
         disabled={busy}
@@ -176,12 +217,15 @@ function Recovery({ marker: m }: { marker: Marker }) {
           Cerrar clave de ejecución
         </button>
       )}
-      {['APPLIED', 'CLOSED_NO_EFFECTS'].includes(state) && (
+      {(['APPLIED', 'CLOSED_NO_EFFECTS'].includes(state) ||
+        (rejection?.canStartNewAttempt === true &&
+          rejection.retryAfter === 0)) && (
         <button
           className="button secondary"
           onClick={() =>
             write(read().filter((r) => r.key !== m.key || r.actor !== m.actor))
           }
+          disabled={busy}
         >
           Reconocer ejecución
         </button>
@@ -197,7 +241,27 @@ function Recovery({ marker: m }: { marker: Marker }) {
     </section>
   )
 }
-export function DriverExecutionActions({
+export function DriverExecutionActions(props: {
+  dispatchId: string
+  e: Execution
+  payment?: ShippingPayment | null
+}) {
+  const { user, expired, loading } = useAuth()
+  if (user?.role !== 'DRIVER' || expired || loading) return null
+  return (
+    <ExecutionActions
+      key={
+        user.id +
+        props.dispatchId +
+        props.e.activeAssignmentId +
+        props.e.revision +
+        JSON.stringify(props.e.deliveryConfirmation)
+      }
+      {...props}
+    />
+  )
+}
+function ExecutionActions({
   dispatchId,
   e,
   payment,
@@ -207,6 +271,15 @@ export function DriverExecutionActions({
   payment?: ShippingPayment | null
 }) {
   const { user } = useAuth()
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+  const [deliveryCode, setDeliveryCode] = useState('')
+  const policy = confirmation(e.deliveryConfirmation)
   const [op, setOp] = useState<Op | null>(null),
     [reason, setReason] = useState(''),
     [error, setError] = useState('')
@@ -235,10 +308,11 @@ export function DriverExecutionActions({
   return (
     <section className="panel panel-body">
       <h2>Registrar operación propia</h2>
+      <p>{confirmationLabel(e.deliveryConfirmation)}</p>
       {actions.map((a) => (
         <button
           className="button secondary"
-          disabled={blocked}
+          disabled={blocked || (a === 'DELIVER' && !policy)}
           key={a}
           onClick={() => {
             setSelectedRevision(e.revision)
@@ -268,15 +342,29 @@ export function DriverExecutionActions({
         <Confirm
           title="Confirmar operación física"
           description="Confirma sólo lo que realizaste. El cierre técnico posterior no revierte la acción física ni devuelve dinero."
-          onClose={() => setOp(null)}
+          onClose={() => {
+            setOp(null)
+            setDeliveryCode('')
+          }}
           onConfirm={async () => {
             try {
               const authorize = sessionFence()
+              const code = deliveryCode
+              setDeliveryCode('')
+              if (
+                op === 'DELIVER' &&
+                (!policy ||
+                  (policy.policy === 'REQUIRED' && !deliveryCodeFormat(code)))
+              )
+                throw Error(
+                  'Introduce exactamente seis dígitos ASCII, sin espacios.',
+                )
               const fresh = await executionApi.detail(
                 { surface: 'driver', dispatchId },
                 1,
               )
               authorize()
+              if (!mounted.current) return
               if (
                 !fresh.execution ||
                 fresh.execution.revision !== selectedRevision ||
@@ -285,10 +373,23 @@ export function DriverExecutionActions({
                 throw Error(
                   'La ejecución cambió; actualiza y revisa antes de confirmar.',
                 )
+              if (
+                op === 'DELIVER' &&
+                (fresh.execution.phase !== 'AT_DROPOFF' ||
+                  !fresh.execution.allowedActions.includes('DELIVER') ||
+                  !confirmation(fresh.execution.deliveryConfirmation) ||
+                  fresh.execution.deliveryConfirmation?.policy !==
+                    policy?.policy)
+              )
+                throw Error(
+                  'Los requisitos de entrega cambiaron. Actualiza el servicio.',
+                )
               const body: Record<string, unknown> = {
                 assignmentId: e.activeAssignmentId,
                 expectedRevision: e.revision,
               }
+              if (op === 'DELIVER' && policy?.policy === 'REQUIRED')
+                body.deliveryCode = code
               if (op === 'ADVANCE') body.phase = next
               if (op === 'REPORT') {
                 if (reason.trim().length < 3)
@@ -308,14 +409,55 @@ export function DriverExecutionActions({
                 })
               }
               await startExecution(user.id, dispatchId, op, body)
-              setOp(null)
+              if (mounted.current) setOp(null)
             } catch (err) {
-              setError(errorMessage(err))
+              if (!mounted.current) return
+              setError(deliveryError(err))
+              setDeliveryCode('')
               setOp(null)
             }
           }}
-        />
+        >
+          {op === 'DELIVER' && policy?.policy === 'REQUIRED' && (
+            <Field
+              label="Código de entrega (6 dígitos)"
+              hint="Introduce exactamente los seis dígitos que te comunican al recibir, incluidos ceros iniciales."
+            >
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                value={deliveryCode}
+                onChange={(v) => setDeliveryCode(v.target.value)}
+              />
+            </Field>
+          )}
+        </Confirm>
       )}
     </section>
   )
+}
+
+function deliveryError(error: unknown) {
+  if (error instanceof ApiError) {
+    if (error.code === 'DELIVERY_CODE_ATTEMPTS_BLOCKED')
+      return `Pausa de intentos. Espera ${Math.ceil(error.retryAfterMs / 1000)} segundos y consulta el intento original. No se reenviará automáticamente.`
+    if (error.code === 'DELIVERY_CODE_MISMATCH')
+      return 'El código no coincide. Recupera el intento rechazado antes de preparar una nueva corrección.'
+    if (
+      [
+        'DELIVERY_CODE_REQUIRED',
+        'DELIVERY_CODE_INVALID_FORMAT',
+        'VALIDATION_ERROR',
+      ].includes(error.code || '')
+    )
+      return 'Revisa el código de seis dígitos y recupera el intento antes de continuar.'
+    if (error.code === 'IDEMPOTENCY_KEY_REUSED')
+      return 'La clave pertenece a otro cuerpo. Consulta el intento original; no cambies su código.'
+  }
+  return error instanceof ApiError
+    ? errorMessage(error)
+    : error instanceof Error
+      ? error.message
+      : 'No se confirmó la operación.'
 }

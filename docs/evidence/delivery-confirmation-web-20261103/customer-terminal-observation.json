@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-11-04T05:32:18.085Z",
+  "browserUrl": "http://127.0.0.1:4270/customer/requests/MDR-000001",
+  "realHttp": true,
+  "mocks": false,
+  "observedAfterReload": {
+    "status": "Entregada",
+    "result": "Entregada",
+    "confirmation": "Código de entrega verificado",
+    "privateCodeVisible": false,
+    "queryCodeVisible": false
+  },
+  "artifacts": [
+    {
+      "file": "customer-terminal-http.json",
+      "sha256": "58d1ddda763b5bcb5865c14fecea9d17da249973a916eb94b63f125fc9ee5274"
+    },
+    {
+      "file": "customer-terminal.png",
+      "sha256": "d8935e71e4101d4431413ada70fbb1611f79a2282f0b5363732dd484f460d065"
+    }
+  ],
+  "limits": [
+    "No new code read or pipe send",
+    "No delivery command",
+    "No ledger or event-count audit",
+    "No Android UI test executed by Web"
+  ]
+}

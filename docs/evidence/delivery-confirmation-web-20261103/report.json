@@ -1,0 +1,26 @@
+{
+  "types": "PASS",
+  "artifacts": [
+    {
+      "sha256": "04BCA41E6C4579C924676F1072EB948FFE8C7514C498A0C8AE83DD7B42755C12",
+      "path": "dist/index.html"
+    },
+    {
+      "sha256": "390AC6FBB13DB4A6AE0267893A69DA5B920632AACD3EB0409AF2F177D1EC8510",
+      "path": "dist/assets/Root-BCNlPgMJ.js"
+    },
+    {
+      "sha256": "5046BBEFF805F56A6D77663406256A06A93059714CB97384C548EF7431BF7C7C",
+      "path": "dist/assets/Root-DoNoVsTX.css"
+    }
+  ],
+  "visual": "PASS: synthetic, four masked captures, zero mutations",
+  "build": "PASS",
+  "version": "1.11.0",
+  "http": "NOT_RUN: no confirmed authorized build/flag/key/fixtures for delivery-code",
+  "date": "2026-11-03",
+  "tests": 188,
+  "lint": "PASS",
+  "testFiles": 9,
+  "base": "c7c1e8faf0d521d16c5b13ad80e7cde2f7a800a5"
+}

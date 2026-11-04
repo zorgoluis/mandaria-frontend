@@ -258,12 +258,14 @@ export function ActionForm({
   )
 }
 export function Confirm({
+  children,
   title,
   description,
   onConfirm,
   onClose,
   label = 'Confirmar',
 }: {
+  children?: ReactNode
   title: string
   description: string
   onConfirm: () => Promise<void>
@@ -293,7 +295,7 @@ export function Confirm({
           }
         }}
       >
-        {null}
+        {children}
       </ActionForm>
     </Modal>
   )

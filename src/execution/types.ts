@@ -17,6 +17,7 @@ export const reasons = [
 ] as const
 export type Reason = (typeof reasons)[number]
 export interface Execution {
+  deliveryConfirmation?: import('./delivery-confirmation').DeliveryConfirmation
   trackingMode: 'DETAILED'
   revision: number
   phase: Phase | null
@@ -28,6 +29,7 @@ export interface Execution {
 }
 export type TrackingMode = 'LEGACY' | 'DETAILED' | null
 export interface ExecutionFields {
+  deliveryConfirmation?: import('./delivery-confirmation').DeliveryConfirmation
   shippingPayment?: ShippingPayment | null
   trackingMode?: TrackingMode
   execution?: Execution
@@ -142,10 +144,12 @@ export type ResolutionAttempt =
     }
 
 export interface DriverAttempt {
-  state: 'APPLIED' | 'PENDING_OR_UNKNOWN' | 'CLOSED_NO_EFFECTS'
+  state: 'APPLIED' | 'PENDING_OR_UNKNOWN' | 'CLOSED_NO_EFFECTS' | 'REJECTED'
   assignmentId: string
-  operation: 'ADVANCE' | 'REPORT' | 'DELIVER'
+  operation: 'ADVANCE' | 'REPORT' | 'DELIVER' | 'COLLECT_SHIPPING'
   canStartNewAttempt: boolean
+  code?: 'DELIVERY_CODE_MISMATCH' | 'DELIVERY_CODE_ATTEMPTS_BLOCKED'
+  retryAfter?: number
 }
 
 export interface ProviderAdvanceAttempt {
