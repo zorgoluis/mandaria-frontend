@@ -119,6 +119,50 @@ it('pending independent without provider accesses onboarding, not automatic oper
   expect(verification.command).not.toHaveBeenCalled()
   expect(screen.queryByText('TOMAR SERVICIO')).toBeNull()
 })
+it('links the driver account to the next pending step', async () => {
+  mount(<App />, 'DRIVER', '/profile')
+  fireEvent.click(screen.getByRole('link', { name: 'Ver mi siguiente paso' }))
+  const action = await screen.findByRole('link', { name: 'Ir a los términos' })
+  expect(action).toHaveAttribute('href', '#verificar-terminos')
+  expect(document.getElementById('verificar-terminos')).toContainElement(
+    screen.getByRole('checkbox'),
+  )
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('resumes the current draft from the guide without creating another case', async () => {
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    terms: {
+      ...onboarding.terms,
+      acceptance: {
+        id: resource,
+        version: terms.version,
+        acceptedAt: '2026-11-04T10:00:00Z',
+      },
+    },
+    subjects: [
+      {
+        id: attachmentId,
+        driverId: resource,
+        vehicleId: null,
+        cases: [
+          {
+            id: caseId,
+            status: 'DRAFT',
+            revision: 1,
+            environment: onboarding.environment,
+          },
+        ],
+      },
+    ],
+  })
+  mount(<DriverOnboarding />)
+  expect(
+    await screen.findByRole('link', { name: 'Abrir borrador' }),
+  ).toHaveAttribute('href', '/verification/cases/' + caseId)
+  expect(verification.command).not.toHaveBeenCalled()
+})
 it('terms are full text, unchecked, exact version/hash sent explicitly', async () => {
   mount(<TermsForm terms={terms} refresh={vi.fn()} />)
   expect(screen.getByRole('region')).toHaveTextContent(terms.text)

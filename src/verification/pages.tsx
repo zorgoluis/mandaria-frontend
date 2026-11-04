@@ -81,92 +81,142 @@ export function DriverOnboarding() {
     !state.canProceed || !onboardingState.canProceed || !currentAcceptance
   const profileStatus =
     q.data?.driver.independentProfile?.status || q.data?.driver.status
-  const statuses = [
-    {
-      label: '1 · Correo',
-      value: user?.emailVerifiedAt ? 'Confirmado' : 'Por confirmar',
-      tone: user?.emailVerifiedAt ? 'ok' : 'pending',
-    },
-    {
-      label: '2 · Términos',
-      value:
-        currentAcceptance && state.canProceed
-          ? 'Vigentes'
-          : state.kind === 'error'
-            ? 'Sin confirmar'
-            : 'Pendientes',
-      tone: currentAcceptance && state.canProceed ? 'ok' : 'pending',
-    },
-    {
-      label: '3 · Perfil',
-      value: q.isError
-        ? 'No disponible'
-        : labels[profileStatus || ''] || profileStatus || 'Consultando…',
-      tone: ['APPROVED', 'ACTIVE'].includes(profileStatus || '')
-        ? 'ok'
-        : ['REJECTED', 'SUSPENDED'].includes(profileStatus || '')
-          ? 'blocked'
-          : 'pending',
-    },
-    {
-      label: '4 · Nuevas asignaciones',
-      value: q.isError
-        ? 'Sin confirmar'
-        : q.data
-          ? q.data.enforcementEnabled
-            ? 'Control activo'
-            : 'Control parcial'
-          : 'Consultando…',
-      tone: q.data?.enforcementEnabled ? 'ok' : 'pending',
-    },
-  ]
+  const independent = q.data?.driver.independentProfile
+  const subjects = q.data?.subjects ?? []
+  const identityCases = subjects
+    .filter((s) => s.driverId === q.data?.driver.id && !s.vehicleId)
+    .flatMap((s) => s.cases)
+  const draft = subjects
+    .filter(
+      (s) =>
+        s.driverId === q.data?.driver.id ||
+        independent?.vehicles.some((v) => v.id === s.vehicleId),
+    )
+    .flatMap((s) => s.cases)
+    .find((c) => c.status === 'DRAFT' && c.environment === state.mode)
+  function nextStep() {
+    if (!user?.emailVerifiedAt)
+      return [
+        'Confirma tu correo',
+        'Solicita el código y escríbelo en el paso 1.',
+        '#verificar-correo',
+        'Ir al correo',
+      ]
+    if (!state.canProceed || !onboardingState.canProceed)
+      return [
+        'Consulta de requisitos',
+        state.kind === 'loading' || onboardingState.kind === 'loading'
+          ? 'Estamos consultando tus requisitos.'
+          : 'Revisa el aviso de disponibilidad antes de continuar.',
+      ]
+    if (!currentAcceptance)
+      return [
+        'Revisa los términos',
+        'Lee los documentos del paso 2 y acepta los términos para preparar tus expedientes.',
+        '#verificar-terminos',
+        'Ir a los términos',
+      ]
+    if (!independent && q.data?.driver.providerId)
+      return [
+        'Tu flotilla presenta los documentos',
+        'Puedes consultar el avance de tus expedientes aquí.',
+        '#mis-expedientes',
+        'Ver mis expedientes',
+      ]
+    if (independent && draft)
+      return [
+        'Continúa tu borrador',
+        'Abre el expediente, completa lo que falta y envíalo a revisión.',
+        '/verification/cases/' + draft.id,
+        'Abrir borrador',
+      ]
+    if (independent && !identityCases.length)
+      return [
+        'Prepara tu identidad',
+        'Empieza con tus datos personales y tu identificación.',
+        '#verificar-identidad',
+        'Ir a mi identidad',
+      ]
+    if (
+      independent &&
+      (!independent.vehicles.length ||
+        independent.vehicles.some(
+          (v) => !subjects.some((s) => s.vehicleId === v.id && s.cases.length),
+        ))
+    )
+      return [
+        'Prepara tu vehículo',
+        'Registra el vehículo que usarás para repartir o prepara los documentos de uno registrado.',
+        '#verificar-vehiculo',
+        'Ir a mis vehículos',
+      ]
+    const submitted = subjects
+      .flatMap((s) => s.cases)
+      .find((c) => c.status === 'SUBMITTED' && c.environment === state.mode)
+    if (submitted)
+      return [
+        'Tu expediente está en revisión',
+        'Ya enviaste tus documentos. Puedes consultar el expediente mientras esperas el resultado.',
+        '/verification/cases/' + submitted.id,
+        'Ver expediente enviado',
+      ]
+    return [
+      'Consulta tus expedientes',
+      'Abre un expediente para ver su estado y las observaciones disponibles.',
+      '#mis-expedientes',
+      'Ver mis expedientes',
+    ]
+  }
+  const [nextTitle, nextDescription, target, action] = nextStep()
   return (
     <div className="driver-documentary">
       <header className="documentary-heading">
         <Link to="/profile">← Mi cuenta</Link>
         <h1>Mi verificación documental</h1>
         <p>
-          Autenticación, correo confirmado, aprobación documental y habilitación
-          operativa son estados diferentes.
+          Confirma tu correo, revisa los términos y consulta tus documentos.
         </p>
       </header>
-      <div className="documentary-statuses" aria-live="polite">
-        {statuses.map((s) => (
-          <div className="documentary-status" key={s.label}>
-            <span>{s.label}</span>
-            <strong className={'state-' + s.tone}>
-              <i aria-hidden="true" />
-              {s.value}
-            </strong>
-          </div>
-        ))}
-      </div>
+      <section className="documentary-next" aria-label="Tu siguiente paso">
+        <div>
+          <p>Tu siguiente paso</p>
+          <h2>{nextTitle}</h2>
+          <p>{nextDescription}</p>
+        </div>
+        {target &&
+          (target.startsWith('#') ? (
+            <a className="button" href={target}>
+              {action}
+            </a>
+          ) : (
+            <Link className="button" to={target}>
+              {action}
+            </Link>
+          ))}
+      </section>
       <Warning />
       {q.isError && <p role="alert">{consultationError(q.error)}</p>}
       <div className="documentary-columns">
         <div className="documentary-main">
-          <EmailVerification designed />
-          <TermsPanel
-            designed
-            accepted={
-              currentAcceptance &&
-              state.canProceed &&
-              onboardingState.canProceed
-                ? (q.data?.terms.acceptance ?? undefined)
-                : undefined
-            }
-          />
+          <div id="verificar-correo" tabIndex={-1}>
+            <EmailVerification designed />
+          </div>
+          <div id="verificar-terminos" tabIndex={-1}>
+            <TermsPanel
+              designed
+              accepted={
+                currentAcceptance &&
+                state.canProceed &&
+                onboardingState.canProceed
+                  ? (q.data?.terms.acceptance ?? undefined)
+                  : undefined
+              }
+            />
+          </div>
           {onboardingState.kind === 'missing_policy' &&
             state.kind !== 'missing_policy' && (
               <p role="alert">{onboardingState.text}</p>
             )}
-          {!currentAcceptance && (
-            <p role="status">
-              Pendiente: consulta y acepta los términos vigentes antes de
-              preparar evidencias. Después se requiere presentación y revisión
-              manual.
-            </p>
-          )}
           {state.mode === 'PRODUCTION' &&
             q.data?.subjects.some((s) =>
               s.cases.some((c) => c.environment !== 'PRODUCTION'),
@@ -179,9 +229,36 @@ export function DriverOnboarding() {
                 autorizada para preparar uno nuevo.
               </p>
             )}
-          <section className="panel panel-body documentary-units">
+          {q.data?.driver.independentProfile && (
+            <section
+              className="panel panel-body"
+              id="verificar-identidad"
+              tabIndex={-1}
+            >
+              <h2>
+                <span className="documentary-step">3</span>Mi identidad
+              </h2>
+              <p>
+                Completa tus datos, adjunta tu identificación y envía el
+                expediente a revisión.
+              </p>
+              <CreateCase
+                area="driver"
+                subjectType="DRIVER_IDENTITY"
+                resourceId={q.data.driver.id}
+                label="Preparar expediente de identidad independiente"
+                disabled={blocked}
+              />
+            </section>
+          )}
+          <section
+            className="panel panel-body documentary-units"
+            id="verificar-vehiculo"
+            tabIndex={-1}
+          >
             <h2>
-              <span className="documentary-step">3</span>Unidades independientes
+              {independent && <span className="documentary-step">4</span>}Mis
+              vehículos
             </h2>
             {q.isPending ? (
               <Loading />
@@ -227,13 +304,16 @@ export function DriverOnboarding() {
             ) : (
               !q.isError && (
                 <p>
-                  Tu identidad de flotilla la presenta su administrador. Tu
-                  aceptación personal no puede sustituirla otra cuenta.
+                  {q.data?.driver.providerId
+                    ? 'Tu administrador de flotilla presenta los documentos de identidad y vehículo.'
+                    : 'Tu cuenta aún no tiene un perfil independiente para registrar vehículos.'}
                 </p>
               )
             )}
           </section>
-          <CaseList area="driver" designed />
+          <div id="mis-expedientes" tabIndex={-1}>
+            <CaseList area="driver" designed />
+          </div>
         </div>
         <aside className="documentary-aside" aria-label="Resumen documental">
           <section className="panel panel-body documentary-receipt">
@@ -265,15 +345,6 @@ export function DriverOnboarding() {
             )}
             {!currentAcceptance && (
               <p>No sustituye la aceptación de los términos vigentes.</p>
-            )}
-            {q.data?.driver.independentProfile && (
-              <CreateCase
-                area="driver"
-                subjectType="DRIVER_IDENTITY"
-                resourceId={q.data.driver.id}
-                label="Preparar expediente de identidad independiente"
-                disabled={blocked}
-              />
             )}
           </section>
           <section className="panel panel-body">
