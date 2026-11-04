@@ -7,6 +7,12 @@ import { useAuth } from '../auth/context'
 import { ActionForm, Field, PageTitle } from '../components/ui'
 import { customer } from './service'
 import type { CustomerProfileViewDto } from './contract'
+import {
+  validateNewPassword,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_INPUT_MAX_LENGTH,
+  PASSWORD_HINT,
+} from '../auth/password-policy'
 const accepted =
   'Solicitud recibida. Si procede, recibirás un correo. Esta respuesta no confirma la entrega del mensaje.'
 export function ProfileFields({
@@ -148,6 +154,8 @@ export function CustomerAccess({
           initialDirty
           submitLabel="Confirmar"
           onSubmit={async (d) => {
+            if (challenge.purpose !== 'VERIFY')
+              validateNewPassword(String(d.get('password')))
             const result = await customer.confirm(
               challenge.purpose,
               token,
@@ -169,14 +177,14 @@ export function CustomerAccess({
           }}
         >
           {challenge.purpose !== 'VERIFY' && (
-            <Field label="Nueva contraseña">
+            <Field label="Nueva contraseña" hint={PASSWORD_HINT}>
               <input
                 name="password"
                 type="password"
                 autoComplete="new-password"
                 required
-                minLength={16}
-                maxLength={128}
+                minLength={PASSWORD_MIN_LENGTH}
+                maxLength={PASSWORD_INPUT_MAX_LENGTH}
               />
             </Field>
           )}

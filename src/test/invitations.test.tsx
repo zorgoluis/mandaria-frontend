@@ -9,12 +9,14 @@ vi.mock('../fleet/service', () => ({
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
   within,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { newPasswordCases } from './password-policy-fixtures'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { App } from '../app/App'
@@ -618,7 +620,9 @@ describe('role visibility and route protection', () => {
     expect(
       nav.getByRole('link', { name: 'Administradores' }),
     ).toBeInTheDocument()
-    expect(nav.queryByRole('link', { name: 'Invitaciones' })).not.toBeInTheDocument()
+    expect(
+      nav.queryByRole('link', { name: 'Invitaciones' }),
+    ).not.toBeInTheDocument()
   })
   it.each(['PROVIDER_ADMIN', 'DRIVER'] as Role[])(
     '%s cannot see or open user administration',
@@ -653,6 +657,34 @@ describe('role visibility and route protection', () => {
 })
 
 describe('account activation', () => {
+  it.each(newPasswordCases)(
+    'password $name before activation',
+    async ({ value, valid }) => {
+      vi.mocked(accounts.activate).mockResolvedValue({
+        status: 'ACTIVE',
+        email: 'synthetic@example.test',
+        role: 'DRIVER',
+      })
+      mount(`/activate-account?token=${TOKEN}`, null)
+      const input = await screen.findByLabelText('Crear contraseña')
+      fireEvent.change(input, { target: { value } })
+      fireEvent.change(screen.getByLabelText('Confirmar contraseña'), {
+        target: { value },
+      })
+      fireEvent.submit(input.closest('form')!)
+      if (valid)
+        await waitFor(() =>
+          expect(accounts.activate).toHaveBeenCalledWith(TOKEN, value),
+        )
+      else {
+        await screen.findByText(/La contraseña debe tener entre 8 y 128/)
+        expect(accounts.activate).not.toHaveBeenCalled()
+      }
+      expect(
+        JSON.stringify(localStorage) + JSON.stringify(sessionStorage),
+      ).not.toContain(value)
+    },
+  )
   async function fill(password = PASSWORD, confirmation = password) {
     const actor = userEvent.setup()
     await actor.type(screen.getByLabelText('Crear contraseña'), password)
@@ -678,7 +710,7 @@ describe('account activation', () => {
         /^\/activate-account$/,
       ),
     )
-    expect(screen.getByText(/Entre 16 y 128 caracteres/)).toBeInTheDocument()
+    expect(screen.getByText(/Entre 8 y 128 caracteres/)).toBeInTheDocument()
     noSecrets()
     await fill()
     await waitFor(() =>
@@ -712,7 +744,7 @@ describe('account activation', () => {
     mount(`/activate-account?token=${TOKEN}`, null)
     const actor = await fill('corta', 'corta')
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'entre 16 y 128 caracteres',
+      'entre 8 y 128 caracteres',
     )
     await actor.clear(screen.getByLabelText('Crear contraseña'))
     await actor.clear(screen.getByLabelText('Confirmar contraseña'))

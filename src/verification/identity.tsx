@@ -6,6 +6,12 @@ import { useAuth } from '../auth/context'
 import { Form, Warning } from './common'
 import { verification } from './service'
 import { registrationUnavailable } from './availability'
+import {
+  validateNewPassword,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_INPUT_MAX_LENGTH,
+} from '../auth/password-policy'
 export function Register() {
   const [sent, setSent] = useState(false)
   const [resend, setResend] = useState(false)
@@ -64,6 +70,7 @@ export function RegistrationConfirm() {
         label="Confirmar y continuar a login"
         disabled={unavailable}
         onSubmit={async (d) => {
+          validateNewPassword(String(d.get('password')))
           const r = await verification
             .confirm({
               token: String(d.get('token')),
@@ -92,14 +99,16 @@ export function RegistrationConfirm() {
         <Field label="Nombre *">
           <input name="name" required maxLength={100} />
         </Field>
-        <Field label="Contraseña nueva (16–128 caracteres) *">
+        <Field
+          label={`Contraseña nueva (${PASSWORD_MIN_LENGTH}–${PASSWORD_MAX_LENGTH} caracteres) *`}
+        >
           <input
             name="password"
             type="password"
             autoComplete="new-password"
             required
-            minLength={16}
-            maxLength={128}
+            minLength={PASSWORD_MIN_LENGTH}
+            maxLength={PASSWORD_INPUT_MAX_LENGTH}
           />
         </Field>
       </Form>

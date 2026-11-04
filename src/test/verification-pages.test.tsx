@@ -1,4 +1,5 @@
 import { AcceptanceHistory } from '../verification/acceptance-history'
+import { newPasswordCases } from './password-policy-fixtures'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -418,6 +419,37 @@ it('registration and confirmation never authenticate or approve automatically', 
   expect(await screen.findByText(/Revisa tu correo/)).toBeInTheDocument()
   expect(verification.command).not.toHaveBeenCalled()
 })
+it.each(newPasswordCases)(
+  'independent registration password $name',
+  async ({ value, valid }) => {
+    vi.mocked(verification.confirm).mockResolvedValue({
+      status: 'CONFIRMED_LOGIN_REQUIRED',
+    })
+    mount(<RegistrationConfirm />)
+    fireEvent.change(screen.getByLabelText('Código de confirmación *'), {
+      target: { value: 's'.repeat(43) },
+    })
+    fireEvent.change(screen.getByLabelText('Nombre *'), {
+      target: { value: 'Persona sintética' },
+    })
+    const input = screen.getByLabelText('Contraseña nueva (8–128 caracteres) *')
+    fireEvent.change(input, { target: { value } })
+    fireEvent.submit(input.closest('form')!)
+    if (valid)
+      await waitFor(() =>
+        expect(verification.confirm).toHaveBeenCalledWith({
+          token: 's'.repeat(43),
+          name: 'Persona sintética',
+          password: value,
+        }),
+      )
+    else {
+      await screen.findByText(/La contraseña debe tener entre 8 y 128/)
+      expect(verification.confirm).not.toHaveBeenCalled()
+    }
+  },
+)
+
 it('confirmation uses token in body and returns to safe login', async () => {
   vi.mocked(verification.confirm).mockResolvedValue({
     status: 'CONFIRMED_LOGIN_REQUIRED',
@@ -435,7 +467,7 @@ it('confirmation uses token in body and returns to safe login', async () => {
     target: { value: 'Persona sintética' },
   })
   fireEvent.change(
-    screen.getByLabelText('Contraseña nueva (16–128 caracteres) *'),
+    screen.getByLabelText('Contraseña nueva (8–128 caracteres) *'),
     { target: { value: 'synthetic-password-only' } },
   )
   fireEvent.click(

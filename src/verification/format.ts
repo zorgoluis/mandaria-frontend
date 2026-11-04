@@ -135,6 +135,7 @@ const errors: Record<string, string> = {
     'El expediente de flotilla lo presenta su administrador; el conductor acepta personalmente sus términos.',
 }
 export function message(e: unknown) {
+  if (e instanceof PasswordPolicyError) return e.message
   return e instanceof ApiError
     ? availabilityError(e) ||
         errors[e.code || ''] ||
@@ -155,3 +156,4 @@ export function message(e: unknown) {
       ? e.message
       : 'No fue posible completar la solicitud.'
 }
+import { PasswordPolicyError } from '../auth/password-policy'

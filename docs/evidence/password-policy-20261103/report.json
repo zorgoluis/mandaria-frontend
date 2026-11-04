@@ -1,0 +1,26 @@
+{
+  "build": "PASS",
+  "artifacts": [
+    {
+      "sha256": "BBCA9CB4DECCEF62FC5DD532BAB747A3DC2F08F98E95FAB7CF584F562352A061",
+      "path": "dist/index.html"
+    },
+    {
+      "sha256": "62B32E0EAB5DA839AD8B916CE18402B2FC6CD713A9A526684FAE2566492D73D9",
+      "path": "dist/assets/Root-lMeSjP2S.js"
+    },
+    {
+      "sha256": "064FF75024FE3D1BF71E8E40D29927D10D6C9FA78C19D4998F05EC264343501F",
+      "path": "src/auth/password-policy.ts"
+    }
+  ],
+  "types": "PASS",
+  "tests": 232,
+  "lint": "PASS",
+  "files": 5,
+  "version": "1.11.0",
+  "result": "PASS",
+  "base": "171c8513326ae08cec974a5eb3c3c8b5fe8a6120",
+  "http": "BLOCKED: connection refused at 127.0.0.1:37795",
+  "date": "2026-11-03"
+}

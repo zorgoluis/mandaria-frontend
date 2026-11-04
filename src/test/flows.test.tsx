@@ -316,6 +316,18 @@ describe('auth and permissions UX', () => {
     mount('/missing')
     expect(screen.getByText('Página no encontrada')).toBeInTheDocument()
   })
+  it('allows a historical short password in login unchanged', async () => {
+    const login = vi.fn().mockResolvedValue(undefined)
+    mount('/login', null, { login })
+    const actor = userEvent.setup()
+    await actor.type(
+      screen.getByLabelText('Correo electrónico'),
+      'synthetic@example.test',
+    )
+    await actor.type(screen.getByLabelText('Contraseña'), ' 001 ')
+    await actor.click(screen.getByRole('button', { name: 'Iniciar sesión' }))
+    expect(login).toHaveBeenCalledWith('synthetic@example.test', ' 001 ')
+  })
   it('submits login and displays an incorrect password error', async () => {
     const login = vi
       .fn()

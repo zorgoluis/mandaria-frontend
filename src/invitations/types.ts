@@ -17,8 +17,10 @@ export type InvitationStatus = (typeof invitationStatuses)[number]
 export type AccountStatus = (typeof accountStatuses)[number]
 export type MembershipRole = (typeof membershipRoles)[number]
 /** Shared by the SUPER_ADMIN bootstrap and account activation (common/password-policy.ts). */
-export const PASSWORD_MIN_LENGTH = 16
-export const PASSWORD_MAX_LENGTH = 128
+export {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+} from '../auth/password-policy'
 
 export interface UserInvitation {
   id: string

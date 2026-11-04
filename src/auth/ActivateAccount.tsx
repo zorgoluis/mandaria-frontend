@@ -10,6 +10,10 @@ import {
   type ActivationResult,
 } from '../invitations/types'
 import { labels } from '../utils/format'
+import {
+  validateNewPassword,
+  PASSWORD_INPUT_MAX_LENGTH,
+} from './password-policy'
 
 /** Token states that end the flow: the form can no longer succeed with this link. */
 const terminal: Record<string, { title: string; text: string }> = {
@@ -122,14 +126,7 @@ export function ActivateAccount() {
         submitLabel="Activar cuenta"
         onSubmit={async (data) => {
           const password = String(data.get('password') ?? '')
-          if (
-            password.length < PASSWORD_MIN_LENGTH ||
-            password.length > PASSWORD_MAX_LENGTH
-          )
-            throw new ApiError(
-              400,
-              `La contraseña debe tener entre ${PASSWORD_MIN_LENGTH} y ${PASSWORD_MAX_LENGTH} caracteres.`,
-            )
+          validateNewPassword(password)
           if (password !== String(data.get('confirmation') ?? ''))
             throw new ApiError(400, 'Las contraseñas no coinciden.')
           try {
@@ -161,7 +158,8 @@ export function ActivateAccount() {
             type={visible ? 'text' : 'password'}
             autoComplete="new-password"
             required
-            maxLength={PASSWORD_MAX_LENGTH}
+            minLength={PASSWORD_MIN_LENGTH}
+            maxLength={PASSWORD_INPUT_MAX_LENGTH}
           />
         </Field>
         <Field label="Confirmar contraseña">
@@ -170,7 +168,7 @@ export function ActivateAccount() {
             type={visible ? 'text' : 'password'}
             autoComplete="new-password"
             required
-            maxLength={PASSWORD_MAX_LENGTH}
+            maxLength={PASSWORD_INPUT_MAX_LENGTH}
           />
         </Field>
         <button

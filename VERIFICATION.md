@@ -1,3 +1,15 @@
+## 2026-11-03 — Entrega Git de política de contraseñas
+
+Revisado el diff final de8–128, sus pruebas y evidencia. Usuario autoriza commit/push a main; origin/main coincide con base171c851. Se conservan los resultados verificados de232 pruebas focalizadas, tipos, lint y build PASS; no se reejecutan por esta operación Git. Login histórico, APIs y versión1.11.0 intactos. La aceptación HTTP real sigue pendiente por indisponibilidad local documentada; publicar código no acredita despliegue. Sin force, backend/Driver ni despliegue. Las entradas inferiores conservan el estado local anterior a esta entrega.
+
+## 2026-11-03 — Contraseñas nuevas8–128
+
+Política común aplicada a invitaciones, confirmación independiente y CUSTOMER REGISTER/RESET. Sin composición obligatoria, trim ni normalización; validación previa a API y texto exacto preservado. Login histórico y contraseña actual intactos. Conteo Unicode por puntos de código, HTML admite pares sustitutos sin relajar máximo128 lógico. Corregida presentación del error local en ambos tipos de formulario; confirmación y manejo de tokens existentes preservados. Selector del harness Web actualizado, sin ejecutarlo.
+
+Verificación nueva:232/232 pruebas en5 archivos,29.70 s; tipos tests/producto, lint global y build PASS; aviso conocido Root1210.48 kB. Primera/segunda corrida223/230 y226/230 detectaron mensajes genéricos al validar; corregido con error local tipado sin ampliar timeouts. [Informe](docs/PASSWORD-POLICY-WEB-20261103.md) · [Pruebas](docs/evidence/password-policy-20261103/tests.txt). No suite global nueva. HTTP real bloqueado:37795 rechaza conexión; build efectivo no comprobado, sin reiniciar ni mutar entorno. Pruebas backend del handoff no se atribuyen a Web.
+
+Web1.11.0 intacta sobre171c851; sin backend/Driver, datos reales, configuración, commit/push ni despliegue. Historia preservada.
+
 ## 2026-11-02 — Entrega Git de catálogo CASH/PICKUP
 
 Usuario autoriza commit y push a main de la corrección local y evidencia previamente verificadas (66 pruebas focalizadas, tipos, lint y build PASS). Revisado diff sin cambios adicionales de producto; origin/main coincide con base e6c3fb6. Versión1.11.0 intacta. No se reejecutan pruebas por esta operación Git. Los estados «local/no publicado» de informes y manifiesto inferiores describen el momento de captura; publicación de código no acredita despliegue en VM, que permanece pendiente. Sin force ni operación de credenciales reales.

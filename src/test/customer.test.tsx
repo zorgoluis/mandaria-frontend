@@ -1,4 +1,5 @@
 import { projection } from './business-fixtures'
+import { newPasswordCases } from './password-policy-fixtures'
 import { requestDetail } from './fixtures/request-design'
 import { env } from '../config/env'
 import { loadMaps } from '../location/googleMaps'
@@ -558,6 +559,58 @@ it('registration resend submits profile and generic acknowledgement does not cla
     true,
   )
 })
+it.each(['REGISTER', 'RESET'] as const)(
+  '%s password policy',
+  async (purpose) => {
+    for (const { value, valid } of newPasswordCases) {
+      vi.mocked(customer.confirm)
+        .mockClear()
+        .mockResolvedValue({ status: 'CONFIRMED' })
+      const view = mount(
+        <CustomerAccess challenge={{ purpose, token: 'synthetic-only' }} />,
+      )
+      const input = screen.getByLabelText('Nueva contraseña')
+      fireEvent.change(input, { target: { value } })
+      fireEvent.submit(input.closest('form')!)
+      if (valid)
+        await waitFor(() =>
+          expect(customer.confirm).toHaveBeenCalledWith(
+            purpose,
+            'synthetic-only',
+            value,
+          ),
+        )
+      else {
+        await screen.findByText(/La contraseña debe tener entre 8 y 128/)
+        expect(customer.confirm).not.toHaveBeenCalled()
+      }
+      view.unmount()
+    }
+  },
+)
+
+it.each(['REGISTER', 'RESET'] as const)(
+  '%s backend rejection does not consume the local challenge or report success',
+  async (purpose) => {
+    vi.mocked(customer.confirm).mockRejectedValue(
+      new ApiError(
+        400,
+        'Enlace no válido o ya utilizado.',
+        'ACCESS_TOKEN_INVALID',
+      ),
+    )
+    mount(<CustomerAccess challenge={{ purpose, token: 'synthetic-only' }} />)
+    fireEvent.change(screen.getByLabelText('Nueva contraseña'), {
+      target: { value: '00000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+    await screen.findByText('Enlace no válido o ya utilizado.')
+    expect(customer.confirm).toHaveBeenCalledOnce()
+    expect(screen.queryByText('Confirmación completada')).toBeNull()
+    expect(auth.logout).not.toHaveBeenCalled()
+  },
+)
+
 it('reset success clears session and requests a fresh login', async () => {
   vi.mocked(customer.confirm).mockResolvedValue({ status: 'CONFIRMED' })
   mount(
