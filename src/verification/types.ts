@@ -177,6 +177,13 @@ export interface CaseSummary {
   decidedAt: string | null
   publicReason: string | null
 }
+export type ReviewPage = import('../types/api').Page<
+  CaseSummary & { updatedAt: string }
+> & {
+  counts: Record<CaseStatus, number>
+  oldest: { id: string; revision: number; submittedAt: string }[]
+  asOf: string
+}
 export interface VerificationCase extends CaseSummary {
   registrationCardRequired?: boolean | null
   retention?: {

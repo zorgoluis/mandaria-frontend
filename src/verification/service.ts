@@ -10,6 +10,7 @@ import type {
   Onboarding,
   VerificationCase,
   CaseSummary,
+  ReviewPage,
   Notice,
   Marker,
   Receipt,
@@ -100,6 +101,26 @@ export const verification = {
     ),
   onboarding: (signal?: AbortSignal) =>
     api<Onboarding>('/driver/onboarding', 'GET', undefined, signal),
+  review: async (
+    page: number,
+    status: string,
+    providerId: string | undefined,
+    search: string,
+    signal: AbortSignal,
+  ) => {
+    const result = await api<ReviewPage>(
+      '/admin/verification-cases?' +
+        queryString({ page, pageSize: 20, status, providerId, search }),
+      'GET',
+      undefined,
+      signal,
+    )
+    if (!result.counts || !Array.isArray(result.oldest) || !result.asOf)
+      throw Error(
+        'El servidor todavía no ofrece el resumen de revisión documental.',
+      )
+    return result
+  },
   list: (
     area: Area,
     page: number,

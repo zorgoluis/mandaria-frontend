@@ -35,12 +35,16 @@ import './identity-case.css'
 import { Bike, Car } from 'lucide-react'
 import { labels as vehicleLabels } from '../utils/format'
 import { RepresentativeCase } from './representatives'
+export { AdminVerification } from './admin-review'
 export function VerificationLayout() {
   const { user } = useAuth()
   const location = useLocation()
+  const adminQueue =
+    user?.role === 'SUPER_ADMIN' &&
+    location.pathname === '/admin/verification-cases'
   return (
     <div
-      className={`verification-area ${location.pathname === '/driver/onboarding' || (user?.role === 'DRIVER' && location.pathname.startsWith('/verification/cases/')) ? 'driver-documentary-area' : ''}`}
+      className={`verification-area ${adminQueue ? 'admin-review-area' : ''} ${location.pathname === '/driver/onboarding' || (user?.role === 'DRIVER' && location.pathname.startsWith('/verification/cases/')) ? 'driver-documentary-area' : ''}`}
       key={user?.id}
     >
       {user?.role === 'SUPER_ADMIN' &&
@@ -49,11 +53,22 @@ export function VerificationLayout() {
           La publicación administrativa es independiente del alta documental y
           no activa la admisión.
         </aside>
-      ) : location.pathname === '/driver/onboarding' ? null : (
+      ) : adminQueue || location.pathname === '/driver/onboarding' ? null : (
         <Warning />
       )}
-      <Recovery showAccountLink={location.pathname !== '/driver/onboarding'} />
-      <Outlet key={user?.id + ':' + location.pathname + location.search} />
+      <Recovery
+        showAccountLink={
+          !adminQueue && location.pathname !== '/driver/onboarding'
+        }
+      />
+      <Outlet
+        key={
+          user?.id +
+          ':' +
+          location.pathname +
+          (adminQueue ? '' : location.search)
+        }
+      />
     </div>
   )
 }
@@ -518,28 +533,6 @@ function ProviderWorkspace({ scope }: { scope: ProviderContext }) {
     </>
   )
 }
-export function AdminVerification() {
-  return (
-    <>
-      <h1>Revisión documental</h1>
-      <p>
-        <Link to="/admin/verification-publications">
-          Publicación de términos y privacidad
-        </Link>
-      </p>
-      <p>
-        <Link to="/admin/fleet-representatives">
-          Vínculos de representación legal
-        </Link>
-      </p>
-      <p>
-        Decisiones exclusivas SUPER_ADMIN. Identidad y unidades se revisan por
-        separado de representación legal.
-      </p>
-      <CaseList area="admin" />
-    </>
-  )
-}
 export function CaseList({
   area,
   providerId,
@@ -552,13 +545,12 @@ export function CaseList({
   const { user } = useAuth()
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
-  const [provider, setProvider] = useState('')
   const q = useQuery({
     queryKey: vkey(
       user!.id,
       'list',
       area,
-      providerId || provider,
+      providerId,
       page,
       status,
     ),
@@ -567,7 +559,7 @@ export function CaseList({
         area,
         page,
         status,
-        providerId || provider || undefined,
+        providerId || undefined,
         signal,
       ),
     gcTime: 0,
@@ -619,29 +611,6 @@ export function CaseList({
             )}
           </select>
         </Field>
-      )}
-      {area === 'admin' && (
-        <details>
-          <summary>Filtrar por proveedor</summary>
-          <ProviderScope>
-            {(p) => (
-              <button
-                type="button"
-                onClick={() => {
-                  setProvider(p.providerId)
-                  setPage(1)
-                }}
-              >
-                Filtrar: {p.name}
-              </button>
-            )}
-          </ProviderScope>
-          {provider && (
-            <button onClick={() => setProvider('')}>
-              Quitar filtro de proveedor
-            </button>
-          )}
-        </details>
       )}
       {q.isPending ? (
         <Loading />

@@ -375,11 +375,13 @@ export function Table<T extends { id: string }>({
   )
 }
 export function Pagination({
+  arrows = false,
   page,
   totalPages,
   total,
   onPage,
 }: {
+  arrows?: boolean
   page: number
   totalPages: number
   total: number
@@ -396,14 +398,14 @@ export function Pagination({
           disabled={page <= 1}
           onClick={() => onPage(page - 1)}
         >
-          Anterior
+          {arrows && <span aria-hidden="true">← </span>}Anterior
         </button>
         <button
           className="button secondary small"
           disabled={page >= totalPages}
           onClick={() => onPage(page + 1)}
         >
-          Siguiente
+          Siguiente{arrows && <span aria-hidden="true"> →</span>}
         </button>
       </div>
     </div>
