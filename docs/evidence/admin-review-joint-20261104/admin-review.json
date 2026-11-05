@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "cases": 24,
+  "checks": [
+    "global counts outside page",
+    "latest event first",
+    "oldest by submission",
+    "pagination",
+    "revision and note search",
+    "status and provider filters",
+    "empty queue",
+    "mobile width",
+    "DRIVER forbidden"
+  ]
+}

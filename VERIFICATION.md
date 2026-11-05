@@ -1,3 +1,7 @@
+## 2026-11-04 — Regresión conjunta del listado administrativo de revisión
+
+Sobre `main` en `8b48126`, Vitest pasó 1.753/1.753 pruebas en 86 archivos en 103,20 s. La primera corrida quedó incompleta por una salida inesperada de un worker. La repetición por separado finalizó con código 0 usando la misma configuración. Tipos, lint, build y Chromium con Nest/PostgreSQL aislados pasaron. [Salidas de ambas corridas, comprobaciones y capturas](docs/evidence/admin-review-joint-20261104/README.md).
+
 ## 2026-11-04 — Regresión conjunta y repetición del recorrido DRIVER
 
 Sobre `main` en `b3591a7`, Vitest pasó 1.751/1.751 pruebas en 86 archivos (125,44 s). Tipos, lint y build finalizaron con código 0. En una nueva ejecución Chromium con HTTP local, cinco cargas quedaron validadas y los dos expedientes llegaron a SUBMITTED, cada uno con un evento de presentación. [Salidas, registro HTTP y capturas](docs/evidence/identity-unit-joint-20261104/README.md).

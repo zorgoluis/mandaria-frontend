@@ -1,3 +1,7 @@
+## 2026-11-04 — Revisión documental y compatibilidad del listado en main
+
+Se verificaron juntos el rediseño SUPER_ADMIN (`9e74505`) y la corrección del listado básico (`d4b583f`) en Web 1.11.0. La suite global completa pasó en la segunda corrida. El recorrido con 24 expedientes sintéticos confirmó filtros, paginación, conteos y pendientes contra la API local ampliada. La compatibilidad con la respuesta básica se comprobó en Vitest. [Evidencia conjunta](docs/evidence/admin-review-joint-20261104/README.md).
+
 ## 2026-11-04 — Identidad y Unidad verificadas juntas en main
 
 Se verificaron `505ae52` y `b3591a7` en Web 1.11.0. La suite global, tipos, lint y build pasaron a la primera. Un nuevo recorrido desde Mi cuenta confirmó ambos expedientes en revisión tras volver a abrirlos como DRIVER. [Evidencia conjunta y capturas](docs/evidence/identity-unit-joint-20261104/README.md).
