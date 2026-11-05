@@ -1,3 +1,7 @@
+## 2026-11-04 — Identidad y Unidad verificadas juntas en main
+
+Se verificaron `505ae52` y `b3591a7` en Web 1.11.0. La suite global, tipos, lint y build pasaron a la primera. Un nuevo recorrido desde Mi cuenta confirmó ambos expedientes en revisión tras volver a abrirlos como DRIVER. [Evidencia conjunta y capturas](docs/evidence/identity-unit-joint-20261104/README.md).
+
 ## 2026-11-04 — Presentación de Identidad y Unidad desde Mi cuenta
 
 Un DRIVER sintético presentó ambos expedientes en Chromium contra Nest y PostgreSQL locales. Al volver a abrirlos se observaron en revisión, con cuatro imágenes en Identidad y una en Unidad. Se corrigieron la validación HTML del identificador de vehículo y los textos del resumen una vez enviado. [Evidencia HTTP/UI y reproducción](docs/evidence/driver-document-journey-20261104/README.md).

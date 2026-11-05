@@ -1,3 +1,7 @@
+## 2026-11-04 — Regresión conjunta y repetición del recorrido DRIVER
+
+Sobre `main` en `b3591a7`, Vitest pasó 1.751/1.751 pruebas en 86 archivos (125,44 s). Tipos, lint y build finalizaron con código 0. En una nueva ejecución Chromium con HTTP local, cinco cargas quedaron validadas y los dos expedientes llegaron a SUBMITTED, cada uno con un evento de presentación. [Salidas, registro HTTP y capturas](docs/evidence/identity-unit-joint-20261104/README.md).
+
 ## 2026-11-04 — Aceptación HTTP/UI de presentación documental
 
 `node scripts/verify-driver-document-journey.mjs` pasó en LOCAL_TEST sobre una base aislada. Cinco cargas HTTP confirmadas y dos presentaciones por UI, cada una con un único evento SUBMIT al releer el expediente. Identidad SUBMITTED/revisión 11 y Unidad SUBMITTED/revisión 5. Adicionalmente pasaron 101 pruebas focalizadas, tipos, lint y build. [Comandos, límites y capturas](docs/evidence/driver-document-journey-20261104/README.md).
