@@ -26,6 +26,23 @@ import type {
 } from './types'
 const enc = encodeURIComponent
 export const verification = {
+  signupStart: (email: string) =>
+    publicApi<{
+      status: string
+      challengeId: string
+      resendAfterSeconds: number
+    }>('/independent-driver-registrations/start', 'POST', { email }),
+  signupComplete: (body: {
+    challengeId: string
+    code: string
+    name: string
+    password: string
+  }) =>
+    publicApi<{ status: string; email: string }>(
+      '/independent-driver-registrations/complete',
+      'POST',
+      body,
+    ),
   representatives: (signal?: AbortSignal) =>
     api<{ items: RepresentativeLink[] }>(
       '/fleet-representatives/mine',

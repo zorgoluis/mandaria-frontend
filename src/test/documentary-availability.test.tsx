@@ -5,7 +5,6 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
@@ -147,16 +146,14 @@ beforeEach(() => {
   })
 })
 it('keeps the authorized basic admin list usable when the server omits dashboard metadata', async () => {
-  const fetcher = vi
-    .spyOn(globalThis, 'fetch')
-    .mockImplementation(async () =>
-      Response.json({
-        ...emptyPage,
-        total: 1,
-        totalPages: 1,
-        items: [caseFixture],
-      }),
-    )
+  const fetcher = vi.spyOn(globalThis, 'fetch').mockImplementation(async () =>
+    Response.json({
+      ...emptyPage,
+      total: 1,
+      totalPages: 1,
+      items: [caseFixture],
+    }),
+  )
   try {
     mount(<AdminVerification />, 'SUPER_ADMIN')
     expect(
@@ -526,23 +523,15 @@ it('requirements failures preserve unresolved markers without another command', 
 it.each([disabled, missing])(
   'public registration uses explicit server errors, never calls protected requirements ($code)',
   async (error) => {
-    vi.spyOn(verification, 'register').mockRejectedValue(error)
+    vi.spyOn(verification, 'signupStart').mockRejectedValue(error)
     mount(<Register />, null)
-    fireEvent.change(screen.getByLabelText(/Correo electrónico/), {
+    fireEvent.change(screen.getByLabelText('Tu correo electrónico'), {
       target: { value: 'synthetic@example.invalid' },
     })
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Solicitar correo de registro' }),
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Recibir código' }))
     await screen.findByRole('alert')
-    expect(
-      screen.getByRole('button', { name: 'Solicitar correo de registro' }),
-    ).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Recibir código' })).toBeEnabled()
     expect(verification.requirements).not.toHaveBeenCalled()
-    expect(
-      within(
-        screen.getByLabelText('Aviso de verificación documental'),
-      ).queryByText(availabilityText.local),
-    ).toBeNull()
+    expect(screen.queryByText(availabilityText.local)).toBeNull()
   },
 )
