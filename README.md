@@ -1,3 +1,11 @@
+## 2026-11-05 — Entrega del registro de conductores en QA
+
+Opción A y diseño listos para la publicación Git autorizada. Para actualizar la VM: backend y migración primero, Web después; confirmar la rama o revisión desplegada. [Requisitos y procedimiento](docs/DRIVER-REGISTRATION-OPTION-A.md#actualización-en-vm). El estado de la VM no se ha consultado ni modificado. Las entradas inferiores conservan su fecha y alcance original.
+
+## 2026-11-05 — Registro simplificado de conductores, opción A
+
+Implementado en QA: correo y código de seis dígitos, acceso automático con la contraseña elegida, nombre precargado, asistente de aceptaciones/datos/fotos y envío conjunto de identidad y vehículo. Recupera el avance guardado y respuestas perdidas sin presentar dos veces. Web: 1.773/1.773 pruebas, tipos, lint y build PASS. Recorrido nuevo con Chrome/Nest/PostgreSQL temporal PASS; nueve grupos y capturas móvil/escritorio. Backend modificado de forma coordinada; requiere su migración y publicación antes de Web. [Contrato, evidencia y límites](docs/DRIVER-REGISTRATION-OPTION-A.md). Sin commit, push ni despliegue.
+
 ## 2026-10-28 — Aceptación local independiente actualizada
 
 Backend1.13.5 local conectado: observación de MDR-000001 entregado y cargo único; onboarding original con identidad/licencia aprobadas y motocicleta aprobada mediante correctivo autorizado. Disponibilidad OFFLINE, recepción OFF; no producción. [Evidencia HTTP/UI y límites](docs/INDEPENDENTS-LIVE-WEB-20261028.md) · [Correctivo documental](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Las entradas inferiores preservan resultados y bloqueos históricos. Web1.11.0 sin cambio de versión.

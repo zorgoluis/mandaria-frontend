@@ -1,3 +1,15 @@
+## 2026-11-05 — Publicación autorizada del registro en QA
+
+Solicitud: commit y push de la opción A y su diseño a la rama actual, con explicación de actualización en VM. Fetch nuevo: QA y origin/QA coinciden antes de la publicación; se revisa el diff y se seleccionan implementación, pruebas, documentación y evidencias sintéticas. Se reutilizan los resultados ya registrados (suite Web 1.773, revisión visual 165, tipos/lint/build y recorrido integrado final); no se atribuyen nuevas ejecuciones de pruebas a esta revisión Git. [Orden y requisitos para VM](docs/DRIVER-REGISTRATION-OPTION-A.md#actualización-en-vm). La autorización de Git no ejecuta el despliegue. Las entradas inferiores describen estados históricos anteriores al commit.
+
+## 2026-11-05 — Diseño del registro de conductores
+
+Rediseñadas las seis vistas de la opción A: entrada por correo, código, términos, datos, fotos y solicitud enviada. Identidad visual verde/crema, portada de escritorio, tarjetas móviles, pasos con estado, campos agrupados, consejos por documento y progreso de cargas. Estilos acotados al registro; conserva comandos y contrato backend. Pasaron 165 pruebas de las cuatro suites relacionadas, lint, tipos y build; recorrido real con Nest/PostgreSQL temporal y Chrome, incluidas recuperación y reanudación. Capturas de seis vistas en móvil/escritorio y comprobación de ancho a 320/390/768/1280 px en `docs/evidence/driver-registration-design-20261105`. Sin publicación.
+
+## 2026-11-05 — Registro simplificado de conductores, opción A
+
+Implementado en QA: correo y código de seis dígitos, acceso automático con la contraseña elegida, nombre precargado, asistente de aceptaciones/datos/fotos y envío conjunto de identidad y vehículo. Recupera el avance guardado y respuestas perdidas sin presentar dos veces. Web: 1.773/1.773 pruebas, tipos, lint y build PASS. Recorrido nuevo con Chrome/Nest/PostgreSQL temporal PASS; nueve grupos y capturas móvil/escritorio. Backend modificado de forma coordinada; requiere su migración y publicación antes de Web. [Contrato, evidencia y límites](docs/DRIVER-REGISTRATION-OPTION-A.md). Sin commit, push ni despliegue.
+
 ## 2026-11-04 — Permiso de lectura del código de entrega en Integraciones
 
 Web 1.11.0 ofrece `deliveries:confirmation-code:read` junto a `deliveries:read` en Crear credencial. La casilla inicia desmarcada. Con API simulada se comprobó el POST con ambos permisos y con sólo lectura, la conservación de permisos existentes al cancelar y el rechazo de la creación en un único intento. Pasaron las 71 pruebas de `flows.test.tsx` e `integration-credentials-api.test.ts`, tipos, lint y build. Pendiente en la VM: publicar la Web y disponer de un backend desplegado que reconozca el permiso. Para consultar códigos de pedidos propios, Coita Eats necesita ambos permisos en su credencial.

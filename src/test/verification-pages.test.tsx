@@ -451,16 +451,11 @@ it('mail failure does not turn approved decision into rejection', async () => {
   expect(await screen.findByText(/Aviso fallido/)).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Aprobado' })).toBeInTheDocument()
 })
-it('registration and confirmation never authenticate or approve automatically', async () => {
-  vi.mocked(verification.register).mockResolvedValue({ status: 'CHECK_EMAIL' })
+it('registration offers the signed-in person their existing account', async () => {
   mount(<Register />)
-  fireEvent.change(screen.getByLabelText('Correo electrónico *'), {
-    target: { value: 'synthetic@example.test' },
-  })
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Solicitar correo de registro' }),
-  )
-  expect(await screen.findByText(/Revisa tu correo/)).toBeInTheDocument()
+  expect(
+    screen.getByRole('link', { name: 'Continuar con mi cuenta' }),
+  ).toHaveAttribute('href', '/verification-entry')
   expect(verification.command).not.toHaveBeenCalled()
 })
 it.each(newPasswordCases)(
@@ -1575,8 +1570,12 @@ it('identity without city or issuer can present a complete dossier', async () =>
     name: 'Presentar para revisión',
   })
   await waitFor(() => expect(submit).toBeEnabled())
-  expect(screen.getByRole('heading', { name: 'Listo para enviar a revisión' })).toBeInTheDocument()
-  expect(screen.getByRole('radio', { name: 'Licencia del conductor' })).toHaveAccessibleDescription(/Imagen recibida/)
+  expect(
+    screen.getByRole('heading', { name: 'Listo para enviar a revisión' }),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByRole('radio', { name: 'Licencia del conductor' }),
+  ).toHaveAccessibleDescription(/Imagen recibida/)
   fireEvent.click(submit)
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   await waitFor(() => expect(verification.command).toHaveBeenCalledOnce())

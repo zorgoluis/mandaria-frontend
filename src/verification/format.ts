@@ -58,6 +58,12 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  SIGNUP_CODE_INVALID:
+    'El código no es válido, venció o agotó sus intentos. Solicita otro. Si ya creaste tu cuenta, inicia sesión con tu contraseña.',
+  VERIFICATION_LICENSE_REQUIRED:
+    'Completa una licencia vigente para el tipo de vehículo que elegiste.',
+  VERIFICATION_PLATE_REQUIRED:
+    'Agrega la placa de tu vehículo antes de enviar.',
   IMAGE_RETENTION_DISABLED:
     'La confirmación de rechazo definitivo no está disponible en este momento.',
   IMAGE_RETENTION_EVIDENCE_REQUIRED:

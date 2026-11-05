@@ -34,9 +34,16 @@ import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
 import { useFeedback } from '../components/feedback-context'
 import { errorMessage } from '../services/errors'
+import type { Onboarding } from '../verification/types'
+import { verification } from '../verification/service'
 export function AdminLayout() {
   const { user, logout } = useAuth()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+  const onboarding = useQuery<Onboarding>({
+    queryKey: ['verification', user?.id, 'onboarding'],
+    queryFn: ({ signal }) => verification.onboarding(signal),
+    enabled: false,
+  })
   // Observe the existing profile cache; do not add requests for operational users.
   const profile = useQuery({
     queryKey: ['customer', user?.id, 'profile'],
@@ -81,6 +88,35 @@ export function AdminLayout() {
     }
   }, [open])
   const admin = user?.role === 'SUPER_ADMIN'
+  if (
+    user?.role === 'DRIVER' &&
+    pathname === '/driver/onboarding' &&
+    !new URLSearchParams(search).has('view') &&
+    onboarding.data?.guidedRegistration &&
+    onboarding.data.driver.independentProfile?.status === 'PENDING' &&
+    onboarding.data.driver.independentProfile.vehicles.length <= 1
+  )
+    return (
+      <div className="signup-workspace">
+        <header className="signup-topbar">
+          <Link
+            className="brand"
+            to="/profile"
+            aria-label="Mandaria, mi cuenta"
+          >
+            <img src="/mandaria.svg" alt="" width="36" height="36" /> mandaria.
+          </Link>
+          <Link className="journey-profile-link" to="/profile">
+            <UserRound size={16} aria-hidden="true" /> Mi cuenta
+          </Link>
+        </header>
+        <main id="main-content">
+          <DriverExecutionRecovery />
+          <IndependentRecovery />
+          <Outlet />
+        </main>
+      </div>
+    )
   const links = [
     ...(user?.role === 'CUSTOMER'
       ? [

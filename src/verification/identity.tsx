@@ -12,52 +12,7 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_INPUT_MAX_LENGTH,
 } from '../auth/password-policy'
-export function Register() {
-  const [sent, setSent] = useState(false)
-  const [resend, setResend] = useState(false)
-  const [unavailable, setUnavailable] = useState(false)
-  return (
-    <main className="verification-public">
-      <Link to="/login">
-        <img src="/mandaria.svg" width="40" alt="Mandaria" />
-      </Link>
-      <h1>Registro de conductor independiente</h1>
-      <Warning />
-      <p>
-        No necesitas un proveedor. Confirmar tu correo crea una cuenta
-        pendiente; no habilita servicios.
-      </p>
-      <Form
-        label={resend ? 'Reenviar correo' : 'Solicitar correo de registro'}
-        disabled={unavailable}
-        onSubmit={async (d) => {
-          const r = await verification
-            .register(String(d.get('email')), resend)
-            .catch((error: unknown) => {
-              setUnavailable(registrationUnavailable(error))
-              throw error
-            })
-          if (r?.status !== 'CHECK_EMAIL')
-            throw new Error('Respuesta no confirmada.')
-          setSent(true)
-          setResend(true)
-        }}
-      >
-        <Field label="Correo electrónico *">
-          <input type="email" name="email" required maxLength={254} />
-        </Field>
-      </Form>
-      {sent && (
-        <p role="status">
-          Revisa tu correo. La respuesta no acredita entrega del mensaje. Si ya
-          tienes cuenta, inicia sesión; no se cambiará tu rol.
-        </p>
-      )}
-      <Link to="/driver/verify">Confirmar con el código recibido</Link> ·{' '}
-      <Link to="/login?next=onboarding">Iniciar sesión</Link>
-    </main>
-  )
-}
+export { DriverSignup as Register } from './signup'
 export function RegistrationConfirm() {
   const navigate = useNavigate()
   const [unavailable, setUnavailable] = useState(false)

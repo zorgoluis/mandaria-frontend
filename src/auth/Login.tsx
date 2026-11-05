@@ -131,7 +131,7 @@ export function Login() {
             correo antes de iniciar sesión.
           </p>
           <p>
-            <Link to="/driver/register">Registro independiente de prueba</Link>
+            <Link to="/driver/register">Crear cuenta de conductor</Link>
           </p>
           <div className="login-security">
             <Link to="/privacy/deletion-access">

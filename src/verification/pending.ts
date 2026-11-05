@@ -211,6 +211,18 @@ export async function reconcile(
             throw new Error(
               'No se confirmó el plan actual del expediente; conserva el intento.',
             )
+        } else if (m.operation === 'SUBMIT_ONBOARDING') {
+          if (
+            !('caseIds' in r) ||
+            !Array.isArray(r.caseIds) ||
+            r.caseIds.length !== 2 ||
+            !r.caseIds.every((id) => typeof id === 'string' && uuid.test(id)) ||
+            r.status !== 'SUBMITTED'
+          )
+            throw new Error(
+              'No se confirmó el envío completo. Conserva el intento.',
+            )
+          await Promise.all(r.caseIds.map((id) => verification.get(id)))
         } else if (m.operation === 'CREATE_VEHICLE') {
           const current = await verification.onboarding()
           if (

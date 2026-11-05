@@ -1,3 +1,11 @@
+## 2026-11-05 — Diseño del registro
+
+165/165 pruebas PASS en `driver-signup`, `verification-pages`, `documentary-availability` y `onboarding-production` (cuatro archivos). Lint, build y tipos de pruebas PASS; permanece el aviso de tamaño de chunk de Vite. `verify-simple-driver-registration.mjs` pasó con la interfaz rediseñada: códigos, alta, acceso, datos, cinco fotos, presentación atómica y recuperación de respuesta perdida. Se añadieron capturas de correo/código/términos/datos/fotos/confirmación y comprobación de desbordamiento a 320, 390, 768 y 1280 px. [Informe final](docs/evidence/driver-registration-design-20261105/verification.json). El primer intento quedó bloqueado por las conexiones loopback del sandbox; se repitió con permiso en entorno aislado y cierre de PostgreSQL confirmado. Sin nueva suite global ni despliegue productivo en esta revisión visual.
+
+## 2026-11-05 — Opción A verificada
+
+Nueva suite global: 1.773/1.773 en 87 archivos, 76,53 s. `npm run typecheck:test`, `npm run lint` y `npm run build`: PASS; aviso habitual de chunk grande. `node scripts/verify-simple-driver-registration.mjs`: PASS el 2026-11-05T17:36:21Z–17:36:32Z, Chrome instalado, Nest real y base PostgreSQL desechable. Registro, acceso automático, reanudación, cinco cargas, envío atómico y recuperación de respuesta perdida. Dos SUBMITTED, un evento por expediente y perfil pendiente. [Informe](docs/DRIVER-REGISTRATION-OPTION-A.md). La primera suite global detectó dos expectativas antiguas; se actualizaron y la corrida final pasó. Sin producción.
+
 ## 2026-11-04 — Regresión conjunta del listado administrativo de revisión
 
 Sobre `main` en `8b48126`, Vitest pasó 1.753/1.753 pruebas en 86 archivos en 103,20 s. La primera corrida quedó incompleta por una salida inesperada de un worker. La repetición por separado finalizó con código 0 usando la misma configuración. Tipos, lint, build y Chromium con Nest/PostgreSQL aislados pasaron. [Salidas de ambas corridas, comprobaciones y capturas](docs/evidence/admin-review-joint-20261104/README.md).

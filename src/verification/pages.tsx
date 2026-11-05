@@ -1,4 +1,5 @@
 import { unitRequirements } from './unit-requirements'
+import { RegistrationJourney } from './registration-journey'
 import { AcceptanceHistory } from './acceptance-history'
 import { CaseRetention, CaseRetentionLookup } from './retention'
 import { useState } from 'react'
@@ -74,6 +75,7 @@ export function VerificationLayout() {
 }
 export function DriverOnboarding() {
   const { user } = useAuth()
+  const location = useLocation()
   const runtime = useRequirements()
   const terms = useTermsQuery()
   const q = useQuery({
@@ -183,6 +185,22 @@ export function DriverOnboarding() {
     ]
   }
   const [nextTitle, nextDescription, target, action] = nextStep()
+  if (
+    q.data?.guidedRegistration &&
+    independent?.status === 'PENDING' &&
+    independent.vehicles.length <= 1 &&
+    runtime.data &&
+    user?.emailVerifiedAt &&
+    !new URLSearchParams(location.search).has('view')
+  )
+    return (
+      <RegistrationJourney
+        data={q.data}
+        requirements={runtime.data}
+        accepted={currentAcceptance}
+        blocked={blocked}
+      />
+    )
   return (
     <div className="driver-documentary">
       <header className="documentary-heading">
@@ -546,22 +564,9 @@ export function CaseList({
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
   const q = useQuery({
-    queryKey: vkey(
-      user!.id,
-      'list',
-      area,
-      providerId,
-      page,
-      status,
-    ),
+    queryKey: vkey(user!.id, 'list', area, providerId, page, status),
     queryFn: ({ signal }) =>
-      verification.list(
-        area,
-        page,
-        status,
-        providerId || undefined,
-        signal,
-      ),
+      verification.list(area, page, status, providerId || undefined, signal),
     gcTime: 0,
     retry: false,
   })
@@ -1106,10 +1111,16 @@ function CaseContent({
             >
               {designed && (
                 <>
-                  <h2>{record.status === 'SUBMITTED' ? 'Expediente enviado' : 'Enviar expediente'}</h2>
+                  <h2>
+                    {record.status === 'SUBMITTED'
+                      ? 'Expediente enviado'
+                      : 'Enviar expediente'}
+                  </h2>
                   <p>
-                    {record.status === 'SUBMITTED' ? 'Datos presentados' : 'Datos del borrador'}:{' '}
-                    <strong>{dataComplete ? 'Completo' : 'Pendiente'}</strong>
+                    {record.status === 'SUBMITTED'
+                      ? 'Datos presentados'
+                      : 'Datos del borrador'}
+                    : <strong>{dataComplete ? 'Completo' : 'Pendiente'}</strong>
                   </p>
                   <p>
                     Evidencias:{' '}

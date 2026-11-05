@@ -1,5 +1,5 @@
 import { dkey } from '../deletion/hooks'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useFeedback } from '../components/feedback-context'
 import { ApiError } from '../services/errors'
@@ -13,6 +13,17 @@ export function useCommand() {
   const notify = useFeedback()
   const [busy, setBusy] = useState(false)
   const lock = useRef(false)
+  const active = useRef(true)
+  const actor = useRef(user?.id)
+  useEffect(() => {
+    actor.current = user?.id
+  }, [user?.id])
+  useEffect(() => {
+    active.current = true
+    return () => {
+      active.current = false
+    }
+  }, [])
   const markers = useMarkers()
   const refresh = async () => {
     await client.invalidateQueries({ queryKey: ['verification', user?.id] })
@@ -34,7 +45,12 @@ export function useCommand() {
       body: unknown,
       method = 'POST',
     ) => {
-      if (!user || lock.current)
+      if (
+        !active.current ||
+        actor.current !== user?.id ||
+        !user ||
+        lock.current
+      )
         throw new Error('La operación ya está en curso.')
       lock.current = true
       setBusy(true)

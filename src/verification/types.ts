@@ -131,6 +131,7 @@ export type CommandResult<O extends Operation> = O extends 'PUBLISH_TERMS'
     ? PrivacyReceipt
     : Receipt
 export interface Receipt {
+  caseIds?: string[]
   id: string
   status: string
   revision?: number
@@ -244,8 +245,10 @@ export interface Requirements {
   }
 }
 export interface Onboarding {
+  guidedRegistration?: boolean
   driver: {
     id: string
+    name?: string
     providerId: string | null
     status: string
     availability: string
@@ -257,6 +260,7 @@ export interface Onboarding {
         identifier: string
         status: string
         type: string
+        plate?: string | null
       }[]
     } | null
   }
@@ -310,6 +314,7 @@ export const operations = [
   'COMPLETE_UPLOAD',
   'REMOVE_ATTACHMENT',
   'SUBMIT',
+  'SUBMIT_ONBOARDING',
   'WITHDRAW',
   'DECIDE',
   'FINAL_REJECTION',
