@@ -1,3 +1,7 @@
+## 2026-11-04 — Permiso de lectura del código de entrega en Integraciones
+
+Web 1.11.0 ofrece `deliveries:confirmation-code:read` junto a `deliveries:read` en Crear credencial. La casilla inicia desmarcada. Con API simulada se comprobó el POST con ambos permisos y con sólo lectura, la conservación de permisos existentes al cancelar y el rechazo de la creación en un único intento. Pasaron las 71 pruebas de `flows.test.tsx` e `integration-credentials-api.test.ts`, tipos, lint y build. Pendiente en la VM: publicar la Web y disponer de un backend desplegado que reconozca el permiso. Para consultar códigos de pedidos propios, Coita Eats necesita ambos permisos en su credencial.
+
 ## 2026-11-04 — Revisión documental y compatibilidad del listado en main
 
 Se verificaron juntos el rediseño SUPER_ADMIN (`9e74505`) y la corrección del listado básico (`d4b583f`) en Web 1.11.0. La suite global completa pasó en la segunda corrida. El recorrido con 24 expedientes sintéticos confirmó filtros, paginación, conteos y pendientes contra la API local ampliada. La compatibilidad con la respuesta básica se comprobó en Vitest. [Evidencia conjunta](docs/evidence/admin-review-joint-20261104/README.md).

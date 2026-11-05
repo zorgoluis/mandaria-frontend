@@ -386,6 +386,18 @@ describe('integrations', () => {
         await screen.findByText(scope, { selector: 'code' }),
       ).toBeInTheDocument()
     expect(screen.queryByText('quotes:accept', { selector: 'code' })).toBeNull()
+    const actor = userEvent.setup()
+    await actor.click(screen.getByRole('button', { name: 'Crear credencial' }))
+    await actor.click(screen.getByLabelText('deliveries:confirmation-code:read'))
+    await actor.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+    const row = screen.getByRole('row', { name: /credential-existing/ })
+    expect(Array.from(row.querySelectorAll('.scopes code'), (el) => el.textContent)).toEqual([
+      'prequotes:create',
+      'prequotes:read',
+      'prequotes:convert',
+      'quotes:read',
+      'deliveries:pickup-reference:write',
+    ])
     expect(integrations.createCredential).not.toHaveBeenCalled()
     expect(integrations.rotate).not.toHaveBeenCalled()
     expect(integrations.revoke).not.toHaveBeenCalled()
@@ -393,6 +405,8 @@ describe('integrations', () => {
 
   it.each([
     { selected: [] },
+    { selected: ['deliveries:read'] },
+    { selected: ['deliveries:read', 'deliveries:confirmation-code:read'] },
     { selected: ['deliveries:pickup-reference:write'] },
     {
       selected: [
@@ -414,6 +428,7 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:confirmation-code:read',
         'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
@@ -469,6 +484,7 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:confirmation-code:read',
         'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
@@ -477,7 +493,7 @@ describe('integrations', () => {
       for (const option of options) expect(option).not.toBeChecked()
       expect(
         new Set(options.map((o) => (o as HTMLInputElement).value)).size,
-      ).toBe(12)
+      ).toBe(13)
       for (const scope of selected)
         await actor.click(screen.getByLabelText(scope))
       // New permissions also remain absent after checking and unchecking.
@@ -522,7 +538,7 @@ describe('integrations', () => {
         await screen.findByRole('button', { name: 'Crear credencial' }),
       )
       await actor.click(
-        screen.getByLabelText('deliveries:pickup-reference:write'),
+        screen.getByLabelText('deliveries:confirmation-code:read'),
       )
       await actor.click(
         screen.getByRole('button', { name: 'Generar credencial' }),
@@ -531,7 +547,10 @@ describe('integrations', () => {
         await within(screen.getByRole('dialog')).findByRole('alert'),
       ).toHaveTextContent('Solicitud rechazada')
       expect(screen.queryByLabelText('Client secret')).toBeNull()
-      expect(integrations.createCredential).toHaveBeenCalledOnce()
+      expect(integrations.createCredential).toHaveBeenCalledExactlyOnceWith(
+        integration.id,
+        { scopes: ['deliveries:confirmation-code:read'] },
+      )
       expect(integrations.rotate).not.toHaveBeenCalled()
       expect(integrations.revoke).not.toHaveBeenCalled()
     },

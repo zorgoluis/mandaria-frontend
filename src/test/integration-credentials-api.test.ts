@@ -25,6 +25,8 @@ it('preserves expiry and sends no scope body on rotation', async () => {
 })
 it.each<{ selected: Scope[] }>([
   { selected: [] },
+  { selected: ['deliveries:read'] },
+  { selected: ['deliveries:read', 'deliveries:confirmation-code:read'] },
   { selected: ['deliveries:pickup-reference:write'] },
   {
     selected: [
@@ -46,6 +48,7 @@ it.each<{ selected: Scope[] }>([
       'quotes:accept',
       'deliveries:create',
       'deliveries:read',
+      'deliveries:confirmation-code:read',
       'deliveries:pickup-reference:write',
       'deliveries:location:read',
       'deliveries:tracking-links:manage',
