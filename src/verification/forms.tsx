@@ -329,7 +329,7 @@ export function NewUnit({ disabled = false }: { disabled?: boolean }) {
           <input
             name="identifier"
             required
-            pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,29}"
+            pattern="[A-Za-z0-9][A-Za-z0-9_\-]{0,29}"
             maxLength={30}
           />
         </Field>

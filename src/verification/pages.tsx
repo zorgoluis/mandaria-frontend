@@ -1137,9 +1137,9 @@ function CaseContent({
             >
               {designed && (
                 <>
-                  <h2>Enviar expediente</h2>
+                  <h2>{record.status === 'SUBMITTED' ? 'Expediente enviado' : 'Enviar expediente'}</h2>
                   <p>
-                    Datos del borrador:{' '}
+                    {record.status === 'SUBMITTED' ? 'Datos presentados' : 'Datos del borrador'}:{' '}
                     <strong>{dataComplete ? 'Completo' : 'Pendiente'}</strong>
                   </p>
                   <p>

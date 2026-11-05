@@ -1,0 +1,919 @@
+{
+  "startedAt": "2026-11-05T00:03:29.689Z",
+  "mode": "LOCAL_TEST",
+  "api": "http://127.0.0.1:4227",
+  "web": "http://127.0.0.1:4228",
+  "pgPort": 55459,
+  "preparation": "Confirmed synthetic DRIVER with pending independent profile; zero cases or vehicles at entry",
+  "steps": [
+    "Mi cuenta → Mi verificación documental",
+    "Mi cuenta → Mi verificación documental"
+  ],
+  "http": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-terms/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private upload]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads/de41ae6f-fa97-41e7-bdd9-bc4844101fcb/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private upload]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads/419127c0-3dad-4a1e-ad42-4f60196c34fd/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private upload]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads/4194c459-9844-412f-9ebe-a07aeacbac27/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private upload]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/uploads/807c3526-b67d-4401-bab8-840452895072/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6/submit",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/onboarding/vehicles",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private upload]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739/uploads/6db61687-fa69-426f-8145-116f1450c45e/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739/submit",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    }
+  ],
+  "cases": [
+    {
+      "id": "c4ef0097-2a27-42c1-97f0-9f50eaa0a2d6",
+      "resourceId": "f9899e24-7b34-4740-954e-281acab16667",
+      "subjectType": "DRIVER_IDENTITY",
+      "status": "SUBMITTED",
+      "revision": 11,
+      "submittedAt": "2026-11-05T00:03:54.062Z",
+      "attachments": [
+        {
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "INE_FRONT",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "INE_BACK",
+          "status": "VALIDATED"
+        },
+        {
+          "category": "LICENSE",
+          "status": "VALIDATED"
+        }
+      ],
+      "submissionEvents": 1,
+      "afterReload": true
+    },
+    {
+      "id": "debca127-1f8f-45ae-9bf0-aa0f9f0fd739",
+      "resourceId": "1345bc1f-706b-4d6d-9a94-c95c8c187316",
+      "subjectType": "VEHICLE",
+      "status": "SUBMITTED",
+      "revision": 5,
+      "submittedAt": "2026-11-05T00:03:58.887Z",
+      "attachments": [
+        {
+          "category": "REGISTRATION_CARD",
+          "status": "VALIDATED"
+        }
+      ],
+      "submissionEvents": 1,
+      "afterReload": true
+    }
+  ],
+  "cleanup": {
+    "postgresStopped": true
+  },
+  "database": "onboarding_web_1793837009689_test",
+  "driverId": "f9899e24-7b34-4740-954e-281acab16667",
+  "backendPackage": "1.13.9",
+  "verificationDistSha256": "c4a44494ebefa2337e1f62cba490674c680a6e16f3e36db571330ebce220bb7b",
+  "status": "PASS",
+  "finishedAt": "2026-11-05T00:04:04.015Z"
+}

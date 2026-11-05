@@ -1,3 +1,7 @@
+## 2026-11-04 — Aceptación HTTP/UI de presentación documental
+
+`node scripts/verify-driver-document-journey.mjs` pasó en LOCAL_TEST sobre una base aislada. Cinco cargas HTTP confirmadas y dos presentaciones por UI, cada una con un único evento SUBMIT al releer el expediente. Identidad SUBMITTED/revisión 11 y Unidad SUBMITTED/revisión 5. Adicionalmente pasaron 101 pruebas focalizadas, tipos, lint y build. [Comandos, límites y capturas](docs/evidence/driver-document-journey-20261104/README.md).
+
 ## 2026-11-04 — Guía de Identidad y Unidad en Web 1.11.0
 
 Suite global aprobada con 1.751 pruebas en 86 archivos (130,20 s). Tipos de pruebas, lint global y build finalizaron con código 0. Vite mantiene el aviso de tamaño del chunk Root de 1.222,38 kB. Los dos recorridos de Chromium pasaron con HTTP simulado a 320 y 1280 px. [Comandos, resultados y capturas](docs/evidence/identity-unit-guide-20261104/README.md).

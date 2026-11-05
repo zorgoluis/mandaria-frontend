@@ -1,3 +1,7 @@
+## 2026-11-04 — Presentación de Identidad y Unidad desde Mi cuenta
+
+Un DRIVER sintético presentó ambos expedientes en Chromium contra Nest y PostgreSQL locales. Al volver a abrirlos se observaron en revisión, con cuatro imágenes en Identidad y una en Unidad. Se corrigieron la validación HTML del identificador de vehículo y los textos del resumen una vez enviado. [Evidencia HTTP/UI y reproducción](docs/evidence/driver-document-journey-20261104/README.md).
+
 ## 2026-11-04 — Guía de documentos para Identidad y Unidad
 
 El repartidor puede identificar los datos pendientes, distinguir una carga incompleta de una imagen recibida y pasar a la confirmación cuando el expediente está listo. Para una unidad prestada, por ejemplo, la guía indica cómo completar la autorización aunque ya se haya recibido la tarjeta de circulación. Se actualizó el escenario visual de unidad propia para usar la política vigente. [Verificación y capturas](docs/evidence/identity-unit-guide-20261104/README.md).
