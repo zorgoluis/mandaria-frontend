@@ -22,19 +22,27 @@ import type { LogisticsRole, ProviderContext, Scope } from './types'
 // Resolve a real provider before mounting forms or fetching logistics data.
 export function ProviderScope({
   children,
+  selectionOptional = false,
 }: {
+  selectionOptional?: boolean
   children: (provider: ProviderContext) => ReactNode
 }) {
   const { user } = useAuth()
   if (user?.role !== 'SUPER_ADMIN' && user?.role !== 'PROVIDER_ADMIN')
     return <ErrorPage code={403} />
-  return <ProviderSelector role={user.role}>{children}</ProviderSelector>
+  return (
+    <ProviderSelector role={user.role} selectionOptional={selectionOptional}>
+      {children}
+    </ProviderSelector>
+  )
 }
 function ProviderSelector({
   role,
   children,
+  selectionOptional,
 }: {
   role: LogisticsRole
+  selectionOptional: boolean
   children: (provider: ProviderContext) => ReactNode
 }) {
   const { user } = useAuth()
@@ -128,7 +136,7 @@ function ProviderSelector({
         >
           {children}
         </ResolvedProvider>
-      ) : (
+      ) : selectionOptional ? null : (
         <Empty
           title="Selecciona un proveedor"
           description="Consulta y administra sus repartidores y vehículos."

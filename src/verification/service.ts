@@ -115,9 +115,27 @@ export const verification = {
       undefined,
       signal,
     )
+    if (
+      !Array.isArray(result?.items) ||
+      !Number.isInteger(result.total) ||
+      !Number.isInteger(result.totalPages) ||
+      result.page !== page
+    )
+      throw new ApiError(
+        502,
+        'El servidor devolvió un listado documental incompleto.',
+      )
+    // Earlier servers return the same authorized page without dashboard metadata.
+    if (
+      result.counts === undefined &&
+      result.oldest === undefined &&
+      result.asOf === undefined
+    )
+      return result
     if (!result.counts || !Array.isArray(result.oldest) || !result.asOf)
-      throw Error(
-        'El servidor todavía no ofrece el resumen de revisión documental.',
+      throw new ApiError(
+        502,
+        'El servidor devolvió un resumen documental incompleto.',
       )
     return result
   },

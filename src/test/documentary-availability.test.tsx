@@ -22,6 +22,7 @@ import { useRequirements } from '../verification/use-availability'
 import { verification } from '../verification/service'
 import { Warning } from '../verification/common'
 import { DriverOnboarding, CaseDetail } from '../verification/pages'
+import { AdminVerification } from '../verification/admin-review'
 import { Register } from '../verification/identity'
 import { TermsPanel } from '../verification/terms'
 import { readMarkers, runVerification } from '../verification/pending'
@@ -144,6 +145,50 @@ beforeEach(() => {
     id: resource,
     status: 'ACCEPTED',
   })
+})
+it('keeps the authorized basic admin list usable when the server omits dashboard metadata', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockImplementation(async () =>
+      Response.json({
+        ...emptyPage,
+        total: 1,
+        totalPages: 1,
+        items: [caseFixture],
+      }),
+    )
+  try {
+    mount(<AdminVerification />, 'SUPER_ADMIN')
+    expect(
+      await screen.findByRole('link', { name: /Ver expediente/ }),
+    ).toHaveAttribute('href', '/verification/cases/' + caseFixture.id)
+    expect(screen.getByRole('columnheader', { name: 'Creado' })).toBeVisible()
+    expect(screen.queryByRole('searchbox')).toBeNull()
+    expect(screen.queryByText('Pendientes de decisión')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Borrador' }))
+    await waitFor(() =>
+      expect(
+        fetcher.mock.calls.some(([url]) =>
+          String(url).includes('status=DRAFT'),
+        ),
+      ).toBe(true),
+    )
+  } finally {
+    fetcher.mockRestore()
+  }
+})
+it('preserves a forbidden admin response without trying another list', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue(Response.json({}, { status: 403 }))
+  try {
+    mount(<AdminVerification />, 'SUPER_ADMIN')
+    expect(await screen.findByText('403 — Sin permisos')).toBeVisible()
+    expect(fetcher).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('table')).toBeNull()
+  } finally {
+    fetcher.mockRestore()
+  }
 })
 it.each(['LOCAL_TEST', 'PRODUCTION'] as const)(
   'only requirements identifies %s, regardless of productionReady',

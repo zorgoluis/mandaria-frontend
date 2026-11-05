@@ -38,65 +38,76 @@ function Overview({ data }: { data?: ReviewPage }) {
   const total = counts && Object.values(counts).reduce((a, b) => a + b, 0)
   return (
     <aside className="review-aside" aria-label="Resumen de expedientes">
-      <section className="review-card review-pending">
-        <h2>Pendientes de decisión</h2>
-        <p className="review-number">
-          <strong>{counts?.SUBMITTED ?? '—'}</strong> en revisión
-        </p>
-        {counts?.SUBMITTED === 0 && <p>Sin expedientes en espera</p>}
-        {!!data?.oldest.length && (
-          <>
-            <ul>
-              {data.oldest.map((c) => {
-                const days = Math.max(
-                  0,
-                  Math.floor(
-                    (Date.parse(data.asOf) - Date.parse(c.submittedAt)) /
-                      86400000,
-                  ),
-                )
-                return (
-                  <li key={c.id}>
-                    <Link to={casePath(c.id)}>
-                      <strong>Revisión {c.revision}</strong>
-                      <time dateTime={c.submittedAt}>
-                        {date(c.submittedAt)}
-                      </time>
-                      <span>
-                        {days} {days === 1 ? 'día' : 'días'}
-                      </span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-            <Link className="review-oldest" to={casePath(data.oldest[0].id)}>
-              Revisar el más antiguo <ArrowUpRight size={16} />
-            </Link>
-          </>
-        )}
-      </section>
-      <section className="review-card">
-        <h2>Resumen por estado</h2>
-        <div className="review-bar" aria-hidden="true">
-          {!!total &&
-            counts &&
-            summaryOrder.map(
-              (s) =>
-                counts[s] > 0 && (
-                  <i key={s} data-status={s} style={{ flexGrow: counts[s] }} />
-                ),
+      {data && counts && (
+        <>
+          <section className="review-card review-pending">
+            <h2>Pendientes de decisión</h2>
+            <p className="review-number">
+              <strong>{counts?.SUBMITTED ?? '—'}</strong> en revisión
+            </p>
+            {counts?.SUBMITTED === 0 && <p>Sin expedientes en espera</p>}
+            {!!data?.oldest?.length && (
+              <>
+                <ul>
+                  {data.oldest.map((c) => {
+                    const days = Math.max(
+                      0,
+                      Math.floor(
+                        (Date.parse(data.asOf) - Date.parse(c.submittedAt)) /
+                          86400000,
+                      ),
+                    )
+                    return (
+                      <li key={c.id}>
+                        <Link to={casePath(c.id)}>
+                          <strong>Revisión {c.revision}</strong>
+                          <time dateTime={c.submittedAt}>
+                            {date(c.submittedAt)}
+                          </time>
+                          <span>
+                            {days} {days === 1 ? 'día' : 'días'}
+                          </span>
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+                <Link
+                  className="review-oldest"
+                  to={casePath(data.oldest[0].id)}
+                >
+                  Revisar el más antiguo <ArrowUpRight size={16} />
+                </Link>
+              </>
             )}
-        </div>
-        <ul className="review-summary">
-          {summaryOrder.map((s) => (
-            <li key={s} data-status={s}>
-              <span>{labels[s]}</span>
-              <b>{counts?.[s] ?? '—'}</b>
-            </li>
-          ))}
-        </ul>
-      </section>
+          </section>
+          <section className="review-card">
+            <h2>Resumen por estado</h2>
+            <div className="review-bar" aria-hidden="true">
+              {!!total &&
+                counts &&
+                summaryOrder.map(
+                  (s) =>
+                    counts[s] > 0 && (
+                      <i
+                        key={s}
+                        data-status={s}
+                        style={{ flexGrow: counts[s] }}
+                      />
+                    ),
+                )}
+            </div>
+            <ul className="review-summary">
+              {summaryOrder.map((s) => (
+                <li key={s} data-status={s}>
+                  <span>{labels[s]}</span>
+                  <b>{counts?.[s] ?? '—'}</b>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
       <section className="review-card">
         <h2>Antes de decidir</h2>
         <ul className="review-tips">
@@ -149,6 +160,7 @@ export function AdminVerification() {
   const data = q.isSuccess ? q.data : undefined
   const counts = data?.counts
   const total = counts && Object.values(counts).reduce((a, b) => a + b, 0)
+  const basic = !!data && !counts
   return (
     <div className="review-board">
       <header className="review-header">
@@ -183,20 +195,27 @@ export function AdminVerification() {
           <header>
             <div>
               <h2>Expedientes e historial</h2>
-              <small>Ordenado por última actualización</small>
+              <small>
+                {basic
+                  ? 'Ordenado por fecha de creación'
+                  : 'Ordenado por última actualización'}
+              </small>
             </div>
             <div className="review-controls">
-              <label>
-                <Search size={16} />
-                <input
-                  aria-label="Buscar revisión o nota"
-                  type="search"
-                  placeholder="Buscar revisión o nota"
-                  value={input}
-                  maxLength={200}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </label>
+              {!basic && (
+                <label>
+                  <Search size={16} />
+                  <input
+                    aria-label="Buscar revisión o nota"
+                    type="search"
+                    placeholder="Buscar revisión o nota"
+                    value={input}
+                    maxLength={200}
+                    disabled={q.isPending && !input && !search}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                </label>
+              )}
               <button
                 className="button secondary"
                 aria-expanded={picker}
@@ -210,7 +229,7 @@ export function AdminVerification() {
           </header>
           {picker && (
             <div id="review-provider">
-              <ProviderScope>
+              <ProviderScope selectionOptional>
                 {(p) => (
                   <button
                     onClick={() => {
@@ -250,10 +269,21 @@ export function AdminVerification() {
                 }}
               >
                 {s ? labels[s] : 'Todos'}{' '}
-                <span>{(s ? counts?.[s] : total) ?? '—'}</span>
+                {(!basic || s === status) && (
+                  <span>
+                    {(basic ? data.total : s ? counts?.[s] : total) ?? '—'}
+                  </span>
+                )}
               </button>
             ))}
           </div>
+          {basic && (
+            <p role="status">
+              El servidor ofrece la lista de expedientes. Puedes filtrar por
+              estado o proveedor. La búsqueda y el resumen global requieren la
+              versión ampliada.
+            </p>
+          )}
           {q.isPending ? (
             <Loading />
           ) : q.isError ? (
@@ -268,7 +298,7 @@ export function AdminVerification() {
                         {[
                           'Expediente',
                           'Estado',
-                          'Actualizado',
+                          basic ? 'Creado' : 'Actualizado',
                           'Nota de decisión',
                           'Acción',
                         ].map((h) => (
@@ -290,9 +320,9 @@ export function AdminVerification() {
                               {labels[c.status]}
                             </span>
                           </td>
-                          <td data-label="Actualizado">
-                            <time dateTime={c.updatedAt}>
-                              {date(c.updatedAt)}
+                          <td data-label={basic ? 'Creado' : 'Actualizado'}>
+                            <time dateTime={basic ? c.createdAt : c.updatedAt}>
+                              {date(basic ? c.createdAt : c.updatedAt)}
                             </time>
                           </td>
                           <td data-label="Nota de decisión">
