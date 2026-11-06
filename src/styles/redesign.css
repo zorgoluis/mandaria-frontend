@@ -937,3 +937,256 @@ dialog::backdrop {
     padding: 12px;
   }
 }
+
+/* ───────── Páginas públicas: baja, privacidad y acceso ───────── */
+.privacy-area,
+.customer-public {
+  max-width: 760px;
+  width: calc(100% - 32px);
+  margin: 48px auto;
+  padding: 36px 44px 40px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-raised);
+  flex: none;
+}
+.privacy-area::before,
+.customer-public::before {
+  content: 'mandaria.';
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding-left: 46px;
+  margin-bottom: 28px;
+  background: url('/mandaria.svg') no-repeat left center / 36px 36px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.privacy-area h1,
+.customer-public h1 {
+  font-size: 32px;
+  margin: 0 0 12px;
+}
+.privacy-area h2 {
+  margin: 28px 0 12px;
+}
+.privacy-area > p,
+.customer-public > p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.customer-public .page-heading {
+  margin-bottom: 16px;
+}
+.privacy-area nav {
+  gap: 8px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.privacy-area nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: var(--pill);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+.privacy-area nav a:hover {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+.privacy-area nav a.active,
+.privacy-area nav a[aria-current='page'] {
+  background: var(--brand);
+  color: #fff;
+}
+.privacy-area nav .button {
+  margin: 0 0 0 auto;
+  min-height: 38px;
+}
+.privacy-area dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 28px;
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+.privacy-area dt {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--faint);
+}
+.privacy-area dd {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 2px 0 14px;
+}
+.privacy-area li {
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.customer-public > a,
+.privacy-area > p > a {
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .privacy-area,
+  .customer-public {
+    width: calc(100% - 24px);
+    margin: 12px auto 24px;
+    padding: 24px 20px 28px;
+  }
+  .privacy-area dl {
+    grid-template-columns: 1fr;
+  }
+  .privacy-area nav .button {
+    margin: 0;
+  }
+}
+
+/* ───────── Inicio de sesión ───────── */
+.login-page {
+  background: var(--page);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+}
+.login-story {
+  background: var(--brand);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.login-story::after {
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -140px;
+  bottom: -160px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: -180px -120px 0 -60px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+.login-story > * {
+  position: relative;
+  z-index: 1;
+}
+.login-story .brand {
+  color: #fff;
+}
+.login-story .brand-period {
+  color: #b9e8a9;
+}
+.login-story .eyebrow {
+  color: var(--brand-on-dark);
+}
+.story-content h1 {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: #fff;
+}
+.story-content em {
+  color: #c7ef9d;
+}
+.story-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--brand-on-dark);
+}
+.login-story > small {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--brand-on-dark);
+}
+.route-node {
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: var(--pill);
+}
+.route-line {
+  border-top-color: rgba(255, 255, 255, 0.35);
+}
+.route-node.end {
+  background: #c7ef9d;
+  border-color: #c7ef9d;
+  color: var(--brand-deep);
+}
+.login-panel {
+  background: var(--page);
+}
+.login-form {
+  max-width: 480px;
+  padding: 32px 36px 26px;
+  margin: 24px auto;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-raised);
+}
+.login-form .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+.login-form h2 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.login-form > p {
+  font-size: 15px;
+  margin: 8px 0 20px;
+}
+.login-form .field {
+  margin-bottom: 16px;
+}
+.login-form .form-actions .button {
+  min-height: 52px;
+  font-size: 15px;
+}
+.login-recovery a {
+  font-size: 13px;
+  font-weight: 700;
+}
+.login-registration h3 {
+  font-size: 16px;
+}
+.login-registration p,
+.login-form > .login-invitation {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.login-security {
+  font-size: 12px;
+  color: var(--faint);
+}
+.login-panel > small {
+  font-size: 12px;
+  color: var(--faint);
+}
+@media (max-width: 640px) {
+  .login-page {
+    background: var(--surface);
+  }
+  .login-panel {
+    background: var(--surface);
+  }
+  .login-form {
+    padding: 8px 0 24px;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
