@@ -1,0 +1,1298 @@
+{
+  "startedAt": "2026-11-06T18:45:06.997Z",
+  "kind": "REAL_HTTP_UI_RESUME",
+  "api": "http://127.0.0.1:4227",
+  "web": "http://127.0.0.1:4228",
+  "checks": [
+    "Registration and terms via UI; fresh login from Mi cuenta resumes data without duplicate cases",
+    "Required phone remains enforced; same saved fields, vehicle and two draft IDs/revisions after logout and fresh login",
+    "Two validated uploads survive a fresh browser context; three missing photos still prevent submission",
+    "Complete remaining photos and submit once via UI; fresh session returns to review, same cases/vehicle and one SUBMIT event each"
+  ],
+  "http": [
+    {
+      "method": "POST",
+      "path": "/api/v1/independent-driver-registrations/start",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/independent-driver-registrations/complete",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-terms/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 204
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/onboarding/vehicles",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 204
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private local storage]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads/9d8d3262-7eb2-4bc7-90e5-1d6b6c2587b6/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private local storage]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads/804e9fa9-57f4-4d4c-ba49-cebf1bb6bf91/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 204
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-cases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private local storage]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads/ef5ee420-f74a-4695-8aff-25a30f38b997/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private local storage]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867/uploads/f687ea1f-c85a-42e3-8c38-4b93e28bb77b/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462/uploads",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "[private local storage]",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462/uploads/5f07ee05-b01c-48a1-8bff-ed7399a95a10/complete",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/driver/onboarding/submit",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 204
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/onboarding",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/driver/verification-acceptances",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/verification-cases/cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": 200
+    }
+  ],
+  "cleanup": {
+    "browserClosed": true,
+    "webStopped": true,
+    "nestStopped": true,
+    "storageStopped": true,
+    "postgresStopped": true
+  },
+  "backend": {
+    "sourceSha256": "bf6c168d340b2159f1cbefd1cc3e0d94ba873fce3171c76eb029c2405451221a",
+    "buildSha256": "334082a25d8943e9cb6fc611d88c0731160e178b52cfb1fc413e101f91bf5fb4",
+    "backendVersion": "1.14.1"
+  },
+  "environment": {
+    "status": "PASS",
+    "cluster": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\test-results\\onboarding-production-isolated\\1793990706996/pgdata",
+    "database": "onboarding_web_1793990706996_test",
+    "port": 55459,
+    "identityBeforeMigration": {
+      "database": "postgres",
+      "host": "127.0.0.1",
+      "port": 55459,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/onboarding-production-isolated/1793990706996/pgdata"
+    },
+    "targetIdentityBeforeMigration": {
+      "database": "onboarding_web_1793990706996_test",
+      "host": "127.0.0.1",
+      "port": 55459,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/onboarding-production-isolated/1793990706996/pgdata"
+    }
+  },
+  "identity": {
+    "userId": "97a95794-f41f-49b5-a8a5-c14cfe40fab8",
+    "driverId": "d4452a5b-1876-4cd8-bc21-b737a3c63b80",
+    "profileId": "2ae0292d-5e50-4776-984e-720fadf389f3"
+  },
+  "cases": [
+    {
+      "id": "a05b6ddc-dac5-4668-8849-404314ebf867",
+      "status": "SUBMITTED",
+      "revision": 11,
+      "validatedAttachments": 4,
+      "submitEvents": 1
+    },
+    {
+      "id": "cdfff984-0b76-4d22-8d4c-3b9c24ff4462",
+      "status": "SUBMITTED",
+      "revision": 5,
+      "validatedAttachments": 1,
+      "submitEvents": 1
+    }
+  ],
+  "vehicleId": "f9d8438f-63e1-4a51-b628-27ea852919e3",
+  "status": "PASS",
+  "finishedAt": "2026-11-06T18:46:15.217Z"
+}
