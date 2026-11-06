@@ -1,3 +1,5 @@
+Actualización 2026-11-06: HTTP/UI real completado posteriormente con instancia desechable autorizada. [Evidencia nueva y límites](../independent-contact-http-20261106/README.md). El contenido siguiente conserva la verificación simulada y el bloqueo histórico.
+
 # Contacto declarado del independiente — Web, 2026-11-06
 
 Implementación local en QA, Web 1.11.0. Conserva los cambios pendientes de información del usuario. Sin commit, push ni despliegue.
@@ -29,3 +31,11 @@ Pruebas nuevas cubren validación, estados, 401/403/404/503, Driver.id distinto 
 No se proporcionó instancia local activa autorizada, URL/build efectivo ni fixtures dedicados para esta ampliación. El handoff acredita ejecuciones históricas del backend, no disponibilidad actual ni pruebas Web. Se requiere esa referencia de entorno y cuentas sintéticas autorizadas para probar HTTP real sin crear datos ni modificar restricciones compartidas. No se buscó una instancia en puertos históricos ni se arrancó/reinició backend. Producción y VM no verificadas.
 
 Cero consultas alternativas de expedientes, cero cambios de datos del conductor. Backend, Driver y Coita intactos. Sin versión, .env, Docker ni mensajes externos.
+
+## Seguimiento de aceptación HTTP tras 85be7a3
+
+Revisión documental nueva del 2026-11-06: el manifiesto backend `docs/checks/admin-independent-contact-20261106.json`, registrado a `2026-11-06T16:16:43.6023438Z`, informa `clusterStopped: true` para ambos snapshots (`run-HuU6QX`, `run-nXV7lg`). No se comprobó su estado de procesos actual ni se ejecutó el runner backend. Su fuente/build corresponden a pruebas backend históricas, no a una API viva acreditada para Web.
+
+Resultado de esta solicitud: **HTTP real pendiente**, sin login ni consultas a cuentas. Hace falta una referencia autorizada de API local activa (URL, manifiesto y build efectivo), IDs sintéticos separados de conductor/usuario/perfil para los tres estados y ruta privada de acceso a cuentas de prueba. No compartir contraseñas ni teléfonos por chat. La alternativa requiere autorización para arrancar un entorno desechable, dado el límite previo explícito de no arrancar/reiniciar backend.
+
+Una vez disponible: verificar el manifiesto y alcance sintético; autenticar SUPER_ADMIN; consultar exclusivamente el detalle por Driver.id; comprobar estados, cabecera private/no-store y denegación de roles sin almacenar cuerpos; abrir la ficha Web con HTTP real, comprobar salida/reentrada y capturar con máscara. No fabricar restricciones ni editar expedientes compartidos. Para cambios concurrentes de disponibilidad se necesitan fixtures/procedimientos dedicados autorizados. Backend y Driver permanecen intactos; sin versión, Git ni despliegue.
