@@ -1,4 +1,5 @@
 import { categories } from '../driver-category/service'
+import { DeclaredPhone } from './contact'
 import { useAuth } from '../auth/context'
 import { canApprove } from '../driver-category/contract'
 import { CategorySummary } from '../driver-category/components'
@@ -267,10 +268,12 @@ function EnableDialog({ onClose }: { onClose: () => void }) {
 
 export function IndependentDriverDetail() {
   const { driverId = '' } = useParams()
-  const { user } = useAuth()
-  if (user?.role !== 'SUPER_ADMIN') return <ErrorPage code={403} />
+  const { user, loading, expired } = useAuth()
+  if (loading) return <Loading />
+  if (user?.role !== 'SUPER_ADMIN' || expired || !user.active)
+    return <ErrorPage code={403} />
   if (!UUID.test(driverId)) return <ErrorPage code={404} />
-  return <ProfileRecord key={driverId} driverId={driverId} />
+  return <ProfileRecord key={`${user.id}:${driverId}`} driverId={driverId} />
 }
 function ProfileRecord({ driverId }: { driverId: string }) {
   const query = useQuery({
@@ -343,6 +346,44 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
         }
       />
       <CategorySummary value={profile.driverCategory} />
+      <section className="panel" aria-labelledby="independent-contact">
+        <div className="panel-toolbar">
+          <h2 id="independent-contact">Información del usuario</h2>
+        </div>
+        <InfoGrid
+          items={[
+            ['Nombre', profile.driver.name],
+            [
+              'Correo electrónico',
+              profile.driver.user?.email || 'No disponible',
+            ],
+            [
+              'Teléfono de contacto declarado',
+              <DeclaredPhone
+                key={profile.driverId}
+                driverId={profile.driverId}
+              />,
+            ],
+            [
+              'Acceso a la cuenta',
+              profile.driver.user
+                ? profile.driver.user.active
+                  ? 'Activo'
+                  : 'Inactivo'
+                : 'No disponible',
+            ],
+            ['ID de usuario', profile.driver.user?.id ?? 'No disponible'],
+            ['ID de conductor', profile.driverId],
+            ['ID de perfil independiente', profile.id],
+            ['Alta del perfil independiente', date(profile.createdAt)],
+            ['Última actualización del perfil', date(profile.updatedAt)],
+          ]}
+        />
+        <p className="panel-note">
+          Contacto declarado por el conductor. No acredita verificación
+          telefónica.
+        </p>
+      </section>
       <section className="panel" aria-labelledby="independent-summary">
         <div className="panel-toolbar">
           <h2 id="independent-summary">Habilitación</h2>
@@ -604,8 +645,8 @@ export function VehicleStatusAction({
           <p>
             Actualizar la placa conserva el vehículo y su historial. Si ya se
             presentó un expediente, el cambio puede impedir su aprobación por
-            diferencia con los datos presentados. No aprueba documentos ni activa
-            la unidad.
+            diferencia con los datos presentados. No aprueba documentos ni
+            activa la unidad.
           </p>
           <ActionForm
             submitLabel="Guardar placa"

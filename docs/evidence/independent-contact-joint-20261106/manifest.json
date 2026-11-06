@@ -1,0 +1,14 @@
+{
+  "recordedAtUtc": "2026-11-06T16:57:58.1876571Z",
+  "branch": "QA",
+  "head": "0d1a21f4ca77fea9013c6021e26fa265bc796c27",
+  "implementationCommit": "85be7a30198636481aac354e9a3cd1e002f0a5fe",
+  "httpCommit": "0d1a21f4ca77fea9013c6021e26fa265bc796c27",
+  "version": "1.11.0",
+  "tests": 1806,
+  "testFiles": 88,
+  "testDurationSeconds": 133.7,
+  "testExitCode": 0,
+  "newHttpExecution": false,
+  "productChanges": false
+}
