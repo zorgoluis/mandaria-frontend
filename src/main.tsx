@@ -2,6 +2,7 @@ import { captureTrackingFragment } from './location/fragment'
 captureTrackingFragment()
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import './styles/redesign.css'
 const root = createRoot(document.getElementById('root')!)
 void import('./app/Root')
   .then(({ Root }) => root.render(<Root />))

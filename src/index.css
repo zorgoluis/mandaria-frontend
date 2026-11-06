@@ -1,24 +1,54 @@
 :root {
   font-family:
-    Inter,
+    Figtree,
     Segoe UI,
     Arial,
     sans-serif;
-  color: #192b2d;
-  background: #f5f7f7;
+  color: #1b2a27;
+  background: #f4f6f5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --brand: #12796a;
-  --brand-dark: #0d5c51;
-  --ink: #192b2d;
-  --muted: #718082;
-  --line: #e4eaea;
+  /* Mandaria · rediseño 2026 */
+  --brand: #156b5c;
+  --brand-dark: #13594d;
+  --brand-deep: #0f3d35;
+  --brand-accent: #1f9d84;
+  --brand-soft: #e7f2ef;
+  --brand-soft-hover: #d5e9e3;
+  --brand-soft-ink: #13594d;
+  --brand-on-dark: #cfe7e0;
+  --ink: #1b2a27;
+  --ink-2: #3d4b47;
+  --muted: #5f6e6a;
+  --faint: #8a9894;
+  --placeholder: #9aa7a3;
+  --line: #e2e8e6;
+  --line-soft: #edf1f0;
+  --line-strong: #d3dcd9;
   --surface: #fff;
-  --radius: 14px;
+  --surface-2: #f6f8f7;
+  --surface-3: #f1f4f3;
+  --hover: #f1f7f5;
+  --page: #f4f6f5;
+  --radius: 24px;
+  --radius-md: 18px;
+  --radius-sm: 14px;
+  --pill: 999px;
   --space: 8px;
-  --danger: #b13e3e;
-  --shadow: 0 3px 18px #183d3610;
+  --danger: #9b3b2e;
+  --danger-strong: #c0503f;
+  --danger-soft: #fbe9e6;
+  --danger-line: #f0d3ce;
+  --warn: #8a5a12;
+  --warn-ink: #6b4710;
+  --warn-dot: #e0a14a;
+  --warn-soft: #fff4e0;
+  --info: #3f6ea8;
+  --info-soft: #eef3fb;
+  --shadow: 0 1px 2px rgba(15, 61, 53, 0.06);
+  --shadow-raised: 0 3px 10px rgba(15, 61, 53, 0.08);
+  --shadow-pop: 0 12px 32px rgba(15, 61, 53, 0.14);
 }
 * {
   box-sizing: border-box;
