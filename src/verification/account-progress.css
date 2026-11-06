@@ -1,0 +1,116 @@
+.account-registration {
+  margin-bottom: 24px;
+  padding: clamp(22px, 4vw, 36px);
+  border: 1px solid #dce8e2;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #f0f8f4, #fff 70%);
+  color: #193b34;
+}
+.account-registration-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.account-registration-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 17px;
+  background: #176b5c;
+  color: white;
+}
+.account-registration-eyebrow {
+  margin: 0 0 6px;
+  color: #386b60;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+.account-registration h2 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 29px);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+.account-registration-description {
+  max-width: 690px;
+  margin: 18px 0 22px;
+  color: #4e675f;
+  line-height: 1.6;
+}
+.account-registration-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+.account-registration-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #e2e9e5;
+  border-radius: 14px;
+}
+.account-registration-step-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff4df;
+  color: #855d17;
+}
+.account-registration-steps .is-done .account-registration-step-icon {
+  background: #e4f2eb;
+  color: #176b5c;
+}
+.account-registration-steps strong {
+  display: block;
+  font-size: 14px;
+  margin: 3px 0 6px;
+  overflow-wrap: anywhere;
+}
+.account-registration-steps div > span {
+  display: block;
+  color: #52655e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.account-registration-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.account-registration-footer .button {
+  gap: 10px;
+}
+.account-registration-footer small {
+  color: #52655e;
+  max-width: 250px;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .account-registration-steps {
+    grid-template-columns: 1fr;
+  }
+  .account-registration-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .account-registration-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+  .account-registration-footer .button {
+    width: 100%;
+  }
+}

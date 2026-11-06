@@ -1,3 +1,36 @@
+## 2026-11-06 — Entrega separada de la aceptación de reanudar registro
+
+Revisados los dos scripts, capturas y manifiesto HTTP de la corrida 1793990706996. http.json coincide con el original: dos expedientes SUBMITTED, cinco adjuntos validados, un SUBMIT por expediente y cleanup confirmado. Nueva comprobación de sintaxis de ambos scripts y ESLint focalizado PASS; no nueva ejecución HTTP ni suite global. [Evidencia y límites](docs/evidence/account-resume-http-20261106/README.md).
+
+Commit/push autorizado a QA sólo de esta aceptación, su helper/harness y continuidad. Cambios concurrentes de estilos/layout excluidos y preservados; Web 1.11.0 intacta, sin despliegue. El resultado HTTP inferior conserva su fecha, base e8e1886 y backend sintético 1.14.1.
+
+## 2026-11-06 — Verificación global y entrega del detalle de independiente
+
+Revisión del diff y verificación final aislada sobre e8e1886: 1818/1818 pruebas en 89 archivos (107,37 s), tipos/lint/build PASS. Primera suite en workspace también PASS (103,49 s); la copia aislada acredita sólo los siete archivos del rediseño, sin cambios simultáneos de estilos/layout ni harness de registro. Sin correcciones adicionales de producto ni cambios de permisos/timeouts. Aviso habitual del bundle Root 1265,13 kB. [Evidencia global y separación de alcance](docs/evidence/independent-detail-design-20261106/README.md#revisión-final-y-entrega-a-qa--2026-11-06).
+
+Entrega Git autorizada a QA, versión 1.11.0 intacta; sin despliegue. Registro reanudable (evidencia HTTP, scripts y su entrada de continuidad) se conserva pendiente fuera de este commit, al igual que los cambios concurrentes del layout. Sin nueva ejecución HTTP/UI; historia inferior conservada.
+
+## 2026-11-06 — Rediseño de Detalle de independiente
+
+Contenido SUPER_ADMIN organizado en indicadores, habilitación/créditos/vehículos y columna de contacto/zonas/decisión. IDs copiables; motivo previo a suspender/rechazar, confirmación y errores del servidor conservados. Disponibilidad no se interpreta como conexión socket, ni falta de cuenta como saldo cero; teléfono privado mantiene su circuito. Menú y barra superior intactos.
+
+175/175 pruebas focalizadas PASS; tipos, lint y build PASS. Chrome con API simulada a 1440/1000/390 px PASS, sin desbordamiento; selector de saldo ajustado al panel por la nueva repetición en el indicador. [Evidencia, capturas y límites](docs/evidence/independent-detail-design-20261106/README.md). No nueva suite global ni HTTP real. Cambios pendientes de reanudación del registro preservados. QA/1.11.0 sin commit/push ni despliegue; historial inferior conservado.
+
+## 2026-11-06 — Reanudar desde Mi cuenta: HTTP/UI real aprobado
+
+Nueva corrida 18:45:06Z–18:46:15Z sobre e8e1886, Chrome/Nest/PostgreSQL desechables. Cuenta creada por UI, términos aceptados, datos y dos fotos guardadas; logout y contextos de navegador nuevos recuperan el avance desde Mi cuenta sin duplicar vehículo o expedientes ni cambiar datos/revisiones. Teléfono requerido y fotos pendientes siguen bloqueando sus pasos. Tras completar cinco fotos, envío único por UI: dos SUBMITTED, un evento SUBMIT cada uno; Mi cuenta cambia a «Ver estado de mi solicitud» y lo conserva al volver a entrar. [Evidencia real, capturas, hashes y límites](docs/evidence/account-resume-http-20261106/README.md).
+
+Sólo harness/helper nuevos; corregida la espera de menú lateral ausente en capturas del asistente, sin cambios de producto ni timeouts. Sintaxis/lint PASS. Backend efectivo 1.14.1 compilado en copia temporal de frontend, sin modificar sus fuentes o versión; Web permanece 1.11.0. Correo y almacenamiento locales sintéticos; no días transcurridos, producción o nueva suite global. Navegador/Web/Nest/almacenamiento/PostgreSQL propios detenidos. Sin backend/Driver, commit/push ni despliegue; historia conservada.
+## 2026-11-06 — Revisión global y entrega de «Continuar mi registro»
+
+Diff revisado en QA/base ab1d12e. Nueva suite global PASS a la primera: 1815/1815 pruebas en 88 archivos, 171,25 s. Tipos, lint y build PASS (código 0); aviso habitual Root 1260,66 kB. No hubo fallos que requirieran cambios de producto, configuración o timeouts. [Salidas y manifiesto final](docs/evidence/account-registration-20261106/README.md).
+
+Se conserva el acceso al asistente, el avance guardado y la autoridad del backend; la tarjeta sólo consulta y distingue pendientes, borradores, enviados y aprobados. Capturas y prueba visual simulada anteriores preservadas, sin nueva ejecución HTTP real. Usuario autoriza commit/push de implementación, pruebas y evidencia a QA. Versión 1.11.0 intacta; sin backend/Driver ni despliegue. Historial inferior conservado.
+## 2026-11-06 — Mi cuenta: continuar el registro guardado
+
+Tarjeta DRIVER con «Continuar mi registro», resumen visual de correo, términos, Identidad y Unidad y estados distintos para borradores, revisión y aprobación. Lectura del onboarding por actor/entorno; errores no se presentan como datos faltantes. El enlace conserva el asistente y las validaciones actuales; no crea cuentas ni expedientes, no altera lo guardado y no añade autoguardado. Flotilla conserva consulta sin prometer presentación propia.
+
+142/142 pruebas focalizadas PASS, tipos/lint/build PASS y Chrome simulado a 1280/390 px PASS. Texto final de borrador no supone faltantes desconocidos. [Evidencia, capturas y límites](docs/evidence/account-registration-20261106/README.md). Selector del harness documental actualizado, sin nueva ejecución HTTP real ni suite global. QA/1.11.0 intactos, sin backend/Driver, commit/push ni despliegue. Historia preservada.
 ## 2026-11-06 — Entrega Git de la verificación conjunta del contacto
 
 Revisada y preparada para commit/push autorizado a QA la evidencia conjunta de 85be7a3 y 0d1a21f. Incluye las salidas registradas de 1806 pruebas, tipos, lint y build PASS, sin nuevas ejecuciones en esta revisión Git. Sólo documentación y continuidad; versión 1.11.0 y producto intactos, sin despliegue. Las entradas inferiores conservan el estado histórico previo a esta entrega.

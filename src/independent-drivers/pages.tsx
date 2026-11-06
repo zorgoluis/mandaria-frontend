@@ -1,3 +1,5 @@
+import './detail.css'
+import { DetailHeader, CopyIdentifier } from './detail-summary'
 import { categories } from '../driver-category/service'
 import { DeclaredPhone } from './contact'
 import { useAuth } from '../auth/context'
@@ -7,7 +9,7 @@ import { IndependentOfferZones } from '../independent-zones/panel'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Info } from 'lucide-react'
+import { ArrowUpRight, Info, Bike } from 'lucide-react'
 import {
   ActionForm,
   Badge,
@@ -311,143 +313,188 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
   const [closing, setClosing] = useState<'suspend' | 'reject' | null>(null)
   const [reEnabling, setReEnabling] = useState(false)
   const [reason, setReason] = useState('')
+  const [decisionError, setDecisionError] = useState('')
   const approved = profile.status === 'APPROVED'
   return (
-    <>
-      <PageTitle
-        title={profile.driver.name}
-        description={`Habilitación independiente · cuenta ${driverStatusLabels[profile.driver.status]}`}
-        back="/independent-drivers"
-        action={
-          approved && profile.driverCategory?.category === 'INDEPENDENT' ? (
-            <div className="row-actions">
-              <button
-                className="button secondary destructive"
-                onClick={() => setClosing('reject')}
-              >
-                Rechazar
-              </button>
-              <button
-                className="button secondary destructive"
-                onClick={() => setClosing('suspend')}
-              >
-                Suspender
-              </button>
+    <div className="independent-detail">
+      <DetailHeader profile={profile} />
+      <div className="independent-detail-grid">
+        <div className="independent-detail-main">
+          <section className="panel" aria-labelledby="independent-summary">
+            <div className="panel-toolbar">
+              <h2 id="independent-summary">Habilitación</h2>
+              <Badge
+                value={profile.status}
+                label={independentStatusLabels[profile.status]}
+              />
             </div>
-          ) : (
-            <button
-              className="button"
-              disabled={!canApprove(profile.driverCategory)}
-              onClick={() => setReEnabling(true)}
-            >
-              Habilitar
-            </button>
-          )
-        }
-      />
-      <CategorySummary value={profile.driverCategory} />
-      <section className="panel" aria-labelledby="independent-contact">
-        <div className="panel-toolbar">
-          <h2 id="independent-contact">Información del usuario</h2>
-        </div>
-        <InfoGrid
-          items={[
-            ['Nombre', profile.driver.name],
-            [
-              'Correo electrónico',
-              profile.driver.user?.email || 'No disponible',
-            ],
-            [
-              'Teléfono de contacto declarado',
-              <DeclaredPhone
-                key={profile.driverId}
-                driverId={profile.driverId}
-              />,
-            ],
-            [
-              'Acceso a la cuenta',
-              profile.driver.user
-                ? profile.driver.user.active
-                  ? 'Activo'
-                  : 'Inactivo'
-                : 'No disponible',
-            ],
-            ['ID de usuario', profile.driver.user?.id ?? 'No disponible'],
-            ['ID de conductor', profile.driverId],
-            ['ID de perfil independiente', profile.id],
-            ['Alta del perfil independiente', date(profile.createdAt)],
-            ['Última actualización del perfil', date(profile.updatedAt)],
-          ]}
-        />
-        <p className="panel-note">
-          Contacto declarado por el conductor. No acredita verificación
-          telefónica.
-        </p>
-      </section>
-      <section className="panel" aria-labelledby="independent-summary">
-        <div className="panel-toolbar">
-          <h2 id="independent-summary">Habilitación</h2>
-          <Badge
-            value={profile.status}
-            label={independentStatusLabels[profile.status]}
+            <InfoGrid
+              items={[
+                ['Estado', independentStatusHints[profile.status]],
+                [
+                  'Cuenta del repartidor',
+                  `${driverStatusLabels[profile.driver.status]} · ${labels[profile.driver.availability] ?? profile.driver.availability}`,
+                ],
+                [
+                  'Habilitado',
+                  profile.approvedAt ? date(profile.approvedAt) : '—',
+                ],
+                [
+                  'Suspendido',
+                  profile.suspendedAt ? date(profile.suspendedAt) : '—',
+                ],
+                [
+                  'Rechazado',
+                  profile.rejectedAt ? date(profile.rejectedAt) : '—',
+                ],
+                ['Motivo', profile.reason ?? 'Sin motivo registrado'],
+              ]}
+            />
+            <div className="panel-body">
+              <CapabilityNote />
+            </div>
+            <p className="panel-note">
+              Suspender o rechazar con un servicio en curso se rechaza: Mandaria
+              prefiere no cancelar en silencio una entrega en marcha.
+            </p>
+          </section>
+          {/* V1.10-F: the independent capability has its own credit account, never the provider's. */}
+          <AdminCreditsPanel
+            scope="independent"
+            ownerId={profile.driverId}
+            ownerName={profile.driver.name}
+            missingDescription="Este repartidor todavía no tiene cuenta propia de créditos: la recibe al aprobarse su habilitación independiente. No es un saldo en cero."
           />
+          <IndependentVehicles driverId={profile.driverId} />
         </div>
-        <InfoGrid
-          items={[
-            ['Estado', independentStatusHints[profile.status]],
-            [
-              'Cuenta del repartidor',
-              `${driverStatusLabels[profile.driver.status]} · ${labels[profile.driver.availability] ?? profile.driver.availability}`,
-            ],
-            ['Habilitado', profile.approvedAt ? date(profile.approvedAt) : '—'],
-            [
-              'Suspendido',
-              profile.suspendedAt ? date(profile.suspendedAt) : '—',
-            ],
-            ['Rechazado', profile.rejectedAt ? date(profile.rejectedAt) : '—'],
-            ['Motivo', profile.reason ?? 'Sin motivo registrado'],
-          ]}
-        />
-        <div className="panel-body">
-          <CapabilityNote />
-        </div>
-        <p className="panel-note">
-          Suspender o rechazar con un servicio en curso se rechaza: Mandaria
-          prefiere no cancelar en silencio una entrega en marcha.
-        </p>
-      </section>
-      {/* V1.10-F: the independent capability has its own credit account, never the provider's. */}
-      <AdminCreditsPanel
-        scope="independent"
-        ownerId={profile.driverId}
-        ownerName={profile.driver.name}
-        missingDescription="Este repartidor todavía no tiene cuenta propia de créditos: la recibe al aprobarse su habilitación independiente. No es un saldo en cero."
-      />
-      <IndependentOfferZones
-        profileId={profile.id}
-        driverId={profile.driverId}
-        canEdit={
-          profile.driverCategory?.category === 'INDEPENDENT' &&
-          profile.driverCategory.independentMembershipState === 'CURRENT'
-        }
-      />
-      <IndependentVehicles driverId={profile.driverId} />
+        <aside className="independent-detail-side">
+          <section className="panel" aria-labelledby="independent-contact">
+            <div className="panel-toolbar">
+              <h2 id="independent-contact">Información del usuario</h2>
+            </div>
+            <InfoGrid
+              items={[
+                ['Nombre', profile.driver.name],
+                [
+                  'Correo electrónico',
+                  profile.driver.user?.email || 'No disponible',
+                ],
+                [
+                  'Teléfono de contacto declarado',
+                  <DeclaredPhone
+                    key={profile.driverId}
+                    driverId={profile.driverId}
+                  />,
+                ],
+                [
+                  'Acceso a la cuenta',
+                  profile.driver.user
+                    ? profile.driver.user.active
+                      ? 'Activo'
+                      : 'Inactivo'
+                    : 'No disponible',
+                ],
+                ['Alta del perfil independiente', date(profile.createdAt)],
+                ['Última actualización del perfil', date(profile.updatedAt)],
+                [
+                  'ID de usuario',
+                  <CopyIdentifier
+                    label="usuario"
+                    value={profile.driver.user?.id}
+                  />,
+                ],
+                [
+                  'ID de conductor',
+                  <CopyIdentifier label="conductor" value={profile.driverId} />,
+                ],
+                [
+                  'ID de perfil independiente',
+                  <CopyIdentifier
+                    label="perfil independiente"
+                    value={profile.id}
+                  />,
+                ],
+              ]}
+            />
+            <p className="panel-note">
+              Contacto declarado por el conductor. No acredita verificación
+              telefónica.
+            </p>
+          </section>
+          <IndependentOfferZones
+            profileId={profile.id}
+            driverId={profile.driverId}
+            canEdit={
+              profile.driverCategory?.category === 'INDEPENDENT' &&
+              profile.driverCategory.independentMembershipState === 'CURRENT'
+            }
+          />
+          <section
+            className="panel panel-body independent-decision"
+            aria-labelledby="independent-decision-title"
+          >
+            <h2 id="independent-decision-title">
+              Decisión sobre la habilitación
+            </h2>
+            <p>Escribe el motivo antes de confirmar una decisión.</p>
+            <Field
+              label="Motivo de habilitación"
+              hint="Entre 3 y 500 caracteres. No incluyas datos personales."
+            >
+              <textarea
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                maxLength={REASON_MAX}
+                rows={4}
+              />
+            </Field>
+            {approved && profile.driverCategory?.category === 'INDEPENDENT' ? (
+              <div className="row-actions">
+                <button
+                  className="button secondary destructive"
+                  disabled={!reason.trim()}
+                  onClick={() => setClosing('suspend')}
+                >
+                  Suspender
+                </button>
+                <button
+                  className="button destructive"
+                  disabled={!reason.trim()}
+                  onClick={() => setClosing('reject')}
+                >
+                  Rechazar
+                </button>
+              </div>
+            ) : (
+              <button
+                className="button"
+                disabled={!canApprove(profile.driverCategory) || !reason.trim()}
+                onClick={() => setReEnabling(true)}
+              >
+                Habilitar
+              </button>
+            )}
+            <p className="muted">
+              Suspender o rechazar con un servicio en curso se rechaza: Mandaria
+              prefiere no cancelar en silencio una entrega en marcha.
+            </p>
+            {decisionError && (
+              <p className="inline-error" role="status">
+                {decisionError}
+              </p>
+            )}
+          </section>
+        </aside>
+      </div>
       {closing && (
         <CloseDialog
           driverId={profile.driverId}
           name={profile.driver.name}
           kind={closing}
+          initialReason={reason}
+          onError={setDecisionError}
           onClose={() => setClosing(null)}
         />
-      )}
-      {canApprove(profile.driverCategory) && (
-        <Field label="Motivo de habilitación">
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            maxLength={REASON_MAX}
-          />
-        </Field>
       )}
       {reEnabling && (
         <Confirm
@@ -480,7 +527,7 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
           }}
         />
       )}
-    </>
+    </div>
   )
 }
 
@@ -488,11 +535,15 @@ function CloseDialog({
   driverId,
   name,
   kind,
+  initialReason,
+  onError,
   onClose,
 }: {
   driverId: string
   name: string
   kind: 'suspend' | 'reject'
+  initialReason: string
+  onError: (message: string) => void
   onClose: () => void
 }) {
   const notify = useFeedback()
@@ -504,7 +555,7 @@ function CloseDialog({
     >
       <p className="modal-description">
         {name} dejará de poder tomar servicios por su cuenta. Su cuenta de
-        repartidor y su pertenencia al proveedor no cambian.
+        repartidor y su pertenencia independiente no cambian.
       </p>
       <ActionForm
         initialDirty
@@ -514,10 +565,20 @@ function CloseDialog({
         onSubmit={async (data) => {
           const reason = reasonOf(String(data.get('reason') ?? ''))
           // The state is never changed locally first: the backend refuses with a service in course.
-          await independentDrivers[suspend ? 'suspend' : 'reject'](
-            driverId,
-            reason,
-          )
+          try {
+            await independentDrivers[suspend ? 'suspend' : 'reject'](
+              driverId,
+              reason,
+            )
+            onError('')
+          } catch (error) {
+            onError(
+              error instanceof ApiError
+                ? error.message
+                : 'No se pudo completar la decisión. Inténtalo nuevamente.',
+            )
+            throw error
+          }
           await refreshIndependent(driverId)
           notify(
             suspend ? 'Habilitación suspendida.' : 'Habilitación rechazada.',
@@ -529,7 +590,13 @@ function CloseDialog({
           label="Motivo"
           hint={`Obligatorio, entre ${REASON_MIN} y ${REASON_MAX} caracteres. No incluyas datos personales.`}
         >
-          <textarea name="reason" required maxLength={REASON_MAX} rows={4} />
+          <textarea
+            name="reason"
+            defaultValue={initialReason}
+            required
+            maxLength={REASON_MAX}
+            rows={4}
+          />
         </Field>
       </ActionForm>
     </Modal>
@@ -568,38 +635,35 @@ function IndependentVehicles({ driverId }: { driverId: string }) {
           }}
         />
       ) : query.data.length ? (
-        <Table
-          stacked
-          rows={query.data}
-          columns={[
-            {
-              label: 'Vehículo',
-              render: (row) => (
-                <span className="cell-meta">
-                  {row.identifier}
-                  <small>{labels[row.type] ?? row.type}</small>
+        <div className="independent-vehicles-list">
+          {query.data.map((row) => (
+            <article className="independent-vehicle" key={row.id}>
+              <div className="independent-vehicle-info">
+                <span className="independent-vehicle-icon">
+                  <Bike size={24} aria-hidden="true" />
                 </span>
-              ),
-            },
-            {
-              label: 'Estado',
-              render: (row) => <Badge value={row.status} />,
-            },
-            {
-              label: 'Detalle',
-              render: (row) =>
-                [row.brand, row.model, row.color].filter(Boolean).join(' ') ||
-                '—',
-            },
-            { label: 'Placa', render: (row) => row.plate ?? '—' },
-            {
-              label: 'Acciones',
-              render: (row) => (
+                <div>
+                  <strong>{row.identifier}</strong> <Badge value={row.status} />
+                  <p>
+                    {[
+                      labels[row.type] ?? row.type,
+                      row.brand,
+                      row.model,
+                      row.year,
+                      row.color,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </p>
+                </div>
+              </div>
+              <div className="independent-vehicle-actions">
+                <code>{row.plate ?? '—'}</code>
                 <VehicleStatusAction driverId={driverId} vehicle={row} />
-              ),
-            },
-          ]}
-        />
+              </div>
+            </article>
+          ))}
+        </div>
       ) : (
         <Empty
           title="Sin vehículos propios"

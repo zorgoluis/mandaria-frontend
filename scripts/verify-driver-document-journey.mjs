@@ -66,7 +66,7 @@ async function action(route, method, click) {
 const button = (name) => page.getByRole('button', { name, exact: true })
 async function goFromAccount() {
   await page.goto(web + '/profile')
-  await page.getByRole('link', { name: 'Ver mi siguiente paso' }).click()
+  await page.locator('a[href="/driver/onboarding"]').click()
   await expect(page).toHaveURL(web + '/driver/onboarding')
   report.steps.push('Mi cuenta → Mi verificación documental')
 }
@@ -82,9 +82,7 @@ async function readCase(id) {
     page.getByText('Tu expediente ya está en revisión.', { exact: false }),
   ).toBeVisible()
   await page.goto(web + '/profile')
-  await expect(
-    page.getByRole('link', { name: 'Ver mi siguiente paso' }),
-  ).toBeVisible()
+  await expect(page.locator('a[href="/driver/onboarding"]')).toBeVisible()
   return action('/verification-cases/' + id, 'GET', () =>
     page.goto(web + '/verification/cases/' + id),
   )

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AccountRegistrationProgress } from '../verification/account-progress'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight } from 'lucide-react'
@@ -140,18 +141,7 @@ export function ProfilePage() {
         title="Mi perfil"
         description="Tu identidad y acceso a Mandaria."
       />
-      {user?.role === 'DRIVER' && (
-        <section className="panel panel-body">
-          <h2>Mi verificación documental</h2>
-          <p>
-            Consulta qué te falta, continúa un borrador o revisa el resultado de
-            tus documentos.
-          </p>
-          <Link className="button" to="/driver/onboarding">
-            Ver mi siguiente paso
-          </Link>
-        </section>
-      )}
+      <AccountRegistrationProgress />
       <div className="panel">
         <InfoGrid
           items={[

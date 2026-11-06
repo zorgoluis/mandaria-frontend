@@ -1,0 +1,16 @@
+
+> mandaria-web@1.11.0 test
+> vitest run src/test/driver-portal.test.tsx src/test/independent-contact.test.tsx src/test/independent-zones.test.tsx src/test/credits.test.tsx src/test/independent-drivers-api.test.ts src/test/independent-zones-api.test.ts src/test/credits-api.test.ts src/test/independent-detail-design.test.tsx
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+
+ Test Files  8 passed (8)
+      Tests  175 passed (175)
+   Start at  12:56:21
+   Duration  16.29s (tests 32%, environment 27%, transform 26%, import 9%, setup 6%)
+
+Environment  jsdom was created 8 times · 11.71s total, 27% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
