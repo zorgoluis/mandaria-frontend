@@ -234,7 +234,7 @@
   color: #77867b;
 }
 .driver-signup input:focus-visible {
-  border-color: #12796a;
+  border-color: var(--brand);
   outline: 3px solid #12796a20;
   outline-offset: 1px;
 }
@@ -274,8 +274,8 @@
   width: 100%;
   font-size: 14px;
   font-weight: 650;
-  background: #126d5b;
-  border-color: #126d5b;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .driver-signup .button:hover:not(:disabled) {
   background: #0d5144;
@@ -317,7 +317,7 @@
   font-size: 12px;
   background: transparent;
   border: 0;
-  color: #126d5b;
+  color: var(--brand);
   padding: 8px 2px;
   min-height: 44px;
   font-weight: 650;

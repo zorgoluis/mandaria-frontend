@@ -187,7 +187,7 @@ fieldset {
   gap: 8px;
 }
 .brand-period {
-  color: #1aa18a;
+  color: var(--brand-accent);
   margin-left: -7px;
 }
 .brand-mark {
@@ -436,7 +436,7 @@ main {
 .panel-note {
   font-size: 11px;
   line-height: 1.7;
-  color: #718082;
+  color: var(--muted);
   padding: 0 24px 18px;
   margin: 0;
 }

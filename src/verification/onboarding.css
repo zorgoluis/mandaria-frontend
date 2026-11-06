@@ -3,20 +3,20 @@
   margin: 0;
 }
 .driver-documentary {
-  background: #f4f6f5;
-  color: #1b2a27;
+  background: var(--page);
+  color: var(--ink);
   font-family: Figtree, sans-serif;
   padding: 40px 48px 56px;
   display: grid;
   gap: 32px;
 }
 .driver-documentary p {
-  color: #5f6e6a;
+  color: var(--muted);
   line-height: 1.6;
   margin: 0;
 }
 .driver-documentary a {
-  color: #156b5c;
+  color: var(--brand);
   font-weight: 700;
 }
 .documentary-heading {
@@ -48,13 +48,13 @@
 .driver-documentary > .notice {
   border: 0;
   border-radius: 18px;
-  background: #e7f2ef;
+  background: var(--brand-soft);
   padding: 16px 20px;
   font-size: 13.5px;
   margin: 0;
 }
 .driver-documentary > .notice p {
-  color: #13594d;
+  color: var(--brand-dark);
 }
 .documentary-columns {
   display: grid;
@@ -90,8 +90,8 @@
   flex: 0 0 36px;
   height: 36px;
   border-radius: 50%;
-  background: #e7f2ef;
-  color: #156b5c;
+  background: var(--brand-soft);
+  color: var(--brand);
   font-weight: 800;
 }
 .driver-documentary .documentary-chips {
@@ -101,8 +101,8 @@
 }
 .documentary-chips span,
 .documentary-badge {
-  background: #f1f4f3;
-  color: #3d4b47;
+  background: var(--surface-3);
+  color: var(--ink-2);
   font-size: 13px;
   font-weight: 600;
   padding: 6px 12px;
@@ -110,12 +110,12 @@
 }
 .driver-documentary .chip-ok,
 .driver-documentary .documentary-accepted {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 .driver-documentary .chip-blocked {
   background: #fbefed;
-  color: #9b3b2e;
+  color: var(--danger);
 }
 .documentary-accepted {
   border-radius: 14px;
@@ -129,14 +129,14 @@
 .driver-documentary select {
   min-height: 52px;
   border-radius: 999px;
-  border: 1.5px solid #e2e8e6;
+  border: 1.5px solid var(--line);
   padding: 0 20px;
   font-size: 15px;
   background: white;
 }
 .driver-documentary
   :is(input, button, a, select, summary, [tabindex]):focus-visible {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 .driver-documentary button {
@@ -150,41 +150,41 @@
   min-height: 48px;
   padding: 10px 26px;
   border-radius: 999px;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   font-weight: 700;
   font-size: 14px;
   border: 1.5px solid transparent;
 }
 .driver-documentary .button:hover:not(:disabled) {
-  background: #13594d;
+  background: var(--brand-dark);
 }
 .driver-documentary .button:active:not(:disabled) {
-  background: #0f3d35;
+  background: var(--brand-deep);
 }
 .documentary-email .verification-form:first-of-type .button {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 .documentary-email .verification-form:last-of-type > .button {
   justify-self: end;
 }
 .driver-documentary small {
-  color: #8a9894;
+  color: var(--faint);
   font-size: 12.5px;
 }
 .driver-documentary .verification-check {
   margin: 0;
   padding: 14px 16px;
   border-radius: 16px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.45;
   cursor: pointer;
 }
 .driver-documentary .verification-check:has(input:checked) {
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .driver-documentary .verification-check input {
   appearance: none;
@@ -197,8 +197,8 @@
   place-content: center;
 }
 .driver-documentary .verification-check input:checked {
-  background: #156b5c;
-  border-color: #156b5c;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .driver-documentary .verification-check input:checked::after {
   content: '✓';
@@ -207,11 +207,11 @@
   font-weight: 800;
 }
 .documentary-counter {
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 13px;
 }
 .documentary-accordion {
-  border: 1.5px solid #edf1f0;
+  border: 1.5px solid var(--line-soft);
   border-radius: 18px;
   overflow: hidden;
 }
@@ -228,16 +228,16 @@
   text-align: left;
   align-items: center;
   gap: 14px;
-  color: #156b5c;
+  color: var(--brand);
   font-size: 13px;
   font-weight: 700;
 }
 .documentary-accordion > button:hover {
-  background: #f6f8f7;
+  background: var(--surface-2);
 }
 .documentary-accordion strong {
   font-size: 15px;
-  color: #1b2a27;
+  color: var(--ink);
 }
 .documentary-accordion small {
   display: block;
@@ -255,7 +255,7 @@
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  background: #e7f2ef;
+  background: var(--brand-soft);
   transition: transform 0.2s;
 }
 .documentary-accordion.is-open i {
@@ -267,13 +267,13 @@
 .documentary-legal {
   max-height: 220px;
   overflow: auto;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 14px;
   padding: 18px 22px;
   font-size: 14px;
   line-height: 1.65;
   white-space: pre-line;
-  color: #3d4b47;
+  color: var(--ink-2);
 }
 .documentary-legal p {
   margin: 0 0 10px;
@@ -285,7 +285,7 @@
 .documentary-accordion > div > p {
   margin-top: 10px;
   font-size: 12.5px;
-  color: #8a9894;
+  color: var(--faint);
 }
 .documentary-unit {
   display: flex;
@@ -293,7 +293,7 @@
   align-items: center;
   padding: 18px 20px;
   border-radius: 18px;
-  border: 1.5px solid #edf1f0;
+  border: 1.5px solid var(--line-soft);
   flex-wrap: wrap;
 }
 .documentary-unit > div {
@@ -305,14 +305,14 @@
 }
 .documentary-unit .button {
   background: white;
-  color: #156b5c;
-  border-color: #d3dcd9;
+  color: var(--brand);
+  border-color: var(--line-strong);
   min-height: 42px;
   padding: 10px 16px;
 }
 .documentary-unit .button:hover:not(:disabled) {
-  background: #f1f7f5;
-  border-color: #156b5c;
+  background: var(--hover);
+  border-color: var(--brand);
 }
 .documentary-vehicle-icon {
   display: grid;
@@ -320,8 +320,8 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #f1f7f5;
-  color: #156b5c;
+  background: var(--hover);
+  color: var(--brand);
 }
 .documentary-units details.panel {
   display: block;
@@ -331,7 +331,7 @@
   padding: 18px 20px;
 }
 .documentary-units summary {
-  color: #156b5c;
+  color: var(--brand);
   font-weight: 700;
   cursor: pointer;
 }
@@ -349,7 +349,7 @@
   gap: 4px;
   border-radius: 24px;
   padding: 4px;
-  background: #f1f4f3;
+  background: var(--surface-3);
   width: fit-content;
 }
 .documentary-filter label {
@@ -370,7 +370,7 @@
   opacity: 0;
 }
 .documentary-filter label:has(:focus-visible) {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
 }
 .documentary-table {
   width: 100%;
@@ -378,9 +378,9 @@
   font-size: 14px;
 }
 .documentary-table th {
-  background: #f6f8f7;
+  background: var(--surface-2);
   font-size: 12px;
-  color: #8a9894;
+  color: var(--faint);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-align: left;
@@ -388,7 +388,7 @@
 .documentary-table td,
 .documentary-table th {
   padding: 16px 12px;
-  border-bottom: 1px solid #edf1f0;
+  border-bottom: 1px solid var(--line-soft);
 }
 .documentary-aside .panel {
   padding: 24px;
@@ -404,13 +404,13 @@
   gap: 12px;
 }
 .documentary-aside .documentary-receipt {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   padding: 28px;
 }
 .documentary-receipt h2,
 .documentary-receipt p {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
   font-size: 13px;
 }
 .documentary-receipt .documentary-version {
@@ -422,11 +422,11 @@
 .documentary-receipt .button {
   width: 100%;
   background: white;
-  color: #156b5c;
+  color: var(--brand);
   padding: 10px 16px;
 }
 .documentary-receipt .button:hover:not(:disabled) {
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .documentary-aside ul {
   padding: 0;
@@ -439,7 +439,7 @@
 .documentary-aside .panel > p:has(> a[href*='/verification/cases/']) {
   padding: 12px 14px;
   border-radius: 14px;
-  background: #f6f8f7;
+  background: var(--surface-2);
 }
 @media (max-width: 1400px) {
   .driver-documentary {
@@ -482,7 +482,7 @@
     display: block;
   }
   .documentary-table tr {
-    border-bottom: 1px solid #edf1f0;
+    border-bottom: 1px solid var(--line-soft);
     padding: 12px 0;
   }
   .documentary-table td {
@@ -491,7 +491,7 @@
   }
   .documentary-table td::before {
     content: attr(data-label) ': ';
-    color: #8a9894;
+    color: var(--faint);
   }
   .documentary-units details[open] form {
     grid-template-columns: 1fr;

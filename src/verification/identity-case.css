@@ -39,11 +39,11 @@
 }
 .identity-case .verification-check {
   padding: 14px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 16px;
 }
 .identity-case .verification-check:has(:checked) {
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .identity-case .identity-categories {
   border: 0;
@@ -59,14 +59,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1.5px solid #e2e8e6;
+  border: 1.5px solid var(--line);
   border-radius: 999px;
   padding: 10px 14px;
   cursor: pointer;
 }
 .identity-categories label:has(:checked) {
-  background: #e7f2ef;
-  border-color: #156b5c;
+  background: var(--brand-soft);
+  border-color: var(--brand);
 }
 .identity-case .identity-categories input {
   width: 16px;
@@ -84,14 +84,14 @@
 }
 .identity-drop:hover,
 .identity-drop:focus-within {
-  border-color: #156b5c;
-  background: #f1f7f5;
+  border-color: var(--brand);
+  background: var(--hover);
 }
 .identity-drop > svg {
   padding: 14px;
   width: 52px;
   height: 52px;
-  background: #e7f2ef;
+  background: var(--brand-soft);
   border-radius: 50%;
 }
 .identity-drop input {
@@ -115,7 +115,7 @@
 }
 .identity-progress {
   height: 6px;
-  background: #edf1f0;
+  background: var(--line-soft);
   border-radius: 999px;
   margin-top: 16px;
   overflow: hidden;
@@ -124,7 +124,7 @@
   display: block;
   width: 40%;
   height: 100%;
-  background: #156b5c;
+  background: var(--brand);
   animation: identity-progress 1.4s ease-in-out infinite alternate;
 }
 @keyframes identity-progress {
@@ -142,7 +142,7 @@
   min-height: 48px;
 }
 .identity-case .identity-withdraw {
-  color: #9b3b2e;
+  color: var(--danger);
   border: 1.5px solid #e3c9c4;
   background: white;
 }
@@ -152,7 +152,7 @@
 .identity-empty {
   padding: 28px;
   border-radius: 18px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   text-align: center;
 }
 .identity-events {
@@ -170,7 +170,7 @@
   justify-content: space-between;
   padding: 0;
   background: none;
-  color: #1b2a27;
+  color: var(--ink);
   border: 0;
   font-size: 16px;
   text-align: left;
@@ -181,7 +181,7 @@
   margin: 0;
 }
 .identity-timeline dt {
-  color: #8a9894;
+  color: var(--faint);
   font-size: 12px;
   margin-top: 14px;
 }
@@ -228,8 +228,8 @@
   font-size: 14px;
   padding: 7px 14px;
   border-radius: 999px;
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
   letter-spacing: normal;
 }
 .identity-status::before {
@@ -238,12 +238,12 @@
 }
 .identity-case .status-SUBMITTED,
 .identity-case .status-APPROVED {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 .identity-case .status-REJECTED {
   background: #fbefed;
-  color: #9b3b2e;
+  color: var(--danger);
 }
 .identity-limit-chips {
   display: flex;
@@ -252,33 +252,33 @@
 }
 .identity-limit-chips span {
   padding: 6px 12px;
-  background: #f1f4f3;
+  background: var(--surface-3);
   border-radius: 999px;
   font-size: 12px;
-  color: #3d4b47;
+  color: var(--ink-2);
 }
 .identity-note {
   padding: 14px 18px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 16px;
   font-size: 13px;
 }
 .verification-area .identity-case .identity-submit button {
   border-radius: 999px;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   font-weight: 700;
 }
 .verification-area .identity-case .identity-submit .identity-withdraw {
   background: white;
-  color: #9b3b2e;
+  color: var(--danger);
   border-color: #e3c9c4;
 }
 .verification-area .identity-case .retention-toggle {
   padding: 0;
   background: transparent;
   border: none;
-  color: #1b2a27;
+  color: var(--ink);
   font-weight: 700;
 }
 .verification-area .identity-case form > button {
@@ -297,11 +297,11 @@
   cursor: pointer;
 }
 .identity-drop:focus-within {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 .identity-case .identity-categories input {
-  accent-color: #156b5c;
+  accent-color: var(--brand);
 }
 .unit-case .identity-draft form > .field {
   grid-column: auto;
@@ -313,7 +313,7 @@
 .unit-ownership {
   display: flex;
   flex-wrap: wrap;
-  background: #f1f4f3;
+  background: var(--surface-3);
   border-radius: 24px;
   padding: 4px;
   gap: 4px;
@@ -331,13 +331,13 @@
 }
 .unit-ownership label:has(:checked) {
   background: white;
-  color: #156b5c;
+  color: var(--brand);
   box-shadow: 0 1px 3px rgba(15, 61, 53, 0.15);
 }
 .unit-case .unit-ownership input {
   width: 14px;
   height: 14px;
-  accent-color: #156b5c;
+  accent-color: var(--brand);
 }
 .unit-ownership-field {
   margin: 0;
@@ -352,7 +352,7 @@
   font-weight: 600;
 }
 .unit-ownership-field legend span {
-  color: #9b3b2e;
+  color: var(--danger);
 }
 .unit-ownership label {
   flex: 1 0 85px;
