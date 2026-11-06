@@ -1,3 +1,13 @@
+## 2026-11-06 — Revisión global y entrega de «Continuar mi registro»
+
+Diff revisado en QA/base ab1d12e. Nueva suite global PASS a la primera: 1815/1815 pruebas en 88 archivos, 171,25 s. Tipos, lint y build PASS (código 0); aviso habitual Root 1260,66 kB. No hubo fallos que requirieran cambios de producto, configuración o timeouts. [Salidas y manifiesto final](docs/evidence/account-registration-20261106/README.md).
+
+Se conserva el acceso al asistente, el avance guardado y la autoridad del backend; la tarjeta sólo consulta y distingue pendientes, borradores, enviados y aprobados. Capturas y prueba visual simulada anteriores preservadas, sin nueva ejecución HTTP real. Usuario autoriza commit/push de implementación, pruebas y evidencia a QA. Versión 1.11.0 intacta; sin backend/Driver ni despliegue. Historial inferior conservado.
+## 2026-11-06 — Mi cuenta: continuar el registro guardado
+
+Tarjeta DRIVER con «Continuar mi registro», resumen visual de correo, términos, Identidad y Unidad y estados distintos para borradores, revisión y aprobación. Lectura del onboarding por actor/entorno; errores no se presentan como datos faltantes. El enlace conserva el asistente y las validaciones actuales; no crea cuentas ni expedientes, no altera lo guardado y no añade autoguardado. Flotilla conserva consulta sin prometer presentación propia.
+
+142/142 pruebas focalizadas PASS, tipos/lint/build PASS y Chrome simulado a 1280/390 px PASS. Texto final de borrador no supone faltantes desconocidos. [Evidencia, capturas y límites](docs/evidence/account-registration-20261106/README.md). Selector del harness documental actualizado, sin nueva ejecución HTTP real ni suite global. QA/1.11.0 intactos, sin backend/Driver, commit/push ni despliegue. Historia preservada.
 ## 2026-11-06 — Entrega Git de la verificación conjunta del contacto
 
 Revisada y preparada para commit/push autorizado a QA la evidencia conjunta de 85be7a3 y 0d1a21f. Incluye las salidas registradas de 1806 pruebas, tipos, lint y build PASS, sin nuevas ejecuciones en esta revisión Git. Sólo documentación y continuidad; versión 1.11.0 y producto intactos, sin despliegue. Las entradas inferiores conservan el estado histórico previo a esta entrega.

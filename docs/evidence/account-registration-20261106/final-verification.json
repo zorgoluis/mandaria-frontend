@@ -1,0 +1,12 @@
+{
+  "recordedAtUtc": "2026-11-06T18:36:33.5125724Z",
+  "branch": "QA",
+  "baseCommit": "ab1d12e06abefa7323be983360cec81b9bba7f31",
+  "version": "1.11.0",
+  "globalTests": 1815,
+  "testFiles": 88,
+  "testDurationSeconds": 171.25,
+  "testExitCode": 0,
+  "newHttpExecution": false,
+  "correctionsRequired": false
+}

@@ -1,0 +1,14 @@
+{
+  "mode": "SIMULATED_HTTP",
+  "checks": [
+    "Saved drafts with Continue CTA",
+    "Desktop/mobile without overflow",
+    "Submitted switches to status CTA",
+    "GET only; no commands"
+  ],
+  "screenshots": [
+    "test-results/account-registration/1793989734550/1280.png",
+    "test-results/account-registration/1793989734550/390.png"
+  ],
+  "status": "PASS"
+}

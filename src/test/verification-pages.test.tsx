@@ -1,4 +1,5 @@
 import { AcceptanceHistory } from '../verification/acceptance-history'
+import { AccountRegistrationProgress } from '../verification/account-progress'
 import { newPasswordCases } from './password-policy-fixtures'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
@@ -121,7 +122,9 @@ it('pending independent without provider accesses onboarding, not automatic oper
 })
 it('links the driver account to the next pending step', async () => {
   mount(<App />, 'DRIVER', '/profile')
-  fireEvent.click(screen.getByRole('link', { name: 'Ver mi siguiente paso' }))
+  fireEvent.click(
+    await screen.findByRole('link', { name: 'Continuar mi registro' }),
+  )
   const action = await screen.findByRole('link', { name: 'Ir a los términos' })
   expect(action).toHaveAttribute('href', '#verificar-terminos')
   expect(document.getElementById('verificar-terminos')).toContainElement(
@@ -1613,3 +1616,150 @@ it.each([false, true])(
     expect(screen.getByText(/Licencia:/)).not.toHaveTextContent('Licencia: ·')
   },
 )
+
+it('account progress preserves drafts in the current environment', async () => {
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    subjects: [
+      {
+        id: resource,
+        driverId: resource,
+        vehicleId: null,
+        cases: [
+          {
+            id: caseId,
+            status: 'APPROVED',
+            revision: 5,
+            environment: 'PRODUCTION',
+          },
+          {
+            id: attachmentId,
+            status: 'DRAFT',
+            revision: 2,
+            environment: 'LOCAL_TEST',
+          },
+        ],
+      },
+    ],
+  })
+  mount(<AccountRegistrationProgress />)
+  expect(
+    await screen.findByRole('link', { name: 'Continuar mi registro' }),
+  ).toHaveAttribute('href', '/driver/onboarding')
+  expect(
+    screen.getByText('Borrador guardado · aún no enviado'),
+  ).toBeInTheDocument()
+  expect(screen.getByText('Confirmado')).toBeInTheDocument()
+  expect(
+    screen.getByText('Falta revisar y aceptar los términos vigentes'),
+  ).toBeInTheDocument()
+  expect(verification.get).not.toHaveBeenCalled()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it.each(['SUBMITTED', 'APPROVED'] as const)(
+  'account progress distinguishes %s from pending registration',
+  async (status) => {
+    vi.mocked(verification.onboarding).mockResolvedValue({
+      ...onboarding,
+      driver: {
+        ...onboarding.driver,
+        independentProfile: {
+          id: attachmentId,
+          status: 'PENDING',
+          vehicles: [
+            {
+              id: 'vehicle',
+              identifier: 'Unidad sintética',
+              status: 'ACTIVE',
+              type: 'BICYCLE',
+            },
+          ],
+        },
+      },
+      terms: {
+        ...onboarding.terms,
+        acceptance: {
+          id: resource,
+          version: terms.version,
+          acceptedAt: '2026-11-06T00:00:00Z',
+        },
+      },
+      subjects: [
+        {
+          id: 'identity',
+          driverId: resource,
+          vehicleId: null,
+          cases: [
+            { id: caseId, status, revision: 2, environment: 'LOCAL_TEST' },
+          ],
+        },
+        {
+          id: 'unit',
+          driverId: null,
+          vehicleId: 'vehicle',
+          cases: [
+            {
+              id: attachmentId,
+              status,
+              revision: 2,
+              environment: 'LOCAL_TEST',
+            },
+          ],
+        },
+      ],
+    })
+    mount(<AccountRegistrationProgress />)
+    await screen.findByRole('link', {
+      name:
+        status === 'SUBMITTED'
+          ? 'Ver estado de mi solicitud'
+          : 'Ver mis documentos',
+    })
+    expect(
+      screen.queryByRole('link', { name: 'Continuar mi registro' }),
+    ).toBeNull()
+    expect(screen.getByText('Aceptaciones guardadas')).toBeInTheDocument()
+  },
+)
+it('account progress does not turn errors into missing steps', async () => {
+  vi.mocked(verification.onboarding).mockRejectedValue(
+    new ApiError(503, 'Unavailable'),
+  )
+  mount(<AccountRegistrationProgress />)
+  await screen.findByRole('alert')
+  expect(
+    screen.queryByText('Faltan tus datos y documentos de identidad'),
+  ).toBeNull()
+  expect(
+    screen.queryByRole('link', { name: 'Continuar mi registro' }),
+  ).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Volver a consultar' }))
+  await waitFor(() => expect(verification.onboarding).toHaveBeenCalledTimes(2))
+})
+it.each(['SUPER_ADMIN', 'PROVIDER_ADMIN', 'CUSTOMER'] as const)(
+  'does not request driver progress for %s',
+  (role) => {
+    mount(<AccountRegistrationProgress />, role)
+    expect(verification.onboarding).not.toHaveBeenCalled()
+  },
+)
+it('account progress re-reads saved state when returning to the account', async () => {
+  const first = mount(<AccountRegistrationProgress />)
+  await screen.findByRole('link', { name: 'Continuar mi registro' })
+  first.unmount()
+  mount(<AccountRegistrationProgress />)
+  await screen.findByRole('link', { name: 'Continuar mi registro' })
+  expect(verification.onboarding).toHaveBeenCalledTimes(2)
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it('account progress routes fleet drivers to consultation', async () => {
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    driver: { ...onboarding.driver, providerId, independentProfile: null },
+  })
+  mount(<AccountRegistrationProgress />)
+  await screen.findByRole('link', { name: 'Consultar mi verificación' })
+  expect(
+    screen.queryByRole('link', { name: 'Continuar mi registro' }),
+  ).toBeNull()
+})
