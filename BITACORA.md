@@ -1,3 +1,18 @@
+## 2026-11-06 — Entrega Git autorizada de información y contacto del independiente
+
+Revisado el diff final de la ficha, contrato privado, pruebas y evidencia en QA. Usuario autoriza commit y push a la rama actual. Se conservan los resultados de la verificación anterior (1806 globales, 93 focalizadas, tipos/lint/build y Chrome simulado), sin atribuir una nueva ejecución a esta revisión Git. HTTP real continúa pendiente del entorno autorizado descrito en la evidencia. Versión 1.11.0 intacta; sin despliegue. Las entradas inferiores conservan los estados históricos anteriores a esta entrega.
+## 2026-11-06 — Integración del teléfono declarado administrativo
+
+Superado el bloqueo contractual de la entrada anterior: backend documenta declaredContact exclusivamente en GET administrativo por Driver.id. Web integra AVAILABLE, NOT_RECORDED, UNAVAILABLE y compatibilidad con respuesta antigua. El teléfono se mantiene fuera de QueryClient y persistencia; cancelación, aislamiento actor/conductor y sessionFence protegen navegación y respuestas tardías. Sin consulta alternativa de expedientes ni cambios del conductor.
+
+Nueva suite global: 1806/1806 PASS en 88 archivos, 99,00 s; focalizadas 93/93. Tipos, lint y build PASS; se corrigió la separación del validador exigida por lint. Chrome con HTTP simulado PASS a 1280/390 px y capturas enmascaradas. HTTP real pendiente por falta de URL/build y fixtures de una instancia local autorizada; no se arrancó backend ni se atribuyeron sus pruebas a Web. [Contrato, comandos, evidencia y límites](docs/evidence/independent-contact-20261106/README.md). QA y versión 1.11.0 conservadas, sin commit/push ni despliegue.
+## 2026-11-06 — Información de usuario en la ficha independiente
+
+En QA, la ficha SUPER_ADMIN muestra nombre, correo, acceso activo/inactivo, identificadores distintos de usuario/conductor/perfil y fechas del perfil. Usa driver.user del GET /admin/drivers/:driverId/independent existente; respuestas antiguas sin user muestran «No disponible». Conserva habilitación, créditos, zonas y vehículos. Sin modificar versión, backend ni publicar.
+
+Pendiente para completar el teléfono solicitado: independent-drivers.select.ts del backend sólo selecciona user.id/email/active. contactPhone pertenece a VerificationCase.data de identidad; el listado administrativo no admite filtro por conductor ni devuelve una referencia de expediente en este perfil. Se necesita una proyección administrativa autorizada con teléfono y referencia/procedencia del expediente, respetando restricciones documentales y ausencia de datos. No se recorren expedientes de otros usuarios ni se inventan campos/API. La pantalla distingue dato no expuesto de dato no registrado.
+
+Validación local: 62/62 pruebas en driver-portal e independent-drivers-api con API simulada; tipos, lint y build PASS. La primera ejecución de Vitest falló al abrir un temporal del sandbox; repetición fuera de éste PASS. Sin aceptación HTTP real ni comprobación en producción. Aviso habitual de chunk grande.
 ## 2026-11-05 — Publicación autorizada del registro en QA
 
 Solicitud: commit y push de la opción A y su diseño a la rama actual, con explicación de actualización en VM. Fetch nuevo: QA y origin/QA coinciden antes de la publicación; se revisa el diff y se seleccionan implementación, pruebas, documentación y evidencias sintéticas. Se reutilizan los resultados ya registrados (suite Web 1.773, revisión visual 165, tipos/lint/build y recorrido integrado final); no se atribuyen nuevas ejecuciones de pruebas a esta revisión Git. [Orden y requisitos para VM](docs/DRIVER-REGISTRATION-OPTION-A.md#actualización-en-vm). La autorización de Git no ejecuta el despliegue. Las entradas inferiores describen estados históricos anteriores al commit.

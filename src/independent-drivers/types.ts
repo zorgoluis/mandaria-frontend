@@ -17,6 +17,8 @@ export const REASON_MAX = 500
 export interface IndependentDriverRef {
   id: string
   name: string
+  /** Administrative profile projection; optional for older API responses. */
+  user?: { id: string; email: string; active: boolean } | null
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'
   availability: 'OFFLINE' | 'AVAILABLE' | 'BUSY'
   /** The V1.4 provider the Driver belongs to. Grants nothing in the independent context. */

@@ -838,6 +838,36 @@ describe('super admin administration', () => {
     await screen.findByRole('region', { name: 'Categoría vigente' })
     expect(independentDrivers.enable).not.toHaveBeenCalled()
   })
+  it('shows the account returned for this driver, distinct from the administrator', async () => {
+    const record = profile()
+    record.driver.user = {
+      id: 'account-carlos',
+      email: 'contact@example.test',
+      active: false,
+    }
+    vi.mocked(independentDrivers.get).mockResolvedValue(record)
+    mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
+    const contact = within(
+      await screen.findByRole('region', { name: 'Información del usuario' }),
+    )
+    expect(contact.getByText('contact@example.test')).toBeInTheDocument()
+    expect(contact.getByText('Inactivo')).toBeInTheDocument()
+    expect(contact.getByText('account-carlos')).toBeInTheDocument()
+    expect(contact.getByText(DRIVER_ID)).toBeInTheDocument()
+    expect(contact.getByText(record.id)).toBeInTheDocument()
+    expect(
+      contact.getByText('Teléfono de contacto declarado'),
+    ).toBeInTheDocument()
+  })
+  it('keeps older profiles readable without inventing contact data', async () => {
+    mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
+    const contact = within(
+      await screen.findByRole('region', { name: 'Información del usuario' }),
+    )
+    expect(contact.getByText('Carlos')).toBeInTheDocument()
+    expect(contact.getAllByText('No disponible')).toHaveLength(3)
+    expect(contact.queryByText('carlos@example.test')).not.toBeInTheDocument()
+  })
   it('suspends with a mandatory reason and never changes the state locally first', async () => {
     vi.mocked(independentDrivers.suspend).mockResolvedValue(
       profile({ status: 'SUSPENDED', suspendedAt: stamp, reason: 'Papeles' }),
