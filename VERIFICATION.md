@@ -1,3 +1,8 @@
+## 2026-11-06 — Verificación conjunta de información y teléfono en QA
+
+Verificados juntos 85be7a3 y 0d1a21f sobre HEAD 0d1a21f, Web 1.11.0. Nueva suite global PASS a la primera: 1806/1806 en 88 archivos, 133,70 s. Tipos, lint y build PASS (código 0); permanece el aviso conocido del chunk Root de 1256,74 kB. Sin fallos que requieran corrección ni cambios de producto, permisos, configuración o timeouts. [Comandos, salidas y manifiesto](docs/evidence/independent-contact-joint-20261106/README.md).
+
+No se repitió HTTP/UI ni se arrancó backend: la aceptación real del informe anterior es histórica y conserva sus límites. Sólo evidencia y continuidad nuevas; backend/Driver y versión intactos. Sin commit/push ni despliegue. Historial preservado.
 ## 2026-11-06 — HTTP real del teléfono declarado completado
 
 El usuario autorizó una instancia desechable, superando el bloqueo de disponibilidad previo. Corrida final 2026-11-06T16:45:26.035Z–16:46:08.408Z: Nest/PostgreSQL aislados y Chrome real PASS. AVAILABLE/NOT_RECORDED/UNAVAILABLE, no-store, identidades distintas, 401/403/404, listado sin contacto, ficha SUPER_ADMIN, salida/reentrada, transiciones del fixture, 503 de recuperación y logout por UI. Capturas con teléfono enmascarado. Datos preparados sintéticamente, no onboarding ni edición por UI. [Manifiesto, resultados, correcciones y límites](docs/evidence/independent-contact-http-20261106/README.md).

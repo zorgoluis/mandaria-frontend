@@ -1,3 +1,11 @@
+## 2026-11-06 — Entrega Git de la verificación conjunta del contacto
+
+Revisada y preparada para commit/push autorizado a QA la evidencia conjunta de 85be7a3 y 0d1a21f. Incluye las salidas registradas de 1806 pruebas, tipos, lint y build PASS, sin nuevas ejecuciones en esta revisión Git. Sólo documentación y continuidad; versión 1.11.0 y producto intactos, sin despliegue. Las entradas inferiores conservan el estado histórico previo a esta entrega.
+## 2026-11-06 — Verificación conjunta de información y teléfono en QA
+
+Verificados juntos 85be7a3 y 0d1a21f sobre HEAD 0d1a21f, Web 1.11.0. Nueva suite global PASS a la primera: 1806/1806 en 88 archivos, 133,70 s. Tipos, lint y build PASS (código 0); permanece el aviso conocido del chunk Root de 1256,74 kB. Sin fallos que requieran corrección ni cambios de producto, permisos, configuración o timeouts. [Comandos, salidas y manifiesto](docs/evidence/independent-contact-joint-20261106/README.md).
+
+No se repitió HTTP/UI ni se arrancó backend: la aceptación real del informe anterior es histórica y conserva sus límites. Sólo evidencia y continuidad nuevas; backend/Driver y versión intactos. Sin commit/push ni despliegue. Historial preservado.
 ## 2026-11-06 — Entrega Git autorizada de la verificación HTTP del contacto
 
 Revisados el harness, sus correcciones, el manifiesto HTTP PASS y las capturas enmascaradas. Usuario autoriza commit y push a QA. Se reutiliza la corrida real documentada de 16:45:26Z–16:46:08Z y su lint aprobado; la revisión Git sólo repite sintaxis y diff whitespace, no una nueva ejecución HTTP ni suite global. Chrome/Web/Nest/PostgreSQL propios constan detenidos. Versión 1.11.0 intacta, sin despliegue. Las entradas inferiores conservan los estados históricos anteriores a esta publicación.
