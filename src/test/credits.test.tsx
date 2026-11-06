@@ -591,7 +591,11 @@ describe('SUPER_ADMIN · créditos de un repartidor independiente', () => {
     })
     vi.mocked(independentDrivers.vehicles).mockResolvedValue([])
     mount(`/independent-drivers/${DRIVER}`)
-    expect(await screen.findByText('40 créditos')).toBeInTheDocument()
+    expect(
+      await within(
+        await screen.findByRole('region', { name: 'Créditos Mandaria' }),
+      ).findByText('40 créditos'),
+    ).toBeInTheDocument()
     expect(panel().getByText('40 créditos')).toBeInTheDocument()
     expect(independentCreditsAdmin.account).toHaveBeenCalledWith(
       DRIVER,

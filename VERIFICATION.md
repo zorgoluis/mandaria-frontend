@@ -1,3 +1,15 @@
+## 2026-11-06 — Verificación global y entrega del detalle de independiente
+
+Revisión del diff y verificación final aislada sobre e8e1886: 1818/1818 pruebas en 89 archivos (107,37 s), tipos/lint/build PASS. Primera suite en workspace también PASS (103,49 s); la copia aislada acredita sólo los siete archivos del rediseño, sin cambios simultáneos de estilos/layout ni harness de registro. Sin correcciones adicionales de producto ni cambios de permisos/timeouts. Aviso habitual del bundle Root 1265,13 kB. [Evidencia global y separación de alcance](docs/evidence/independent-detail-design-20261106/README.md#revisión-final-y-entrega-a-qa--2026-11-06).
+
+Entrega Git autorizada a QA, versión 1.11.0 intacta; sin despliegue. Registro reanudable (evidencia HTTP, scripts y su entrada de continuidad) se conserva pendiente fuera de este commit, al igual que los cambios concurrentes del layout. Sin nueva ejecución HTTP/UI; historia inferior conservada.
+
+## 2026-11-06 — Rediseño de Detalle de independiente
+
+Contenido SUPER_ADMIN organizado en indicadores, habilitación/créditos/vehículos y columna de contacto/zonas/decisión. IDs copiables; motivo previo a suspender/rechazar, confirmación y errores del servidor conservados. Disponibilidad no se interpreta como conexión socket, ni falta de cuenta como saldo cero; teléfono privado mantiene su circuito. Menú y barra superior intactos.
+
+175/175 pruebas focalizadas PASS; tipos, lint y build PASS. Chrome con API simulada a 1440/1000/390 px PASS, sin desbordamiento; selector de saldo ajustado al panel por la nueva repetición en el indicador. [Evidencia, capturas y límites](docs/evidence/independent-detail-design-20261106/README.md). No nueva suite global ni HTTP real. Cambios pendientes de reanudación del registro preservados. QA/1.11.0 sin commit/push ni despliegue; historial inferior conservado.
+
 ## 2026-11-06 — Revisión global y entrega de «Continuar mi registro»
 
 Diff revisado en QA/base ab1d12e. Nueva suite global PASS a la primera: 1815/1815 pruebas en 88 archivos, 171,25 s. Tipos, lint y build PASS (código 0); aviso habitual Root 1260,66 kB. No hubo fallos que requirieran cambios de producto, configuración o timeouts. [Salidas y manifiesto final](docs/evidence/account-registration-20261106/README.md).

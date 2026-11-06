@@ -874,9 +874,14 @@ describe('super admin administration', () => {
     )
     mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
     const user = userEvent.setup()
-    await user.click(await screen.findByRole('button', { name: 'Suspender' }))
+    expect(
+      await screen.findByRole('button', { name: 'Suspender' }),
+    ).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Rechazar' })).toBeDisabled()
+    await user.type(screen.getByLabelText('Motivo de habilitación'), 'ab')
+    await user.click(screen.getByRole('button', { name: 'Suspender' }))
     // Empty is stopped by the field itself; too short is stopped before the API call.
-    await user.type(dialog().getByLabelText('Motivo'), 'ab')
+    expect(dialog().getByLabelText('Motivo')).toHaveValue('ab')
     await user.click(dialog().getByRole('button', { name: 'Suspender' }))
     expect(await screen.findByRole('alert')).toHaveTextContent(
       /entre 3 y 500 caracteres/i,
@@ -901,8 +906,14 @@ describe('super admin administration', () => {
     )
     mount(`/independent-drivers/${DRIVER_ID}`, 'SUPER_ADMIN')
     const user = userEvent.setup()
-    await user.click(await screen.findByRole('button', { name: 'Suspender' }))
-    await user.type(dialog().getByLabelText('Motivo'), 'Documentación vencida')
+    await user.type(
+      await screen.findByLabelText('Motivo de habilitación'),
+      'Documentación vencida',
+    )
+    await user.click(screen.getByRole('button', { name: 'Suspender' }))
+    expect(dialog().getByLabelText('Motivo')).toHaveValue(
+      'Documentación vencida',
+    )
     await user.click(dialog().getByRole('button', { name: 'Suspender' }))
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent(/est[áa] ejecutando un servicio/i)
