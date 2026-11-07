@@ -1,3 +1,21 @@
+## 2026-11-07 — Entrega Git de recuperación de cargas y cupo
+
+Commit y push autorizados por el propietario en las ramas actuales: Web feature/rediseno y backend QA. Incluye recuperación visible de operaciones pendientes en Web, cupo de imágenes VALIDATED, compatibilidad legacy, pruebas y continuidad. Revisión nueva: fuentes contrastadas con las doce huellas del manifiesto y ramas sincronizadas con origin antes de preparar los commits. Se reutilizan las pruebas de implementación ya documentadas (Web180, backend49, recorrido aislado y Chrome/WebKit); no se atribuye una nueva ejecución a esta entrega Git.
+
+Sin despliegue, migración ni datos operativos. Artefactos locales ajenos de cuentas/VM excluidos. Las menciones inferiores «sin commit/push» describen la etapa anterior de implementación.
+
+## 2026-11-07 — Recuperación de cupo tras cargas fallidas
+
+Solicitud: corregir Web/backend y probar expedientes ya agotados, sin desplegar. Implementado cupo de diez imágenes VALIDATED vigentes; CREATED y REMOVED conservan historial sin consumirlo. Backend comprueba creación y confirmación bajo bloqueo; publica fileLimitMode=VALIDATED. Web conserva legacy si falta ese campo y permite nueva selección explícita en el asistente. Fallar al reemplazar no retira la imagen válida. Sin migración ni reparación de datos existentes.
+
+Validación NUEVA: Web180 pruebas focalizadas (155 en tres archivos y25 en el pase final de uploads), backend49, tipos/builds/lint PASS. Nest/PostgreSQL/Chrome temporal:10 grupos de registro y6 de cupo PASS, incluidos expedientes antes agotados, concurrencia, replay, conservación y presentación final; clúster detenido. Chrome/WebKit táctil:8/8, diez fallos, refetch y recuperación sin duplicado. OpenAPI actualizado; no suite global ni teléfonos físicos. [Implementación, comandos y límites](docs/UPLOAD-QUOTA-RECOVERY.md) · [Evidencia](docs/upload-quota-recovery-evidence.json).
+
+Sin commit/push, despliegue, variables, versión ni datos operativos. Publicar backend antes de Web cuando se autorice. Trabajo concurrente e historial inferior conservados.
+
+## 2026-11-07 — Recuperación de «Cargar imagen» en navegador móvil
+
+Corregido un bloqueo reproducible con vista previa: el CSS del expediente ocultaba el panel para consultar una operación pendiente. El panel permanece visible y el formulario enlaza al aviso. Chrome/WebKit con pantalla táctil móvil:8/8 comprobaciones; regresiones focalizadas143/143 y tipos/lint PASS. Sin despliegue ni cambios backend. [Reproducción y límites](docs/CAMERA-PHOTO-UPLOAD.md#seguimiento-botón-cargar-imagen-bloqueado-en-móvil).
+
 ## 2026-11-07 — Entrega Git de la corrección de fotos
 
 Commit y push autorizados por el propietario en la rama actual feature/rediseno, coordinados con backend QA. Se publica la implementación y evidencia ya validadas; en esta entrega se comprueban huellas de fuentes y diff, sin repetir pruebas ni desplegar. Las menciones inferiores «sin commit/push» describen la etapa de implementación anterior.

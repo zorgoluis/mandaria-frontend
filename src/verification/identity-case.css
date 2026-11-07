@@ -218,7 +218,8 @@
     grid-column: 1 !important;
   }
 }
-.verification-area:has(.identity-case) > .notice,
+/* Hide only the duplicate informational aside, never recovery actions. */
+.verification-area:has(.identity-case) > aside.notice,
 .verification-area:has(.identity-case) > p:has(> a[href='/profile']) {
   display: none;
 }
@@ -374,6 +375,6 @@
   gap: 3px;
 }
 .case-document > span {
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }

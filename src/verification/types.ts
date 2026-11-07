@@ -225,6 +225,7 @@ export interface Requirements {
   maxBytes: number
   maxPixels: number
   maxFiles: number
+  fileLimitMode?: 'VALIDATED'
   malwareScan: false
   pdfSupported: false
   identity: { required: string[]; motorizedLicense: string; checks: string[] }
