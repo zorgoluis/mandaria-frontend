@@ -880,7 +880,7 @@ function CaseContent({
       className={
         designed
           ? 'driver-documentary identity-case' + (unit ? ' unit-case' : '')
-          : undefined
+          : 'case-view'
       }
     >
       {designed && <Link to="/driver/onboarding">← Mi verificación</Link>}
@@ -899,7 +899,7 @@ function CaseContent({
             </>
           )}
         </h1>
-        <p className={designed ? 'identity-limit-chips' : undefined}>
+        <p className="identity-limit-chips">
           <span>{provenance(record.environment)}</span>
           <span>Checklist {record.policyVersion}</span>
         </p>
@@ -995,8 +995,8 @@ function CaseContent({
       {user?.role === 'SUPER_ADMIN' && record.internalNote && (
         <p>Nota interna: {record.internalNote}</p>
       )}
-      <div className={designed ? 'identity-body' : undefined}>
-        <div className={designed ? 'identity-main' : undefined}>
+      <div className={designed ? 'identity-body' : 'case-body'}>
+        <div className={designed ? 'identity-main' : 'case-main'}>
           {canWrite && currentEvidence && record.status === 'DRAFT' ? (
             <CaseForm
               key={record.id + ':' + record.revision}
@@ -1061,16 +1061,6 @@ function CaseContent({
               disabled={blocked}
             />
           )}
-          {user?.role === 'SUPER_ADMIN' &&
-            currentEvidence &&
-            record.status === 'SUBMITTED' && (
-              <Decision
-                key={record.revision}
-                record={record}
-                requirements={requirements}
-                disabled={!runtimeReady || ownershipContractBlocked}
-              />
-            )}
           <section className="panel panel-body">
             <h2>Historial del expediente</h2>
             {!record.events.length && (
@@ -1102,7 +1092,54 @@ function CaseContent({
             </ul>
           </section>
         </div>
-        <aside className={designed ? 'identity-aside' : undefined}>
+        <aside className={designed ? 'identity-aside' : 'case-aside'}>
+          {!designed && (
+            <section className="panel panel-body case-summary">
+              <h2>Resumen del expediente</h2>
+              <dl>
+                <div>
+                  <dt>Estado</dt>
+                  <dd>
+                    <span className={'identity-status status-' + record.status}>
+                      {labels[record.status]}
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Revisión</dt>
+                  <dd>{record.revision}</dd>
+                </div>
+                <div>
+                  <dt>Ámbito</dt>
+                  <dd>
+                    {record.scope.providerId ? 'Flotilla' : 'Independiente'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Evidencias validadas</dt>
+                  <dd>
+                    {completeCount} de {displayedCategories.length}
+                  </dd>
+                </div>
+                {record.submittedAt && (
+                  <div>
+                    <dt>Presentado</dt>
+                    <dd>{date(record.submittedAt)}</dd>
+                  </div>
+                )}
+              </dl>
+            </section>
+          )}
+          {user?.role === 'SUPER_ADMIN' &&
+            currentEvidence &&
+            record.status === 'SUBMITTED' && (
+              <Decision
+                key={record.revision}
+                record={record}
+                requirements={requirements}
+                disabled={!runtimeReady || ownershipContractBlocked}
+              />
+            )}
           {canWrite && ['DRAFT', 'SUBMITTED'].includes(record.status) && (
             <section
               className="panel panel-body identity-submit"
