@@ -5,6 +5,7 @@ import { writeFile, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { chromium, expect } from '@playwright/test'
 import { createServer } from 'vite'
+import { verifyUploadQuota } from './verify-upload-quota-cases.mjs'
 import {
   root,
   work,
@@ -19,7 +20,13 @@ import {
 } from './onboarding-isolated-environment.mjs'
 const api = 'http://127.0.0.1:' + apiPort,
   web = 'http://127.0.0.1:' + webPort
-const report = { startedAt: new Date().toISOString(), cameraPhotos: process.env.CAMERA_PHOTOS === '1', checks: [], cleanup: {} }
+const report = {
+  startedAt: new Date().toISOString(),
+  cameraPhotos: process.env.CAMERA_PHOTOS === '1',
+  uploadQuota: process.env.UPLOAD_QUOTA === '1',
+  checks: [],
+  cleanup: {},
+}
 const mail = []
 const secret = () => randomBytes(32).toString('hex')
 const password = secret(),
@@ -375,6 +382,24 @@ try {
           },
         }
       : {}
+  if (report.uploadQuota) {
+    mark('Cupos: expedientes agotados, fallos y concurrencia')
+    const { VerificationService } = await loadSource(
+      'dist/verification/verification.service.js',
+    )
+    report.quota = await verifyUploadQuota({
+      service: app.get(VerificationService),
+      db,
+      storage,
+      actor: user.id,
+      identity,
+      unit,
+      image,
+      page,
+      web,
+      apiCall,
+    })
+  }
   for (const label of [
     'Fotografía de rostro',
     'INE: frente',
@@ -516,6 +541,17 @@ try {
   report.checks.push(
     'Lost HTTP response recovered from UI; one submission presents both cases; idempotent replay adds no event; reload confirms review; driver remains pending',
   )
+  if (report.uploadQuota) {
+    assert.equal(
+      await db.verificationAttachment.count({
+        where: { id: { in: report.quota.historicalIdentityIds } },
+      }),
+      10,
+    )
+    report.quota.checks.push(
+      'Previously exhausted identity and vehicle complete all five photos and submit together; failed history is retained',
+    )
+  }
   report.status = 'PASS'
 } catch (error) {
   report.status = 'FAIL'

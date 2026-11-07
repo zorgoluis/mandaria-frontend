@@ -1,0 +1,28 @@
+# Recuperar registros bloqueados por intentos de carga — 2026-11-07
+
+## Resultado y contrato
+
+El límite sigue siendo diez imágenes por expediente, pero ahora cuenta sólo adjuntos `VALIDATED` vigentes. Los registros `CREATED` (incluidos caducados, archivos inválidos y transferencias fallidas) y `REMOVED` permanecen en el historial sin consumir cupo. No se borran archivos, expedientes, evidencias válidas ni recibos para desbloquear. La regla se aplica al consultar cualquier borrador existente: no requiere migración ni reparación manual de los expedientes que acumularon diez o más intentos.
+
+Backend publica `fileLimitMode: "VALIDATED"` junto a `maxFiles: 10` en GET `/verification-requirements`. Comprueba el cupo en CREATE_UPLOAD, antes de normalizar y nuevamente en la confirmación, dentro del bloqueo del expediente. Concurrencia y revisiones vigentes impiden superar diez imágenes validadas. Los replays aplicados conservan su recibo, incluso con el cupo lleno. Se mantienen autorización, términos, DRAFT, idempotencia, límites de bytes/píxeles, formato, calidad, retención y control de acceso. No se renuevan URLs caducadas automáticamente.
+
+Web usa el nuevo conteo sólo con ese valor explícito del backend. Si el campo está ausente o no se reconoce, conserva el conteo legacy de todos los intentos. El detalle muestra el cupo de imágenes guardadas; el asistente permite una nueva selección explícita cuando hay cargas incompletas. Una imagen válida sigue marcada como guardada aunque haya intentos fallidos de la misma categoría. Un reemplazo fallido nunca retira la imagen válida anterior. El reemplazo exitoso mantiene la retirada posterior que ya existía en el asistente.
+
+Una operación con respuesta incierta continúa bloqueada hasta consultarla; el arreglo de visibilidad de «Consultar intento» se conserva. La selección, el contador local y la vista previa no acreditan una carga ni modifican la autoridad del backend. Si existen diez imágenes realmente validadas, el cupo sigue lleno: se orienta a revisar y retirar sólo las innecesarias mediante la acción explícita existente.
+
+## Validación nueva
+
+Los scripts de navegador y la suite Web se ejecutan desde `mandaria-frontend`, con `mandaria-backend` compilado; la suite backend se ejecuta desde su propio repositorio.
+
+- Web: 180 pruebas focalizadas aprobadas en total:155 en verification-pages, documentary-availability y representatives;25 en verification-upload, incluido su pase final independiente tras agregar los casos del asistente. Cubren diez CREATED/REMOVED, mezcla con VALIDATED, cupo lleno, refetch tras retirada, campo ausente y reemplazo fallido. El primer pase tuvo dos fallos del arnés jsdom al simular clic sobre un file input requerido; se usa submit como las pruebas de ciclo de vida existentes. El clic real queda probado con navegador y HTTP. Un parámetro de Testing Library no admitido por tipos se corrigió antes del pase final de tipos.
+- Backend:49/49 en `test/driver-verification.spec.ts`, conservando validación de imágenes y calidad. El servicio de cupos se verificó además con Nest/PostgreSQL reales en el recorrido siguiente.
+- `$env:UPLOAD_QUOTA='1'; node scripts/verify-simple-driver-registration.mjs`:PASS,10 grupos del registro completo y6 grupos adicionales de cupo. Corrida `test-results/onboarding-production-isolated/1794071408050`. Base temporal nueva y comprobada, correo capturado y almacenamiento local privado. Dos expedientes antes agotados completan las cinco fotos y se presentan juntos. Clúster detenido (`postgresStopped=true`).
+- Los seis grupos adicionales comprueban: diez intentos caducados/ilegibles/sin objeto/retirados y carga once por UI; reemplazo inválido conserva foto/hash/bytes válidos; dos confirmaciones concurrentes sólo ocupan el último cupo; rechazo HTTP de CREATE/COMPLETE al estar lleno y replay sin duplicado; retirada explícita libera cupo sin borrar bytes/historial; asistente reanudado y envío final de identidad/vehículo.
+- `node scripts/verify-mobile-evidence.mjs`:8/8 en Chrome y WebKit con pantalla390×844 y touch, API simulada. Diez intentos fallidos no bloquean una selección nueva, refetch demorado conserva la foto, recuperación visible/táctil, ABSENT conserva bloqueo y COMPLETE_UPLOAD perdido se consulta sin repetir la transferencia. Corrida `test-results/mobile-evidence/1794071645099`.
+- Builds Web/backend, tipos Web de producto/pruebas, ESLint focalizado y Oxlint backend:PASS. Aviso conocido de chunks Vite grandes. OpenAPI regenerado con configuración sintética aislada. El CLI y `docs:check` directos terminaron sin completar; el comprobador original `generate-api-access.ts --check` sí pasó al ejecutarse mediante `test-results/generate-upload-openapi.mjs --check`, con ConfigModule aislado, ignorando archivos/env y sin listener ni conexión a base. OpenAPI y API_ACCESS coinciden con las fuentes.
+
+Evidencia preservada: [upload-quota-recovery-evidence.json](upload-quota-recovery-evidence.json). Los ensayos usan datos sintéticos; no se consultaron expedientes reales. No se ejecutó suite global. Las pruebas de Chrome/WebKit en Windows no equivalen a una cámara física Android/iPhone.
+
+## Entrega local
+
+Web y backend modificados en sus ramas actuales, sin commit/push ni despliegue en esta tarea. Publicar backend antes de Web cuando se autorice; los clientes Web antiguos conservarán su bloqueo legacy hasta actualizarse. No hay migraciones, variables ni cambios de versión. No se elimina automáticamente el historial de intentos: la retención y los límites generales de peticiones existentes siguen vigentes. Los cambios concurrentes de diseño administrativo del workspace se preservaron; no forman parte de este ajuste de cupo.

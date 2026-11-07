@@ -1,6 +1,7 @@
 import { PHOTO_ACCEPT, preparePhoto } from './prepare-photo'
 import { unitRequirements } from './unit-requirements'
 import { EvidencePicker } from './evidence-picker'
+import { uploadQuota } from './upload-quota'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../auth/context'
 import { Field } from '../components/ui'
@@ -44,6 +45,7 @@ function EvidenceSession({
   const [selectionVersion, setSelectionVersion] = useState(0)
   const [selectionValid, setSelectionValid] = useState(false)
   const command = useCommand()
+  const quota = uploadQuota(record, requirements)
   const { user } = useAuth()
   const scope = user?.id + ':' + record.id
   const current = useRef(scope)
@@ -114,7 +116,11 @@ function EvidenceSession({
               Máx. {requirements.maxBytes / 1048576} MB ·{' '}
               {requirements.maxPixels / 1000000} MP
             </span>
-            <span>{requirements.maxFiles} intentos por expediente</span>
+            <span>
+              {requirements.maxFiles}{' '}
+              {quota.validatedOnly ? 'imágenes guardadas' : 'intentos'} por
+              expediente
+            </span>
           </div>
           <p className="identity-note">
             Las fotos de cámara JPEG, PNG o HEIC/HEIF se preparan en tu
@@ -134,10 +140,16 @@ function EvidenceSession({
       ) : (
         <p>
           JPEG/PNG, máximo {requirements.maxBytes} bytes y{' '}
-          {requirements.maxPixels} píxeles; {requirements.maxFiles} intentos por
-          expediente, incluidos retirados. No PDF ni antimalware. VALIDATED
-          significa formato decodificado, no identidad aprobada.
+          {requirements.maxPixels} píxeles; {requirements.maxFiles}{' '}
+          {quota.validatedOnly
+            ? 'imágenes guardadas por expediente.'
+            : 'intentos por expediente, incluidos retirados.'}{' '}
+          No PDF ni antimalware. VALIDATED significa formato decodificado, no
+          identidad aprobada.
         </p>
+      )}
+      {quota.validatedOnly && (
+        <p>Las cargas incompletas y las imágenes retiradas no consumen cupo.</p>
       )}
       {canWrite && record.status === 'DRAFT' && categories.length > 0 && (
         <Form
@@ -151,9 +163,7 @@ function EvidenceSession({
             command.blocked ||
             command.busy ||
             busy ||
-            (designed &&
-              (!selectionValid ||
-                record.attachments.length >= requirements.maxFiles))
+            (designed && (!selectionValid || quota.full))
           }
           onSubmit={async (d) => {
             const file = d.get('file')
@@ -161,9 +171,11 @@ function EvidenceSession({
               throw new Error('Selecciona una imagen.')
             if (!categories.includes(String(d.get('category'))))
               throw new Error('Categoría no disponible para nuevas cargas.')
-            if (record.attachments.length >= requirements.maxFiles)
+            if (quota.full)
               throw new Error(
-                'Se alcanzó el límite de archivos. Solicita orientación; no omitas páginas indispensables ni reduzcas su legibilidad.',
+                quota.validatedOnly
+                  ? 'Se alcanzó el cupo de imágenes guardadas. Revisa y retira sólo imágenes que no necesites antes de volver a cargar.'
+                  : 'Se alcanzó el límite de archivos. Solicita orientación; no omitas páginas indispensables ni reduzcas su legibilidad.',
               )
             const controller = new AbortController()
             request.current = controller
@@ -242,7 +254,9 @@ function EvidenceSession({
                   )
                   const hint =
                     incomplete && !received
-                      ? 'Usa «Consultar y completar carga» en el archivo de abajo.'
+                      ? quota.validatedOnly
+                        ? 'Puedes usar «Consultar y completar carga» abajo o elegir otra foto para iniciar una nueva carga.'
+                        : 'Usa «Consultar y completar carga» en el archivo de abajo.'
                       : documentHints[c]
                   return (
                     <label key={c}>
@@ -301,15 +315,25 @@ function EvidenceSession({
               <input name="file" type="file" accept={PHOTO_ACCEPT} required />
             </Field>
           )}
+          {designed && command.blocked && !busy && (
+            <p role="status">
+              Para habilitar la carga,{' '}
+              <a href="#verification-status">
+                revisa el aviso de recuperación al inicio de esta página
+              </a>
+              . La vista previa no confirma que la imagen esté guardada.
+            </p>
+          )}
         </Form>
       )}
-      {designed && requirements.maxFiles - record.attachments.length <= 3 && (
+      {designed && quota.remaining <= 3 && (
         <p role="status">
-          Intentos restantes:{' '}
-          {Math.max(0, requirements.maxFiles - record.attachments.length)} de{' '}
-          {requirements.maxFiles}
-          {record.attachments.length >= requirements.maxFiles &&
-            ' · Límite alcanzado. Si falta un documento, solicita orientación.'}
+          {quota.validatedOnly ? 'Espacios disponibles' : 'Intentos restantes'}:{' '}
+          {quota.remaining} de {requirements.maxFiles}
+          {quota.full &&
+            (quota.validatedOnly
+              ? ' · Revisa las imágenes guardadas y retira sólo las que no necesites antes de cargar otra.'
+              : ' · Límite alcanzado. Si falta un documento, solicita orientación.')}
         </p>
       )}
       {busy && (

@@ -1,5 +1,22 @@
 # Fotos de cámara en el registro — 2026-11-07
 
+Actualización posterior: [recuperación del cupo de cargas fallidas](UPLOAD-QUOTA-RECOVERY.md), con cambios Web/backend y pruebas de expedientes ya agotados. Las secciones siguientes conservan sus alcances y resultados anteriores.
+
+## Seguimiento: botón «Cargar imagen» bloqueado en móvil
+
+El usuario precisó que el bloqueo ocurre en «Cargar imagen» del navegador móvil, después de ver la foto seleccionada. Se reprodujo una causa concreta en el formulario de detalle: una operación documental pendiente bloquea nuevas cargas y el selector `.verification-area:has(.identity-case) > .notice` ocultaba también el panel «Pendiente de reconciliación» y su botón «Consultar intento». El preview sólo acredita selección local; no descarta una carga anterior pendiente. No se inspeccionó el almacenamiento del teléfono del usuario, por lo que no se atribuye su estado particular sin esa evidencia.
+
+El selector ahora oculta únicamente el `aside` informativo duplicado. Los paneles de recuperación permanecen visibles; un aviso junto a «Cargar imagen» enlaza al inicio para consultarlos. Se conservan todos los bloqueos y la consulta explícita existente: ABSENT no permite otra carga, CLOSED_NO_EFFECTS/APPLIED requieren respuesta y refetch, y no se borran marcadores ni se repiten CREATE_UPLOAD/COMPLETE_UPLOAD automáticamente. No cambia compresión, resolución, backend ni comportamiento de selección de cámara/galería.
+
+Validación del seguimiento:
+
+- `npx vitest run src/test/verification-upload.test.tsx src/test/verification-pages.test.tsx src/test/documentary-availability.test.tsx --maxWorkers=1`:143/143 PASS,3 archivos.
+- `npx tsc -b`, `npx tsc --project tsconfig.test.json --pretty false`, ESLint de los archivos TSX y script afectados:PASS. No nueva suite global ni build de bundle; los tipos sí se recompilaron.
+- `node scripts/verify-mobile-evidence.mjs`:8/8 grupos PASS en Chrome/WebKit con viewport390×844 y touch. Incluye selección/preview habilitado, regreso con refetch demorado sin perder el archivo, aviso visible y enlace táctil, consulta ABSENT bloqueada, CLOSED_NO_EFFECTS confirmado, pérdida de respuesta al completar y consulta APPLIED sin nueva transferencia. API simulada local y PNG sintético con decodificación real; no backend, cuentas reales ni operaciones externas.
+- Antes del arreglo, corrida1794070422048: selección/refetch PASS, recuperación invisible FAIL. El primer intento del arnés esperaba incorrectamente «Guardar datos» habilitado sin cambios; se corrigió esa aserción del arnés, sin alterar producto. Pase final1794070537535, con capturas en test-results/mobile-evidence. [Informe conservado](mobile-evidence-recovery-evidence.json).
+
+Corrección local en feature/rediseno, sin commit/push ni despliegue de este seguimiento. Chrome/WebKit en Windows no sustituyen una comprobación en Android/iPhone físicos. Las entradas inferiores conservan la implementación y validaciones previas de formatos de cámara.
+
 ## Corrección
 
 Web prepara JPEG, PNG y HEIC/HEIF localmente antes de CREATE_UPLOAD, tanto en el asistente del conductor como en formularios de evidencia (identidad, unidad y representante). Detecta firmas reales, corrige MIME ausente/genérico y rechaza archivos no raster/corruptos. El selector conserva cámara y galería; no fuerza capture ni restringe a una sola cámara. HEIC se decodifica con heic-to 1.6.7, distribución CSP y worker local cargados bajo demanda. No usa conversores externos. Licencia, versión y fuentes en public/licenses/heic-to/. nginx.conf agrega únicamente worker-src 'self' blob: a su CSP para permitir ese worker local; no abre scripts remotos ni cambia el servidor desplegado.

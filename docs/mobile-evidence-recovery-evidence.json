@@ -1,0 +1,16 @@
+{
+  "kind": "MOBILE_BROWSER_SYNTHETIC_HTTP",
+  "physicalCamera": false,
+  "status": "PASS",
+  "checks": [
+    "chromium: selection with preview enables upload",
+    "chromium: return from picker/refetch preserves selection and re-enables",
+    "chromium: visible recovery; ABSENT stays blocked; confirmed closure preserves selection",
+    "chromium: lost completion recovered without repeating upload",
+    "webkit: selection with preview enables upload",
+    "webkit: return from picker/refetch preserves selection and re-enables",
+    "webkit: visible recovery; ABSENT stays blocked; confirmed closure preserves selection",
+    "webkit: lost completion recovered without repeating upload"
+  ],
+  "errors": []
+}

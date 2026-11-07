@@ -108,7 +108,7 @@ const errors: Record<string, string> = {
     'Revisa los datos, fechas y forma de actuación del expediente.',
   VERIFICATION_CATEGORY_INVALID: 'Esta categoría no corresponde al expediente.',
   VERIFICATION_FILE_LIMIT:
-    'Se alcanzó el límite de archivos. Solicita orientación sin omitir páginas indispensables.',
+    'Se alcanzó el cupo de carga del expediente. Revisa sus límites y las imágenes guardadas antes de continuar.',
   VERIFICATION_PUBLICATION_ENVIRONMENT_REQUIRED:
     'La publicación no está disponible en este modo. Conserva el borrador y consulta con la administración.',
   VERIFICATION_VERSION_EXISTS:
@@ -131,7 +131,7 @@ const errors: Record<string, string> = {
   TERMS_VERSION_CONFLICT:
     'Los términos cambiaron. Lee la versión vigente y vuelve a marcar la casilla.',
   VERIFICATION_UPLOAD_EXPIRED:
-    'La carga caducó. Consulta su estado y retira la referencia incompleta antes de preparar otra carga explícita.',
+    'Esta carga ya no está disponible para completarse. Consulta el expediente y elige la foto de nuevo para iniciar otra carga.',
   VERIFICATION_DOCUMENTS_PENDING:
     'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
   VERIFICATION_CATEGORY_RETIRED:

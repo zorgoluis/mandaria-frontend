@@ -1179,7 +1179,16 @@ dialog::backdrop {
 }
 @media (max-width: 640px) {
   .login-page {
+    grid-template-columns: 1fr;
     background: var(--surface);
+  }
+  .login-story {
+    min-height: auto;
+    padding: 20px 24px;
+    background: var(--brand);
+  }
+  .login-story::after {
+    display: none;
   }
   .login-panel {
     background: var(--surface);
