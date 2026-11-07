@@ -1,0 +1,7 @@
+heic-to 1.6.7 — Hopper Gee — LGPL-3.0
+Unmodified CSP distribution, loaded on demand for local HEIC conversion.
+Package source and build instructions: https://github.com/hoppergee/heic-to
+Exact package: https://registry.npmjs.org/heic-to/-/heic-to-1.6.7.tgz
+Underlying libheif 1.23.7: https://github.com/strukturag/libheif/tree/v1.23.7
+libde265: https://github.com/strukturag/libde265
+License text accompanies this notice.

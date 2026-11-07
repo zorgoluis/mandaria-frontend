@@ -1,3 +1,4 @@
+import { preparePhoto } from '../verification/prepare-photo'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -415,4 +416,59 @@ it('cancelled A does not announce success or clear the pending B selection', asy
   )
   expect(screen.queryByText(/Carga confirmada/)).not.toBeInTheDocument()
   expect(verification.command).toHaveBeenCalledOnce()
+})
+
+// These lifecycle tests use synthetic non-image bytes. Codec behavior is exercised separately.
+vi.mock('../verification/prepare-photo', async (original) => ({
+  ...(await original<typeof import('../verification/prepare-photo')>()),
+  preparePhoto: vi.fn(
+    async (
+      file: File,
+      requirements: import('../verification/types').Requirements,
+    ) => {
+      const { validateFile } = await import('../verification/service')
+      validateFile(file, requirements)
+      return file
+    },
+  ),
+}))
+
+it('uploads the prepared bytes instead of the original HEIC', async () => {
+  const prepared = new File(['prepared'], 'documento.jpg', {
+    type: 'image/jpeg',
+  })
+  vi.mocked(preparePhoto).mockResolvedValueOnce(prepared)
+  mount(<Evidence record={caseFixture} requirements={requirements} canWrite />)
+  const input = screen.getByLabelText('Imagen sintética *') as HTMLInputElement
+  await userEvent.upload(
+    input,
+    new File(['heic'], 'camera.heic', { type: 'image/heic' }),
+  )
+  fireEvent.submit(input.form!)
+  await waitFor(() => expect(putEvidence).toHaveBeenCalledOnce())
+  expect(vi.mocked(putEvidence).mock.calls[0][1]).toBe(prepared)
+})
+it('does not create an upload if preparation finishes after leaving the case', async () => {
+  let finish!: (file: File) => void
+  vi.mocked(preparePhoto).mockReturnValueOnce(
+    new Promise((resolve) => {
+      finish = resolve
+    }),
+  )
+  const view = mount(
+    <Evidence record={caseFixture} requirements={requirements} canWrite />,
+  )
+  const input = screen.getByLabelText('Imagen sintética *') as HTMLInputElement
+  await userEvent.upload(
+    input,
+    new File(['heic'], 'camera.heic', { type: 'image/heic' }),
+  )
+  fireEvent.submit(input.form!)
+  await waitFor(() => expect(preparePhoto).toHaveBeenCalledOnce())
+  view.unmount()
+  await act(async () =>
+    finish(new File(['prepared'], 'documento.jpg', { type: 'image/jpeg' })),
+  )
+  expect(verification.command).not.toHaveBeenCalled()
+  expect(putEvidence).not.toHaveBeenCalled()
 })

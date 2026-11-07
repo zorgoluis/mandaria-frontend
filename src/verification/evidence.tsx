@@ -1,3 +1,4 @@
+import { PHOTO_ACCEPT, preparePhoto } from './prepare-photo'
 import { unitRequirements } from './unit-requirements'
 import { EvidencePicker } from './evidence-picker'
 import { useEffect, useRef, useState } from 'react'
@@ -6,7 +7,7 @@ import { Field } from '../components/ui'
 import { Form } from './common'
 import { labels, message } from './format'
 import { useCommand } from './hooks'
-import { putEvidence, validateFile, verification } from './service'
+import { putEvidence, verification } from './service'
 import type { Requirements, VerificationCase } from './types'
 const documentHints: Record<string, string> = {
   FACE_PHOTO: 'Una foto de tu cara, de frente y con buena luz.',
@@ -116,8 +117,9 @@ function EvidenceSession({
             <span>{requirements.maxFiles} intentos por expediente</span>
           </div>
           <p className="identity-note">
-            Una vez cargada la imagen, el equipo revisará su contenido cuando
-            envíes el expediente.
+            Las fotos de cámara JPEG, PNG o HEIC/HEIF se preparan en tu
+            dispositivo. Comprueba que el texto sea legible. Una vez cargada la
+            imagen, el equipo revisará su contenido cuando envíes el expediente.
           </p>
           {record.subjectType === 'VEHICLE' &&
             record.status === 'DRAFT' &&
@@ -159,7 +161,6 @@ function EvidenceSession({
               throw new Error('Selecciona una imagen.')
             if (!categories.includes(String(d.get('category'))))
               throw new Error('Categoría no disponible para nuevas cargas.')
-            validateFile(file, requirements)
             if (record.attachments.length >= requirements.maxFiles)
               throw new Error(
                 'Se alcanzó el límite de archivos. Solicita orientación; no omitas páginas indispensables ni reduzcas su legibilidad.',
@@ -169,6 +170,12 @@ function EvidenceSession({
             const owner = scope
             setBusy(true)
             try {
+              const prepared = await preparePhoto(
+                file,
+                requirements,
+                controller.signal,
+              )
+              if (current.current !== owner || controller.signal.aborted) return
               const upload = await command.send(
                 'CREATE_UPLOAD',
                 record.id,
@@ -188,7 +195,7 @@ function EvidenceSession({
                 )
               await putEvidence(
                 upload.uploadUrl,
-                file,
+                prepared,
                 upload.expiresAt,
                 controller.signal,
               )
@@ -291,12 +298,7 @@ function EvidenceSession({
                   : 'Imagen *'
               }
             >
-              <input
-                name="file"
-                type="file"
-                accept="image/jpeg,image/png"
-                required
-              />
+              <input name="file" type="file" accept={PHOTO_ACCEPT} required />
             </Field>
           )}
         </Form>
