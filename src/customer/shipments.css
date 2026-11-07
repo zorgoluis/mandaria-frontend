@@ -19,12 +19,12 @@
   min-height: 42px;
   padding: 0 18px;
   background: white;
-  border: 1.5px solid #d3dcd9;
+  border: 1.5px solid var(--line-strong);
   font-size: 14px;
-  color: #1b2a27;
+  color: var(--ink);
 }
 .shipments-profile:hover {
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .shipments-active {
   display: flex;
@@ -33,7 +33,7 @@
   gap: 24px;
   flex-wrap: wrap;
   padding: 28px 32px;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border-radius: 24px;
   margin-bottom: 32px;
@@ -62,23 +62,23 @@
 .shipments-active-info div > span {
   font-size: 13px;
   font-weight: 600;
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .shipments-active-info p {
   margin: 4px 0 0;
   font-size: 13.5px;
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .shipments-continue {
   min-height: 50px;
   padding: 10px 24px;
   background: white;
-  color: #156b5c;
+  color: var(--brand);
   font-size: 15px;
   font-weight: 700;
 }
 .shipments-continue:hover {
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .shipments-create {
   margin-bottom: 32px;
@@ -105,7 +105,7 @@
   border-radius: 16px;
 }
 .shipments-table thead tr {
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 14px 20px;
 }
 .shipments-page .shipments-table th {
@@ -125,23 +125,23 @@
   cursor: pointer;
 }
 .shipments-table tbody tr:hover {
-  background: #f1f7f5;
+  background: var(--hover);
 }
 .shipments-table tbody tr:focus-within {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
-  background: #f1f7f5;
+  background: var(--hover);
 }
 .shipments-page .shipments-table td {
   padding: 0;
   border: 0;
   font-size: 15px;
-  color: #3d4b47;
+  color: var(--ink-2);
   overflow-wrap: anywhere;
 }
 .shipment-row-link {
   font-weight: 700;
-  color: #156b5c;
+  color: var(--brand);
   text-decoration: none;
 }
 .shipment-row-link::after {
@@ -156,8 +156,8 @@
   align-items: center;
   padding: 6px 12px;
   border-radius: 999px;
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   font-size: 13px;
   font-weight: 600;
 }
@@ -166,15 +166,15 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #156b5c;
+  background: var(--brand);
   flex-shrink: 0;
 }
 .shipment-state.cancelled {
-  color: #9b3b2e;
+  color: var(--danger);
   background: #fbefed;
 }
 .shipment-state.cancelled::before {
-  background: #9b3b2e;
+  background: var(--danger);
 }
 .shipment-arrow {
   display: grid;
@@ -182,8 +182,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f1f7f5;
-  color: #156b5c;
+  background: var(--hover);
+  color: var(--brand);
 }
 .shipments-page .pagination {
   display: flex;
@@ -191,7 +191,7 @@
   flex-wrap: wrap;
   gap: 16px;
   padding: 16px 20px 8px;
-  border-top: 1px solid #edf1f0;
+  border-top: 1px solid var(--line-soft);
   margin: 4px 0 0;
 }
 .shipments-page .pagination > span {
@@ -206,8 +206,8 @@
   height: 38px;
   padding: 0 16px;
   background: white;
-  border: 1.5px solid #e2e8e6;
-  color: #3d4b47;
+  border: 1.5px solid var(--line);
+  color: var(--ink-2);
   font-size: 14px;
   font-weight: 600;
 }
@@ -225,8 +225,8 @@
 .shipments-empty .shipments-package {
   width: 56px;
   height: 56px;
-  background: #e7f2ef;
-  color: #156b5c;
+  background: var(--brand-soft);
+  color: var(--brand);
 }
 .shipments-empty h2 {
   font-size: 17px;
@@ -235,7 +235,7 @@
 .shipments-empty p {
   font-size: 14px;
   margin: 0;
-  color: #5f6e6a;
+  color: var(--muted);
 }
 .shipments-sr {
   position: absolute;
@@ -252,7 +252,7 @@
 }
 .shipments-skeleton span {
   height: 24px;
-  background: #edf1f0;
+  background: var(--line-soft);
   border-radius: 12px;
   animation: shipment-pulse 1.4s ease-in-out infinite alternate;
 }

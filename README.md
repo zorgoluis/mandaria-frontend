@@ -1,3 +1,11 @@
+## 2026-11-07 — Entrega Git de la corrección de fotos
+
+Commit y push autorizados por el propietario en la rama actual feature/rediseno, coordinados con backend QA. Se publica la implementación y evidencia ya validadas; en esta entrega se comprueban huellas de fuentes y diff, sin repetir pruebas ni desplegar. Las menciones inferiores «sin commit/push» describen la etapa de implementación anterior.
+
+## 2026-11-07 — Fotos de cámara en registro
+
+Corrección local Web/backend: preparación de JPEG/PNG/HEIC, orientación y reducción proporcional sólo cuando hace falta; PNG validado con límite independiente para conservar píxeles. Web188 pruebas, backend49,12 combinaciones Chrome/WebKit y registro HTTP completo aislado PASS. Builds/tipos/lint focalizado PASS. Sin despliegue/commit/push. Cámaras físicas pendientes. [Contrato, evidencia, límites y reproducción](docs/CAMERA-PHOTO-UPLOAD.md).
+
 ## 2026-11-05 — Entrega del registro de conductores en QA
 
 Opción A y diseño listos para la publicación Git autorizada. Para actualizar la VM: backend y migración primero, Web después; confirmar la rama o revisión desplegada. [Requisitos y procedimiento](docs/DRIVER-REGISTRATION-OPTION-A.md#actualización-en-vm). El estado de la VM no se ha consultado ni modificado. Las entradas inferiores conservan su fecha y alcance original.

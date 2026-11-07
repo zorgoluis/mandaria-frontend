@@ -544,9 +544,7 @@ it('background privacy refresh preserves the pending file for the confirmed vers
   )
   expect(screen.getByLabelText('Imagen *')).toBe(input)
   expect(input.files?.[0]).toBe(file)
-  expect(
-    screen.getByRole('button', { name: /^Cargar imagen$/ }),
-  ).toBeDisabled()
+  expect(screen.getByRole('button', { name: /^Cargar imagen$/ })).toBeDisabled()
   await act(async () => {
     resolve(privacy)
     await refresh
@@ -744,3 +742,18 @@ it('a scoped deletion denial shows minimum follow-up and no dossier data', async
     screen.queryByRole('button', { name: 'Ver evidencia' }),
   ).not.toBeInTheDocument()
 })
+
+// These lifecycle tests use synthetic non-image bytes. Codec behavior is exercised separately.
+vi.mock('../verification/prepare-photo', async (original) => ({
+  ...(await original<typeof import('../verification/prepare-photo')>()),
+  preparePhoto: vi.fn(
+    async (
+      file: File,
+      requirements: import('../verification/types').Requirements,
+    ) => {
+      const { validateFile } = await import('../verification/service')
+      validateFile(file, requirements)
+      return file
+    },
+  ),
+}))

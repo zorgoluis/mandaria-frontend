@@ -331,20 +331,22 @@ export function AdminLayout() {
                 }
                 onClick={() => setOpen(false)}
               >
-                <Icon size={19} />
+                <Icon size={19} aria-hidden="true" />
                 <span>{label}</span>
               </NavLink>
             ))}
         </nav>
         <div className="sidebar-bottom">
-          <Link to="/privacy/deletion">Baja y privacidad</Link>
-          <span className="sidebar-emblem">
-            <ArrowUpRight size={22} />
-          </span>
-          <strong>Una operación conectada.</strong>
-          <p>La base de lo que viene.</p>
-          <div className="version">
-            MANDARIA WEB <span>V1.10</span>
+          <Link className="sidebar-privacy" to="/privacy/deletion">
+            Baja y privacidad
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
+          <div className="sidebar-card">
+            <strong>Una operación conectada.</strong>
+            <p>La base de lo que viene.</p>
+            <div className="version">
+              MANDARIA WEB <span>V1.10</span>
+            </div>
           </div>
         </div>
       </aside>

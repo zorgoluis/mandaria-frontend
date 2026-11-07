@@ -12,25 +12,25 @@
 }
 .conversion-tags span {
   border-radius: 999px;
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   font-size: 13px;
   font-weight: 600;
   padding: 6px 12px;
 }
 .conversion-tags span + span {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
 }
 .conversion-page .quote-steps .completed {
-  color: #156b5c;
+  color: var(--brand);
 }
 .conversion-page .quote-steps .completed > span {
-  background: #e7f2ef;
-  border-color: #e7f2ef;
+  background: var(--brand-soft);
+  border-color: var(--brand-soft);
 }
 .conversion-page .quote-steps .completed + li::before {
-  background: #156b5c;
+  background: var(--brand);
 }
 .conversion-card {
   display: grid;
@@ -52,17 +52,17 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .conversion-stop-title > span::after {
   content: '';
   width: 12px;
   height: 12px;
-  border: 3px solid #156b5c;
+  border: 3px solid var(--brand);
   border-radius: 50%;
 }
 .conversion-stop-title > .destination::after {
-  background: #156b5c;
+  background: var(--brand);
 }
 .conversion-row {
   display: grid;
@@ -104,7 +104,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: #156b5c;
+  color: var(--brand);
   font-size: 13px;
   font-weight: 700;
   text-align: right;
@@ -133,7 +133,7 @@
 .conversion-money > span {
   position: absolute;
   top: 16px;
-  color: #8a9894;
+  color: var(--faint);
   font-weight: 600;
 }
 .conversion-money > span:first-child {
@@ -150,21 +150,21 @@
   gap: 12px;
   align-items: start;
   margin: 0;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 16px;
   padding: 14px 18px;
-  color: #3d4b47;
+  color: var(--ink-2);
   font-size: 13.5px;
   line-height: 1.5;
 }
 .conversion-info svg {
   flex-shrink: 0;
-  fill: #156b5c;
+  fill: var(--brand);
   stroke: white;
 }
 .conversion-subtitle {
   font-size: 14px;
-  color: #5f6e6a;
+  color: var(--muted);
   margin: 8px 0 0;
 }
 .conversion-sidebar {
@@ -175,7 +175,7 @@
   min-width: 0;
 }
 .conversion-price {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border-radius: 24px;
   padding: 28px;
@@ -183,7 +183,7 @@
 .conversion-price > span,
 .conversion-price p {
   font-size: 13px;
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .conversion-price > div {
   margin-block: 8px;
@@ -196,7 +196,7 @@
 }
 .conversion-price b {
   font-size: 18px;
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .conversion-price p {
   margin-bottom: 0;
@@ -206,8 +206,8 @@
   position: static;
 }
 .conversion-expired {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
   border-radius: 16px;
   padding: 14px;
   font-size: 14px;
@@ -246,7 +246,7 @@
   font-weight: 700;
 }
 .conversion-required-note {
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 13px;
   margin: -12px 0 24px;
 }

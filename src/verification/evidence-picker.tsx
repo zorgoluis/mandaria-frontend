@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Upload } from 'lucide-react'
-import { validateFile } from './service'
+import { PHOTO_ACCEPT, validatePhotoSource } from './prepare-photo'
 import type { Requirements } from './types'
 
 export function EvidencePicker({
-  requirements,
   busy,
   onValid,
 }: {
@@ -17,7 +16,7 @@ export function EvidencePicker({
   const preview = useRef<HTMLImageElement>(null)
   const [error, setError] = useState('')
   useEffect(() => {
-    if (!file) return
+    if (!file || !['image/jpeg', 'image/png'].includes(file.type)) return
     const next = URL.createObjectURL(file)
     if (preview.current) preview.current.src = next
     return () => URL.revokeObjectURL(next)
@@ -28,7 +27,7 @@ export function EvidencePicker({
     onValid(false)
     if (!next) return
     try {
-      validateFile(next, requirements)
+      validatePhotoSource(next)
       setFile(next)
       onValid(true)
     } catch (e) {
@@ -59,7 +58,7 @@ export function EvidencePicker({
           ref={input}
           name="file"
           type="file"
-          accept="image/jpeg,image/png"
+          accept={PHOTO_ACCEPT}
           required
           disabled={busy}
           onChange={(e) => choose(e.target.files?.[0] ?? null)}
@@ -68,7 +67,13 @@ export function EvidencePicker({
       </label>
       {file && (
         <div className="identity-selected">
-          <img ref={preview} alt="Vista previa de la imagen seleccionada" />
+          {['image/jpeg', 'image/png'].includes(file.type) ? (
+            <img ref={preview} alt="Vista previa de la imagen seleccionada" />
+          ) : (
+            <span>
+              La vista previa estará disponible después de preparar la foto.
+            </span>
+          )}
           <span>
             {file.name} · {(file.size / 1024).toFixed(1)} KB
           </span>

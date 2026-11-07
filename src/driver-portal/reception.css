@@ -1,6 +1,6 @@
 .reception-page {
-  background: #f4f6f5;
-  color: #1b2a27;
+  background: var(--page);
+  color: var(--ink);
   font-family: Figtree, sans-serif;
   padding: 40px 48px 56px;
   display: grid;
@@ -13,7 +13,7 @@
   margin: 0 0 10px;
 }
 .reception-page p {
-  color: #5f6e6a;
+  color: var(--muted);
   line-height: 1.6;
   margin: 0;
   text-wrap: pretty;
@@ -29,7 +29,7 @@
   gap: 12px;
 }
 .reception-page small {
-  color: #8a9894;
+  color: var(--faint);
   font-size: 12.5px;
   line-height: 1.5;
 }
@@ -45,14 +45,14 @@
 .reception-page .driver-tabs a {
   border: 0;
   background: transparent;
-  color: #3d4b47;
+  color: var(--ink-2);
   min-height: 42px;
   padding: 0 20px;
   border-radius: 999px;
   white-space: nowrap;
 }
 .reception-page .driver-tabs a.active {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
 }
 .reception-statuses {
@@ -68,7 +68,7 @@
   gap: 10px;
 }
 .reception-statuses section > span {
-  color: #8a9894;
+  color: var(--faint);
   font-size: 12px;
   font-weight: 600;
 }
@@ -83,20 +83,20 @@
   flex: 0 0 10px;
   height: 10px;
   border-radius: 50%;
-  background: #8a9894;
-  box-shadow: 0 0 0 4px #f1f4f3;
+  background: var(--faint);
+  box-shadow: 0 0 0 4px var(--surface-3);
 }
 .reception-dot.state-OFF::before {
-  background: #9b3b2e;
+  background: var(--danger);
   box-shadow: 0 0 0 4px #fbefed;
 }
 .reception-dot.state-READY::before {
-  background: #156b5c;
-  box-shadow: 0 0 0 4px #e7f2ef;
+  background: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-soft);
 }
 .reception-dot.state-PAUSED::before {
-  background: #e0a14a;
-  box-shadow: 0 0 0 4px #fff4e0;
+  background: var(--warn-dot);
+  box-shadow: 0 0 0 4px var(--warn-soft);
 }
 .reception-columns {
   display: grid;
@@ -117,8 +117,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #e7f2ef;
-  color: #156b5c;
+  background: var(--brand-soft);
+  color: var(--brand);
   display: grid;
   place-items: center;
   font-weight: 800;
@@ -136,7 +136,7 @@
 .reception-select {
   display: flex;
   align-items: center;
-  border: 1.5px solid #e2e8e6;
+  border: 1.5px solid var(--line);
   border-radius: 999px;
   padding: 0 16px;
   height: 52px;
@@ -144,7 +144,7 @@
 }
 .reception-select svg {
   width: 20px;
-  color: #156b5c;
+  color: var(--brand);
   flex-shrink: 0;
 }
 .reception-page .reception-select select {
@@ -160,8 +160,8 @@
   min-height: 48px;
 }
 .reception-zone-row .button {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   border: 0;
   min-height: 52px;
 }
@@ -179,13 +179,13 @@
   font-size: 16px;
 }
 .reception-availability {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
 }
 .reception-availability h2,
 .reception-availability p,
 .reception-availability small {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .reception-availability h2 {
   font-size: 13px;
@@ -216,12 +216,12 @@
 }
 .reception-switch .selected {
   background: white;
-  color: #156b5c;
+  color: var(--brand);
 }
 .reception-switch input {
   width: 14px;
   height: 14px;
-  accent-color: #156b5c;
+  accent-color: var(--brand);
 }
 .reception-switch label:has(:disabled) {
   opacity: 0.45;
@@ -243,18 +243,18 @@
 .reception-checklist span {
   flex: 0 0 22px;
   height: 22px;
-  border: 2px solid #d3dcd9;
+  border: 2px solid var(--line-strong);
   border-radius: 50%;
   display: grid;
   place-items: center;
 }
 .reception-checklist .complete {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .reception-page :focus-visible {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 .reception-availability :focus-visible {
