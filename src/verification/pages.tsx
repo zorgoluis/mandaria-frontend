@@ -45,6 +45,7 @@ export function VerificationLayout() {
     location.pathname === '/admin/verification-cases'
   return (
     <div
+      id="verification-status"
       className={`verification-area ${adminQueue ? 'admin-review-area' : ''} ${location.pathname === '/driver/onboarding' || (user?.role === 'DRIVER' && location.pathname.startsWith('/verification/cases/')) ? 'driver-documentary-area' : ''}`}
       key={user?.id}
     >

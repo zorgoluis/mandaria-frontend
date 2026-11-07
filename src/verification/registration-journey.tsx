@@ -1,4 +1,5 @@
 import { PHOTO_ACCEPT, preparePhoto } from './prepare-photo'
+import { uploadQuota } from './upload-quota'
 import { useEffect, useRef, useState } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
@@ -699,6 +700,7 @@ function PhotoCard({
   )
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const quota = uploadQuota(record, requirements)
   const received = record.attachments.some(
     (a) => a.category === category && a.status === 'VALIDATED',
   )
@@ -738,88 +740,111 @@ function PhotoCard({
           alt={'Vista previa: ' + (labels[category] || category)}
         />
       )}
-      {busy ? (
-        <p role="status">Preparando y guardando foto…</p>
-      ) : incomplete ? (
+      {!busy && incomplete && (!received || !quota.validatedOnly) && (
         <>
-          <p>Esta carga quedó incompleta.</p>
+          <p>
+            Esta carga quedó incompleta.
+            {quota.validatedOnly &&
+              ' Puedes consultarla o elegir otra foto para volver a cargar.'}
+          </p>
           <Link to={'/verification/cases/' + record.id}>
             Revisar y completar la carga
           </Link>
         </>
+      )}
+      {!busy && quota.full && (
+        <p role="status">
+          {quota.validatedOnly
+            ? 'El cupo de imágenes guardadas está completo.'
+            : 'Se alcanzó el límite de intentos del expediente.'}{' '}
+          <Link to={'/verification/cases/' + record.id}>
+            Revisar imágenes del expediente
+          </Link>
+        </p>
+      )}
+      {busy ? (
+        <p role="status">Preparando y guardando foto…</p>
       ) : (
-        <label className="journey-photo-input">
-          <Camera size={17} aria-hidden="true" />
-          {received ? 'Cambiar foto' : 'Tomar o elegir foto'}
-          <input
-            aria-label={labels[category] || category}
-            type="file"
-            accept={PHOTO_ACCEPT}
-            disabled={disabled || command.blocked || command.busy}
-            onChange={async (e) => {
-              const file = e.target.files?.[0]
-              e.target.value = ''
-              if (!file || lock.current) return
-              lock.current = true
-              setBusy(true)
-              setError('')
-              try {
-                const controller = new AbortController()
-                request.current = controller
-                const prepared = await preparePhoto(
-                  file,
-                  requirements,
-                  controller.signal,
-                )
-                if (!alive.current || controller.signal.aborted) return
-                setPreview(URL.createObjectURL(prepared))
-                const before = await verification.get(record.id)
-                if (!alive.current || controller.signal.aborted) return
-                const upload = await command.send(
-                  'CREATE_UPLOAD',
-                  record.id,
-                  `/verification-cases/${record.id}/uploads`,
-                  { expectedVersion: before.revision, category },
-                )
-                if (!upload.uploadUrl || !upload.expiresAt)
-                  throw new Error(
-                    'No se confirmó la carga. Consulta su estado antes de volver a intentarlo.',
-                  )
-                if (!alive.current) return
-                await putEvidence(
-                  upload.uploadUrl,
-                  prepared,
-                  upload.expiresAt,
-                  controller.signal,
-                )
-                const latest = await verification.get(record.id)
-                await command.send(
-                  'COMPLETE_UPLOAD',
-                  record.id,
-                  `/verification-cases/${record.id}/uploads/${upload.id}/complete`,
-                  { expectedVersion: latest.revision },
-                )
-                for (const old of before.attachments.filter(
-                  (a) => a.category === category && a.status === 'VALIDATED',
-                )) {
-                  const current = await verification.get(record.id)
-                  await command.send(
-                    'REMOVE_ATTACHMENT',
-                    record.id,
-                    `/verification-cases/${record.id}/attachments/${old.id}`,
-                    { expectedVersion: current.revision },
-                    'DELETE',
-                  )
-                }
-              } catch (err) {
-                setError(message(err))
-              } finally {
-                lock.current = false
-                setBusy(false)
+        (!incomplete || quota.validatedOnly) && (
+          <label className="journey-photo-input">
+            <Camera size={17} aria-hidden="true" />
+            {received
+              ? 'Cambiar foto'
+              : incomplete
+                ? 'Volver a tomar o elegir foto'
+                : 'Tomar o elegir foto'}
+            <input
+              aria-label={labels[category] || category}
+              type="file"
+              accept={PHOTO_ACCEPT}
+              disabled={
+                disabled || command.blocked || command.busy || quota.full
               }
-            }}
-          />
-        </label>
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file || lock.current) return
+                lock.current = true
+                setBusy(true)
+                setError('')
+                try {
+                  const controller = new AbortController()
+                  request.current = controller
+                  const prepared = await preparePhoto(
+                    file,
+                    requirements,
+                    controller.signal,
+                  )
+                  if (!alive.current || controller.signal.aborted) return
+                  setPreview(URL.createObjectURL(prepared))
+                  const before = await verification.get(record.id)
+                  if (!alive.current || controller.signal.aborted) return
+                  const upload = await command.send(
+                    'CREATE_UPLOAD',
+                    record.id,
+                    `/verification-cases/${record.id}/uploads`,
+                    { expectedVersion: before.revision, category },
+                  )
+                  if (!upload.uploadUrl || !upload.expiresAt)
+                    throw new Error(
+                      'No se confirmó la carga. Consulta su estado antes de volver a intentarlo.',
+                    )
+                  if (!alive.current) return
+                  await putEvidence(
+                    upload.uploadUrl,
+                    prepared,
+                    upload.expiresAt,
+                    controller.signal,
+                  )
+                  const latest = await verification.get(record.id)
+                  await command.send(
+                    'COMPLETE_UPLOAD',
+                    record.id,
+                    `/verification-cases/${record.id}/uploads/${upload.id}/complete`,
+                    { expectedVersion: latest.revision },
+                  )
+                  for (const old of before.attachments.filter(
+                    (a) => a.category === category && a.status === 'VALIDATED',
+                  )) {
+                    const current = await verification.get(record.id)
+                    await command.send(
+                      'REMOVE_ATTACHMENT',
+                      record.id,
+                      `/verification-cases/${record.id}/attachments/${old.id}`,
+                      { expectedVersion: current.revision },
+                      'DELETE',
+                    )
+                  }
+                } catch (err) {
+                  setError(message(err))
+                } finally {
+                  lock.current = false
+                  setBusy(false)
+                }
+              }}
+            />
+          </label>
+        )
       )}
       {error && <p role="alert">{error}</p>}
     </article>
