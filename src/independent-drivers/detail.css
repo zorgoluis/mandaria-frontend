@@ -1,5 +1,5 @@
 .independent-detail {
-  color: #1b2a27;
+  color: var(--ink);
   display: grid;
   gap: 28px;
 }
@@ -7,7 +7,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #156b5c;
+  color: var(--brand);
   font-weight: 600;
   margin-bottom: 24px;
 }
@@ -30,7 +30,7 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   font-size: 26px;
   font-weight: 800;
@@ -44,7 +44,7 @@
 .independent-badges > span {
   padding: 6px 12px;
   border-radius: 999px;
-  background: #f1f4f3;
+  background: var(--surface-3);
   font-size: 12px;
 }
 .independent-metrics {
@@ -63,7 +63,7 @@
 .independent-metric > span,
 .independent-metric small {
   font-size: 12px;
-  color: #5f6e6a;
+  color: var(--muted);
 }
 .independent-metric strong {
   font-size: 17px;
@@ -77,16 +77,16 @@
   height: 10px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #156b5c;
-  box-shadow: 0 0 0 4px #e7f2ef;
+  background: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-soft);
 }
 .independent-metric strong.pending::before {
   background: #b87918;
-  box-shadow: 0 0 0 4px #fff4e0;
+  box-shadow: 0 0 0 4px var(--warn-soft);
 }
 .independent-category .panel {
-  background: #fff4e0;
-  color: #6b4710;
+  background: var(--warn-soft);
+  color: var(--warn-ink);
   border: 0;
   border-radius: 18px;
   padding: 20px;
@@ -144,7 +144,7 @@
   gap: 22px;
 }
 .independent-detail .info-grid dt {
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 600;
 }
@@ -163,28 +163,28 @@
 .independent-detail textarea {
   min-height: 96px;
   border-radius: 16px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   resize: vertical;
 }
 .independent-detail .destructive {
-  color: #9b3b2e;
+  color: var(--danger);
   border-color: #e9b8af;
 }
 .independent-detail .destructive:not(.secondary) {
   color: white;
-  background: #9b3b2e;
+  background: var(--danger);
 }
 .independent-detail .button:disabled {
   opacity: 0.45;
 }
 .independent-detail .capability-note {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   border: 0;
   border-radius: 16px;
 }
 .independent-detail .credit-balance {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border: 0;
   border-radius: 20px;
@@ -192,7 +192,7 @@
 }
 .independent-detail .credit-balance small,
 .independent-detail .credit-balance-label {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .independent-detail .credit-amount {
   color: white;
@@ -202,10 +202,10 @@
   overflow-wrap: anywhere;
 }
 .independent-detail .ledger-amount.negative {
-  color: #9b3b2e;
+  color: var(--danger);
 }
 .independent-detail th {
-  background: #f6f8f7;
+  background: var(--surface-2);
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -217,11 +217,11 @@
   white-space: normal;
 }
 .independent-decision {
-  border: 1.5px solid #f0d3ce;
+  border: 1.5px solid var(--danger-line);
 }
 .independent-decision > p {
   font-size: 13px;
-  color: #5f6e6a;
+  color: var(--muted);
   margin: 14px 0;
 }
 .independent-decision .row-actions {
@@ -232,7 +232,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 12px;
   padding: 10px;
 }
@@ -245,7 +245,7 @@
   white-space: nowrap;
 }
 .independent-identifier button {
-  color: #156b5c;
+  color: var(--brand);
   font-size: 12px;
   font-weight: 700;
   background: none;
@@ -307,7 +307,7 @@
   padding: 0 24px;
 }
 .independent-vehicle {
-  border: 1.5px solid #edf1f0;
+  border: 1.5px solid var(--line-soft);
   border-radius: 18px;
   padding: 18px 20px;
   display: flex;
@@ -325,14 +325,14 @@
 }
 .independent-vehicle-info p {
   font-size: 13px;
-  color: #5f6e6a;
+  color: var(--muted);
   margin-top: 8px;
 }
 .independent-vehicle-icon {
   display: grid;
   place-items: center;
-  background: #e7f2ef;
-  color: #156b5c;
+  background: var(--brand-soft);
+  color: var(--brand);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -345,7 +345,7 @@
   gap: 10px;
 }
 .independent-vehicle-actions code {
-  border: 1px solid #d3dcd9;
+  border: 1px solid var(--line-strong);
   padding: 8px;
   border-radius: 8px;
   font-size: 14px;
@@ -361,7 +361,7 @@
   .info-grid
   > div:nth-child(-n + 2) {
   grid-column: span 2;
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 16px;
   border-radius: 16px;
 }
@@ -401,8 +401,8 @@
   }
 }
 .independent-metric strong.negative::before {
-  background: #9b3b2e;
-  box-shadow: 0 0 0 4px #fbe9e6;
+  background: var(--danger);
+  box-shadow: 0 0 0 4px var(--danger-soft);
 }
 .independent-detail-side
   section[aria-labelledby='independent-contact']
@@ -429,6 +429,6 @@
   section[aria-labelledby='independent-contact']
   .info-grid
   > div:nth-child(7) {
-  border-top: 1px solid #edf1f0;
+  border-top: 1px solid var(--line-soft);
   padding-top: 18px;
 }

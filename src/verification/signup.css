@@ -222,20 +222,20 @@
 .driver-signup input {
   min-height: 52px;
   width: 100%;
-  border: 1px solid #cfdcd2;
-  border-radius: 12px;
-  padding: 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--pill);
+  padding: 0 20px;
   font-size: 16px;
   font-weight: 400;
-  background: #fcfdfb;
+  background: #fff;
 }
 .driver-signup input::placeholder {
   font-size: 14px;
-  color: #77867b;
+  color: var(--placeholder);
 }
 .driver-signup input:focus-visible {
-  border-color: #12796a;
-  outline: 3px solid #12796a20;
+  border-color: var(--brand);
+  outline: 3px solid #156b5c20;
   outline-offset: 1px;
 }
 .driver-signup .signup-code {
@@ -243,7 +243,7 @@
   letter-spacing: 0.36em;
   font-variant-numeric: tabular-nums;
   text-align: center;
-  background: #f3f7ef;
+  background: var(--surface-2);
   min-height: 64px;
 }
 .driver-signup .signup-code::placeholder {
@@ -265,20 +265,20 @@
   place-items: center;
   background: transparent;
   border: 0;
-  border-radius: 9px;
-  color: #516d5c;
+  border-radius: var(--pill);
+  color: var(--muted);
 }
 .driver-signup .button {
   min-height: 52px;
-  border-radius: 12px;
+  border-radius: var(--pill);
   width: 100%;
-  font-size: 14px;
-  font-weight: 650;
-  background: #126d5b;
-  border-color: #126d5b;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .driver-signup .button:hover:not(:disabled) {
-  background: #0d5144;
+  background: var(--brand-dark);
 }
 .signup-mail-notice {
   display: flex;
@@ -317,7 +317,7 @@
   font-size: 12px;
   background: transparent;
   border: 0;
-  color: #126d5b;
+  color: var(--brand);
   padding: 8px 2px;
   min-height: 44px;
   font-weight: 650;

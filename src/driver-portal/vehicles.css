@@ -4,7 +4,7 @@
 .vehicles-summary strong {
   font-size: 30px;
   font-weight: 800;
-  color: #156b5c;
+  color: var(--brand);
 }
 .vehicles-toolbar {
   display: flex;
@@ -26,7 +26,7 @@
   gap: 16px;
 }
 .vehicles-cards li {
-  border: 1px solid #e2e8e6;
+  border: 1px solid var(--line);
   border-radius: 20px;
   padding: 22px;
   min-width: 0;
@@ -43,8 +43,8 @@
   flex: 0 0 52px;
   height: 52px;
   border-radius: 16px;
-  color: #156b5c;
-  background: #e7f2ef;
+  color: var(--brand);
+  background: var(--brand-soft);
 }
 .vehicles-card-header > div {
   flex: 1;
@@ -59,27 +59,27 @@
   display: inline-block;
   padding: 5px 10px;
   border-radius: 999px;
-  background: #f1f4f3;
-  color: #3d4b47;
+  background: var(--surface-3);
+  color: var(--ink-2);
   font-size: 12px;
 }
 .vehicles-page .vehicles-detail {
-  border-top: 1px solid #edf1f0;
+  border-top: 1px solid var(--line-soft);
   padding-top: 14px;
   margin-top: 16px;
   font-size: 14px;
   overflow-wrap: anywhere;
 }
 .vehicles-documentation {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
 }
 .vehicles-documentation p {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .vehicles-documentation .button {
   background: white;
-  color: #156b5c;
+  color: var(--brand);
   border: 0;
   text-align: center;
 }
@@ -89,11 +89,11 @@
   text-align: center;
   gap: 16px;
   padding: 28px 12px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 18px;
 }
 .vehicles-empty > svg {
-  color: #156b5c;
+  color: var(--brand);
 }
 .vehicles-empty h3 {
   margin: 0;

@@ -1763,3 +1763,18 @@ it('account progress routes fleet drivers to consultation', async () => {
     screen.queryByRole('link', { name: 'Continuar mi registro' }),
   ).toBeNull()
 })
+
+// These lifecycle tests use synthetic non-image bytes. Codec behavior is exercised separately.
+vi.mock('../verification/prepare-photo', async (original) => ({
+  ...(await original<typeof import('../verification/prepare-photo')>()),
+  preparePhoto: vi.fn(
+    async (
+      file: File,
+      requirements: import('../verification/types').Requirements,
+    ) => {
+      const { validateFile } = await import('../verification/service')
+      validateFile(file, requirements)
+      return file
+    },
+  ),
+}))

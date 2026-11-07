@@ -1,12 +1,12 @@
 .request-page .quote-steps .completed {
-  color: #156b5c;
+  color: var(--brand);
 }
 .request-page .quote-steps .completed > span {
-  background: #e7f2ef;
-  border-color: #e7f2ef;
+  background: var(--brand-soft);
+  border-color: var(--brand-soft);
 }
 .request-page .quote-steps .completed + li::before {
-  background: #156b5c;
+  background: var(--brand);
 }
 .request-heading {
   display: flex;
@@ -54,15 +54,15 @@
   height: 10px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #156b5c;
-  box-shadow: 0 0 0 4px #e7f2ef;
+  background: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-soft);
 }
 .request-dot.pending::before {
-  background: #e0a14a;
-  box-shadow: 0 0 0 4px #fff4e0;
+  background: var(--warn-dot);
+  box-shadow: 0 0 0 4px var(--warn-soft);
 }
 .request-dot.danger::before {
-  background: #9b3b2e;
+  background: var(--danger);
   box-shadow: 0 0 0 4px #fbefed;
 }
 .request-grid {
@@ -98,7 +98,7 @@
   margin: 0 0 18px;
 }
 .request-page p {
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -112,7 +112,7 @@
   margin-block: 20px;
 }
 .request-page .location-panel .info-grid > div {
-  border: 1.5px solid #edf1f0;
+  border: 1.5px solid var(--line-soft);
   border-radius: 16px;
   padding: 14px 16px;
 }
@@ -128,15 +128,15 @@
   color: #687b74;
 }
 .request-page .location-panel[aria-label='Seguimiento GPS'] > p:first-of-type {
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 20px;
   border-radius: 18px;
   font-size: 16px;
   font-weight: 700;
-  color: #1b2a27;
+  color: var(--ink);
 }
 .request-page .location-panel[aria-label='Enlace temporal'] > .field {
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 18px;
   border-radius: 18px;
   margin-block: 16px;
@@ -145,7 +145,7 @@
   .location-panel[aria-label='Enlace temporal']
   > .button.secondary {
   background: white;
-  border: 1.5px solid #d3dcd9;
+  border: 1.5px solid var(--line-strong);
 }
 .request-page .location-panel .actions {
   gap: 10px;
@@ -161,7 +161,7 @@
   justify-content: center;
 }
 .request-page .button.secondary {
-  border: 1.5px solid #e2e8e6;
+  border: 1.5px solid var(--line);
 }
 .request-page .field:has(input[type='checkbox']) {
   display: flex;
@@ -178,7 +178,7 @@
   height: 22px;
   flex-shrink: 0;
   margin: 0;
-  accent-color: #156b5c;
+  accent-color: var(--brand);
 }
 .quote-page.request-page form > .form-fields {
   display: grid;
@@ -199,14 +199,14 @@
   text-align: center;
 }
 .request-price {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border-radius: 24px;
   padding: 28px;
 }
 .request-price > span,
 .request-price p {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
   font-size: 13px;
 }
 .request-price > div {
@@ -220,7 +220,7 @@
 }
 .request-price b {
   font-size: 18px;
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
 }
 .request-price p {
   margin-bottom: 0;
@@ -238,7 +238,7 @@
 .request-consent .info-grid {
   display: grid;
   grid-template-columns: 1fr;
-  border-block: 1px solid #edf1f0;
+  border-block: 1px solid var(--line-soft);
   padding: 16px 0;
   margin-block: 20px;
   gap: 14px;
@@ -262,16 +262,16 @@
   overflow-wrap: anywhere;
 }
 .request-consent .field {
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 16px;
   padding: 14px 16px;
 }
 .request-consent .field:has(input:checked) {
-  background: #e7f2ef;
+  background: var(--brand-soft);
 }
 .request-expired {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
   padding: 16px;
   border-radius: 16px;
   font-size: 14px;
@@ -286,20 +286,20 @@
   display: block;
 }
 .request-success {
-  background: #e7f2ef;
-  color: #13594d !important;
+  background: var(--brand-soft);
+  color: var(--brand-dark) !important;
   border-radius: 16px;
   padding: 16px;
 }
 .request-progress ol {
   list-style: none;
   padding: 0 0 0 20px;
-  border-left: 2px solid #156b5c;
+  border-left: 2px solid var(--brand);
 }
 .request-progress time {
   display: block;
   margin-top: 8px;
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 13px;
 }
 .request-cancel {
@@ -321,12 +321,12 @@
 }
 .request-cancel-toggle strong {
   font-size: 17px;
-  color: #9b3b2e;
+  color: var(--danger);
 }
 .request-cancel-toggle small {
   display: block;
   font-size: 13.5px;
-  color: #5f6e6a;
+  color: var(--muted);
   line-height: 1.6;
   margin-top: 8px;
 }
@@ -337,7 +337,7 @@
   height: 36px;
   flex-shrink: 0;
   background: #fbefed;
-  color: #9b3b2e;
+  color: var(--danger);
   border-radius: 50%;
   font-size: 22px;
 }
@@ -345,19 +345,19 @@
   margin-top: 24px;
 }
 .request-cancel .button {
-  background: #9b3b2e;
+  background: var(--danger);
 }
 .request-cancel .button:hover {
   background: #7f2f25;
 }
 .request-cancel .field:has(input[type='checkbox']) input {
-  accent-color: #9b3b2e;
+  accent-color: var(--danger);
 }
 .request-page .collection-instructions > strong {
   font-size: 19px;
 }
 .request-page .collection-instructions > p {
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 14px 18px;
   border-radius: 16px;
   font-size: 13.5px;
@@ -395,7 +395,7 @@
   }
 }
 .request-page .tracking-review {
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 18px;
   padding: 20px;
   margin-block: 20px;
@@ -414,7 +414,7 @@
   flex-shrink: 0;
   max-width: 210px;
   background: white;
-  border: 1.5px solid #d3dcd9;
+  border: 1.5px solid var(--line-strong);
 }
 .request-page .tracking-review .field {
   margin-top: 16px;
@@ -428,16 +428,16 @@
   font-size: 0;
 }
 .request-page .shipping-payment-chips span {
-  background: #f1f4f3;
-  color: #3d4b47;
+  background: var(--surface-3);
+  color: var(--ink-2);
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
 }
 .request-page .shipping-payment-chips .unconfirmed {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
 }
 @media (max-width: 600px) {
   .request-page .tracking-review-heading {
@@ -460,8 +460,8 @@
   padding: 0;
 }
 .request-page .field:has(input[type='checkbox']) input:checked {
-  background: #156b5c;
-  border-color: #156b5c;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .request-page .field:has(input[type='checkbox']) input:checked::after {
   content: '✓';
@@ -470,8 +470,8 @@
   font-weight: 800;
 }
 .request-page .request-cancel .field input[type='checkbox']:checked {
-  background: #9b3b2e;
-  border-color: #9b3b2e;
+  background: var(--danger);
+  border-color: var(--danger);
 }
 
 .request-page .location-phase {
@@ -487,5 +487,5 @@
   height: 44px;
   border-radius: 50%;
   background: white;
-  color: #8a9894;
+  color: var(--faint);
 }

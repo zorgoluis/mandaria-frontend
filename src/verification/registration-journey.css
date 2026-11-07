@@ -129,10 +129,10 @@
 .journey-steps [aria-current] {
   color: #145c46;
   background: #f1f6eb;
-  border-bottom-color: #126d5b;
+  border-bottom-color: var(--brand);
 }
 .journey-steps [aria-current] .journey-step-number {
-  background: #126d5b;
+  background: var(--brand);
   color: white;
 }
 .journey-steps .is-complete {
@@ -238,7 +238,7 @@
   .journey-fieldset
   .field
   select:focus-visible {
-  border-color: #126d5b;
+  border-color: var(--brand);
   outline: 3px solid #12796a20;
   outline-offset: 1px;
 }
@@ -255,7 +255,7 @@
 }
 .driver-documentary.registration-journey .button {
   border-radius: 11px;
-  background: #126d5b;
+  background: var(--brand);
   min-height: 50px;
   padding: 12px 22px;
   font-size: 13px;
@@ -355,7 +355,7 @@
 .journey-photo-count {
   font-size: 28px;
   font-weight: 700;
-  color: #126d5b;
+  color: var(--brand);
   white-space: nowrap;
 }
 .journey-photo-count > span {
@@ -377,7 +377,7 @@
   height: 5px;
   border: 0;
   background: #eaf0e4;
-  color: #126d5b;
+  color: var(--brand);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -385,11 +385,11 @@
   background: #eaf0e4;
 }
 .journey-photo-progress::-webkit-progress-value {
-  background: #126d5b;
+  background: var(--brand);
   border-radius: 99px;
 }
 .journey-photo-progress::-moz-progress-bar {
-  background: #126d5b;
+  background: var(--brand);
   border-radius: 99px;
 }
 .journey-photo {
@@ -497,7 +497,7 @@
   cursor: not-allowed;
 }
 .journey-photo[aria-busy='true'] {
-  border-color: #126d5b;
+  border-color: var(--brand);
 }
 .journey-submit-area {
   display: grid;
@@ -518,7 +518,7 @@
   justify-self: start;
   background: transparent;
   border: 0;
-  color: #126d5b;
+  color: var(--brand);
   padding: 8px 0;
   min-height: 44px;
   font-size: 12px;

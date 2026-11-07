@@ -1,7 +1,7 @@
 // End-to-end option A: real Nest, isolated PostgreSQL, browser, captured mail and private local storage.
 import assert from 'node:assert/strict'
 import { randomBytes, randomUUID } from 'node:crypto'
-import { writeFile } from 'node:fs/promises'
+import { writeFile, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { chromium, expect } from '@playwright/test'
 import { createServer } from 'vite'
@@ -19,7 +19,7 @@ import {
 } from './onboarding-isolated-environment.mjs'
 const api = 'http://127.0.0.1:' + apiPort,
   web = 'http://127.0.0.1:' + webPort
-const report = { startedAt: new Date().toISOString(), checks: [], cleanup: {} }
+const report = { startedAt: new Date().toISOString(), cameraPhotos: process.env.CAMERA_PHOTOS === '1', checks: [], cleanup: {} }
 const mail = []
 const secret = () => randomBytes(32).toString('hex')
 const password = secret(),
@@ -351,6 +351,30 @@ try {
   )
     .png()
     .toBuffer()
+  const cameraFixtures =
+    process.env.CAMERA_PHOTOS === '1'
+      ? {
+          'Fotografía de rostro': {
+            name: 'example.heic',
+            mimeType: 'image/heic',
+            buffer: await readFile('test-results/camera-photos/example.heic'),
+          },
+          'INE: frente': {
+            name: 'camera-48MP.jpg',
+            mimeType: 'image/jpeg',
+            buffer: await requireBackend('sharp')({
+              create: {
+                width: 8000,
+                height: 6000,
+                channels: 3,
+                background: '#abc',
+              },
+            })
+              .jpeg()
+              .toBuffer(),
+          },
+        }
+      : {}
   for (const label of [
     'Fotografía de rostro',
     'INE: frente',
@@ -362,13 +386,15 @@ try {
       .locator('article')
       .filter({ has: page.getByRole('heading', { name: label, exact: true }) })
     await expect(card.locator('input[type=file]')).toBeEnabled()
-    await card.locator('input[type=file]').setInputFiles({
-      name: 'synthetic.png',
-      mimeType: 'image/png',
-      buffer: image,
-    })
+    await card.locator('input[type=file]').setInputFiles(
+      cameraFixtures[label] || {
+        name: 'synthetic.png',
+        mimeType: 'image/png',
+        buffer: image,
+      },
+    )
     await expect(card.getByText('Guardada', { exact: true })).toBeVisible()
-    await expect(card.getByText('Guardando foto…')).toHaveCount(0)
+    await expect(card.getByText('Preparando y guardando foto…')).toHaveCount(0)
   }
   assert.equal(await page.locator('input[type=file]').count(), 5)
   await page

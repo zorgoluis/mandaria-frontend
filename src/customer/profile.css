@@ -11,15 +11,15 @@
   min-height: 42px;
   padding: 0 18px;
   background: white;
-  border: 1.5px solid #d3dcd9;
+  border: 1.5px solid var(--line-strong);
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  color: #1b2a27;
+  color: var(--ink);
   text-decoration: none;
 }
 .profile-back:hover {
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .profile-card {
   background: white;
@@ -34,7 +34,7 @@
 }
 .profile-card > p {
   font-size: 14px;
-  color: #5f6e6a;
+  color: var(--muted);
   line-height: 1.6;
   margin: 0 0 22px;
 }
@@ -51,10 +51,10 @@
   height: 72px;
   display: grid;
   place-items: center;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border-radius: 50%;
-  box-shadow: 0 0 0 6px #e7f2ef;
+  box-shadow: 0 0 0 6px var(--brand-soft);
   font-size: 26px;
   font-weight: 800;
   margin: 6px;
@@ -69,7 +69,7 @@
 .profile-identity p {
   margin: 0;
   font-size: 14px;
-  color: #5f6e6a;
+  color: var(--muted);
   overflow-wrap: anywhere;
   line-height: 1.5;
 }
@@ -81,8 +81,8 @@
 .profile-chips > span {
   padding: 6px 12px;
   border-radius: 999px;
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   font-size: 13px;
   font-weight: 600;
 }
@@ -96,19 +96,19 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #156b5c;
+  background: var(--brand);
 }
 .profile-chips .pending {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
 }
 .profile-email.pending::before {
-  background: #e0a14a;
+  background: var(--warn-dot);
 }
 .profile-identity-actions {
   display: grid;
   gap: 10px;
-  border-top: 1px solid #edf1f0;
+  border-top: 1px solid var(--line-soft);
   padding-top: 20px;
 }
 .quote-page.profile-page .profile-identity-actions .button {
@@ -123,8 +123,8 @@
 }
 .quote-page.profile-page .button.profile-refresh {
   background: white;
-  color: #3d4b47;
-  border: 1.5px solid #e2e8e6;
+  color: var(--ink-2);
+  border: 1.5px solid var(--line);
 }
 .profile-forms {
   display: grid;
@@ -149,7 +149,7 @@
 }
 .profile-save > span {
   font-size: 12.5px;
-  color: #5f6e6a;
+  color: var(--muted);
 }
 .profile-page .profile-card .button {
   min-height: 48px;
@@ -175,18 +175,18 @@
   min-width: min(280px, 100%);
   border-radius: 16px;
   padding: 14px 18px;
-  background: #f6f8f7;
+  background: var(--surface-2);
   font-size: 13.5px;
   line-height: 1.6;
-  color: #3d4b47;
+  color: var(--ink-2);
 }
 .profile-type-note svg {
-  color: #156b5c;
+  color: var(--brand);
   flex-shrink: 0;
 }
 .profile-type-note.warning {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
   border: 0;
 }
 .profile-type-note a {
@@ -199,11 +199,11 @@
   padding-inline: 26px;
 }
 .profile-error {
-  color: #9b3b2e;
+  color: var(--danger);
   font-size: 12.5px;
 }
 .profile-page input[aria-invalid='true'] {
-  border-color: #9b3b2e !important;
+  border-color: var(--danger) !important;
 }
 .profile-loading > div {
   background: white;
@@ -212,12 +212,12 @@
   padding: 32px;
 }
 .profile-loading > div:first-child {
-  background: linear-gradient(#e7f2ef, #edf1f0);
+  background: linear-gradient(var(--brand-soft), var(--line-soft));
 }
 .profile-loading span {
   display: block;
   height: 52px;
-  background: #edf1f0;
+  background: var(--line-soft);
   border-radius: 999px;
   margin-bottom: 24px;
   animation: profile-pulse 1.4s ease-in-out infinite alternate;

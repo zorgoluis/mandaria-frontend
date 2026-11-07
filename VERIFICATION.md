@@ -1,3 +1,11 @@
+## 2026-11-07 — Entrega Git de la corrección de fotos
+
+Commit y push autorizados por el propietario en la rama actual feature/rediseno, coordinados con backend QA. Se publica la implementación y evidencia ya validadas; en esta entrega se comprueban huellas de fuentes y diff, sin repetir pruebas ni desplegar. Las menciones inferiores «sin commit/push» describen la etapa de implementación anterior.
+
+## 2026-11-07 — Fotos de cámara en registro
+
+Corrección local Web/backend: preparación de JPEG/PNG/HEIC, orientación y reducción proporcional sólo cuando hace falta; PNG validado con límite independiente para conservar píxeles. Web188 pruebas, backend49,12 combinaciones Chrome/WebKit y registro HTTP completo aislado PASS. Builds/tipos/lint focalizado PASS. Sin despliegue/commit/push. Cámaras físicas pendientes. [Contrato, evidencia, límites y reproducción](docs/CAMERA-PHOTO-UPLOAD.md).
+
 ## 2026-11-06 — Entrega separada de la aceptación de reanudar registro
 
 Revisados los dos scripts, capturas y manifiesto HTTP de la corrida 1793990706996. http.json coincide con el original: dos expedientes SUBMITTED, cinco adjuntos validados, un SUBMIT por expediente y cleanup confirmado. Nueva comprobación de sintaxis de ambos scripts y ESLint focalizado PASS; no nueva ejecución HTTP ni suite global. [Evidencia y límites](docs/evidence/account-resume-http-20261106/README.md).

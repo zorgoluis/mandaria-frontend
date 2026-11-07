@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-07",
+  "webTests": {
+    "passed": 188,
+    "files": 6
+  },
+  "backendTests": {
+    "passed": 49,
+    "files": 1
+  },
+  "browser": {
+    "csp": "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com; connect-src 'self' https: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-src 'none'; frame-ancestors 'none'; form-action 'self'",
+    "checks": [
+      {
+        "engine": "chromium",
+        "name": "camera-48MP",
+        "inputBytes": 2178137,
+        "uploadedBytes": 873499,
+        "normalizedBytes": 1510572,
+        "width": 4096,
+        "height": 3072,
+        "status": "PASS"
+      },
+      {
+        "engine": "chromium",
+        "name": "camera-EXIF6",
+        "inputBytes": 576798,
+        "uploadedBytes": 576798,
+        "normalizedBytes": 396727,
+        "width": 3000,
+        "height": 4000,
+        "status": "PASS"
+      },
+      {
+        "engine": "chromium",
+        "name": "camera-no-MIME",
+        "inputBytes": 576798,
+        "uploadedBytes": 576798,
+        "normalizedBytes": 396727,
+        "width": 3000,
+        "height": 4000,
+        "status": "PASS"
+      },
+      {
+        "engine": "chromium",
+        "name": "camera-12MP-noisy",
+        "inputBytes": 8553805,
+        "uploadedBytes": 8553805,
+        "normalizedBytes": 35045832,
+        "width": 4000,
+        "height": 3000,
+        "status": "PASS"
+      },
+      {
+        "engine": "chromium",
+        "name": "PNG-document",
+        "inputBytes": 278804,
+        "uploadedBytes": 278804,
+        "normalizedBytes": 278804,
+        "width": 2000,
+        "height": 1500,
+        "status": "PASS"
+      },
+      {
+        "engine": "chromium",
+        "name": "iPhone-HEIC",
+        "inputBytes": 718114,
+        "uploadedBytes": 569916,
+        "normalizedBytes": 2472611,
+        "width": 1280,
+        "height": 854,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "camera-48MP",
+        "inputBytes": 2178137,
+        "uploadedBytes": 914199,
+        "normalizedBytes": 1119726,
+        "width": 4096,
+        "height": 3072,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "camera-EXIF6",
+        "inputBytes": 576798,
+        "uploadedBytes": 576798,
+        "normalizedBytes": 396727,
+        "width": 3000,
+        "height": 4000,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "camera-no-MIME",
+        "inputBytes": 576798,
+        "uploadedBytes": 576798,
+        "normalizedBytes": 396727,
+        "width": 3000,
+        "height": 4000,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "camera-12MP-noisy",
+        "inputBytes": 8553805,
+        "uploadedBytes": 8553805,
+        "normalizedBytes": 35045832,
+        "width": 4000,
+        "height": 3000,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "PNG-document",
+        "inputBytes": 278804,
+        "uploadedBytes": 278804,
+        "normalizedBytes": 278804,
+        "width": 2000,
+        "height": 1500,
+        "status": "PASS"
+      },
+      {
+        "engine": "webkit",
+        "name": "iPhone-HEIC",
+        "inputBytes": 718114,
+        "uploadedBytes": 569916,
+        "normalizedBytes": 2472611,
+        "width": 1280,
+        "height": 854,
+        "status": "PASS"
+      }
+    ],
+    "heicSource": "https://github.com/strukturag/libheif/blob/master/examples/example.heic",
+    "heicSha256": "7f8b363e4936c0666a25f64f3a92fda10bd8e5453be4592530b65a55dd98f3f2"
+  },
+  "registration": {
+    "startedAt": "2026-11-07T15:56:11.458Z",
+    "cameraPhotos": true,
+    "checks": [
+      "Five failed attempts persist; correct code then rejected",
+      "Expired and cross-environment challenges rejected",
+      "Resend invalidates old code; concurrent completion creates one account; replay and existing email do not change it",
+      "Six digits, including leading zero, appear in both email formats",
+      "UI registration enters onboarding automatically; email verified; driver remains pending",
+      "Name prefilled; vehicle identifier and two drafts created automatically; reload resumes photos",
+      "Missing files reject the entire submission; neither case changes",
+      "Stale revision and foreign driver are rejected before either case changes",
+      "Six redesigned screens captured on mobile and desktop; no horizontal overflow at 320, 390, 768 and 1280 px",
+      "Lost HTTP response recovered from UI; one submission presents both cases; idempotent replay adds no event; reload confirms review; driver remains pending"
+    ],
+    "cleanup": {
+      "postgresStopped": true
+    },
+    "database": "onboarding_web_1794066971458_test",
+    "status": "PASS",
+    "finishedAt": "2026-11-07T15:56:44.932Z"
+  },
+  "sourceHashes": {
+    "src/verification/prepare-photo.ts": "332b8307caa51ba9f5da4f4f168174d7869c26d75f8d5fec4eb6fe0a462c8fa6",
+    "src/verification/evidence.tsx": "f581081f71d4e4a009022e508e1ddf3534ac3842d9c37644492b1dc39332b494",
+    "src/verification/evidence-picker.tsx": "d350b7ce77365ee95a215943c837bad72c88c3d4717385e532f405970025ca59",
+    "src/verification/registration-journey.tsx": "5c1920d2331312f41826800c20543b76a890b4c37362b142cf5d0aadaa600e25",
+    "../mandaria-backend/src/verification/verification-storage.ts": "788601b87c610a6455afc9db1cb61699c7f527cba90805616246e83dd47e96fb",
+    "../mandaria-backend/src/verification/verification.service.ts": "a1bc761bdf8de1bcca51ddd2ebad949002993c5e98cf116b088aa1ed599de331",
+    "nginx.conf": "466686605aed47d42970db0786feb71200d2c8996a234dd6023b695d856ee88e"
+  }
+}

@@ -10,8 +10,8 @@
   width: 100%;
   max-width: none;
   font-family: Figtree, sans-serif;
-  color: #1b2a27;
-  background: #f4f6f5;
+  color: var(--ink);
+  background: var(--page);
   height: 100dvh;
   min-height: 540px;
   display: flex;
@@ -21,14 +21,14 @@
   box-sizing: border-box;
 }
 .public-tracking :focus-visible {
-  outline: 2px solid #156b5c;
+  outline: 2px solid var(--brand);
   outline-offset: 3px;
 }
 .tracking-header {
   min-height: 72px;
   padding: 12px 32px;
   background: white;
-  border-bottom: 1px solid #e2e8e6;
+  border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   gap: 20px;
@@ -40,7 +40,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: #156b5c;
+  color: var(--brand);
   font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -51,14 +51,14 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
 }
 .tracking-header h1 {
   font-size: 16px;
   font-weight: 700;
   margin: 0;
-  border-left: 1px solid #e2e8e6;
+  border-left: 1px solid var(--line);
   padding-left: 20px;
   letter-spacing: 0;
 }
@@ -79,27 +79,27 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #8a9894;
+  background: var(--faint);
   flex-shrink: 0;
 }
 .tracking-freshness.recent {
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 .tracking-freshness.recent i {
-  background: #1f9d84;
+  background: var(--brand-accent);
   box-shadow: 0 0 0 4px #1f9d8433;
 }
 .tracking-freshness.stale {
-  background: #fff4e0;
-  color: #8a5a12;
+  background: var(--warn-soft);
+  color: var(--warn);
 }
 .tracking-freshness.stale i {
-  background: #e0a14a;
+  background: var(--warn-dot);
 }
 .tracking-freshness.none {
-  background: #f1f4f3;
-  color: #5f6e6a;
+  background: var(--surface-3);
+  color: var(--muted);
 }
 .tracking-stage {
   flex: 1;
@@ -159,7 +159,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8a9894;
+  color: var(--faint);
   margin: 0 0 20px;
 }
 .tracking-state {
@@ -175,9 +175,9 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
-  box-shadow: 0 0 0 6px #e7f2ef;
+  box-shadow: 0 0 0 6px var(--brand-soft);
 }
 .tracking-state h2 {
   font-size: 26px;
@@ -193,7 +193,7 @@
   margin: 0 0 20px;
 }
 .tracking-data > div {
-  background: #f6f8f7;
+  background: var(--surface-2);
   border-radius: 16px;
   padding: 14px 16px;
   min-width: 0;
@@ -220,13 +220,13 @@
   font-size: 13px;
 }
 .tracking-notes {
-  border-top: 1px solid #edf1f0;
+  border-top: 1px solid var(--line-soft);
   padding-top: 18px;
 }
 .tracking-notes p {
   margin: 0 0 8px;
   font-size: 13.5px;
-  color: #3d4b47;
+  color: var(--ink-2);
   line-height: 1.5;
 }
 .tracking-notes p:last-child {
@@ -235,7 +235,7 @@
   margin: 0;
 }
 .tracking-no-position {
-  background: #f6f8f7;
+  background: var(--surface-2);
   padding: 16px;
   border-radius: 16px;
   margin-bottom: 20px;
@@ -261,7 +261,7 @@
   box-shadow: 0 3px 10px #0f3d3529;
   font-size: 13px;
   font-weight: 600;
-  color: #3d4b47;
+  color: var(--ink-2);
 }
 .tracking-legend span {
   display: flex;
@@ -272,15 +272,15 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #156b5c;
+  background: var(--brand);
   border: 2px solid white;
-  outline: 1px solid #156b5c;
+  outline: 1px solid var(--brand);
 }
 .tracking-legend span + span i {
   width: 16px;
   height: 16px;
   background: #156b5c2e;
-  border: 1.5px solid #156b5c;
+  border: 1.5px solid var(--brand);
   outline: none;
 }
 .tracking-sheet-toggle {
@@ -297,13 +297,13 @@
   text-align: center;
 }
 .tracking-unavailable svg {
-  color: #156b5c;
+  color: var(--brand);
 }
 .tracking-unavailable h2 {
   font-size: 24px;
 }
 .tracking-unavailable p {
-  color: #5f6e6a;
+  color: var(--muted);
   line-height: 1.6;
 }
 @media (max-width: 1000px) and (min-width: 768px) {
@@ -373,7 +373,7 @@
     width: 100%;
     background: none;
     border: 0;
-    color: #5f6e6a;
+    color: var(--muted);
     margin: 0 0 14px;
     cursor: pointer;
     font: 600 12px Figtree;
@@ -387,7 +387,7 @@
     width: 36px;
     height: 4px;
     border-radius: 999px;
-    background: #d3dcd9;
+    background: var(--line-strong);
   }
   .tracking-kicker {
     margin-bottom: 12px;

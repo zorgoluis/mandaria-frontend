@@ -1,3 +1,4 @@
+import { PHOTO_ACCEPT, preparePhoto } from './prepare-photo'
 import { useEffect, useRef, useState } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
@@ -19,7 +20,7 @@ import { Field, Loading } from '../components/ui'
 import { Form } from './common'
 import { TermsPanel } from './terms'
 import { useCommand } from './hooks'
-import { verification, putEvidence, validateFile } from './service'
+import { verification, putEvidence } from './service'
 import { labels, message, vkey } from './format'
 import { labels as vehicleLabels } from '../utils/format'
 import { unitRequirements } from './unit-requirements'
@@ -738,7 +739,7 @@ function PhotoCard({
         />
       )}
       {busy ? (
-        <p role="status">Guardando foto…</p>
+        <p role="status">Preparando y guardando foto…</p>
       ) : incomplete ? (
         <>
           <p>Esta carga quedó incompleta.</p>
@@ -753,7 +754,7 @@ function PhotoCard({
           <input
             aria-label={labels[category] || category}
             type="file"
-            accept="image/jpeg,image/png"
+            accept={PHOTO_ACCEPT}
             disabled={disabled || command.blocked || command.busy}
             onChange={async (e) => {
               const file = e.target.files?.[0]
@@ -763,11 +764,17 @@ function PhotoCard({
               setBusy(true)
               setError('')
               try {
-                validateFile(file, requirements)
-                setPreview(URL.createObjectURL(file))
                 const controller = new AbortController()
                 request.current = controller
+                const prepared = await preparePhoto(
+                  file,
+                  requirements,
+                  controller.signal,
+                )
+                if (!alive.current || controller.signal.aborted) return
+                setPreview(URL.createObjectURL(prepared))
                 const before = await verification.get(record.id)
+                if (!alive.current || controller.signal.aborted) return
                 const upload = await command.send(
                   'CREATE_UPLOAD',
                   record.id,
@@ -781,7 +788,7 @@ function PhotoCard({
                 if (!alive.current) return
                 await putEvidence(
                   upload.uploadUrl,
-                  file,
+                  prepared,
                   upload.expiresAt,
                   controller.signal,
                 )

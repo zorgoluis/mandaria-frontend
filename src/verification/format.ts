@@ -58,6 +58,14 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  VERIFICATION_FILE_SIZE:
+    'La imagen excede el tamaño permitido. Vuelve a elegir la foto para prepararla antes de subirla.',
+  VERIFICATION_FILE_PIXELS:
+    'La foto supera la resolución permitida. Vuelve a elegirla para ajustar sus dimensiones sin recortar el documento.',
+  VERIFICATION_FILE_TYPE:
+    'El formato recibido no es compatible. Elige una foto JPEG, PNG o HEIC/HEIF para prepararla.',
+  VERIFICATION_FILE_INVALID:
+    'No se pudo leer la imagen recibida. Toma otra foto nítida o elige un archivo válido.',
   SIGNUP_CODE_INVALID:
     'El código no es válido, venció o agotó sus intentos. Solicita otro. Si ya creaste tu cuenta, inicia sesión con tu contraseña.',
   VERIFICATION_LICENSE_REQUIRED:

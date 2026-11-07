@@ -3,8 +3,8 @@
   margin: 0;
 }
 .review-board {
-  background: #f4f6f5;
-  color: #1b2a27;
+  background: var(--page);
+  color: var(--ink);
   font-family: Figtree, sans-serif;
   padding: 40px 48px 56px;
   display: grid;
@@ -29,7 +29,7 @@
 .review-back {
   font-size: 14px;
   font-weight: 600;
-  color: #156b5c;
+  color: var(--brand);
 }
 .review-header h1 {
   font-size: 40px;
@@ -40,7 +40,7 @@
 }
 .review-header p {
   font-size: 16px;
-  color: #5f6e6a;
+  color: var(--muted);
   margin: 0 0 12px;
 }
 .review-shield,
@@ -57,7 +57,7 @@
   font-weight: 700;
 }
 .review-shield {
-  background: #0f3d35;
+  background: var(--brand-deep);
   color: white;
   padding: 6px 12px;
 }
@@ -74,25 +74,25 @@
 .review-controls button,
 .review-table a {
   background: white;
-  border: 1.5px solid #d3dcd9;
+  border: 1.5px solid var(--line-strong);
   min-height: 44px;
   padding: 0 16px;
-  color: #1b2a27;
+  color: var(--ink);
 }
 .review-header nav a:hover,
 .review-controls button:hover,
 .review-table a:hover {
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .review-header nav svg {
   width: 16px;
-  color: #156b5c;
+  color: var(--brand);
 }
 .review-board > .notice {
   position: relative;
   margin: 0;
-  background: #e7f2ef;
-  color: #13594d;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
   border: 0;
   border-radius: 18px;
   padding: 16px 20px 16px 52px;
@@ -103,7 +103,7 @@
   position: absolute;
   left: 19px;
   top: 16px;
-  background: #156b5c;
+  background: var(--brand);
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -154,13 +154,13 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  border: 1px solid #d3dcd9;
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   padding: 0 14px;
   width: 240px;
   max-width: 100%;
   height: 42px;
-  color: #5f6e6a;
+  color: var(--muted);
 }
 .review-controls input {
   width: 100%;
@@ -169,7 +169,7 @@
   border: 0;
   outline: 0;
   background: none;
-  color: #1b2a27;
+  color: var(--ink);
 }
 .review-board button {
   cursor: pointer;
@@ -183,8 +183,8 @@
   align-items: center;
   gap: 6px;
   background: white;
-  border: 1px solid #e2e8e6;
-  color: #3d4b47;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
   border-radius: 999px;
   padding: 6px 10px;
   font-weight: 600;
@@ -192,19 +192,19 @@
 .review-filters span {
   border-radius: 999px;
   padding: 0 6px;
-  background: #f1f4f3;
+  background: var(--surface-3);
   font-size: 12px;
 }
 .review-filters [aria-pressed='true'] {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .review-filters [aria-pressed='true'] span {
   background: rgba(255, 255, 255, 0.2);
 }
 #review-provider {
-  border: 1px solid #e2e8e6;
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 14px;
   margin-top: 14px;
@@ -221,8 +221,8 @@
 }
 .review-table th {
   text-align: left;
-  background: #f6f8f7;
-  color: #5f6e6a;
+  background: var(--surface-2);
+  color: var(--muted);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -244,10 +244,10 @@
 }
 .review-table td {
   padding: 14px 10px;
-  border-bottom: 1px solid #edf1f0;
+  border-bottom: 1px solid var(--line-soft);
 }
 .review-table td strong {
-  color: #156b5c;
+  color: var(--brand);
 }
 .review-table td small {
   display: block;
@@ -261,27 +261,27 @@
 }
 .review-board [data-status='DRAFT'] {
   --dot: #b6c1be;
-  --tint: #f1f4f3;
-  --ink: #3d4b47;
+  --tint: var(--surface-3);
+  --ink: var(--ink-2);
 }
 .review-board [data-status='SUBMITTED'] {
-  --dot: #e0a14a;
-  --tint: #fff4e0;
-  --ink: #8a5a12;
+  --dot: var(--warn-dot);
+  --tint: var(--warn-soft);
+  --ink: var(--warn);
 }
 .review-board [data-status='APPROVED'] {
-  --dot: #156b5c;
-  --tint: #e7f2ef;
-  --ink: #13594d;
+  --dot: var(--brand);
+  --tint: var(--brand-soft);
+  --ink: var(--brand-dark);
 }
 .review-board [data-status='REJECTED'] {
-  --dot: #c0503f;
-  --tint: #fbe9e6;
-  --ink: #9b3b2e;
+  --dot: var(--danger-strong);
+  --tint: var(--danger-soft);
+  --ink: var(--danger);
 }
 .review-board [data-status='WITHDRAWN'] {
-  --dot: #d3dcd9;
-  --tint: #f4f6f5;
+  --dot: var(--line-strong);
+  --tint: var(--page);
   --ink: #64716e;
 }
 .review-badge {
@@ -316,27 +316,27 @@
 }
 .review-table a {
   min-height: 36px;
-  color: #156b5c;
+  color: var(--brand);
 }
 .review-table [data-status='SUBMITTED'] a {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
-  border-color: #156b5c;
+  border-color: var(--brand);
 }
 .review-table [data-status='SUBMITTED'] a:hover {
-  background: #13594d;
+  background: var(--brand-dark);
 }
 .review-empty {
   text-align: center;
   padding: 32px 12px;
 }
 .review-empty p {
-  color: #5f6e6a;
+  color: var(--muted);
 }
 .review-board .pagination {
   gap: 10px;
   flex-wrap: wrap;
-  color: #5f6e6a;
+  color: var(--muted);
   font-size: 13px;
 }
 .review-board .pagination button {
@@ -353,11 +353,11 @@
   top: 24px;
 }
 .review-pending {
-  background: #156b5c;
+  background: var(--brand);
   color: white;
 }
 .review-pending h2 {
-  color: #cfe7e0;
+  color: var(--brand-on-dark);
   font-size: 13px;
 }
 .review-number {
@@ -393,19 +393,19 @@
   grid-row: 1/3;
   padding: 4px 8px;
   border-radius: 999px;
-  color: #8a5a12;
-  background: #fff4e0;
+  color: var(--warn);
+  background: var(--warn-soft);
 }
 .review-oldest {
   min-height: 42px;
   background: white;
-  color: #156b5c;
+  color: var(--brand);
   padding: 0 14px;
 }
 .review-bar {
   display: flex;
   overflow: hidden;
-  background: #edf1f0;
+  background: var(--line-soft);
   border-radius: 999px;
   height: 10px;
   margin: 20px 0;
@@ -428,7 +428,7 @@
 .review-tips {
   padding-left: 17px;
   font-size: 13px;
-  color: #5f6e6a;
+  color: var(--muted);
   margin-bottom: 0;
 }
 .review-tips li + li {
@@ -464,7 +464,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 10px;
-    border: 1px solid #e2e8e6;
+    border: 1px solid var(--line);
     border-radius: 14px;
     padding: 14px;
     margin-bottom: 10px;
@@ -479,7 +479,7 @@
   .review-table td[data-label]::before {
     content: attr(data-label);
     display: block;
-    color: #5f6e6a;
+    color: var(--muted);
     font-size: 12px;
   }
   .review-table td a {
