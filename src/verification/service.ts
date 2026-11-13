@@ -10,6 +10,7 @@ import type {
   Onboarding,
   VerificationCase,
   CaseSummary,
+  ReviewPage,
   Notice,
   Marker,
   Receipt,
@@ -25,6 +26,23 @@ import type {
 } from './types'
 const enc = encodeURIComponent
 export const verification = {
+  signupStart: (email: string) =>
+    publicApi<{
+      status: string
+      challengeId: string
+      resendAfterSeconds: number
+    }>('/independent-driver-registrations/start', 'POST', { email }),
+  signupComplete: (body: {
+    challengeId: string
+    code: string
+    name: string
+    password: string
+  }) =>
+    publicApi<{ status: string; email: string }>(
+      '/independent-driver-registrations/complete',
+      'POST',
+      body,
+    ),
   representatives: (signal?: AbortSignal) =>
     api<{ items: RepresentativeLink[] }>(
       '/fleet-representatives/mine',
@@ -91,15 +109,53 @@ export const verification = {
       undefined,
       signal,
     ),
-  acceptanceHistory: (page: number, signal?: AbortSignal) =>
+  acceptanceHistory: (page: number, signal?: AbortSignal, pageSize = 20) =>
     api<Page<{ id: string; version: string; acceptedAt: string }>>(
-      '/driver/verification-acceptances?' + queryString({ page, pageSize: 20 }),
+      '/driver/verification-acceptances?' + queryString({ page, pageSize }),
       'GET',
       undefined,
       signal,
     ),
   onboarding: (signal?: AbortSignal) =>
     api<Onboarding>('/driver/onboarding', 'GET', undefined, signal),
+  review: async (
+    page: number,
+    status: string,
+    providerId: string | undefined,
+    search: string,
+    signal: AbortSignal,
+  ) => {
+    const result = await api<ReviewPage>(
+      '/admin/verification-cases?' +
+        queryString({ page, pageSize: 20, status, providerId, search }),
+      'GET',
+      undefined,
+      signal,
+    )
+    if (
+      !Array.isArray(result?.items) ||
+      !Number.isInteger(result.total) ||
+      !Number.isInteger(result.totalPages) ||
+      result.page !== page
+    )
+      throw new ApiError(
+        502,
+        'El servidor devolvió un listado documental incompleto.',
+      )
+    // Earlier servers return the same authorized page without dashboard metadata.
+    if (
+      result.counts === undefined &&
+      result.oldest === undefined &&
+      result.asOf === undefined
+    )
+      return result
+    if (!result.counts || !Array.isArray(result.oldest) || !result.asOf)
+      throw new ApiError(
+        502,
+        'El servidor devolvió un resumen documental incompleto.',
+      )
+    return result
+  },
   list: (
     area: Area,
     page: number,

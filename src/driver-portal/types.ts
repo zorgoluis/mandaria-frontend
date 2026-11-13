@@ -1,3 +1,4 @@
+import type { DriverCategory } from '../driver-category/contract'
 import type { DispatchSearch } from '../dispatch/search'
 import type { CollectionInstructions } from '../collection-instructions/types'
 import type { ExecutionFields } from '../execution/types'
@@ -36,6 +37,7 @@ export interface DriverSelfIndependent {
   canTakeServices: boolean
 }
 export interface DriverSelf {
+  driverCategory?: DriverCategory
   id: string
   name: string
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'

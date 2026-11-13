@@ -1,3 +1,4 @@
+import { FleetResourceScope as ProviderScope } from '../fleet/resources'
 import { resourceLink, useResourceFilters } from '../logistics/navigation'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -18,7 +19,6 @@ import { useFeedback } from '../components/feedback-context'
 import {
   CapacityCards,
   Options,
-  ProviderScope,
   ResourceFilters,
 } from '../logistics/components'
 import {

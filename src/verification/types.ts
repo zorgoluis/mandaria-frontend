@@ -17,10 +17,10 @@ export type Ownership = 'OWNED' | 'RENTED' | 'BORROWED'
 export interface IdentityData {
   fullName: string
   contactPhone: string
-  operatingCity: string
+  operatingCity?: string
   documentType: 'INE'
   license?: {
-    issuer: string
+    issuer?: string
     category: string
     expiresAt: string
     vehicleTypes: MotorType[]
@@ -131,6 +131,7 @@ export type CommandResult<O extends Operation> = O extends 'PUBLISH_TERMS'
     ? PrivacyReceipt
     : Receipt
 export interface Receipt {
+  caseIds?: string[]
   id: string
   status: string
   revision?: number
@@ -177,6 +178,17 @@ export interface CaseSummary {
   decidedAt: string | null
   publicReason: string | null
 }
+export type ReviewPage = import('../types/api').Page<
+  CaseSummary & { updatedAt?: string }
+> &
+  (
+    | {
+        counts: Record<CaseStatus, number>
+        oldest: { id: string; revision: number; submittedAt: string }[]
+        asOf: string
+      }
+    | { counts?: undefined; oldest?: undefined; asOf?: undefined }
+  )
 export interface VerificationCase extends CaseSummary {
   registrationCardRequired?: boolean | null
   retention?: {
@@ -213,12 +225,13 @@ export interface Requirements {
   maxBytes: number
   maxPixels: number
   maxFiles: number
+  fileLimitMode?: 'VALIDATED'
   malwareScan: false
   pdfSupported: false
   identity: { required: string[]; motorizedLicense: string; checks: string[] }
   vehicle: {
     required: string[]
-    OWNED: string
+    OWNED: string | null
     RENTED: string
     BORROWED: string
     checks: string[]
@@ -233,8 +246,10 @@ export interface Requirements {
   }
 }
 export interface Onboarding {
+  guidedRegistration?: boolean
   driver: {
     id: string
+    name?: string
     providerId: string | null
     status: string
     availability: string
@@ -246,6 +261,7 @@ export interface Onboarding {
         identifier: string
         status: string
         type: string
+        plate?: string | null
       }[]
     } | null
   }
@@ -299,6 +315,7 @@ export const operations = [
   'COMPLETE_UPLOAD',
   'REMOVE_ATTACHMENT',
   'SUBMIT',
+  'SUBMIT_ONBOARDING',
   'WITHDRAW',
   'DECIDE',
   'FINAL_REJECTION',

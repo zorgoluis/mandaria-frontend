@@ -1,3 +1,5 @@
+import { FleetResourceScope as ProviderScope } from '../fleet/resources'
+import { FleetSpending } from '../fleet/spending'
 import { resourceLink, useResourceFilters } from '../logistics/navigation'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -15,11 +17,7 @@ import {
   Table,
 } from '../components/ui'
 import { useFeedback } from '../components/feedback-context'
-import {
-  CapacityCards,
-  ProviderScope,
-  ResourceFilters,
-} from '../logistics/components'
+import { CapacityCards, ResourceFilters } from '../logistics/components'
 import {
   invalidateLogistics,
   logisticsKey,
@@ -229,6 +227,12 @@ function CreateDriver({ scope }: { scope: ProviderContext }) {
     )
   return (
     <div className="panel form-panel">
+      <p>
+        El alta no convierte un independiente en repartidor de flotilla.
+        Suspender o rechazar su perfil no termina esa pertenencia; no existe
+        incorporación de un Driver existente a otra flotilla desde este
+        recorrido.
+      </p>
       <ActionForm
         submitLabel="Crear repartidor"
         onSubmit={async (data) => {
@@ -308,6 +312,11 @@ function DriverContent({
       />
       <section className="panel panel-body">
         <h2>Información</h2>
+        <Link
+          to={`${scope.role === 'SUPER_ADMIN' ? '/admin' : ''}/fleet-exits?driverId=${encodeURIComponent(item.id)}&providerId=${encodeURIComponent(scope.providerId)}`}
+        >
+          Consultar afiliación y salida de flotilla
+        </Link>
         <InfoGrid
           items={[
             ['Usuario', item.user.email],
@@ -357,6 +366,9 @@ function DriverContent({
           </Field>
         </ActionForm>
       </section>
+      {scope.role === 'PROVIDER_ADMIN' && (
+        <FleetSpending providerId={scope.providerId} driverId={item.id} />
+      )}
       <DriverAssignment scope={scope} driver={item} />
       <AssignmentHistory scope={scope} kind="drivers" id={item.id} />
       {status && (

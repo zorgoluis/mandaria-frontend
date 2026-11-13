@@ -1,0 +1,26 @@
+{
+  "mode": "READ_ONLY",
+  "date": "2026-11-03",
+  "files": [
+    {
+      "sha256": "918D597427B147C101CCE82DD63C5F3BD6DC69DD92A116880EEA26AB8ED8B2E0",
+      "path": "src/common/password-policy.ts"
+    },
+    {
+      "sha256": "446896869B67AE7D4DC69105E7E38436CE177C14375073192407376ACDBD388E",
+      "path": "src/auth/auth.dto.ts"
+    },
+    {
+      "sha256": "AE4132B5B2382F0D18C4CFF70A629E8E826D93D536FC6EBE799378855DD2148D",
+      "path": "src/invitations/invitations.dto.ts"
+    },
+    {
+      "sha256": "5874CDC59F5067085F18095C691273AB227A7768B7BB33ECABB73E584A8E828F",
+      "path": "src/verification/verification.dto.ts"
+    },
+    {
+      "sha256": "4C74EEC0F2D2AD8DABE5CC2AA4D025EDAC5D3208403BB131D41E57251ADCD4CE",
+      "path": "src/customers/customers.dto.ts"
+    }
+  ]
+}

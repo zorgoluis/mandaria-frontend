@@ -1,0 +1,1202 @@
+{
+  "stage": "identity-upload",
+  "checkedAt": "2026-10-29T04:02:01.660Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 3,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    "UI reconciled persisted pending marker via original key before next action",
+    {
+      "readAt": "2026-10-29T04:01:52.490Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 4,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:53.283Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 4,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:54.577Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 6,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:55.341Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 6,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:57.183Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 8,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:57.980Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 8,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:01:59.302Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 10,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:02:00.145Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 10,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:02:01.472Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 12,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        },
+        {
+          "id": "2a631d16-42fe-4017-9beb-cf24a327c574",
+          "category": "LICENSE",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:02:00.160Z"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "http": [
+    {
+      "at": "2026-10-29T04:01:50.570Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.579Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.874Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.887Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.918Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.931Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.962Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:50.985Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.585Z",
+      "method": "GET",
+      "path": "/api/v1/verification-command-attempts/b3317b8c-4e98-4924-a060-0370eb4967f8",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.604Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.617Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.622Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.625Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.636Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.644Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.648Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.883Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.899Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.934Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.945Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.961Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:51.983Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.694Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.701Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.729Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.739Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.758Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:52.780Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.402Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads",
+      "status": 201
+    },
+    {
+      "at": "2026-10-29T04:01:53.419Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.430Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.430Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.445Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.449Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.453Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.509Z",
+      "method": "PUT",
+      "path": "[private signed upload; URL omitted]",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.531Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.643Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads/229c9de1-4d6c-427c-bf3a-23a3ab593eec/complete",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.657Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.665Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.667Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.682Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.691Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.695Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.983Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:53.992Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.017Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.032Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.045Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.066Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.755Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.762Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.788Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.800Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.817Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:54.840Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.466Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads",
+      "status": 201
+    },
+    {
+      "at": "2026-10-29T04:01:55.484Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.495Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.495Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.512Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.518Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.526Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.580Z",
+      "method": "PUT",
+      "path": "[private signed upload; URL omitted]",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.604Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.756Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads/7127e9f0-962b-403e-81fa-c56a57204212/complete",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.769Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.780Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.784Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.798Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.805Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:55.813Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.577Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.586Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.619Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.632Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.651Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:56.673Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.392Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.401Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.427Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.437Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.451Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:57.472Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.128Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads",
+      "status": 201
+    },
+    {
+      "at": "2026-10-29T04:01:58.144Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.156Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.156Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.181Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.188Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.188Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.241Z",
+      "method": "PUT",
+      "path": "[private signed upload; URL omitted]",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.260Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.339Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads/beb398aa-e040-4371-a497-63c818dae5ca/complete",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.352Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.361Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.365Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.377Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.389Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.391Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.686Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.704Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.737Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.750Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.767Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:58.792Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.545Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.554Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.590Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.602Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.620Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:01:59.645Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.292Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads",
+      "status": 201
+    },
+    {
+      "at": "2026-10-29T04:02:00.306Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.320Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.320Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.341Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.343Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.350Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.400Z",
+      "method": "PUT",
+      "path": "[private signed upload; URL omitted]",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.417Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.492Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads/2a631d16-42fe-4017-9beb-cf24a327c574/complete",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.502Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.511Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.515Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.531Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.540Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.543Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.873Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.882Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.906Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.923Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.937Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:00.958Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    }
+  ]
+}

@@ -22,27 +22,36 @@ import type { LogisticsRole, ProviderContext, Scope } from './types'
 // Resolve a real provider before mounting forms or fetching logistics data.
 export function ProviderScope({
   children,
+  selectionOptional = false,
 }: {
+  selectionOptional?: boolean
   children: (provider: ProviderContext) => ReactNode
 }) {
   const { user } = useAuth()
   if (user?.role !== 'SUPER_ADMIN' && user?.role !== 'PROVIDER_ADMIN')
     return <ErrorPage code={403} />
-  return <ProviderSelector role={user.role}>{children}</ProviderSelector>
+  return (
+    <ProviderSelector role={user.role} selectionOptional={selectionOptional}>
+      {children}
+    </ProviderSelector>
+  )
 }
 function ProviderSelector({
   role,
   children,
+  selectionOptional,
 }: {
   role: LogisticsRole
+  selectionOptional: boolean
   children: (provider: ProviderContext) => ReactNode
 }) {
+  const { user } = useAuth()
   const [params, setParams] = useSearchParams()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const selected = params.get('providerId')
   const query = useQuery({
-    queryKey: ['logistics-provider-options', role, page, search],
+    queryKey: ['logistics-provider-options', role, user?.id, page, search],
     queryFn: async ({ signal }) =>
       role === 'SUPER_ADMIN'
         ? providers.list({ page, pageSize: 20, search }, signal)
@@ -122,12 +131,12 @@ function ProviderSelector({
       </div>
       {id ? (
         <ResolvedProvider
-          key={`${role}:${id}`}
+          key={`${user?.id}:${role}:${id}`}
           scope={{ role, providerId: id }}
         >
           {children}
         </ResolvedProvider>
-      ) : (
+      ) : selectionOptional ? null : (
         <Empty
           title="Selecciona un proveedor"
           description="Consulta y administra sus repartidores y vehículos."
@@ -143,8 +152,10 @@ function ResolvedProvider({
   scope: Scope
   children: (provider: ProviderContext) => ReactNode
 }) {
+  const { user } = useAuth()
   const query = useQuery({
-    queryKey: ['logistics-provider', scope.role, scope.providerId],
+    queryKey: ['logistics-provider', scope.role, user?.id, scope.providerId],
+    gcTime: 0,
     queryFn: async ({ signal }) =>
       scope.role === 'SUPER_ADMIN'
         ? providers.get(scope.providerId, signal)

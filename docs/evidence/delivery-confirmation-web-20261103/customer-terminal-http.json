@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-11-04T05:32:18.085Z",
+  "api": "http://127.0.0.1:42929/api/v1",
+  "actorRole": "CUSTOMER",
+  "fixture": "DELIVERY-CODE-B2C-A09B99DCF2",
+  "dispatchId": "82770d25-8a2e-4adc-83bd-e6a253138785",
+  "assignmentId": "01e2f07c-1794-4449-94be-76a291e3b01d",
+  "reads": [
+    {
+      "method": "GET",
+      "route": "/customer/delivery-requests/MDR-000001",
+      "http": 200,
+      "projection": {
+        "publicId": "MDR-000001",
+        "status": "CREATED",
+        "updatedAt": "2026-11-04T05:16:31.989Z"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/customer/delivery-requests/MDR-000001/status",
+      "http": 200,
+      "projection": {
+        "publicId": "MDR-000001",
+        "status": "DELIVERED",
+        "terminalOutcome": {
+          "type": "DELIVERED",
+          "occurredAt": "2026-11-04T05:30:40.031Z"
+        },
+        "deliveryConfirmation": {
+          "method": "CODE_VERIFIED",
+          "policy": "REQUIRED"
+        },
+        "deliveredAt": "2026-11-04T05:30:40.031Z"
+      }
+    }
+  ],
+  "deliveryCodeReads": 0,
+  "pipeWrites": 0,
+  "completionCommands": 0,
+  "scope": "Live HTTP CUSTOMER projection only; no Driver command, ledger or SQL audit"
+}

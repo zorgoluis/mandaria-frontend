@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_UI_NOT_HTTP_ACCEPTANCE",
+  "screenshots": [
+    "customer-1280.png",
+    "driver-1280.png",
+    "customer-390.png",
+    "driver-390.png"
+  ],
+  "secretsMasked": true,
+  "mutations": 0
+}

@@ -1,4 +1,5 @@
-import { api } from '../services/api'
+import { api, apiOnce } from '../services/api'
+import { receipt } from './attempt-api'
 import { queryString } from '../services/query'
 import type { Page } from '../types/api'
 import type { DriverDispatch, DriverSelf, DriverVehicle } from './types'
@@ -32,11 +33,17 @@ export const driverPortal = {
    * assignment is created in the same transaction. The web never sends claim and assignment
    * as two requests.
    */
-  take: (dispatchId: string, vehicleId: string) =>
-    api<DriverDispatch>(
-      `/driver/dispatches/${encodeURIComponent(dispatchId)}/take`,
-      'POST',
-      { vehicleId },
+  take: async (dispatchId: string, vehicleId: string, key: string) =>
+    receipt(
+      await apiOnce(
+        `/driver/dispatches/${encodeURIComponent(dispatchId)}/take`,
+        'POST',
+        { vehicleId },
+        undefined,
+        { 'Idempotency-Key': key },
+      ),
+      'TAKE',
+      dispatchId,
     ),
   /**
    * V1.11: no body at all. The driver comes from the JWT and the timestamp from the server.
@@ -48,10 +55,21 @@ export const driverPortal = {
       'POST',
     ),
   /** Atomic too: the assignment is cancelled with a reason and the dispatch returns to OPEN. */
-  release: (dispatchId: string, reason: string, reasonDetail?: string) =>
-    api<DriverDispatch>(
-      `/driver/dispatches/${encodeURIComponent(dispatchId)}/release`,
-      'POST',
-      { reason, ...(reasonDetail ? { reasonDetail } : {}) },
+  release: async (
+    dispatchId: string,
+    reason: string,
+    reasonDetail: string | undefined,
+    key: string,
+  ) =>
+    receipt(
+      await apiOnce(
+        `/driver/dispatches/${encodeURIComponent(dispatchId)}/release`,
+        'POST',
+        { reason, ...(reasonDetail ? { reasonDetail } : {}) },
+        undefined,
+        { 'Idempotency-Key': key },
+      ),
+      'RELEASE',
+      dispatchId,
     ),
 }

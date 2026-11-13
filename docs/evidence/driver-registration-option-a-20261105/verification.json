@@ -1,0 +1,20 @@
+{
+  "startedAt": "2026-11-05T17:36:21.974Z",
+  "checks": [
+    "Five failed attempts persist; correct code then rejected",
+    "Expired and cross-environment challenges rejected",
+    "Resend invalidates old code; concurrent completion creates one account; replay and existing email do not change it",
+    "Six digits, including leading zero, appear in both email formats",
+    "UI registration enters onboarding automatically; email verified; driver remains pending",
+    "Name prefilled; vehicle identifier and two drafts created automatically; reload resumes photos",
+    "Missing files reject the entire submission; neither case changes",
+    "Stale revision and foreign driver are rejected before either case changes",
+    "Lost HTTP response recovered from UI; one submission presents both cases; idempotent replay adds no event; reload confirms review; driver remains pending"
+  ],
+  "cleanup": {
+    "postgresStopped": true
+  },
+  "database": "onboarding_web_1793900181973_test",
+  "status": "PASS",
+  "finishedAt": "2026-11-05T17:36:32.842Z"
+}

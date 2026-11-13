@@ -1,3 +1,8 @@
+import { IndependentRecovery } from '../driver-portal/recovery'
+import { ReceptionPage } from '../driver-portal/reception'
+import { AssistancePage } from '../assistance/pages'
+import { FleetExitsPage, PrivateExitRecovery } from '../fleet-exit/pages'
+import { FleetServicesPage } from '../fleet/pages'
 import {
   BusinessCustomerPage,
   BusinessAdminPage,
@@ -120,7 +125,9 @@ export function Protected({ roles }: { roles?: Role[] }) {
     if (
       !roles &&
       (/^\/privacy\/deletion(?:\/[0-9a-f-]{36})?$/i.test(route.pathname) ||
-        route.pathname === '/privacy/active-service')
+        route.pathname === '/privacy/active-service' ||
+        route.pathname === '/privacy/fleet-exit-recovery' ||
+        route.pathname === '/privacy/independent-recovery')
     )
       return <Outlet />
     return <Navigate to="/privacy/deletion" replace />
@@ -196,6 +203,14 @@ export function App() {
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route element={<Protected />}>
         <Route element={<PrivacyLayout />}>
+          <Route
+            path="/privacy/independent-recovery"
+            element={<IndependentRecovery />}
+          />
+          <Route
+            path="/privacy/fleet-exit-recovery"
+            element={<PrivateExitRecovery />}
+          />
           <Route
             path="/privacy/active-service"
             element={<RestrictedActiveService />}
@@ -311,6 +326,24 @@ export function App() {
           </Route>
           <Route element={<Protected roles={['SUPER_ADMIN']} />}>
             <Route
+              path="admin/fleet-assistance"
+              element={<AssistancePage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-exits"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-exits/:id"
+              element={<FleetExitsPage surface="admin" />}
+            />
+            <Route
+              path="admin/fleet-assistance/:id"
+              element={
+                <AssistancePage surface="admin" key={location.pathname} />
+              }
+            />
+            <Route
               path="admin/customer-business-applications"
               element={<BusinessAdminPage />}
             />
@@ -405,6 +438,15 @@ export function App() {
               path="driver"
               element={<Navigate to="/driver/services" replace />}
             />
+            <Route
+              path="driver/fleet-exits"
+              element={<FleetExitsPage surface="driver" />}
+            />
+            <Route
+              path="driver/fleet-exits/:id"
+              element={<FleetExitsPage surface="driver" />}
+            />
+            <Route path="driver/reception" element={<ReceptionPage />} />
             <Route path="driver/services" element={<AvailableServicesPage />} />
             <Route
               path="driver/services/:id"
@@ -415,10 +457,33 @@ export function App() {
             <Route path="driver/credits" element={<DriverCreditsPage />} />
           </Route>
           <Route element={<Protected roles={['PROVIDER_ADMIN']} />}>
+            <Route
+              path="fleet-exits"
+              element={<FleetExitsPage surface="provider" />}
+            />
+            <Route
+              path="fleet-exits/:id"
+              element={<FleetExitsPage surface="provider" />}
+            />
             <Route path="provider/profile" element={<MyProvider />} />
             {/* V1.10-F: the provider reads its own credits; recharging stays with SUPER_ADMIN. */}
+            <Route
+              path="fleet-assistance"
+              element={<AssistancePage surface="provider" />}
+            />
+            <Route
+              path="fleet-assistance/:id"
+              element={
+                <AssistancePage surface="provider" key={location.pathname} />
+              }
+            />
             <Route path="provider/credits" element={<MyCreditsPage />} />
             {/* V1.7: provider dispatch claiming is PROVIDER_ADMIN only (backend enforces it too). */}
+            <Route path="fleet-services" element={<FleetServicesPage />} />
+            <Route
+              path="fleet-services/:id"
+              element={<FleetServicesPage key={location.pathname} />}
+            />
             <Route path="services" element={<ProviderServicesPage />} />
             <Route
               path="services/:id"

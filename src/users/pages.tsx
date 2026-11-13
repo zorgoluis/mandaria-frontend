@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AccountRegistrationProgress } from '../verification/account-progress'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight } from 'lucide-react'
@@ -140,6 +141,7 @@ export function ProfilePage() {
         title="Mi perfil"
         description="Tu identidad y acceso a Mandaria."
       />
+      <AccountRegistrationProgress />
       <div className="panel">
         <InfoGrid
           items={[

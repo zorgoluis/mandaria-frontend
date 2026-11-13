@@ -1,3 +1,6 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({ fleet: { context: vi.fn() } }))
 import { executionApi } from '../execution/service'
 import { detailFixture } from './execution-fixture'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -236,6 +239,15 @@ const vehicle: DriverVehicle = {
 }
 function me(over: Partial<DriverSelf> = {}): DriverSelf {
   return {
+    driverCategory: {
+      contractVersion: '1.0.0',
+      categoryRevision: '1',
+      category: 'INDEPENDENT',
+      providerId: null,
+      independentMembershipState: 'CURRENT',
+      independentApprovalStatus: 'APPROVED',
+      resolutionRequired: false,
+    },
     id: DRIVER_ID,
     name: 'Carlos',
     status: 'ACTIVE',
@@ -263,6 +275,7 @@ function driverDispatch(over: Partial<DriverDispatch> = {}): DriverDispatch {
   return {
     id: DISPATCH,
     trackingMode: 'LEGACY',
+    deliveryConfirmation: { policy: 'NOT_REQUIRED', method: null },
     status: 'CLAIMED',
     access: 'OWNER',
     serviceType: 'LOCAL_DELIVERY',
@@ -350,6 +363,7 @@ const deliverButton = () =>
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
   vi.mocked(providers.profiles).mockResolvedValue(page([profile(A, 'Rápidos')]))
   vi.mocked(providers.profile).mockResolvedValue(profile(A, 'Rápidos'))
   vi.mocked(providerDispatches.get).mockResolvedValue(owned())
@@ -535,6 +549,20 @@ describe('provider completion', () => {
 
 describe('independent driver completion', () => {
   const portal = '/driver/my-service'
+  it.each([undefined, { policy: 'REQUIRED', method: null }] as const)(
+    'keeps legacy completion unavailable for confirmation metadata %j',
+    async (deliveryConfirmation) => {
+      vi.mocked(driverPortal.get).mockResolvedValue(
+        driverDispatch({ deliveryConfirmation }),
+      )
+      mount(portal, 'DRIVER')
+      await screen.findByText('Cocina El Fogón')
+      expect(
+        screen.queryByRole('button', { name: 'MARCAR COMO ENTREGADO' }),
+      ).toBeNull()
+      expect(driverPortal.deliver).not.toHaveBeenCalled()
+    },
+  )
   it('offers the completion on my service and confirms it with a dialog', async () => {
     mount(portal, 'DRIVER')
     const user = userEvent.setup()

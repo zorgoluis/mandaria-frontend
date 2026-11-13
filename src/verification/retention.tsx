@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { utcDate } from '../deletion/image-retention'
+import { useId, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Field, Modal } from '../components/ui'
@@ -16,10 +17,14 @@ import type { VerificationCase } from './types'
 export function CaseRetention({
   record,
   refreshing = false,
+  compact = false,
 }: {
   record: VerificationCase
   refreshing?: boolean
+  compact?: boolean
 }) {
+  const [expanded, setExpanded] = useState(false)
+  const detailsId = useId()
   const { user } = useAuth()
   const admin = user?.role === 'SUPER_ADMIN'
   const plans = useRead(
@@ -57,109 +62,176 @@ export function CaseRetention({
   if (!user) return null
   return (
     <section className="panel panel-body" aria-label="Conservación documental">
-      <h2>Conservación de imágenes</h2>
-      <p>
-        Los borradores elegibles y los rechazos confirmados como definitivos
-        pueden tener un calendario de conservación de 30 días. Un rechazo
-        ordinario no inicia por sí solo ese calendario.
-      </p>
-      <p>
-        No se deducen fechas desde la última modificación. La eliminación no
-        cierra tu cuenta ni elimina saldo o servicios comprometidos. Un
-        expediente depurado no se reabre automáticamente.
-      </p>
-      {record.retention && (
+      {compact ? (
+        <>
+          <button
+            className="retention-toggle"
+            aria-expanded={expanded}
+            aria-controls={detailsId}
+            onClick={() => setExpanded(!expanded)}
+          >
+            Conservación de imágenes{' '}
+            <span aria-hidden="true">{expanded ? '⌃' : '⌄'}</span>
+          </button>
+          <p>
+            {record.retention?.eligibility === 'RECORDED_CALENDAR'
+              ? 'Calendario acreditado por el servidor · 30 días'
+              : 'Conservación documental · 30 días'}
+          </p>
+          {record.retention?.eligibility === 'RECORDED_CALENDAR' &&
+            matches.map(
+              (s) =>
+                s.imageRetention && (
+                  <dl className="identity-timeline" key={s.id}>
+                    <dt>Fecha de origen acreditada</dt>
+                    <dd>{utcDate(s.imageRetention.anchorAt)}</dd>
+                    <dt>Aviso programado · día 23</dt>
+                    <dd>
+                      {utcDate(s.imageRetention.noticeAt)}
+                      <p>
+                        {s.imageRetention.noticeAcceptedAt
+                          ? 'Aceptación acreditada: ' +
+                            utcDate(s.imageRetention.noticeAcceptedAt)
+                          : 'Sin aceptación acreditada'}
+                      </p>
+                    </dd>
+                    <dt>Eliminación prevista · día 30</dt>
+                    <dd>{utcDate(s.imageRetention.dueAt)}</dd>
+                  </dl>
+                ),
+            )}
+          {!matches.length && (
+            <p>
+              {record.retention &&
+              ['NOT_ELIGIBLE', 'HISTORICAL_ONLY'].includes(
+                record.retention.eligibility,
+              )
+                ? 'Sin calendario de conservación activo.'
+                : 'Calendario no acreditado en esta consulta.'}
+            </p>
+          )}
+        </>
+      ) : (
+        <h2>Conservación de imágenes</h2>
+      )}
+      <div id={detailsId} hidden={compact && !expanded}>
         <p>
-          {
+          Los borradores elegibles y los rechazos confirmados como definitivos
+          pueden tener un calendario de conservación de 30 días. Un rechazo
+          ordinario no inicia por sí solo ese calendario.
+        </p>
+        <p>
+          No se deducen fechas desde la última modificación. La eliminación no
+          cierra tu cuenta ni elimina saldo o servicios comprometidos. Un
+          expediente depurado no se reabre automáticamente.
+        </p>
+        {record.retention && (
+          <p>
             {
-              RECORDED_CALENDAR: 'Calendario acreditado por el servidor.',
-              NO_RELIABLE_ANCHOR:
-                'Sin hito fiable registrado; las fechas se desconocen.',
-              FINAL_REJECTION_UNCONFIRMED:
-                'Rechazo sin confirmación definitiva; no existe fecha de inicio acreditada.',
-              NOT_ELIGIBLE:
-                'El estado del expediente no es elegible para este calendario.',
-              NOT_DISCLOSED:
-                'El seguimiento no está disponible para esta cuenta; no se infiere un hito ausente.',
-              HISTORICAL_ONLY:
-                'Sólo consta historia; no se deduce un calendario vigente.',
-            }[record.retention.eligibility]
-          }{' '}
-          {!record.retention.executionEnabled &&
-            'La ejecución automática está desactivada.'}
-        </p>
-      )}
-      {(admin || record.retention) && (
-        <>
-          {!record.retention && plans.isPending && (
-            <p role="status">Consultando calendario autorizado…</p>
-          )}
-          {!record.retention && plans.isError && (
-            <p role="alert">{deletionMessage(plans.error)}</p>
-          )}
-          {matches.map((s) => (
-            <div key={s.id}>
-              <ImageRetentionStatus data={s} />
-              <Link to={(admin ? '/admin' : '') + '/privacy/deletion/' + s.id}>
-                Consultar seguimiento del calendario
-              </Link>
-            </div>
-          ))}
-          {record.retention?.historyTruncated && (
-            <p>Se muestran los últimos 20 planes disponibles.</p>
-          )}
-        </>
-      )}
-      {admin ? (
-        <>
-          {record.status === 'REJECTED' && (
-            <>
-              <h3>Confirmación de rechazo definitivo</h3>
-              <p>
-                Confirma sólo cuando la revisión o apelación esté cerrada y
-                exista evidencia custodiada. Se conserva el motivo comunicable
-                de la decisión ordinaria. Esta acción fija el calendario de
-                imágenes; no ordena borrado inmediato ni habilita operaciones.
-              </p>
-              {finalized && (
+              {
+                RECORDED_CALENDAR: 'Calendario acreditado por el servidor.',
+                NO_RELIABLE_ANCHOR:
+                  'Sin hito fiable registrado; las fechas se desconocen.',
+                FINAL_REJECTION_UNCONFIRMED:
+                  'Rechazo sin confirmación definitiva; no existe fecha de inicio acreditada.',
+                NOT_ELIGIBLE:
+                  'El estado del expediente no es elegible para este calendario.',
+                NOT_DISCLOSED:
+                  'El seguimiento no está disponible para esta cuenta; no se infiere un hito ausente.',
+                HISTORICAL_ONLY:
+                  'Sólo consta historia; no se deduce un calendario vigente.',
+              }[record.retention.eligibility]
+            }{' '}
+            {!record.retention.executionEnabled &&
+              'La ejecución automática está desactivada.'}
+          </p>
+        )}
+        {(admin || record.retention) && (
+          <>
+            {!record.retention && plans.isPending && (
+              <p role="status">Consultando calendario autorizado…</p>
+            )}
+            {!record.retention && plans.isError && (
+              <p role="alert">{deletionMessage(plans.error)}</p>
+            )}
+            {matches.map((s) => (
+              <div key={s.id}>
+                <ImageRetentionStatus data={s} />
+                <Link
+                  to={(admin ? '/admin' : '') + '/privacy/deletion/' + s.id}
+                >
+                  Consultar seguimiento del calendario
+                </Link>
+              </div>
+            ))}
+            {record.retention?.historyTruncated && (
+              <p>Se muestran los últimos 20 planes disponibles.</p>
+            )}
+          </>
+        )}
+        {admin ? (
+          <>
+            {record.status === 'REJECTED' && (
+              <>
+                <h3>Confirmación de rechazo definitivo</h3>
                 <p>
-                  Ya consta un plan definitivo o efectos iniciados. Consulta su
-                  seguimiento; no prepares otra confirmación.
+                  Confirma sólo cuando la revisión o apelación esté cerrada y
+                  exista evidencia custodiada. Se conserva el motivo comunicable
+                  de la decisión ordinaria. Esta acción fija el calendario de
+                  imágenes; no ordena borrado inmediato ni habilita operaciones.
                 </p>
-              )}
-              <Form
-                label="Revisar rechazo definitivo"
-                disabled={disabled}
-                onSubmit={async (form) => {
-                  setDraft({
-                    expectedVersion: record.revision,
-                    evidenceRef: String(form.get('evidenceRef')),
-                  })
-                }}
-              >
-                <Field label="Referencia UUID de evidencia del cierre de revisión o apelación">
-                  <input name="evidenceRef" required pattern={uuid.source} />
-                </Field>
-              </Form>
-            </>
-          )}
-        </>
-      ) : !record.retention ? (
+                {finalized && (
+                  <p>
+                    Ya consta un plan definitivo o efectos iniciados. Consulta
+                    su seguimiento; no prepares otra confirmación.
+                  </p>
+                )}
+                <Form
+                  label="Revisar rechazo definitivo"
+                  disabled={disabled}
+                  onSubmit={async (form) => {
+                    setDraft({
+                      expectedVersion: record.revision,
+                      evidenceRef: String(form.get('evidenceRef')),
+                    })
+                  }}
+                >
+                  <Field label="Referencia UUID de evidencia del cierre de revisión o apelación">
+                    <input name="evidenceRef" required pattern={uuid.source} />
+                  </Field>
+                </Form>
+              </>
+            )}
+          </>
+        ) : !record.retention ? (
+          <p>
+            Las fechas individuales se consultan con el folio comunicado por el
+            canal autorizado. El expediente no expone un calendario en esta
+            consulta; no se interpreta como ausencia de obligaciones de
+            conservación.
+          </p>
+        ) : null}
         <p>
-          Las fechas individuales se consultan con el folio comunicado por el
-          canal autorizado. El expediente no expone un calendario en esta
-          consulta; no se interpreta como ausencia de obligaciones de
-          conservación.
+          La aceptación del aviso por el proveedor de correo no acredita entrega
+          ni lectura. Contactar, apelar o editar no garantiza detener la
+          eliminación; las excepciones requieren revisión autorizada.
         </p>
-      ) : null}
-      <p>
-        La aceptación del aviso por el proveedor de correo no acredita entrega
-        ni lectura. Contactar, apelar o editar no garantiza detener la
-        eliminación; las excepciones requieren revisión autorizada.
-      </p>
-      <Link to="/privacy/deletion">
-        Consultar un folio o canal de aclaración
-      </Link>
+        <Link to="/privacy/deletion">
+          Consultar un folio o canal de aclaración
+        </Link>
+      </div>
+      {compact && (
+        <>
+          <Link to="/privacy/deletion">
+            Consultar un folio o canal de aclaración →
+          </Link>
+          {matches.map((s) => (
+            <Link key={s.id} to={'/privacy/deletion/' + s.id}>
+              Consultar seguimiento del calendario →
+            </Link>
+          ))}
+        </>
+      )}
       {draft && (
         <Modal
           title="Confirmar rechazo definitivo"

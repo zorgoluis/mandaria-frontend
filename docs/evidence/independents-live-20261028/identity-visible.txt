@@ -1,0 +1,63 @@
+Modo de prueba. Usa exclusivamente datos e imágenes sintéticos. No habilita operaciones reales.
+
+Verificación documental. Aceptar términos o cargar archivos no aprueba el expediente ni habilita operaciones. La baja y sus constancias tienen alcance limitado y seguimiento independiente. Baja y privacidad
+
+Mi cuenta
+
+Conservación de imágenes
+
+Los borradores elegibles y los rechazos confirmados como definitivos pueden tener un calendario de conservación de 30 días. Un rechazo ordinario no inicia por sí solo ese calendario.
+
+No se deducen fechas desde la última modificación. La eliminación no cierra tu cuenta ni elimina saldo o servicios comprometidos. Un expediente depurado no se reabre automáticamente.
+
+Sin hito fiable registrado; las fechas se desconocen. La ejecución automática está desactivada.
+
+La aceptación del aviso por el proveedor de correo no acredita entrega ni lectura. Contactar, apelar o editar no garantiza detener la eliminación; las excepciones requieren revisión autorizada.
+
+Consultar un folio o canal de aclaración
+Identidad · Borrador
+
+PRUEBA LOCAL — no habilita producción · Checklist LOCAL-TEST-1.
+
+Revisión 2. Estado documental: Sin presentar. Ámbito independiente.
+
+Conserva los servicios comprometidos. La revisión no acredita cobro ni modifica créditos.
+
+Datos del borrador
+Nombre completo *
+Teléfono de contacto *
+Ciudad de operación *
+
+Identificación: INE. La fotografía de rostro y ambos lados se cargan por separado.
+
+Declarar licencia del conductor (necesaria para tipos motorizados)
+Licencia personal
+Emisor *
+Categoría *
+Vencimiento, hora local *
+
+Se envía el instante UTC. Sin equivalencias jurídicas automáticas ni gracia.
+
+Motocicleta
+Automóvil
+Pickup
+Van
+Camión
+Guardar datos
+Evidencias privadas
+
+JPEG/PNG, máximo 10485760 bytes y 20000000 píxeles; 10 intentos por expediente, incluidos retirados. No PDF ni antimalware. VALIDATED significa formato decodificado, no identidad aprobada.
+
+Categoría *
+Fotografía de rostro
+INE: frente
+INE: reverso
+Licencia del conductor
+Imagen sintética *
+Cargar imagen sintética
+
+Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó incompleto, consulta o retira su referencia en el borrador.
+
+Presentar para revisión Retirar expediente
+Historial del expediente
+Datos guardados · 28 oct 2026, 6:36 p.m.

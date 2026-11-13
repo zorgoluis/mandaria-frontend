@@ -1,3 +1,4 @@
+import { preparePhoto } from '../verification/prepare-photo'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -7,6 +8,8 @@ import { useState, type ReactNode } from 'react'
 import { AuthContext } from '../auth/context'
 import { FeedbackProvider } from '../components/Feedback'
 import { Evidence } from '../verification/evidence'
+import { RegistrationJourney } from '../verification/registration-journey'
+import { ApiError } from '../services/errors'
 import { verification, putEvidence } from '../verification/service'
 import {
   actor,
@@ -14,9 +17,11 @@ import {
   caseId,
   attachmentId,
   requirements,
+  onboarding,
 } from './verification-fixtures'
 import type { Role } from '../types/api'
 import { repRequirements, repCase } from './representative-fixtures'
+import type { Attachment, Requirements } from '../verification/types'
 vi.mock('../verification/service', async (original) => ({
   ...(await original<typeof import('../verification/service')>()),
   putEvidence: vi.fn(),
@@ -66,6 +71,59 @@ function deferred<T>() {
   })
   return { promise, resolve, reject }
 }
+it('does not offer ownership proof or complete legacy uploads, retaining historical evidence', async () => {
+  const record = {
+    ...caseFixture,
+    subjectType: 'VEHICLE' as const,
+    data: { ownershipEvidenceType: 'OWNED' as const },
+    attachments: ['CREATED', 'VALIDATED'].map((status, i) => ({
+      id: attachmentId + i,
+      category: 'OWNERSHIP_PROOF',
+      status: status as 'CREATED' | 'VALIDATED',
+      bytes: 100,
+      mime: 'image/png',
+      hash: null,
+      createdAt: caseFixture.createdAt,
+    })),
+  }
+  mount(<Evidence record={record} requirements={requirements} canWrite />)
+  expect(
+    screen.queryByRole('option', { name: /histórico|propiedad/i }),
+  ).toBeNull()
+  expect(
+    screen.getByRole('option', { name: 'Tarjeta de circulación' }),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'Consultar y completar carga' }),
+  ).toBeNull()
+  expect(
+    screen.getAllByText('Adjunto histórico (ya no solicitado)'),
+  ).toHaveLength(2)
+  expect(
+    screen.getByRole('button', { name: 'Ver evidencia' }),
+  ).toBeInTheDocument()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+it('does not show an empty upload form for OWNED bicycle with explicit null', () => {
+  mount(
+    <Evidence
+      record={{
+        ...caseFixture,
+        subjectType: 'VEHICLE',
+        registrationCardRequired: false,
+        data: { ownershipEvidenceType: 'OWNED' },
+      }}
+      requirements={{
+        ...requirements,
+        vehicle: { ...requirements.vehicle, OWNED: null },
+      }}
+      canWrite
+    />,
+  )
+  expect(screen.queryByRole('combobox')).toBeNull()
+  expect(screen.queryByRole('button', { name: /Cargar imagen/ })).toBeNull()
+})
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(verification.get).mockResolvedValue({ ...caseFixture, revision: 4 })
@@ -113,7 +171,11 @@ it.each([
     const record = category.startsWith('REPRESENT')
       ? { ...repCase, environment: 'LOCAL_TEST' as const }
       : category === 'REGISTRATION_CARD'
-        ? { ...caseFixture, subjectType: 'VEHICLE' as const }
+        ? {
+            ...caseFixture,
+            subjectType: 'VEHICLE' as const,
+            data: { ownershipEvidenceType: 'OWNED' as const },
+          }
         : {
             ...caseFixture,
             data: {
@@ -184,6 +246,42 @@ it.each([
     view.unmount()
   },
 )
+it.each(['retired', 'receipt'] as const)(
+  '%s never transfers bytes or issues another upload command',
+  async (mode) => {
+    if (mode === 'retired')
+      vi.mocked(verification.command).mockRejectedValue(
+        new ApiError(409, 'private', 'VERIFICATION_CATEGORY_RETIRED'),
+      )
+    else
+      vi.mocked(verification.command).mockResolvedValue({
+        id: attachmentId,
+        status: 'CREATED',
+        revision: 4,
+      })
+    const user = userEvent.setup()
+    mount(
+      <Evidence record={caseFixture} requirements={requirements} canWrite />,
+    )
+    const input = screen.getByLabelText(
+      'Imagen sintética *',
+    ) as HTMLInputElement
+    await user.upload(input, new File(['A'], 'A.png', { type: 'image/png' }))
+    fireEvent.submit(input.form!)
+    expect(
+      (
+        await screen.findAllByText(
+          mode === 'retired'
+            ? /Ese documento ya no se solicita/
+            : /Operación registrada sin URL/,
+        )
+      ).length,
+    ).toBeGreaterThan(0)
+    expect(verification.command).toHaveBeenCalledOnce()
+    expect(putEvidence).not.toHaveBeenCalled()
+  },
+)
+
 it('failure of A leaves B selected and names A in the error', async () => {
   const user = userEvent.setup(),
     transfer = deferred<void>()
@@ -321,4 +419,276 @@ it('cancelled A does not announce success or clear the pending B selection', asy
   )
   expect(screen.queryByText(/Carga confirmada/)).not.toBeInTheDocument()
   expect(verification.command).toHaveBeenCalledOnce()
+})
+
+// These lifecycle tests use synthetic non-image bytes. Codec behavior is exercised separately.
+vi.mock('../verification/prepare-photo', async (original) => ({
+  ...(await original<typeof import('../verification/prepare-photo')>()),
+  preparePhoto: vi.fn(
+    async (
+      file: File,
+      requirements: import('../verification/types').Requirements,
+    ) => {
+      const { validateFile } = await import('../verification/service')
+      validateFile(file, requirements)
+      return file
+    },
+  ),
+}))
+
+it('uploads the prepared bytes instead of the original HEIC', async () => {
+  const prepared = new File(['prepared'], 'documento.jpg', {
+    type: 'image/jpeg',
+  })
+  vi.mocked(preparePhoto).mockResolvedValueOnce(prepared)
+  mount(<Evidence record={caseFixture} requirements={requirements} canWrite />)
+  const input = screen.getByLabelText('Imagen sintética *') as HTMLInputElement
+  await userEvent.upload(
+    input,
+    new File(['heic'], 'camera.heic', { type: 'image/heic' }),
+  )
+  fireEvent.submit(input.form!)
+  await waitFor(() => expect(putEvidence).toHaveBeenCalledOnce())
+  expect(vi.mocked(putEvidence).mock.calls[0][1]).toBe(prepared)
+})
+it('does not create an upload if preparation finishes after leaving the case', async () => {
+  let finish!: (file: File) => void
+  vi.mocked(preparePhoto).mockReturnValueOnce(
+    new Promise((resolve) => {
+      finish = resolve
+    }),
+  )
+  const view = mount(
+    <Evidence record={caseFixture} requirements={requirements} canWrite />,
+  )
+  const input = screen.getByLabelText('Imagen sintética *') as HTMLInputElement
+  await userEvent.upload(
+    input,
+    new File(['heic'], 'camera.heic', { type: 'image/heic' }),
+  )
+  fireEvent.submit(input.form!)
+  await waitFor(() => expect(preparePhoto).toHaveBeenCalledOnce())
+  view.unmount()
+  await act(async () =>
+    finish(new File(['prepared'], 'documento.jpg', { type: 'image/jpeg' })),
+  )
+  expect(verification.command).not.toHaveBeenCalled()
+  expect(putEvidence).not.toHaveBeenCalled()
+})
+
+function history(status: Attachment['status'], count: number): Attachment[] {
+  return Array.from({ length: count }, (_, i) => ({
+    id: status + i,
+    category: 'FACE_PHOTO',
+    status,
+    bytes: status === 'VALIDATED' ? 1 : null,
+    mime: null,
+    hash: null,
+    createdAt: caseFixture.createdAt,
+  }))
+}
+const savedFileQuota: Requirements = {
+  ...requirements,
+  fileLimitMode: 'VALIDATED',
+}
+function mockPhotoUrls() {
+  vi.stubGlobal(
+    'URL',
+    Object.assign(URL, {
+      createObjectURL: vi.fn(() => 'blob:synthetic'),
+      revokeObjectURL: vi.fn(),
+    }),
+  )
+}
+it.each(['CREATED', 'REMOVED'] as const)(
+  'an existing dossier with ten %s entries can upload without removing its history',
+  async (status) => {
+    mockPhotoUrls()
+    const record = { ...caseFixture, attachments: history(status, 10) }
+    mount(
+      <Evidence
+        record={record}
+        requirements={savedFileQuota}
+        designed
+        canWrite
+      />,
+    )
+    const input = document.querySelector<HTMLInputElement>('input[type=file]')!
+    await userEvent.upload(
+      input,
+      new File(['photo'], 'camera.png', { type: 'image/png' }),
+    )
+    const upload = screen.getByRole('button', {
+      name: 'Cargar imagen sintética',
+    })
+    expect(upload).toBeEnabled()
+    expect(
+      screen.getByAltText('Vista previa de la imagen seleccionada'),
+    ).toBeVisible()
+    expect(verification.command).not.toHaveBeenCalled()
+    // jsdom's native required-file check does not read userEvent's FileList;
+    // real click/tap submission is covered by the browser + HTTP quota scenario.
+    fireEvent.submit(input.form!)
+    await waitFor(() => expect(verification.command).toHaveBeenCalledTimes(2))
+    expect(
+      vi.mocked(verification.command).mock.calls.map(([m]) => m.operation),
+    ).toEqual(['CREATE_UPLOAD', 'COMPLETE_UPLOAD'])
+    expect(record.attachments).toHaveLength(10)
+    expect(record.attachments.every((a) => a.status === status)).toBe(true)
+    await waitFor(() => expect(putEvidence).toHaveBeenCalledOnce())
+  },
+)
+it.each([undefined, 'VALIDATED'] as const)(
+  'keeps a full quota blocked with fileLimitMode=%s',
+  async (fileLimitMode) => {
+    mockPhotoUrls()
+    mount(
+      <Evidence
+        record={{
+          ...caseFixture,
+          attachments: history(fileLimitMode ? 'VALIDATED' : 'CREATED', 10),
+        }}
+        requirements={{ ...requirements, fileLimitMode }}
+        designed
+        canWrite
+      />,
+    )
+    await userEvent.upload(
+      document.querySelector<HTMLInputElement>('input[type=file]')!,
+      new File(['photo'], 'camera.png', { type: 'image/png' }),
+    )
+    expect(
+      screen.getByRole('button', { name: 'Cargar imagen sintética' }),
+    ).toBeDisabled()
+    expect(
+      screen.getByText(
+        fileLimitMode ? /Espacios disponibles: 0/ : /Intentos restantes: 0/,
+      ),
+    ).toBeVisible()
+    expect(verification.command).not.toHaveBeenCalled()
+  },
+)
+it('counts valid images alongside failed history and follows the backend refetch after withdrawal', async () => {
+  mockPhotoUrls()
+  function Refetch() {
+    const [attachments, setAttachments] = useState([
+      ...history('VALIDATED', 10),
+      ...history('CREATED', 10),
+    ])
+    return (
+      <>
+        <button
+          onClick={() =>
+            setAttachments((rows) =>
+              rows.map((a, i) => (i === 0 ? { ...a, status: 'REMOVED' } : a)),
+            )
+          }
+        >
+          Refetch confirmed withdrawal
+        </button>
+        <Evidence
+          record={{ ...caseFixture, attachments }}
+          requirements={savedFileQuota}
+          designed
+          canWrite
+        />
+      </>
+    )
+  }
+  mount(<Refetch />)
+  const input = document.querySelector<HTMLInputElement>('input[type=file]')!
+  const file = new File(['photo'], 'camera.png', { type: 'image/png' })
+  await userEvent.upload(input, file)
+  const upload = screen.getByRole('button', { name: 'Cargar imagen sintética' })
+  expect(upload).toBeDisabled()
+  await userEvent.click(screen.getByText('Refetch confirmed withdrawal'))
+  expect(upload).toBeEnabled()
+  expect(input.files?.[0]).toBe(file)
+  expect(screen.getByText(/Espacios disponibles: 1 de 10/)).toBeVisible()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+
+function mountJourney(attachments: Attachment[], req: Requirements) {
+  const unitId = '77777777-7777-4777-8777-777777777777'
+  const identity = { ...caseFixture, attachments }
+  const unit = {
+    ...caseFixture,
+    id: unitId,
+    subjectType: 'VEHICLE' as const,
+    registrationCardRequired: true,
+    data: {
+      declaredOwnerName: 'Synthetic',
+      serialNumber: 'SYNTHETIC',
+      ownershipEvidenceType: 'OWNED' as const,
+    },
+  }
+  vi.mocked(verification.get).mockImplementation(async (id) =>
+    id === unitId ? unit : identity,
+  )
+  return mount(
+    <RegistrationJourney
+      data={{
+        ...onboarding,
+        driver: {
+          ...onboarding.driver,
+          independentProfile: {
+            ...onboarding.driver.independentProfile!,
+            vehicles: [
+              {
+                id: unitId,
+                identifier: 'SYNTHETIC',
+                type: 'MOTORCYCLE',
+                status: 'PENDING',
+              },
+            ],
+          },
+        },
+        subjects: [
+          {
+            id: caseId,
+            driverId: onboarding.driver.id,
+            vehicleId: null,
+            cases: [identity],
+          },
+          { id: unitId, driverId: null, vehicleId: unitId, cases: [unit] },
+        ],
+      }}
+      requirements={{ ...req, vehicle: { ...req.vehicle, OWNED: null } }}
+      accepted
+      blocked={false}
+    />,
+  )
+}
+it.each([undefined, 'VALIDATED'] as const)(
+  'guided upload requires explicit new quota capability to retry incomplete photos (%s)',
+  async (fileLimitMode) => {
+    mountJourney(history('CREATED', 10), { ...requirements, fileLimitMode })
+    await screen.findByRole('heading', { name: 'Tus fotos' })
+    const field = screen.queryByLabelText('Fotografía de rostro')
+    if (fileLimitMode) expect(field).toBeEnabled()
+    else expect(field).toBeNull()
+    expect(verification.command).not.toHaveBeenCalled()
+  },
+)
+it('guided failed replacement preserves the existing validated photo and permits explicit selection again', async () => {
+  mockPhotoUrls()
+  vi.mocked(putEvidence).mockRejectedValueOnce(
+    new Error('Synthetic transfer failed'),
+  )
+  mountJourney(
+    [...history('VALIDATED', 1), ...history('CREATED', 10)],
+    savedFileQuota,
+  )
+  const input = await screen.findByLabelText('Fotografía de rostro')
+  expect(input).toBeEnabled()
+  await userEvent.upload(
+    input,
+    new File(['photo'], 'camera.png', { type: 'image/png' }),
+  )
+  await screen.findByText('Synthetic transfer failed')
+  expect(screen.getByText('Guardada', { exact: true })).toBeVisible()
+  expect(screen.getByLabelText('Fotografía de rostro')).toBeEnabled()
+  expect(
+    vi.mocked(verification.command).mock.calls.map(([m]) => m.operation),
+  ).toEqual(['CREATE_UPLOAD'])
 })

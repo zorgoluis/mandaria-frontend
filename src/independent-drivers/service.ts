@@ -27,13 +27,14 @@ export const independentDrivers = {
     )
   },
   /** A Driver without an independent profile answers 404: being a fleet driver is not enough. */
-  get: (driverId: string, signal?: AbortSignal) =>
-    api<IndependentDriverProfile>(
-      forDriver(driverId),
-      'GET',
-      undefined,
-      signal,
-    ),
+  get: async (driverId: string, signal?: AbortSignal) => {
+    const result = await api<
+      IndependentDriverProfile & { declaredContact?: unknown }
+    >(forDriver(driverId), 'GET', undefined, signal)
+    // Shared profile consumers/cache never receive the private detail projection.
+    delete result.declaredContact
+    return result
+  },
   enable: (driverId: string, reason?: string) =>
     api<IndependentDriverProfile>(
       forDriver(driverId),

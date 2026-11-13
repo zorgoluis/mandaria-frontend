@@ -1,0 +1,422 @@
+{
+  "kind": "REAL_NEST_POSTGRES_HTTP_AND_CHROME",
+  "startedAt": "2026-11-06T16:45:26.035Z",
+  "api": "http://127.0.0.1:4227",
+  "web": "http://127.0.0.1:4228",
+  "checks": [
+    "Real login + three contact states, distinct IDs and private/no-store",
+    "DRIVER/CUSTOMER/PROVIDER_ADMIN 403, anonymous 401, wrong identity 404; list excludes contact",
+    "Real SUPER_ADMIN UI AVAILABLE/NOT_RECORDED/UNAVAILABLE, exit/reentry and masked 1280/390 captures",
+    "HTTP/UI transitions to NOT_RECORDED/UNAVAILABLE; recovery fence 503 clears phone (synthetic fixture changes)",
+    "Real UI logout clears contact"
+  ],
+  "http": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "requestId": "e64d54aa-f969-4524-a016-e80120c7e90a"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200,
+      "requestId": "7637fa1e-458c-4aad-a241-4071cea33418"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/4689498c-8310-40fd-a706-b5deb8a6f854/independent",
+      "status": 200,
+      "requestId": "3b868b3d-fb83-48c0-91e2-38c179c2b31b"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 200,
+      "requestId": "65aa6b73-9615-4836-baeb-f7252a653e17"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "requestId": "ecde04be-aeef-46a1-912c-0e3a088adc89"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 403,
+      "requestId": "04ec84ec-81bf-444e-85c8-aca241887356"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "requestId": "aa6f7db5-e5ee-4d0f-bcff-94dade772848"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 403,
+      "requestId": "db98f36a-e8ad-4e2b-a8ed-8f70e411b99d"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "requestId": "04e5132b-bfbe-4fb3-bb2b-f8a1812b7939"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 403,
+      "requestId": "0a29ce8d-7606-464f-84b2-e266567e313b"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 401,
+      "requestId": "f2d53973-3289-4c90-964d-ca9ef7b2b21b"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/662726ee-ed22-44bb-b5f9-df5a33a3fff9/independent",
+      "status": 404,
+      "requestId": "0383d11c-5184-42f7-93b3-b191affee30f"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/94433095-0cca-4c20-bcc4-e31a6804349f/independent",
+      "status": 404,
+      "requestId": "efcf5b56-b9a8-4431-825f-7fcba5cd7285"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/independent-drivers",
+      "status": 200,
+      "requestId": "6960492c-1853-4274-9403-8fce372eeda1"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/partner-applications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/94433095-0cca-4c20-bcc4-e31a6804349f/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/4689498c-8310-40fd-a706-b5deb8a6f854/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/e58cf294-626f-4fe8-8c2f-f36667f30ae6/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/4689498c-8310-40fd-a706-b5deb8a6f854/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/4689498c-8310-40fd-a706-b5deb8a6f854/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/4689498c-8310-40fd-a706-b5deb8a6f854/independent",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/c5e759f0-e69e-49f6-9643-db4529625377/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/94433095-0cca-4c20-bcc4-e31a6804349f/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/94433095-0cca-4c20-bcc4-e31a6804349f/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/d75546a3-d8f2-4352-aa25-884c80da222b/independent",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/c5e759f0-e69e-49f6-9643-db4529625377/offer-zones",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent/credits",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 503,
+      "requestId": "493fb5c7-c2ee-4a2b-b55e-6c46d127e51d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9d59ed60-812d-4203-b14a-e6347ab98c64/independent",
+      "status": 503
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 204
+    }
+  ],
+  "fixtures": [
+    {
+      "kind": "AVAILABLE",
+      "userId": "662726ee-ed22-44bb-b5f9-df5a33a3fff9",
+      "driverId": "d75546a3-d8f2-4352-aa25-884c80da222b",
+      "profileId": "94433095-0cca-4c20-bcc4-e31a6804349f",
+      "caseId": "ae1dcd55-fd21-4de6-99d3-3efc9789763a"
+    },
+    {
+      "kind": "NOT_RECORDED",
+      "userId": "af41f8b1-17c9-4259-bda2-a1da88d2d7af",
+      "driverId": "4689498c-8310-40fd-a706-b5deb8a6f854",
+      "profileId": "e58cf294-626f-4fe8-8c2f-f36667f30ae6",
+      "caseId": null
+    },
+    {
+      "kind": "UNAVAILABLE",
+      "userId": "631ba3b6-216a-4b33-9931-12e79f8aa122",
+      "driverId": "9d59ed60-812d-4203-b14a-e6347ab98c64",
+      "profileId": "c5e759f0-e69e-49f6-9643-db4529625377",
+      "caseId": "818b4234-d010-470c-b511-0feff8e59566"
+    }
+  ],
+  "cleanup": {
+    "browserClosed": true,
+    "webStopped": true,
+    "nestStopped": true,
+    "postgresStopped": true
+  },
+  "sourceSha256": "463e59d6628a9d1c2bb8ee1425deed751ba19e83bf25b72ebf6d82b8fb0a1e41",
+  "buildSha256": "701438e8b1a6c05d54dab9f588347fd6beeefb3f9758b21cf5d823740bcebbc2",
+  "backendVersion": "1.13.9",
+  "environment": {
+    "status": "PASS",
+    "cluster": "C:\\Users\\zorgl\\Documents\\mandaria-frontend\\test-results\\onboarding-production-isolated\\1793983526034/pgdata",
+    "database": "onboarding_web_1793983526034_test",
+    "port": 55459,
+    "identityBeforeMigration": {
+      "database": "postgres",
+      "host": "127.0.0.1",
+      "port": 55459,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/onboarding-production-isolated/1793983526034/pgdata"
+    },
+    "targetIdentityBeforeMigration": {
+      "database": "onboarding_web_1793983526034_test",
+      "host": "127.0.0.1",
+      "port": 55459,
+      "directory": "C:/Users/zorgl/Documents/mandaria-frontend/test-results/onboarding-production-isolated/1793983526034/pgdata"
+    }
+  },
+  "status": "PASS",
+  "finishedAt": "2026-11-06T16:46:08.408Z"
+}

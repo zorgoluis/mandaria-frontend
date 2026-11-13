@@ -1,0 +1,12 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+
+ Test Files  84 passed (84)
+      Tests  1647 passed (1647)
+   Start at  13:30:45
+   Duration  110.77s (tests 44%, environment 33%, import 10%, setup 7%, transform 6%)
+
+Environment  jsdom was created 84 times · 139.12s total, 33% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

@@ -27,6 +27,13 @@ export interface Capabilities extends CompatibleProjection {
   reason: string | null
 }
 export const customer = {
+  deliveryCode: (publicId: string, signal: AbortSignal) =>
+    apiOnce<{ publicId: string; deliveryCode: string }>(
+      `/customer/delivery-requests/${encodeURIComponent(publicId)}/delivery-code`,
+      'GET',
+      undefined,
+      signal,
+    ),
   consentContext: (id: string) =>
     api<ConsentContext>(
       `/customer/delivery-requests/${encodeURIComponent(id)}/consent-context`,

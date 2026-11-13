@@ -1,0 +1,545 @@
+{
+  "stage": "submit",
+  "checkedAt": "2026-10-29T04:02:23.297Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 3,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    {
+      "readAt": "2026-10-29T04:02:18.143Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "DRAFT",
+      "revision": 12,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        },
+        {
+          "id": "2a631d16-42fe-4017-9beb-cf24a327c574",
+          "category": "LICENSE",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:02:00.160Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:02:20.494Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "SUBMITTED",
+      "revision": 13,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        },
+        {
+          "id": "2a631d16-42fe-4017-9beb-cf24a327c574",
+          "category": "LICENSE",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:02:00.160Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:02:21.492Z",
+      "id": "59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "resourceId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+      "status": "DRAFT",
+      "revision": 6,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "cedb4a1c-b3f9-47fd-b368-f6b70ca9efe7",
+          "category": "REGISTRATION_CARD",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:47.165Z"
+        },
+        {
+          "id": "0c6f5505-53b5-4423-80dc-3b903502d633",
+          "category": "OWNERSHIP_PROOF",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:49.748Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:02:23.170Z",
+      "id": "59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "resourceId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+      "status": "SUBMITTED",
+      "revision": 7,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "cedb4a1c-b3f9-47fd-b368-f6b70ca9efe7",
+          "category": "REGISTRATION_CARD",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:47.165Z"
+        },
+        {
+          "id": "0c6f5505-53b5-4423-80dc-3b903502d633",
+          "category": "OWNERSHIP_PROOF",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:49.748Z"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "http": [
+    {
+      "at": "2026-10-29T04:02:16.214Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.225Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.636Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.650Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.693Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.709Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.751Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:16.779Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.538Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.551Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.590Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.602Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.618Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:17.640Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:18.242Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/229c9de1-4d6c-427c-bf3a-23a3ab593eec/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:18.575Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/7127e9f0-962b-403e-81fa-c56a57204212/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:18.886Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/beb398aa-e040-4371-a497-63c818dae5ca/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.175Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/attachments/2a631d16-42fe-4017-9beb-cf24a327c574/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.541Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/submit",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.560Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.569Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.573Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.591Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.600Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.603Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.880Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.890Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.920Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.934Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.950Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:19.980Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.885Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.899Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.930Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.948Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.964Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:20.990Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:21.576Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/attachments/cedb4a1c-b3f9-47fd-b368-f6b70ca9efe7/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:21.844Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/attachments/0c6f5505-53b5-4423-80dc-3b903502d633/access",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.222Z",
+      "method": "POST",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a/submit",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.237Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.250Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.255Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.271Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.280Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.284Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.562Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.574Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.600Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.615Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.632Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:02:22.670Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    }
+  ]
+}

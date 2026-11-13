@@ -23,6 +23,69 @@ vi.mock('../verification/service', () => ({
   },
 }))
 const refresh = vi.fn().mockResolvedValue(undefined)
+it.each(['CREATE_UPLOAD', 'COMPLETE_UPLOAD'] as const)(
+  'recovers historical %s receipt without URL or another command',
+  async (operation) => {
+    vi.mocked(verification.command).mockRejectedValue(new ApiError(0, 'lost'))
+    await expect(
+      runVerification(
+        actor,
+        operation,
+        caseId,
+        '/original',
+        { expectedVersion: 3 },
+        refresh,
+      ),
+    ).rejects.toThrow()
+    const marker = readMarkers()[0]
+    const id = resource
+    vi.mocked(verification.get).mockResolvedValue({
+      ...caseFixture,
+      status: 'APPROVED',
+      attachments: [
+        {
+          id,
+          category: 'OWNERSHIP_PROOF',
+          status: 'VALIDATED',
+          mime: 'image/png',
+          bytes: 100,
+          hash: null,
+          createdAt: caseFixture.createdAt,
+        },
+      ],
+    })
+    vi.mocked(verification.attempt).mockResolvedValue({
+      state: 'APPLIED',
+      result: {
+        id,
+        status: operation === 'CREATE_UPLOAD' ? 'CREATED' : 'VALIDATED',
+        revision: 4,
+      },
+    })
+    expect(await reconcile(marker, actor, refresh)).toBe('APPLIED')
+    expect(verification.attempt).toHaveBeenCalledWith(marker, false)
+    expect(verification.command).toHaveBeenCalledOnce()
+    expect(readMarkers()).toEqual([])
+  },
+)
+
+it('retired category is a terminal rejection without automatic retry', async () => {
+  vi.mocked(verification.command).mockRejectedValue(
+    new ApiError(409, 'retired', 'VERIFICATION_CATEGORY_RETIRED'),
+  )
+  await expect(
+    runVerification(
+      actor,
+      'CREATE_UPLOAD',
+      caseId,
+      '/original',
+      { category: 'OWNERSHIP_PROOF', expectedVersion: 3 },
+      refresh,
+    ),
+  ).rejects.toThrow()
+  expect(verification.command).toHaveBeenCalledOnce()
+  expect(readMarkers()).toEqual([])
+})
 beforeEach(() => {
   vi.clearAllMocks()
   localStorage.clear()
@@ -158,15 +221,18 @@ it('definitive revision conflict refreshes without automatic replay', async () =
   expect(readMarkers()).toEqual([])
   expect(verification.command).toHaveBeenCalledOnce()
 })
-it('closed key response retains marker until explicit consultation', async () => {
-  vi.mocked(verification.command).mockRejectedValue(
-    new ApiError(409, 'closed', 'VERIFICATION_ATTEMPT_CLOSED'),
-  )
-  await expect(
-    runVerification(actor, 'SUBMIT', caseId, '/', {}, refresh),
-  ).rejects.toThrow()
-  expect(readMarkers()).toHaveLength(1)
-})
+it.each(['VERIFICATION_ATTEMPT_CLOSED', 'IDEMPOTENCY_KEY_REUSED'])(
+  '%s response retains marker until explicit consultation',
+  async (code) => {
+    vi.mocked(verification.command).mockRejectedValue(
+      new ApiError(409, 'closed', code),
+    )
+    await expect(
+      runVerification(actor, 'SUBMIT', caseId, '/', {}, refresh),
+    ).rejects.toThrow()
+    expect(readMarkers()).toHaveLength(1)
+  },
+)
 it('terms receipt never automatically accepts the newer version', async () => {
   vi.mocked(verification.command).mockRejectedValue(new ApiError(0, 'lost'))
   await expect(

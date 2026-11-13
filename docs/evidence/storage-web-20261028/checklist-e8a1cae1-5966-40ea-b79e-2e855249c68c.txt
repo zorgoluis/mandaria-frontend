@@ -1,0 +1,84 @@
+Modo de prueba. Usa exclusivamente datos e imágenes sintéticos. No habilita operaciones reales.
+
+Verificación documental. Aceptar términos o cargar archivos no aprueba el expediente ni habilita operaciones. La baja y sus constancias tienen alcance limitado y seguimiento independiente. Baja y privacidad
+
+Mi cuenta
+
+Conservación de imágenes
+
+Los borradores elegibles y los rechazos confirmados como definitivos pueden tener un calendario de conservación de 30 días. Un rechazo ordinario no inicia por sí solo ese calendario.
+
+No se deducen fechas desde la última modificación. La eliminación no cierra tu cuenta ni elimina saldo o servicios comprometidos. Un expediente depurado no se reabre automáticamente.
+
+El estado del expediente no es elegible para este calendario. La ejecución automática está desactivada.
+
+La aceptación del aviso por el proveedor de correo no acredita entrega ni lectura. Contactar, apelar o editar no garantiza detener la eliminación; las excepciones requieren revisión autorizada.
+
+Consultar un folio o canal de aclaración
+Identidad · En revisión
+
+PRUEBA LOCAL — no habilita producción · Checklist LOCAL-TEST-1.
+
+Revisión 13. Estado documental: En revisión. Ámbito independiente.
+
+Conserva los servicios comprometidos. La revisión no acredita cobro ni modifica créditos.
+
+Datos presentados
+Nombre
+Aceptación Web Sintética
+Teléfono
+0000000000
+Identificación
+INE
+Ciudad
+Ciudad sintética
+
+Licencia: EMISOR SINTETICO SIN VALIDEZ · PRUEBA · vence 28 oct 2027, 12:00 p.m. · MOTORCYCLE
+
+Evidencias privadas
+
+JPEG/PNG, máximo 10485760 bytes y 20000000 píxeles; 10 intentos por expediente, incluidos retirados. No PDF ni antimalware. VALIDATED significa formato decodificado, no identidad aprobada.
+
+Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó incompleto, consulta o retira su referencia en el borrador.
+
+Fotografía de rostro · Retirado
+Fotografía de rostro · Formato validadoVer evidencia
+INE: frente · Formato validadoVer evidencia
+INE: reverso · Formato validadoVer evidencia
+Licencia del conductor · Formato validadoVer evidencia
+Decisión SUPER_ADMIN
+Resultado
+Aprobar
+Rechazar
+Identidad concordante
+Evidencia legible
+Titular de licencia
+Vigencia de licencia
+Categoría y tipos de vehículo exactos
+Motivo público
+Nota interna (sólo SUPER_ADMIN)
+Registrar decisión explícita
+
+Se decide sobre la revisión 13. Un conflicto exige revisar de nuevo; no se reenvía automáticamente.
+
+Historial del expediente
+Datos guardados · 28 oct 2026, 6:36 p.m.
+Carga iniciada · 28 oct 2026, 6:37 p.m.
+Referencia retirada · 28 oct 2026, 9:59 p.m.
+Carga iniciada · 28 oct 2026, 10:01 p.m.
+Formato validado · 28 oct 2026, 10:01 p.m.
+Carga iniciada · 28 oct 2026, 10:01 p.m.
+Formato validado · 28 oct 2026, 10:01 p.m.
+Carga iniciada · 28 oct 2026, 10:01 p.m.
+Formato validado · 28 oct 2026, 10:01 p.m.
+Carga iniciada · 28 oct 2026, 10:02 p.m.
+Formato validado · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Presentado · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.

@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+  "checks": [
+    "draft-checklist-valid-change-invalid-file-retention-readonly-submitted"
+  ],
+  "screenshots": [
+    {
+      "file": "unit-draft-1280.png",
+      "width": 1280,
+      "sha256": "78af31833098cce4fa112c8fd70faebc68be48a93bf140503de3474af671d2bc"
+    },
+    {
+      "file": "unit-draft-320.png",
+      "width": 320,
+      "sha256": "e59f130d44a2642b1629af1506a0a884f5ddfc999d43f747249905e9d53b6594"
+    },
+    {
+      "file": "unit-invalid-file-1280.png",
+      "width": 1280,
+      "sha256": "e36e5fd9a268c379b4f11dd084a3ddb395a68661c1775573633f5df787dfb7ca"
+    },
+    {
+      "file": "unit-invalid-file-320.png",
+      "width": 320,
+      "sha256": "dd077604e54f25cf433a7a341d07d436fe50f1c2f9f2d4d9021c42e8ebe89813"
+    },
+    {
+      "file": "unit-selected-1280.png",
+      "width": 1280,
+      "sha256": "a17e14a7fceb5bdd076b5f0092e776b351b53f3a8b4bbd2c6d45854cf0559762"
+    },
+    {
+      "file": "unit-selected-320.png",
+      "width": 320,
+      "sha256": "7fac2f956dd7a5f6c48c681e9ac1637c2fbb46f3e64c3fde7608f2487ac49c7f"
+    },
+    {
+      "file": "unit-submitted-1280.png",
+      "width": 1280,
+      "sha256": "419f80aa496a3d933766f97bd64fe990ed036a51355e034445e9c9a0c9264aa6"
+    },
+    {
+      "file": "unit-submitted-320.png",
+      "width": 320,
+      "sha256": "e080aead13df4471f1f5087beb8ab9fd801c26b6b3108b1b54cf451d6d3d1fe6"
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "mutations": 0
+}

@@ -1,0 +1,4379 @@
+
+> mandaria-web@1.11.0 test
+> vitest run
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/delivery-assignments-api.test.ts (12 tests | 1 failed) 108ms
+   × labels assignments, reasons and availability without inventing presence 27ms
+ ❯ src/test/delivery-completion.test.tsx (41 tests | 1 failed) 16436ms
+   ❯ provider completion (11)
+     × offers the completion only with a claimed service and someone executing it 1416ms
+ ❯ src/test/delivery-assignments.test.tsx (22 tests | 17 failed) 28384ms
+   ❯ pending assignment (3)
+     × shows a claimed dispatch as pending without inventing a DispatchStatus 3790ms
+     × offers an empty state, not an automatic release, without drivers 1491ms
+   ❯ assign (3)
+     × sends the chosen driver and vehicle and renders what the backend reports back 1383ms
+     × refuses to submit without a driver and a vehicle 1344ms
+     × locks the paired vehicle so the operator cannot build a mismatch 1249ms
+   ❯ conflicts (4)
+     × explains a 409 DRIVER_BUSY and refetches the availability 1655ms
+     × explains a 409 VEHICLE_BUSY and refetches the availability 1462ms
+     × explains a 409 DRIVER_VEHICLE_MISMATCH and refetches the availability 1354ms
+     × explains a 409 DISPATCH_ALREADY_ASSIGNED and refetches the availability 1576ms
+   ❯ reassign (2)
+     × sends the new pair with the reason the DTO defines 1272ms
+     × renders the winner of a concurrent reassignment, not what this browser sent 1307ms
+   ❯ cancel assignment and release protection (3)
+     × blocks releasing the service while an assignment is active 1319ms
+     × cancels only the assignment and keeps the service with the provider 1363ms
+     × requires a detail for OTHER before calling the API 1339ms
+   ❯ payment context (2)
+     × COURIER_ADVANCE warns about the cash the driver must carry 1271ms
+     × PREPAID shows no advance at all 1320ms
+   ❯ security (4)
+     × scopes every assignment call to the resolved provider of the session 1303ms
+ ❯ src/test/dispatch.test.tsx (55 tests | 1 failed) 33448ms
+   × transferred provider uses current OWNER permissions and selected provider, not historical claim 1448ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 20 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/delivery-assignments-api.test.ts > labels assignments, reasons and availability without inventing presence
+AssertionError: expected { ACTIVE: 'Asignado', …(5) } to deeply equal { ACTIVE: 'Asignado', …(3) }
+
+- Expected
++ Received
+
+  {
+    "ACTIVE": "Asignado",
+    "CANCELLED": "Cancelado",
+    "COMPLETED": "Entrega completada",
+    "REASSIGNED": "Reasignado",
++   "RETURNED": "Devuelto al origen",
++   "TRANSFERRED": "Custodia transferida",
+  }
+
+ ❯ src/test/delivery-assignments-api.test.ts:180:34
+    178|
+    179| it('labels assignments, reasons and availability without inventing pre…
+    180|   expect(assignmentStatusLabels).toEqual({
+       |                                  ^
+    181|     ACTIVE: 'Asignado',
+    182|     REASSIGNED: 'Reasignado',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > pending assignment > shows a claimed dispatch as pending without inventing a DispatchStatus
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 4:57
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 4:57
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/delivery-assignments.test.tsx:295:24
+    293|       await scope.findByText(/todav[íi]a no tiene repartidor asignado/…
+    294|     ).toBeInTheDocument()
+    295|     expect(await scope.findByRole('button', { name: 'ASIGNAR' })).toBe…
+       |                        ^
+    296|     expect(scope.queryByRole('button', { name: 'REASIGNAR' })).toBeNul…
+    297|     // The Dispatch itself is still CLAIMED, not "ASSIGNED".
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > pending assignment > offers an empty state, not an automatic release, without drivers
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:323:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > assign > sends the chosen driver and vehicle and renders what the backend reports back
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:353:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > assign > refuses to submit without a driver and a vehicle
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:373:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > assign > locks the paired vehicle so the operator cannot build a mismatch
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:394:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > conflicts > explains a 409 DRIVER_BUSY and refetches the availability
+ FAIL  src/test/delivery-assignments.test.tsx > conflicts > explains a 409 VEHICLE_BUSY and refetches the availability
+ FAIL  src/test/delivery-assignments.test.tsx > conflicts > explains a 409 DRIVER_VEHICLE_MISMATCH and refetches the availability
+ FAIL  src/test/delivery-assignments.test.tsx > conflicts > explains a 409 DISPATCH_ALREADY_ASSIGNED and refetches the availability
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:414:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > reassign > sends the new pair with the reason the DTO defines
+TestingLibraryElementError: Unable to find role="button" and name "REASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ src/test/delivery-assignments.test.tsx:452:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > reassign > renders the winner of a concurrent reassignment, not what this browser sent
+TestingLibraryElementError: Unable to find role="button" and name "REASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ src/test/delivery-assignments.test.tsx:491:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > cancel assignment and release protection > blocks releasing the service while an assignment is active
+TestingLibraryElementError: Unable to find role="button" and name "CANCELAR ASIGNACIÓN"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ src/test/delivery-assignments.test.tsx:551:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > cancel assignment and release protection > cancels only the assignment and keeps the service with the provider
+TestingLibraryElementError: Unable to find role="button" and name "CANCELAR ASIGNACIÓN"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ src/test/delivery-assignments.test.tsx:582:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > cancel assignment and release protection > requires a detail for OTHER before calling the API
+TestingLibraryElementError: Unable to find role="button" and name "CANCELAR ASIGNACIÓN"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Quién ejecuta este servicio
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <dl
+    class="info-grid"
+  >
+    <div>
+      <dt>
+        Repartidor
+      </dt>
+      <dd>
+        Carlos
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Vehículo
+      </dt>
+      <dd>
+        MOTO-03 · Motocicleta
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Asignado
+      </dt>
+      <dd>
+        18 sep 2026, 6:00 a.m.
+      </dd>
+    </div>
+    <div>
+      <dt>
+        Estado
+      </dt>
+      <dd>
+        <span
+          class="badge active"
+        >
+          <span
+            class="status-dot"
+          />
+          Asignado
+        </span>
+      </dd>
+    </div>
+  </dl>
+  <div
+    class="panel-body"
+  >
+    <h3
+      class="subhead"
+    >
+      Historial de asignaciones
+    </h3>
+    <ol
+      class="assignment-history"
+    >
+      <li
+        class="assignment-entry current"
+      >
+        <div
+          class="assignment-heading"
+        >
+          <strong>
+            Carlos
+          </strong>
+          <span
+            class="muted"
+          >
+            MOTO-03 · Motocicleta
+          </span>
+          <span
+            class="badge active"
+          >
+            <span
+              class="status-dot"
+            />
+            Asignado
+          </span>
+          <span
+            class="tag"
+          >
+            Asignación vigente
+          </span>
+        </div>
+        <dl
+          class="info-grid"
+        >
+          <div>
+            <dt>
+              Asignado
+            </dt>
+            <dd>
+              18 sep 2026, 6:00 a.m.
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ src/test/delivery-assignments.test.tsx:605:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > payment context > COURIER_ADVANCE warns about the cash the driver must carry
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:626:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > payment context > PREPAID shows no advance at all
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:657:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/20]⎯
+
+ FAIL  src/test/delivery-assignments.test.tsx > security > scopes every assignment call to the resolved provider of the session
+TestingLibraryElementError: Unable to find role="button" and name "ASIGNAR"
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+
+Ignored nodes: comments, script, style
+<section
+  aria-labelledby="service-assignment"
+  class="panel"
+>
+  <div
+    class="panel-toolbar"
+  >
+    <div>
+      <h2
+        id="service-assignment"
+      >
+        Asignación
+      </h2>
+      <p>
+        Pendiente de asignación
+      </p>
+    </div>
+    <div
+      class="row-actions"
+    >
+      <button
+        class="button secondary small"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-refresh-cw"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+          />
+          <path
+            d="M21 3v5h-5"
+          />
+          <path
+            d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+          />
+          <path
+            d="M8 16H3v5"
+          />
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+  <div
+    class="panel-body"
+  >
+    <p
+      class="warning"
+      role="status"
+    >
+      Este servicio todavía no tiene repartidor asignado.
+    </p>
+    <span
+      class="countdown"
+      role="status"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-clock-3"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <path
+          d="M12 6v6h4"
+        />
+      </svg>
+      Tiempo esperado para asignar: 5:00
+    </span>
+  </div>
+  <p
+    class="panel-note"
+  >
+    Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.
+  </p>
+</section>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ action src/test/delivery-assignments.test.tsx:259:19
+    257| /** The panel renders while its query loads, so every action is awaite…
+    258| const action = async (name: string) =>
+    259|   (await panel()).findByRole('button', { name })
+       |                   ^
+    260| const openAssign = async (user: ReturnType<typeof userEvent.setup>) =>…
+    261|   await user.click(await action('ASIGNAR'))
+ ❯ openAssign src/test/delivery-assignments.test.tsx:261:20
+ ❯ src/test/delivery-assignments.test.tsx:683:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/20]⎯
+
+ FAIL  src/test/delivery-completion.test.tsx > provider completion > offers the completion only with a claimed service and someone executing it
+TestingLibraryElementError: Unable to find role="button" and name "MARCAR COMO ENTREGADO"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ deliverButton src/test/delivery-completion.test.tsx:351:10
+    349| const dialog = () => within(screen.getByRole('dialog'))
+    350| const deliverButton = () =>
+    351|   screen.findByRole('button', { name: 'MARCAR COMO ENTREGADO' })
+       |          ^
+    352|
+    353| beforeEach(() => {
+ ❯ src/test/delivery-completion.test.tsx:384:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/20]⎯
+
+ FAIL  src/test/dispatch.test.tsx > transferred provider uses current OWNER permissions and selected provider, not historical claim
+TestingLibraryElementError: Unable to find role="button" and name "Reportar incidencia"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/dispatch.test.tsx:275:18
+    273|   mount(`/services/${owned.id}?providerId=${A}`)
+    274|   expect(
+    275|     await screen.findByRole('button', {
+       |                  ^
+    276|       name: 'Reportar incidencia',
+    277|     }),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/20]⎯
+
+
+ Test Files  4 failed | 71 passed (75)
+      Tests  20 failed | 1508 passed (1528)
+   Start at  11:35:11
+   Duration  55.58s (environment 39%, tests 35%, transform 11%, setup 9%, import 6%)
+
+Environment  jsdom was created 75 times · 417.07s total, 39% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

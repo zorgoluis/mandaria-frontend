@@ -1,0 +1,112 @@
+{
+  "date": "2026-11-07",
+  "status": "PASS",
+  "scope": "Upload quota recovery; no deployment or operational data",
+  "web": {
+    "tests": 180,
+    "files": 4,
+    "finalUploadFileTests": 25,
+    "otherFilesTests": 155,
+    "productTypes": "PASS",
+    "testTypes": "PASS",
+    "lint": "PASS",
+    "build": "PASS"
+  },
+  "backend": {
+    "tests": 49,
+    "files": 1,
+    "build": "PASS",
+    "eslint": "PASS",
+    "oxlint": "PASS",
+    "documentation": "PASS: original generate-api-access.ts --check with isolated synthetic ConfigModule; no listener/database. Direct CLI/check exited before completion."
+  },
+  "integration": {
+    "startedAt": "2026-11-07T17:10:08.051Z",
+    "cameraPhotos": false,
+    "uploadQuota": true,
+    "checks": [
+      "Five failed attempts persist; correct code then rejected",
+      "Expired and cross-environment challenges rejected",
+      "Resend invalidates old code; concurrent completion creates one account; replay and existing email do not change it",
+      "Six digits, including leading zero, appear in both email formats",
+      "UI registration enters onboarding automatically; email verified; driver remains pending",
+      "Name prefilled; vehicle identifier and two drafts created automatically; reload resumes photos",
+      "Missing files reject the entire submission; neither case changes",
+      "Stale revision and foreign driver are rejected before either case changes",
+      "Six redesigned screens captured on mobile and desktop; no horizontal overflow at 320, 390, 768 and 1280 px",
+      "Lost HTTP response recovered from UI; one submission presents both cases; idempotent replay adds no event; reload confirms review; driver remains pending"
+    ],
+    "cleanup": {
+      "postgresStopped": true
+    },
+    "database": "onboarding_web_1794071408050_test",
+    "quota": {
+      "checks": [
+        "Existing ten expired/invalid/missing/removed attempts: real mobile detail UI uploads an eleventh record; all historical rows unchanged",
+        "Invalid replacement preserves the valid attachment, hash and stored bytes",
+        "Concurrent completions stop at ten valid images; create/complete reject excess over HTTP; applied replay remains idempotent",
+        "Ten retired valid images release capacity without deleting historical rows or image bytes",
+        "Reloaded assistant offers an explicit new selection for incomplete uploads and still shows the valid photo as saved",
+        "Previously exhausted identity and vehicle complete all five photos and submit together; failed history is retained"
+      ],
+      "historicalIdentityIds": [
+        "13de6c80-24a1-44fd-b9ab-9aff3ae489c0",
+        "34fe311e-e2e6-49cd-96be-e871e9f4b85c",
+        "41999c86-008a-4031-b92f-86dc45f16edf",
+        "4f06664c-5bf8-4da7-ada4-3b83766ffd0e",
+        "8391b0b3-6717-426a-b2f0-29541166679b",
+        "ced50321-9db6-4d97-8a6e-d1a1ec658308",
+        "da3c9777-6000-468d-b8f4-fbb175e90096",
+        "efe44244-6ec2-4864-b80a-7dcfaf74c36f",
+        "f6d4dd7d-c08a-4296-b248-4579af099cb0",
+        "f8ad0195-5b69-4b91-8425-3dd78af63219"
+      ]
+    },
+    "status": "PASS",
+    "finishedAt": "2026-11-07T17:10:57.814Z"
+  },
+  "mobile": {
+    "kind": "MOBILE_BROWSER_SYNTHETIC_HTTP",
+    "physicalCamera": false,
+    "status": "PASS",
+    "checks": [
+      "chromium: ten failed attempts do not block a new selection with preview",
+      "chromium: return from picker/refetch preserves selection and re-enables",
+      "chromium: visible recovery; ABSENT stays blocked; confirmed closure preserves selection",
+      "chromium: lost completion recovered without repeating upload",
+      "webkit: ten failed attempts do not block a new selection with preview",
+      "webkit: return from picker/refetch preserves selection and re-enables",
+      "webkit: visible recovery; ABSENT stays blocked; confirmed closure preserves selection",
+      "webkit: lost completion recovered without repeating upload"
+    ],
+    "errors": []
+  },
+  "sources": {
+    "web/src/verification/upload-quota.ts": "565058ee16403dc340780b909a4ff7a6b7b9078de928c509b82b53fa779c3bf2",
+    "web/src/verification/types.ts": "7eb2a3a4d209fe23d776b2ea86e5151952003b3e986771525559a1522a77bd73",
+    "web/src/verification/evidence.tsx": "efa02b10c6533edceab6214891252fab4d7978a67aee6cabedca7ae0551e1930",
+    "web/src/verification/registration-journey.tsx": "b4df33a29c85856b280c76b2d408fbb0052711be42f50126d32236d148bc1cc4",
+    "web/src/verification/format.ts": "63db279f938e6ce43d8b3e100505c14c674d750ccfb7cd4968894e27c5d62722",
+    "web/src/test/verification-upload.test.tsx": "6d33c49ed24bda9b5d4d5728ac38fc0cc8c13f699456b5cfe9160ed93bd98ecd",
+    "web/scripts/verify-simple-driver-registration.mjs": "d79b23f64a8c524b2f974541d93d3f9dc3b726fa05502e7246cb022c897fd8b0",
+    "web/scripts/verify-upload-quota-cases.mjs": "aeb78edbf22e95b82e7f731b283fb2db458fc6891e74e671abce9f9b25b1e55c",
+    "web/scripts/verify-mobile-evidence.mjs": "6dbbdb732f8b26691f2c4baef99b555e6ad05eac70951a30e340b70481fadbd7",
+    "backend/src/verification/verification.service.ts": "ab3f03a3820adbf3bc1f5df1199334968311c56b964b4143cd57efe3fc314154",
+    "backend/src/verification/verification.controller.ts": "4396af977fc2c8665eb352b5a2cbce4f6008c06bb37b682281d43de95a778b1e",
+    "backend/docs/openapi.json": "3748c2041006fc03f5ee43ef8a048317a8cf2beb3d8c79d445b138f3786da532"
+  },
+  "limits": [
+    "Synthetic isolated database only; no real cases inspected",
+    "Chrome/WebKit on Windows, no physical mobile camera",
+    "No global suite, commit, push or deployment"
+  ],
+  "publication": {
+    "authorized": true,
+    "date": "2026-11-07",
+    "webBranch": "feature/rediseno",
+    "backendBranch": "QA",
+    "sourceHashesVerified": 12,
+    "implementationTestsReused": true,
+    "deployment": false
+  }
+}

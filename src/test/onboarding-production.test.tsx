@@ -661,3 +661,46 @@ it('does not infer production from durable policy when runtime metadata is absen
   ).toBeNull()
   expect(verification.command).not.toHaveBeenCalled()
 })
+
+it('designed legal accordions never accept implicitly and preserve individual consent requirements', async () => {
+  mount(
+    <TermsForm
+      designed
+      terms={productionTerms}
+      refresh={async () => undefined}
+    />,
+  )
+  const toggle = screen.getByRole('button', { name: /Términos de conductor/ })
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  fireEvent.click(toggle)
+  expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  for (const box of screen.getAllByRole('checkbox'))
+    expect(box).not.toBeChecked()
+  expect(screen.getByText('0 de 4 aceptados')).toBeVisible()
+  expect(
+    screen.getByRole('button', { name: 'Aceptar personalmente' }),
+  ).toBeDisabled()
+  expect(verification.command).not.toHaveBeenCalled()
+})
+it('designed accepted terms retain document reading and receipt without another acceptance form', () => {
+  mount(
+    <TermsForm
+      designed
+      terms={productionTerms}
+      accepted={{
+        id: resource,
+        version: productionTerms.version,
+        acceptedAt: '2026-10-28T18:41:00Z',
+      }}
+      refresh={async () => undefined}
+    />,
+  )
+  expect(screen.queryByRole('checkbox')).toBeNull()
+  expect(
+    screen.getByRole('link', { name: 'Consultar comprobante' }),
+  ).toHaveAttribute('href', '/verification/acceptances/' + resource)
+  expect(
+    screen.getByRole('button', { name: /Términos de conductor/ }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(verification.command).not.toHaveBeenCalled()
+})

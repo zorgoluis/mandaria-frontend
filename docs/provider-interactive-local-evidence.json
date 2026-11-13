@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-26",
+  "commit": "517364483b7960999321b8674cbab63c02208cee",
+  "branch": "QA",
+  "version": "1.11.0",
+  "initialGit": "clean",
+  "web": "http://localhost:5173",
+  "effectiveApi": "http://127.0.0.1:56597/api/v1",
+  "pid": 21788,
+  "listener": "::1:5173",
+  "build": {
+    "api": "http://127.0.0.1:56597",
+    "sha256": "5e57239437ee61a17fc2d94d275e3548bc3a6e742ecd286502ed0e6d35cee9ac",
+    "files": [
+      {
+        "path": "dist\\assets\\Root-BXfdYLLh.css",
+        "sha256": "5905edebae1b0db64da6513ac6024acdfa2a2d50ec5bc1e6846c60840c9c3500"
+      },
+      {
+        "path": "dist\\assets\\Root-aIhyWNCw.js",
+        "sha256": "39afee8cd1a5f831f4d8a996d81a029a4268ff126000fdfe7fb86ec6ff9b86eb"
+      },
+      {
+        "path": "dist\\assets\\index-Bn0ZRUnB.js",
+        "sha256": "83d5f92de5b2c97d49f8d71aa0f28f140417beedf3b741dd1073eeaedb8e485b"
+      },
+      {
+        "path": "dist\\assets\\index-SQlafVaS.css",
+        "sha256": "d9c23f8dabcc1c32be6e72250155b07c5e896f232dc7a67b2e9ee88b237670f8"
+      },
+      {
+        "path": "dist\\developers\\assets\\B2B-PUBLIC-GUIDE.md",
+        "sha256": "42c7c39f4d3a94473555b28a8f2bedf15725a102ef153e06c2237bce8b5ee80f"
+      },
+      {
+        "path": "dist\\developers\\assets\\B2B-WEBHOOKS.md",
+        "sha256": "21d15e1f79245b8dc9e45502519890d636ed28330fd5a6ebd7557983b77cd389"
+      },
+      {
+        "path": "dist\\developers\\assets\\examples\\b2b-flow.json",
+        "sha256": "1041ea441ce183db3aa469b3269ebe767ea16b3101cd7439301794f9d9965d57"
+      },
+      {
+        "path": "dist\\developers\\assets\\examples\\verify-mandaria-webhook.mjs",
+        "sha256": "6d2515a0010fb12d105acbdcf2e132a7bc488ec00d120fcd6e4ccdf342ff76e2"
+      },
+      {
+        "path": "dist\\developers\\assets\\manifest.json",
+        "sha256": "8287550f4ad78c3abe52bb316f750b1f0e8280afd75ad18ce95567cbcce2f83f"
+      },
+      {
+        "path": "dist\\developers\\assets\\openapi-b2b.json",
+        "sha256": "301f461d6337e69e582a4f66fd0633a778093dad65ce076395ab590f2268786c"
+      },
+      {
+        "path": "dist\\fonts\\figtree\\Figtree.ttf",
+        "sha256": "26ad3db9b31ff7dde67a91ff515d022d2f495cd506590699cf264f0bfe6fb714"
+      },
+      {
+        "path": "dist\\fonts\\figtree\\OFL.txt",
+        "sha256": "3b2cf414f05f46c29e551980d3b99bdf13a0eb00622976ff9ad59e81c8ff988a"
+      },
+      {
+        "path": "dist\\index.html",
+        "sha256": "6b2c00f3f9f3afd37ad7e590debdbde6efd23ae38ce74a674d3e83e0e268d361"
+      },
+      {
+        "path": "dist\\mandaria.svg",
+        "sha256": "c0d85ff7ea9b5515d3f96e029cf2dcfdce9bb86a1a82be9a88f52c239fcb8dae"
+      }
+    ]
+  },
+  "role": "PROVIDER_ADMIN",
+  "providerId": "42c2e5f8-22ac-4812-8c0b-1d24a242220f",
+  "driverId": "b22656db-ab07-4ccd-a939-adddebecb107",
+  "vehicleId": "9fcb1868-8711-4626-9d7f-1ab1d33ffc49",
+  "browser": {
+    "login": "PASS",
+    "providerContext": "PASS",
+    "mode": "ADMIN_DISPATCH",
+    "availableServices": 0,
+    "driver": "ACTIVE / disconnected; eligibility at assignment pending",
+    "vehicle": "ACTIVE / unassigned",
+    "balance": 100,
+    "httpSanitizedRecords": 35,
+    "http4xx5xx": 0
+  },
+  "claim": "PENDING no reserved OPEN dispatch",
+  "assignment": "PENDING no claimed dispatch",
+  "dispatchId": null,
+  "assignmentId": null,
+  "mutations": "login/refresh only; no business mutation",
+  "mockRegressions": {
+    "files": 6,
+    "passed": 143,
+    "failed": 0,
+    "pending": 0,
+    "success": true
+  },
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "buildStatus": "PASS; existing chunk warning >500kB",
+  "limitations": [
+    "No real claim/assignment/double-submit/409 tested",
+    "No real detailed service presentation tested",
+    "No Coita or driver UI acceptance",
+    "No confirmed dispatch supplied; user does not know ID"
+  ],
+  "attempts": [
+    "Sandbox git could not inspect worktree; elevated read succeeded",
+    "Browser performance API unavailable; local build telemetry used",
+    "Screenshot write outside workspace denied; saved in authorized artifact directory and copied"
+  ],
+  "evidenceHashes": {
+    "credits-ax.txt": "a3536821233636d9e4ef5c667450a35fd1031aad4575a3d681dd3a21dd6d939f",
+    "drivers-ax.txt": "6711c46cd2204c9dc79224d568b6de9b300bce09156b842dfbc2bc7176601bc1",
+    "http.json": "0406e1df1357a9c1684d685cf9d3c8b6efe6c0e4459a4c7622a32ebdfa789910",
+    "services-ax.txt": "6466e74d09821a9c9268e59311057494559b24fab2d4f6096af6537f9a12f3aa",
+    "services.png": "649b9c3211c6149ae79ed9adbd544cd9eb9425cfdd0cf32fd5d1830e57395a5a",
+    "vehicles-ax.txt": "849130f401e12594b75ecf6c984ff7063fd7e5c0d69197a381e2bb10e1bbeb5a"
+  }
+}

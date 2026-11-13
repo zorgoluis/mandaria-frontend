@@ -1,0 +1,17 @@
+isolated-database-ready
+11:50:18 p.m. [vite] http proxy error: /api/v1/health
+Error: connect ECONNREFUSED 127.0.0.1:4237
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+action:CONTRIBUTE
+action:RECORD_EVIDENCE
+action:VERIFY_IDENTITY
+action:PROPOSE
+action:RECORD_OBLIGATION
+action:REGISTER_PARTY
+action:PROPOSE
+action:RECORD_EVIDENCE
+action:DECLARE_MOVEMENT
+action:PROPOSE
+action:CONTRIBUTE
+waiting-real-five-minute-cursor-expiry
+{"output":"test-results/admin-references-http-1792993792784","complete":true,"checks":["seven-real-sections-multipage-no-duplicates-provider-denied-strict-query-actor-section-cursors","tampered-and-foreign-evidence-rejected","browser-contribution-canonical-note-evidence-lost-response-receipt-exact-replay","browser-identity-same-party-canonical-channel-offered-method-real-receipt","browser-current-driver-session-proposal-no-automatic-apply-review-barrier","access-recovered-second-admin-review-http-apply-receipt-replay-one-resolution-driver-session-valid-service-remains-ACTIVE","browser-first-obligation-with-real-participation-id","browser-stop-registration-exact-channel-refreshes-parties","changed-source-hash-rejected-without-silent-replacement","unreachable-new-action-origin-proof-inventory-two-distinct-admins-same-identity-not-two-apply-receipt-replay-single-refund","browser-shipping-selector-exact-source-amount-date-concepts-real-DECLARED-original-unchanged-foreign-case-denied","existing-release-positive-inventory-eight-confirmations-two-identities-and-missing-inventory-confirmations-approval-barriers","historical-release-fixture-selector-uses-original-requestId-not-opaque-id-or-response-receipt","browser-existing-release-proposal-second-admin-review-http-apply-LIBERADO-exact-replay-no-new-release-refund-or-assignment-change","desktop-mobile-keyboard-and-real-flag-off","real-five-minute-cursor-expiration"],"stopped":true}

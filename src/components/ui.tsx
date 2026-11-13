@@ -32,11 +32,14 @@ export function PageTitle({
   description,
   action,
   back,
+  eyebrow,
 }: {
   title: string
   description?: string
   action?: ReactNode
   back?: string
+  /** Texto corto en mayúsculas sobre el título (fecha, sección). */
+  eyebrow?: string
 }) {
   return (
     <div className="page-heading">
@@ -46,6 +49,7 @@ export function PageTitle({
             <ArrowLeft size={15} /> Volver
           </Link>
         )}
+        {eyebrow && <span className="eyebrow page-eyebrow">{eyebrow}</span>}
         <h1>{title}</h1>
         {description && <p>{description}</p>}
       </div>
@@ -258,12 +262,14 @@ export function ActionForm({
   )
 }
 export function Confirm({
+  children,
   title,
   description,
   onConfirm,
   onClose,
   label = 'Confirmar',
 }: {
+  children?: ReactNode
   title: string
   description: string
   onConfirm: () => Promise<void>
@@ -293,7 +299,7 @@ export function Confirm({
           }
         }}
       >
-        {null}
+        {children}
       </ActionForm>
     </Modal>
   )
@@ -373,11 +379,13 @@ export function Table<T extends { id: string }>({
   )
 }
 export function Pagination({
+  arrows = false,
   page,
   totalPages,
   total,
   onPage,
 }: {
+  arrows?: boolean
   page: number
   totalPages: number
   total: number
@@ -394,14 +402,14 @@ export function Pagination({
           disabled={page <= 1}
           onClick={() => onPage(page - 1)}
         >
-          Anterior
+          {arrows && <span aria-hidden="true">← </span>}Anterior
         </button>
         <button
           className="button secondary small"
           disabled={page >= totalPages}
           onClick={() => onPage(page + 1)}
         >
-          Siguiente
+          Siguiente{arrows && <span aria-hidden="true"> →</span>}
         </button>
       </div>
     </div>

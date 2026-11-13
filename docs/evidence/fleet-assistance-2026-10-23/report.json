@@ -1,0 +1,86 @@
+{
+  "scope": "real Web/Nest HTTP/PostgreSQL; synthetic identities/data; external routing/mail simulated",
+  "output": "test-results/assistance-http-1792792262713",
+  "checks": [
+    "owner-real-login-historical-create-private-detail-and-missing-reference-gate",
+    "lost-real-response-restart-encrypted-intent-recovery-without-duplicate",
+    "owner-no-administrative-http-requests",
+    "admin-contribution-note-sourceHash-compatible-with-real-backend",
+    "admin-identity-blocked-by-real-redacted-contactSourceRef",
+    "private-image-reserve-access-multipart-SEAL_EVIDENCE-register-authenticated-proxy",
+    "proposal-preview-frozen-votes-same-user-one-vote-two-identities-apply-no-extra-operational-call",
+    "commands-off-real-durable-REJECTED",
+    "commands-off-real-rejection-UNKNOWN-and-technical-close-without-operational-effect",
+    "same-account-pending-intent-survives-other-role-login",
+    "real-membership-revocation-removes-private-case"
+  ],
+  "networkErrors": [],
+  "complete": true,
+  "database": {
+    "name": "mandaria_assistance_web_test",
+    "directory": "/tmp/mandaria-assistance-web-8mAGSB/pgdata",
+    "migrations": 64,
+    "apiPort": 4237
+  },
+  "caseId": "cfcc7f40-c015-48b0-b1eb-d2f96cae38e9",
+  "lostResponseCommitted": true,
+  "httpErrors": [
+    {
+      "path": "/api/v1/admin/fleet-assistance-cases/cfcc7f40-c015-48b0-b1eb-d2f96cae38e9/close",
+      "status": 409,
+      "code": "ASSISTANCE_DISABLED"
+    },
+    {
+      "path": "/api/v1/provider/fleet-assistance-cases/cfcc7f40-c015-48b0-b1eb-d2f96cae38e9",
+      "status": 404,
+      "code": "RESOURCE_NOT_FOUND"
+    }
+  ],
+  "idempotency": {
+    "before": [
+      {
+        "operation": "CREATE",
+        "status": "APPLIED",
+        "count": 1
+      }
+    ],
+    "after": [
+      {
+        "operation": "CONTRIBUTE",
+        "status": "APPLIED",
+        "count": 1
+      },
+      {
+        "operation": "CREATE",
+        "status": "APPLIED",
+        "count": 1
+      }
+    ]
+  },
+  "shutdown": {
+    "stopped": true,
+    "data": "/tmp/mandaria-assistance-web-8mAGSB/pgdata",
+    "backendUnchanged": true,
+    "backendHashes": {
+      "src/assistance/assistance.controller.ts": "0ffc951e9eae7e7387ae1da46246a2754bda8db85792a87dd1d7dd2c91d70e59",
+      "src/assistance/assistance.dto.ts": "6da8896cb6973331bfa57d1fae0f9864b868266aab2d3cd37b43733a2307fe1f",
+      "src/assistance/assistance.service.ts": "9ea3741c71a14a14b46df7521109af5ec3226aa84d7fa140d98efc5e4ef2cd7f",
+      "src/assistance/assistance.persistence.ts": "8c79a9e4e3eeaf10f3a577021fcfb3b66d0fc3986f92a31a9bbaf4ebbe3ec835",
+      "src/assistance/assistance.records.ts": "1c32dec377a560740e136275a594157b774d3e01a8d5ada133d11210a73c4108",
+      "src/assistance/assistance.resolutions.ts": "fcc98b3e226a99fea2a38f0d8a6ee3ae864db4793818ca7c17a4d7bb3cea59d8",
+      "dist/assistance/assistance.service.js": "f2180684de4e858499397f04787d216a9be18be0c4806a35084a7fdcd3427ea8",
+      "prisma/migrations/20261023000300_fleet_assistance/migration.sql": "7e153ac2bfdbcd75325a7d63e06b7f90728d8fbeeb690bc6537170d5f6dd40ae",
+      "src/fleet-offers/fleet.controller.ts": "32e704f3fc1a73a3382fd2b1a21163f3ddc09a02c8aa6fa256cb2e2323158f8c",
+      "src/fleet-offers/fleet.dto.ts": "aadd0b7d34625f6c8b9ba71e4627869248244ab0615134c60ee0bf5d1e7f7613",
+      "src/fleet-offers/fleet.service.ts": "0e1e3ca9cc77bbfc65b6d9ea4aa376b322e05f7be81cff3a5e222d6f31901a16",
+      "src/fleet-offers/fleet-legacy.guard.ts": "b9f44b3bd70e8908028a4793a5bf08b09bb4906fb275d9bedce8ba6f151ff03a",
+      "dist/fleet-offers/fleet.controller.js": "9f105ecada87b784da487ef54d35234df62cd0a64c72d03d262255ead370fc09",
+      "dist/fleet-offers/fleet.dto.js": "8f2fa5f9354a53a6bf80580e09f1a3e5794a0efaf253f7dd58054fa849a4c473",
+      "dist/fleet-offers/fleet.service.js": "f0262cda0db8da600fcd564c00200520eef8f7b6aae0224b75f68536e76bae93",
+      "dist/fleet-offers/fleet-legacy.guard.js": "16b81eee82730b745c161a9cfa807589357243161a5c4613bc9831093a4bcc08",
+      "prisma/schema.prisma": "0def4fb8134efe32dccf02a3e2e8a5afebb38594aa97a7a58ac5841a221e2e15",
+      "prisma/migrations/20261023000200_fleet_direct_take/migration.sql": "093160a9b229bb99d606b8004010fb357a756ddcef36c3d47191f2d09707db90"
+    }
+  },
+  "processClosed": true
+}

@@ -1,0 +1,14 @@
+{
+  "backendPrevious": {
+    "ref": "9af2185",
+    "version": "1.13.0"
+  },
+  "backendCurrent": "1.13.1",
+  "backendOnlyInfoVersionChanged": true,
+  "portalPreviousVersion": "1.12.0",
+  "portalMissing": {
+    "automaticDispatchSearch": true,
+    "DispatchSearchResponse": true,
+    "search": true
+  }
+}

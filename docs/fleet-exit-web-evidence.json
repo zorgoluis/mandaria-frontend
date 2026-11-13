@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "repository": "mandaria-frontend",
+  "branch": "QA",
+  "base": "829d012ba440c5436bcbbd0146d877517f4c6b4a",
+  "implementation": "fleet exit / independent transition 1.0.0 local Web",
+  "newTests": {
+    "passed": 63,
+    "failed": 0
+  },
+  "regressionPass": {
+    "passed": 325,
+    "note": "Before final context404 regression; includes earlier62 exit tests, do not add as distinct tests"
+  },
+  "globalSuite": {
+    "note": "Before final adjustment;18 known assignment failures,3 load-sensitive dispatch/completion failures",
+    "passed": 1506,
+    "failed": 21
+  },
+  "loadSensitiveRetest": {
+    "passed": 96,
+    "failed": 0
+  },
+  "checks": {
+    "types": "PASS",
+    "diff": "PASS",
+    "lintGlobal": "PASS",
+    "format": "PASS",
+    "lintLastChange": "PASS",
+    "build": "PASS with existing chunk warning"
+  },
+  "realHttp": {
+    "backendUnchanged": true,
+    "checks": [
+      "multiple-memberships-require-explicit-provider",
+      "two-tabs-share-encrypted-original-intent-without-new-START",
+      "owner-START-lost-real-response-reload-recovers-by-affiliation-without-exitId-one-PENDING-active-service-preserved",
+      "provider-RECHECK-keeps-PENDING-no-force-no-cancellation",
+      "START-flag-off-retains-reading",
+      "UNKNOWN-close-original-START-affiliation-tombstone-blocks-late-request",
+      "ADMIN-membership-START-COMPLETED-identity-history-ledger-preserved-no-new-independent-profile-no-driver-admin-fallback",
+      "COMPLETED-ex-provider-authorized-historical-movementContext-declaration-and-dispute-no-ledger-no-reaffiliation",
+      "second-provider-member-reads-history-without-original-private-intent",
+      "SUPER_ADMIN-no-START-RECHECK-accepted-with-flag-off-and-independent-separate",
+      "membership-loss-removes-private-detail-preserves-original-APPLIED-redacted-recovery",
+      "provider-switch-never-shows-another-provider-intent"
+    ],
+    "passed": 12,
+    "stopped": true,
+    "complete": true,
+    "report": "docs/evidence/fleet-exit-web-2026-10-24/report.json",
+    "runtimeBuiltFromCurrentSources": true
+  },
+  "notExecutedHttp": [
+    "ACCOUNT_CLOSING with actual account deletion",
+    "all operational/custody blockers",
+    "actual five-minute cursor expiry",
+    "every400/401/409/503 branch",
+    "remote QA/production"
+  ],
+  "backendPreviousEvidenceNotWeb": {
+    "unit": 765,
+    "b2b": 40,
+    "e2e": 177
+  },
+  "boundaries": {
+    "envEdited": false,
+    "pushed": false,
+    "dependenciesChanged": false,
+    "deployed": false,
+    "committed": false,
+    "driverEdited": false,
+    "backendEdited": false,
+    "realProvidersEnabled": false
+  },
+  "sha256": {
+    "BITACORA.md": "c8130079d62b90e188945fb4a8e65fd38f340d870668292dacecf77a16cf597e",
+    "docs/evidence/fleet-exit-web-2026-10-24/admin-1280.png": "c9d9f17c1b60c2ff629aca3d87b83c6affa7513cc4aaa3e9fe9573c99913a65b",
+    "docs/evidence/fleet-exit-web-2026-10-24/build-version-1.11.0.txt": "3017c4f22f2c9be2d4f15e9ed0547ee5a7d59afd3b1cb4d31457a219e3d20445",
+    "docs/evidence/fleet-exit-web-2026-10-24/build.txt": "73c70bdc5a3d7022fc9fec9104e8af9ce71b24f36ddea4e3110e759449a9c04a",
+    "docs/evidence/fleet-exit-web-2026-10-24/format.txt": "8bba62cdd6a5ec8b50b3bad81a04b35a10d4831902f34239d6daea06ddf54dbf",
+    "docs/evidence/fleet-exit-web-2026-10-24/http.txt": "3d69e358c202dbe34af07a8391f1ee6e6a3417e7f4ab9c88356f2b4336c14f40",
+    "docs/evidence/fleet-exit-web-2026-10-24/lint-global.txt": "c629ab111f8230b625640abb01ed7c7bed4bf66f68fc0bf58dc39ee268121aee",
+    "docs/evidence/fleet-exit-web-2026-10-24/lint-last.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/fleet-exit-web-2026-10-24/load-sensitive-check.txt": "2f4f4593f60ad03f0eee005eb765d174362fe0b425734380a4328105426897cc",
+    "docs/evidence/fleet-exit-web-2026-10-24/post-exit-movement-context.png": "8e484b2d774b1c8ee77dc0daf06b424c56c9062eabcbe97774fc5afd963ca88e",
+    "docs/evidence/fleet-exit-web-2026-10-24/provider-completed-1280.png": "b693ba700947e3f307e9dc7e55f92f2afaded9483490f097d575bdbe37a93afe",
+    "docs/evidence/fleet-exit-web-2026-10-24/provider-pending-1280.png": "9b341557c785d11ee1d6e351e86674a7034ad8ebf7baebc65f50bfb3d80eecb7",
+    "docs/evidence/fleet-exit-web-2026-10-24/provider-pending-320.png": "6512a06a0c926df2816494beee3e703b3677697832ed94c62ebaa6fe341e50f7",
+    "docs/evidence/fleet-exit-web-2026-10-24/regressions.txt": "655af569672b17c5edb9df46e24dc2a658afbbbc7631a966d873531d2426eee4",
+    "docs/evidence/fleet-exit-web-2026-10-24/report.json": "401dc9833fb5d42ac19c17e02374a0352420c25203e4a0f3689c0a87af55c4c6",
+    "docs/evidence/fleet-exit-web-2026-10-24/requests.json": "9bcaf1970a8a2b98e05441d194bd8227c7e49d04c4e029adcf1be5d17593e1a7",
+    "docs/evidence/fleet-exit-web-2026-10-24/suite-global.txt": "89da41d7d12f0fb29b0c8f2734565fe5d4e6177111785a7057e9bb1d17ce0538",
+    "docs/evidence/fleet-exit-web-2026-10-24/tests-new.txt": "932dc32d8bffb69ebac0ded49f50cc1a370dd42e98242f6b35b51ebdb3de8dfb",
+    "docs/evidence/fleet-exit-web-2026-10-24/types.txt": "5b68a32bfcb212644212d64c9cdc565f42d428fc985f332c7cadea8f63da9611",
+    "docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB-DESIGN.md": "899ef9f144285777e341f12ec3ce7e484511d326883544bdef52191c4b929ebe",
+    "docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB.md": "5ecc3e1c5180ae499a6ad31178aea34ae2f11fc4d1f755f750ff327dc2e95f6b",
+    "package-lock.json": "fd3664bbadd67b546178f8bb4ef2f08327aae1ec0863a7fcd312eab94f3f892d",
+    "package.json": "8763fc2473cebabae5314c1049ac8ebd67b5bc0561c3a3b3edf7d3dca0d85908",
+    "README.md": "7f61c97f67edfed11004e2a9be2b4a3a1bf45d05afd2f2d767fb14ad71c26028",
+    "scripts/fleet-exit-http-wsl.mjs": "6b50d43fdd2d278fb6cebdea2f8b298583acb67b6ad41c8ff4309dd039cc99ec",
+    "scripts/verify-fleet-exit-http.mjs": "5aac222f4c817c5255bd8e2ef2fbbf22889ddf298fd5cf73486422edae886c45",
+    "src/app/App.tsx": "fd6f85d3461c6f79dbaf851175fc1fe547d5b909e22bcbadfbd67df490f74557",
+    "src/deletion/pages.tsx": "493f0eb711c908e6c5a04239078c32c2d1f6363e1394b635f6efcdf94efef541",
+    "src/drivers/pages.tsx": "213683d831afa5b7a6e3b6b22f1e69dcc1465519c6211e88993d91dc22c91d68",
+    "src/fleet-exit/attempts.ts": "d5941c2e76a2e93ab9101d5b10c098b88aa7dbc8e04af0a1b760506c00d18fce",
+    "src/fleet-exit/command-context.ts": "7d1666204c8e754e550e1bf9d566dcb1a5956094f8d221077187575826ea5257",
+    "src/fleet-exit/commands.tsx": "5367adf9aba877f5016d3cbc8e69d9f5e0de959abf40b1c645f763b70693ef63",
+    "src/fleet-exit/messages.ts": "0018380f5fc0e3962b73e2e0ac2db0798981b32397adc74fb2c7095f554ea078",
+    "src/fleet-exit/pages.tsx": "9ecee46ed6c0d1e7f073f93f1fb5ccaff56fd244a8865625c82a3722d1b5a5d5",
+    "src/fleet-exit/schemas.json": "693409b4f7e6a5035aaa13a1eb9448f08ec661a6bdd2bd7391dab3b4029a9fad",
+    "src/fleet-exit/service.ts": "e552eeabe736dfc10fc3f1d27af572d2acb6877c08211bb2b7f09041a296d64e",
+    "src/fleet-exit/types.ts": "ae6e8a44eb92addda598942e30b8ed422549ccef83221a496b7b67e88cdd26bd",
+    "src/fleet-exit/validation.ts": "11c7711ca4c7ae9d6a2f920a43b55f5179a634556889c30fbb185c1bd9bba6de",
+    "src/layouts/AdminLayout.tsx": "521140341e33f29601130856d9232be0c1c90b0d7d45536557fe3adbef6adeec",
+    "src/test/fleet-exit-api.test.ts": "1b7313694d01a2e4b36896cd75dddecdbb3323cc276fb1876dc41e4b827f1388",
+    "src/test/fleet-exit-fixture.ts": "552becddbdf1454bcf488e468b7965b5aabd3d29c737bf1d487be08f1912e5b5",
+    "src/test/fleet-exit.test.tsx": "af4b96a2e57f6a9065d98e3bfaa41fc3890828051e7da8872a42949461c9eac6",
+    "src/test/flows.test.tsx": "0050535a0caff22a19b244ab091fae7e913962102bcc6aae04dc103617587b05",
+    "VERIFICATION.md": "5e92a8eebbb56d774d946ee87944e154eaceb4881f0e6222c8765253140b7fe4"
+  },
+  "commitReview": {
+    "state": "reviewed before authorized local QA commit",
+    "webVersion": "1.11.0",
+    "previousWebVersion": "1.10.0",
+    "contractVersion": "1.0.0",
+    "originalEvidenceHashesVerified": 41,
+    "httpEvidence": "Reused unchanged validated run; no new HTTP execution for metadata-only version bump",
+    "build": "PASS",
+    "buildLog": "docs/evidence/fleet-exit-web-2026-10-24/build-version-1.11.0.txt",
+    "originalBoundaries": "boundaries below describe the pre-commit implementation delivery; user subsequently authorized version bump and local commit",
+    "push": false,
+    "deploy": false,
+    "whitespaceNormalization": "Removed trailing whitespace/blank EOF in archived text logs and harness only; results unchanged."
+  }
+}

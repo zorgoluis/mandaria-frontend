@@ -1,0 +1,473 @@
+{
+  "scope": "MOCKED HTTP ONLY; no real backend",
+  "checks": [
+    "Own zone and READY, no fleet navigation",
+    "Explicit reception mutation with requestId and revision",
+    "TAKE no fleet candidates; own vehicle; lost response, reload, original receipt, single POST",
+    "RELEASE lost response, receipt after current detail becomes forbidden",
+    "Explicit shipping cash declaration with quote/hash/revision; RELEASE blocked afterwards",
+    "Five detailed phases and execution-completion; custody prevents RELEASE; original execution recovery",
+    "PREVIEW read-only offers",
+    "SUPER_ADMIN category NONE despite profile404, no category inferred"
+  ],
+  "passed": 8,
+  "errors": [],
+  "records": [
+    {
+      "path": "/auth/login",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-feed",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "PUT"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-feed",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-feed",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/credits",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/vehicles",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/take",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/independent-attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/release",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/independent-attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-events",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-events",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/shipping-collection",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-events",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-events",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-events",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution-completion",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/execution",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/dispatches/10000000-0000-4000-8000-000000000003/assignments/10000000-0000-4000-8000-000000000004/attempt",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-reception",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/offer-feed",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/login",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/admin/drivers/10000000-0000-4000-8000-000000000002/independent",
+      "method": "GET"
+    },
+    {
+      "path": "/admin/drivers/10000000-0000-4000-8000-000000000002/category",
+      "method": "GET"
+    }
+  ]
+}

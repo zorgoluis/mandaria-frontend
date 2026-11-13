@@ -1,0 +1,797 @@
+
+> mandaria-web@1.11.0 test
+> vitest run
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+ ❯ src/test/driver-portal.test.tsx (38 tests | 2 failed) 8434ms
+   ❯ super admin administration (4)
+     × suspends with a mandatory reason and never changes the state locally first 1272ms
+     × explains the 409 when the driver is executing a service 1573ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/driver-portal.test.tsx > super admin administration > suspends with a mandatory reason and never changes the state locally first
+TestingLibraryElementError: Found multiple elements with the role "alert"
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<p
+  role="alert"
+>
+  indexedDB is not defined
+</p>
+
+Ignored nodes: comments, script, style
+<p
+  role="alert"
+>
+  Perfil independiente no válido.
+   No se muestran autorizaciones anteriores.
+</p>
+
+Ignored nodes: comments, script, style
+<p
+  class="inline-error"
+  role="alert"
+>
+  Escribe el motivo con entre 3 y 500 caracteres.
+</p>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/driver-portal.test.tsx:773:25
+    771|     await user.type(dialog().getByLabelText('Motivo'), 'ab')
+    772|     await user.click(dialog().getByRole('button', { name: 'Suspender' …
+    773|     expect(await screen.findByRole('alert')).toHaveTextContent(
+       |                         ^
+    774|       /entre 3 y 500 caracteres/i,
+    775|     )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/driver-portal.test.tsx > super admin administration > explains the 409 when the driver is executing a service
+TestingLibraryElementError: Found multiple elements with the role "alert"
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<p
+  role="alert"
+>
+  indexedDB is not defined
+</p>
+
+Ignored nodes: comments, script, style
+<p
+  role="alert"
+>
+  Perfil independiente no válido.
+   No se muestran autorizaciones anteriores.
+</p>
+
+Ignored nodes: comments, script, style
+<p
+  class="inline-error"
+  role="alert"
+>
+  El repartidor está ejecutando un servicio. Espera a que termine o libéralo antes de cambiar su habilitación.
+</p>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="admin-app"
+    >
+      <aside
+        class="sidebar "
+      >
+        <a
+          class="brand"
+          data-discover="true"
+          href="/dashboard"
+        >
+          <img
+            alt=""
+            class="brand-mark"
+            height="35"
+            src="/mandaria.svg"
+            width="35"
+          />
+          mandaria
+          <span
+            class="brand-period"
+          >
+            .
+          </span>
+        </a>
+        <button
+          aria-label="Cerrar menú"
+          class="icon-button mobile-close"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+        <span
+          class="nav-label"
+        >
+          ESPACIO DE TRABAJO
+        </span>
+        <nav
+          aria-label="Navegación principal"
+        >
+          <a
+            data-discover="true"
+            href="/customer"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-package-search"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22V12"
+              />
+              <path
+                d="M20.27 18.27 22 20"
+              />
+              <path
+                d="M21 10.498V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l.98-.559"
+              />
+              <path
+                d="M3.29 7 12 12l8.71-5"
+              />
+              <path
+                d="m7.5 4.27 8.997 5.148"
+              />
+              <circle
+                cx="18.5"
+                cy="16.5"
+                r="2.5"
+              />
+            </svg>
+            <span>
+              Mis envíos
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/customer/business"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-building-complex lucide-building-2"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12h4"
+              />
+              <path
+                d="M10 8h4"
+              />
+              <path
+                d="M14 21v-3a2 2 0 0 0-4 0v3"
+              />
+              <path
+                d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+              />
+              <path
+                d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+              />
+            </svg>
+            <span>
+              Cuenta Negocio
+            </span>
+          </a>
+          <a
+            data-discover="true"
+            href="/dashboard"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-layout-dashboard"
+              fill="none"
+              height="19"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="9"
+                rx="1"
+                width="7"
+                x="3"
+                y="3"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="7"
+                x="14"
+                y="3"
+              />
+              <rect[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/driver-portal.test.tsx:799:32
+    797|     await user.type(dialog().getByLabelText('Motivo'), 'Documentación …
+    798|     await user.click(dialog().getByRole('button', { name: 'Suspender' …
+    799|     const alert = await screen.findByRole('alert')
+       |                                ^
+    800|     expect(alert).toHaveTextContent(/est[áa] ejecutando un servicio/i)
+    801|     expect(alert).not.toHaveTextContent('1111')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 76 passed (77)
+      Tests  2 failed | 1553 passed (1555)
+   Start at  11:43:27
+   Duration  113.43s (tests 41%, environment 38%, setup 8%, transform 7%, import 6%)
+
+Environment  jsdom was created 77 times · 161.85s total, 38% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

@@ -105,12 +105,10 @@ export function RestrictedActiveService() {
                 <button className="button" onClick={() => setAction('deliver')}>
                   Revisar entrega
                 </button>
-                <button
-                  className="button secondary"
-                  onClick={() => setAction('release')}
-                >
-                  Revisar liberación
-                </button>
+                <p>
+                  La liberación con recibo requiere ejecución detallada; no se
+                  ofrece para este servicio legacy.
+                </p>
               </>
             ) : (
               <p>
@@ -153,10 +151,9 @@ export function RestrictedActiveService() {
                     description.length < REASON_DETAIL_MIN
                   )
                     throw new ApiError(400, 'Describe el motivo')
-                  await driverPortal.release(
-                    active!.dispatchId,
-                    reason,
-                    description || undefined,
+                  throw new ApiError(
+                    409,
+                    'La liberación durable requiere ejecución detallada; consulta asistencia.',
                   )
                 }
                 setAction(null)

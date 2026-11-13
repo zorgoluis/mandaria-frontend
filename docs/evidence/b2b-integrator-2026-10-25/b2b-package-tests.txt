@@ -1,0 +1,18 @@
+✔ backend, public asset and package contract are semantically identical and versions coherent (16.7017ms)
+✔ exact independently reviewed method/path and schema allowlists; no human operations (4.1288ms)
+✔ every internal reference resolves, with no external reference or duplicate API prefix (2.1896ms)
+✔ optional search schemas and legacy semantics are represented without new webhook events (1.009ms)
+✔ public Markdown relative links resolve to packaged files and real headings (4.213ms)
+✔ signature helper unchanged and verifies original bytes, tamper and duplicate headers safely (1.0117ms)
+✔ actual ZIP extracts through Windows ZIP implementation; exact allowlist, hashes and reproducible bytes (1243.6001ms)
+✔ Internal app /developers serves the SPA without probing the physical directory (0.9309ms)
+✔ Internal app /developers/ serves the SPA without probing the physical directory (0.1978ms)
+✔ real assets, missing JSON and deep SPA routes retain their policies (0.2826ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1386.5931

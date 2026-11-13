@@ -46,7 +46,7 @@ export const labels: Record<string, string> = {
   INE_BACK: 'INE: reverso',
   LICENSE: 'Licencia del conductor',
   REGISTRATION_CARD: 'Tarjeta de circulación',
-  OWNERSHIP_PROOF: 'Comprobante de propiedad',
+  OWNERSHIP_PROOF: 'Adjunto histórico (ya no solicitado)',
   RENTAL_CONTRACT: 'Contrato de arrendamiento',
   OWNER_AUTHORIZATION: 'Autorización del titular',
   IDENTITY_MATCH: 'Identidad concordante',
@@ -58,6 +58,20 @@ export const labels: Record<string, string> = {
   AUTHORIZED_USE: 'Propiedad o uso autorizado',
 }
 const errors: Record<string, string> = {
+  VERIFICATION_FILE_SIZE:
+    'La imagen excede el tamaño permitido. Vuelve a elegir la foto para prepararla antes de subirla.',
+  VERIFICATION_FILE_PIXELS:
+    'La foto supera la resolución permitida. Vuelve a elegirla para ajustar sus dimensiones sin recortar el documento.',
+  VERIFICATION_FILE_TYPE:
+    'El formato recibido no es compatible. Elige una foto JPEG, PNG o HEIC/HEIF para prepararla.',
+  VERIFICATION_FILE_INVALID:
+    'No se pudo leer la imagen recibida. Toma otra foto nítida o elige un archivo válido.',
+  SIGNUP_CODE_INVALID:
+    'El código no es válido, venció o agotó sus intentos. Solicita otro. Si ya creaste tu cuenta, inicia sesión con tu contraseña.',
+  VERIFICATION_LICENSE_REQUIRED:
+    'Completa una licencia vigente para el tipo de vehículo que elegiste.',
+  VERIFICATION_PLATE_REQUIRED:
+    'Agrega la placa de tu vehículo antes de enviar.',
   IMAGE_RETENTION_DISABLED:
     'La confirmación de rechazo definitivo no está disponible en este momento.',
   IMAGE_RETENTION_EVIDENCE_REQUIRED:
@@ -94,7 +108,7 @@ const errors: Record<string, string> = {
     'Revisa los datos, fechas y forma de actuación del expediente.',
   VERIFICATION_CATEGORY_INVALID: 'Esta categoría no corresponde al expediente.',
   VERIFICATION_FILE_LIMIT:
-    'Se alcanzó el límite de archivos. Solicita orientación sin omitir páginas indispensables.',
+    'Se alcanzó el cupo de carga del expediente. Revisa sus límites y las imágenes guardadas antes de continuar.',
   VERIFICATION_PUBLICATION_ENVIRONMENT_REQUIRED:
     'La publicación no está disponible en este modo. Conserva el borrador y consulta con la administración.',
   VERIFICATION_VERSION_EXISTS:
@@ -117,9 +131,11 @@ const errors: Record<string, string> = {
   TERMS_VERSION_CONFLICT:
     'Los términos cambiaron. Lee la versión vigente y vuelve a marcar la casilla.',
   VERIFICATION_UPLOAD_EXPIRED:
-    'La carga caducó. Consulta su estado y retira la referencia incompleta antes de preparar otra carga explícita.',
+    'Esta carga ya no está disponible para completarse. Consulta el expediente y elige la foto de nuevo para iniciar otra carga.',
   VERIFICATION_DOCUMENTS_PENDING:
     'Faltan documentos requeridos con formato validado. Revisa las categorías del expediente y completa las cargas pendientes.',
+  VERIFICATION_CATEGORY_RETIRED:
+    'Ese documento ya no se solicita. No vuelvas a cargarlo ni lo sustituyas por otra categoría. Consulta el estado del expediente.',
   VERIFICATION_OPEN_CASE_EXISTS:
     'Ya existe un expediente abierto para este recurso. Continúa desde el listado.',
   STORAGE_UNAVAILABLE:
@@ -133,6 +149,7 @@ const errors: Record<string, string> = {
     'El expediente de flotilla lo presenta su administrador; el conductor acepta personalmente sus términos.',
 }
 export function message(e: unknown) {
+  if (e instanceof PasswordPolicyError) return e.message
   return e instanceof ApiError
     ? availabilityError(e) ||
         errors[e.code || ''] ||
@@ -153,3 +170,4 @@ export function message(e: unknown) {
       ? e.message
       : 'No fue posible completar la solicitud.'
 }
+import { PasswordPolicyError } from '../auth/password-policy'

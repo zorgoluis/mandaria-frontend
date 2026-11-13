@@ -1,0 +1,1002 @@
+{
+  "context": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "schemaVersion": {
+        "type": "number",
+        "const": 1
+      },
+      "serverTime": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+      },
+      "affiliation": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "driverId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "providerId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "state": {
+                "type": "string",
+                "enum": ["ACTIVE", "EXIT_PENDING"]
+              },
+              "revision": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$"
+              },
+              "startedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            },
+            "required": [
+              "id",
+              "driverId",
+              "providerId",
+              "state",
+              "revision",
+              "startedAt",
+              "observedAt"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "exit": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "affiliationId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "driverId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "providerId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "COMPLETED"]
+              },
+              "revision": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$"
+              },
+              "requestedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              "completedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "initiatedByKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["DRIVER_REQUEST", "PROVIDER_REMOVAL"]
+                }
+              },
+              "blockers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "assignmentId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "assistanceCaseId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "required": ["code"],
+                  "additionalProperties": false
+                }
+              },
+              "hasPendingEconomics": {
+                "type": "boolean"
+              },
+              "capabilities": {
+                "type": "object",
+                "properties": {
+                  "canRecheck": {
+                    "type": "boolean"
+                  },
+                  "recheckReason": {
+                    "type": ["string", "null"]
+                  }
+                },
+                "required": ["canRecheck", "recheckReason"],
+                "additionalProperties": false
+              },
+              "lastEvaluatedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "affiliationId",
+              "driverId",
+              "providerId",
+              "status",
+              "revision",
+              "requestedAt",
+              "completedAt",
+              "initiatedByKinds",
+              "blockers",
+              "hasPendingEconomics",
+              "capabilities"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "capabilities": {
+        "type": "object",
+        "properties": {
+          "canRequestExit": {
+            "type": "boolean"
+          },
+          "requestExitReason": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["canRequestExit", "requestExitReason"],
+        "additionalProperties": false
+      },
+      "independent": {
+        "type": "object",
+        "properties": {
+          "profileState": {
+            "type": "string"
+          },
+          "canOperate": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowedZoneIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "selectedZoneId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requiresExplicitReceptionStart": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "profileState",
+          "canOperate",
+          "reasons",
+          "allowedZoneIds",
+          "selectedZoneId",
+          "requiresExplicitReceptionStart"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "schemaVersion",
+      "serverTime",
+      "affiliation",
+      "exit",
+      "capabilities"
+    ],
+    "additionalProperties": false
+  },
+  "detail": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "affiliationId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "driverId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "providerId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "status": {
+        "type": "string",
+        "enum": ["PENDING", "COMPLETED"]
+      },
+      "revision": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "requestedAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+      },
+      "completedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "initiatedByKinds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["DRIVER_REQUEST", "PROVIDER_REMOVAL"]
+        }
+      },
+      "blockers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "assignmentId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "assistanceCaseId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "required": ["code"],
+          "additionalProperties": false
+        }
+      },
+      "hasPendingEconomics": {
+        "type": "boolean"
+      },
+      "capabilities": {
+        "type": "object",
+        "properties": {
+          "canRecheck": {
+            "type": "boolean"
+          },
+          "recheckReason": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["canRecheck", "recheckReason"],
+        "additionalProperties": false
+      },
+      "lastEvaluatedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "notices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "exitId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["REQUESTED", "COMPLETED"]
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            }
+          },
+          "required": ["id", "exitId", "type", "createdAt"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "affiliationId",
+      "driverId",
+      "providerId",
+      "status",
+      "revision",
+      "requestedAt",
+      "completedAt",
+      "initiatedByKinds",
+      "blockers",
+      "hasPendingEconomics",
+      "capabilities",
+      "lastEvaluatedAt",
+      "notices"
+    ],
+    "additionalProperties": false
+  },
+  "list": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "affiliationId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "driverId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "providerId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "COMPLETED"]
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$"
+            },
+            "requestedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            },
+            "completedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "initiatedByKinds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["DRIVER_REQUEST", "PROVIDER_REMOVAL"]
+              }
+            },
+            "blockers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "assignmentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "assistanceCaseId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": ["code"],
+                "additionalProperties": false
+              }
+            },
+            "hasPendingEconomics": {
+              "type": "boolean"
+            },
+            "capabilities": {
+              "type": "object",
+              "properties": {
+                "canRecheck": {
+                  "type": "boolean"
+                },
+                "recheckReason": {
+                  "type": ["string", "null"]
+                }
+              },
+              "required": ["canRecheck", "recheckReason"],
+              "additionalProperties": false
+            },
+            "lastEvaluatedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "affiliationId",
+            "driverId",
+            "providerId",
+            "status",
+            "revision",
+            "requestedAt",
+            "completedAt",
+            "initiatedByKinds",
+            "blockers",
+            "hasPendingEconomics",
+            "capabilities"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "nextPageToken": {
+        "type": ["string", "null"]
+      },
+      "asOf": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+      }
+    },
+    "required": ["items", "nextPageToken", "asOf"],
+    "additionalProperties": false
+  },
+  "notices": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "exitId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["REQUESTED", "COMPLETED"]
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            }
+          },
+          "required": ["id", "exitId", "type", "createdAt"],
+          "additionalProperties": false
+        }
+      },
+      "nextPageToken": {
+        "type": ["string", "null"]
+      },
+      "asOf": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+      }
+    },
+    "required": ["items", "nextPageToken", "asOf"],
+    "additionalProperties": false
+  },
+  "command": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "number",
+                "const": 1
+              },
+              "receiptId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "key": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "operation": {
+                "type": "string",
+                "enum": ["START", "RECHECK"]
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": ["AFFILIATION", "EXIT"]
+              },
+              "resourceId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "appliedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              "status": {
+                "type": "string",
+                "const": "APPLIED"
+              },
+              "exitId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "exitRevision": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$"
+              },
+              "exitStatus": {
+                "type": "string",
+                "enum": ["PENDING", "COMPLETED"]
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "receiptId",
+              "key",
+              "operation",
+              "resourceType",
+              "resourceId",
+              "appliedAt",
+              "status",
+              "exitId",
+              "exitRevision",
+              "exitStatus"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "number",
+                "const": 1
+              },
+              "receiptId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "key": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "operation": {
+                "type": "string",
+                "enum": ["START", "RECHECK"]
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": ["AFFILIATION", "EXIT"]
+              },
+              "resourceId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "appliedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              "status": {
+                "type": "string",
+                "const": "REJECTED"
+              },
+              "code": {
+                "type": "string"
+              },
+              "httpStatus": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "receiptId",
+              "key",
+              "operation",
+              "resourceType",
+              "resourceId",
+              "appliedAt",
+              "status",
+              "code",
+              "httpStatus"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "number",
+            "const": 1
+          },
+          "key": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "operation": {
+            "type": "string",
+            "enum": ["START", "RECHECK"]
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": ["AFFILIATION", "EXIT"]
+          },
+          "resourceId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["APPLIED", "REJECTED"]
+          },
+          "receipt": {
+            "type": "null"
+          },
+          "redacted": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "key",
+          "operation",
+          "resourceType",
+          "resourceId",
+          "status",
+          "receipt",
+          "redacted"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  },
+  "attempt": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "schemaVersion": {
+        "type": "number",
+        "const": 1
+      },
+      "key": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "operation": {
+        "type": "string",
+        "enum": ["START", "RECHECK"]
+      },
+      "resourceType": {
+        "type": "string",
+        "enum": ["AFFILIATION", "EXIT"]
+      },
+      "resourceId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "APPLIED",
+          "REJECTED",
+          "PENDING",
+          "UNKNOWN",
+          "CLOSED_NO_EFFECTS"
+        ]
+      },
+      "receipt": {
+        "anyOf": [
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "receiptId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "key": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "enum": ["START", "RECHECK"]
+                  },
+                  "resourceType": {
+                    "type": "string",
+                    "enum": ["AFFILIATION", "EXIT"]
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "appliedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "status": {
+                    "type": "string",
+                    "const": "APPLIED"
+                  },
+                  "exitId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "exitRevision": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$"
+                  },
+                  "exitStatus": {
+                    "type": "string",
+                    "enum": ["PENDING", "COMPLETED"]
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "receiptId",
+                  "key",
+                  "operation",
+                  "resourceType",
+                  "resourceId",
+                  "appliedAt",
+                  "status",
+                  "exitId",
+                  "exitRevision",
+                  "exitStatus"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "receiptId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "key": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "enum": ["START", "RECHECK"]
+                  },
+                  "resourceType": {
+                    "type": "string",
+                    "enum": ["AFFILIATION", "EXIT"]
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "appliedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "status": {
+                    "type": "string",
+                    "const": "REJECTED"
+                  },
+                  "code": {
+                    "type": "string"
+                  },
+                  "httpStatus": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "receiptId",
+                  "key",
+                  "operation",
+                  "resourceType",
+                  "resourceId",
+                  "appliedAt",
+                  "status",
+                  "code",
+                  "httpStatus"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "redacted": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "schemaVersion",
+      "key",
+      "operation",
+      "resourceType",
+      "resourceId",
+      "status",
+      "receipt",
+      "redacted"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -36,6 +36,32 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    INDEPENDENT_ATTEMPT_CLOSED:
+      'La clave se cerró sin efectos. Consulta el recibo original antes de preparar otra intención.',
+    INDEPENDENT_RELEASE_LEGACY_UNSUPPORTED:
+      'La liberación con recibo requiere ejecución detallada. Consulta la resolución autorizada del servicio.',
+    REVISION_CONFLICT:
+      'Otra operación cambió la revisión. Actualiza y revisa antes de preparar una nueva intención.',
+    ZONE_NOT_ALLOWED:
+      'Esta zona no está autorizada para tu perfil. Actualiza las zonas propias o solicita revisión administrativa.',
+    SHIFT_EXPIRED:
+      'El turno venció. Consulta la recepción e inicia otro turno explícitamente.',
+    SHIFT_ALREADY_ACTIVE:
+      'Ya existe un turno vigente. Actualiza y revisa si corresponde renovarlo.',
+    RECEPTION_CHANGED:
+      'La recepción cambió. Actualiza la fotografía de ofertas antes de continuar.',
+    CURSOR_EXPIRED:
+      'La consulta de ofertas venció. Actualiza para obtener una fotografía nueva.',
+    SNAPSHOT_EXPIRED:
+      'La fotografía de ofertas venció. Actualiza desde la primera página.',
+    DRIVER_CATEGORY_CONFLICT:
+      'La categoría vigente impide esta operación. Actualiza el contexto; no hay conversión automática.',
+    DRIVER_CATEGORY_REVIEW_REQUIRED:
+      'La categoría requiere conciliación administrativa. Se conservan servicios e historial.',
+    DRIVER_CATEGORY_SELECTION_REMOVED:
+      'La categoría ya no se elige por modalidad. Consulta el contexto vigente.',
+    CATEGORY_RESOLUTION_REASON_REQUIRED:
+      'Escribe un motivo explícito para resolver el perfil legado.',
     BUSINESS_APPROVAL_REQUIRED:
       'Negocio requiere una solicitud y aprobación administrativa. No puedes activar ese acceso desde el perfil.',
     BUSINESS_REVIEW_REQUIRED:

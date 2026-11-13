@@ -1,3 +1,10 @@
+import './reception.css'
+import './vehicles.css'
+import { DriverExecutionActions } from './execution'
+import { reception, ready } from './reception-service'
+import { startIndependent } from './attempts'
+import { categoryBlock } from '../driver-category/contract'
+import { CategorySummary } from '../driver-category/components'
 import { ShippingPaymentBlock } from '../shipping/Payment'
 import { SearchStatus } from '../dispatch/SearchStatus'
 import { searchAllowsTake, dispatchPollInterval } from '../dispatch/search'
@@ -14,6 +21,9 @@ import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
   AlertTriangle,
+  Car,
+  Truck,
+  FileCheck,
   Bike,
   PackageSearch,
   Coins,
@@ -70,7 +80,9 @@ const PAGE_SIZE = 20
  */
 export function DriverPortal({
   children,
+  showCategorySummary = true,
 }: {
+  showCategorySummary?: boolean
   children: (me: DriverSelf) => ReactNode
 }) {
   const { user } = useAuth()
@@ -92,7 +104,9 @@ export function DriverPortal({
         }}
       />
     )
-  const blocked = portalBlock(query.data.independent)
+  const blocked =
+    categoryBlock(query.data.driverCategory) ??
+    portalBlock(query.data.independent)
   if (blocked && !(query.data.activeDeliveryAssignment?.mode === 'INDEPENDENT'))
     return (
       <div className="panel">
@@ -141,14 +155,17 @@ export function DriverPortal({
           servicio comprometido mantiene sus acciones autorizadas.
         </p>
       )}
+      {showCategorySummary && (
+        <CategorySummary value={query.data.driverCategory} />
+      )}
       {children(query.data)}
     </>
   )
 }
 
 const tabs = [
-  { to: '/driver/services', label: 'Servicios', icon: PackageSearch },
-  { to: '/driver/my-service', label: 'Mi servicio', icon: Bike },
+  { to: '/driver/onboarding', label: 'Mi expediente', icon: Bike },
+  { to: '/driver/reception', label: 'Zonas y turno', icon: PackageSearch },
   { to: '/driver/vehicles', label: 'Mis vehículos', icon: Wallet },
   { to: '/driver/credits', label: 'Créditos', icon: Coins },
 ] as const
@@ -445,6 +462,14 @@ function ServiceContent({
 }) {
   const now = useNow(!!dispatch.search && dispatch.status === 'OPEN')
   const [taking, setTaking] = useState(false)
+  const receptionQuery = useQuery({
+    queryKey: ['offer-reception', me.id],
+    queryFn: reception.get,
+    staleTime: 0,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
+    retry: false,
+  })
   const { service, paymentContext } = dispatch
   const mine =
     dispatch.trackingMode === 'DETAILED'
@@ -463,6 +488,9 @@ function ServiceContent({
             <button
               className="button"
               disabled={
+                receptionQuery.isError ||
+                !ready(receptionQuery.data) ||
+                receptionQuery.isFetching ||
                 busyElsewhere ||
                 dispatch.trackingMode === undefined ||
                 !searchAllowsTake(dispatch.search, now)
@@ -639,6 +667,7 @@ function TakeDialog({
 }) {
   const navigate = useNavigate()
   const notify = useFeedback()
+  const { user } = useAuth()
   const [vehicleId, setVehicleId] = useState('')
   const [gone, setGone] = useState(false)
   const [waiting, setWaiting] = useState<string | null>(null)
@@ -706,8 +735,39 @@ function TakeDialog({
               if (!vehicleId)
                 throw new ApiError(400, 'Elige el vehículo que vas a usar.')
               try {
-                await driverPortal.take(dispatch.id, vehicleId)
+                const fresh = await driverPortal.me()
+                const r = await reception.get()
+                const blocked =
+                  categoryBlock(fresh.driverCategory) ??
+                  (!ready(r)
+                    ? 'La recepción no está READY. Revisa zona, turno y disponibilidad.'
+                    : null)
+                if (blocked || !fresh.independent?.canTakeServices) {
+                  await refreshDriverPortal(dispatch.id)
+                  throw new ApiError(
+                    409,
+                    blocked ?? 'El servidor no autoriza nuevas tomas.',
+                  )
+                }
+                if (!user || user.role !== 'DRIVER')
+                  throw new ApiError(403, 'Sesión DRIVER requerida.')
+                await startIndependent(
+                  {
+                    actor: user.id,
+                    dispatchId: dispatch.id,
+                    operation: 'TAKE',
+                  },
+                  { vehicleId },
+                )
               } catch (error) {
+                if (
+                  error instanceof ApiError &&
+                  [
+                    'DRIVER_CATEGORY_CONFLICT',
+                    'DRIVER_CATEGORY_REVIEW_REQUIRED',
+                  ].includes(error.code ?? '')
+                )
+                  await refreshDriverPortal(dispatch.id)
                 if (
                   error instanceof ApiError &&
                   error.code === 'DISPATCH_RETRY_PENDING'
@@ -792,6 +852,7 @@ function MyService({ me }: { me: DriverSelf }) {
     !query.isFetching &&
     !query.isError &&
     legacyProjection(query.data) &&
+    query.data.deliveryConfirmation?.policy === 'NOT_REQUIRED' &&
     active?.trackingMode === 'LEGACY' &&
     !active.execution &&
     active?.mode === 'INDEPENDENT' &&
@@ -927,41 +988,58 @@ function MyService({ me }: { me: DriverSelf }) {
                   MARCAR COMO ENTREGADO
                 </button>
               )}
-              {(legacyProjection(query.data) ||
-                (query.data.trackingMode === 'DETAILED' &&
-                  !!query.data.execution &&
-                  query.data.execution.allowedActions.includes(
-                    'ORDINARY_ASSIGNMENT_OPERATIONS',
-                  ) &&
-                  !query.data.execution.openIncidentId &&
-                  query.data.execution.activeAssignmentId === active.id)) && (
-                <button
-                  className="button secondary destructive full"
-                  disabled={busy || query.isFetching}
-                  onClick={() => setReleasing(true)}
-                >
-                  LIBERAR SERVICIO
-                </button>
-              )}
+              {query.data.trackingMode === 'DETAILED' &&
+                !!query.data.execution &&
+                query.data.execution.allowedActions.includes(
+                  'ORDINARY_ASSIGNMENT_OPERATIONS',
+                ) &&
+                !query.data.execution.openIncidentId &&
+                query.data.execution.activeAssignmentId === active.id &&
+                query.data.execution.custodyStatus === 'NOT_COLLECTED' &&
+                !['PICKED_UP', 'TO_DROPOFF', 'AT_DROPOFF'].includes(
+                  query.data.execution.phase ?? '',
+                ) &&
+                query.data.shippingPayment?.evidenceStatus !== 'DECLARED' && (
+                  <button
+                    className="button secondary destructive full"
+                    disabled={busy || query.isFetching}
+                    onClick={() => setReleasing(true)}
+                  >
+                    LIBERAR SERVICIO
+                  </button>
+                )}
             </div>
             <p className="panel-note">
-              En servicios detallados, el repartidor registra avances y entrega
-              desde la app. El cierre web sólo está disponible para servicios
-              anteriores sin ejecución detallada.
+              Registra los hitos y confirma la entrega en el panel de ejecución.
+              Se conservan los controles de custodia y cobro.
             </p>
           </section>
+          {query.data.trackingMode === 'DETAILED' && query.data.execution && (
+            <DriverExecutionActions
+              dispatchId={query.data.id}
+              e={query.data.execution}
+              payment={query.data.shippingPayment}
+            />
+          )}
           {query.data.trackingMode === 'DETAILED' && (
             <ExecutionPanel
               scope={{ surface: 'driver', dispatchId: query.data.id }}
             />
           )}
           {releasing &&
-            (legacyProjection(query.data) ||
-              (query.data.trackingMode === 'DETAILED' &&
-                !!query.data.execution &&
-                query.data.execution.allowedActions.includes(
-                  'ORDINARY_ASSIGNMENT_OPERATIONS',
-                ))) && (
+            !query.isFetching &&
+            query.data.trackingMode === 'DETAILED' &&
+            !!query.data.execution &&
+            query.data.execution.activeAssignmentId === active.id &&
+            query.data.execution.custodyStatus === 'NOT_COLLECTED' &&
+            !query.data.execution.openIncidentId &&
+            !['PICKED_UP', 'TO_DROPOFF', 'AT_DROPOFF'].includes(
+              query.data.execution.phase ?? '',
+            ) &&
+            query.data.shippingPayment?.evidenceStatus !== 'DECLARED' &&
+            query.data.execution.allowedActions.includes(
+              'ORDINARY_ASSIGNMENT_OPERATIONS',
+            ) && (
               <ReleaseDialog
                 dispatchId={query.data.id}
                 onClose={() => setReleasing(false)}
@@ -1020,6 +1098,14 @@ function DeliverDialog({
         cancelLabel="Cancelar"
         onCancel={onClose}
         onSubmit={async () => {
+          const current = await driverPortal.get(dispatch.id)
+          if (
+            current.deliveryConfirmation?.policy !== 'NOT_REQUIRED' ||
+            current.trackingMode !== 'LEGACY' ||
+            !current.takenByMe ||
+            current.assignment?.id !== dispatch.assignment?.id
+          )
+            throw Error('La ejecución cambió; actualiza antes de confirmar.')
           await driverPortal.deliver(dispatch.id)
           // The backend frees me and my vehicle: the portal reads that back before closing.
           await refreshDriverPortal(dispatch.id)
@@ -1041,6 +1127,7 @@ function ReleaseDialog({
   dispatchId: string
   onClose: () => void
 }) {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const notify = useFeedback()
   const [reason, setReason] = useState<ReleaseReason>('CANNOT_COMPLETE')
@@ -1067,8 +1154,13 @@ function ReleaseDialog({
               400,
               `Describe el motivo con entre ${REASON_DETAIL_MIN} y ${REASON_DETAIL_MAX} caracteres.`,
             )
-          await driverPortal.release(dispatchId, reason, raw || undefined)
-          await refreshDriverPortal(dispatchId)
+          if (!user || user.role !== 'DRIVER')
+            throw new ApiError(403, 'Sesión DRIVER requerida.')
+          await startIndependent(
+            { actor: user.id, dispatchId, operation: 'RELEASE' },
+            { reason, ...(raw ? { reasonDetail: raw } : {}) },
+          )
+          await refreshDriverPortal()
           notify('Servicio liberado.')
           onClose()
           navigate('/driver/services')
@@ -1108,56 +1200,151 @@ function ReleaseDialog({
 }
 
 export function DriverVehiclesPage() {
-  return <DriverPortal>{() => <DriverVehicles />}</DriverPortal>
+  return (
+    <DriverPortal showCategorySummary={false}>
+      {(me) => <DriverVehicles me={me} />}
+    </DriverPortal>
+  )
 }
-function DriverVehicles() {
+function DriverVehicles({ me }: { me: DriverSelf }) {
   const query = useQuery({
     queryKey: driverKeys.vehicles,
     queryFn: ({ signal }) => driverPortal.vehicles(signal),
   })
+  const records = query.isSuccess ? query.data : undefined
+  const active = records?.filter((v) => v.status === 'ACTIVE').length
   return (
-    <>
-      <PageTitle
-        title="Mis vehículos"
-        description="Los tuyos, no los de tu proveedor."
-      />
-      <PortalTabs />
-      <div className="panel">
-        {query.isPending ? (
-          <Loading />
-        ) : query.isError ? (
-          <ErrorState
-            error={query.error}
-            retry={() => {
-              void query.refetch()
-            }}
-          />
-        ) : query.data.length ? (
-          <ul className="driver-vehicle-list">
-            {query.data.map((vehicle) => (
-              <li key={vehicle.id}>
-                <div>
-                  <strong>{vehicle.identifier}</strong>
-                  <small>{labels[vehicle.type] ?? vehicle.type}</small>
-                  {vehicleDetail(vehicle) && (
-                    <small>{vehicleDetail(vehicle)}</small>
-                  )}
-                </div>
-                <Badge value={vehicle.status} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Empty
-            title="No tienes vehículos registrados"
-            description="Mandaria registra los vehículos de los repartidores independientes. Pide que agreguen el tuyo."
-          />
-        )}
-        <p className="panel-note">
-          Sólo puedes tomar un servicio con un vehículo activo. Para registrar o
-          cambiar uno, contacta a Mandaria.
+    <div className="reception-page vehicles-page">
+      <header>
+        <h1>Mis vehículos</h1>
+        <p>
+          Consulta tus vehículos propios y su estado actual. La aprobación
+          documental, la disponibilidad y la habilitación para operar son
+          requisitos separados.
         </p>
+      </header>
+      <PortalTabs />
+      <div className="reception-statuses vehicles-summary" aria-live="polite">
+        <section>
+          <span>Vehículos registrados</span>
+          <strong>{records?.length ?? '—'}</strong>
+          <small>Tus unidades propias registradas</small>
+        </section>
+        <section>
+          <span>Activos</span>
+          <strong>{active ?? '—'}</strong>
+          <small>El estado activo no sustituye los demás requisitos</small>
+        </section>
+        <section>
+          <span>Otros estados</span>
+          <strong>{records ? records.length - (active ?? 0) : '—'}</strong>
+          <small>Consulta el estado de cada unidad</small>
+        </section>
       </div>
-    </>
+      <div className="reception-columns vehicles-columns">
+        <section
+          className="reception-card vehicles-inventory"
+          aria-labelledby="vehicles-inventory-title"
+        >
+          <div className="vehicles-toolbar">
+            <h2 id="vehicles-inventory-title">
+              <span className="reception-step">
+                <Car size={20} aria-hidden="true" />
+              </span>
+              Tus unidades
+            </h2>
+            <button
+              className="button secondary"
+              disabled={query.isFetching}
+              onClick={() => void query.refetch()}
+            >
+              <RefreshCw size={16} aria-hidden="true" />
+              Actualizar
+            </button>
+          </div>
+          {query.isPending ? (
+            <Loading />
+          ) : query.isError ? (
+            <ErrorState
+              error={query.error}
+              retry={() => void query.refetch()}
+            />
+          ) : query.data.length ? (
+            <ul className="vehicles-cards">
+              {query.data.map((vehicle) => {
+                const Icon =
+                  vehicle.type === 'BICYCLE' || vehicle.type === 'MOTORCYCLE'
+                    ? Bike
+                    : vehicle.type === 'TRUCK' || vehicle.type === 'VAN'
+                      ? Truck
+                      : Car
+                return (
+                  <li key={vehicle.id}>
+                    <div className="vehicles-card-header">
+                      <span className="vehicles-icon">
+                        <Icon aria-hidden="true" size={26} />
+                      </span>
+                      <div>
+                        <h3>{vehicle.identifier}</h3>
+                        <span className="vehicles-type">
+                          {labels[vehicle.type] ?? vehicle.type}
+                        </span>
+                      </div>
+                      <Badge value={vehicle.status} />
+                    </div>
+                    {vehicleDetail(vehicle) && (
+                      <p className="vehicles-detail">
+                        {vehicleDetail(vehicle)}
+                      </p>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <div className="vehicles-empty">
+              <Car size={40} aria-hidden="true" />
+              <h3>No tienes vehículos registrados</h3>
+              <p>
+                Consulta el registro y la documentación de tus unidades en Mi
+                verificación.
+              </p>
+              <Link className="button secondary" to="/driver/onboarding">
+                Ver mi expediente
+              </Link>
+            </div>
+          )}
+        </section>
+        <aside className="reception-aside vehicles-aside">
+          <CategorySummary value={me.driverCategory} />
+          <section className="reception-card vehicles-documentation">
+            <FileCheck size={28} aria-hidden="true" />
+            <h2>Verificación de tus unidades</h2>
+            <p>
+              Consulta tus expedientes, requisitos y evidencias en Mi
+              verificación. Cargar documentos no activa automáticamente un
+              vehículo.
+            </p>
+            <Link className="button" to="/driver/onboarding">
+              Ir a Mi verificación
+            </Link>
+          </section>
+          <section className="reception-card">
+            <h2>Antes de operar</h2>
+            <p>
+              Sólo puedes operar con un vehículo activo. El servidor vuelve a
+              comprobar los requisitos vigentes.
+            </p>
+            <p>
+              Esta lista corresponde a tus vehículos propios. No incluye
+              unidades de la flotilla.
+            </p>
+            <small>
+              Los servicios se consultan y gestionan desde la app Driver.
+            </small>
+          </section>
+        </aside>
+      </div>
+    </div>
   )
 }

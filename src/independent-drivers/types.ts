@@ -1,9 +1,9 @@
+import type { DriverCategory } from '../driver-category/contract'
 import type { VehicleType, VehicleStatus } from '../logistics/types'
 
 // Mandaria Backend OpenAPI 1.9.0: independent-drivers.dto.ts,
 // independent-drivers.responses.ts and independent-driver-policy.ts.
-// A DRIVER is an account and a person; an Independent Driver profile is an extra
-// operational capability Mandaria grants on top of it. They are never the same thing.
+// Historical profile and approval never substitute for the canonical category projection.
 export const independentStatuses = [
   'PENDING',
   'APPROVED',
@@ -17,12 +17,16 @@ export const REASON_MAX = 500
 export interface IndependentDriverRef {
   id: string
   name: string
+  /** Administrative profile projection; optional for older API responses. */
+  user?: { id: string; email: string; active: boolean } | null
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'
   availability: 'OFFLINE' | 'AVAILABLE' | 'BUSY'
   /** The V1.4 provider the Driver belongs to. Grants nothing in the independent context. */
   providerId: string | null
 }
 export interface IndependentDriverProfile {
+  driverCategory?: DriverCategory
+  membershipState?: 'CURRENT' | 'HISTORICAL' | 'REVIEW_REQUIRED'
   id: string
   driverId: string
   status: IndependentStatus

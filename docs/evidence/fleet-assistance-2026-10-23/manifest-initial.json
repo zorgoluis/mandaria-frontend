@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-23",
+  "repository": "C:/Users/zorgl/Documents/mandaria-frontend",
+  "branch": "QA",
+  "base": "7488fc881fbe99f887c24948db2ee0d3e169b95f",
+  "status": "implemented available local flows; incomplete for missing authorized references",
+  "committed": false,
+  "deployed": false,
+  "validations": {
+    "fullSuite": "not rerun; historical failures not resolved",
+    "lint": "PASS",
+    "http": {
+      "checks": 11,
+      "processClosed": true,
+      "shutdown": {
+        "stopped": true,
+        "data": "/tmp/mandaria-assistance-web-8mAGSB/pgdata",
+        "backendUnchanged": true,
+        "backendHashes": {
+          "src/assistance/assistance.controller.ts": "0ffc951e9eae7e7387ae1da46246a2754bda8db85792a87dd1d7dd2c91d70e59",
+          "src/assistance/assistance.dto.ts": "6da8896cb6973331bfa57d1fae0f9864b868266aab2d3cd37b43733a2307fe1f",
+          "src/assistance/assistance.service.ts": "9ea3741c71a14a14b46df7521109af5ec3226aa84d7fa140d98efc5e4ef2cd7f",
+          "src/assistance/assistance.persistence.ts": "8c79a9e4e3eeaf10f3a577021fcfb3b66d0fc3986f92a31a9bbaf4ebbe3ec835",
+          "src/assistance/assistance.records.ts": "1c32dec377a560740e136275a594157b774d3e01a8d5ada133d11210a73c4108",
+          "src/assistance/assistance.resolutions.ts": "fcc98b3e226a99fea2a38f0d8a6ee3ae864db4793818ca7c17a4d7bb3cea59d8",
+          "dist/assistance/assistance.service.js": "f2180684de4e858499397f04787d216a9be18be0c4806a35084a7fdcd3427ea8",
+          "prisma/migrations/20261023000300_fleet_assistance/migration.sql": "7e153ac2bfdbcd75325a7d63e06b7f90728d8fbeeb690bc6537170d5f6dd40ae",
+          "src/fleet-offers/fleet.controller.ts": "32e704f3fc1a73a3382fd2b1a21163f3ddc09a02c8aa6fa256cb2e2323158f8c",
+          "src/fleet-offers/fleet.dto.ts": "aadd0b7d34625f6c8b9ba71e4627869248244ab0615134c60ee0bf5d1e7f7613",
+          "src/fleet-offers/fleet.service.ts": "0e1e3ca9cc77bbfc65b6d9ea4aa376b322e05f7be81cff3a5e222d6f31901a16",
+          "src/fleet-offers/fleet-legacy.guard.ts": "b9f44b3bd70e8908028a4793a5bf08b09bb4906fb275d9bedce8ba6f151ff03a",
+          "dist/fleet-offers/fleet.controller.js": "9f105ecada87b784da487ef54d35234df62cd0a64c72d03d262255ead370fc09",
+          "dist/fleet-offers/fleet.dto.js": "8f2fa5f9354a53a6bf80580e09f1a3e5794a0efaf253f7dd58054fa849a4c473",
+          "dist/fleet-offers/fleet.service.js": "f0262cda0db8da600fcd564c00200520eef8f7b6aae0224b75f68536e76bae93",
+          "dist/fleet-offers/fleet-legacy.guard.js": "16b81eee82730b745c161a9cfa807589357243161a5c4613bc9831093a4bcc08",
+          "prisma/schema.prisma": "0def4fb8134efe32dccf02a3e2e8a5afebb38594aa97a7a58ac5841a221e2e15",
+          "prisma/migrations/20261023000200_fleet_direct_take/migration.sql": "093160a9b229bb99d606b8004010fb357a756ddcef36c3d47191f2d09707db90"
+        }
+      },
+      "report": "docs/evidence/fleet-assistance-2026-10-23/report.json",
+      "complete": true
+    },
+    "typecheckTest": "PASS",
+    "visual": {
+      "notClaimed": [
+        "admin mobile",
+        "complete accessibility audit"
+      ],
+      "reviewed": [
+        "owner 1280",
+        "owner 320",
+        "admin 1280"
+      ]
+    },
+    "webFocused": {
+      "passed": 95,
+      "failed": 0,
+      "files": 5
+    },
+    "build": "PASS (existing chunk >500 kB warning)"
+  },
+  "limitations": [
+    "admin contactSourceRef redacted",
+    "AssistanceParticipation.id absent",
+    "owner parties/movements absent",
+    "authorized session/release/shipping/internal-record references unavailable",
+    "admin FLEET creation selector unavailable",
+    "additional admin provider/dispatch filter selectors pending",
+    "full physical/economic resolution not verified end to end"
+  ],
+  "sourceSha256": {
+    "src/assistance/attempts.ts": "f5f213a8560a83b4cb761b436365f25b71b5dbbc73dd09333a1d10d112174658",
+    "src/assistance/command-context.ts": "d62064a6172667e17180107f64406f1f8ccf65e0e42bdfae525612484301cd21",
+    "src/assistance/commands.tsx": "4a457cdb36d0c47f2467844273a4ddbcb96f7fd8ff903400bf2683537dd8128a",
+    "src/assistance/contract.ts": "cc53c8ce518cf5ecbca838234d6830529c809d515f1756b8ee0c591469f189ea",
+    "src/assistance/form-model.ts": "bbaf8d0607a6554ce2d508d4c4b84b140faf70aaf5990c041af661aea4c9eb8b",
+    "src/assistance/forms.tsx": "9be324950e06ec0a40e036ac024983894567372ca58d662a739600d74f57e4d3",
+    "src/assistance/hashes.ts": "5de2f723128cb3399e3c603f10213f7368f8c3ac38d98b75d469cb3035b5e7e3",
+    "src/assistance/messages.ts": "9f711151c88bf3177004004630295ae43591881804396ba3238483b6037bb5bf",
+    "src/assistance/pages.tsx": "8670a38b9bcfcddb63ffee727a8dcfa3c7f9a898d4cd7cc8d4ebe537a4755445",
+    "src/assistance/service.ts": "c2ff89fdd8c5b4f7d7e892e6980696afb3292ccfc4ec5eb87e4817038090a839",
+    "src/assistance/types.ts": "39bc9d2f48dfcfcca5373f913720cbc70e59ef20cd01c9f7887a93aad81fa863",
+    "src/assistance/workbench.tsx": "6f16b04f858b190c49cd27e04c91870f3b74a099c02149e9c06db904f0510fb2",
+    "src/app/App.tsx": "837719eaf8f49437ea088bbbb9f2ebe0e5e8c77d04ab4d8600c8ff89a9186588",
+    "src/layouts/AdminLayout.tsx": "605cd9c8a2c862f25409f256876c47507d034cf49ba2118f27890502ab60f88f",
+    "src/fleet/pages.tsx": "416ad5a7234b8dc9f89b7319b56676e62d9066249121fe948c42bf405727d441",
+    "src/services/api.ts": "bff34a18998af9699e91fb8801dd26dd142b8169dcbab922945de607f240d76f",
+    "src/test/assistance.test.tsx": "7626aa44cf99cf4081e8741c377504ca029627c0bfbc905632d51b49d5a6b80a",
+    "src/test/assistance-api.test.ts": "6e39c3e8a9cede4dbaeb88b0aa15de1ad7cf30a8efdc7210dcd75665b8c220ee",
+    "src/test/assistance-fixture.ts": "bf702123fb9f386afcdbd7842494e87e6924eabf9de544c1c965f9bc76125928",
+    "src/test/flows.test.tsx": "5e1adae62a4c98fa3018c468547dfaaa08e317bd080ed61c3d2891d6cba52b86",
+    "scripts/assistance-http-wsl.mjs": "aff1a20c58852948d47882335e1f1ced6aa6a2ccf9ac8093f11cbdd2a3e454b3",
+    "scripts/verify-assistance-http.mjs": "72bf4cef9b6429140f1808f4d7c8859d1b563dec3b4b5e2d566ca7e84738c590"
+  },
+  "backendDocumentationSha256": {
+    "FLEET-ASSISTED-RECOVERY-CONTRACT.md": "827752c23216867fcf60e69bd67df261706ae9fd8d3481e589810e09c4a63094",
+    "FLEET-ASSISTED-RECOVERY-TECHNICAL-SPEC.md": "fd6615179e7205554e654166ae4601b1a3f4957e7735e8e06491a8fc4ae3612d",
+    "FLEET-ASSISTED-RECOVERY-IMPLEMENTATION.md": "eb5c959915ad94832023e96067278d001f9b655be2d3b59bbbf88fa6c52db0fb",
+    "FLEET-ASSISTED-RECOVERY-TEST-MATRIX.md": "fb5ea430c481b7c85b84af713f1c290a92c896362427c5d500b9c357c190b707",
+    "openapi.json": "99ca1352986369b6f1f97c0d8b98fc6987a8c71bb28960b7f258b49f674ab09c",
+    "API_ACCESS.md": "9582801644e219a06fef02a7819bc7d7e28bf164c91220c5f3bafd01a009e673",
+    "FLEET-DIRECT-TAKE-CONTRACT.md": "37d49676ec470ad4c405c725c3a45a6a3bb983f9f53a4bdfdd8d5b1530e60c6d",
+    "INDEPENDENT-OFFERS-CONTRACT.md": "dbfc3e27fb7034a9be280715ea064589921114ea907cac8d9fae3bbc6112e21a"
+  },
+  "artifactSha256": {
+    "admin-1280.png": "c9d0c94411ec07b1d19ac9329fe5cd0ae687e43a61b4f89312d02ff73a81d2a6",
+    "owner-1280.png": "afdcc39195ebd28b0ebf0a2282365168bce9ae0195b26c6b5c06170fdb5910cb",
+    "owner-320.png": "93218341e2064e5f230d8cf309ddf61db6645b665d463d6d3257ac12970e97ab",
+    "report.json": "7848d958caee1f39170a8562d42e57331ea2441c3ecb172133382f4d500b6dc2"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "webBase": "e6c3fb6fa554d8ccffd8195de7e387874fbd1045",
+  "backendSources": [
+    {
+      "path": "src/integrations/integration-scopes.ts",
+      "sha256": "BBE2F51620E4BC61EF5CA630BEB256C8C9958B212BD63327A1E82FCEEB6CC2D1"
+    },
+    {
+      "path": "src/integrations/integrations.dto.ts",
+      "sha256": "C062EBD5B79C2BF0A34BFEB4985F0DF3B28C1128F5395297B014151B065FD1C9"
+    },
+    {
+      "path": "src/integrations/admin-integrations.controller.ts",
+      "sha256": "F64B4F151EC1F0FB50768E77C3E20F091D3D8028FD12A0F54E736B60C02E1EFD"
+    },
+    {
+      "path": "src/integrations/integrations.service.ts",
+      "sha256": "0A9A47C5ED9A2B83E311A2F0BFC29CF2C79F4189C6E5158DE48ADB8B756484AB"
+    },
+    {
+      "path": "docs/openapi.json",
+      "sha256": "DDA71659821EC4326ABCD577ABC78C2E4096A0C2179DC6CED71322D9E58064D3"
+    }
+  ],
+  "date": "2026-11-02",
+  "scopes": [
+    "prequotes:convert",
+    "prequotes:create",
+    "prequotes:read",
+    "quotes:create",
+    "quotes:read",
+    "quotes:accept",
+    "deliveries:create",
+    "deliveries:read",
+    "deliveries:pickup-reference:write",
+    "deliveries:location:read",
+    "deliveries:tracking-links:manage",
+    "deliveries:cancel"
+  ],
+  "result": "PASS"
+}

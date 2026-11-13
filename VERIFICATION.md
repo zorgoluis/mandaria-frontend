@@ -1,3 +1,604 @@
+## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
+
+Ejecutado sobre el merge de QA 0af444b en feat/prequote-stop-addresses: npm run lint, npm run build y Vitest completo PASS, 1851/1851 (sin las 20 fallas previas, ya corregidas en QA). Dependencias idénticas a QA. Sin backend real, Google real ni navegador.
+## 2026-11-07 — Entrega Git de recuperación de cargas y cupo
+
+Commit y push autorizados por el propietario en las ramas actuales: Web feature/rediseno y backend QA. Incluye recuperación visible de operaciones pendientes en Web, cupo de imágenes VALIDATED, compatibilidad legacy, pruebas y continuidad. Revisión nueva: fuentes contrastadas con las doce huellas del manifiesto y ramas sincronizadas con origin antes de preparar los commits. Se reutilizan las pruebas de implementación ya documentadas (Web180, backend49, recorrido aislado y Chrome/WebKit); no se atribuye una nueva ejecución a esta entrega Git.
+
+Sin despliegue, migración ni datos operativos. Artefactos locales ajenos de cuentas/VM excluidos. Las menciones inferiores «sin commit/push» describen la etapa anterior de implementación.
+
+## 2026-11-07 — Recuperación de cupo tras cargas fallidas
+
+Solicitud: corregir Web/backend y probar expedientes ya agotados, sin desplegar. Implementado cupo de diez imágenes VALIDATED vigentes; CREATED y REMOVED conservan historial sin consumirlo. Backend comprueba creación y confirmación bajo bloqueo; publica fileLimitMode=VALIDATED. Web conserva legacy si falta ese campo y permite nueva selección explícita en el asistente. Fallar al reemplazar no retira la imagen válida. Sin migración ni reparación de datos existentes.
+
+Validación NUEVA: Web180 pruebas focalizadas (155 en tres archivos y25 en el pase final de uploads), backend49, tipos/builds/lint PASS. Nest/PostgreSQL/Chrome temporal:10 grupos de registro y6 de cupo PASS, incluidos expedientes antes agotados, concurrencia, replay, conservación y presentación final; clúster detenido. Chrome/WebKit táctil:8/8, diez fallos, refetch y recuperación sin duplicado. OpenAPI actualizado; no suite global ni teléfonos físicos. [Implementación, comandos y límites](docs/UPLOAD-QUOTA-RECOVERY.md) · [Evidencia](docs/upload-quota-recovery-evidence.json).
+
+Sin commit/push, despliegue, variables, versión ni datos operativos. Publicar backend antes de Web cuando se autorice. Trabajo concurrente e historial inferior conservados.
+
+## 2026-11-07 — Recuperación de «Cargar imagen» en navegador móvil
+
+Reproducción antes del arreglo: selección y regreso con refetch funcionan; con operación pendiente queda visible el preview y deshabilitado el botón, mientras CSS oculta «Consultar intento». Selector limitado al aviso informativo duplicado, conservando las acciones de recuperación; enlace junto a la carga para llegar al aviso en pantalla móvil. No se borran marcadores ni se repiten comandos para desbloquear.
+
+Validación nueva:143/143 en verification-upload, verification-pages y documentary-availability. `npx tsc -b`, tipos de tests y ESLint focalizado PASS. `node scripts/verify-mobile-evidence.mjs`:8/8 grupos Chrome/WebKit táctil390×844, HTTP simulado: selección, refetch demorado al regresar, ABSENT bloqueado, CLOSED_NO_EFFECTS consultado, respuesta COMPLETE_UPLOAD perdida y recuperación APPLIED sin nueva transferencia. Enlace probado con tap; capturas revisadas. [Informe](docs/mobile-evidence-recovery-evidence.json) y [alcance](docs/CAMERA-PHOTO-UPLOAD.md#seguimiento-botón-cargar-imagen-bloqueado-en-móvil). No acredita ejecución en teléfonos físicos ni inspección del dispositivo reportado. Backend intacto; sin suite global, despliegue, commit/push de este seguimiento. Historia inferior conservada.
+
+## 2026-11-07 — Entrega Git de la corrección de fotos
+
+Commit y push autorizados por el propietario en la rama actual feature/rediseno, coordinados con backend QA. Se publica la implementación y evidencia ya validadas; en esta entrega se comprueban huellas de fuentes y diff, sin repetir pruebas ni desplegar. Las menciones inferiores «sin commit/push» describen la etapa de implementación anterior.
+
+## 2026-11-07 — Fotos de cámara en registro
+
+Corrección local Web/backend: preparación de JPEG/PNG/HEIC, orientación y reducción proporcional sólo cuando hace falta; PNG validado con límite independiente para conservar píxeles. Web188 pruebas, backend49,12 combinaciones Chrome/WebKit y registro HTTP completo aislado PASS. Builds/tipos/lint focalizado PASS. Sin despliegue/commit/push. Cámaras físicas pendientes. [Contrato, evidencia, límites y reproducción](docs/CAMERA-PHOTO-UPLOAD.md).
+
+## 2026-11-06 — Entrega separada de la aceptación de reanudar registro
+
+Revisados los dos scripts, capturas y manifiesto HTTP de la corrida 1793990706996. http.json coincide con el original: dos expedientes SUBMITTED, cinco adjuntos validados, un SUBMIT por expediente y cleanup confirmado. Nueva comprobación de sintaxis de ambos scripts y ESLint focalizado PASS; no nueva ejecución HTTP ni suite global. [Evidencia y límites](docs/evidence/account-resume-http-20261106/README.md).
+
+Commit/push autorizado a QA sólo de esta aceptación, su helper/harness y continuidad. Cambios concurrentes de estilos/layout excluidos y preservados; Web 1.11.0 intacta, sin despliegue. El resultado HTTP inferior conserva su fecha, base e8e1886 y backend sintético 1.14.1.
+
+## 2026-11-06 — Verificación global y entrega del detalle de independiente
+
+Revisión del diff y verificación final aislada sobre e8e1886: 1818/1818 pruebas en 89 archivos (107,37 s), tipos/lint/build PASS. Primera suite en workspace también PASS (103,49 s); la copia aislada acredita sólo los siete archivos del rediseño, sin cambios simultáneos de estilos/layout ni harness de registro. Sin correcciones adicionales de producto ni cambios de permisos/timeouts. Aviso habitual del bundle Root 1265,13 kB. [Evidencia global y separación de alcance](docs/evidence/independent-detail-design-20261106/README.md#revisión-final-y-entrega-a-qa--2026-11-06).
+
+Entrega Git autorizada a QA, versión 1.11.0 intacta; sin despliegue. Registro reanudable (evidencia HTTP, scripts y su entrada de continuidad) se conserva pendiente fuera de este commit, al igual que los cambios concurrentes del layout. Sin nueva ejecución HTTP/UI; historia inferior conservada.
+
+## 2026-11-06 — Rediseño de Detalle de independiente
+
+Contenido SUPER_ADMIN organizado en indicadores, habilitación/créditos/vehículos y columna de contacto/zonas/decisión. IDs copiables; motivo previo a suspender/rechazar, confirmación y errores del servidor conservados. Disponibilidad no se interpreta como conexión socket, ni falta de cuenta como saldo cero; teléfono privado mantiene su circuito. Menú y barra superior intactos.
+
+175/175 pruebas focalizadas PASS; tipos, lint y build PASS. Chrome con API simulada a 1440/1000/390 px PASS, sin desbordamiento; selector de saldo ajustado al panel por la nueva repetición en el indicador. [Evidencia, capturas y límites](docs/evidence/independent-detail-design-20261106/README.md). No nueva suite global ni HTTP real. Cambios pendientes de reanudación del registro preservados. QA/1.11.0 sin commit/push ni despliegue; historial inferior conservado.
+
+## 2026-11-06 — Reanudar desde Mi cuenta: HTTP/UI real aprobado
+
+Nueva corrida 18:45:06Z–18:46:15Z sobre e8e1886, Chrome/Nest/PostgreSQL desechables. Cuenta creada por UI, términos aceptados, datos y dos fotos guardadas; logout y contextos de navegador nuevos recuperan el avance desde Mi cuenta sin duplicar vehículo o expedientes ni cambiar datos/revisiones. Teléfono requerido y fotos pendientes siguen bloqueando sus pasos. Tras completar cinco fotos, envío único por UI: dos SUBMITTED, un evento SUBMIT cada uno; Mi cuenta cambia a «Ver estado de mi solicitud» y lo conserva al volver a entrar. [Evidencia real, capturas, hashes y límites](docs/evidence/account-resume-http-20261106/README.md).
+
+Sólo harness/helper nuevos; corregida la espera de menú lateral ausente en capturas del asistente, sin cambios de producto ni timeouts. Sintaxis/lint PASS. Backend efectivo 1.14.1 compilado en copia temporal de frontend, sin modificar sus fuentes o versión; Web permanece 1.11.0. Correo y almacenamiento locales sintéticos; no días transcurridos, producción o nueva suite global. Navegador/Web/Nest/almacenamiento/PostgreSQL propios detenidos. Sin backend/Driver, commit/push ni despliegue; historia conservada.
+## 2026-11-06 — Revisión global y entrega de «Continuar mi registro»
+
+Diff revisado en QA/base ab1d12e. Nueva suite global PASS a la primera: 1815/1815 pruebas en 88 archivos, 171,25 s. Tipos, lint y build PASS (código 0); aviso habitual Root 1260,66 kB. No hubo fallos que requirieran cambios de producto, configuración o timeouts. [Salidas y manifiesto final](docs/evidence/account-registration-20261106/README.md).
+
+Se conserva el acceso al asistente, el avance guardado y la autoridad del backend; la tarjeta sólo consulta y distingue pendientes, borradores, enviados y aprobados. Capturas y prueba visual simulada anteriores preservadas, sin nueva ejecución HTTP real. Usuario autoriza commit/push de implementación, pruebas y evidencia a QA. Versión 1.11.0 intacta; sin backend/Driver ni despliegue. Historial inferior conservado.
+## 2026-11-06 — Mi cuenta: continuar el registro guardado
+
+Tarjeta DRIVER con «Continuar mi registro», resumen visual de correo, términos, Identidad y Unidad y estados distintos para borradores, revisión y aprobación. Lectura del onboarding por actor/entorno; errores no se presentan como datos faltantes. El enlace conserva el asistente y las validaciones actuales; no crea cuentas ni expedientes, no altera lo guardado y no añade autoguardado. Flotilla conserva consulta sin prometer presentación propia.
+
+142/142 pruebas focalizadas PASS, tipos/lint/build PASS y Chrome simulado a 1280/390 px PASS. Texto final de borrador no supone faltantes desconocidos. [Evidencia, capturas y límites](docs/evidence/account-registration-20261106/README.md). Selector del harness documental actualizado, sin nueva ejecución HTTP real ni suite global. QA/1.11.0 intactos, sin backend/Driver, commit/push ni despliegue. Historia preservada.
+## 2026-11-06 — Verificación conjunta de información y teléfono en QA
+
+Verificados juntos 85be7a3 y 0d1a21f sobre HEAD 0d1a21f, Web 1.11.0. Nueva suite global PASS a la primera: 1806/1806 en 88 archivos, 133,70 s. Tipos, lint y build PASS (código 0); permanece el aviso conocido del chunk Root de 1256,74 kB. Sin fallos que requieran corrección ni cambios de producto, permisos, configuración o timeouts. [Comandos, salidas y manifiesto](docs/evidence/independent-contact-joint-20261106/README.md).
+
+No se repitió HTTP/UI ni se arrancó backend: la aceptación real del informe anterior es histórica y conserva sus límites. Sólo evidencia y continuidad nuevas; backend/Driver y versión intactos. Sin commit/push ni despliegue. Historial preservado.
+## 2026-11-06 — HTTP real del teléfono declarado completado
+
+El usuario autorizó una instancia desechable, superando el bloqueo de disponibilidad previo. Corrida final 2026-11-06T16:45:26.035Z–16:46:08.408Z: Nest/PostgreSQL aislados y Chrome real PASS. AVAILABLE/NOT_RECORDED/UNAVAILABLE, no-store, identidades distintas, 401/403/404, listado sin contacto, ficha SUPER_ADMIN, salida/reentrada, transiciones del fixture, 503 de recuperación y logout por UI. Capturas con teléfono enmascarado. Datos preparados sintéticamente, no onboarding ni edición por UI. [Manifiesto, resultados, correcciones y límites](docs/evidence/independent-contact-http-20261106/README.md).
+
+Se añadió harness reproducible Web; fuentes backend compiladas en copia temporal con Prisma propio, sin modificar backend/Driver ni código de producto Web. Sintaxis y lint PASS; sin nueva suite global/tipos/build Web. Se corrigieron el cliente generado temporal y dos aserciones/sincronizaciones del harness; no se ampliaron timeouts ni relajaron permisos. Chrome, Vite, Nest y PostgreSQL propios detenidos. QA, versión 1.11.0, sin commit/push ni despliegue. Historial inferior conservado; HTTP real ya no está bloqueado para este recorrido aislado, sin acreditar producción o toda la matriz de retención/red.
+## 2026-11-06 — Comprobación de prerrequisitos para HTTP real del contacto
+
+Solicitud posterior a 85be7a3: completar HTTP local con datos sintéticos, sin modificar backend/Driver, versión ni publicar. Revisión nueva en sólo lectura de ADMIN-INDEPENDENT-CONTACT-HANDOFF-20261106.md, BITACORA backend y docs/checks/admin-independent-contact-20261106.json. El manifiesto registrado a 2026-11-06T16:16:43.6023438Z identifica run-HuU6QX y run-nXV7lg con clusterStopped=true; no suministra API activa ni fixtures/credenciales de aceptación Web. Esto acredita el estado documentado, no una comprobación de procesos actual.
+
+HTTP real Web no ejecutado: falta URL local autorizada, manifiesto/build efectivo, referencias sintéticas para AVAILABLE/NOT_RECORDED/UNAVAILABLE y acceso privado para SUPER_ADMIN y roles negativos. Se solicitó al usuario esa referencia o autorización de arranque de una instancia desechable; la instrucción anterior prohíbe arrancar/reiniciar backend. No se sondearon puertos históricos, leyeron secretos, ejecutaron verificadores backend ni alteraron datos o procesos. Sin nuevas pruebas funcionales: las 1806 globales, 93 focalizadas y capturas simuladas anteriores siguen siendo históricas. El bloqueo HTTP permanece abierto; no se declara aceptación completa.
+## 2026-11-06 — Integración del teléfono declarado administrativo
+
+Superado el bloqueo contractual de la entrada anterior: backend documenta declaredContact exclusivamente en GET administrativo por Driver.id. Web integra AVAILABLE, NOT_RECORDED, UNAVAILABLE y compatibilidad con respuesta antigua. El teléfono se mantiene fuera de QueryClient y persistencia; cancelación, aislamiento actor/conductor y sessionFence protegen navegación y respuestas tardías. Sin consulta alternativa de expedientes ni cambios del conductor.
+
+Nueva suite global: 1806/1806 PASS en 88 archivos, 99,00 s; focalizadas 93/93. Tipos, lint y build PASS; se corrigió la separación del validador exigida por lint. Chrome con HTTP simulado PASS a 1280/390 px y capturas enmascaradas. HTTP real pendiente por falta de URL/build y fixtures de una instancia local autorizada; no se arrancó backend ni se atribuyeron sus pruebas a Web. [Contrato, comandos, evidencia y límites](docs/evidence/independent-contact-20261106/README.md). QA y versión 1.11.0 conservadas, sin commit/push ni despliegue.
+## 2026-11-06 — Información de usuario en la ficha independiente
+
+En QA, la ficha SUPER_ADMIN muestra nombre, correo, acceso activo/inactivo, identificadores distintos de usuario/conductor/perfil y fechas del perfil. Usa driver.user del GET /admin/drivers/:driverId/independent existente; respuestas antiguas sin user muestran «No disponible». Conserva habilitación, créditos, zonas y vehículos. Sin modificar versión, backend ni publicar.
+
+Pendiente para completar el teléfono solicitado: independent-drivers.select.ts del backend sólo selecciona user.id/email/active. contactPhone pertenece a VerificationCase.data de identidad; el listado administrativo no admite filtro por conductor ni devuelve una referencia de expediente en este perfil. Se necesita una proyección administrativa autorizada con teléfono y referencia/procedencia del expediente, respetando restricciones documentales y ausencia de datos. No se recorren expedientes de otros usuarios ni se inventan campos/API. La pantalla distingue dato no expuesto de dato no registrado.
+
+Validación local: 62/62 pruebas en driver-portal e independent-drivers-api con API simulada; tipos, lint y build PASS. La primera ejecución de Vitest falló al abrir un temporal del sandbox; repetición fuera de éste PASS. Sin aceptación HTTP real ni comprobación en producción. Aviso habitual de chunk grande.
+## 2026-11-05 — Diseño del registro
+
+165/165 pruebas PASS en `driver-signup`, `verification-pages`, `documentary-availability` y `onboarding-production` (cuatro archivos). Lint, build y tipos de pruebas PASS; permanece el aviso de tamaño de chunk de Vite. `verify-simple-driver-registration.mjs` pasó con la interfaz rediseñada: códigos, alta, acceso, datos, cinco fotos, presentación atómica y recuperación de respuesta perdida. Se añadieron capturas de correo/código/términos/datos/fotos/confirmación y comprobación de desbordamiento a 320, 390, 768 y 1280 px. [Informe final](docs/evidence/driver-registration-design-20261105/verification.json). El primer intento quedó bloqueado por las conexiones loopback del sandbox; se repitió con permiso en entorno aislado y cierre de PostgreSQL confirmado. Sin nueva suite global ni despliegue productivo en esta revisión visual.
+
+## 2026-11-05 — Opción A verificada
+
+Nueva suite global: 1.773/1.773 en 87 archivos, 76,53 s. `npm run typecheck:test`, `npm run lint` y `npm run build`: PASS; aviso habitual de chunk grande. `node scripts/verify-simple-driver-registration.mjs`: PASS el 2026-11-05T17:36:21Z–17:36:32Z, Chrome instalado, Nest real y base PostgreSQL desechable. Registro, acceso automático, reanudación, cinco cargas, envío atómico y recuperación de respuesta perdida. Dos SUBMITTED, un evento por expediente y perfil pendiente. [Informe](docs/DRIVER-REGISTRATION-OPTION-A.md). La primera suite global detectó dos expectativas antiguas; se actualizaron y la corrida final pasó. Sin producción.
+
+## 2026-11-04 — Regresión conjunta del listado administrativo de revisión
+
+Sobre `main` en `8b48126`, Vitest pasó 1.753/1.753 pruebas en 86 archivos en 103,20 s. La primera corrida quedó incompleta por una salida inesperada de un worker. La repetición por separado finalizó con código 0 usando la misma configuración. Tipos, lint, build y Chromium con Nest/PostgreSQL aislados pasaron. [Salidas de ambas corridas, comprobaciones y capturas](docs/evidence/admin-review-joint-20261104/README.md).
+
+## 2026-11-04 — Regresión conjunta y repetición del recorrido DRIVER
+
+Sobre `main` en `b3591a7`, Vitest pasó 1.751/1.751 pruebas en 86 archivos (125,44 s). Tipos, lint y build finalizaron con código 0. En una nueva ejecución Chromium con HTTP local, cinco cargas quedaron validadas y los dos expedientes llegaron a SUBMITTED, cada uno con un evento de presentación. [Salidas, registro HTTP y capturas](docs/evidence/identity-unit-joint-20261104/README.md).
+
+## 2026-11-04 — Aceptación HTTP/UI de presentación documental
+
+`node scripts/verify-driver-document-journey.mjs` pasó en LOCAL_TEST sobre una base aislada. Cinco cargas HTTP confirmadas y dos presentaciones por UI, cada una con un único evento SUBMIT al releer el expediente. Identidad SUBMITTED/revisión 11 y Unidad SUBMITTED/revisión 5. Adicionalmente pasaron 101 pruebas focalizadas, tipos, lint y build. [Comandos, límites y capturas](docs/evidence/driver-document-journey-20261104/README.md).
+
+## 2026-11-04 — Guía de Identidad y Unidad en Web 1.11.0
+
+Suite global aprobada con 1.751 pruebas en 86 archivos (130,20 s). Tipos de pruebas, lint global y build finalizaron con código 0. Vite mantiene el aviso de tamaño del chunk Root de 1.222,38 kB. Los dos recorridos de Chromium pasaron con HTTP simulado a 320 y 1280 px. [Comandos, resultados y capturas](docs/evidence/identity-unit-guide-20261104/README.md).
+
+## 2026-11-04 — Regresión global en main tras integrar los dos cambios Web
+
+Web 1.11.0 sobre `9fa1c06` con `dd39ff3` incluido. La primera corrida de `npm test` detectó seis fallos en un fixture LEGACY. Tras explicitar su política de confirmación y cubrir los dos casos de bloqueo, `npm test` pasó con **1.750/1.750 pruebas en 86/86 archivos**, en 94,84 s. `npm run typecheck:test`, `npm run lint` y `npm run build` finalizaron con código 0. Vite conserva el aviso de tamaño del chunk Root (1.219,12 kB). [Resultados y comandos](docs/evidence/web-verification-delivery-joint-20261104/README.md).
+
+## 2026-11-03 — MDR-000001: entrega observada como CUSTOMER por HTTP real
+
+Verificación de lectura a 2026-11-04T05:32:18.085Z (23:32:18 CDMX del 3 de noviembre). Reserva DELIVERY-CODE-B2C-A09B99DCF2, API local42929/backend1.13.7 según manifiesto del responsable; Web4270/1.11.0. dispatch82770d25-8a2e-4adc-83bd-e6a253138785, assignment01e2f07c-1794-4449-94be-76a291e3b01d. No confundir con MDR-000001 histórico de octubre.
+
+GET CUSTOMER /customer/delivery-requests/MDR-000001/status:200, DELIVERED, terminalOutcome DELIVERED y deliveredAt2026-11-04T05:30:40.031Z (23:30:40 CDMX), policy REQUIRED/method CODE_VERIFIED. GET detalle:200, status CREATED corresponde al recurso de solicitud; no sustituye el estado logístico de /status. UI real recargada como titular: Entregada/Entregada, Código de entrega verificado, servicio finalizado y sin control para consultar código. Cobro declarado60 MXN, conservado como declaración del conductor, no pago verificado.
+
+[Evidencia HTTP sanitizada](docs/evidence/delivery-confirmation-web-20261103/customer-terminal-http.json) · [Captura terminal](docs/evidence/delivery-confirmation-web-20261103/customer-terminal.png) · [Informe](docs/DELIVERY-CONFIRMATION-CODE-WEB-20261103.md). En esta comprobación: cero consultas de código, cero envíos al canal y cero comandos de cierre. Sólo login CUSTOMER y lecturas; sin mutaciones logísticas, SQL, cambios de producto o backend/Driver. No se repitieron suites/tipos/lint/build: los188 tests y cuatro capturas simuladas inferiores son históricos, no evidencia HTTP nueva. No acredita conteo de eventos, ledger/reembolso, UI Android ni toda la matriz negativa.
+
+Antecedente de coordinación: envío privado único a05:30:27.823Z, sin acuse ACCEPTED_FOR_UI confirmado; no reenviado. El resultado terminal se acredita ahora mediante lectura independiente, no mediante ese acuse. El bloqueo inicial de instancia queda superado sólo para este recorrido sintético; historial conservado. Sin versión, commit/push ni despliegue.
+
+## 2026-11-03 — Código de entrega B2C y Driver Web
+
+Integración local del contrato1.0.0: lectura CUSTOMER explícita y temporal/no-store; código string con ceros, sin persistencia/caché/URL. Metadatos REQUIRED/NOT_REQUIRED y CODE_VERIFIED/ADMIN_ASSISTED separados, históricos sin metadato legibles sin habilitar bypass. Driver detallado pide6dígitos ASCII al finalizar AT_DROPOFF, revalida asignación/revisión/permisos y conserva cobro/hitos. Recuperación DELIVER admite REJECTED por GET/close, respeta pausa y canStartNewAttempt, sin autoenvío ni cambiar cuerpo bajo una clave previa. TAKE/RELEASE no se amplían con ese estado. Legacy sólo cierra con NOT_REQUIRED explícito y relectura vigente.
+
+Verificación nueva:188/188 pruebas en9 archivos,18.58 s; tipos tests/producto, lint global, build y diff whitespace PASS. Aviso conocido de chunk Root1216.98 kB. Chromium local con HTTP simulado:4 capturas1280/390 con código enmascarado, cero mutaciones; no UI Android ni HTTP Nest. [Informe y matriz](docs/DELIVERY-CONFIRMATION-CODE-WEB-20261103.md) · [Pruebas](docs/evidence/delivery-confirmation-web-20261103/tests.txt) · [Visual](docs/evidence/delivery-confirmation-web-20261103/visual.json). No suite global nueva; resultados backend del handoff no se atribuyen a Web.
+
+HTTP real bloqueado por falta de instancia autorizada con build/flag/clave y fixtures dedicados confirmados para este contrato. No se usa la API previa de contraseñas como acreditación ni se reinicia/resembra/activa entorno. Web1.11.0 intacta sobre c7c1e8f. Sin backend/Driver nativo/Coita, datos reales, .env, Docker, versión, commit/push, despliegue ni mensajes externos. Historial preservado.
+
+## 2026-11-03 — Entrega Git de política de contraseñas
+
+Revisado el diff final de8–128, sus pruebas y evidencia. Usuario autoriza commit/push a main; origin/main coincide con base171c851. Se conservan los resultados verificados de232 pruebas focalizadas, tipos, lint y build PASS; no se reejecutan por esta operación Git. Login histórico, APIs y versión1.11.0 intactos. La aceptación HTTP real sigue pendiente por indisponibilidad local documentada; publicar código no acredita despliegue. Sin force, backend/Driver ni despliegue. Las entradas inferiores conservan el estado local anterior a esta entrega.
+
+## 2026-11-03 — Contraseñas nuevas8–128
+
+Política común aplicada a invitaciones, confirmación independiente y CUSTOMER REGISTER/RESET. Sin composición obligatoria, trim ni normalización; validación previa a API y texto exacto preservado. Login histórico y contraseña actual intactos. Conteo Unicode por puntos de código, HTML admite pares sustitutos sin relajar máximo128 lógico. Corregida presentación del error local en ambos tipos de formulario; confirmación y manejo de tokens existentes preservados. Selector del harness Web actualizado, sin ejecutarlo.
+
+Verificación nueva:232/232 pruebas en5 archivos,29.70 s; tipos tests/producto, lint global y build PASS; aviso conocido Root1210.48 kB. Primera/segunda corrida223/230 y226/230 detectaron mensajes genéricos al validar; corregido con error local tipado sin ampliar timeouts. [Informe](docs/PASSWORD-POLICY-WEB-20261103.md) · [Pruebas](docs/evidence/password-policy-20261103/tests.txt). No suite global nueva. HTTP real bloqueado:37795 rechaza conexión; build efectivo no comprobado, sin reiniciar ni mutar entorno. Pruebas backend del handoff no se atribuyen a Web.
+
+Web1.11.0 intacta sobre171c851; sin backend/Driver, datos reales, configuración, commit/push ni despliegue. Historia preservada.
+
+## 2026-11-02 — Entrega Git de catálogo CASH/PICKUP
+
+Usuario autoriza commit y push a main de la corrección local y evidencia previamente verificadas (66 pruebas focalizadas, tipos, lint y build PASS). Revisado diff sin cambios adicionales de producto; origin/main coincide con base e6c3fb6. Versión1.11.0 intacta. No se reejecutan pruebas por esta operación Git. Los estados «local/no publicado» de informes y manifiesto inferiores describen el momento de captura; publicación de código no acredita despliegue en VM, que permanece pendiente. Sin force ni operación de credenciales reales.
+
+## 2026-11-02 — Catálogo administrativo CASH/PICKUP
+
+Añadido deliveries:pickup-reference:write a src/types/api.ts; catálogo/tipo/selector local de12 scopes alineado mediante comparación independiente con fuentes backend1.13.7. Los11 previos se conservan, selección opt-in, payload exacto/vacío y expiración intactos. Listado y rotación existentes correctos, sin mutaciones automáticas ni cambios de permisos reales. Único cambio de producto: catálogo; pruebas ampliadas en flows e integration-credentials-api.
+
+Nueva verificación focal:66/66 pruebas,2 archivos,21.80 s; tipos tests/producto, lint global y build PASS. Fallos iniciales de tests nuevos corregidos (Response reutilizada y selector de alertas ambiguo), sin tiempos relajados. Aviso conocido de chunk Root1210.22 kB. No suite global ni HTTP/UI real nuevo; resultados anteriores históricos. [Informe, comandos y límites](docs/CASH-PICKUP-SCOPES-WEB-20261102.md) · [Evidencia](docs/evidence/cash-pickup-scopes-20261102/tests.txt) · [Build/hash candidato](docs/evidence/cash-pickup-scopes-20261102/candidate.json).
+
+Web1.11.0 intacta, base e6c3fb6. Candidato local Root-DxG0CmoV.js; pendiente publicación autorizada. VM no inspeccionada: ausencia de los otros cinco CASH requiere revisar build servido, ruta/rol y assets, no se explica sólo por PICKUP. Sin backend/móvil/Coita, secretos/.env, flags, credenciales reales, commit/push ni despliegue.
+
+## 2026-10-31 — Verificación conjunta: Mis vehículos, Identidad y Unidad
+
+Revisado el diff conjunto sobre main/d4bf431: diseño de Mis vehículos con datos/estados reales del servicio; identidad sin ciudad/emisor requeridos y conservación histórica; fechas de licencia/autorización sin hora visible y preservación del instante no editado; contrato OWNED=null sin comprobante y recuperación de recibos históricos. No se detectaron correcciones adicionales de producto necesarias. Web1.11.0 intacta; package.json/package-lock.json sin cambios.
+
+Verificación nueva: `npm test` PASS **1681/1681,84/84 archivos,96.21 s**, sin pruebas omitidas ni cambios de timeouts/configuración. Primera corrida incompleta:82 archivos/1658 pruebas pasaron y dos workers terminaron con código3221226505 en dispatch y delivery-requests; no se contó como verde. Repetición de la misma suite completa sin tipos/lint/build concurrentes PASS; causa exacta del cierre nativo no determinada. Logs inicial y final conservados. `npx tsc -b`, `npm run typecheck:test`, `npm run lint`, `npm run build` y `git diff --check` PASS. Aviso conocido de chunk Root1210.19 kB. [Evidencia conjunta](docs/evidence/combined-documentary-20261031/tests.txt) · [Primer intento](docs/evidence/combined-documentary-20261031/tests-initial-worker-crash.txt) · [Build](docs/evidence/combined-documentary-20261031/build.txt).
+
+Pruebas globales simuladas; capturas previas de Mis vehículos/Identidad conservadas, no reejecutadas ni atribuidas a HTTP real. Sigue pendiente aceptación real OWNED=null: última consulta local a37795 rechazó conexión; no se reinició entorno ni se modificó backend/Driver. Commit/push a origin/main autorizados por usuario para esta entrega; sin cambio de versión ni despliegue.
+
+## 2026-10-31 — Unidad propia: contrato OWNED=null integrado
+
+Web consume null explícito sin documento adicional y conserva bloqueo frente a OWNERSHIP_PROOF antiguo o contrato incompleto/malformado. Categorías y gates centralizados; bicicleta sin formulario vacío, tarjeta vigente para otros tipos, renta/préstamo intactos. CREATED histórico no se completa ni bloquea por sí solo; VALIDATED conserva consulta. Error CATEGORY_RETIRED explícito y recibos sin URL recuperables sin PUT, reintento automático ni nueva clave. Identidad opcional, fechas y Mis vehículos preservados.
+
+Nueva verificación simulada: 158/158 pruebas en cinco archivos,9.85 s; tipos producto/tests, lint global y build PASS (aviso conocido Root1210.19 kB). Prueba nueva de error tuvo selector ambiguo en dos intentos; corregido sin relajar comportamiento ni tiempos. No suite global ni aceptación HTTP/UI real: GET a127.0.0.1:37795/api/v1/verification-requirements rechaza conexión fuera del sandbox. No se obtuvo build/contrato efectivo ni se reinició el entorno. Requiere instancia sintética autorizada actualizada y operativa para alta/presentación/aprobación por UI. [Informe y límites](docs/UNIT-OWNERSHIP-PROOF-REMOVAL-20261031.md) · [Pruebas](docs/evidence/unit-ownership-null-20261031/tests.txt). Fuentes backend consultadas en sólo lectura; sus pruebas no se atribuyen a Web. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Unidad sin solicitud de comprobante de propiedad
+
+Web retira OWNERSHIP_PROOF de nuevas cargas, instrucciones y checklist; conserva adjuntos históricos y su consulta autorizada. No ofrece completar cargas CREATED de ese tipo. Backend todavía lo exige para OWNED: presentación bloqueada explícitamente hasta actualizar contrato, sin solicitar documentos adicionales. Backend consultado en sólo lectura, sin cambios ni nueva ejecución HTTP.
+
+Verificación focal nueva: 137/137 pruebas en cinco archivos, 10.14 s; tipos producto/tests, lint focal y build PASS. Aviso conocido de chunk Root1209.68 kB. Primer intento Vitest falló por temporales del sandbox; repetición fuera del sandbox PASS. No suite global ni aceptación HTTP en este turno. [Alcance y pendiente backend](docs/UNIT-OWNERSHIP-PROOF-REMOVAL-20261031.md) · [Evidencia](docs/evidence/unit-ownership-removal-20261031/tests.txt). Cambios pendientes de vehículos, fechas e identidad preservados. Sin versión, commit/push ni despliegue.
+## 2026-10-31 — Identidad sin ciudad ni emisor: integración Web completada
+
+Backend local comprobado en sólo lectura: reglas opcionales y preserveIdentityLegacyFields aplicado dentro de UPDATE_CASE. Handoff IDENTITY-OPTIONAL-LEGACY-FIELDS-HANDOFF-20261031 confirma conservación por omisión, rechazo de null/vacíos y hashes de comandos intactos. [Huellas de fuentes consultadas](docs/evidence/identity-optional-web-20261031/backend-sources.json). No se acredita despliegue ni nueva ejecución HTTP Web.
+
+Web retira ciudad/emisor del formulario y de payloads nuevos; tipos opcionales, checklist sin ciudad y lectura de licencia sin separadores vacíos cuando falta emisor. Datos históricos presentes siguen visibles en consulta. No se modifican marcadores, cuerpos de intentos previos, recibos ni recuperación. Se conservan cambios pendientes de Mis vehículos y fechas sin hora.
+
+Verificación nueva:134/134 pruebas en5 suites completas (verification-pages,verification-recovery,verification-service,verification-upload,onboarding-production),11.07 s. Incluye campos ausentes, payload omite incluso valores históricos, fixture original intacto, presentación sin campos legacy y consulta con/sin valores históricos. Tipos producto/tests, lint focal y build PASS; aviso conocido Root1209.26 kB. Visual identity-redesign PASS,8 capturas1280/320,HTTP simulado. [Tests](docs/evidence/identity-optional-web-20261031/tests.txt) · [Visual](docs/evidence/identity-optional-web-20261031/visual.json). Cifras backend del handoff no se atribuyen a Web. Sin versión,commit/push,backend/móvil ni despliegue.
+
+## 2026-10-31 — Licencia con fecha y simplificación de identidad pendiente
+
+Vencimiento de licencia solicita sólo fecha; hora interna al final del día local convertida a UTC. Fecha no modificada conserva timestamp histórico. Añadida explicación de emisor como autoridad expedidora. Ciudad y emisor no retirados: backend exige operatingCity y license.issuer no vacíos y devuelve VERIFICATION_DATA_INVALID400 al omitirlos. No se fabrican datos desde zonas ni se modifica backend. Contrato requerido en [IDENTITY-SIMPLIFICATION-20261031](docs/IDENTITY-SIMPLIFICATION-20261031.md).
+
+Verificación:50/50 pruebas de verification-pages,9.08 s; tsc -b y lint de forms/test PASS. Resultado local:test-results/license-date-only-tests.txt. Cambios previos de Mis vehículos y vencimiento de unidad preservados. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Vencimiento de autorización: sólo fecha
+
+Formulario de unidad solicita fecha opcional sin hora. Al elegir una fecha nueva, Web fija23:59:59.999 en hora local del navegador y convierte a UTC para el contrato existente. Si la fecha no cambia, conserva el timestamp guardado para no extender ni reducir autorizaciones al editar otros datos. Licencia mantiene su comportamiento anterior.
+
+Verificación:49/49 pruebas de verification-pages,9.91 s, incluidos fin de día y conservación exacta; tsc -b y lint de forms.tsx/verification-pages.test.tsx PASS. Resultado local:test-results/unit-date-only-tests.txt. Cambios pendientes de Mis vehículos preservados. Sin versión,commit/push ni despliegue.
+
+## 2026-10-31 — Mis vehículos: diseño documental
+
+Pantalla adaptada al estilo de Mi verificación y Zonas: cabecera, pestañas, resumen calculado desde GET /driver/vehicles, tarjetas con identificador/tipo/estado y detalles reales, actualización explícita y enlace al onboarding existente. Categoría vigente se presenta en la columna lateral conservando la misma guarda DriverPortal. Sin acciones nuevas de edición/activación ni cambios de validación, permisos o cliente API. Estados de carga/error/vacío separados; error no se presenta como cero vehículos. Menú sin Servicios/Mi servicio conservado.
+
+Verificación nueva:51/51 pruebas en2 suites completas,21.60 s, comando node node_modules/vitest/vitest.mjs run src/test/driver-portal.test.tsx src/test/navigation-roles.test.tsx. tsc -b, tsc --project tsconfig.test.json, eslint de pages.tsx y driver-portal.test.tsx y vite build PASS (2430 módulos; aviso conocido Root1209.47 kB). Suite global anterior histórica, no reejecutada.
+
+node scripts/verify-vehicles-redesign.mjs PASS:6 capturas1280/320, lista con estados ACTIVE/SUSPENDED, vacío,error confirmado con Reintentar, sin overflow/errores de página/mutaciones. HTTP simulado, no nueva aceptación backend. [Reporte](docs/evidence/vehicles-ui-20261031/report.json) · [Tests](docs/evidence/vehicles-ui-20261031/tests.txt). Sin versión,commit/push,backend ni despliegue.
+
+## 2026-10-31 — Verificación conjunta de Zonas y navegación DRIVER
+
+Diff revisado: Zonas y disponibilidad sin gestión nueva de turno ni feed/ofertas; Servicios y Mi servicio retirados del menú principal y PortalTabs del repartidor. Se conservan contratos, revisiones string, recuperación de intenciones y permisos de otros roles. No se elimina el acceso por rutas históricas. No fue necesario corregir código adicional.
+
+Suite GLOBAL nueva **1647/1647 PASS,84 archivos,110.77 s**, sin fallos ni omisiones. Tipos producto/tests, lint global y build PASS. Aviso de bundle Root1206.22 kB conservado. Nueva ejecución visual sintética:6 capturas1280/320, sin errores,desbordamiento ni mutaciones; no acredita backend real. [Comandos y resultados](docs/evidence/reception-combined-20261031/verification.json) · [Global](docs/evidence/reception-combined-20261031/global.txt) · [Visual](docs/evidence/reception-combined-20261031/visual.json).
+
+Usuario autoriza commit/push del conjunto a main en github.com/zorgoluis/mandaria-frontend, sin force. Versión1.11.0 intacta, sin despliegue/backend/móvil. Historial y evidencias anteriores preservados.
+
+## 2026-10-31 — Zonas y disponibilidad
+
+Pantalla DRIVER rediseñada: franja de recepción/modo, selección de zona autorizada, disponibilidad real de /driver/me y checklist. Sin controles nuevos de turno ni consulta/listado de ofertas. Servicios/Mi servicio permanecen ocultos conforme a aclaración anterior, aunque el adjunto los enumeraba. Se conserva recuperación explícita de intenciones pendientes anteriores; no se crean START/RENEW/STOP desde esta pantalla. Selección de zona usa revisión string y requestId durable; conflicto refresca e informa sin nueva intención automática. Disponibilidad usa PATCH /driver/availability {availability}, sin campo de revisión que su DTO no admite; refresca ambas proyecciones. Recepción real OFF/PAUSED/PREVIEW/READY: no se inventa un modo LIVE. READY y canAttemptTake deben coincidir para indicar autorización de intento. Datos desconocidos/errores no habilitan cambios.
+
+Nueva verificación:64/64 pruebas en3 archivos (reception-design,independent-operations,driver-portal),20.96 s; tsc -b, tsc --project tsconfig.test.json, lint de reception.tsx y reception-design.test.tsx y vite build PASS. Aviso conocido de chunk Root1206.22 kB preservado. Primer fixture excedía bigint del contrato: corregido a9007199254740993 sin tocar validador; nueva ejecución completa verde.
+
+Arnés node scripts/verify-reception-redesign.mjs PASS,6 capturas1280/320 para OFF,READY y sin zonas; sin desbordamiento,errores ni mutaciones. HTTP simulado: no acredita backend real. [Reporte](docs/evidence/reception-ui-20261031/report.json) · [Tests](docs/evidence/reception-ui-20261031/tests.txt). Suite global anterior histórica. Cambios previos preservados; sin versión,commit/push,backend ni despliegue.
+
+## 2026-10-31 — Corrección: servicios sólo en navegación de la app Driver
+
+Aclaración del usuario: no se desea unificar Servicios/Mi servicio en Web, sino retirar ambas opciones del menú DRIVER y del contenedor PortalTabs. Retiradas ambas; deshecha la selección automática añadida en el turno anterior. No se eliminan endpoints ni rutas existentes, ni cambian permisos u otros roles. Esta entrada sustituye el alcance de la entrada inferior de acceso único.
+
+Verificación:96/96 pruebas,3 archivos (driver-portal,navigation-roles,flows),19.45 s; tsc -b y lint de archivos afectados PASS. Evidencia local:test-results/driver-app-navigation.txt. Sin versión,commit,push ni despliegue.
+
+## 2026-10-31 — Acceso único a Servicios para DRIVER
+
+Retirada opción duplicada Mi servicio del menú principal y de PortalTabs. Servicios muestra directamente el servicio activo cuando existe; sin asignación muestra disponibles. Se conserva la ruta anterior y sus acciones para enlaces existentes; Servicios permanece resaltado. Sin cambio de permisos, comandos o APIs.
+
+Verificación nueva:96/96 pruebas en3 archivos (driver-portal,navigation-roles,flows),18.61 s. Comando: node node_modules/vitest/vitest.mjs run src/test/driver-portal.test.tsx src/test/navigation-roles.test.tsx src/test/flows.test.tsx. Tipos tsc -b y lint de archivos afectados PASS. Evidencia local:test-results/unified-driver-services-final.txt. Suite global anterior histórica; no repetida aquí. Sin versión, commit,push ni despliegue.
+
+## 2026-10-31 — Verificación conjunta y publicación autorizada
+
+Mi verificación, Identidad y Unidad revisadas juntas con navegación por rol y evidencia. Suite GLOBAL nueva: **1643/1643 PASS,83 archivos,139.55 s**, sin omisiones. Tipos producto y tests, lint global y build PASS; aviso conocido Root1204.62 kB preservado. Lint ahora excluye únicamente artefactos generados test-results además de dist, evitando analizar copias temporales de backend.
+
+Corregidas dos opciones exact no admitidas por tipos de Testing Library (el nombre string sigue siendo exacto) y una aserción previa de foco que necesitaba esperar al efecto React. Primera global1642 PASS/1 FAIL conservada; segunda global completa verde, sin ampliar timeout ni cambiar permisos. Tres arneses visuales reejecutados:24 capturas,1280/320,HTTP simulado,cero mutaciones; no nueva aceptación backend. [Comandos y resultados](docs/evidence/documentary-combined-20261031/verification.json) · [Suite global final](docs/evidence/documentary-combined-20261031/global-final.txt). Logs publicados sólo normalizan blancos finales; originales permanecen locales.
+
+Usuario autoriza commit y push en rama actual main a origin github.com/zorgoluis/mandaria-frontend, sin force. Versión1.11.0 intacta. Sin despliegue ni cambios backend/móvil. Continuidad y evidencia anteriores preservadas.
+
+## 2026-10-31 — Diseño de verificación de unidad
+
+Área DRIVER de unidad adaptada al diseño documental: formulario de titular/serie, selector accesible OWNED/RENTED/BORROWED, vencimiento local convertido a UTC, categorías reales del checklist, carga privada con miniatura, historial y conservación plegable. Serie normalizada a mayúsculas sin espacios al guardar. No se inventan fechas ni estados; se conserva excepción de tarjeta de circulación de bicicleta, permisos de consulta en flotilla y comandos durables. Checklist de envío requiere datos persistidos y categorías VALIDATED, sin contar referencias retiradas como evidencia. Cambios previos y versión preservados.
+
+Verificación nueva: 134/134 pruebas en cinco archivos completos mediante `node node_modules/vitest/vitest.mjs run src/test/verification-pages.test.tsx src/test/verification-upload.test.tsx src/test/onboarding-production.test.tsx src/test/retention-projection.test.tsx src/test/image-retention.test.tsx` (11.19 s). Primera ejecución:133 PASS/1 FAIL por clic antes de resolver permisos; el test ahora espera el botón habilitado, sin ampliar timeout. Lint `node node_modules/eslint/bin/eslint.js src/verification src/test/verification-pages.test.tsx` PASS; `tsc -b` PASS; `vite build` PASS,2428 módulos. Suite global no repetida.
+
+`node scripts/verify-unit-redesign.mjs` PASS: ocho capturas1280/320, archivo inválido bloqueado, selección/quitar, modificación/reversión del borrador, conservación plegable, estado presentado de consulta, sin overflow ni mutaciones. HTTP simulado, no acredita backend/almacenamiento reales. [Reporte](docs/evidence/unit-ui-20261031/report.json) · [Tests](docs/evidence/unit-ui-20261031/tests.txt). Sin backend, versión, commit/push ni despliegue.
+
+## 2026-10-30 — Diseño del expediente de identidad
+
+Pantalla DRIVER reorganizada: encabezado/estado real, datos en dos columnas, selector de categorías, carga por clic/arrastre con miniatura y validación local de tipo/tamaño, progreso indeterminado (sin porcentaje inventado), historial y panel de envío. Guardar requiere modificación válida; presentar requiere datos guardados y categorías VALIDATED. Licencia requiere persistir su declaración y datos antes de cargar su evidencia. Se conservan comandos durables, confirmaciones, recuperación y permisos. Expediente presentado sin edición/carga; fecha de envío real. Conservación plegable con calendario acreditado en UTC, sin usar fechas de ejemplo ni deducir ausencia de obligaciones cuando no hay proyección. Historial no inventa notas que el DTO no devuelve. En móvil el envío precede al formulario.
+
+Nueva verificación: 133/133 pruebas en cinco suites (verification-pages, verification-upload, onboarding-production, retention-projection, image-retention), 10.32 s. Comando: `node node_modules/vitest/vitest.mjs run src/test/verification-pages.test.tsx src/test/verification-upload.test.tsx src/test/onboarding-production.test.tsx src/test/retention-projection.test.tsx src/test/image-retention.test.tsx`. Lint: `node node_modules/eslint/bin/eslint.js src/verification src/layouts/AdminLayout.tsx src/test/verification-pages.test.tsx` sin diagnósticos; `tsc -b` y `vite build` PASS (2428 módulos, aviso Root1203.50 kB conservado). Suite global no repetida. Dos ejecuciones intermedias tuvieron fallos de expectativas: checklist vacío antes presentable y título ahora con chip; corregidas las fixtures completas y los selectores, conservando pruebas de conflicto/confirmación/privacidad.
+
+`node scripts/verify-identity-redesign.mjs`: PASS, ocho capturas a1280/320, sin overflow ni errores ni mutaciones. Comprobados cambios válidos/reversión, archivo inválido, miniatura/quitar, solo lectura presentada y conservación plegable. HTTP interceptado sintético: no acredita backend/almacenamiento reales. [Reporte](docs/evidence/identity-ui-20261030/report.json) · [Pruebas](docs/evidence/identity-ui-20261030/tests.txt). Evidencia anterior preservada. Sin versión, commit/push, backend ni despliegue; cambios previos y .env.example conservados.
+
+## 2026-10-30 — Diseño de Mi verificación documental
+
+Área DRIVER reorganizada con estados reales, tarjetas, documentos Markdown plegables accesibles, consentimientos explícitos, recibo vigente, unidades, expedientes filtrables e historial lateral de cinco registros. Adaptación móvil y recuperación de operaciones conservada. El token de correo mantiene 43–128 caracteres (contrato real), con espera de reenvío de 60 s; control activo no se presenta como habilitación operativa.
+
+Verificación nueva: 110/110 pruebas focalizadas en cinco archivos; Chromium sintético a 1280/320 px, ocho capturas, sin desbordamiento, errores ni mutaciones. No acredita HTTP real/backend. [Reporte visual](docs/evidence/documentary-ui-20261030/report.json) y [resultado de tests](docs/evidence/documentary-ui-20261030/tests.txt). Cambios previos de navegación y .env.example preservados. Versión intacta; sin backend, commit, push ni despliegue.
+
+Comprobaciones finales: `node node_modules/eslint/bin/eslint.js . --ignore-pattern 'test-results/**'`, `node node_modules/typescript/bin/tsc -b` y `node node_modules/vite/bin/vite.js build`: PASS. Build conserva aviso de chunk >500 kB (Root 1196.11 kB). Lint sin exclusión encontró 824 errores en copias históricas de backend bajo test-results; no se presenta como verde global ni se modifican esas copias. Una ejecución duplicada de lint fue detenida. Pruebas: `node node_modules/vitest/vitest.mjs run src/test/verification-pages.test.tsx src/test/onboarding-production.test.tsx src/test/verification-recovery.test.ts src/test/verification-upload.test.tsx src/test/customer-profile-design.test.tsx` (110 PASS, 12.81 s). Visual: `node scripts/verify-documentary-redesign.mjs` PASS. Los cuatro fallos de regresión de una ejecución intermedia se corrigieron conservando la clave de caché/argumentos del historial original y evitando anunciar comprobante cuando no existe. Suite global no repetida.
+
+## 2026-10-30 — Menú según rol
+
+Mis envíos y Cuenta Negocio se muestran únicamente a CUSTOMER; se conservan las opciones administrativas, de proveedor y DRIVER según su rol, y las guardas de rutas existentes. Modificado AdminLayout, ajustadas expectativas de navegación y añadida matriz de los cuatro roles. Verificación nueva:59/59 pruebas en3 archivos (navigation-roles, flows, customer-profile-design), tipos producto tsc -b exit0. Sin versión, commit, push ni despliegue.
+
+## 2026-10-28 — Verificación previa al commit y push autorizados
+
+Usuario autoriza commit/push a rama actual main, ampliando restricciones previas. Diff revisado y archivos nuevos comprobados sin JWT/claves privadas/URLs firmadas completas; .env y test-results excluidos. Nueva suite GLOBAL1635/1635 PASS,82 archivos,0 omitidas,91.04s mediante comando directo Vitest. Dos intentos previos incompletos conservados localmente; no se cuentan como PASS. Tipos/lint Web/build anteriores permanecen identificados como históricos. [Resultado nuevo](docs/evidence/storage-web-20261028/commit-global-verification.json). Versión1.11.0 intacta; sin despliegue solicitado o ejecutado. Incluye implementación independiente acumulada y evidencia local de servicio/correctivo, preservando historial.
+
+## 2026-10-28 — Correctivo motocicleta aprobado con autorización expresa
+
+Anterior59d9cf1d-bad3-4377-962c-e9e4937fb76a WITHDRAWN/revisión8; correctivo real9864ae95-25d7-49d9-84b7-5a6a573b5ea7 APPROVED/revisión8. Misma motocicleta6a072e1f-c9ae-446a-b31b-c592427aa721/placa SYN-WEB-01 ahora ACTIVE por decisión documental; identidad/licencia original APPROVED/revisión14 sin cambios. Flujo UI/HTTP real, dos adjuntos nuevos validados, revisión SUPER_ADMIN y negativo DRIVER403 separado. Historial conservado. Driver OFFLINE, saldo0, zonas vacías/turno nulo; recepción OFF/RECEPTION_DISABLED, no READY.
+
+Corrective-final y aserciones de conservación PASS; sintaxis/diff-check exit0. Fallos de origen/caché/throttling del harness conservados sin repetir mutaciones. Sólo harness/evidencia/docs nuevos; pruebas producto anteriores históricas. [Informe y capturas](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Sin servicios/Carlos/Coita/backend/móvil, versión, commit/push/deploy. Recursos propios cerrados, backend intacto.
+
+## 2026-10-28 — Continuación documental original, aprobación parcial
+
+Recuperado CREATE_UPLOAD original con clave proporcionada por usuario y GET de intento desde UI; adjunto vencido retirado explícitamente. Seis imágenes sintéticas nuevas subidas por PUT real/complete y visualizadas por DRIVER/SUPER_ADMIN. Identidad original APPROVED/revisión14, licencia MOTORCYCLE hasta2027-10-28; mismo vehículo/expedientes. Motocicleta SUBMITTED/revisión7, INACTIVE: primer409 VERIFICATION_PLATE_REQUIRED; placa completada por UI administrativa nueva sobre vehículo original; decisión posterior409 VERIFICATION_MATERIAL_CHANGED por snapshot ya presentado. No se sustituyó ni retiró el expediente para eludir la restricción. Recepción PAUSED/DOCUMENTARY_REQUIREMENTS, OFFLINE, saldo0, sin zona/turno.
+
+Cambio Web: edición limitada de placa propia SUPER_ADMIN y aviso sobre expedientes presentados.15/15 focalizadas, tipos producto/tests y build exit0; sin suite global nueva. npm run lint sin exclusiones encontró824 errores en copias backend previas bajo test-results; no se alteraron esas copias. Resultado del lint Web delimitado en informe. [Informe, bloqueos, comandos y evidencia](docs/STORAGE-LOCAL-WEB-ACCEPTANCE-20261028.md). Sin backend/móvil/servicios/FCM/GPS, versión, commit/push/deploy. Navegador/Vite propios cerrados; backend compartido conservado.
+
+## 2026-10-28 — Cierre observado del recorrido conjunto Carlos
+
+HTTP/UI real SUPER_ADMIN a19:29 México: MDR-000001/MQ-000001, dispatch4daacb2e-8904-4113-8cc2-88f247d1863e DELIVERED; asignación abdbca5b-7c75-4a42-9182-5acbbc9f0225 COMPLETED a19:23:13.111. Ejecución revisión7/custodia DELIVERED, cinco avances y entrega en historial. Libro completo de Carlos:2 registros/1 página, recarga100 y único SERVICE_AWARD -5 del despacho, saldo95, cero SERVICE_REFUND. Movimiento e878e804-7232-449e-9c9b-9ab8b596a271. Observación posterior, sin comandos operativos Web ni atribuir taps Android a Web.
+
+joint-final exit0; aserciones sobre respuestas y node --check exit0. [Evidencia, capturas y correlaciones](docs/INDEPENDENTS-LIVE-WEB-20261028.md). Acredita cierre/cargo/sin reembolso a la consulta; no cobro físico ni onboarding completo. STORAGE_UNAVAILABLE y servicio separado Pedro pendientes. Conservados versión/cambios previos; sin backend/móvil, commit/push o despliegue.
+
+## 2026-10-28 — Despacho conjunto real observado, aún sin asignación
+
+SUPER_ADMIN UI/HTTP confirmó MDR-000001 / MQ-000001, dispatchId4daacb2e-8904-4113-8cc2-88f247d1863e a18:53 México: Disponible, sin asignaciones, vigencia hasta19:50. Detalle/asignaciones200; ejecución404, sin acreditar hitos ni finalización. Cero comandos operativos Web; Carlos/Coita intactos. observe-joint exit0, captura y trazas en [informe HTTP real](docs/INDEPENDENTS-LIVE-WEB-20261028.md). READY/socket Carlos comunicado por usuario, no ejecutado por Web. Sin versión/commit/push/despliegue; pendientes documentales anteriores preservados.
+
+## 2026-10-28 — Aceptación HTTP/UI contra backend1.13.5 encendido
+
+Nueva evidencia real, separada de1633 unitarias/8 simuladas históricas: sa/Pedro login, NONE canónico+perfil404, PENDING/suspendido, recursos propios, Pedro READY por UI y feed vacío con poll. Registro público nuevo confirmado mediante outbox, términos aceptados, identidad/licencia y vehículo propio en borradores; SUPER_ADMIN leyó el expediente nuevo.
+
+Bloqueo real: POST verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c/uploads →503 STORAGE_UNAVAILABLE a2026-10-29T00:37:04.884Z; dejó carga incompleta/revisión3. Sin repetir ni aprobar/bypassear. Presentación y decisión pendientes de almacenamiento backend. Web preparado para observar despacho conjunto; no se recibieron referencias, no se creó/tomó servicio ni actuó por Carlos. TAKE/RELEASE Pedro reservado para otro servicio posterior autorizado.
+
+[Informe, comandos, capturas, correlaciones y pendientes](docs/INDEPENDENTS-LIVE-WEB-20261028.md). Status/manifest comprobados antes de mutar; backend compartido intacto. Sólo harness/evidencia/continuidad nuevos; cambios previos preservados, Web1.11.0/main sin commit/push/deploy. No nueva suite global en este turno; node --check y git diff --check exit0. Historia inferior conservada.
+
+## 2026-10-28 — Operación Web sólo con independientes
+
+Decisión nueva: la experiencia visible se centra en expediente/aprobación, vehículo propio, créditos, zonas/turno, ofertas, servicio e historial. Flotilla/salida/invitaciones se ocultan de navegación, conservando implementación histórica, permisos y recuperación. Nueva lectura SUPER_ADMIN de categoría resuelve NONE sin perfil;404 de perfil no concede autoridad. FLEET/REVIEW_REQUIRED bloqueados. Primera habilitación exige referencia autorizada, motivo, revisión fresca y validación transaccional existente.
+
+TAKE/RELEASE migrados a Idempotency-Key durable, body exacto y recibo keyed, separados por entorno/actor/despacho/operación. IndexedDB cifrado antes de POST, sin reenvío automático; GET/close recuperan clave original aun después de perder acceso al despacho. Cuenta restringida dispone de recuperación propia. Zonas/recepción, turno explícito y disponibilidad desde servidor; READY/PREVIEW separados, feed HTTP paginado y resnapshot. Cinco hitos, entrega detallada, declaración de efectivo e incidencia sólo DRIVER propio, revisión/assignmentId/clave; RELEASE bloqueado por custodia/cobro/incidencia. NoProviderAvailable no excluye independientes.
+
+Nueva suite GLOBAL final1633/1633 PASS,81 archivos,0 omitidas;8 escenarios Chromium PASS con HTTP totalmente simulado, incluidas respuesta perdida/recarga/recibo de TAKE y RELEASE, NONE administrativo, PREVIEW, cinco hitos/completion y cobro. Capturas/contratos/huellas/comandos: [evidencia](docs/evidence/independents-only-20261028/verification.json). Tipos producto/tests, lint y build aislado verificados separadamente; warning conocido chunk>500kB. Se conservan corridas fallidas e incompletas, sin presentarlas como PASS ni sumar repeticiones.
+
+Backend supervisor vuelve a informar offline/PostgreSQLfalse: URL/build/migraciones/flags vivos no acreditados. No se arrancó/resembró la instancia compartida. HTTP real actual PENDIENTE. Las59 pruebas backend de readiness y cifras previas siguen históricas, no aceptación Web ni Android/FCM. [Implementación, matriz y handoff](docs/INDEPENDENTS-ONLY-WEB-20261028.md). Requiere instancia sintética dedicada identificada y pedido originado por su cliente titular; no se inventa MDR ni usa servicio reservado. Web1.11.0/main intactos; sin backend/móvil, datos reales, configuración remota, Docker, commit/push, mensajes automáticos o despliegue. Historia inferior preservada.
+
+## 2026-10-28 — Categorías y salida voluntaria DRIVER; entorno integrado pendiente
+
+Continuación sin commit sobre main/ffb07b1, Web1.11.0 intacta. Añadidas navegación/rutas propias DRIVER, START VOLUNTARY_EXIT sin veto, recuperación durable por AFFILIATION sin exitId y motivo por rol; proveedor conserva OWNER/ADMIN y SUPER_ADMIN sin START. Independiente→flotilla bloqueado expresamente, incluso suspendido/rechazado. Se conservan cambios pendientes de categorías, zonas, asistencia y ejecución.
+
+Verificación nueva: global1618/1618 en80 archivos,0 omitidas; focal68/68 en2 archivos; tipos producto/tests, lint y build aislado PASS. Chromium con HTTP simulado:5 escenarios PASS,0 errores de página, capturas de ACTIVE, APPLIED/PENDING recuperado tras recarga/respuesta perdida, ENDED/NONE, independiente suspendido y REVIEW_REQUIRED. No son pruebas HTTP reales. Warning conocido de chunk>500kB conservado.
+
+Supervisor backend consultado sólo en lectura: offline/PostgreSQLfalse. URL/build/migraciones/flags vivos NO acreditados; no se reiniciaron compartidos. Harness SQL legado histórico deshabilitado; se requiere fixture backend. Los185 casos backend y6 grupos Web previos siguen siendo históricos. [Matriz, archivos, limitaciones y prerrequisitos](docs/DRIVER-CATEGORY-FLEET-EXIT-WEB-20261028.md), [resultados nuevos](docs/evidence/driver-exit-ui-20261028/verification.json). Pendientes explícitos: matriz HTTP actual, primera habilitación sin perfil canónico y recuperación durable RELEASE independiente (variante histórica sin clave aún vigente). Sin cambios backend/móvil/Coita, datos reales, versión, commit/push, despliegue ni mensajes.
+
+## 2026-10-28 — Integración Web de categorías excluyentes 1.0.0
+
+Backend ya publica contrato/handoff y migración66; se supera el bloqueo documental anterior sin eliminar historia. Web sobre main/ffb07b1, versión1.11.0 intacta. Nueva lectura canónica driverCategory separa pertenencia, aprobación e historial; no habilita por providerId ausente ni por APPROVED histórico. Se retira el selector de afiliados para aprobación independiente, se revalida rehabilitación y TAKE, se restringen nuevas ediciones de zonas incompatibles y se conserva ejecución/recuperación autorizada. SUPER_ADMIN dispone de conciliación explícita de legado con motivo, revisión y requestId, intención cifrada durable y replay exacto. Sin selector MODE nuevo ni baja/reafiliación inventada.
+
+Resultados NUEVOS: suite global1613/1613 en80 archivos,0 omitidas; focal final posterior a ajustes menores128/128 en5 archivos. Tipos producto/tests, lint de todo código propio (excluye snapshots test-results/.tmp) y build aislado sin .env PASS; warning conocido chunk>500kB. Primera global1612/1613: fixture de finalización sin categoría canónica corregido, sin relajar permisos/tiempos ni omitir tests. HTTP Web6/6 grupos usando módulos reales→fetch→Nest/PostgreSQL WSL sintético, incluida aplicación de conciliación, conflicto y replay;16 grupos del runner backend reejecutados y atribuidos separadamente. Cluster/Nest propios cerrados;382 fuentes src/prisma coinciden con original. No navegador/Android acreditados por estas llamadas.
+
+[Implementación, evidencia y handoff](docs/DRIVER-CATEGORY-EXCLUSIVITY-WEB.md), [manifiesto](docs/evidence/driver-category-20261028/verification.json). Bloqueo real: primera habilitación sin perfil, porque lectura administrativa canónica devuelve404 y no hay catálogo de candidatos; no se habilita a ciegas. No existen baja independiente general ni reafiliación existente. Pendientes navegador con recarga/dos pestañas, UI Driver, sockets multiinstancia y matriz integrada nueva con ACTIVE/TAKE tardío/asistencia. Fallos iniciales del harness y límites de fixture EXIT_PENDING documentados; HTTP/GPS anteriores históricos. Sin backend/móvil, configuración remota, datos reales, versión, commit/push, despliegue ni mensajes a agentes. Cambios previos de impacto/continuidad preservados.
+
+## 2026-10-28 — Categorías excluyentes: impacto Web, contrato pendiente
+
+Solicitud: Prompt2 del adjunto, exclusión de pertenencia FLEET/independiente, no prioridad entre capacidades. Revisión documental sobre main/ffb07b1 (árbol inicial limpio); no cambio de rama. Backend legible conserva F4/offer-mode y approve de perfil como capacidad adicional; no se encontró contrato revisado ni DTO canónico de pertenencia/cierre independiente. Se aplicó alternativa explícita del usuario: impacto y pendientes, sin implementar APIs inferidas.
+
+Nuevo [informe de impacto y handoff](docs/DRIVER-EXCLUSIVE-CATEGORIES-WEB-IMPACT-20261028.md): incoherencias por ruta/campo/regla, archivos afectados, privacidad, concurrencia, recuperación, matriz de pruebas y siete requisitos de desbloqueo. Suspensión no es baja; EXIT_PENDING sigue FLEET; ENDED no aprueba independiente. Política de proveedor y ejecución/RELEASE/asistencia/movementContext preservados.
+
+Comprobaciones nuevas: lectura de fuentes y documentación, revisión de diff. Sin pruebas funcionales/HTTP/mocks, tipos/lint/build nuevos; cifras previas históricas. Git backend no legible en sandbox, sin inferir su HEAD; fuentes sí consultadas. Sólo documentación Web y continuidad, sin código, backend/Android, configuración/versiones, mensajes, commit/push o despliegue. Historia conservada.
+
+## 2026-10-26 — Revisión final y commit local QA de MDR-000001
+
+Diff revisado sobre QA5173644: supervisor local de preparación, evidencia UI de reclamo/asignación, dos muestras GPS y continuidad. Sin cambios de producto, dependencias, configuración ni versión (Web1.11.0). Las menciones históricas «pendiente»/«sin commit» describen sus etapas originales; este commit incorpora el cierre posterior sin sobrescribirlas.
+
+Revisión NUEVA: sintaxis Node, ESLint y Prettier del supervisor PASS; seis hashes históricos coinciden; seis copias GPS coinciden byte a byte con fuentes Driver/Coita; correlación de ambas muestras y los dos POST de negocio (claim200/assignment201) verificada. Capturas revisadas visualmente, registros sin credenciales/tokens. No se repitieron HTTP operativo, GPS, suite global, tipos ni build; sus cifras anteriores siguen históricas. Sin hallazgos nuevos de producto. Primera comparación nominal GPS indeterminada se conserva como limitación.
+
+Evidencia GPS ahora autocontenida bajo docs/evidence/reserved-assignment-20261026/: coita-sample{1,2}-map.png, coita-sample{1,2}-observation.json y driver-sample{1,2}.jsonl. review-manifest.json registra origen, SHA256, correlaciones y alcance. Sólo datos sintéticos. Sin backend/móvil modificados, push o despliegue; no nuevas muestras ni hitos.
+
+## 2026-10-26 — Acuse final del cierre GPS Driver
+
+Responsable Driver confirma GPS detenido, servicio Android ausente y cierre exclusivo del AVD5582, conservando datos; Coita/servidores intactos. Muestra2: accuracy5m/delta0.173m reportados por Coita; muestra1 indeterminada por falta de coordenadas/accuracy conservadas. Sin nuevas capturas ni hitos. Detalle añadido al handoff PROVIDER-INTERACTIVE-LOCAL-20261026.md; PICKED_UP revisión4 intacto. Sin nuevas pruebas Web, commit/push o despliegue.
+
+## 2026-10-26 — MDR-000001: PICKED_UP y dos muestras observadas
+
+Web reclamó/asignó el pedido reservado a Ana/fleet1; Driver avanzó por UI real a PICKED_UP revisión4 (2026-10-27T04:47:35Z) y publicó dos posiciones simuladas mediante LocationManager/FGS. Coita capturó ambos marcadores/tiles RECENT: locationVersion="11"→"12", publicVersion="13", assignmentGeneration="4". capturedAt/receivedAt UTC:04:48:16.343/04:48:30.685 y04:51:49.530/04:52:03.342. Segunda enviada tras acuse/readiness de primera. GPS detenidoUI; asignación ACTIVE, sin completion.
+
+[Handoff y evidencia](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md) conserva correlaciones, versiones de APK, fuentes Driver/Coita y límites. Segunda posición coincide nominal dentro1m; primera diferencia exacta sin causa acreditada. No se declara borrado por expiración, dispositivo físico, replay ni suite global nueva. Android atribuido a responsables. Web1.11.0/QA5173644 intactos, sin producto, commit/push o despliegue; historia/cambios previos conservados.
+
+## 2026-10-26 — Pedido reservado reclamado y asignado por UI
+
+Nueva autorización humana ejecutada: cadena checkout a6764b7a-b75c-4578-ba82-562df3fe9001→pedido cb9609f4-c9b5-40a3-8dce-148f1aa9db2d→intento4e86bc19-3bfa-4a6a-8502-62f2697aaa03→MDR-000001/MQ-000001→dispatch7e9272b5-10ca-4ceb-b1c1-3fbf78cbf632 comprobada por responsables antes de reclamar. UI claim20004:40:07.525Z y assignment20104:40:33.972Z; Ana/fleet1, ADMIN_DISPATCH. GET Web/Driver confirma assignment0aebcbc2-b8e1-45f2-b6c1-2c9c190f0ee9 ACTIVE; ejecuciónrev1 sin hito al asignar. Costo mostrado4créditos, envío55MXN CASH/RECIPIENT y comida PREPAID separados.
+
+Handoff docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md y captura/tráfico sanitizado docs/evidence/reserved-assignment-20261026/. Revisión automática inicial rechazó reclamo por externalReference distinta; resuelto mediante lectura de la cadena real, sin bypass. Driver/Coita coordinados para PICKED_UP y dos muestras LocationManager/FGS; muestras aún pendientes al registrar esta entrada. Sin nuevos tests de código, servicios reiniciados, flags, versión, commit/push ni despliegue. Historial conservado.
+
+## 2026-10-26 — Handoff reservado/GPS: lectura21:31 México
+
+Web5173 HTTP200, supervisor Mandaria56597 ready/PID41072; health404 no se interpreta como caída. Coita65397 ECONNREFUSED. Sin sesión UI disponible para revalidar datos privados. No hay asignación reservada acreditada en evidencia Web: MDR/dispatchId/assignmentId/orderId/fase y ACTIVE vigente pendientes. Datos UI originales históricos. Driver21:16 informó401/contexto, sin asignación y cero muestras; no es una comprobación nueva de Web. Dos muestras LocationManager/FGS PENDIENTES.
+
+Actualizado docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md con correlaciones, requisitos y límites. Sólo lecturas/status y documentación frontend; sin login, reinicios, mutaciones, GPS por script, flags, credenciales, FCM, mensajes externos, backend/App, commit/push ni despliegue. Historial preservado.
+
+## 2026-10-26 — Web local preparada; reclamo/asignación pendientes
+
+QA 5173644, Web1.11.0, árbol inicial limpio. Preview de build nuevo en localhost:5173, API efectiva127.0.0.1:56597/api/v1 comprobada en navegador real. Login PROVIDER_ADMIN, proveedorA, ADMIN_DISPATCH, conductores/vehículos y saldo100 verificados; lista de servicios disponibles vacía. Ana activa pero Desconectado; fleet1 activa y sin asignar. Sin despacho reservado/dispatchId confirmado: no reclamo, asignación, cargo, cancelación ni entrega. Handoff requiere recorrido Coita MPQ→conversión→consentimientoMQ→aceptación y revisión de elegibilidad del conductor.
+
+NUEVO:143/143 regresiones con mocks en6archivos, tipos producto/tests, lint global, build aislado y sintaxis/lint supervisor PASS; warning chunk>500kB conservado.35 registros HTTP sanitizados, sin4xx/5xx, distintos de pruebas con mocks. No aceptación integral ni reejecución de cifras históricas. Frontend PID21788 queda encendido; backends intactos. Sin defectos nuevos de producto; sólo supervisor/evidencia/documentación, sin versión/commit/push/despliegue. [Informe y comandos](docs/PROVIDER-INTERACTIVE-LOCAL-20261026.md), [manifiesto](docs/provider-interactive-local-evidence.json). Historial inferior conservado.
+
+## 2026-10-26 — Revisión y commit separado QA de aprobaciones
+
+Diff final revisado sobre QA f3ae9c8, conservando el commit de sincronización1.13.3/B2B. Se incorpora el harness de revocación, replay, invalidación material y nueva propuesta con dos votos, junto con informes, evidencia HTTP y continuidad. Las9 huellas previas coinciden; informe16/16 completo, cero errores de navegador, backend sin cambios y entorno cerrado. Sin hallazgos ni correcciones adicionales.
+
+Se reutilizan explícitamente las ejecuciones HTTP16/16 y regresiones93/93 de la verificación original; no se reejecutan durante esta revisión. La ausencia de TTL temporal sigue documentada y no se presenta como expiración probada. Commit local autorizado ahora; las menciones anteriores «sin commit» describen sus etapas originales. Web1.11.0 intacta; sin backend/móvil, push ni despliegue. Historia preservada.
+
+## 2026-10-26 — Revisión y commit QA de sincronización 1.13.3/B2B
+
+Diff revisado sobre QA 8dc67e6: metadatos públicos1.13.3, fuentes regenerables del paquete, evidencia y compatibilidad. Las24 huellas de sincronización y el ZIP coinciden; las9 huellas de aprobaciones pendientes permanecen intactas. Sin hallazgos ni correcciones adicionales. Se conservan los resultados recientes118/118,10/10, tipos/lint/build y navegador local; no son nuevas ejecuciones de esta revisión.
+
+Commit local autorizado exclusivamente para sincronización/B2B. Harness, informes, evidencia HTTP y entradas de continuidad de aprobaciones se dejan pendientes mediante selección parcial de los documentos compartidos. ZIP local ignorado, sin envío/publicación; Web1.11.0 intacta, sin push ni despliegue. Las menciones previas «sin commit» describen sus etapas originales.
+
+## 2026-10-26 — Sincronización documental backend 1.13.3
+
+QA 8dc67e6, Web 1.11.0 intacta. Backend QA f2f942e046901551f4e4d144479d6b5bbeac0014/1.13.3 coincide con la entrega Git indicada; no acredita servicio remoto ni despliegue. Comparación canónica: OpenAPI público Web1.13.1→1.13.3 y backend interno/público1.13.2→1.13.3 sólo difieren en info.version. Schema administrativo idéntico; no se rehacen las siete secciones, movementContext ni asistencia, y no se integra FCM Android en Web.
+
+Actualizados OpenAPI público/manifiesto mediante sync existente, textos del paquete y fecha del generador. ZIP local .tmp/b2b-integrator-package-2026-10-26.zip: 11 archivos permitidos, SHA256 a914ace0310c2afa17afde9974ec731f2d75a9fc7e1b4d299be281a2ec6e69c4. Extracción real, hashes, allowlist, enlaces y bytes deterministas PASS. Fuera de public/dist, ignorado por Git; paquete anterior conservado, sin envío.
+
+Ejecuciones NUEVAS: comparación y sync --check PASS; 10/10 tests Node de paquete/rutas; 118/118 Vitest en5 archivos (25 portal+93 asistencia),10.61s; tipos/lint/build PASS; navegador local16 recorridos/10 descargas, cero errores/peticiones externas o API; formato script/manifiesto y whitespace PASS. Prettier OpenAPI señala formato ya presente en HEAD1.13.1: ambos logs conservados, se respeta la copia autorizada exacta. Aviso previo chunk>500kB persiste. Sin fallos nuevos funcionales.
+
+[Informe, comandos, límites y paquete](docs/BACKEND-1.13.3-WEB-SYNCHRONIZATION.md); evidencia nueva docs/evidence/backend-1133-sync-2026-10-26/ y manifiesto docs/backend-1133-sync-evidence.json. Global1597 y HTTP16 anteriores HISTÓRICOS, no reejecutados porque no cambió comportamiento. Revocación/invalidez material probadas, TTL temporal ausente y distinto de expiración del cursor. Las nueve huellas de evidencia de aprobaciones pendiente permanecen intactas. Historial y cambios ajenos preservados; sin backend/App, dependencias/.env/flags, versión, Docker, commit/push, publicación o despliegue.
+
+## 2026-10-26 — Revocación e invalidación de aprobaciones ASSISTED_RELEASE
+
+Sobre QA 8dc67e6, Web 1.11.0 intacta, se amplía sólo el harness UNREACHABLE/NEW_ACTION. HTTP real NUEVO: revocar el segundo voto devuelve DRAFT/count=1; replay exacto estable; APPLY rechaza APPROVALS_REQUIRED sin efectos. Repetir el voto del otro actor no reemplaza el revocado. Reaprobar explícitamente restablece READY. Una contribución material por API invalida la propuesta: STALE/PROPOSAL_STALE sin efectos. Nueva propuesta exige dos votos nuevos; aplicación LIBERADO, recibo/replay y un único reembolso.
+
+Bloqueo concreto: la aprobación no tiene TTL en OpenAPI/DTO, tabla AssistanceApproval ni votes/barrera SQL del backend 1.13.3. No se puede acreditar expiración temporal inexistente; no se alteraron relojes ni registros para simularla. Invalidación material y expiración de cursor no equivalen a caducidad del voto. [Contrato, recorrido y límites](docs/ASSISTED-RELEASE-APPROVAL-LIFECYCLE-HTTP.md).
+
+Ejecuciones NUEVAS: node scripts/verify-admin-references-http.mjs, **16/16 grupos HTTP PASS** (aserciones ampliadas dentro de UNREACHABLE), cero errores de navegador, 65 migraciones, cursor expirado tras cinco minutos reales, cierre confirmado y fuentes backend sin cambios. Backend QA f2f942e, 1.13.3, copiado y compilado en entorno sintético aislado. Primer sondeo /health encontró ECONNREFUSED durante el arranque; el readiness posterior y el recorrido completo pasaron, sin cambiar tiempos.
+
+Regresiones NUEVAS: npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts, **93/93 PASS, 4 archivos, 7.31 s**. Sintaxis y Prettier PASS. Sin fallos de producto que corregir. Global1597/tipos/lint/build del pase conjunto anterior son HISTÓRICOS, no reejecutados. Evidencia en docs/evidence/approval-lifecycle-2026-10-26/ y manifiesto docs/approval-lifecycle-web-evidence.json.
+
+Propuesta inicial en Web; sustituta, revisiones y aplicación por HTTP. No acredita UI Android ni llamadas humanas. Permanecen límites de otros proofSource, pérdida de rol/actividad de aprobadores y custodia/economía. Backend/móvil, versión, dependencias/configuración/.env intactos; cambios ajenos backend preservados. Sin Docker, datos reales, commit/push ni despliegue. Historia inferior preservada.
+
+## 2026-10-26 — Revisión y commit local QA de la verificación conjunta
+
+Diff final revisado sobre QA 5924964: sólo logs, manifiesto y continuidad de EXISTING_RELEASE, ACCESS_RECOVERED y UNREACHABLE. Las cuatro huellas SHA-256 coinciden y los logs respaldan 1597/1597 pruebas en 79 archivos, tipos/lint/build PASS. Sin hallazgos ni correcciones adicionales; aviso conocido de chunk >500 kB.
+
+Se reutilizan las ejecuciones de la verificación conjunta inmediatamente anterior; no se ejecutaron nuevamente durante esta revisión. HTTP permanece histórico. Commit local autorizado ahora por el usuario; las menciones anteriores «sin commit» y commitCreated=false describen la etapa de ejecución. Web 1.11.0 intacta; sin cambios de producto, backend/móvil, push o despliegue. Historial preservado.
+
+## 2026-10-26 — Verificación conjunta QA de las tres variantes de asistencia
+
+Ejecuciones NUEVAS sobre QA `59249641962c6074e817e2277a98e4d3af540515`, con árbol inicial limpio y Web **1.11.0**: incluye EXISTING_RELEASE `79e938d`, ACCESS_RECOVERED `f52b782` y ASSISTED_RELEASE/UNREACHABLE `5924964`. AGENTS.md no existe en el repositorio ni en los ancestros consultados; continuidad y documentación actuales leídas.
+
+- `npm test`: **1597/1597 PASS, 79/79 archivos**, 110.08 s, salida 0.
+- `npm run typecheck:test`: PASS, salida 0.
+- `npm run lint`: PASS, salida 0.
+- `npm run build`: PASS, salida 0; conserva el aviso conocido de chunk >500 kB.
+
+Suite global completa, sin omisiones ni cambios de permisos, configuración, concurrencia o tiempos. Se ejecutó fuera del sandbox por el ENOENT de temporales documentado anteriormente; no hubo fallo nuevo ni corrección necesaria. Tipos/lint/build ejecutados en el entorno habitual. Logs nuevos en `docs/evidence/qa-assistance-combined-2026-10-26/`; comandos, commits y huellas en [manifiesto conjunto](docs/qa-assistance-combined-evidence.json).
+
+HTTP no se reejecutó en esta tarea: los informes previos de EXISTING_RELEASE (14), ACCESS_RECOVERED (15) y UNREACHABLE (16, incluye las tres variantes) permanecen históricos, sin atribuirlos a esta ejecución global. Las pruebas Web con mocks no acreditan nuevas llamadas Nest/PostgreSQL ni UI Android. Continúan los límites de cobertura exhaustiva de proofSource, expiración/revocación de aprobaciones, custodia/economía y operación remota descritos en los informes HTTP.
+
+Sin cambios de producto, harness, versión, dependencias, backend o móvil; sin commit/push ni despliegue. Sólo evidencia y continuidad nuevas; historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit local QA de UNREACHABLE
+
+Diff final revisado sobre QAf52b782: ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE con inventario y doble aprobación, corrección del harness que reutiliza sesiones existentes, evidencia y continuidad. Las15 huellas previas coinciden; HTTP16/16 completo, cero errores de navegador, backend sin cambios por el harness y entorno cerrado. Dos sesiones de la misma identidad no suman dos votos; dos administradores distintos habilitan la aplicación y el replay conserva un único reembolso. Sin correcciones adicionales en esta revisión.
+
+Se reutilizan explícitamente las ejecuciones recientes HTTP16/16 y regresiones93/93, sintaxis/formato PASS; no se reejecutaron ahora. Global1597 y tipos/lint/build anteriores siguen históricos. Backend utilizado1.13.3/f2f942e por trabajo ajeno, Web1.11.0 intacta. Commit local autorizado por el usuario; las menciones anteriores «sin commit» describen sus etapas originales. Sin backend/móvil, push ni despliegue; historial preservado.
+
+## 2026-10-25 — ASSISTED_RELEASE UNREACHABLE con doble aprobación
+
+Sobre QA f52b782 y Web1.11.0 intacta, se completa HTTP local de ASSISTED_RELEASE/NEW_ACTION/UNREACHABLE. Nueva asignación ACTIVE obtenida por Fleet TAKE; ORIGIN verificado con cuatro confirmaciones; constancia DRIVER UNREACHABLE vigente; inventario positivo. Sin constancia de no localización, el inventario se rechaza COUNTERPARTY_UNVERIFIED. La propuesta preparada en navegador exige dos votos: cero/uno rechazan APPLY; otra sesión de la misma identidad sigue contando uno. Segundo SUPER_ADMIN distinto produce READY; aplicación HTTP deja LIBERADO, asignación CANCELLED, dispatch OPEN y un solo reembolso. Consulta del intento y replay exacto conservan recibo; aplicar con nueva clave rechaza PROPOSAL_STALE sin duplicar efectos. No se registra un Fleet RELEASE adicional.
+
+HTTP NUEVO `node scripts/verify-admin-references-http.mjs`: **16/16 PASS**, cero errores de navegador,65 migraciones, cursor expirado tras cinco minutos reales y cierre Nest/PostgreSQL confirmado. Incluye nuevamente ACCESS_RECOVERED y EXISTING_RELEASE/CONTACTABLE. Backend realmente ejecutado: QA `f2f942e046901551f4e4d144479d6b5bbeac0014`, paquete1.13.3 por trabajo ajeno;379 huellas coinciden con la copia compilada. Las15 fuentes de asistencia son iguales a la evidencia anterior1.13.2. No se restauró checkout ni se amplió alcance a FCM. Cambios ajenos BITACORA.md, docs/OFFER-FCM-DRIVER-AGENT-PROMPT.md y nul preservados.
+
+Corrección del harness: primer ensayo HTTP429 por login adicional para segunda sesión. Se usan las sesiones ya creadas por API/navegador, sin ampliar límites de autenticación, relajar permisos o tiempos. Informe fallido conservado con cierre confirmado. Regresiones NUEVAS `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts`: **93/93 PASS,4 archivos**,8.40s. Sintaxis Node de los tres scripts y Prettier PASS. Global1597 y tipos/lint/build anteriores permanecen HISTÓRICOS, no se reejecutaron; no hubo cambios de producto.
+
+Evidencia y fallos separados en `docs/evidence/unreachable-release-2026-10-25/`; manifiesto `docs/unreachable-release-web-evidence.json`; [recorrido y límites](docs/ASSISTED-RELEASE-UNREACHABLE-HTTP-VERIFICATION.md). Propuesta/lectura final en navegador; inventario, revisiones y aplicación por HTTP; actas humanas sintéticas. Se completa UNREACHABLE/NEW_ACTION con doble aprobación, sin afirmar matriz exhaustiva de proofSource, revocaciones/expiraciones, custodia o economía, llamadas reales, UI Android o disponibilidad remota. Sin backend/móvil, cambio de versión Web, dependencias/configuración/.env, Docker, commit/push ni despliegue. Historial preservado.
+
+## 2026-10-25 — Revisión y commit local QA de ACCESS_RECOVERED
+
+Diff final revisado sobre QA79e938d: harness ampliado hasta aplicación ACCESS_RECOVERED, consulta del recibo mediante receipt.result, replay y controles de sesión/servicio, evidencia y continuidad. Las 13 huellas previas coinciden; HTTP15/15 completo, sin errores de navegador, backend intacto y entorno cerrado. Una resolución, sesión vigente y asignación ACTIVE sin efectos físicos/económicos nuevos. Sin correcciones adicionales durante esta revisión.
+
+Se reutilizan explícitamente las ejecuciones recientes HTTP15/15 y regresiones93/93, sintaxis/formato PASS; no se reejecutaron ahora. Global1597 y tipos/lint/build anteriores permanecen históricos. Commit local autorizado por el usuario, incluyendo evidencia fallida y final separadas. Las menciones anteriores «sin commit» describen sus etapas originales. Web1.11.0 intacta; sin backend/móvil, push o despliegue. Historial preservado.
+
+## 2026-10-25 — ACCESS_RECOVERED aplicado y verificado por HTTP local
+
+Sobre QA79e938d, Web1.11.0 intacta. Se amplía el harness existente: login DRIVER sintético posterior a la apertura, sesión seleccionada por newSessionId, propuesta Web con evidencia/identidad verificadas, rechazo APPROVALS_REQUIRED antes de revisión, aprobación por segundo SUPER_ADMIN y aplicación HTTP. El recibo devuelve ACCESO_RECUPERADO, la propuesta APPLIED; consulta del intento y replay exacto conservan el mismo resultado. GET y refresco Web confirman el estado. Una sola resolución; asignación ACTIVE con endedAt=null, dispatch/ejecución sin cambio, cero liberaciones y reembolsos; sesión vigente del conductor con refresh emitido desde la apertura y /driver/me200 antes/después. Tokens sólo en memoria, no en evidencia.
+
+HTTP NUEVO: `node scripts/verify-admin-references-http.mjs` **15/15 PASS**, cero errores de navegador,65 migraciones, expiración real del cursor tras cinco minutos y cierre Nest/PostgreSQL confirmado. Incluye nuevamente EXISTING_RELEASE/CONTACTABLE sin duplicar efectos. Backend QA `204d4f712fb150f872e006a891595f8d64b6a2c7`,1.13.2,377 fuentes comprobadas; runtime compilado desde copia actual, no dist viejo. Cambios documentales ajenos backend (BITACORA, VERIFICATION, documentos OFFER-FCM y nul) preservados.
+
+Único fallo nuevo: aserción del harness leía result directamente en la consulta de intentos; el contrato devuelve receipt.result. Se corrigió sólo el harness, se conservó el informe fallido y se repitió completo. Sin correcciones nuevas de producto ni backend. Pruebas NUEVAS: `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts` **93/93 PASS,4 archivos**,5.43s; sintaxis Node de ambos scripts y Prettier focalizado PASS. Global1597 y tipos/lint/build previos se conservan como HISTÓRICOS, no se reejecutaron para este cambio de harness.
+
+Evidencia: `docs/evidence/access-recovered-2026-10-25/`; manifiesto `docs/access-recovered-web-evidence.json`; [recorrido y límites](docs/ACCESS-RECOVERED-HTTP-VERIFICATION.md). Propuesta/refresco en navegador; revisión y aplicación por HTTP. No se acredita UI Android, llamadas reales, revocación de todas las sesiones anteriores, UNREACHABLE/doble aprobación ni disponibilidad remota. Se resuelve el pendiente de aplicación ACCESS_RECOVERED, conservando entradas anteriores como historia. Sin backend/móvil, versión, dependencias/configuración/.env, Docker, commit/push o despliegue.
+
+## 2026-10-25 — Revisión y commit local QA de EXISTING_RELEASE
+
+Diff final revisado sobre QA9e4af36: recorrido HTTP completo EXISTING_RELEASE/CONTACTABLE, refresco de permisos con revisión invariable, regresión, harness y evidencia. Las 24 huellas previas de fuentes/documentación/evidencia coinciden; informe HTTP completo14/14, sin errores de navegador y con cierre confirmado. Sin nuevas correcciones de producto durante esta revisión. Suite global1597/1597, tipos/lint/build y HTTP14 se reutilizan del pase reciente comprobado; no son nuevas ejecuciones de esta revisión.
+
+Commit local autorizado ahora por el usuario, incluyendo continuidad y avisos históricos actualizados. Las menciones anteriores «sin commit» corresponden a sus etapas originales. Versión1.11.0 intacta; backend/móvil sin cambios; sin push ni despliegue. Se conservan los límites de ACCESS_RECOVERED completo, UNREACHABLE y UI Android. Historial preservado.
+
+## 2026-10-25 — Contraste del adjunto de referencias backend 1.13.2
+
+El adjunto recibido vuelve a describir la integración ya implementada en QA9e4af36 y completada por los cambios pendientes de EXISTING_RELEASE. Se conserva íntegramente ese trabajo. Comprobación documental NUEVA: backend QA `204d4f712fb150f872e006a891595f8d64b6a2c7`, paquete1.13.2; 377 huellas de las fuentes ejecutadas coinciden con el checkout actual; 22 huellas de implementación/evidencia coinciden antes de esta actualización; schema Web de las siete secciones idéntico a OpenAPI. Los únicos cambios backend visibles siguen siendo BITACORA.md y nul, ajenos y preservados. AGENTS.md no existe en el repositorio ni ancestros consultados.
+
+No fue necesario rehacer código de producto ni ejecutar otra vez las pruebas: se reutilizan explícitamente los resultados recientes del mismo árbol (global1597/1597, tipos/lint/build PASS, HTTP14/14 con cierre confirmado). Esto es un contraste documental y de huellas, no una nueva ejecución funcional. Se añaden avisos a los dos informes históricos para evitar interpretar contactSourceRef, participationId o movementContext como ausentes. Los límites de ACCESS_RECOVERED completo, UNREACHABLE y UI Android permanecen explícitos; EXISTING_RELEASE/CONTACTABLE está completado con datos sintéticos. Sin nuevo commit/push, versión, backend/móvil, Docker o despliegue. Historia preservada.
+
+## 2026-10-25 — EXISTING_RELEASE completo por HTTP local
+
+Ampliación sobre QA `9e4af36`, Web 1.11.0 intacta. Se completa el pendiente de EXISTING_RELEASE / CONTACTABLE con datos sintéticos: TAKE/RELEASE Fleet reales generan el recibo original; dos identidades verificadas y ocho confirmaciones; inventario positivo sin obligaciones; propuesta preparada en navegador; revisión HTTP de segundo SUPER_ADMIN; aplicación y replay exacto. GET y refresco Web confirman LIBERADO. Los controles antes/después conservan una liberación, un reembolso, asignación CANCELLED sin cambios y cero obligaciones/movimientos/cobro. Sin insertar recibos artificiales ni modificar estados de asistencia directamente en base.
+
+Ejecución HTTP NUEVA: `node scripts/verify-admin-references-http.mjs`, **14/14 PASS**, cero errores de navegador, 65 migraciones, cursor expirado tras cinco minutos reales y Nest/PostgreSQL cerrados. Fuentes backend comprobadas sin cambios. Se verifican rechazos por inventario/confirmaciones ausentes y falta de aprobación; no se omiten barreras para completar el recorrido. Las declaraciones humanas son sintéticas; revisión/aplicación se ejercitan por HTTP, no se atribuyen a formularios Web.
+
+Fallo Web verificado y corregido: Actualizar expediente conservaba referencias/permisos cuando el flag cambiaba sin incrementar la revisión. El contenido se renueva con dataUpdatedAt, reconsulta permisos y descarta preparación anterior, conservando el intento durable exterior. Regresión nueva incluida. El harness normaliza datetime-local para segundos cero. Una ejecución interrumpida no produjo informe y su PostgreSQL residual fue identificado/cerrado; no se declara PASS. Primera suite global bloqueada por ENOENT de temporales del sandbox (79 archivos sin tests ejecutados); repetida sin ese aislamiento, sin cambiar configuración o tiempos.
+
+Validación NUEVA final: `npm test` **1597/1597 PASS, 79 archivos**,101.05s; tipos, lint, build y formato focalizado PASS. Archivo focalizado de asistencia **44/44 PASS**,5.98s. Permanece el aviso conocido de bundle>500kB. Informes fallidos y finales separados en `docs/evidence/existing-release-2026-10-25/`; [recorrido y límites](docs/EXISTING-RELEASE-HTTP-VERIFICATION.md), manifiesto `docs/existing-release-web-evidence.json`. Los informes anteriores (incluido HTTP12 y global1596) siguen siendo históricos; esta entrada resuelve su pendiente de EXISTING_RELEASE, no el de ACCESS_RECOVERED completo o UNREACHABLE/UI Android/operación real.
+
+Sin cambios backend/móvil, versión, dependencias, configuración, .env, commit/push ni despliegue. Se preservan los cambios ajenos de backend BITACORA.md y nul; no se tocaron. Historia inferior intacta.
+
+## 2026-10-25 — Revisión final y commit local QA de referencias administrativas
+
+Diff revisado sobre QA b55f772, conservando los commits de B2B y zonas. Las 32 huellas de implementación y evidencia coincidieron antes de esta actualización. Sin correcciones adicionales de producto durante la revisión.
+
+Comprobación NUEVA: `npx vitest run src/test/admin-references.test.tsx src/test/admin-reference-access.test.tsx src/test/assistance.test.tsx src/test/assistance-api.test.ts`: **92/92 PASS, 4 archivos**, 5.89s. Log archivado en `docs/evidence/qa-combined-admin-references-2026-10-25/admin-references-commit-review.txt`. La suite global 1596/1596, tipos, lint, build y HTTP 12/12 de la implementación anterior se conservan con huellas verificadas; no se reejecutaron en esta revisión. Cierre sintético confirmado en el reporte HTTP, sin errores de navegador. EXISTING_RELEASE completo sigue pendiente; ACCESS_RECOVERED acredita propuesta y barrera de revisión, no aplicación completa.
+
+Commit local autorizado ahora por el usuario: integración, pruebas, evidencia HTTP y continuidad. La mención «sin commit» de la entrada anterior describe aquella etapa. Web 1.11.0 intacta; sin push, publicación, despliegue ni modificaciones backend/móvil. Historial preservado.
+
+## 2026-10-25 — QA conjunta y referencias administrativas de asistencia
+
+Verificados juntos los commits QA `263a4b9` (B2B/paquete) y `b55f772` (zonas). Baseline NUEVA antes de ampliar: `npm test` **1566/1566 PASS, 77 archivos**,108.61s; `npm run typecheck:test`, `npm run lint`, `npm run build` PASS. No se corrigieron fallos de esos commits ni se reutilizó la cifra histórica1563 como ejecución actual.
+
+Por aclaración expresa del usuario se implementó después el adjunto de referencias administrativas: siete secciones tipadas/validadas contra OpenAPI, selectores SUPER_ADMIN, paginación completa, partes/canales autorizados, participación real para primera obligación, sesión y recibo original en propuestas, declaración SHIPPING_DECLARATION exacta y evidencia con hash del servidor. PROVIDER_ADMIN/movementContext, B2B, zonas y desvinculación conservados. Sin crear permisos desde caché. Catálogos sólo en memoria, cancelación/limpieza por actor/caso; cuerpos sensibles excluidos del intento durable y reinicio limitado a consulta/cierre técnico, conservando identidad y replay exacto en memoria.
+
+Suite GLOBAL final NUEVA: `npm test` **1596/1596 PASS,79 archivos**,105.33s. Tipos de tests, lint global, build y formato focalizado PASS. Schema de respuesta generado comparado con OpenAPI local: coincidencia exacta. Se conserva aviso de bundle>500kB. Ningún test omitido, ningún permiso relajado y sin aumentar tiempos de pruebas para ocultar fallos.
+
+HTTP NUEVO final: `node scripts/verify-admin-references-http.mjs` **12/12 comprobaciones PASS**, Nest/PostgreSQL sintéticos y65 migraciones. Incluye siete secciones/paginación, proveedor403 y cursores ajenos, fuente alterada/ajena/obsoleta, contribución→acta→identidad desde navegador, respuesta perdida/recibo/replay exacto, sesión→propuesta con barrera de revisión, primera obligación, parada→parte, cobro original→DECLARED sin modificar original, recibo histórico con requestId exacto,1280/320px/teclado/flagOFF y cursor expirado tras cinco minutos reales. Cierre Nest/PostgreSQL confirmado; fuentes backend verificadas sin cambio.0 errores de navegador. El recibo de liberación es fixture histórico; **no se acredita EXISTING_RELEASE completo**. Capturas revisadas sin referencias privadas, cuerpos o credenciales.
+
+Backend leído: commit `204d4f7`, paquete1.13.2; ampliación asistencia1.0.0/schemaVersion1,65 migraciones. Su handoff refiere pruebas originales1.13.1, sin acreditar disponibilidad remota. Harness compila una copia actual en scratch WSL, utiliza dependencias locales, PostgreSQL desechable y datos sintéticos, bloquea red externa e ignora .env. El código/backend móvil no se modifica. Los43E2E/765unit/40B2B backend son HISTÓRICOS, no pruebas Web.
+
+Fallos nuevos corregidos: el formulario UNKNOWN exigía importe HTML pese a enviar null; fixture unitario de evidencia incompleto; sincronización inicial del puente WSL; selección de evidencia obligatoria en inventario; fixture de conductor que intentaba usar una ruta LEGACY con modalidad DRIVER_TAKE (se usa el conductor sintético ya habilitado por APIs FLEET); fixture de huella obsoleta que violaba la restricción de asignación activa (sólo cambia updatedAt en datos desechables). No se modificaron reglas backend para resolverlos. La captura móvil se realiza con animaciones deshabilitadas para no fotografiar una transición del menú.
+
+Documento de integración, contratos y límites: [FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md](docs/FLEET-ASSISTANCE-ADMIN-REFERENCES-WEB.md). Evidencia nueva: `docs/evidence/qa-combined-admin-references-2026-10-25/`; manifiesto `docs/admin-references-web-evidence.json`. EXISTING_RELEASE completo permanece pendiente: el selector del recibo histórico no acredita inventario sin obligaciones, confirmaciones, aprobaciones ni aplicación. No se prueba UI Android, llamadas humanas, operación remota o proveedores reales. Web1.11.0 intacta; sin commit/push, publicación, despliegue, Docker ni .env. Historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit separado QA de zonas del independiente
+
+Diff de zonas revisado sobre QA263a4b9, conservando el commit B2B separado. SUPER_ADMIN usa profileId real, catálogo activo paginado y protocolo de ofertas con requestId en body; intención cifrada y replay exacto, conflicto con revisión explícita y lista vacía confirmada. Se incluyen la estabilización de fixtures/etiquetas y maxWorkers4 documentados. Sin cambios adicionales de código de producto durante esta revisión.
+
+Nueva comprobación: `npx vitest run src/test/independent-zones-api.test.ts src/test/independent-zones.test.tsx src/test/driver-portal.test.tsx src/test/delivery-assignments-api.test.ts src/test/delivery-assignments.test.tsx`:107/107 PASS,5 archivos. Las34 huellas anteriores de fuentes/evidencia verificadas coinciden (se excluyen los dos documentos compartidos de continuidad ampliados por B2B). HTTP18/18 PASS con cierre confirmado y backend intacto se reutiliza, no se reejecuta. Suite global1563/1563, tipos/lint/build previos permanecen como evidencia histórica, no nuevos resultados de esta revisión. Android UI sigue pendiente.
+
+Commit local autorizado de zonas, pruebas, evidencia HTTP, handoff y continuidad; versión Web1.11.0 intacta. Manifiesto actualizado con huellas de revisión y Git, manteniendo la evidencia de la ejecución original. Sólo se normalizan espacios finales de logs y EOF documental para el diff; no se alteran comandos/resultados. Sin backend/móvil, push, publicación, despliegue ni activación. Historial inferior preservado.
+
+## 2026-10-25 — Revisión y commit local QA del portal B2B
+
+Diff B2B revisado; fuentes públicas, paquete regenerable y evidencia incluidos en commit local autorizado. Se preservan sin incluir los cambios pendientes de zonas (incluida su continuidad local). Se normalizan a LF las fuentes textuales del ZIP para regenerarlo idéntico tras checkout Windows; 10/10 comprobaciones de paquete/rutas reejecutadas PASS y SHA256 del ZIP sin cambio. Las 25 pruebas de portal, tipos/lint/build y navegador anteriores se reutilizan como evidencia, no como nueva ejecución. No se modifica versión ni se hace push, publicación, envío o despliegue.
+
+## 2026-10-25 — Portal B2B sincronizado y paquete local para integradores
+
+QA19d30bc, Web1.11.0 sin incremento. Sincronizadas las cinco fuentes públicas del backend1.13.1;20 operaciones método+ruta exactas y schemas de automaticDispatchSearch/search. Visor/descarga leen el mismo asset. Revalidación contra backend9af2185:1.13.0→1.13.1 sólo cambia info.version; búsqueda automática corrige atraso local y no se anuncia como novedad de1.13.1. Tres referencias fuera del paquete aprobado se resuelven a secciones públicas, sin copiar handoffs. Nueva navegación de búsqueda y tabla GPS corregida a320px. Se conservó el trabajo previo de zonas/desvinculación/asistencia.
+
+Paquete local de11 archivos y ZIP determinista en `.tmp/b2b-integrator-package-2026-10-25.zip`, SHA256 `e2744137f5e5395d87b644fbeb1f540753662ddb0aa477becd59ccff16ac00f0`. Rotulado «Borrador para revisión — no enviado/no publicado», fuera de public/dist y sin enlace público al ZIP. Fuentes y regeneración: `docs/b2b-integrator-package/` y `node scripts/package-b2b-integrators.mjs`. Incluye cambios, matriz de disponibilidad, plan sintético, comunicación existente/nueva y manifiesto sin informes internos. Destinatario/canal/entorno/soporte/fecha y disponibilidad remota por confirmar; distribución requiere instrucción posterior.
+
+Pruebas NUEVAS: `npx vitest run src/test/developers.test.tsx`25/25 PASS; `node --test scripts/b2b-integrator-package.test.mjs scripts/check-developers-entry.test.mjs`10/10 PASS; `node scripts/sync-public-b2b.mjs --check`, `npm run typecheck:test`, `npm run lint`, `npm run build` y formato focalizado PASS. Build conserva advertencia de chunk>500kB. Navegador `node scripts/verify-b2b-integrator-browser.mjs`:16 recorridos y10 descargas reales en1440/320px, MIME/bytes/schemas correctos,0 errores y0 llamadas externas/API, red externa bloqueada. ZIP real extraído por Windows, allowlist/hashes exactos y regeneración idéntica. Se corrigieron carreras del harness, mapeo de enlaces codificados y expectativas estáticas obsoletas TLS de nginx (configuración intacta).
+
+No se ejecutó suite global Vitest ni HTTP funcional backend en esta tarea;1563 pruebas/18 HTTP de zonas y40 B2B backend son HISTÓRICOS, no resultados nuevos. No se declara disponibilidad remota ni receptor de integrador probado. [Informe y comandos](docs/B2B-INTEGRATOR-PACKAGE-WEB.md), [evidencia](docs/b2b-integrator-evidence.json). Sin modificar backend/móvil, .env, dependencias, datos reales, Docker, migraciones, versión, commit/push, despliegue, publicación, credenciales, mensajes o activación remota. Historial inferior preservado.
+
+## 2026-10-25 — Zonas propias del independiente y sincronización backend 1.13.1
+
+Web 1.11.0 sobre QA base 19d30bc, sin cambio de versión ni commit. Integración SUPER_ADMIN de GET/PUT offer-zones con profileId real, catálogo activo paginado, confirmación de lista vacía e intención cifrada durable por actor/entorno/perfil. Replay conserva body/requestId; el recibo histórico no sustituye proyección vigente; conflicto exige revisión humana. No se rehacen desvinculación 1.0.0 ni asistencia/movementContext.
+
+Validación nueva: suite GLOBAL final `npm test` **1563/1563 PASS, 77 archivos**, 99.25s; tipos de tests, lint global, build y formato focalizado PASS. Se conservan advertencia de chunk >500kB y los informes históricos inferiores. Baseline de esta tarea:1508 PASS/20 FAIL; se corrigieron fixtures de trackingMode/etiquetas y se limitó la concurrencia jsdom a4 sin omitir tests ni ampliar deadlines. Los fallos nuevos de fixtures/composición y clic previo a habilitación también quedaron corregidos; pases intermedios archivados.
+
+HTTP nuevo `node scripts/verify-client-sync-http.mjs`: **18 comprobaciones PASS** con Nest/PostgreSQL sintéticos en WSL; zonas visibles en lectura DRIVER sin selección/turno automáticos, pérdida de respuesta/replay, otro administrador, vaciado y flag OFF. Se reejecutaron salida/movementContext y se ampliaron ACCOUNT_CLOSING/reauth, cursor expirado tras cinco minutos reales y custodia resuelta por APIs existentes. Backend compilado desde fuentes actuales verificadas; procesos cerrados y backend intacto. Routing/mail simulados y FCM/socket desactivados. Esto no acredita UI Android ni reutiliza cifras históricas backend como resultados Web.
+
+Implementación, matriz y límites: [informe](docs/INDEPENDENT-OFFER-ZONES-WEB.md). Reproducción móvil pendiente: [handoff](docs/INDEPENDENT-OFFER-ZONES-MOBILE-HANDOFF.md). Comandos, intentos fallidos, logs, capturas y huellas: [manifiesto](docs/client-sync-web-evidence.json), [evidencia](docs/evidence/client-sync-2026-10-25/report.json). No hay bloqueo local de zonas por el futuro contexto de asistencia. Retención de siete días y ciertos errores se cubren con Vitest simulado, no HTTP real. Sin backend/móvil, dependencias, .env, datos operativos, Docker, versión, commit/push, mensajes externos, despliegue o activación remota. Historial inferior preservado.
+
+## 2026-10-24 — Revisión para commit local QA y versión Web 1.11.0
+
+Diff final de desvinculación y transición independiente revisado; 41 huellas previas de implementación/evidencia coinciden. Versión Web incrementada de1.10.0 a1.11.0 en package.json y package-lock.json, sin cambios de dependencias; el contrato funcional permanece1.0.0. Build con1.11.0 PASS, con la advertencia conocida de chunk >500kB. Evidencia HTTP vigente:12 comprobaciones PASS; se reutiliza sin atribuir una nueva ejecución al cambio de versión. También se conservan63 pruebas nuevas PASS,325 focalizadas y los límites/fallos globales documentados abajo.
+
+Commit local autorizado en QA con código, pruebas, continuidad y evidencia. El manifiesto registra esta revisión previa al commit y sus huellas; el SHA del commit corresponde a la revisión Git que contiene esta entrada. Sin push, despliegue, activación remota ni cambios backend/driver. Historial inferior preservado.
+
+## 2026-10-24 — Desvinculación Web 1.0.0 implementada localmente
+
+QA base 829d012. La autorización posterior sustituye el alcance documental previo: cliente tipado validado con OpenAPI, navegación proveedor/admin, START/RECHECK por capacidades, detalle histórico, avisos y recuperación cifrada por cuenta/entorno/proveedor implementados. SUPER_ADMIN no inicia salidas; APPLIED/PENDING no se presenta como desvinculación completada. Se conserva asistencia/movementContext y operación FLEET/independiente previa.
+
+Validación Web: 325 pruebas focalizadas PASS; tras retirar recibos privados en memoria al perder autoridad y conservar el recibo COMPLETED ante el 404 esperado del contexto, 63 pruebas nuevas PASS y build PASS. Tipos, lint global y formato focalizado PASS. Suite global anterior al último ajuste: 1506 PASS/21 FAIL; 18 fallos de asignaciones (17 UI y1 etiquetas) coinciden con deuda histórica. Los3 fallos de dispatch/finalización sensibles a carga pasan al ejecutar sus archivos completos aparte (96/96). Se actualizaron las expectativas de navegación por sus enlaces vigentes. Build conserva advertencia de chunk >500kB.
+
+HTTP final: 12 comprobaciones PASS, incluida conciliación histórica después de COMPLETED; procesos cerrados y backend intacto. Comandos, capturas, huellas y límites en [informe de integración](docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB.md) y [manifiesto](docs/fleet-exit-web-evidence.json). No se atribuyen a Web las177 E2E/765 unitarias/40 B2B previas del backend. Se mantienen documentadas las ramas no ejecutadas por HTTP. Sin backend/driver, dependencias, configuración, .env o versión modificados; sin Docker, datos reales, commit/push, despliegue o activación remota. Historial inferior conservado.
+
+## 2026-10-24 — Diseño Web de desvinculación y transición independiente 1.0.0
+
+QA base 829d012; sólo diseño documental, sin implementación de la ampliación. [Documento de integración](docs/FLEET-EXIT-INDEPENDENT-TRANSITION-WEB-DESIGN.md): experiencias PROVIDER_ADMIN/SUPER_ADMIN separadas, navegación y archivos previstos, estados de afiliación/salida/elegibilidad, rutas/DTO futuros, intención cifrada y recuperación START por affiliationId, privacidad histórica, avisos HTTP y matriz X01–X30 prevista.
+
+Comprobación documental y estática exclusivamente: cuatro documentos backend leídos en sólo lectura y recorridos Web contrastados. API nueva no disponible; no se ejecutaron pruebas funcionales, mocks ni HTTP. Pendientes concretos de scope provider, filtros de avisos, schema REJECTED, allowlist de cuenta restringida y selector Web de zonas identificados; políticas S1–S10 conservadas. Sin código, dependencias, configuración, .env, backend/driver, datos operativos, Docker, commit/push o despliegue. Asistencia/movementContext, FLEET e independiente previos permanecen vigentes. Historial inferior conservado.
+
+## 2026-10-24 — Revisión y commit local de movimientos del proveedor
+
+Diff final revisado para commit local autorizado en QA: movementContext PROVIDER_ADMIN, declaraciones, disputas, recuperación y evidencia HTTP. Las 33 huellas del manifiesto coinciden con fuentes y artefactos del pase validado; se reutilizan 158 pruebas focalizadas, 20 comprobaciones HTTP reales, tipos/lint/build y revisión visual. No se repiten suites ni se modifica código. Sin push, despliegue o activación. La revisión Git que contiene esta entrada identifica el commit; el manifiesto conserva el estado anterior al commit durante la verificación.
+
+## 2026-10-24 — movementContext PROVIDER_ADMIN integrado localmente
+
+Web vigente: C:/Users/zorgl/Documents/mandaria-frontend, QA base 1ec1a83. El backend actual ya ofrece proyección provider: se sustituye el bloqueo histórico general. Selección de combinaciones autorizadas, dinero exacto, declaración pendiente, disputa por movement.id y recuperación cifrada implementadas; las contrapartes ambiguas siguen bloqueadas con explicación.
+
+Validación propia Web: 158 pruebas focalizadas, 20 comprobaciones HTTP reales contra Node/PostgreSQL aislados en WSL, tipos/lint/build PASS y revisión visual. Se conservan consola SUPER_ADMIN, FLEET 1.0.0 e independiente 1.1.0. Entorno de ensayo cerrado; backend intacto. [Informe vigente y límites](docs/FLEET-ASSISTANCE-PROVIDER-MOVEMENTS-WEB.md) · [Evidencia](docs/fleet-assistance-provider-movements-evidence.json). Activación remota/producción pendiente por separado; sin commit, push, despliegue ni cambios de .env. Las entradas inferiores son históricas.
+
+## 2026-10-23 — Revisión para commit local de asistencia en QA
+
+Commit local autorizado con implementación y evidencia HTTP actualizada; sin push ni despliegue. Diff revisado y huellas de fuentes/capturas contrastadas con el manifiesto: coinciden. Se reutilizan 119 pruebas focalizadas y 14 comprobaciones HTTP reales, tipos/lint/build y revisión visual del pase final, sin repetir suites ni modificar código. Los bloqueos de referencias backend siguen documentados; no se declara integración completa ni activación productiva. El SHA del commit se obtiene de la revisión Git que contiene esta entrada.
+
+## 2026-10-23 — Asistencia Web contra backend actual (continuación)
+
+QA base 7488fc8; se conserva la implementación previa. La ampliación movementContext es sólo DRIVER y no concede referencias al dueño. Ahora el upload conserva únicamente huellas, exige reselección del original tras reinicio y mantiene la reserva hasta confirmar atómicamente el siguiente paso. Selectores administrativos aprovechan identidades históricas y participationId de obligaciones existentes; filtros de estado, envío, proveedor y límite integrados. Proyecciones antiguas sin capacidades no conceden comandos.
+
+[Informe vigente, pruebas y bloqueos exactos](docs/FLEET-ASSISTANCE-WEB-CURRENT.md). Validación final: 119 pruebas focalizadas, 14 comprobaciones HTTP real, tipos/lint/build PASS y capturas revisadas; entorno de ensayo cerrado. No se declara integración completa: faltan canales registrados, referencias propias del dueño y selectores documentados. Backend actual comparado con Windows y recompilado en scratch WSL para HTTP sintético. Sin .env compartidos, Docker, backend/driver modificados, proveedores reales, commit/push ni despliegue. Las entradas siguientes conservan los resultados históricos.
+
+## 2026-10-23 — Asistencia y conciliación: Web local y HTTP
+
+Web vigente en C:/Users/zorgl/Documents/mandaria-frontend, QA base 7488fc8. UI por rol, cliente tipado, intentos cifrados y recuperación, evidencia privada y propuestas/votos implementados. Chrome → Nest WSL → PostgreSQL sintético: 11 comprobaciones HTTP PASS; 95 pruebas focalizadas PASS, typecheck:test, lint y build PASS. Capturas dueño 1280/320 y admin 1280 revisadas. Suite global no repetida; fallos históricos no declarados resueltos.
+
+Integración aún incompleta: faltan referencias autorizadas de canal registrado, participación, partes/movimientos propios y otros selectores; se bloquean comandos dependientes. El HTTP real confirmó que incluso admin recibe contactSourceRef redactado. [Implementación, recorridos y faltantes exactos](docs/FLEET-ASSISTANCE-WEB.md) · [Evidencia](docs/fleet-assistance-web-evidence.json). Backend/DB de prueba cerrados, fuentes backend intactas; sin .env, datos/proveedores reales, commit/push o despliegue. Esta entrada actualiza el contexto; las entradas inferiores conservan su historial.
+
+## 2026-10-23 — Integración HTTP FLEET local verificada
+
+Web vigente en C:/Users/zorgl/Documents/mandaria-frontend (QA, base 58f4d519). Chrome → Vite → Nest en WSL → PostgreSQL aislado: **10 escenarios PASS**, autenticación y autorización reales con identidades sintéticas. Recuperación de gasto tras respuesta perdida: mismo cuerpo/UUID, operaciones 2 → 3 → 3, ACTIVE conservado y ledger sin cambios. Corregido el mensaje del cursor malformado que el backend devuelve como 409 ECONOMIC_CONTEXT_CHANGED.
+
+34 pruebas FLEET PASS; tipos de pruebas, build y lint focalizado PASS. Capturas 1280/320 revisadas. Backend y PostgreSQL de ensayo detenidos, auxiliares cerrados. Sin despliegue ni proveedores reales; sin cambios de .env, Docker o fuentes backend. [Informe HTTP](docs/FLEET-DIRECT-TAKE-HTTP-INTEGRATION.md) y [evidencia HTTP](docs/fleet-direct-take-http-evidence.json). Esta entrada sustituye el estado “integración pendiente” de las entradas históricas siguientes; sus resultados anteriores se conservan.
+
+## 2026-10-23 — Web FLEET implementada localmente
+
+Contexto vigente: C:/Users/zorgl/Documents/mandaria-frontend, rama QA, base 58f4d519; checkout inicialmente limpio, sin AGENTS.md. Se sustituye sólo el alcance anterior de diseño: contexto/capacidades, observación privada por segmentos y gasto por conductor implementados; ADMIN_DISPATCH preservado y DRIVER_TAKE/PAUSED sin mutaciones de envío. Contratos FLEET 1.0.0 e independiente 1.1.0 consultados en backend local, sólo lectura.
+
+296 pruebas focalizadas finales PASS; suite completa previa al último endurecimiento 1352 PASS/20 fallos previos documentados. Build PASS; Chrome sintético 1280/320, foco/Enter y privacidad PASS. Tipos/lint y manifiesto final en [informe y límites](docs/FLEET-DIRECT-TAKE-WEB.md) y [evidencia](docs/fleet-direct-take-web-evidence.json). Integración HTTP real pendiente: WSL conserva clústeres de prueba detenidos, sin API activa. No confundir fixtures o evidencia backend histórica con E2E Web. Sin .env, Docker, backend/App, datos reales, commit/push, despliegue ni activación. Las entradas siguientes son historia preservada.
+
 ## 2026-10-22 — Snapshot de dirección por parada en precotización
 
 Ejecutado en feat/prequote-stop-addresses: tsc -b, typecheck:test, ESLint y vite build PASS (advertencia previa chunk >500 kB). Vitest completo 1338/1358; las 20 fallas son las deterministas preexistentes de delivery-assignments (17), delivery-assignments-api (1) y flows (2). Archivos de cliente afectados completos: 99/99 PASS (customer, customer-address, customer-stop-addresses, customer-location, customer-quote-design, customer-autocomplete, customer-conversion-design, api).
@@ -2203,4 +2804,3 @@ Arnés navegador: primera ejecución `1792376328952` escribió reporte FAIL por 
 Evidencia histórica reutilizada, sin repetir entrega/depuración: docs/deletion-delivery-resume-evidence.json y docs/deletion-receipt-only-evidence.json permanecen intactos. ActiveService, proyección de sesión, cliente HTTP, marcadores y lectura/proyector del recibo no cambiaron; hooks añade polling opt-in apagado para servicio comprometido, pages/service añaden V2 y resumen. Las siete huellas históricas Web ya no coinciden en pages/service por esta adaptación: no se afirma una integración nueva de esos archivos. Las regresiones completas de sesión y recuperación sí son nuevas. Sin nueva entrega, reloj de purga, PostgreSQL ni cambios backend. Histórico no acredita V2 actual.
 
 Bloqueos: GET commandSnapshot no admite CANCELLED; por ello no se habilitan decisiones administrativas sobre canceladas sin recuperación segura. No existe endpoint de observaciones completas/historia de incidentes, mapa gate→resource completo ni inventarioVerificado en work-items; Web no los inventa. Pasos de integración aislada posterior en handoff. Constancias parciales; drenaje real en Spaces y apertura limitada de restauración pendientes. No eliminación total ni aptitud productiva. Sin Docker43000, QA, commit, push ni despliegue.
-

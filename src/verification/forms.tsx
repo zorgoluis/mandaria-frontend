@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Field } from '../components/ui'
 import { vehicleTypes } from '../logistics/types'
 import { labels as operationalLabels } from '../utils/format'
@@ -23,10 +23,14 @@ const local = (s?: string) =>
 export function CaseForm({
   record,
   disabled = false,
+  designed = false,
 }: {
+  designed?: boolean
   record: VerificationCase
   disabled?: boolean
 }) {
+  const original = useRef<string | null>(null)
+  const [validChange, setValidChange] = useState(false)
   const command = useCommand()
   const [license, setLicense] = useState(!!record.data.license)
   const [ownership, setOwnership] = useState<Ownership>(
@@ -34,24 +38,52 @@ export function CaseForm({
   )
   const identity = record.subjectType === 'DRIVER_IDENTITY'
   return (
-    <section className="panel panel-body">
-      <h2>Datos del borrador</h2>
+    <section
+      className={'panel panel-body' + (designed ? ' identity-draft' : '')}
+      id={designed ? 'datos-expediente' : undefined}
+      tabIndex={designed ? -1 : undefined}
+      ref={(node) => {
+        const form = node?.querySelector('form')
+        if (form && original.current === null)
+          original.current = JSON.stringify([...new FormData(form).entries()])
+      }}
+      onChange={(e) => {
+        const form = (e.target as HTMLElement).closest('form')
+        if (form)
+          setValidChange(
+            form.checkValidity() &&
+              JSON.stringify([...new FormData(form).entries()]) !==
+                original.current,
+          )
+      }}
+    >
+      <h2>
+        {designed && <span className="documentary-step">1</span>}Datos del
+        borrador
+      </h2>
       <Form
         label="Guardar datos"
-        disabled={disabled || command.blocked || command.busy}
+        disabled={
+          disabled ||
+          command.blocked ||
+          command.busy ||
+          (designed && !validChange)
+        }
         onSubmit={async (d) => {
           const data: IdentityData | UnitData = identity
             ? {
                 fullName: text(d, 'fullName'),
                 contactPhone: text(d, 'contactPhone'),
-                operatingCity: text(d, 'operatingCity'),
                 documentType: 'INE',
                 ...(license
                   ? {
                       license: {
-                        issuer: text(d, 'issuer'),
                         category: text(d, 'category'),
-                        expiresAt: utc(text(d, 'expiresAt')),
+                        expiresAt:
+                          text(d, 'expiresAt') ===
+                          local(record.data.license?.expiresAt).slice(0, 10)
+                            ? record.data.license!.expiresAt
+                            : utc(text(d, 'expiresAt') + 'T23:59:59.999'),
                         vehicleTypes: motorTypes.filter((t) =>
                           d.getAll('vehicleTypes').includes(t),
                         ),
@@ -61,13 +93,20 @@ export function CaseForm({
               }
             : {
                 declaredOwnerName: text(d, 'declaredOwnerName'),
-                serialNumber: text(d, 'serialNumber'),
+                serialNumber: text(d, 'serialNumber')
+                  .replace(/\s/g, '')
+                  .toUpperCase(),
                 ownershipEvidenceType: ownership,
                 ...(text(d, 'authorizationExpiresAt')
                   ? {
-                      authorizationExpiresAt: utc(
-                        text(d, 'authorizationExpiresAt'),
-                      ),
+                      authorizationExpiresAt:
+                        text(d, 'authorizationExpiresAt') ===
+                        local(record.data.authorizationExpiresAt).slice(0, 10)
+                          ? record.data.authorizationExpiresAt!
+                          : utc(
+                              text(d, 'authorizationExpiresAt') +
+                                'T23:59:59.999',
+                            ),
                     }
                   : {}),
               }
@@ -79,6 +118,8 @@ export function CaseForm({
             throw new Error(
               'Selecciona al menos un tipo motorizado de la licencia.',
             )
+          if (!identity && !(data as UnitData).serialNumber)
+            throw new Error('Indica un número de serie válido.')
           await command.send(
             'UPDATE_CASE',
             record.id,
@@ -93,6 +134,7 @@ export function CaseForm({
             <Field label="Nombre completo *">
               <input
                 name="fullName"
+                placeholder="Como aparece en tu INE"
                 required
                 maxLength={150}
                 defaultValue={record.data.fullName}
@@ -101,18 +143,12 @@ export function CaseForm({
             <Field label="Teléfono de contacto *">
               <input
                 name="contactPhone"
+                inputMode="tel"
+                placeholder="10 dígitos"
                 required
                 minLength={5}
                 maxLength={30}
                 defaultValue={record.data.contactPhone}
-              />
-            </Field>
-            <Field label="Ciudad de operación *">
-              <input
-                name="operatingCity"
-                required
-                maxLength={150}
-                defaultValue={record.data.operatingCity}
               />
             </Field>
             <p>
@@ -123,21 +159,16 @@ export function CaseForm({
               <input
                 type="checkbox"
                 checked={license}
-                onChange={(e) => setLicense(e.target.checked)}
+                onChange={(e) => {
+                  setLicense(e.target.checked)
+                  if (e.target.checked) setValidChange(false)
+                }}
               />
               Declarar licencia del conductor (necesaria para tipos motorizados)
             </label>
             {license && (
               <fieldset>
                 <legend>Licencia personal</legend>
-                <Field label="Emisor *">
-                  <input
-                    name="issuer"
-                    required
-                    maxLength={150}
-                    defaultValue={record.data.license?.issuer}
-                  />
-                </Field>
                 <Field label="Categoría *">
                   <input
                     name="category"
@@ -146,18 +177,18 @@ export function CaseForm({
                     defaultValue={record.data.license?.category}
                   />
                 </Field>
-                <Field label="Vencimiento, hora local *">
+                <Field label="Fecha de vencimiento *">
                   <input
                     name="expiresAt"
-                    type="datetime-local"
+                    type="date"
                     required
-                    defaultValue={local(record.data.license?.expiresAt)}
+                    defaultValue={local(record.data.license?.expiresAt).slice(
+                      0,
+                      10,
+                    )}
                   />
                 </Field>
-                <p>
-                  Se envía el instante UTC. Sin equivalencias jurídicas
-                  automáticas ni gracia.
-                </p>
+                <p>El vencimiento se registra al final de la fecha elegida.</p>
                 {motorTypes.map((t) => (
                   <label className="verification-check" key={t}>
                     <input
@@ -179,6 +210,7 @@ export function CaseForm({
             <Field label="Nombre del titular declarado *">
               <input
                 name="declaredOwnerName"
+                placeholder="Como aparece en la tarjeta de circulación"
                 required
                 maxLength={150}
                 defaultValue={record.data.declaredOwnerName}
@@ -187,45 +219,77 @@ export function CaseForm({
             <Field label="Número de serie *">
               <input
                 name="serialNumber"
+                placeholder="VIN o número de serie"
                 required
                 maxLength={150}
                 defaultValue={record.data.serialNumber}
               />
             </Field>
-            <Field label="Propiedad o uso autorizado *">
-              <select
-                value={ownership}
-                onChange={(e) => setOwnership(e.target.value as Ownership)}
-              >
-                {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
-                  <option key={v} value={v}>
-                    {labels[v]}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Vencimiento de autorización, hora local (opcional)">
+            {designed ? (
+              <fieldset className="field unit-ownership-field">
+                <legend>
+                  Propiedad o uso autorizado <span aria-hidden="true">*</span>
+                </legend>
+                <div
+                  role="radiogroup"
+                  aria-label="Propiedad o uso autorizado"
+                  className="unit-ownership"
+                >
+                  {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
+                    <label key={v}>
+                      <input
+                        type="radio"
+                        name="ownershipEvidenceType"
+                        value={v}
+                        checked={ownership === v}
+                        onChange={() => setOwnership(v)}
+                      />
+                      {labels[v]}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            ) : (
+              <Field label="Propiedad o uso autorizado *">
+                <select
+                  value={ownership}
+                  onChange={(e) => setOwnership(e.target.value as Ownership)}
+                >
+                  {(['OWNED', 'RENTED', 'BORROWED'] as const).map((v) => (
+                    <option key={v} value={v}>
+                      {labels[v]}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            )}
+            <Field
+              hint={
+                ownership !== 'OWNED'
+                  ? 'Indica hasta cuándo puedes usar esta unidad. Recomendado.'
+                  : undefined
+              }
+              label="Vencimiento de autorización (opcional)"
+            >
               <input
                 name="authorizationExpiresAt"
-                type="datetime-local"
-                defaultValue={local(record.data.authorizationExpiresAt)}
+                type="date"
+                defaultValue={local(record.data.authorizationExpiresAt).slice(
+                  0,
+                  10,
+                )}
               />
             </Field>
             <p>
-              {record.registrationCardRequired !== false &&
-                'Tarjeta de circulación y '}
-              {record.registrationCardRequired === false &&
-                'Bicicleta: no requiere tarjeta de circulación. Requiere '}
-              {
-                labels[
-                  ownership === 'OWNED'
-                    ? 'OWNERSHIP_PROOF'
-                    : ownership === 'RENTED'
-                      ? 'RENTAL_CONTRACT'
-                      : 'OWNER_AUTHORIZATION'
-                ]
-              }
-              . En flotilla la unidad no necesita pertenecer al conductor.
+              {record.registrationCardRequired === false
+                ? 'Bicicleta: no requiere tarjeta de circulación.'
+                : 'Tarjeta de circulación.'}
+              {ownership === 'RENTED'
+                ? ' ' + labels.RENTAL_CONTRACT + '.'
+                : ownership === 'BORROWED'
+                  ? ' ' + labels.OWNER_AUTHORIZATION + '.'
+                  : ''}{' '}
+              En flotilla la unidad no necesita pertenecer al conductor.
             </p>
           </>
         )}
@@ -265,7 +329,7 @@ export function NewUnit({ disabled = false }: { disabled?: boolean }) {
           <input
             name="identifier"
             required
-            pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,29}"
+            pattern="[A-Za-z0-9][A-Za-z0-9_\-]{0,29}"
             maxLength={30}
           />
         </Field>

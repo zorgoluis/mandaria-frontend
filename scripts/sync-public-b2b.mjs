@@ -21,7 +21,17 @@ const files = [
 const target = resolve(root, 'public/developers/assets')
 const hash = (text) => createHash('sha256').update(text).digest('hex')
 const manifest = {
-  source: 'Mandaria Backend / B2B-FRONTEND-HANDOFF.md',
+  source: 'Mandaria public B2B artifacts',
+  notice: 'Borrador para revisión — no enviado/no publicado',
+  sourceHashes: {},
+  linkReplacements: {
+    'V1.18-B2B.md':
+      'B2B-PUBLIC-GUIDE.md#v118--gps-y-enlaces-temporales-backend-local-sin-activar',
+    'AUTOMATIC-DISPATCH-SEARCH-HANDOFF.md':
+      'B2B-PUBLIC-GUIDE.md#búsqueda-automática-opcional-después-de-aceptar',
+    'PUBLIC-B2B-TRACKING.md':
+      'B2B-PUBLIC-GUIDE.md#fotografía-pública-versionada--disponible-en-checkout-qa-no-desplegada',
+  },
   files: {},
 }
 const docs = new Map(
@@ -34,6 +44,9 @@ const docs = new Map(
   ]),
 )
 const spec = JSON.parse(docs.get('openapi-b2b.json'))
+manifest.contractVersion = spec.info.version
+if (spec.servers[0].url !== 'https://mandaria.com.mx')
+  throw new Error('Unexpected public server')
 if (
   Object.keys(spec.components.securitySchemes).join() !== 'integration-bearer'
 )
@@ -74,7 +87,12 @@ for (const [path, methods] of Object.entries(spec.paths)) {
   }
 }
 if (approved.size) throw new Error('Missing reviewed public operations')
-for (const [name, text] of docs) {
+for (const [name, original] of docs) {
+  manifest.sourceHashes[name] = hash(original)
+  let text = original
+  if (name.endsWith('.md'))
+    for (const [from, to] of Object.entries(manifest.linkReplacements))
+      text = text.replaceAll(`](${from})`, `](${to})`)
   manifest.files[name] = hash(text)
   const output = resolve(target, name)
   if (checking) {

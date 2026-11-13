@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+  "checks": [
+    "offline-ready-no-zones-no-shift-no-offers-no-services-navigation"
+  ],
+  "screenshots": [
+    {
+      "file": "offline-1280.png",
+      "width": 1280,
+      "sha256": "50e8c6d3ffca9976b35589bf7331acb1c4452270caa3c224db608adaf513d65e"
+    },
+    {
+      "file": "offline-320.png",
+      "width": 320,
+      "sha256": "9455284ea1a406fcb5412b5ed5977cf2ea1074251d9999038b03fa7dbd76b828"
+    },
+    {
+      "file": "ready-1280.png",
+      "width": 1280,
+      "sha256": "791df97dbb6f0df29ef75236f04e8d8e57304f8bb8e82aec2649a8d75b76df65"
+    },
+    {
+      "file": "ready-320.png",
+      "width": 320,
+      "sha256": "872c4e8d3e7958d49d22a097ee6bb621cd7c47873d82ae97ec43b47a57b138f4"
+    },
+    {
+      "file": "no-zones-1280.png",
+      "width": 1280,
+      "sha256": "8859fbba26ec0d0e4e2be249319a61548287556adc682a78428caa3a36deae63"
+    },
+    {
+      "file": "no-zones-320.png",
+      "width": 320,
+      "sha256": "d0b58510e0df124600ef5a19eea5232830316795c7c14a6c99fac822c443f670"
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "mutations": 0
+}

@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-23",
+  "checkout": "C:/Users/zorgl/Documents/mandaria-frontend",
+  "branch": "QA",
+  "base": "58f4d519eed500e96e0aa9586e93e47ba377dff7",
+  "scope": "real Web/Nest HTTP/PostgreSQL; synthetic identities/data; external routing/mail simulated",
+  "output": "test-results/fleet-http-1792783122772",
+  "checks": [
+    "real-login-and-own-history",
+    "private-envelope-without-contact-or-package-content",
+    "old-deep-link-no-legacy-projection-and-eight-HTTP-mutations-denied",
+    "spending-revoke-lost-response-reload-exact-replay-one-effect-ACTIVE-preserved",
+    "real-revision-conflict-requires-review",
+    "PAUSED-observer-and-real-denial",
+    "real-invalid-cursor-error-clears-rows-and-refresh-recovers",
+    "27-seeded-historical-segments-real-list-detail-cursor-filter-reset-and-foreign-404",
+    "ADMIN_DISPATCH-read-regression-and-DRAINING-claim-denial",
+    "membership-revocation-clears-visible-private-data-and-HTTP-denies"
+  ],
+  "networkErrors": [],
+  "complete": true,
+  "database": {
+    "name": "mandaria_fleet_web_test",
+    "directory": "/tmp/mandaria-fleet-web-wZlKo5/pgdata",
+    "migrations": 63,
+    "apiPort": 4227
+  },
+  "lostResponseCommitted": true,
+  "idempotency": {
+    "originalPuts": 1,
+    "exactReplays": 1,
+    "commandsBefore": 2,
+    "commandsAfterLost": 3,
+    "commandsAfterReplay": 3,
+    "activeBefore": 1,
+    "activeAfter": 1,
+    "ledgerUnchanged": true
+  },
+  "invalidCursor": {
+    "status": 409,
+    "code": "ECONOMIC_CONTEXT_CHANGED"
+  },
+  "shutdown": {
+    "stopped": true,
+    "data": "/tmp/mandaria-fleet-web-wZlKo5/pgdata",
+    "backendUnchanged": true,
+    "backendHashes": {
+      "src/fleet-offers/fleet.controller.ts": "32e704f3fc1a73a3382fd2b1a21163f3ddc09a02c8aa6fa256cb2e2323158f8c",
+      "src/fleet-offers/fleet.dto.ts": "aadd0b7d34625f6c8b9ba71e4627869248244ab0615134c60ee0bf5d1e7f7613",
+      "src/fleet-offers/fleet.service.ts": "2efc3aef148132a4238f0659be8f4ab7a06f11fe3921f61811f0e99bccba1dc7",
+      "src/fleet-offers/fleet-legacy.guard.ts": "b9f44b3bd70e8908028a4793a5bf08b09bb4906fb275d9bedce8ba6f151ff03a",
+      "dist/fleet-offers/fleet.controller.js": "9f105ecada87b784da487ef54d35234df62cd0a64c72d03d262255ead370fc09",
+      "dist/fleet-offers/fleet.dto.js": "8f2fa5f9354a53a6bf80580e09f1a3e5794a0efaf253f7dd58054fa849a4c473",
+      "dist/fleet-offers/fleet.service.js": "2fa22d8a669f5b6f31fcc466bdd37925abebfe5de63c9c7866acb1e530a9ca57",
+      "dist/fleet-offers/fleet-legacy.guard.js": "16b81eee82730b745c161a9cfa807589357243161a5c4613bc9831093a4bcc08",
+      "prisma/schema.prisma": "0e68b129f6418e88be4cc7ff5c6c5be015e2401ff84ee47617d8240d345ef886",
+      "prisma/migrations/20261023000200_fleet_direct_take/migration.sql": "093160a9b229bb99d606b8004010fb357a756ddcef36c3d47191f2d09707db90"
+    }
+  },
+  "processClosed": true,
+  "verification": {
+    "fleetTests": 34,
+    "testFiles": 2,
+    "testTypes": "PASS",
+    "build": "PASS; existing >500 kB warning",
+    "lint": "PASS: src/fleet and src/test/fleet-api.test.ts",
+    "visual": "1280/320 reviewed; no horizontal overflow",
+    "cleanup": "Process exit confirmed; prior helper PIDs verified and closed; WSL API/DB listeners absent"
+  },
+  "sources": {
+    "scripts/fleet-http-wsl.mjs": "9627248bb8b420d04c5abfe0d9a5a6332c8f56916804bde49981948063699018",
+    "scripts/verify-fleet-http.mjs": "051117d43dc6b81fe3edd3678ba13f4b07df5df0343ef001e13451b93c785f48",
+    "src/fleet/service.ts": "97dc693a68c104a69be1f8885e2a912a752b1af3569e2bb1421a20938fabf37b",
+    "src/test/fleet-api.test.ts": "1636cf235be97147c64953878cc0abb3ba5bdcd8bbdef87ce8d66deaf25cdc27"
+  },
+  "artifacts": {
+    "test-results/fleet-http-1792783122772/report.json": "a58ec8fa3e777f04109f350ead3f0b8931146a639f5e5ef80224f7a2375e35b6",
+    "test-results/fleet-http-1792783122772/requests.json": "227a7240c121eee1615f59c44df92edf31c75a64ccb3d9efe24fb7b261c02ea1",
+    "test-results/fleet-http-1792783122772/real-detail-1280.png": "37db00c5610cb4f1b30db8b1138557acc3e437096ddbc99a34d4f7afe0e11ddb",
+    "test-results/fleet-http-1792783122772/real-detail-320.png": "1706102b0d222a3c516e75bd58575e370d551914fba4460b2b955ae890bf559d"
+  },
+  "limitations": [
+    "Synthetic identities and seeded history; no physical deliveries",
+    "Routing simulated; mail local outbox; no external providers",
+    "No deployment, persistent env change or backend source/dist edits",
+    "Full suite not rerun; previous 20 failures remain documented"
+  ],
+  "archivedArtifacts": {
+    "docs/evidence/fleet-http-2026-10-23/report.json": "a58ec8fa3e777f04109f350ead3f0b8931146a639f5e5ef80224f7a2375e35b6",
+    "docs/evidence/fleet-http-2026-10-23/real-detail-1280.png": "37db00c5610cb4f1b30db8b1138557acc3e437096ddbc99a34d4f7afe0e11ddb",
+    "docs/evidence/fleet-http-2026-10-23/real-detail-320.png": "1706102b0d222a3c516e75bd58575e370d551914fba4460b2b955ae890bf559d"
+  }
+}

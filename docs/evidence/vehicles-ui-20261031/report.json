@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+  "checks": [
+    "backend-records-empty-error-no-mutations-responsive"
+  ],
+  "screenshots": [
+    {
+      "file": "vehicles-1280.png",
+      "width": 1280,
+      "sha256": "8b0f81806f837577ed774576cd2933dc2829eb5a108006ddcc058119a9e53409"
+    },
+    {
+      "file": "vehicles-320.png",
+      "width": 320,
+      "sha256": "07b3e51956dcffb22c1d447fab0cfe5c87b0620da25f22ecb18bda956e9b092b"
+    },
+    {
+      "file": "empty-1280.png",
+      "width": 1280,
+      "sha256": "94673ceefd1a2ec34a6b66ee5297b1de32bfcf081ab667af3216e785a85c9952"
+    },
+    {
+      "file": "empty-320.png",
+      "width": 320,
+      "sha256": "3e36cb35260995127d3e783b46505d4cb24808627a4b5349dc19131292b4ab01"
+    },
+    {
+      "file": "error-1280.png",
+      "width": 1280,
+      "sha256": "6cb1dcef0239b77c57efa78932ed458c7fe3d63023d72e3fb116bf9bc1772c27"
+    },
+    {
+      "file": "error-320.png",
+      "width": 320,
+      "sha256": "900220898d769b70c8bcd6de8249d44b3a6beea4bf956a2a731a32ed0fa45031"
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "mutations": 0
+}

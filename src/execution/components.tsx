@@ -1,3 +1,5 @@
+import { confirmationLabel } from './delivery-confirmation'
+import { useFleetPermission } from '../fleet/permissions'
 import { HistoricalAdvanceRecovery } from './historical-recovery'
 import { useHistoricalMarkers } from './historical-store'
 import { useState, useEffect, useRef } from 'react'
@@ -225,6 +227,7 @@ export function ExecutionProgress({
         <span>Revisión {e.revision}</span>
       </div>
       <div className="panel-body">
+        <p>{confirmationLabel(e.deliveryConfirmation)}</p>
         <ol className="execution-phases">
           {phases.map((p) => (
             <li
@@ -281,6 +284,7 @@ export function ExecutionPanel({
   legacy404?: boolean
   operationalAssignmentId?: string | null
 }) {
+  const mutateAllowed = useFleetPermission('canMutateIncidents')
   const { user } = useAuth()
   const [page, setPage] = useState(1)
   const [dialog, setDialog] = useState<'report' | null>(null)
@@ -323,7 +327,7 @@ export function ExecutionPanel({
     scope.surface === 'admin'
       ? user?.role === 'SUPER_ADMIN'
       : scope.surface === 'provider'
-        ? user?.role === 'PROVIDER_ADMIN' && !!scope.providerId
+        ? user?.role === 'PROVIDER_ADMIN' && !!scope.providerId && mutateAllowed
         : false
   const blocked =
     (scope.surface === 'provider' &&
@@ -345,8 +349,9 @@ export function ExecutionPanel({
     <>
       <ExecutionProgress execution={e} />
       <p className="notice">
-        El repartidor registra los avances y la entrega detallada desde la app.
-        En la web, el progreso es de consulta.
+        {scope.surface === 'driver'
+          ? 'Registra tus operaciones autorizadas desde Mi servicio; este panel conserva el historial.'
+          : 'Los hitos y la entrega corresponden al conductor asignado. Este panel administrativo es de consulta.'}
       </p>
       <section className="panel">
         <div className="panel-toolbar">

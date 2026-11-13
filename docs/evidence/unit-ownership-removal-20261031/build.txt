@@ -1,0 +1,21 @@
+
+> mandaria-web@1.11.0 build
+> tsc -b && vite build
+
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 2430 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.77 kB │ gzip:   0.46 kB
+dist/assets/index-SQlafVaS.css     39.80 kB │ gzip:   8.93 kB
+dist/assets/Root-BGLIYgGF.css      65.91 kB │ gzip:  11.85 kB
+dist/assets/index-Dq4r2ItQ.js     222.44 kB │ gzip:  69.82 kB
+dist/assets/Root-DreVm2Kg.js    1,209.68 kB │ gzip: 320.13 kB
+
+✓ built in 1.22s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

@@ -50,7 +50,7 @@ it('sends exact normalized DTO without phone, no automatic retry and focuses gen
   const heading = await screen.findByRole('heading', {
     name: 'Solicitud enviada',
   })
-  expect(heading).toHaveFocus()
+  await waitFor(() => expect(heading).toHaveFocus())
   expect(customer.register).toHaveBeenCalledExactlyOnceWith(
     {
       email: 'person@example.test',

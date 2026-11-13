@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { date } from '../utils/format'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/context'
 import { Loading } from '../components/ui'
@@ -58,14 +61,99 @@ export function TermsDocuments({ terms }: { terms: Terms }) {
     </>
   )
 }
+function LegalAccordion({
+  title,
+  version,
+  text,
+  note,
+}: {
+  title: string
+  version?: string
+  text: string
+  note: string
+}) {
+  const id = useId()
+  const [open, setOpen] = useState(false)
+  return (
+    <section className={'documentary-accordion' + (open ? ' is-open' : '')}>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen(!open)}
+      >
+        <span>
+          <strong>{title}</strong>
+          <small>{version}</small>
+        </span>
+        <span>
+          {open ? 'Ocultar' : 'Leer'} <i aria-hidden="true">⌄</i>
+        </span>
+      </button>
+      <div id={id} hidden={!open}>
+        <div
+          className="documentary-legal"
+          tabIndex={0}
+          role="region"
+          aria-label={title}
+        >
+          <Markdown remarkPlugins={[remarkGfm]} skipHtml>
+            {text}
+          </Markdown>
+        </div>
+        <p>{note}</p>
+      </div>
+    </section>
+  )
+}
+function DesignedDocuments({ terms }: { terms: Terms }) {
+  return (
+    <>
+      <div className="documentary-chips">
+        <span>Versión: {terms.version}</span>
+        <span>Ámbito: Conductor personal</span>
+        <span>{provenance(terms.environment)}</span>
+      </div>
+      <LegalAccordion
+        key={'terms:' + terms.version}
+        title="Términos de conductor"
+        version={terms.version}
+        text={terms.text}
+        note="Desplázate para leer el texto completo."
+      />
+      {terms.privacyText && (
+        <LegalAccordion
+          key={'privacy:' + terms.privacyVersion}
+          title="Aviso de privacidad"
+          version={terms.privacyVersion ?? undefined}
+          text={terms.privacyText}
+          note="Consultar o reconocer este aviso no otorga todos los consentimientos."
+        />
+      )}
+      {terms.specificConsents?.map((c) => (
+        <LegalAccordion
+          key={c.id}
+          title="Consentimiento específico"
+          version={c.id}
+          text={c.text}
+          note="Aceptación personal del conductor; no sustituye la aprobación de identidad o de unidades."
+        />
+      ))}
+    </>
+  )
+}
 export function TermsPanel({
   providerId,
   providerName,
   fleetAuthority = false,
+  designed = false,
+  accepted,
 }: {
   providerId?: string
   providerName?: string
   fleetAuthority?: boolean
+  designed?: boolean
+  accepted?: { id: string; version: string; acceptedAt?: string }
 }) {
   const { user } = useAuth()
   const scope = providerId ? 'FLEET' : 'DRIVER'
@@ -75,6 +163,7 @@ export function TermsPanel({
   return (
     <section className="panel panel-body">
       <h2>
+        {designed && <span className="documentary-step">2</span>}
         {providerId
           ? `Términos de la flotilla — ${providerName}`
           : 'Términos personales vigentes'}
@@ -104,6 +193,12 @@ export function TermsPanel({
           providerId={providerId}
           refresh={() => q.refetch()}
           disabled={!state.canProceed || (!!providerId && !fleetAuthority)}
+          designed={designed}
+          accepted={
+            accepted?.version === q.data.version && state.canProceed
+              ? accepted
+              : undefined
+          }
         />
       )}
       {providerId && !fleetAuthority && (
@@ -123,6 +218,8 @@ export function TermsForm(props: {
   providerId?: string
   refresh: () => Promise<unknown>
   disabled?: boolean
+  designed?: boolean
+  accepted?: { id: string; version: string; acceptedAt?: string }
 }) {
   return (
     <AcceptanceForm
@@ -136,11 +233,15 @@ function AcceptanceForm({
   providerId,
   refresh,
   disabled = false,
+  designed = false,
+  accepted,
 }: {
   terms: Terms
   providerId?: string
   refresh: () => Promise<unknown>
   disabled?: boolean
+  designed?: boolean
+  accepted?: { id: string; version: string; acceptedAt?: string }
 }) {
   const command = useCommand()
   const [checked, setChecked] = useState(false)
@@ -152,7 +253,11 @@ function AcceptanceForm({
     completeTerms(terms) && terms.scope === (providerId ? 'FLEET' : 'DRIVER')
   return (
     <>
-      <TermsDocuments terms={terms} />
+      {designed ? (
+        <DesignedDocuments terms={terms} />
+      ) : (
+        <TermsDocuments terms={terms} />
+      )}
       {!ready && (
         <p role="alert">
           La publicación está incompleta o no corresponde a este ámbito.
@@ -164,94 +269,118 @@ function AcceptanceForm({
           ? 'El representante acepta sólo por esta flotilla. Cada conductor debe aceptar personalmente con su cuenta.'
           : 'Aceptación personal del conductor; no sustituye la aprobación de identidad o de unidades.'}
       </p>
-      <Form
-        label={
-          (providerId ? 'Aceptar por esta flotilla' : 'Aceptar personalmente') +
-          (terms.environment === 'LOCAL_TEST' ? ' (prueba)' : '')
-        }
-        disabled={
-          disabled ||
-          !ready ||
-          !checked ||
-          (production &&
-            (!privacy || consents.length !== terms.specificConsents!.length)) ||
-          command.busy ||
-          command.blocked
-        }
-        onSubmit={async () => {
-          setReceipt('')
-          try {
-            const r = await command.send(
-              'ACCEPT_TERMS',
-              providerId ? 'FLEET:' + providerId : 'DRIVER',
-              '/verification-terms/accept',
-              {
-                scope: terms.scope,
-                ...(providerId ? { providerId } : {}),
-                version: terms.version,
-                hash: terms.hash,
-                accepted: true,
-                method: 'WEB_CHECKBOX_BUTTON',
-                ...(production
-                  ? {
-                      privacyVersion: terms.privacyVersion,
-                      privacyHash: terms.privacyHash,
-                      privacyAcknowledged: true,
-                      specificConsents: terms.specificConsents!.map(
-                        ({ id, hash }) => ({ id, hash, accepted: true }),
-                      ),
-                    }
-                  : {}),
-              },
-            )
-            setReceipt(r.id)
-          } finally {
-            setChecked(false)
-            setPrivacy(false)
-            setConsents([])
-            await refresh()
+      {accepted && ready ? (
+        <p className="documentary-accepted" role="status">
+          ✓{' '}
+          {accepted.acceptedAt
+            ? 'Aceptado el ' + date(accepted.acceptedAt)
+            : 'Aceptación vigente'}{' '}
+          ·{' '}
+          <Link to={'/verification/acceptances/' + accepted.id}>
+            Consultar comprobante
+          </Link>
+        </p>
+      ) : (
+        <Form
+          label={
+            (providerId
+              ? 'Aceptar por esta flotilla'
+              : 'Aceptar personalmente') +
+            (terms.environment === 'LOCAL_TEST' ? ' (prueba)' : '')
           }
-        }}
-      >
-        <label className="verification-check">
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={(e) => setChecked(e.target.checked)}
-          />
-          He leído el texto completo, versión {terms.version}, y acepto
-          expresamente los términos de este ámbito.
-        </label>
-        {production && (
+          disabled={
+            disabled ||
+            !ready ||
+            !checked ||
+            (production &&
+              (!privacy ||
+                consents.length !== terms.specificConsents!.length)) ||
+            command.busy ||
+            command.blocked
+          }
+          onSubmit={async () => {
+            setReceipt('')
+            try {
+              const r = await command.send(
+                'ACCEPT_TERMS',
+                providerId ? 'FLEET:' + providerId : 'DRIVER',
+                '/verification-terms/accept',
+                {
+                  scope: terms.scope,
+                  ...(providerId ? { providerId } : {}),
+                  version: terms.version,
+                  hash: terms.hash,
+                  accepted: true,
+                  method: 'WEB_CHECKBOX_BUTTON',
+                  ...(production
+                    ? {
+                        privacyVersion: terms.privacyVersion,
+                        privacyHash: terms.privacyHash,
+                        privacyAcknowledged: true,
+                        specificConsents: terms.specificConsents!.map(
+                          ({ id, hash }) => ({ id, hash, accepted: true }),
+                        ),
+                      }
+                    : {}),
+                },
+              )
+              setReceipt(r.id)
+            } finally {
+              setChecked(false)
+              setPrivacy(false)
+              setConsents([])
+              await refresh()
+            }
+          }}
+        >
           <label className="verification-check">
             <input
               type="checkbox"
-              checked={privacy}
-              onChange={(e) => setPrivacy(e.target.checked)}
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
             />
-            He consultado el aviso de privacidad {terms.privacyVersion}. Esta
-            declaración no es un consentimiento general.
+            He leído el texto completo, versión {terms.version}, y acepto
+            expresamente los términos de este ámbito.
           </label>
-        )}
-        {production &&
-          terms.specificConsents?.map((c) => (
-            <label className="verification-check" key={c.id}>
+          {production && (
+            <label className="verification-check">
               <input
                 type="checkbox"
-                checked={consents.includes(c.id)}
-                onChange={(e) =>
-                  setConsents(
-                    e.target.checked
-                      ? [...consents, c.id]
-                      : consents.filter((id) => id !== c.id),
-                  )
-                }
+                checked={privacy}
+                onChange={(e) => setPrivacy(e.target.checked)}
               />
-              Otorgo expresamente el consentimiento específico {c.id} descrito
-              arriba.
+              He consultado el aviso de privacidad {terms.privacyVersion}. Esta
+              declaración no es un consentimiento general.
             </label>
-          ))}
-      </Form>
+          )}
+          {production &&
+            terms.specificConsents?.map((c) => (
+              <label className="verification-check" key={c.id}>
+                <input
+                  type="checkbox"
+                  checked={consents.includes(c.id)}
+                  onChange={(e) =>
+                    setConsents(
+                      e.target.checked
+                        ? [...consents, c.id]
+                        : consents.filter((id) => id !== c.id),
+                    )
+                  }
+                />
+                Otorgo expresamente el consentimiento específico {c.id} descrito
+                arriba.
+              </label>
+            ))}
+          {designed && (
+            <span className="documentary-counter" aria-live="polite">
+              {Number(checked) +
+                (production ? Number(privacy) + consents.length : 0)}{' '}
+              de {production ? 2 + (terms.specificConsents?.length || 0) : 1}{' '}
+              aceptados
+            </span>
+          )}
+        </Form>
+      )}
       {receipt && (
         <p role="status">
           Comprobante recibido. Aceptar no aprueba el expediente ni habilita

@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-29T01:29:07.043Z",
+  "source": "joint-final-projections-2026-10-29T01-29-02-276Z.json",
+  "dispatchId": "4daacb2e-8904-4113-8cc2-88f247d1863e",
+  "assignmentId": "abdbca5b-7c75-4a42-9182-5acbbc9f0225",
+  "dispatchStatus": "DELIVERED",
+  "assignmentStatus": "COMPLETED",
+  "deliveredAt": "2026-10-29T01:23:13.111Z",
+  "endedAt": "2026-10-29T01:23:13.111Z",
+  "ledgerComplete": true,
+  "ledgerTotal": 2,
+  "awardCount": 1,
+  "awardId": "e878e804-7232-449e-9c9b-9ab8b596a271",
+  "awardAmount": -5,
+  "balanceBefore": 100,
+  "balanceAfter": 95,
+  "refundCount": 0,
+  "executionRevision": 7,
+  "eventCount": 7
+}

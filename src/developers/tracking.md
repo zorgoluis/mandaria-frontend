@@ -72,3 +72,7 @@ Ningún error de consulta ordena reenviar operaciones físicas. Detén el sondeo
 Se conserva `delivery.completed`, su sobre, firma y payload congelado; **no incluye los cuatro campos nuevos**. Deduplica `eventId` duraderamente y consulta `/status` para reconciliar. No compares `eventId` ni la fecha del webhook con `publicVersion`; un webhook atrasado no debe degradar la fotografía. Una devolución no se anuncia como entrega.
 
 No se agregan timeline, GPS ni webhooks de progreso. Consulta la [guía de firma y recepción](B2B-WEBHOOKS.md) y el [contrato público descargable](openapi-b2b.json).
+
+## Búsqueda automática y compatibilidad
+
+`IntegrationMeResponse.automaticDispatchSearch` informa política de admisión, no prueba de cinco rondas para cada MDR ni disponibilidad remota. En `DeliveryStatusResponse.search`, `DispatchSearchResponse` describe la búsqueda opcional de integraciones habilitadas: SEARCHING/RETRY_PENDING conserva la misma MDR y status OPEN. No crear pedidos de reemplazo por timeout o contador local. Hasta cinco rondas; agotamiento informado como EXPIRED/EXHAUSTED según la política vigente. No renovar automáticamente MQ, precio, vencimiento ni consentimiento. Ausencia de search conserva comportamiento legacy. Consultar la misma MDR; aceptación no implica asignación. No hay nuevos eventos de búsqueda, desvinculación o conciliación.

@@ -1,0 +1,66 @@
+Modo de prueba. Usa exclusivamente datos e imágenes sintéticos. No habilita operaciones reales.
+
+Verificación documental. Aceptar términos o cargar archivos no aprueba el expediente ni habilita operaciones. La baja y sus constancias tienen alcance limitado y seguimiento independiente. Baja y privacidad
+
+Mi cuenta
+
+Conservación de imágenes
+
+Los borradores elegibles y los rechazos confirmados como definitivos pueden tener un calendario de conservación de 30 días. Un rechazo ordinario no inicia por sí solo ese calendario.
+
+No se deducen fechas desde la última modificación. La eliminación no cierra tu cuenta ni elimina saldo o servicios comprometidos. Un expediente depurado no se reabre automáticamente.
+
+El estado del expediente no es elegible para este calendario. La ejecución automática está desactivada.
+
+La aceptación del aviso por el proveedor de correo no acredita entrega ni lectura. Contactar, apelar o editar no garantiza detener la eliminación; las excepciones requieren revisión autorizada.
+
+Consultar un folio o canal de aclaración
+Unidad · En revisión
+
+PRUEBA LOCAL — no habilita producción · Checklist LOCAL-TEST-1.
+
+Revisión 7. Estado documental: En revisión. Ámbito independiente.
+
+Conserva los servicios comprometidos. La revisión no acredita cobro ni modifica créditos.
+
+Datos presentados
+Serie
+SINTETICO-SIN-VALIDEZ
+Titular
+Aceptación Web Sintética
+Propiedad o uso
+Propia
+Evidencias privadas
+
+JPEG/PNG, máximo 10485760 bytes y 20000000 píxeles; 10 intentos por expediente, incluidos retirados. No PDF ni antimalware. VALIDATED significa formato decodificado, no identidad aprobada.
+
+Cancelar la carga no retira el expediente ni elimina el objeto. Si quedó incompleto, consulta o retira su referencia en el borrador.
+
+Tarjeta de circulación · Formato validadoVer evidencia
+Comprobante de propiedad · Formato validadoVer evidencia
+Decisión SUPER_ADMIN
+Resultado
+Aprobar
+Rechazar
+Unidad concordante
+Evidencia legible
+Propiedad o uso autorizado
+Motivo público
+Nota interna (sólo SUPER_ADMIN)
+Registrar decisión explícita
+
+Se decide sobre la revisión 7. Un conflicto exige revisar de nuevo; no se reenvía automáticamente.
+
+Historial del expediente
+Datos guardados · 28 oct 2026, 6:38 p.m.
+Carga iniciada · 28 oct 2026, 9:58 p.m.
+Formato validado · 28 oct 2026, 9:58 p.m.
+Carga iniciada · 28 oct 2026, 9:58 p.m.
+Formato validado · 28 oct 2026, 9:58 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Presentado · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:02 p.m.
+Actividad registrada · 28 oct 2026, 10:04 p.m.
+Actividad registrada · 28 oct 2026, 10:04 p.m.

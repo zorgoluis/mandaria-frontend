@@ -240,14 +240,12 @@ describe('auth and permissions UX', () => {
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
-      'Mis envíos',
       'Dashboard',
+      'Representación legal',
       'Mi proveedor',
       'Verificación documental',
       'Servicios',
       'Créditos',
-      'Repartidores',
-      'Vehículos',
       'Mi perfil',
     ])
     expect(providers.list).not.toHaveBeenCalled()
@@ -270,26 +268,22 @@ describe('auth and permissions UX', () => {
       await screen.findByRole('link', { name: 'Integraciones' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: 'Proveedores' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('link', { name: 'Proveedores' }),
+    ).not.toBeInTheDocument()
     expect(
       within(screen.getByRole('navigation', { name: 'Navegación principal' }))
         .getAllByRole('link')
         .map((link) => link.textContent),
     ).toEqual([
-      'Mis envíos',
       'Dashboard',
       'Integraciones',
-      'Proveedores',
+      'Solicitudes Negocio',
       'Administradores',
-      'Invitaciones',
-      'Solicitudes de socio',
-      'Repartidores',
-      'Vehículos',
       'Solicitudes',
       'Cotizaciones',
       'Zonas de servicio',
       'Despachos',
+      'Incidencias de custodia',
       'Revisión documental',
       'Independientes',
       'Políticas de créditos',
@@ -322,6 +316,18 @@ describe('auth and permissions UX', () => {
     mount('/missing')
     expect(screen.getByText('Página no encontrada')).toBeInTheDocument()
   })
+  it('allows a historical short password in login unchanged', async () => {
+    const login = vi.fn().mockResolvedValue(undefined)
+    mount('/login', null, { login })
+    const actor = userEvent.setup()
+    await actor.type(
+      screen.getByLabelText('Correo electrónico'),
+      'synthetic@example.test',
+    )
+    await actor.type(screen.getByLabelText('Contraseña'), ' 001 ')
+    await actor.click(screen.getByRole('button', { name: 'Iniciar sesión' }))
+    expect(login).toHaveBeenCalledWith('synthetic@example.test', ' 001 ')
+  })
   it('submits login and displays an incorrect password error', async () => {
     const login = vi
       .fn()
@@ -348,7 +354,7 @@ describe('auth and permissions UX', () => {
   })
 })
 describe('integrations', () => {
-  it('renders prequote scopes on existing credentials without granting other permissions', async () => {
+  it('renders existing PICKUP and prequote scopes without granting permissions', async () => {
     vi.mocked(integrations.credentials).mockResolvedValue([
       {
         id: 'credential-existing',
@@ -359,6 +365,7 @@ describe('integrations', () => {
           'prequotes:read',
           'prequotes:convert',
           'quotes:read',
+          'deliveries:pickup-reference:write',
         ],
         expiresAt: null,
         lastUsedAt: null,
@@ -373,17 +380,44 @@ describe('integrations', () => {
       'prequotes:read',
       'prequotes:convert',
       'quotes:read',
+      'deliveries:pickup-reference:write',
     ])
       expect(
         await screen.findByText(scope, { selector: 'code' }),
       ).toBeInTheDocument()
     expect(screen.queryByText('quotes:accept', { selector: 'code' })).toBeNull()
+    const actor = userEvent.setup()
+    await actor.click(screen.getByRole('button', { name: 'Crear credencial' }))
+    await actor.click(screen.getByLabelText('deliveries:confirmation-code:read'))
+    await actor.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+    const row = screen.getByRole('row', { name: /credential-existing/ })
+    expect(Array.from(row.querySelectorAll('.scopes code'), (el) => el.textContent)).toEqual([
+      'prequotes:create',
+      'prequotes:read',
+      'prequotes:convert',
+      'quotes:read',
+      'deliveries:pickup-reference:write',
+    ])
     expect(integrations.createCredential).not.toHaveBeenCalled()
     expect(integrations.rotate).not.toHaveBeenCalled()
+    expect(integrations.revoke).not.toHaveBeenCalled()
   })
 
   it.each([
     { selected: [] },
+    { selected: ['deliveries:read'] },
+    { selected: ['deliveries:read', 'deliveries:confirmation-code:read'] },
+    { selected: ['deliveries:pickup-reference:write'] },
+    {
+      selected: [
+        'quotes:create',
+        'quotes:read',
+        'quotes:accept',
+        'deliveries:create',
+        'deliveries:read',
+        'deliveries:pickup-reference:write',
+      ],
+    },
     {
       selected: [
         'prequotes:convert',
@@ -394,6 +428,8 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:confirmation-code:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
@@ -415,6 +451,7 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
@@ -447,14 +484,25 @@ describe('integrations', () => {
         'quotes:accept',
         'deliveries:create',
         'deliveries:read',
+        'deliveries:confirmation-code:read',
+        'deliveries:pickup-reference:write',
         'deliveries:location:read',
         'deliveries:tracking-links:manage',
         'deliveries:cancel',
       ])
       for (const option of options) expect(option).not.toBeChecked()
+      expect(
+        new Set(options.map((o) => (o as HTMLInputElement).value)).size,
+      ).toBe(13)
       for (const scope of selected)
         await actor.click(screen.getByLabelText(scope))
       // New permissions also remain absent after checking and unchecking.
+      await actor.click(
+        screen.getByLabelText('deliveries:pickup-reference:write'),
+      )
+      await actor.click(
+        screen.getByLabelText('deliveries:pickup-reference:write'),
+      )
       await actor.click(screen.getByLabelText('prequotes:convert'))
       await actor.click(screen.getByLabelText('prequotes:convert'))
       // A permission checked and then unchecked must not be granted either.
@@ -477,6 +525,81 @@ describe('integrations', () => {
   it('lists clients', async () => {
     mount('/integrations')
     expect(await screen.findByText('Cliente Demo')).toBeInTheDocument()
+  })
+  it.each([400, 401, 403])(
+    'credential creation %s is not presented as success',
+    async (status) => {
+      vi.mocked(integrations.createCredential).mockRejectedValue(
+        new ApiError(status, 'Solicitud rechazada'),
+      )
+      mount('/integrations/integration-1')
+      const actor = userEvent.setup()
+      await actor.click(
+        await screen.findByRole('button', { name: 'Crear credencial' }),
+      )
+      await actor.click(
+        screen.getByLabelText('deliveries:confirmation-code:read'),
+      )
+      await actor.click(
+        screen.getByRole('button', { name: 'Generar credencial' }),
+      )
+      expect(
+        await within(screen.getByRole('dialog')).findByRole('alert'),
+      ).toHaveTextContent('Solicitud rechazada')
+      expect(screen.queryByLabelText('Client secret')).toBeNull()
+      expect(integrations.createCredential).toHaveBeenCalledExactlyOnceWith(
+        integration.id,
+        { scopes: ['deliveries:confirmation-code:read'] },
+      )
+      expect(integrations.rotate).not.toHaveBeenCalled()
+      expect(integrations.revoke).not.toHaveBeenCalled()
+    },
+  )
+  it('rotation preserves permissions contract and does not revoke the previous credential', async () => {
+    vi.mocked(integrations.credentials).mockResolvedValue([
+      {
+        id: 'credential-old',
+        clientId: integration.id,
+        status: 'ACTIVE',
+        scopes: ['deliveries:pickup-reference:write'],
+        expiresAt: null,
+        lastUsedAt: null,
+        revokedAt: null,
+        createdAt: stamp,
+        updatedAt: stamp,
+      },
+    ])
+    vi.mocked(integrations.rotate).mockResolvedValue({
+      clientId: 'credential-new',
+      integrationId: integration.id,
+      clientSecret: 'synthetic-rotated',
+    })
+    mount('/integrations/integration-1')
+    const actor = userEvent.setup()
+    await actor.click(await screen.findByRole('button', { name: 'Rotar' }))
+    expect(screen.getByRole('dialog')).toHaveTextContent(
+      'mismos permisos y expiración',
+    )
+    expect(integrations.rotate).not.toHaveBeenCalled()
+    await actor.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Confirmar',
+      }),
+    )
+    expect(await screen.findByLabelText('Client secret')).toHaveValue(
+      'synthetic-rotated',
+    )
+    expect(integrations.rotate).toHaveBeenCalledExactlyOnceWith(
+      integration.id,
+      'credential-old',
+    )
+    expect(integrations.revoke).not.toHaveBeenCalled()
+    expect(integrations.createCredential).not.toHaveBeenCalled()
+    expect(
+      JSON.stringify(localStorage) +
+        JSON.stringify(sessionStorage) +
+        JSON.stringify(queryClient.getQueryCache().getAll()),
+    ).not.toContain('synthetic-rotated')
   })
   it('creates only admitted fields', async () => {
     vi.mocked(integrations.create).mockResolvedValue(integration)

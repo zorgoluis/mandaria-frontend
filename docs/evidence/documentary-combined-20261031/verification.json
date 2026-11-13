@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-31",
+  "branch": "main",
+  "version": "1.11.0",
+  "global": {
+    "command": "node node_modules/vitest/vitest.mjs run",
+    "files": 83,
+    "tests": 1643,
+    "passed": 1643,
+    "failed": 0,
+    "durationSeconds": 139.55
+  },
+  "checks": [
+    {
+      "command": "node node_modules/typescript/bin/tsc -b",
+      "result": "PASS"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.test.json",
+      "result": "PASS"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js .",
+      "result": "PASS",
+      "scope": "Excludes generated test-results/**; all Web sources included"
+    },
+    {
+      "command": "node node_modules/vite/bin/vite.js build",
+      "result": "PASS",
+      "modules": 2428,
+      "warning": "Root chunk 1204.62 kB exceeds 500 kB"
+    },
+    {
+      "command": "git diff --cached --check",
+      "result": "PASS"
+    }
+  ],
+  "visual": {
+    "kind": "HTTP_SIMULATED_NOT_BACKEND_ACCEPTANCE",
+    "reports": [
+      "onboarding/report.json",
+      "identity/report.json",
+      "unit/report.json"
+    ],
+    "screenshots": 24
+  },
+  "corrections": [
+    "Remove unsupported exact option from Testing Library role queries; string name matching remains exact",
+    "Await focus effect using waitFor without increasing timeout in customer-registration-design",
+    "Exclude generated test-results from ESLint, including temporary backend snapshots"
+  ],
+  "limits": [
+    "No live backend/HTTP acceptance rerun",
+    "No deployment or version change"
+  ]
+}

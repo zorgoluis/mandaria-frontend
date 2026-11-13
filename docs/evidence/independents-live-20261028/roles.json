@@ -1,0 +1,450 @@
+{
+  "stage": "roles",
+  "checkedAt": "2026-10-29T00:31:37.908Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 0,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    "Fresh status and live unauthenticated401; matching build manifest before mutations",
+    "sa login UI; canonical NONE and independent profile404 without creating profile",
+    "Admin read of seeded pending; not public onboarding",
+    "Admin read of seeded bruno; not public onboarding",
+    "Pedro login UI, own vehicle, credits, zones and reception HTTP",
+    "Pedro admin deep link denied by UI role guard",
+    "Pedro ONLY: own zone SELECT_ZONE, availability AVAILABLE and explicit START via UI; READY",
+    "Real feed refreshed by poll, currently empty; no multi-page dataset available",
+    "sa authorized dispatch observation page ready; no dispatch created"
+  ],
+  "errors": [],
+  "http": [
+    {
+      "at": "2026-10-29T00:31:06.753Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:06.768Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:06.845Z",
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:06.847Z",
+      "method": "GET",
+      "path": "/api/v1/admin/partner-applications",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:06.847Z",
+      "method": "GET",
+      "path": "/api/v1/admin/delivery-requests",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:07.218Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:07.234Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:07.271Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/6e4e594c-ccdc-4afd-8a99-338059ce516d/independent",
+      "status": 404,
+      "code": "HTTP_404"
+    },
+    {
+      "at": "2026-10-29T00:31:07.295Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/6e4e594c-ccdc-4afd-8a99-338059ce516d/category",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.191Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.204Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.239Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/f7979db2-2b2b-418f-aa92-f019880318eb/independent",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.275Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/f7979db2-2b2b-418f-aa92-f019880318eb/independent/credits",
+      "status": 404,
+      "code": "CREDIT_ACCOUNT_NOT_FOUND"
+    },
+    {
+      "at": "2026-10-29T00:31:08.281Z",
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/107ce846-7b29-4904-b69d-a92b2b7294ad/offer-zones",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.281Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/f7979db2-2b2b-418f-aa92-f019880318eb/independent/vehicles",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.687Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.703Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.740Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/82f301a5-309f-4558-b7cb-06e4ee47a37b/independent",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.766Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/82f301a5-309f-4558-b7cb-06e4ee47a37b/independent/credits",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.771Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/82f301a5-309f-4558-b7cb-06e4ee47a37b/independent/vehicles",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.771Z",
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/016d979d-e92f-45c5-b1b9-94f7bef13b6a/offer-zones",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:08.800Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/82f301a5-309f-4558-b7cb-06e4ee47a37b/independent/credits/ledger",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.184Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.196Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.235Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9b85db88-0dbc-4414-ba18-f77da55e06f7/independent",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.262Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9b85db88-0dbc-4414-ba18-f77da55e06f7/independent/credits",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.268Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9b85db88-0dbc-4414-ba18-f77da55e06f7/independent/vehicles",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.269Z",
+      "method": "GET",
+      "path": "/api/v1/admin/independent-drivers/ffb33f45-e2b2-42fd-b6a6-2ce069069292/offer-zones",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:09.286Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9b85db88-0dbc-4414-ba18-f77da55e06f7/independent/credits/ledger",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.361Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.374Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.851Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.866Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.920Z",
+      "method": "GET",
+      "path": "/api/v1/driver/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:15.949Z",
+      "method": "GET",
+      "path": "/api/v1/driver/vehicles",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:16.856Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:16.869Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:16.916Z",
+      "method": "GET",
+      "path": "/api/v1/driver/credits",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:16.945Z",
+      "method": "GET",
+      "path": "/api/v1/driver/credits/ledger",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:18.152Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:18.168Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:18.245Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.128Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.150Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.546Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.561Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.623Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.835Z",
+      "method": "PUT",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.881Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:19.928Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-feed",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.031Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.160Z",
+      "method": "PATCH",
+      "path": "/api/v1/driver/availability",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.199Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.472Z",
+      "method": "PUT",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.555Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.639Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-feed",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.684Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-feed",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:20.787Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:24.260Z",
+      "method": "GET",
+      "path": "/api/v1/admin/drivers/9b85db88-0dbc-4414-ba18-f77da55e06f7/independent",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:35.770Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-feed",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:35.815Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:37.199Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:37.213Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T00:31:37.268Z",
+      "method": "GET",
+      "path": "/api/v1/admin/dispatches",
+      "status": 200
+    }
+  ]
+}

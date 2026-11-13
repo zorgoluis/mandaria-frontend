@@ -1,0 +1,179 @@
+{
+  "scope": "Browser UI with mocked HTTP only; NO live backend integration",
+  "checks": [
+    "DRIVER own route ACTIVE; explicit voluntary exit without owner veto",
+    "Lost mock response; reload reads IndexedDB; GET recovery by affiliation; APPLIED/PENDING; one START",
+    "COMPLETED/ENDED leaves NONE; no independent approval or reception command",
+    "Suspended independent keeps category; reverse transition explicitly blocked",
+    "Ambiguous legacy displayed without automatic resolution (mock only)"
+  ],
+  "passed": 5,
+  "failed": 0,
+  "errors": [],
+  "requests": [
+    {
+      "path": "/auth/login",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliations/10000000-0000-4000-8000-000000000004/exit-requests",
+      "method": "POST"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/fleet-exit-attempts/af98a9b0-6d33-43fb-b8fa-6d2ec5ecf14b",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/me",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-affiliation-context",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-requests",
+      "method": "GET"
+    },
+    {
+      "path": "/driver/fleet-exit-notices",
+      "method": "GET"
+    }
+  ]
+}

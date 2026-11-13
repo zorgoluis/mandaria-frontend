@@ -1,0 +1,106 @@
+{
+  "reviewDateLocal": "2026-10-26",
+  "timezone": "America/Mexico_City",
+  "baseCommit": "517364483b7960999321b8674cbab63c02208cee",
+  "branch": "QA",
+  "webVersion": "1.11.0",
+  "newExecution": false,
+  "evidenceAttribution": {
+    "web": "Claim/assignment UI real, original execution",
+    "driver": "Android UI instrumentation with product LocationManager/FGS; simulated positions; copied original ACK evidence",
+    "coita": "Original CUSTOMER readings and map captures; copied without alteration"
+  },
+  "businessRequests": [
+    {
+      "time": "2026-10-27T04:40:07.525Z",
+      "method": "POST",
+      "url": "http://127.0.0.1:56597/api/v1/provider/dispatches/7e9272b5-10ca-4ceb-b1c1-3fbf78cbf632/claim",
+      "status": 200
+    },
+    {
+      "time": "2026-10-27T04:40:33.972Z",
+      "method": "POST",
+      "url": "http://127.0.0.1:56597/api/v1/provider/dispatches/7e9272b5-10ca-4ceb-b1c1-3fbf78cbf632/assignment",
+      "status": 201
+    }
+  ],
+  "copiedSources": [
+    {
+      "source": "C:/Users/zorgl/Documents/coitaeatsapp/build/interactive-local-20261026/sample1-map.png",
+      "target": "docs/evidence/reserved-assignment-20261026/coita-sample1-map.png",
+      "sha256": "2065d824b0cce52615722579255bfa9a69d1661c3b16e0ec7bd906b1fb03a207"
+    },
+    {
+      "source": "C:/Users/zorgl/Documents/coitaeatsapp/build/interactive-local-20261026/sample1-observation.json",
+      "target": "docs/evidence/reserved-assignment-20261026/coita-sample1-observation.json",
+      "sha256": "47167283a2b9f492bbbe8bcd507e62bd92b8951a72eb5692873ac960522322b2"
+    },
+    {
+      "source": "C:/Users/zorgl/Documents/mandaria-driver/androidApp/build/coita-reserved-gps/sample1.jsonl",
+      "target": "docs/evidence/reserved-assignment-20261026/driver-sample1.jsonl",
+      "sha256": "bc24d5efb8b6cc27751ac22400d003fd17cbb082bbf3717ed07d05d2883e1b31"
+    },
+    {
+      "source": "C:/Users/zorgl/Documents/coitaeatsapp/build/interactive-local-20261026/sample2-map.png",
+      "target": "docs/evidence/reserved-assignment-20261026/coita-sample2-map.png",
+      "sha256": "b309ada3e5dcd1feacc90b1496ea29e4e152ad9153745ca7531a420eaa5472c4"
+    },
+    {
+      "source": "C:/Users/zorgl/Documents/coitaeatsapp/build/interactive-local-20261026/sample2-observation.json",
+      "target": "docs/evidence/reserved-assignment-20261026/coita-sample2-observation.json",
+      "sha256": "7c04e7a5d953dcfe9b38c811169f02f8337e5fec9e62f4c97fcbecd0c74d510f"
+    },
+    {
+      "source": "C:/Users/zorgl/Documents/mandaria-driver/androidApp/build/coita-reserved-gps/sample2.jsonl",
+      "target": "docs/evidence/reserved-assignment-20261026/driver-sample2.jsonl",
+      "sha256": "533515796b3720c591c496b2dd328adc3ad2b993b948a12bee0f0987e399c9a2"
+    }
+  ],
+  "files": [
+    {
+      "path": "assigned.png",
+      "sha256": "7e702939140825caf223a950d1c2fa20e25672490a3de6b67800df135aaa4e2e"
+    },
+    {
+      "path": "coita-sample1-map.png",
+      "sha256": "2065d824b0cce52615722579255bfa9a69d1661c3b16e0ec7bd906b1fb03a207"
+    },
+    {
+      "path": "coita-sample1-observation.json",
+      "sha256": "47167283a2b9f492bbbe8bcd507e62bd92b8951a72eb5692873ac960522322b2"
+    },
+    {
+      "path": "coita-sample2-map.png",
+      "sha256": "b309ada3e5dcd1feacc90b1496ea29e4e152ad9153745ca7531a420eaa5472c4"
+    },
+    {
+      "path": "coita-sample2-observation.json",
+      "sha256": "7c04e7a5d953dcfe9b38c811169f02f8337e5fec9e62f4c97fcbecd0c74d510f"
+    },
+    {
+      "path": "driver-sample1.jsonl",
+      "sha256": "bc24d5efb8b6cc27751ac22400d003fd17cbb082bbf3717ed07d05d2883e1b31"
+    },
+    {
+      "path": "driver-sample2.jsonl",
+      "sha256": "533515796b3720c591c496b2dd328adc3ad2b993b948a12bee0f0987e399c9a2"
+    },
+    {
+      "path": "http-ui.json",
+      "sha256": "30fdfa3dc4ef50f63e4a2b2d107e453358f8ad76588353097a7bdabeee00828d"
+    }
+  ],
+  "reviewChecks": {
+    "historicalHashes": 6,
+    "gpsSamples": 2,
+    "syntax": "PASS",
+    "eslintHarness": "PASS",
+    "prettierHarness": "PASS"
+  },
+  "limitations": [
+    "First point exact comparison false, cause/accuracy unavailable",
+    "ACK UI does not identify exact PUT outcome",
+    "No fresh global suite or HTTP replay in this review",
+    "No physical GPS or completed delivery claimed"
+  ]
+}

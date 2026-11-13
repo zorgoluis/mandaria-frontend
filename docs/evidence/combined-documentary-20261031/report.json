@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-31",
+  "branch": "main",
+  "base": "d4bf431",
+  "version": "1.11.0",
+  "tests": {
+    "initialRun": "Two native worker exits 3221226505; full rerun without concurrent checks PASS; root cause undetermined",
+    "command": "npm test",
+    "result": "PASS",
+    "durationSeconds": 96.21,
+    "passed": 1681,
+    "skipped": 0,
+    "files": 84
+  },
+  "productTypes": "npx tsc -b: PASS",
+  "testTypes": "npm run typecheck:test: PASS",
+  "lint": "npm run lint: PASS",
+  "build": "npm run build: PASS; known Root chunk 1210.19 kB",
+  "http": "Not rerun; real OWNED=null acceptance remains pending local backend availability",
+  "versionChanged": false
+}

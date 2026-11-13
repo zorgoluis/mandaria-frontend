@@ -1,0 +1,367 @@
+
+> mandaria-web@1.11.0 test
+> vitest run --reporter=default
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for USER_INVITATION_PENDING (409)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for USER_ALREADY_ACTIVE (409)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for USER_DISABLED (409)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for undefined (429)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for undefined (403)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for undefined (400)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for undefined (500)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/invitations.test.tsx > SUPER_ADMIN accounts and admin invitations > shows a clear invite error for undefined (0)
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+ ✓ src/test/driver-portal.test.tsx (40 tests) 7093ms
+   ✓ take (8)
+     ✓ sends one atomic call with the chosen vehicle and refetches afterwards 397ms
+     ✓ explains that a service someone else took is gone, and refreshes (DISPATCH_ALREADY_CLAIMED) 302ms
+     ✓ explains that a service someone else took is gone, and refreshes (TAKE_CONFLICT) 318ms
+     ✓ keeps saying the service is gone when the refetch after a lost race is a 404 324ms
+   ✓ my service (4)
+     ✓ releases with a reason and warns it returns to others 303ms
+     ✓ requires a detail for OTHER before calling the API 393ms
+   ✓ super admin administration (4)
+     ✓ suspends with a mandatory reason and never changes the state locally first 733ms
+     ✓ explains the 409 when the driver is executing a service 552ms
+stderr | src/test/invitations.test.tsx > invitation list, resend and revoke > scopes the provider detail list to that provider
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["users"]
+
+stderr | src/test/logistics.test.tsx > scope and permissions > SUPER_ADMIN explicitly selects provider; no collection scan
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["invitations",{"kind":"admin","providerId":"a","role":"DRIVER"},{"page":1,"pageSize":20}]
+
+stderr | src/test/logistics.test.tsx > drivers > lists, filters and paginates server data within the membership
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["invitations",{"kind":"provider","providerId":"a"},{"page":1,"pageSize":20}]
+
+ ✓ src/test/dispatch.test.tsx (55 tests) 14951ms
+   ✓ transferred provider uses current OWNER permissions and selected provider, not historical claim 732ms
+   ✓ roles and navigation (6)
+     ✓ PROVIDER_ADMIN gets Servicios; SUPER_ADMIN gets Despachos without claiming 330ms
+   ✓ claim (11)
+     ✓ confirms with route and money, waits for the backend and moves to Mis servicios 464ms
+     ✓ explains a lost race (409) and refreshes the list 378ms
+     ✓ ends the dialog for final outcome DISPATCH_EXPIRED 301ms
+   ✓ expiration (2)
+     ✓ does not send a claim when the window ends while confirming 1956ms
+   ✓ my services and release (5)
+     ✓ lists claimed services and releases with a preset reason after the warning 438ms
+     ✓ validates a free-text reason within the DTO limits 828ms
+     ✓ explains a release that no longer applies (409) 307ms
+     ✓ history shows summaries without invalid actions and filters by real status 352ms
+   ✓ F-01 summary without status waits for complete history and then renders current assignment 323ms
+   ✓ F-01 removes operative actions when a concurrent transfer changes the history 419ms
+   ✓ automatic dispatch search (6)
+     ✓ keeps the last round during a late refetch, then accepts retry pending and the renewed window 377ms
+stderr | src/test/logistics.test.tsx > capacity > never counts filtered lists to determine capacity
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["invitations",{"kind":"provider","providerId":"a"},{"page":1,"pageSize":20}]
+
+ ✓ src/test/flows.test.tsx (47 tests) 16008ms
+   ✓ auth and permissions UX (19)
+     ✓ submits login and displays an incorrect password error 532ms
+   ✓ integrations (19)
+     ✓ offers the full credential catalog and submits only the explicit selection [] 567ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'prequotes:convert', …(10) ] 1379ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'deliveries:location:read' ] 579ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'deliveries:tracking-links:manage' ] 539ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'prequotes:create' ] 547ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'prequotes:read' ] 595ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'prequotes:convert' ] 589ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'prequotes:convert', …(2) ] 718ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'quotes:read' ] 636ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'quotes:accept' ] 622ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'quotes:read', 'quotes:accept' ] 636ms
+     ✓ offers the full credential catalog and submits only the explicit selection [ 'quotes:create', 'quotes:read', …(6) ] 1032ms
+     ✓ creates only admitted fields 484ms
+     ✓ shows secret once without persistence or query cache 537ms
+   ✓ providers (9)
+     ✓ associates an existing administrator with a local role 784ms
+     ✓ creates FLEET using backend limit defaults 566ms
+     ✓ creates INDEPENDENT using backend limit defaults 518ms
+     ✓ confirms provider transition from PENDING 303ms
+     ✓ removes only membership after confirmation 329ms
+ ✓ src/test/invitations.test.tsx (47 tests) 22892ms
+   ✓ SUPER_ADMIN accounts and admin invitations (11)
+     ✓ shows real account statuses and filters them on the server 479ms
+     ✓ invites a PROVIDER_ADMIN with a role fixed by the flow 766ms
+     ✓ shows a clear invite error for USER_INVITATION_PENDING (409) 590ms
+     ✓ shows a clear invite error for USER_ALREADY_ACTIVE (409) 522ms
+     ✓ shows a clear invite error for USER_DISABLED (409) 466ms
+     ✓ shows a clear invite error for undefined (429) 494ms
+     ✓ shows a clear invite error for undefined (403) 465ms
+     ✓ shows a clear invite error for undefined (400) 473ms
+     ✓ shows a clear invite error for undefined (500) 506ms
+     ✓ shows a clear invite error for undefined (0) 474ms
+   ✓ invitation list, resend and revoke (12)
+     ✓ filters by status, role and email on the server 383ms
+     ✓ revokes only after confirmation 323ms
+   ✓ driver invitations (3)
+     ✓ PROVIDER_ADMIN invites a driver of its own provider only 842ms
+     ✓ SUPER_ADMIN invites a driver for the selected provider 636ms
+     ✓ shows the driver seat limit conflict and the empty drivers state 615ms
+   ✓ account activation (17)
+     ✓ is public, hides the token and activates without logging in 835ms
+     ✓ activates a DRIVER account too 886ms
+     ✓ enforces the real password policy and confirmation before calling the API 1234ms
+     ✓ shows a safe final state for INVITATION_TOKEN_INVALID 880ms
+     ✓ shows a safe final state for INVITATION_EXPIRED 863ms
+     ✓ shows a safe final state for INVITATION_ALREADY_ACCEPTED 878ms
+     ✓ shows a safe final state for INVITATION_REVOKED 913ms
+     ✓ shows a safe final state for ACCOUNT_NOT_ACTIVATABLE 915ms
+     ✓ shows a safe final state for PROVIDER_DRIVER_LIMIT_REACHED 929ms
+     ✓ keeps the form for retryable error 429 906ms
+     ✓ keeps the form for retryable error 0 904ms
+     ✓ keeps the form for retryable error 500 924ms
+     ✓ keeps the form for retryable error 400 918ms
+ ✓ src/test/logistics.test.tsx (44 tests) 12621ms
+   ✓ scope and permissions (12)
+     ✓ SUPER_ADMIN explicitly selects provider; no collection scan 361ms
+   ✓ drivers (8)
+     ✓ reports a concurrent capacity conflict while preserving form data 901ms
+     ✓ lists, filters and paginates server data within the membership 703ms
+     ✓ creates a driver with only DTO fields 949ms
+     ✓ confirms transition to SUSPENDED 326ms
+   ✓ vehicles (13)
+     ✓ creates BICYCLE without a plate and without hardcoded status 432ms
+     ✓ creates MOTORCYCLE without a plate and without hardcoded status 457ms
+     ✓ creates CAR without a plate and without hardcoded status 468ms
+     ✓ creates PICKUP without a plate and without hardcoded status 485ms
+     ✓ creates VAN without a plate and without hardcoded status 489ms
+     ✓ creates TRUCK without a plate and without hardcoded status 472ms
+     ✓ creates OTHER without a plate and without hardcoded status 473ms
+     ✓ filters vehicles with supported fields 377ms
+   ✓ assignments (8)
+     ✓ lists only active free vehicles from same provider and assigns 357ms
+     ✓ shows safe backend assignment failure: Driver already has an active vehicle assignment 371ms
+     ✓ shows safe backend assignment failure: Vehicle is already assigned to another driver 425ms
+     ✓ shows safe backend assignment failure: Only ACTIVE vehicles can be assigned 431ms
+     ✓ shows safe backend assignment failure: Suspended drivers cannot receive vehicles 379ms
+     ✓ shows safe backend assignment failure: Vehicle not found 359ms
+ ✓ src/test/delivery-completion.test.tsx (41 tests) 7396ms
+   ✓ provider completion (11)
+     ✓ offers the completion only with a claimed service and someone executing it 767ms
+     ✓ confirms with an explicit dialog and refreshes from the backend 603ms
+     ✓ sends no body at all: the backend derives who confirmed and when 435ms
+     ✓ cancelling the dialog calls no mutation 376ms
+     ✓ a fast double click sends a single request 470ms
+     ✓ represents no credit movement for the delivery 394ms
+   ✓ status formatters and already-delivered handling (5)
+     ✓ ends the claim dialog when the service is already delivered 310ms
+ ✓ src/test/delivery-assignments.test.tsx (22 tests) 9434ms
+   ✓ pending assignment (3)
+     ✓ shows a claimed dispatch as pending without inventing a DispatchStatus 582ms
+     ✓ shows the backend deadline and the overdue signal, never releasing on its own 322ms
+     ✓ offers an empty state, not an automatic release, without drivers 334ms
+   ✓ assign (3)
+     ✓ sends the chosen driver and vehicle and renders what the backend reports back 656ms
+     ✓ refuses to submit without a driver and a vehicle 331ms
+     ✓ locks the paired vehicle so the operator cannot build a mismatch 410ms
+   ✓ conflicts (4)
+     ✓ explains a 409 DRIVER_BUSY and refetches the availability 506ms
+     ✓ explains a 409 VEHICLE_BUSY and refetches the availability 453ms
+     ✓ explains a 409 DRIVER_VEHICLE_MISMATCH and refetches the availability 521ms
+     ✓ explains a 409 DISPATCH_ALREADY_ASSIGNED and refetches the availability 545ms
+   ✓ reassign (2)
+     ✓ sends the new pair with the reason the DTO defines 800ms
+     ✓ renders the winner of a concurrent reassignment, not what this browser sent 761ms
+   ✓ history (1)
+     ✓ lists the assignments newest first and marks the current one 303ms
+   ✓ cancel assignment and release protection (3)
+     ✓ blocks releasing the service while an assignment is active 349ms
+     ✓ cancels only the assignment and keeps the service with the provider 491ms
+     ✓ requires a detail for OTHER before calling the API 661ms
+   ✓ payment context (2)
+     ✓ COURIER_ADVANCE warns about the cash the driver must carry 334ms
+     ✓ PREPAID shows no advance at all 368ms
+   ✓ security (4)
+     ✓ scopes every assignment call to the resolved provider of the session 348ms
+stderr | src/test/partner-applications.test.tsx > partner applications inbox > shows the sidebar entry and the dashboard counter for SUPER_ADMIN
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["delivery-requests","count","CREATED"]
+Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ["delivery-requests","count","CANCELLED"]
+
+ ✓ src/test/partner-applications.test.tsx (25 tests) 8069ms
+   ✓ partner applications inbox (10)
+     ✓ lists open applications by default with Spanish labels and highlights repeated submissions 574ms
+     ✓ applies status, type, search and pagination on the server 1186ms
+     ✓ shows the sidebar entry and the dashboard counter for SUPER_ADMIN 345ms
+   ✓ partner application detail (10)
+     ✓ marks as contacted with an optional note 356ms
+     ✓ requires a review note before APPROVED 744ms
+     ✓ requires a review note before REJECTED 655ms
+     ✓ requires a review note before DISCARDED 838ms
+     ✓ shows 409 INVALID_TRANSITION by code and reloads the allowed transitions 438ms
+   ✓ onboarding and links (5)
+     ✓ guides a FLEET conversion and registers provider and invitation 428ms
+     ✓ registers only the invitation for INDIVIDUAL and never fixes a provider 305ms
+ ✓ src/test/delivery-requests.test.tsx (31 tests) 8813ms
+   ✓ SUPER_ADMIN navigation and list (13)
+     ✓ shows Solicitudes in the menu and opens the list 905ms
+     ✓ sends only backend-supported filters and paginates on the server 1622ms
+     ✓ clearing filters and immediately selecting a status drops old filters 352ms
+   ✓ cancel (3)
+     ✓ requires confirmation and a reason, then updates the state 893ms
+     ✓ shows a safe error and keeps the request unchanged 394ms
+     ✓ reports a double cancellation with the original reason preserved 409ms
+   ✓ V1.17 direct customer rows and detail allow null integration without inventing a B2B link 474ms
+   ✓ links request search to the existing filtered admin dispatch view 383ms
+ ✓ src/test/pricing.test.tsx (26 tests) 7232ms
+   ✓ service zones list (4)
+     ✓ opens from the menu and shows name, code, status, currency and the active rate 715ms
+     ✓ sends the search and status filters the backend accepts 497ms
+   ✓ service zone detail (4)
+     ✓ allows replacing the coverage of an inactive zone and rejects invalid GeoJSON 363ms
+   ✓ rate plan versions inside a zone (3)
+     ✓ warns and offers the first version when the zone has no rate plan 323ms
+     ✓ clones the active version into a new draft 423ms
+   ✓ draft editing (6)
+     ✓ saves bands converting kilometres into metres 485ms
+   ✓ validation and activation (4)
+     ✓ confirms the activation and explains what happens to existing quotes 377ms
+     ✓ explains a 422 refusing an invalid draft without leaking the raw report 332ms
+   ✓ security (2)
+     ✓ hides pricing from PROVIDER_ADMIN and blocks the routes typed by hand 436ms
+ ✓ src/test/credits.test.tsx (24 tests) 6041ms
+   ✓ SUPER_ADMIN · créditos de un proveedor (8)
+     ✓ registra una recarga con el DTO real y vuelve a leer la cuenta 941ms
+     ✓ no permite un doble envío de la misma recarga 412ms
+     ✓ distingue el ajuste administrativo y avisa cuando resta créditos 748ms
+   ✓ SUPER_ADMIN · créditos de un repartidor independiente (2)
+     ✓ usa exclusivamente las rutas independientes, nunca las del proveedor 380ms
+     ✓ aparece dentro de la ficha del repartidor independiente 383ms
+   ✓ políticas de créditos (4)
+     ✓ permite crear una nueva versión desde la vigente, nunca editarla 519ms
+ ✓ src/test/webhooks.test.tsx (22 tests) 2978ms
+   ✓ creates missing configuration disabled and explicitly sends enabled 782ms
+   ✓ syncs remote fields while clean, preserves edits and blocks conflicting save 696ms
+   ✓ filters and pagination stay scoped to the integration, using actual reason codes 598ms
+ ✓ src/test/service-coverage.test.tsx (19 tests) 4835ms
+   ✓ SUPER_ADMIN coverage in the provider detail (5)
+     ✓ lists zone, service type and status from the nested serviceZone 667ms
+   ✓ create, deactivate and reactivate (7)
+     ✓ creates with the flat write shape and refetches from the backend 589ms
+     ✓ requires a zone before calling the backend 387ms
+     ✓ turns SERVICE_COVERAGE_EXISTS on an inactive row into a PATCH reactivation 610ms
+     ✓ says an already active duplicate needs nothing 402ms
+     ✓ warns that deactivating keeps the frozen candidates and blocks new claims 381ms
+     ✓ warns that activating does not recalculate open services 321ms
+     ✓ keeps a failed PATCH on screen with a safe message 308ms
+ ✓ src/test/quotes.test.tsx (18 tests) 4230ms
+   ✓ quote list (4)
+     ✓ opens from the menu with translated statuses, price, distance and duration 914ms
+     ✓ sends the filters the admin DTO accepts 771ms
+   ✓ quotes inside a delivery request (4)
+     ✓ adds the quotes section keeping the V1.5 panels intact 305ms
+ ✓ src/test/verification-pages.test.tsx (45 tests) 3784ms
+   ✓ pending independent without provider accesses onboarding, not automatic operation 418ms
+ ✓ src/test/fleet.test.tsx (31 tests) 2622ms
+   ✓ resource management respects capabilities even in PAUSED 340ms
+ ✓ src/test/verification-upload.test.tsx (11 tests) 2619ms
+   ✓ FACE_PHOTO: A completes once, preserves B and uploads B only on explicit submit 616ms
+ ✓ src/test/fleet-exit.test.tsx (35 tests) 2972ms
+ ✓ src/test/assistance.test.tsx (43 tests) 3022ms
+ ✓ src/test/customer-autocomplete.test.tsx (4 tests) 1969ms
+   ✓ selects actual coordinates only after keyboard confirmation and requests minimal Places fields 691ms
+   ✓ late prediction does not restore options after text was cleared 431ms
+   ✓ late place details cannot replace a newer map selection 449ms
+   ✓ unavailable Places preserves map/location alternatives without fabricated coordinates 396ms
+ ✓ src/test/representatives.test.tsx (29 tests) 3085ms
+   ✓ linked DRIVER acknowledges separate consents before creating; no FLEET or approval 709ms
+ ✓ src/test/deletion-pages.test.tsx (32 tests) 2579ms
+   ✓ restriction task assignment requires distinct current administrators and evidence 620ms
+ ✓ src/test/business-pages.test.tsx (26 tests) 3352ms
+   ✓ accessible form trims exact DTO, omits empty note, confirms and refreshes profile/capabilities/list 785ms
+ ✓ src/test/deletion-v2.test.tsx (57 tests) 2982ms
+   ✓ releases only selected restriction with captured body and minimal durable marker 345ms
+ ✓ src/test/onboarding-production.test.tsx (30 tests) 3260ms
+   ✓ renders complete terms, privacy and each specific purpose with initially unchecked separate controls 385ms
+ ✓ src/test/execution.test.tsx (40 tests) 2431ms
+   ✓ provider only reads phase null even with stale ADVANCE permission 378ms
+ ✓ src/test/documentary-availability.test.tsx (29 tests) 2513ms
+   ✓ query failure 503/VERIFICATION_LOCAL_DISABLED blocks preparation without logout 535ms
+ ✓ src/test/independent-zones.test.tsx (13 tests) 886ms
+ ✓ src/test/customer.test.tsx (26 tests) 1634ms
+   ✓ quote requires both selected points and sends exact coordinates through the existing command 398ms
+ ✓ src/test/customer-conversion-design.test.tsx (8 tests) 1917ms
+   ✓ uses real price, synchronizes summary and allows PREPAID without goods value; restores profile explicitly 577ms
+   ✓ requires positive goods value only for advance and shows blur errors 528ms
+ ✓ src/test/developers.test.tsx (22 tests) 1393ms
+   ✓ anonymous portal does not restore an administrative session or send tokens 350ms
+   ✓ reference offers only the reviewed JSON and copyable synthetic examples 525ms
+   ✓ tracking documents QA, shared polling, custody and renders exact downloaded examples 322ms
+ ✓ src/test/google-map.test.tsx (10 tests) 729ms
+   ✓ public map uses bounds, grey stale marker and cancels animation on withdrawal 443ms
+ ✓ src/test/location.test.tsx (29 tests) 1099ms
+ ✓ src/test/customer-profile-design.test.tsx (8 tests) 1351ms
+   ✓ preloads identity and only saves valid changed data, then refreshes identity 469ms
+ ✓ src/test/customer-quote-design.test.tsx (4 tests) 1578ms
+   ✓ live summary, accessible controls and exact contract; CTA requires both selected points 1030ms
+ ✓ src/test/customer-location.test.tsx (9 tests) 1017ms
+   ✓ search requires explicit selection, sends only address to Google and invalidates a changed address 420ms
+ ✓ src/test/customer-registration-design.test.tsx (6 tests) 773ms
+   ✓ defaults to personal, marks required fields and validates on blur 387ms
+ ✓ src/test/session-compatibility.test.tsx (10 tests) 644ms
+ ✓ src/test/customer-request-design.test.tsx (9 tests) 840ms
+ ✓ src/test/image-retention.test.tsx (36 tests) 695ms
+ ✓ src/test/customer-reconciliation.test.tsx (23 tests) 1036ms
+   ✓ reload with lost body offers query, explicit close and explicit prepare; never resends command 481ms
+ ✓ src/test/provider-movements.test.tsx (25 tests) 959ms
+ ✓ src/test/customer-address.test.tsx (10 tests) 526ms
+ ✓ src/test/collection-instructions.test.tsx (22 tests) 346ms
+ ✓ src/test/provider-historical-attempt.test.tsx (12 tests) 581ms
+ ✓ src/test/public-tracking-design.test.tsx (10 tests) 325ms
+ ✓ src/test/customer-contact.test.tsx (6 tests) 285ms
+ ✓ src/test/customer-shipments-design.test.tsx (6 tests) 343ms
+ ✓ src/test/api.test.ts (24 tests) 225ms
+ ✓ src/test/execution-reconciliation.test.ts (24 tests) 170ms
+ ✓ src/test/fleet-api.test.ts (3 tests) 108ms
+ ✓ src/test/dispatch-search.test.tsx (8 tests) 73ms
+ ✓ src/test/retention-projection.test.tsx (8 tests) 69ms
+ ✓ src/test/deletion-service.test.ts (23 tests) 41ms
+ ✓ src/test/independent-drivers-api.test.ts (13 tests) 33ms
+ ✓ src/test/delivery-assignments-api.test.ts (12 tests) 26ms
+ ✓ src/test/invitations-api.test.ts (11 tests) 23ms
+ ✓ src/test/independent-zones-api.test.ts (15 tests) 29ms
+ ✓ src/test/credits-api.test.ts (22 tests) 46ms
+ ✓ src/test/verification-service.test.ts (22 tests) 38ms
+ ✓ src/test/assistance-api.test.ts (19 tests) 69ms
+ ✓ src/test/pricing-api.test.ts (16 tests) 53ms
+ ✓ src/test/google-loader.test.ts (4 tests) 58ms
+ ✓ src/test/logistics-api.test.ts (9 tests) 41ms
+ ✓ src/test/delivery-requests-api.test.ts (10 tests) 40ms
+ ✓ src/test/verification-recovery.test.ts (14 tests) 41ms
+ ✓ src/test/dispatch-api.test.ts (8 tests) 36ms
+ ✓ src/test/business-recovery.test.ts (16 tests) 40ms
+ ✓ src/test/quotes-api.test.ts (9 tests) 20ms
+ ✓ src/test/customer-service.test.ts (18 tests) 28ms
+ ✓ src/test/service-coverage-api.test.ts (9 tests) 35ms
+ ✓ src/test/fleet-exit-api.test.ts (28 tests) 25ms
+ ✓ src/test/integration-credentials-api.test.ts (10 tests) 18ms
+ ✓ src/test/webhooks-api.test.ts (7 tests) 16ms
+ ✓ src/test/business-service.test.ts (13 tests) 12ms
+ ✓ src/test/execution-attempt-service.test.ts (5 tests) 5ms
+ ✓ src/test/customer-tracking.test.ts (1 test) 3ms
+
+ Test Files  77 passed (77)
+      Tests  1558 passed (1558)
+   Start at  11:50:02
+   Duration  114.07s (tests 44%, environment 35%, setup 7%, import 7%, transform 7%)
+
+Environment  jsdom was created 77 times · 150.78s total, 35% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-28",
+  "scope": "LOCAL_TEST original identity and motorcycle",
+  "ui": "partial; identity approved, original motorcycle material conflict",
+  "tests": {
+    "passed": 15,
+    "files": 2,
+    "global": false
+  },
+  "productTypes": 0,
+  "testTypes": 0,
+  "build": 0,
+  "lintUnfiltered": {
+    "exit": 1,
+    "errors": 824,
+    "location": "historical generated backend copies under test-results"
+  },
+  "lintWeb": {
+    "exit": 0,
+    "command": "npm run lint -- --ignore-pattern 'test-results/**'"
+  },
+  "versionChanged": false,
+  "backendChanged": false,
+  "servicesChanged": false
+}

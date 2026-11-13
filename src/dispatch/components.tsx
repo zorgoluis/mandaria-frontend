@@ -1,3 +1,4 @@
+import { useFleetPermission } from '../fleet/permissions'
 import { ShippingPaymentBlock } from '../shipping/Payment'
 import type { DispatchSearch } from './search'
 import { SearchStatus } from './SearchStatus'
@@ -187,6 +188,8 @@ export function ServiceCard({
   onClaim: (dispatch: ProviderDispatch) => void
   onRelease: (dispatch: ProviderDispatch) => void
 }) {
+  const claimAllowed = useFleetPermission('canClaim')
+  const releaseAllowed = useFleetPermission('canRelease')
   const service = dispatch.service
   const expiredLocally =
     dispatch.status === 'OPEN' && remaining(dispatch.expiresAt, now) === null
@@ -248,20 +251,22 @@ export function ServiceCard({
         >
           Ver detalle <ArrowUpRight size={14} />
         </Link>
-        {dispatch.access === 'OFFER' && dispatch.status === 'OPEN' && (
-          <button
-            className="button small"
-            disabled={!canClaim(dispatch, now)}
-            onClick={() => onClaim(dispatch)}
-          >
-            {dispatch.search && !searchAllowsTake(dispatch.search, now)
-              ? 'Esperando actualización'
-              : expiredLocally
-                ? 'Tiempo terminado'
-                : 'TOMAR SERVICIO'}
-          </button>
-        )}
-        {canRelease(dispatch) && (
+        {claimAllowed &&
+          dispatch.access === 'OFFER' &&
+          dispatch.status === 'OPEN' && (
+            <button
+              className="button small"
+              disabled={!canClaim(dispatch, now)}
+              onClick={() => onClaim(dispatch)}
+            >
+              {dispatch.search && !searchAllowsTake(dispatch.search, now)
+                ? 'Esperando actualización'
+                : expiredLocally
+                  ? 'Tiempo terminado'
+                  : 'TOMAR SERVICIO'}
+            </button>
+          )}
+        {releaseAllowed && canRelease(dispatch) && (
           <button
             className="button secondary destructive small"
             disabled={dispatch.assignment !== null}

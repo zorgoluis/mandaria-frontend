@@ -1,0 +1,3 @@
+Browser tab: 1, Title: "Mandaria · Panel administrativo", URL: "http://localhost:5173/drivers".
+There has been no change in the accessibility tree.
+The focused UI element is 1 AXWebArea Mandaria · Panel administrativo, URL: localhost:5173/drivers

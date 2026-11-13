@@ -1,0 +1,44 @@
+# Fotos de cámara en el registro — 2026-11-07
+
+Actualización posterior: [recuperación del cupo de cargas fallidas](UPLOAD-QUOTA-RECOVERY.md), con cambios Web/backend y pruebas de expedientes ya agotados. Las secciones siguientes conservan sus alcances y resultados anteriores.
+
+## Seguimiento: botón «Cargar imagen» bloqueado en móvil
+
+El usuario precisó que el bloqueo ocurre en «Cargar imagen» del navegador móvil, después de ver la foto seleccionada. Se reprodujo una causa concreta en el formulario de detalle: una operación documental pendiente bloquea nuevas cargas y el selector `.verification-area:has(.identity-case) > .notice` ocultaba también el panel «Pendiente de reconciliación» y su botón «Consultar intento». El preview sólo acredita selección local; no descarta una carga anterior pendiente. No se inspeccionó el almacenamiento del teléfono del usuario, por lo que no se atribuye su estado particular sin esa evidencia.
+
+El selector ahora oculta únicamente el `aside` informativo duplicado. Los paneles de recuperación permanecen visibles; un aviso junto a «Cargar imagen» enlaza al inicio para consultarlos. Se conservan todos los bloqueos y la consulta explícita existente: ABSENT no permite otra carga, CLOSED_NO_EFFECTS/APPLIED requieren respuesta y refetch, y no se borran marcadores ni se repiten CREATE_UPLOAD/COMPLETE_UPLOAD automáticamente. No cambia compresión, resolución, backend ni comportamiento de selección de cámara/galería.
+
+Validación del seguimiento:
+
+- `npx vitest run src/test/verification-upload.test.tsx src/test/verification-pages.test.tsx src/test/documentary-availability.test.tsx --maxWorkers=1`:143/143 PASS,3 archivos.
+- `npx tsc -b`, `npx tsc --project tsconfig.test.json --pretty false`, ESLint de los archivos TSX y script afectados:PASS. No nueva suite global ni build de bundle; los tipos sí se recompilaron.
+- `node scripts/verify-mobile-evidence.mjs`:8/8 grupos PASS en Chrome/WebKit con viewport390×844 y touch. Incluye selección/preview habilitado, regreso con refetch demorado sin perder el archivo, aviso visible y enlace táctil, consulta ABSENT bloqueada, CLOSED_NO_EFFECTS confirmado, pérdida de respuesta al completar y consulta APPLIED sin nueva transferencia. API simulada local y PNG sintético con decodificación real; no backend, cuentas reales ni operaciones externas.
+- Antes del arreglo, corrida1794070422048: selección/refetch PASS, recuperación invisible FAIL. El primer intento del arnés esperaba incorrectamente «Guardar datos» habilitado sin cambios; se corrigió esa aserción del arnés, sin alterar producto. Pase final1794070537535, con capturas en test-results/mobile-evidence. [Informe conservado](mobile-evidence-recovery-evidence.json).
+
+Corrección local en feature/rediseno, sin commit/push ni despliegue de este seguimiento. Chrome/WebKit en Windows no sustituyen una comprobación en Android/iPhone físicos. Las entradas inferiores conservan la implementación y validaciones previas de formatos de cámara.
+
+## Corrección
+
+Web prepara JPEG, PNG y HEIC/HEIF localmente antes de CREATE_UPLOAD, tanto en el asistente del conductor como en formularios de evidencia (identidad, unidad y representante). Detecta firmas reales, corrige MIME ausente/genérico y rechaza archivos no raster/corruptos. El selector conserva cámara y galería; no fuerza capture ni restringe a una sola cámara. HEIC se decodifica con heic-to 1.6.7, distribución CSP y worker local cargados bajo demanda. No usa conversores externos. Licencia, versión y fuentes en public/licenses/heic-to/. nginx.conf agrega únicamente worker-src 'self' blob: a su CSP para permitir ese worker local; no abre scripts remotos ni cambia el servidor desplegado.
+
+JPEG/PNG que ya cumplen los límites se envían sin recompresión. Para HEIC o fotos que necesitan ajuste: orientación decodificada, proporción completa, sin recorte ni ampliación, borde máximo4096px y límite de píxeles del backend; JPEG calidad0.95, segundo intento0.92 sólo si es necesario. No degrada indefinidamente para hacer caber el archivo: informa cuando no puede mantener estos criterios. Fuente local máxima40MiB y dimensión decodificada máxima120MP; no se afirma que teléfonos de poca memoria puedan decodificar cualquier imagen extrema. Abortar/salir durante preparación descarta el resultado; no crea un intento remoto. La preparación no persiste la foto en localStorage/IndexedDB y libera bitmaps/canvas/URLs temporales. El worker puede terminar la decodificación ya iniciada después de abortar; ese resultado no se sube.
+
+Backend mantiene la entrada JPEG/PNG en10MiB y20MP. HEIC llega convertido por Web, no se habilita un formato sin decodificador en el servidor. La salida PNG normalizada tiene un límite separado85MiB: cubre20MP RGBA sin pérdida y evita que la expansión de un JPEG válido cause un falso rechazo. Sólo la lectura del objeto VALIDATED usa ese límite mayor; cuarentena sigue limitada a10MiB por ContentLength y por bytes del stream. Hash, orientación, eliminación de metadatos, almacenamiento privado, control de acceso y PNG de respuesta permanecen. Consecuencia: algunos PNG detallados ocupan más almacenamiento/tráfico; no se reduce su resolución en servidor ni se cambia el formato público. No cambia esquema, migraciones, variables ni versión.
+
+Errores de tamaño, formato, resolución e imagen ilegible tienen mensajes concretos. La imagen técnicamente válida sigue sujeta a revisión humana de legibilidad/identidad; la corrección no recupera texto ya borroso ni aprueba documentos.
+
+## Validación nueva
+
+- Web:188/188 pruebas en seis archivos afectados (prepare-photo, verification-upload, verification-service, verification-pages, representatives y driver-signup). Los tests históricos con bytes ficticios simulan sólo el preparador; el preparador tiene pruebas propias y el ensayo de navegador utiliza codecs reales.
+- Backend:49/49 en test/driver-verification.spec.ts. Igualdad exacta de píxeles decodificados entre JPEG12MP ruidoso y PNG normalizado; EXIF6; límites de entrada/salida; tipo inválido; lectura del PNG ampliado sin ampliar cuarentena.
+- Script verify-camera-photos.mjs:12/12 combinaciones en Chrome y WebKit reales, viewport móvil:48MP, EXIF6, MIME vacío, JPEG12MP que se expande a PNG>10MiB, PNG y HEIC real. Cada salida pasa por validateImage compilado del backend. Sólo recursos locales durante la prueba, aplicando la CSP final leída directamente de nginx.conf (incluido worker-src). No es una cámara física Android/iOS.
+- CAMERA_PHOTOS=1 node scripts/verify-simple-driver-registration.mjs:PASS,10 grupos, navegador Chrome/Nest/PostgreSQL temporal; subidas reales por UI de HEIC y48MP más tres PNG, presentación única y recuperación de respuesta perdida. Correo capturado, almacenamiento privado local y usuarios sintéticos. Base temporal detenida (postgresStopped=true). Sin producción ni servicios externos.
+- Build Web, tipos de producto/pruebas, ESLint focalizado:PASS; aviso Vite de chunks grandes (HEIC se carga aparte, ~809KB gzip). Backend Prisma generate local, build, ESLint y Oxlint focalizados:PASS. La generación no conectó ni migró bases operativas. No se ejecutó suite global.
+
+Evidencia reproducible: [camera-photo-upload-evidence.json](camera-photo-upload-evidence.json). Imágenes/capturas locales en test-results/camera-photos y recorrido en test-results/onboarding-production-isolated/1794066971458. El archivo HEIC de ejemplo se obtiene de https://raw.githubusercontent.com/strukturag/libheif/master/examples/example.heic y se coloca en test-results/camera-photos/example.heic; su SHA256 está en el informe. No contiene documentos de usuarios. Compilar backend antes de ejecutar los scripts. El ejemplo no se incorpora a Git.
+
+Preparación: npm inicialmente bloqueado por caché/sandbox, ejecutado con acceso autorizado. Vite requirió permiso para procesos. Backend detectó cliente Prisma local desactualizado; regenerado y build corregido. El comparador de igualdad de buffers de prueba agotó heap: sustituido por Buffer.equals sin cambiar la aserción de píxeles. Primer ensayo WebKit bloqueó el worker blob del codec por la política del arnés; se permitió exclusivamente blob local y se repitieron12/12. Ninguno de esos intentos se contabiliza como PASS. La revisión automática rechazó reescribir un archivo completo para retirar formato; se aplicaron sólo dos hunks equivalentes, conservando el cambio funcional y cualquier contenido restante.
+
+## Entrega
+
+Sin despliegue, commit/push ni cambios operativos. Publicar coordinadamente backend antes de Web cuando se autorice: todas las instancias lectoras deben entender el nuevo límite de PNG validado. Sin migración ni variables nuevas. Pendiente aceptación con cámaras físicas Android/iPhone y condiciones de memoria/red de dispositivos reales; WebKit en Windows no sustituye Safari en un iPhone. El diagnóstico específico de un usuario requiere su mensaje/archivo, no se afirma inspección de la VM.

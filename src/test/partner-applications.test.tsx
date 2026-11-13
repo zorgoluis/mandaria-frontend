@@ -331,8 +331,8 @@ describe('partner applications inbox', () => {
     vi.mocked(partnerApplications.list).mockResolvedValue(page([], 7))
     mount('/dashboard')
     expect(
-      screen.getByRole('link', { name: /Solicitudes de socio/ }),
-    ).toHaveAttribute('href', '/admin/partner-applications')
+      screen.queryByRole('link', { name: /^Solicitudes de socio$/ }),
+    ).not.toBeInTheDocument()
     await waitFor(() =>
       expect(partnerApplications.list).toHaveBeenCalledWith(
         { pageSize: 1, status: 'RECEIVED' },

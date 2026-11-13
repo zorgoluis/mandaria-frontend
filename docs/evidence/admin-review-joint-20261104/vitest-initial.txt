@@ -1,0 +1,37 @@
+
+> mandaria-web@1.11.0 test
+> vitest run
+
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Worker forks emitted error.
+ ❯ EventEmitter.onTaskError node_modules/vitest/dist/chunks/index.B89dZ0-N.js:11463:21
+ ❯ EventEmitter.emit node:events:509:28
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/index.B89dZ0-N.js:10940:22
+ ❯ ChildProcess.emit node:events:509:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:295:12
+
+Caused by: Error: Worker exited unexpectedly with exit code 3221226505 during started state while running test file C:/Users/zorgl/Documents/mandaria-frontend/src/test/delivery-requests.test.tsx
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/index.B89dZ0-N.js:10938:33
+ ❯ ChildProcess.emit node:events:509:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:295:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  85 passed (86)
+      Tests  1736 passed (1753)
+     Errors  1 error
+   Start at  18:52:02
+   Duration  113.41s (tests 41%, environment 36%, import 10%, setup 7%, transform 6%)
+
+Environment  jsdom was created 86 times · 152.11s total, 36% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

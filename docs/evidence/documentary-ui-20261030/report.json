@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "kind": "SYNTHETIC_RENDER_NOT_BACKEND_INTEGRATION",
+  "checks": [
+    "accordions-closed-independent-no-implicit-consent-three-required-checks-active-nav"
+  ],
+  "screenshots": [
+    {
+      "file": "pending-desktop-mobile-1280.png",
+      "width": 1280,
+      "sha256": "b72a8b166d9ec999f448bfd892b6deabac35b1b1bc296e7c95e2e1364c12c9cd"
+    },
+    {
+      "file": "pending-desktop-mobile-320.png",
+      "width": 320,
+      "sha256": "a5d42814be75f5d3b1faec7c4cc2b0d4cba68adbc74cd1e0dd0d27ec358f8717"
+    },
+    {
+      "file": "legal-expanded-1280.png",
+      "width": 1280,
+      "sha256": "4a003816d05628e660fcf075d211cc83a61bb55e02e895dc4399c4483ce4c6b6"
+    },
+    {
+      "file": "legal-expanded-320.png",
+      "width": 320,
+      "sha256": "516cb6e10c423887840503015f37e00f4738c7181e2f622270f26cb6810e3380"
+    },
+    {
+      "file": "accepted-1280.png",
+      "width": 1280,
+      "sha256": "32db9f155268cf87b1e89ee5df7c41831f7af10dde8b1f8a791166087888464e"
+    },
+    {
+      "file": "accepted-320.png",
+      "width": 320,
+      "sha256": "a588b3d6c7c84ae174adf3acc1e7da417a1c7835b3b988cacbef01f9226fc352"
+    },
+    {
+      "file": "unavailable-1280.png",
+      "width": 1280,
+      "sha256": "a9dcbe47b93fbc8f5697ef6d7ae066bbf97f714c5f0cf669bf2cbbeb2472031e"
+    },
+    {
+      "file": "unavailable-320.png",
+      "width": 320,
+      "sha256": "25d7826d3db10b6fd120050aa7f3e38c9bf5b0191138235bd6c6cc8f27577913"
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "mutations": 0
+}

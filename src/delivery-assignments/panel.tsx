@@ -1,3 +1,4 @@
+import { useFleetPermission } from '../fleet/permissions'
 import { useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { ErrorState, InfoGrid, Loading } from '../components/ui'
@@ -39,6 +40,8 @@ export function AssignmentPanel({
   assignments: ReturnType<typeof useDispatchAssignments>['query']
   active: DeliveryAssignment | null
 }) {
+  const assignAllowed = useFleetPermission('canAssign')
+  const reassignAllowed = useFleetPermission('canReassign')
   const [assigning, setAssigning] = useState(false)
   const [reassigning, setReassigning] = useState(false)
   const [cancelling, setCancelling] = useState(false)
@@ -91,7 +94,9 @@ export function AssignmentPanel({
             />
             Actualizar
           </button>
-          {delivered || !ordinary ? null : active ? (
+          {delivered ||
+          !ordinary ||
+          (active ? !reassignAllowed : !assignAllowed) ? null : active ? (
             <>
               <button
                 className="button secondary destructive small"
@@ -161,14 +166,14 @@ export function AssignmentPanel({
             ? 'El repartidor y el vehículo quedaron libres al confirmar la entrega; aquí permanece quién la realizó.'
             : 'Sin actualización en tiempo real: otro administrador de tu proveedor puede reasignar al mismo tiempo. Usa Actualizar para ver quién está asignado ahora.'}
       </p>
-      {assigning && ordinary && (
+      {assigning && assignAllowed && ordinary && (
         <AssignDialog
           providerId={providerId}
           dispatch={dispatch}
           onClose={() => setAssigning(false)}
         />
       )}
-      {reassigning && active && ordinary && (
+      {reassigning && reassignAllowed && active && ordinary && (
         <ReassignDialog
           providerId={providerId}
           dispatch={dispatch}
@@ -176,7 +181,7 @@ export function AssignmentPanel({
           onClose={() => setReassigning(false)}
         />
       )}
-      {cancelling && active && ordinary && (
+      {cancelling && reassignAllowed && active && ordinary && (
         <CancelAssignmentDialog
           providerId={providerId}
           dispatch={dispatch}

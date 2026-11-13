@@ -7,12 +7,26 @@ import { date } from '../utils/format'
 import { verification } from './service'
 import { vkey } from './format'
 
-export function AcceptanceHistory({ currentId }: { currentId?: string }) {
+export function AcceptanceHistory({
+  currentId,
+  compact = false,
+}: {
+  currentId?: string
+  compact?: boolean
+}) {
   const { user } = useAuth()
   const [page, setPage] = useState(1)
   const q = useQuery({
-    queryKey: vkey(user!.id, 'acceptance-history', page),
-    queryFn: ({ signal }) => verification.acceptanceHistory(page, signal),
+    queryKey: vkey(
+      user!.id,
+      'acceptance-history',
+      page,
+      ...(compact ? [5] : []),
+    ),
+    queryFn: ({ signal }) =>
+      compact
+        ? verification.acceptanceHistory(page, signal, 5)
+        : verification.acceptanceHistory(page, signal),
     retry: false,
     gcTime: 0,
   })

@@ -76,6 +76,7 @@ export type DeliveryRequestResponse = {
   financialContext: DeliveryFinancialContextResponse
 }
 export type DeliveryStatusResponse = {
+  deliveryConfirmation?: import('../execution/delivery-confirmation').DeliveryConfirmation
   shippingPayment: ShippingPaymentResponse | null
   publicVersion: string
   trackingMode: ('LEGACY' | 'DETAILED') | null

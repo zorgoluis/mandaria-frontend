@@ -1,0 +1,12 @@
+
+ RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+
+ Test Files  2 passed (2)
+      Tests  96 passed (96)
+   Start at  18:28:03
+   Duration  23.36s (tests 54%, transform 28%, environment 10%, import 5%, setup 3%)
+
+  Transform  transforming modules took 10.58s · 28% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

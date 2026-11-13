@@ -1,0 +1,18 @@
+{
+  "kind": "SIMULATED_HTTP_NOT_BACKEND",
+  "checks": [
+    "AVAILABLE desktop/mobile masked",
+    "no overflow",
+    "NOT_RECORDED",
+    "UNAVAILABLE",
+    "exit/reentry fresh read",
+    "no web storage",
+    "only authorized detail GET"
+  ],
+  "screenshots": [
+    "test-results/independent-contact/1793982333528/1280.png",
+    "test-results/independent-contact/1793982333528/390.png"
+  ],
+  "calls": 5,
+  "status": "PASS"
+}

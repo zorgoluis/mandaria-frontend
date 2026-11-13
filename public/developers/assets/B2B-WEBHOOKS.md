@@ -82,4 +82,4 @@ Fuentes de contrato del emisor: `webhook-transport.ts`, `webhook-secret.ts`, `we
 
 ### Consulta versionada y compatibilidad
 
-El GET status añade publicVersion/trackingMode/assignmentState/terminalOutcome; delivery.completed conserva su payload previo, sin esos campos y sin executionProgress/executionOutcome. Deduplicar eventId y consultar GET para reconciliar la fotografía versionada; no ordenar por fecha de recepción ni sobrescribir una versión más reciente con payload de webhook. No se añadieron eventos de progreso, atención, transferencia o devolución. [Seguimiento público](PUBLIC-B2B-TRACKING.md).
+El GET status añade publicVersion/trackingMode/assignmentState/terminalOutcome; delivery.completed conserva su payload previo, sin esos campos y sin executionProgress/executionOutcome. Deduplicar eventId y consultar GET para reconciliar la fotografía versionada; no ordenar por fecha de recepción ni sobrescribir una versión más reciente con payload de webhook. No se añadieron eventos de progreso, atención, transferencia o devolución. [Seguimiento público](B2B-PUBLIC-GUIDE.md#fotografía-pública-versionada--disponible-en-checkout-qa-no-desplegada).

@@ -1,0 +1,87 @@
+Volver
+Despacho de MDR-000001
+
+Entrega local · Zona 306F30E89D
+
+Resumen
+Entregado
+Solicitud
+MDR-000001
+Cotización
+MQ-000001
+Abierto
+28 oct 2026, 6:50 p.m.
+Vence
+28 oct 2026, 7:50 p.m.
+Tomado por (histórico)
+—
+Tomado
+28 oct 2026, 7:01 p.m.
+Cobro y mercancía
+COSTO DEL ENVÍO
+$60.00 MXN
+VALOR DE MERCANCÍA
+$800.00 MXN
+Mercancía prepagada
+Costo en créditos
+
+Congelado al abrirse el despacho, por actor
+
+Actor	Costo	Política	Distancia	Detalle
+Proveedor	5 créditos	v1 · Por kilómetro	4.2 km (4,200 m)	5 km cobrados
+Repartidor independiente	5 créditos	v1 · Por kilómetro	4.2 km (4,200 m)	5 km cobrados
+
+Los créditos son una unidad interna de Mandaria: no son pesos y no se suman al cobro del envío. El cobro real de un servicio aparece como movimiento en la cuenta de créditos de quien se lo adjudicó.
+
+Candidatos
+
+Proveedores a los que se ofreció al abrirse
+
+Sin candidatos
+
+Ningún proveedor tenía cobertura activa para esta zona y servicio.
+
+Asignaciones
+
+Historial de ejecutores, de la asignación más reciente a la más antigua
+
+Proveedor de la asignación más reciente (histórico)
+Independiente
+carlos
+CARLOS-306F30E89D · Motocicleta
+Entrega completada
+Asignado
+28 oct 2026, 7:01 p.m.
+Terminó
+28 oct 2026, 7:23 p.m.
+
+Lectura y auditoría. Asignar, reasignar y cancelar corresponden al proveedor dueño del servicio.
+
+Progreso de ejecución
+Revisión 7
+En camino al origen
+En el origen
+Mercancía recogida
+En camino al destino
+En el destino
+Entrega confirmada · Entregado
+
+Último registro: 28 oct 2026, 7:23 p.m..
+
+Los registros, la entrega, la devolución y la transferencia no acreditan cobro ni devolución automática de créditos.
+
+Los hitos y la entrega corresponden al conductor asignado. Este panel administrativo es de consulta.
+
+Registro operativo
+Actualizar ejecución
+Registro	Fase	Actor	Origen del aviso	Fecha de registro	Revisión
+Entregado	En el destino	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:23 p.m.	7
+Avance	En el destino	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:20 p.m.	6
+Avance	En camino al destino	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:14 p.m.	5
+Avance	Mercancía recogida	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:08 p.m.	4
+Avance	En el origen	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:03 p.m.	3
+Avance	En camino al origen	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:01 p.m.	2
+Asignación	Sin hito	Repartidor · e2df19bd-450b-4d79-abba-5a7fc9d03f5b	Reporte propio	28 oct 2026, 7:01 p.m.	1
+7 registros · Página 1 de 1
+Anterior
+Siguiente

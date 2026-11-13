@@ -1,6 +1,6 @@
 ## GPS y enlaces temporales — implementación local, sin disponibilidad productiva acreditada
 
-La API base confirmada es https://mandaria.com.mx/api/v1. Los paths del JSON descargable ya incluyen /api/v1; su servers.url es el origen sin ese prefijo.
+La API base documentada, con disponibilidad remota por confirmar, es https://mandaria.com.mx/api/v1. Los paths del JSON descargable ya incluyen /api/v1; su servers.url es el origen sin ese prefijo.
 
 Desde tu backend, con ownership de la IntegrationClient:
 

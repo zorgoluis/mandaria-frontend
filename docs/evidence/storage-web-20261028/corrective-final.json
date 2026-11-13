@@ -1,0 +1,506 @@
+{
+  "stage": "corrective-final",
+  "checkedAt": "2026-10-29T04:23:31.500Z",
+  "scope": "REAL browser -> Web -> authorized Nest/PostgreSQL; no response substitution",
+  "status": {
+    "ready": true,
+    "apiUrl": "http://127.0.0.1:37795/api/v1",
+    "socketPath": "/api/v1/driver-offers/socket.io",
+    "root": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU",
+    "drivers": {
+      "carlos": "06c6bde2-3238-40f8-bedd-5fa5c11622a7",
+      "pedro": "9b85db88-0dbc-4414-ba18-f77da55e06f7",
+      "bruno": "82f301a5-309f-4558-b7cb-06e4ee47a37b",
+      "none": "6e4e594c-ccdc-4afd-8a99-338059ce516d",
+      "pending": "f7979db2-2b2b-418f-aa92-f019880318eb"
+    },
+    "vehicles": {
+      "carlos": "f5d99211-e412-45b8-9b8f-097ebc72c5f1",
+      "pedro": "7839881d-c84a-4c8a-98ee-896839c3be15",
+      "bruno": "e6555ecc-4126-450a-b7a1-025f00ae567e"
+    },
+    "zoneId": "09a308ec-56ca-41ec-bb02-7ef4576a4f9d",
+    "flags": {
+      "detailedExecution": true,
+      "independentOffers": true,
+      "independentSocket": true,
+      "fleet": false,
+      "fleetExit": false,
+      "assistance": false,
+      "fcm": false,
+      "gps": false
+    },
+    "providers": 0,
+    "activeAssignments": 0,
+    "dispatches": 3,
+    "migrations": [
+      {
+        "applied": 66
+      }
+    ],
+    "manifest": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/build-manifest.json",
+    "accountsPrivatePath": "/home/mandaria/.local/share/mandaria-independent-interactive/session-8OS0bU/accounts.private.json"
+  },
+  "manifest": {
+    "packageVersion": "1.13.5",
+    "sourceCommit": "b799308315f87cd94ef2051de5eea18e28b3bcd0",
+    "buildSha256": "5fa6715996fc858ea42e5f868d16ed0f3a4a0e3ab5efb148d2ba731836c11bc7",
+    "equalsPublished": true
+  },
+  "checks": [
+    {
+      "readAt": "2026-10-29T04:23:26.068Z",
+      "id": "59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "resourceId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+      "status": "WITHDRAWN",
+      "revision": 8,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "cedb4a1c-b3f9-47fd-b368-f6b70ca9efe7",
+          "category": "REGISTRATION_CARD",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:47.165Z"
+        },
+        {
+          "id": "0c6f5505-53b5-4423-80dc-3b903502d633",
+          "category": "OWNERSHIP_PROOF",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T03:58:49.748Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:23:27.256Z",
+      "id": "9864ae95-25d7-49d9-84b7-5a6a573b5ea7",
+      "resourceId": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+      "status": "APPROVED",
+      "revision": 8,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "342f4d48-8c56-4f52-89d3-4200e219ad9a",
+          "category": "REGISTRATION_CARD",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:21:31.263Z"
+        },
+        {
+          "id": "d762b863-dfd3-4ceb-804b-026269da0839",
+          "category": "OWNERSHIP_PROOF",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:21:33.760Z"
+        }
+      ]
+    },
+    {
+      "readAt": "2026-10-29T04:23:28.473Z",
+      "id": "e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "resourceId": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+      "status": "APPROVED",
+      "revision": 14,
+      "scope": {
+        "providerId": null,
+        "independentProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94"
+      },
+      "attachments": [
+        {
+          "id": "8ab909fd-c1c9-4bb2-a03b-f4f66610a294",
+          "category": "FACE_PHOTO",
+          "status": "REMOVED",
+          "bytes": null,
+          "mime": null,
+          "hash": null,
+          "createdAt": "2026-10-29T00:37:04.848Z"
+        },
+        {
+          "id": "229c9de1-4d6c-427c-bf3a-23a3ab593eec",
+          "category": "FACE_PHOTO",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:53.405Z"
+        },
+        {
+          "id": "7127e9f0-962b-403e-81fa-c56a57204212",
+          "category": "INE_FRONT",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:55.437Z"
+        },
+        {
+          "id": "beb398aa-e040-4371-a497-63c818dae5ca",
+          "category": "INE_BACK",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:01:58.047Z"
+        },
+        {
+          "id": "2a631d16-42fe-4017-9beb-cf24a327c574",
+          "category": "LICENSE",
+          "status": "VALIDATED",
+          "bytes": 14902,
+          "mime": "image/png",
+          "hash": "a16641d7988cd5e4beecd37064a08e5248945a3566208d2759294a980cb7e00d",
+          "createdAt": "2026-10-29T04:02:00.160Z"
+        }
+      ]
+    },
+    {
+      "unitAt": "2026-10-29T04:23:28.991Z",
+      "unit": {
+        "id": "6a072e1f-c9ae-446a-b31b-c592427aa721",
+        "independentDriverProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94",
+        "identifier": "WEB-SYNTH-9003210835",
+        "type": "MOTORCYCLE",
+        "status": "ACTIVE",
+        "brand": null,
+        "model": null,
+        "year": null,
+        "color": null,
+        "plate": "SYN-WEB-01",
+        "createdAt": "2026-10-29T00:38:09.505Z",
+        "updatedAt": "2026-10-29T04:21:40.124Z"
+      }
+    },
+    {
+      "directHarnessReadOnlyProjections": [
+        {
+          "path": "/driver/me",
+          "body": {
+            "providerId": null,
+            "id": "6d5019e0-4f3e-48af-9801-33107ae08daf",
+            "name": "Aceptación Web Sintética",
+            "displayName": null,
+            "status": "ACTIVE",
+            "availability": "OFFLINE",
+            "provider": null,
+            "currentAssignment": null,
+            "driverCategory": {
+              "contractVersion": "1.0.0",
+              "categoryRevision": "2",
+              "category": "INDEPENDENT",
+              "providerId": null,
+              "independentMembershipState": "CURRENT",
+              "independentApprovalStatus": "APPROVED",
+              "resolutionRequired": false
+            },
+            "verification": {
+              "identityStatus": "APPROVED",
+              "policyVersion": "LOCAL-TEST-1",
+              "environment": "LOCAL_TEST",
+              "canAdmitIdentity": true,
+              "blockingReasons": []
+            },
+            "activeDeliveryAssignment": null,
+            "independent": {
+              "id": "02b893dd-c45c-4c1f-ba25-aa883e75ba94",
+              "status": "APPROVED",
+              "membershipState": "CURRENT",
+              "approvedAt": "2026-10-29T04:04:32.169Z",
+              "suspendedAt": null,
+              "reason": null,
+              "canTakeServices": true
+            }
+          }
+        },
+        {
+          "path": "/driver/credits",
+          "body": {
+            "id": "8c3ad1bc-dd35-4769-b773-49de5659133e",
+            "ownerType": "INDEPENDENT_DRIVER",
+            "providerId": null,
+            "independentDriverProfileId": "02b893dd-c45c-4c1f-ba25-aa883e75ba94",
+            "balance": 0,
+            "createdAt": "2026-10-29T04:04:32.130Z",
+            "updatedAt": "2026-10-29T04:04:32.130Z"
+          }
+        },
+        {
+          "path": "/driver/offer-reception",
+          "body": {
+            "schemaVersion": 1,
+            "revision": "2",
+            "serverTime": "2026-10-29T04:23:29.520Z",
+            "allowedZones": [],
+            "selectedZoneId": null,
+            "shift": null,
+            "state": "OFF",
+            "reason": "RECEPTION_DISABLED",
+            "canAttemptTake": false,
+            "limits": {
+              "defaultMinutes": 480,
+              "minMinutes": 60,
+              "maxMinutes": 720
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "http": [
+    {
+      "at": "2026-10-29T04:23:23.769Z",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:23.780Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.375Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.392Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.441Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.460Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.489Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:24.520Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.412Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.434Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.488Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.500Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/59d9cf1d-bad3-4377-962c-e9e4937fb76a",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.524Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:25.557Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.625Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.641Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.684Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.707Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/9864ae95-25d7-49d9-84b7-5a6a573b5ea7",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.727Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:26.753Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.803Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.816Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.869Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.898Z",
+      "method": "GET",
+      "path": "/api/v1/verification-cases/e8a1cae1-5966-40ea-b79e-2e855249c68c",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.921Z",
+      "method": "GET",
+      "path": "/api/v1/verification-requirements",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:27.969Z",
+      "method": "GET",
+      "path": "/api/v1/verification-terms",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:28.866Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:28.885Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:28.950Z",
+      "method": "GET",
+      "path": "/api/v1/driver/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:28.985Z",
+      "method": "GET",
+      "path": "/api/v1/driver/vehicles",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.031Z",
+      "method": "GET",
+      "path": "/api/v1/driver/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.055Z",
+      "method": "GET",
+      "path": "/api/v1/driver/credits",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.207Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.599Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.614Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.663Z",
+      "method": "GET",
+      "path": "/api/v1/driver/credits",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:29.696Z",
+      "method": "GET",
+      "path": "/api/v1/driver/credits/ledger",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:30.744Z",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:30.765Z",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "at": "2026-10-29T04:23:30.848Z",
+      "method": "GET",
+      "path": "/api/v1/driver/offer-reception",
+      "status": 200
+    }
+  ]
+}

@@ -1,24 +1,45 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, Navigate } from 'react-router-dom'
 import {
+  ArrowRight,
   ArrowUpRight,
+  BadgeCheck,
+  Bike,
   Building2,
+  Coins,
+  FileCheck2,
   PlugZap,
   Layers3,
+  MapPinned,
   UserRound,
+  UsersRound,
   Plus,
   PackageCheck,
   PackageX,
   Handshake,
+  Send,
+  Settings2,
+  ShieldAlert,
 } from 'lucide-react'
 import { providers } from '../providers/service'
 import { useAuth } from '../auth/context'
 import { Badge, ErrorState, Loading, PageTitle, Table } from '../components/ui'
 import { MyProvider } from '../providers/pages'
+import {
+  LinkCard,
+  LinkRow,
+  Panel,
+  QueueCard,
+  StatCard,
+  TwoColumn,
+} from '../components/design'
 import { deliveryRequests } from '../delivery-requests/service'
 import { deliveryRequestKeys } from '../delivery-requests/queries'
 import { partnerApplications } from '../partner-applications/service'
 import { partnerApplicationKeys } from '../partner-applications/queries'
+import { verification } from '../verification/service'
+import { independentDrivers } from '../independent-drivers/service'
+import { business } from '../customer-business/service'
 export function Dashboard() {
   const { user } = useAuth()
   return user?.role === 'CUSTOMER' ? (
@@ -42,6 +63,195 @@ export function Dashboard() {
   )
 }
 function AdminDashboard() {
+  const today = new Intl.DateTimeFormat('es-MX', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date())
+  return (
+    <>
+      <PageTitle
+        eyebrow={today.toUpperCase()}
+        title="Operación de hoy"
+        description="Expediente, habilitación comercial y recepción se revisan por separado."
+        action={
+          <div className="dash-actions">
+            <Link className="button secondary" to="/dispatches">
+              Consultar despachos
+            </Link>
+            <Link className="button" to="/admin/verification-cases">
+              Revisar expedientes <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+          </div>
+        }
+      />
+      <TwoColumn
+        aside={
+          <>
+            <Panel
+              className="dash-config"
+              title="Configuración de la plataforma"
+            >
+              <LinkRow
+                to="/integrations"
+                title="Integraciones"
+                text="Plataformas B2B y webhooks"
+                icon={PlugZap}
+              />
+              <LinkRow
+                to="/service-zones"
+                title="Zonas de servicio"
+                text="Cobertura y tarifas"
+                icon={MapPinned}
+              />
+              <LinkRow
+                to="/credit-policies"
+                title="Políticas de créditos"
+                text="Versiones vigentes"
+                icon={Coins}
+              />
+              <LinkRow
+                to="/users"
+                title="Administradores"
+                text="Cuentas e invitaciones"
+                icon={UsersRound}
+              />
+              <LinkRow
+                to="/settings"
+                title="Configuración"
+                text="Parámetros generales"
+                icon={Settings2}
+              />
+            </Panel>
+            <Panel className="dash-about" title="Sobre estos números">
+              <p>
+                Los indicadores consultan totales paginados del backend, sin
+                descargar el catálogo completo. Un pendiente no se resuelve
+                desde aquí: abre su cola para decidir.
+              </p>
+            </Panel>
+          </>
+        }
+      >
+        <PendingQueues />
+        <DeliveryRequestCounts />
+        <Panel
+          title="Operación independiente"
+          description="Revisión, despacho e incidencias del día"
+        >
+          <div className="link-card-grid">
+            <LinkCard
+              to="/independent-drivers"
+              title="Revisar independientes y zonas propias"
+              text="Habilitar, suspender y autorizar zonas"
+              icon={Bike}
+            />
+            <LinkCard
+              to="/admin/verification-cases"
+              title="Revisar expediente, términos y licencia"
+              text="Revisión documental"
+              icon={BadgeCheck}
+            />
+            <LinkCard
+              to="/dispatches"
+              title="Consultar despachos e historial"
+              text="Búsquedas, asignación y resultado"
+              icon={Send}
+            />
+            <LinkCard
+              to="/custody-incidents"
+              title="Resolver incidencias autorizadas"
+              text="Custodia y resolución"
+              icon={ShieldAlert}
+            />
+          </div>
+        </Panel>
+      </TwoColumn>
+    </>
+  )
+}
+// Read-only server totals for each decision queue; deciding happens on each queue's own page.
+function PendingQueues() {
+  const cases = useQuery({
+    queryKey: ['dashboard', 'verification-cases', 'SUBMITTED'],
+    queryFn: ({ signal }) =>
+      verification.review(1, 'SUBMITTED', undefined, '', signal),
+  })
+  const independents = useQuery({
+    queryKey: ['dashboard', 'independent-drivers', 'PENDING'],
+    queryFn: ({ signal }) =>
+      independentDrivers.list({ pageSize: 1, status: 'PENDING' }, signal),
+  })
+  const applications = useQuery({
+    queryKey: ['dashboard', 'customer-business-applications', 'PENDING'],
+    queryFn: () => business.list(true, 1, 'PENDING'),
+  })
+  const partners = useQuery({
+    queryKey: partnerApplicationKeys.count('RECEIVED'),
+    queryFn: ({ signal }) =>
+      partnerApplications.list({ pageSize: 1, status: 'RECEIVED' }, signal),
+  })
+  const queues = [
+    {
+      title: 'Expedientes en revisión',
+      text: 'Identidad y unidades',
+      to: '/admin/verification-cases',
+      icon: FileCheck2,
+      query: cases,
+    },
+    {
+      title: 'Independientes pendientes',
+      text: 'Habilitación por cuenta propia',
+      to: '/independent-drivers',
+      icon: Bike,
+      query: independents,
+    },
+    {
+      title: 'Solicitudes Negocio',
+      text: 'Acceso comercial por aprobar',
+      to: '/admin/customer-business-applications',
+      icon: Building2,
+      query: applications,
+    },
+    {
+      title: 'Socios por atender',
+      text: 'Llegadas desde la landing',
+      to: '/admin/partner-applications?status=RECEIVED',
+      icon: Handshake,
+      query: partners,
+    },
+  ]
+  const totals = queues
+    .map(({ query }) => query.data?.total)
+    .filter((total): total is number => typeof total === 'number')
+  const sum = totals.reduce((total, value) => total + value, 0)
+  return (
+    <section className="queue-panel" aria-labelledby="dash-queues">
+      <div className="queue-panel-head">
+        <div>
+          <h2 id="dash-queues">Pendientes de decisión</h2>
+          <strong>
+            {totals.length ? sum.toLocaleString('es-MX') : '…'}
+            <span> por atender</span>
+          </strong>
+        </div>
+        <small>Cada cola se decide en su propia pantalla</small>
+      </div>
+      <div className="queue-grid">
+        {queues.map(({ query, ...queue }) => (
+          <QueueCard
+            key={queue.title}
+            {...queue}
+            total={query.data?.total}
+            failed={query.isError}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}
+/** Preserved historical fleet dashboard; not part of current operational navigation. */
+export function HistoricalProviderDashboard() {
   const recent = useQuery({
     queryKey: ['providers', 'dashboard'],
     queryFn: ({ signal }) => providers.list({ pageSize: 5 }, signal),
@@ -114,30 +324,18 @@ function AdminDashboard() {
             to: '/providers?type=INDEPENDENT',
           },
         ].map(({ title, query, icon: Icon, note, to }) => (
-          <div className="stat-card" key={title}>
-            <div>
-              <span>{title}</span>
-              <Icon size={20} />
-            </div>
-            {query.isError ? (
-              <ErrorState
-                error={query.error}
-                retry={() => {
-                  void query.refetch()
-                }}
-              />
-            ) : (
-              <strong>
-                {query.isPending
-                  ? '…'
-                  : query.data.total.toLocaleString('es-MX')}
-              </strong>
-            )}
-            <Link to={to}>
-              {note}
-              <ArrowUpRight size={15} />
-            </Link>
-          </div>
+          <StatCard
+            key={title}
+            title={title}
+            icon={Icon}
+            note={note}
+            to={to}
+            value={query.data?.total}
+            error={query.isError ? query.error : undefined}
+            retry={() => {
+              void query.refetch()
+            }}
+          />
         ))}
       </div>
       <DeliveryRequestCounts />
@@ -268,28 +466,18 @@ function DeliveryRequestCounts() {
           to: '/admin/partner-applications?status=RECEIVED',
         },
       ].map(({ title, query, icon: Icon, note, to }) => (
-        <div className="stat-card" key={title}>
-          <div>
-            <span>{title}</span>
-            <Icon size={20} />
-          </div>
-          {query.isError ? (
-            <ErrorState
-              error={query.error}
-              retry={() => {
-                void query.refetch()
-              }}
-            />
-          ) : (
-            <strong>
-              {query.isPending ? '…' : query.data.total.toLocaleString('es-MX')}
-            </strong>
-          )}
-          <Link to={to}>
-            {note}
-            <ArrowUpRight size={15} />
-          </Link>
-        </div>
+        <StatCard
+          key={title}
+          title={title}
+          icon={Icon}
+          note={note}
+          to={to}
+          value={query.data?.total}
+          error={query.isError ? query.error : undefined}
+          retry={() => {
+            void query.refetch()
+          }}
+        />
       ))}
     </div>
   )

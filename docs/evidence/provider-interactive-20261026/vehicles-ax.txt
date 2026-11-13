@@ -1,0 +1,126 @@
+Browser tab: 1, Title: "Mandaria · Panel administrativo", URL: "http://localhost:5173/vehicles".
+1 AXWebArea Mandaria · Panel administrativo, URL: localhost:5173/vehicles
+	2 container root
+		3 container
+			4 link Description: mandaria ., Value: localhost:5173/dashboard
+			5 button Cerrar menú
+			6 text ESPACIO DE TRABAJO
+			7 container Navegación principal
+				8 link Description: Mis envíos, Value: localhost:5173/customer
+				9 link Description: Cuenta Negocio, Value: localhost:5173/customer/business
+				10 link Description: Dashboard, Value: localhost:5173/dashboard
+				11 link Description: Representación legal, Value: localhost:5173/verification/representatives
+				12 link Description: Mi proveedor, Value: localhost:5173/provider/profile
+				13 link Description: Salidas de flotilla, Value: localhost:5173/fleet-exits
+				14 link Description: Verificación documental, Value: localhost:5173/provider/verification
+				15 link Description: Asistencia y conciliación, Value: localhost:5173/fleet-assistance
+				16 link Description: Servicios, Value: localhost:5173/services
+				17 link Description: Envíos de mi flotilla, Value: localhost:5173/fleet-services
+				18 link Description: Créditos, Value: localhost:5173/provider/credits
+				19 link Description: Repartidores, Value: localhost:5173/drivers
+				20 link Description: Vehículos, Value: localhost:5173/vehicles
+				21 link Description: Mi perfil, Value: localhost:5173/profile
+			22 link Description: Baja y privacidad, Value: localhost:5173/privacy/deletion
+			23 text Una operación conectada. La base de lo que viene. MANDARIA WEB V1.10
+		24 container
+			25 button (collapsed) Description: Abrir menú, Secondary Actions: Expand
+			26 text Panel administrativo
+			27 button (collapsed) A, Secondary Actions: Expand
+		28 container main-content
+			29 heading Vehículos, Value: 1
+				30 text Vehículos
+			31 text Unidades y medios de transporte de cada proveedor.
+			32 container
+				33 text Seleccionar proveedor
+				34 pop up button (collapsed, settable) Seleccionar proveedor, Value: Proveedor A 6097EB0E7D, Secondary Actions: Expand
+					35 menu
+						36 Selecciona un proveedor
+						37 (selected) Proveedor A 6097EB0E7D
+			38 text Proveedor A 6097EB0E7D
+			39 text Flotilla Activo
+			40 container
+				41 text Modo:  ADMIN_DISPATCH  · Revisión  0  · Última actualización:  26/10/2026, 5:08:38 p.m.
+				42 button Actualizar modo
+			43 container
+				44 link Description: Repartidores 4 / 10 Ver y administrar, Value: localhost:5173/drivers?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+				45 link Description: Vehículos 2 / 10 Ver y administrar, Value: localhost:5173/vehicles?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+				46 heading Vehículos del proveedor, Value: 2
+					47 text Vehículos del proveedor
+				48 link Description: Nuevo vehículo, Value: localhost:5173/vehicles/new?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+				49 text field (settable) Buscar
+				50 button Buscar
+				51 pop up button (collapsed, settable) Description: Filtrar por estado, Value: Todos los estados, Secondary Actions: Expand
+					52 menu
+						53 (selected) Todos los estados
+						54 Activo
+						55 Inactivo
+						56 Mantenimiento
+						57 Suspendido
+				58 pop up button (collapsed, settable) Description: Filtrar por tipo, Value: Todos los tipos, Secondary Actions: Expand
+					59 menu
+						60 (selected) Todos los tipos
+						61 Bicicleta
+						62 Motocicleta
+						63 Automóvil
+						64 Pickup
+						65 Van
+						66 Camión
+						67 Otro
+				68 table
+					69 row
+						70 cell
+							71 text Identificador
+						72 cell
+							73 text Proveedor
+						74 cell
+							75 text Tipo
+						76 cell
+							77 text Estado
+						78 cell
+							79 text Marca / modelo
+						80 cell
+							81 text Placa
+						82 cell
+							83 text Repartidor actual
+						84 cell
+							85 text Acciones
+					86 row
+						87 cell
+							88 link Description: FLEET2-6097EB0E7D, Value: localhost:5173/vehicles/dc6cbca4-c4cb-4690-b157-5824a8a51f9e?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+						89 cell
+							90 text Proveedor A 6097EB0E7D
+						91 cell
+							92 text Motocicleta
+						93 cell
+							94 text Activo
+						95 cell
+							96 text Sin registro
+						97 cell
+							98 text Sin placa
+						99 cell
+							100 text Sin asignar
+						101 cell
+							102 link Description: Ver detalle, Value: localhost:5173/vehicles/dc6cbca4-c4cb-4690-b157-5824a8a51f9e?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+					103 row
+						104 cell
+							105 link Description: FLEET1-6097EB0E7D, Value: localhost:5173/vehicles/9fcb1868-8711-4626-9d7f-1ab1d33ffc49?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+						106 cell
+							107 text Proveedor A 6097EB0E7D
+						108 cell
+							109 text Motocicleta
+						110 cell
+							111 text Activo
+						112 cell
+							113 text Sin registro
+						114 cell
+							115 text Sin placa
+						116 cell
+							117 text Sin asignar
+						118 cell
+							119 link Description: Ver detalle, Value: localhost:5173/vehicles/9fcb1868-8711-4626-9d7f-1ab1d33ffc49?providerId=42c2e5f8-22ac-4812-8c0b-1d24a242220f
+				120 text 2  registros · Página  1  de  1
+				121 button (disabled) Anterior
+				122 button (disabled) Siguiente
+		123 text Mandaria · Administración
+
+The focused UI element is 1 AXWebArea Mandaria · Panel administrativo, URL: localhost:5173/vehicles

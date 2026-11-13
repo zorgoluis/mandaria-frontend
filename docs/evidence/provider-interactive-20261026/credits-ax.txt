@@ -1,0 +1,70 @@
+Browser tab: 1, Title: "Mandaria · Panel administrativo", URL: "http://localhost:5173/provider/credits".
+1 AXWebArea Mandaria · Panel administrativo, URL: localhost:5173/provider/credits
+	2 container root
+		3 container
+			4 link Description: mandaria ., Value: localhost:5173/dashboard
+			5 button Cerrar menú
+			6 text ESPACIO DE TRABAJO
+			7 container Navegación principal
+				8 link Description: Mis envíos, Value: localhost:5173/customer
+				9 link Description: Cuenta Negocio, Value: localhost:5173/customer/business
+				10 link Description: Dashboard, Value: localhost:5173/dashboard
+				11 link Description: Representación legal, Value: localhost:5173/verification/representatives
+				12 link Description: Mi proveedor, Value: localhost:5173/provider/profile
+				13 link Description: Salidas de flotilla, Value: localhost:5173/fleet-exits
+				14 link Description: Verificación documental, Value: localhost:5173/provider/verification
+				15 link Description: Asistencia y conciliación, Value: localhost:5173/fleet-assistance
+				16 link Description: Servicios, Value: localhost:5173/services
+				17 link Description: Envíos de mi flotilla, Value: localhost:5173/fleet-services
+				18 link Description: Créditos, Value: localhost:5173/provider/credits
+				19 link Description: Repartidores, Value: localhost:5173/drivers
+				20 link Description: Vehículos, Value: localhost:5173/vehicles
+				21 link Description: Mi perfil, Value: localhost:5173/profile
+			22 link Description: Baja y privacidad, Value: localhost:5173/privacy/deletion
+			23 text Una operación conectada. La base de lo que viene. MANDARIA WEB V1.10
+		24 container
+			25 button (collapsed) Description: Abrir menú, Secondary Actions: Expand
+			26 text Panel administrativo
+			27 button (collapsed) A, Secondary Actions: Expand
+		28 container main-content
+			29 heading Créditos, Value: 1
+				30 text Créditos
+			31 text Saldo e historial de créditos de mi proveedor
+			32 container
+				33 text Seleccionar proveedor
+				34 pop up button (collapsed, settable) Seleccionar proveedor, Value: Proveedor A 6097EB0E7D, Secondary Actions: Expand
+					35 menu
+						36 Selecciona un proveedor
+						37 (selected) Proveedor A 6097EB0E7D
+			38 text Proveedor A 6097EB0E7D
+			39 text Flotilla Activo
+			40 container Créditos de Proveedor A 6097EB0E7D
+				41 heading Créditos de Proveedor A 6097EB0E7D, Value: 2, ID: my-credits
+					42 text Créditos de  Proveedor A 6097EB0E7D
+				43 text Un solo saldo para el proveedor y sus repartidores de flotilla
+				44 button Actualizar
+				45 text SALDO ACTUAL
+				46 text 100 créditos
+				47 text Cuenta del proveedor (la comparten sus repartidores de flotilla)
+				48 container
+					49 text Actualizado  26 oct 2026, 4:41 p.m.
+				50 text Las recargas y los ajustes los registra Mandaria. Para sumar créditos, contacta a Mandaria por los medios administrativos acordados.
+				51 table
+					52 row
+						53 cell
+							54 text Fecha
+							55 text 26 oct 2026, 4:41 p.m.
+						56 cell
+							57 text Movimiento
+							58 text Recarga
+							59 text E2E funding
+							60 text Otro medio
+						61 cell
+							62 text Créditos
+							63 text +100 créditos
+						64 cell
+							65 text Saldo resultante
+							66 text 100 créditos
+		67 text Mandaria · Administración
+
+The focused UI element is 1 AXWebArea Mandaria · Panel administrativo, URL: localhost:5173/provider/credits

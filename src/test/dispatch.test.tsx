@@ -1,3 +1,6 @@
+import { fleet } from '../fleet/service'
+import { fleetContext } from './fleet-fixture'
+vi.mock('../fleet/service', () => ({ fleet: { context: vi.fn() } }))
 import type { DeliveryAssignment } from '../delivery-assignments/types'
 import { collectionFixture } from './collection-fixture'
 import { executionFixture, detailFixture } from './execution-fixture'
@@ -289,6 +292,7 @@ it('transferred provider uses current OWNER permissions and selected provider, n
 beforeEach(() => {
   queryClient.clear()
   vi.resetAllMocks()
+  vi.mocked(fleet.context).mockResolvedValue(fleetContext())
   vi.mocked(providers.profiles).mockResolvedValue(
     page([profile(A, 'Rápidos A')]),
   )

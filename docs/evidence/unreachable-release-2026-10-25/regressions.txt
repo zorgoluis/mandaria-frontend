@@ -1,0 +1,7 @@
+RUN  v5.0.0 C:/Users/zorgl/Documents/mandaria-frontend
+
+
+ Test Files  4 passed (4)
+      Tests  93 passed (93)
+   Start at  23:51:22
+   Duration  8.40s (environment 54%, tests 16%, setup 14%, transform 9%, import 7%)
