@@ -802,3 +802,154 @@ it('direct MPQ URL suggests both addresses but conversion retains original coord
     env.googleMapsApiKey = originalKey
   }
 })
+const snapshotStops = [
+  {
+    type: 'PICKUP' as const,
+    sequence: 1,
+    latitude: 17.123456,
+    longitude: -93.123456,
+  },
+  {
+    type: 'DROPOFF' as const,
+    sequence: 2,
+    latitude: 18.123456,
+    longitude: -94.123456,
+  },
+]
+function offeredWithSnapshot(
+  stopAddresses: DirectPrequoteResponse['stopAddresses'],
+) {
+  vi.mocked(customer.capabilities).mockResolvedValue({
+    ...projection,
+    type: 'PERSONAL',
+    allowedShippingPayers: ['REQUESTER', 'RECIPIENT'],
+    defaultShippingPayer: 'REQUESTER',
+    capacity: {
+      occupied: false,
+      activeCount: 0,
+      maxActiveRequests: 1,
+      activeRequestPublicId: null,
+    },
+    canPrequote: true,
+    canCreateRequest: true,
+    reason: null,
+  })
+  vi.mocked(customer.prequote).mockResolvedValue({
+    ...mpq,
+    status: 'OFFERED',
+    deliveryRequestPublicId: null,
+    shippingTerms: { ...terms, payer: 'RECIPIENT' },
+    conditions: { ...mpq.conditions, stops: snapshotStops },
+    stopAddresses,
+  })
+}
+it('Detalles prefills the quote-time snapshot and reverse geocodes only stops without one', async () => {
+  const originalKey = env.googleMapsApiKey
+  env.googleMapsApiKey = 'synthetic-key'
+  try {
+    const geocode = vi.fn().mockResolvedValue({
+      results: [{ formatted_address: 'Destino sugerido' }],
+    })
+    vi.mocked(loadMaps).mockResolvedValue({
+      Map: class {
+        setCenter() {}
+        unbindAll() {}
+      },
+      Circle: class {
+        setOptions() {}
+        setMap() {}
+        unbindAll() {}
+      },
+      event: { clearInstanceListeners() {} },
+      importLibrary: async () => ({
+        Geocoder: class {
+          geocode = geocode
+        },
+      }),
+    })
+    offeredWithSnapshot([
+      { sequence: 1, address: 'Av. Central 123, Ocozocoautla' },
+    ])
+    vi.mocked(apiOnce).mockResolvedValue({
+      result: { deliveryRequestPublicId: 'MDR-000002' },
+    })
+    mount(<NewRequest />, auth, '/customer/new?prequote=MPQ-000001')
+    expect(await screen.findByLabelText('Dirección de origen')).toHaveValue(
+      'Av. Central 123, Ocozocoautla',
+    )
+    await waitFor(() =>
+      expect(screen.getByLabelText('Dirección de destino')).toHaveValue(
+        'Destino sugerido',
+      ),
+    )
+    expect(geocode.mock.calls).toEqual([
+      [{ location: { lat: 18.123456, lng: -94.123456 } }],
+    ])
+    for (const label of ['origen', 'destino']) {
+      fireEvent.change(screen.getByLabelText(`Contacto de ${label}`), {
+        target: { value: 'Contacto sintético' },
+      })
+      fireEvent.change(screen.getByLabelText(`Teléfono de ${label}`), {
+        target: { value: '9615550011' },
+      })
+    }
+    fireEvent.change(screen.getByLabelText('Descripción del paquete'), {
+      target: { value: 'Paquete sintético' },
+    })
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Crear solicitud y revisar términos',
+      }),
+    )
+    await waitFor(() => expect(apiOnce).toHaveBeenCalledTimes(1))
+    const body = vi.mocked(apiOnce).mock.calls[0][2] as {
+      deliveryRequest: { stops: { address: string; latitude: number }[] }
+    }
+    expect(body.deliveryRequest.stops.map((s) => s.address)).toEqual([
+      'Av. Central 123, Ocozocoautla',
+      'Destino sugerido',
+    ])
+    expect(body.deliveryRequest.stops.map((s) => s.latitude)).toEqual([
+      17.123456, 18.123456,
+    ])
+  } finally {
+    env.googleMapsApiKey = originalKey
+  }
+})
+it.each([true, false])(
+  'adjusting a quote sends stopAddresses only when the build enables it: %s',
+  async (enabled) => {
+    const original = env.prequoteStopAddresses
+    env.prequoteStopAddresses = enabled
+    try {
+      offeredWithSnapshot([
+        { sequence: 1, address: 'Av. Central 123' },
+        { sequence: 2, address: 'Calle 5 Norte 45' },
+      ])
+      vi.mocked(apiOnce).mockResolvedValue({
+        prequote: { ...mpq, publicId: 'MPQ-000002', status: 'OFFERED' },
+        replayed: false,
+      })
+      mount(<NewRequest />, auth, '/customer/new?prequote=MPQ-000001&edit=1')
+      const submit = await screen.findByRole('button', {
+        name: 'Obtener precotización',
+      })
+      expect(screen.getAllByText('Av. Central 123').length).toBeGreaterThan(0)
+      fireEvent.click(submit)
+      await waitFor(() => expect(apiOnce).toHaveBeenCalledOnce())
+      const body = vi.mocked(apiOnce).mock.calls[0][2] as Record<
+        string,
+        unknown
+      >
+      if (enabled)
+        expect(body.stopAddresses).toEqual([
+          { sequence: 1, address: 'Av. Central 123' },
+          { sequence: 2, address: 'Calle 5 Norte 45' },
+        ])
+      else expect(body).not.toHaveProperty('stopAddresses')
+      expect(body.conditions).toMatchObject({ stops: snapshotStops })
+    } finally {
+      env.prequoteStopAddresses = original
+    }
+  },
+)

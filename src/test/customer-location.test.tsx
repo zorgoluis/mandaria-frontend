@@ -93,6 +93,7 @@ it('search requires explicit selection, sends only address to Google and invalid
     lat: 17,
     lng: -93,
     label: 'Calle sintética 10, Ciudad',
+    address: 'Calle sintética 10, Ciudad',
   })
   fireEvent.change(screen.getByLabelText('Buscar dirección de origen'), {
     target: { value: 'Otra dirección' },

@@ -105,6 +105,8 @@ it('live summary, accessible controls and exact contract; CTA requires both sele
       ],
     },
     'RECIPIENT',
+    // Picker labels without address text never become a snapshot.
+    [undefined, undefined],
   )
   await waitFor(() => expect(button).toBeEnabled())
   fireEvent.click(screen.getByRole('button', { name: 'Borrar Origen' }))
@@ -174,7 +176,10 @@ it('restores the quoted coordinates and package data when returning from details
   expect(screen.getByRole('spinbutton', { name: 'Cantidad' })).toHaveValue(3)
   fireEvent.click(screen.getByRole('button', { name: 'Obtener precotización' }))
   await waitFor(() =>
-    expect(submit).toHaveBeenCalledWith(conditions, 'RECIPIENT'),
+    expect(submit).toHaveBeenCalledWith(conditions, 'RECIPIENT', [
+      'Origen editado',
+      'Destino editado',
+    ]),
   )
 })
 

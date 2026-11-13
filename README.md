@@ -487,6 +487,8 @@ VITE_API_URL=http://localhost:3000
 
 `src/config/env.ts` es el único punto que lee `import.meta.env`. La URL representa la base del backend, sin `/api/v1`; el cliente añade ese prefijo. Debe ser HTTP(S), sin credenciales, query ni fragmentos. Configuración obligatoria validada al arrancar; un fallo muestra una página legible. Reinicia Vite tras cambiar `.env`.
 
+`VITE_PREQUOTE_STOP_ADDRESSES=true` envía `stopAddresses` (texto elegido en el autocompletado o la búsqueda, por `sequence`) al crear precotizaciones de cliente. Por defecto es `false`: un backend sin ese campo rechaza propiedades desconocidas con 400. La lectura no depende de la variable: si la precotización trae `stopAddresses`, Detalles prellena esa dirección; si falta para una parada, usa la geocodificación inversa. Puntos marcados en el mapa o por ubicación del dispositivo no envían dirección. En Docker se pasa como `--build-arg`.
+
 No colocar clientSecret, claves de JWT, Integration Credentials ni credenciales de base de datos en Vite. _\*Todo VITE_* es público y se incorpora al build._* `.env`, `.env.e2e` y sus variantes están ignorados; `.env.example` no contiene secretos.
 
 ## Backend y CORS

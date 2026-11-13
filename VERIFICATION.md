@@ -1,3 +1,6 @@
+## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
+
+Ejecutado sobre el merge de QA 0af444b en feat/prequote-stop-addresses: npm run lint, npm run build y Vitest completo PASS, 1851/1851 (sin las 20 fallas previas, ya corregidas en QA). Dependencias idénticas a QA. Sin backend real, Google real ni navegador.
 ## 2026-11-07 — Entrega Git de recuperación de cargas y cupo
 
 Commit y push autorizados por el propietario en las ramas actuales: Web feature/rediseno y backend QA. Incluye recuperación visible de operaciones pendientes en Web, cupo de imágenes VALIDATED, compatibilidad legacy, pruebas y continuidad. Revisión nueva: fuentes contrastadas con las doce huellas del manifiesto y ramas sincronizadas con origin antes de preparar los commits. Se reutilizan las pruebas de implementación ya documentadas (Web180, backend49, recorrido aislado y Chrome/WebKit); no se atribuye una nueva ejecución a esta entrega Git.
@@ -596,6 +599,11 @@ Contexto vigente: C:/Users/zorgl/Documents/mandaria-frontend, rama QA, base 58f4
 
 296 pruebas focalizadas finales PASS; suite completa previa al último endurecimiento 1352 PASS/20 fallos previos documentados. Build PASS; Chrome sintético 1280/320, foco/Enter y privacidad PASS. Tipos/lint y manifiesto final en [informe y límites](docs/FLEET-DIRECT-TAKE-WEB.md) y [evidencia](docs/fleet-direct-take-web-evidence.json). Integración HTTP real pendiente: WSL conserva clústeres de prueba detenidos, sin API activa. No confundir fixtures o evidencia backend histórica con E2E Web. Sin .env, Docker, backend/App, datos reales, commit/push, despliegue ni activación. Las entradas siguientes son historia preservada.
 
+## 2026-10-22 — Snapshot de dirección por parada en precotización
+
+Ejecutado en feat/prequote-stop-addresses: tsc -b, typecheck:test, ESLint y vite build PASS (advertencia previa chunk >500 kB). Vitest completo 1338/1358; las 20 fallas son las deterministas preexistentes de delivery-assignments (17), delivery-assignments-api (1) y flows (2). Archivos de cliente afectados completos: 99/99 PASS (customer, customer-address, customer-stop-addresses, customer-location, customer-quote-design, customer-autocomplete, customer-conversion-design, api).
+
+Nuevas: helper de snapshot (envío recortado por sequence, lectura que ignora ausente/null/malformado/duplicado/>300); SuggestedAddress prellena sin cargar Google y sigue editable; Detalles usa snapshot en origen y geocodificación inversa sólo en destino, conversión con el texto prellenado y coordenadas originales; ajuste de precotización envía stopAddresses sólo con la variable activa. Actualizadas customer-location y customer-quote-design por el nuevo campo `address` y el tercer argumento de onSubmit. APIs simuladas; sin backend real, Google real ni navegador.
 ## 2026-10-21 — Integración de main en QA
 
 Merge de main 8b864c5 sobre QA 0409015, rama merge/main-into-qa. Ejecutado en este worktree: tsc -b, typecheck:test, ESLint y vite build PASS; build mantiene advertencia de chunk >500 kB. Vitest completo: 1323 PASS / 21 FAIL de 1344. Línea base QA limpio en worktree temporal: 972 PASS / 22 FAIL de 994. Fallas comunes deterministas: delivery-assignments (17), delivery-assignments-api (1) y flows (2), también presentes en main. Intermitentes por carga: dispatch (merge) y delivery-completion/customer-registration-design (QA); pasan al ejecutar sus archivos completos aislados (dispatch + delivery-completion 96/96).
