@@ -10,6 +10,7 @@ export function SuggestedAddress({
   name,
   latitude,
   longitude,
+  initialAddress,
   onValueChange,
   error,
 }: {
@@ -17,6 +18,8 @@ export function SuggestedAddress({
   name: string
   latitude?: number
   longitude?: number
+  /** Server snapshot chosen at quote time; replaces reverse geocoding. */
+  initialAddress?: string
   onValueChange?: (value: string) => void
   error?: string
 }) {
@@ -26,16 +29,22 @@ export function SuggestedAddress({
   useEffect(() => {
     notify.current = onValueChange
   }, [onValueChange])
+  useEffect(() => {
+    if (initialAddress && !edited.current) notify.current?.(initialAddress)
+  }, [initialAddress])
   const hint = useId()
   const available =
+    !initialAddress &&
     !!env.googleMapsApiKey &&
     latitude !== undefined &&
     longitude !== undefined &&
     validPosition({ lat: latitude, lng: longitude })
   const [message, setMessage] = useState(
-    available
-      ? 'Buscando dirección del punto seleccionado… Puedes escribir mientras tanto.'
-      : 'Escribe la dirección del punto seleccionado.',
+    initialAddress
+      ? 'Dirección elegida al cotizar. Revísala y completa número o interior.'
+      : available
+        ? 'Buscando dirección del punto seleccionado… Puedes escribir mientras tanto.'
+        : 'Escribe la dirección del punto seleccionado.',
   )
   useEffect(() => {
     if (!available || latitude === undefined || longitude === undefined) return
@@ -93,6 +102,7 @@ export function SuggestedAddress({
       <input
         ref={input}
         name={name}
+        defaultValue={initialAddress}
         required
         maxLength={300}
         aria-describedby={`${hint}${error ? ` ${hint}-error` : ''}`}

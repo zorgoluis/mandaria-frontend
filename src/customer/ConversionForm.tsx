@@ -5,6 +5,7 @@ import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
 import { OriginContact } from './OriginContact'
 import { SuggestedAddress } from './SuggestedAddress'
+import { snapshotAddress } from './stop-addresses'
 import {
   conversionErrors,
   quoteExpired,
@@ -258,6 +259,7 @@ export function ConversionForm({
                   name={`address${i}`}
                   latitude={p.conditions.stops[i]?.latitude}
                   longitude={p.conditions.stops[i]?.longitude}
+                  initialAddress={snapshotAddress(p, i)}
                   onValueChange={(value) => update(`address${i}`, value)}
                   error={error(`address${i}`)}
                 />

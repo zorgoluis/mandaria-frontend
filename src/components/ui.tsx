@@ -32,11 +32,14 @@ export function PageTitle({
   description,
   action,
   back,
+  eyebrow,
 }: {
   title: string
   description?: string
   action?: ReactNode
   back?: string
+  /** Texto corto en mayúsculas sobre el título (fecha, sección). */
+  eyebrow?: string
 }) {
   return (
     <div className="page-heading">
@@ -46,6 +49,7 @@ export function PageTitle({
             <ArrowLeft size={15} /> Volver
           </Link>
         )}
+        {eyebrow && <span className="eyebrow page-eyebrow">{eyebrow}</span>}
         <h1>{title}</h1>
         {description && <p>{description}</p>}
       </div>

@@ -1,3 +1,6 @@
+## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
+
+Rama feat/prequote-stop-addresses (3b489fd) actualizada con merge de QA 0af444b, sin rebase ni push forzado. Código mezclado sin conflictos; sólo BITACORA y VERIFICATION, resueltas conservando todas las entradas en orden cronológico (las de QA del 23-oct en adelante arriba de la del 22-oct). Envío de stopAddresses sigue apagado por VITE_PREQUOTE_STOP_ADDRESSES hasta que el backend lo acepte. PR hacia QA; sin despliegue.
 ## 2026-11-07 — Entrega Git de recuperación de cargas y cupo
 
 Commit y push autorizados por el propietario en las ramas actuales: Web feature/rediseno y backend QA. Incluye recuperación visible de operaciones pendientes en Web, cupo de imágenes VALIDATED, compatibilidad legacy, pruebas y continuidad. Revisión nueva: fuentes contrastadas con las doce huellas del manifiesto y ramas sincronizadas con origin antes de preparar los commits. Se reutilizan las pruebas de implementación ya documentadas (Web180, backend49, recorrido aislado y Chrome/WebKit); no se atribuye una nueva ejecución a esta entrega Git.
@@ -605,6 +608,13 @@ Contexto vigente: C:/Users/zorgl/Documents/mandaria-frontend, rama QA, base 58f4
 
 296 pruebas focalizadas finales PASS; suite completa previa al último endurecimiento 1352 PASS/20 fallos previos documentados. Build PASS; Chrome sintético 1280/320, foco/Enter y privacidad PASS. Tipos/lint y manifiesto final en [informe y límites](docs/FLEET-DIRECT-TAKE-WEB.md) y [evidencia](docs/fleet-direct-take-web-evidence.json). Integración HTTP real pendiente: WSL conserva clústeres de prueba detenidos, sin API activa. No confundir fixtures o evidencia backend histórica con E2E Web. Sin .env, Docker, backend/App, datos reales, commit/push, despliegue ni activación. Las entradas siguientes son historia preservada.
 
+## 2026-10-22 — Snapshot de dirección por parada en precotización
+
+Rama feat/prequote-stop-addresses desde QA 58f4d51, sin commit ni push. Causa: la precotización sólo guardaba coordenadas y Detalles reconstruía la dirección con geocodificación inversa, que devuelve el elemento más cercano al punto y no el lugar elegido. Web preparada para el contrato solicitado al backend: `stopAddresses` [{sequence, address}] fuera de `conditions`, opcional, sin precio ni hash.
+
+Envío detrás de VITE_PREQUOTE_STOP_ADDRESSES (false por defecto; .env.example, Dockerfile y README) porque el ValidationPipe global del backend rechaza campos desconocidos. Sólo se envía texto elegido en autocompletado o búsqueda; mapa, dispositivo y etiquetas genéricas no. Lectura siempre activa: Detalles prellena el snapshot sin llamar a Google y conserva la geocodificación inversa para paradas sin snapshot. Ajustar precotización reutiliza lo editado en Detalles o, si no hay, el snapshot. Snapshots malformados, duplicados o >300 se ignoran. Coordenadas cotizadas y DeliveryStopDto.address obligatorio sin cambios.
+
+Pendiente: backend con `stopAddresses` desplegado; después activar la variable en el build de QA y probar con navegador real. Sin backend real ni navegador en esta tarea.
 ## 2026-10-21 — Integración de main en QA
 
 Merge de main 8b864c5 sobre QA 0409015 (base común 06d9766) en worktree mandaria-frontend-qa, rama merge/main-into-qa. Once conflictos resueltos conservando ambos lados: CSP de Google Maps de QA más blob: de main en img-src; transporte con rama blob de main y parseo estricto/Retry-After de QA; códigos BUSINESS/CUSTOMER y VERIFICATION/LICENSE unidos; Login con next=business y next=onboarding y redirección de sesión restringida; rutas de cliente y de verificación/baja juntas. Bitácoras, README e informe de compatibilidad conservan ambos historiales.

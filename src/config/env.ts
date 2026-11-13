@@ -22,6 +22,8 @@ export function parseEnv(values: Record<string, unknown>) {
       typeof values.VITE_GOOGLE_MAPS_API_KEY === 'string'
         ? values.VITE_GOOGLE_MAPS_API_KEY.trim()
         : '',
+    // Backends without stopAddresses reject unknown body fields: opt in per build.
+    prequoteStopAddresses: values.VITE_PREQUOTE_STOP_ADDRESSES === 'true',
   }
 }
 export const env = parseEnv(import.meta.env)
