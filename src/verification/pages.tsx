@@ -31,6 +31,7 @@ import { documentaryAvailability, consultationError } from './availability'
 import { useRequirements, useTermsQuery } from './use-availability'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
+import { SummaryList } from '../components/design'
 import './onboarding.css'
 import './identity-case.css'
 import { Bike, Car } from 'lucide-react'
@@ -1097,38 +1098,33 @@ function CaseContent({
           {!designed && (
             <section className="panel panel-body case-summary">
               <h2>Resumen del expediente</h2>
-              <dl>
-                <div>
-                  <dt>Estado</dt>
-                  <dd>
+              <SummaryList
+                items={[
+                  [
+                    'Estado',
                     <span className={'identity-status status-' + record.status}>
                       {labels[record.status]}
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Revisión</dt>
-                  <dd>{record.revision}</dd>
-                </div>
-                <div>
-                  <dt>Ámbito</dt>
-                  <dd>
-                    {record.scope.providerId ? 'Flotilla' : 'Independiente'}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Evidencias validadas</dt>
-                  <dd>
-                    {completeCount} de {displayedCategories.length}
-                  </dd>
-                </div>
-                {record.submittedAt && (
-                  <div>
-                    <dt>Presentado</dt>
-                    <dd>{date(record.submittedAt)}</dd>
-                  </div>
-                )}
-              </dl>
+                    </span>,
+                  ],
+                  ['Revisión', record.revision],
+                  [
+                    'Ámbito',
+                    record.scope.providerId ? 'Flotilla' : 'Independiente',
+                  ],
+                  [
+                    'Evidencias validadas',
+                    `${completeCount} de ${displayedCategories.length}`,
+                  ],
+                  ...(record.submittedAt
+                    ? [
+                        ['Presentado', date(record.submittedAt)] as [
+                          string,
+                          string,
+                        ],
+                      ]
+                    : []),
+                ]}
+              />
             </section>
           )}
           {user?.role === 'SUPER_ADMIN' &&

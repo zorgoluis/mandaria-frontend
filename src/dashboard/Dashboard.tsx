@@ -6,7 +6,6 @@ import {
   BadgeCheck,
   Bike,
   Building2,
-  ChevronRight,
   Coins,
   FileCheck2,
   PlugZap,
@@ -21,12 +20,19 @@ import {
   Send,
   Settings2,
   ShieldAlert,
-  type LucideIcon,
 } from 'lucide-react'
 import { providers } from '../providers/service'
 import { useAuth } from '../auth/context'
 import { Badge, ErrorState, Loading, PageTitle, Table } from '../components/ui'
 import { MyProvider } from '../providers/pages'
+import {
+  LinkCard,
+  LinkRow,
+  Panel,
+  QueueCard,
+  StatCard,
+  TwoColumn,
+} from '../components/design'
 import { deliveryRequests } from '../delivery-requests/service'
 import { deliveryRequestKeys } from '../delivery-requests/queries'
 import { partnerApplications } from '../partner-applications/service'
@@ -64,8 +70,8 @@ function AdminDashboard() {
   }).format(new Date())
   return (
     <>
-      <span className="eyebrow dash-date">{today.toUpperCase()}</span>
       <PageTitle
+        eyebrow={today.toUpperCase()}
         title="Operación de hoy"
         description="Expediente, habilitación comercial y recepción se revisan por separado."
         action={
@@ -79,115 +85,88 @@ function AdminDashboard() {
           </div>
         }
       />
-      <div className="dash-grid">
-        <div className="dash-main">
-          <PendingQueues />
-          <DeliveryRequestCounts />
-          <section className="panel dash-ops" aria-labelledby="dash-ops">
-            <div className="panel-toolbar">
-              <div>
-                <h2 id="dash-ops">Operación independiente</h2>
-                <p>Revisión, despacho e incidencias del día</p>
-              </div>
-            </div>
-            <div className="dash-op-grid">
-              {[
-                {
-                  to: '/independent-drivers',
-                  title: 'Revisar independientes y zonas propias',
-                  text: 'Habilitar, suspender y autorizar zonas',
-                  icon: Bike,
-                },
-                {
-                  to: '/admin/verification-cases',
-                  title: 'Revisar expediente, términos y licencia',
-                  text: 'Revisión documental',
-                  icon: BadgeCheck,
-                },
-                {
-                  to: '/dispatches',
-                  title: 'Consultar despachos e historial',
-                  text: 'Búsquedas, asignación y resultado',
-                  icon: Send,
-                },
-                {
-                  to: '/custody-incidents',
-                  title: 'Resolver incidencias autorizadas',
-                  text: 'Custodia y resolución',
-                  icon: ShieldAlert,
-                },
-              ].map(({ to, title, text, icon: Icon }) => (
-                <Link className="dash-op" to={to} key={to}>
-                  <span className="dash-op-icon">
-                    <Icon size={20} aria-hidden="true" />
-                  </span>
-                  <span className="dash-op-text">
-                    <strong>{title}</strong>
-                    <small>{text}</small>
-                  </span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-              ))}
-            </div>
-          </section>
-        </div>
-        <aside className="dash-side">
-          <section className="panel dash-config" aria-labelledby="dash-config">
-            <h2 id="dash-config">Configuración de la plataforma</h2>
-            {[
-              {
-                to: '/integrations',
-                title: 'Integraciones',
-                text: 'Plataformas B2B y webhooks',
-                icon: PlugZap,
-              },
-              {
-                to: '/service-zones',
-                title: 'Zonas de servicio',
-                text: 'Cobertura y tarifas',
-                icon: MapPinned,
-              },
-              {
-                to: '/credit-policies',
-                title: 'Políticas de créditos',
-                text: 'Versiones vigentes',
-                icon: Coins,
-              },
-              {
-                to: '/users',
-                title: 'Administradores',
-                text: 'Cuentas e invitaciones',
-                icon: UsersRound,
-              },
-              {
-                to: '/settings',
-                title: 'Configuración',
-                text: 'Parámetros generales',
-                icon: Settings2,
-              },
-            ].map(({ to, title, text, icon: Icon }) => (
-              <Link className="dash-config-link" to={to} key={to}>
-                <span className="dash-config-icon">
-                  <Icon size={17} aria-hidden="true" />
-                </span>
-                <span>
-                  <strong>{title}</strong>
-                  <small>{text}</small>
-                </span>
-                <ChevronRight size={16} aria-hidden="true" />
-              </Link>
-            ))}
-          </section>
-          <section className="panel dash-about">
-            <h2>Sobre estos números</h2>
-            <p>
-              Los indicadores consultan totales paginados del backend, sin
-              descargar el catálogo completo. Un pendiente no se resuelve desde
-              aquí: abre su cola para decidir.
-            </p>
-          </section>
-        </aside>
-      </div>
+      <TwoColumn
+        aside={
+          <>
+            <Panel
+              className="dash-config"
+              title="Configuración de la plataforma"
+            >
+              <LinkRow
+                to="/integrations"
+                title="Integraciones"
+                text="Plataformas B2B y webhooks"
+                icon={PlugZap}
+              />
+              <LinkRow
+                to="/service-zones"
+                title="Zonas de servicio"
+                text="Cobertura y tarifas"
+                icon={MapPinned}
+              />
+              <LinkRow
+                to="/credit-policies"
+                title="Políticas de créditos"
+                text="Versiones vigentes"
+                icon={Coins}
+              />
+              <LinkRow
+                to="/users"
+                title="Administradores"
+                text="Cuentas e invitaciones"
+                icon={UsersRound}
+              />
+              <LinkRow
+                to="/settings"
+                title="Configuración"
+                text="Parámetros generales"
+                icon={Settings2}
+              />
+            </Panel>
+            <Panel className="dash-about" title="Sobre estos números">
+              <p>
+                Los indicadores consultan totales paginados del backend, sin
+                descargar el catálogo completo. Un pendiente no se resuelve
+                desde aquí: abre su cola para decidir.
+              </p>
+            </Panel>
+          </>
+        }
+      >
+        <PendingQueues />
+        <DeliveryRequestCounts />
+        <Panel
+          title="Operación independiente"
+          description="Revisión, despacho e incidencias del día"
+        >
+          <div className="link-card-grid">
+            <LinkCard
+              to="/independent-drivers"
+              title="Revisar independientes y zonas propias"
+              text="Habilitar, suspender y autorizar zonas"
+              icon={Bike}
+            />
+            <LinkCard
+              to="/admin/verification-cases"
+              title="Revisar expediente, términos y licencia"
+              text="Revisión documental"
+              icon={BadgeCheck}
+            />
+            <LinkCard
+              to="/dispatches"
+              title="Consultar despachos e historial"
+              text="Búsquedas, asignación y resultado"
+              icon={Send}
+            />
+            <LinkCard
+              to="/custody-incidents"
+              title="Resolver incidencias autorizadas"
+              text="Custodia y resolución"
+              icon={ShieldAlert}
+            />
+          </div>
+        </Panel>
+      </TwoColumn>
     </>
   )
 }
@@ -212,79 +191,60 @@ function PendingQueues() {
     queryFn: ({ signal }) =>
       partnerApplications.list({ pageSize: 1, status: 'RECEIVED' }, signal),
   })
-  const queues: {
-    title: string
-    text: string
-    to: string
-    icon: LucideIcon
-    total?: number
-    failed: boolean
-  }[] = [
+  const queues = [
     {
       title: 'Expedientes en revisión',
       text: 'Identidad y unidades',
       to: '/admin/verification-cases',
       icon: FileCheck2,
-      total: cases.data?.total,
-      failed: cases.isError,
+      query: cases,
     },
     {
       title: 'Independientes pendientes',
       text: 'Habilitación por cuenta propia',
       to: '/independent-drivers',
       icon: Bike,
-      total: independents.data?.total,
-      failed: independents.isError,
+      query: independents,
     },
     {
       title: 'Solicitudes Negocio',
       text: 'Acceso comercial por aprobar',
       to: '/admin/customer-business-applications',
       icon: Building2,
-      total: applications.data?.total,
-      failed: applications.isError,
+      query: applications,
     },
     {
       title: 'Socios por atender',
       text: 'Llegadas desde la landing',
       to: '/admin/partner-applications?status=RECEIVED',
       icon: Handshake,
-      total: partners.data?.total,
-      failed: partners.isError,
+      query: partners,
     },
   ]
-  const known = queues.filter((queue) => typeof queue.total === 'number')
-  const sum = known.reduce((total, queue) => total + (queue.total ?? 0), 0)
+  const totals = queues
+    .map(({ query }) => query.data?.total)
+    .filter((total): total is number => typeof total === 'number')
+  const sum = totals.reduce((total, value) => total + value, 0)
   return (
-    <section className="dash-queues" aria-labelledby="dash-queues">
-      <div className="dash-queues-head">
+    <section className="queue-panel" aria-labelledby="dash-queues">
+      <div className="queue-panel-head">
         <div>
           <h2 id="dash-queues">Pendientes de decisión</h2>
           <strong>
-            {known.length ? sum.toLocaleString('es-MX') : '…'}
+            {totals.length ? sum.toLocaleString('es-MX') : '…'}
             <span> por atender</span>
           </strong>
         </div>
         <small>Cada cola se decide en su propia pantalla</small>
       </div>
-      <div className="dash-queue-grid">
-        {queues.map(({ title, text, to, icon: Icon, total, failed }) => (
-          <Link className="dash-queue" to={to} key={title}>
-            <span className="dash-queue-count">
-              {failed ? (
-                <Icon size={18} aria-label="Sin dato" />
-              ) : typeof total === 'number' ? (
-                total.toLocaleString('es-MX')
-              ) : (
-                '…'
-              )}
-            </span>
-            <span className="dash-queue-text">
-              <strong>{title}</strong>
-              <small>{failed ? 'No se pudo consultar el total' : text}</small>
-            </span>
-            <ArrowRight size={18} aria-hidden="true" />
-          </Link>
+      <div className="queue-grid">
+        {queues.map(({ query, ...queue }) => (
+          <QueueCard
+            key={queue.title}
+            {...queue}
+            total={query.data?.total}
+            failed={query.isError}
+          />
         ))}
       </div>
     </section>
@@ -364,30 +324,18 @@ export function HistoricalProviderDashboard() {
             to: '/providers?type=INDEPENDENT',
           },
         ].map(({ title, query, icon: Icon, note, to }) => (
-          <div className="stat-card" key={title}>
-            <div>
-              <span>{title}</span>
-              <Icon size={20} />
-            </div>
-            {query.isError ? (
-              <ErrorState
-                error={query.error}
-                retry={() => {
-                  void query.refetch()
-                }}
-              />
-            ) : (
-              <strong>
-                {query.isPending
-                  ? '…'
-                  : query.data.total.toLocaleString('es-MX')}
-              </strong>
-            )}
-            <Link to={to}>
-              {note}
-              <ArrowUpRight size={15} />
-            </Link>
-          </div>
+          <StatCard
+            key={title}
+            title={title}
+            icon={Icon}
+            note={note}
+            to={to}
+            value={query.data?.total}
+            error={query.isError ? query.error : undefined}
+            retry={() => {
+              void query.refetch()
+            }}
+          />
         ))}
       </div>
       <DeliveryRequestCounts />
@@ -518,28 +466,18 @@ function DeliveryRequestCounts() {
           to: '/admin/partner-applications?status=RECEIVED',
         },
       ].map(({ title, query, icon: Icon, note, to }) => (
-        <div className="stat-card" key={title}>
-          <div>
-            <span>{title}</span>
-            <Icon size={20} />
-          </div>
-          {query.isError ? (
-            <ErrorState
-              error={query.error}
-              retry={() => {
-                void query.refetch()
-              }}
-            />
-          ) : (
-            <strong>
-              {query.isPending ? '…' : query.data.total.toLocaleString('es-MX')}
-            </strong>
-          )}
-          <Link to={to}>
-            {note}
-            <ArrowUpRight size={15} />
-          </Link>
-        </div>
+        <StatCard
+          key={title}
+          title={title}
+          icon={Icon}
+          note={note}
+          to={to}
+          value={query.data?.total}
+          error={query.isError ? query.error : undefined}
+          retry={() => {
+            void query.refetch()
+          }}
+        />
       ))}
     </div>
   )
