@@ -7,6 +7,7 @@ import { canApprove } from '../driver-category/contract'
 import { CategorySummary } from '../driver-category/components'
 import { IndependentOfferZones } from '../independent-zones/panel'
 import { IndependentVerificationCases } from './verification-cases'
+import { DriverActivity } from '../driver-activity/panels'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -359,6 +360,7 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
               prefiere no cancelar en silencio una entrega en marcha.
             </p>
           </section>
+          <DriverActivity key={profile.driverId} driverId={profile.driverId} />
           <IndependentVerificationCases
             key={profile.id}
             profileId={profile.id}

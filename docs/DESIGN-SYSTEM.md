@@ -108,7 +108,7 @@ TwoColumn
 | ------------- | ------------------------------------------------------- |
 | `Panel`       | Tarjeta con título, descripción y acciones opcionales   |
 | `TwoColumn`   | Contenido principal + columna lateral fija              |
-| `StatCard`    | Indicador numérico con enlace (estructura `.stat-card`) |
+| `StatCard`    | Indicador con enlace opcional (estructura `.stat-card`) |
 | `QueueCard`   | Cola de pendientes sobre el bloque verde `.queue-panel` |
 | `LinkCard`    | Acceso destacado con ícono (rejilla `.link-card-grid`)  |
 | `LinkRow`     | Acceso compacto para la columna lateral                 |
@@ -141,10 +141,10 @@ celular se vuelva tarjetas), `Pagination`, `Field`, `InfoGrid`, `Modal`,
 | Familia     | Estados                                                                                        | Color |
 | ----------- | ---------------------------------------------------------------------------------------------- | ----- |
 | Positivo    | `active` `available` `approved` `accepted` `completed` `delivered` `created` `open` `received` | Verde |
-| Pendiente   | `pending` `maintenance` `expired` `busy` `contacted` `submitted`                               | Ámbar |
+| Pendiente   | `pending` `maintenance` `expired` `busy` `contacted` `submitted` `returned`                    | Ámbar |
 | Negativo    | `rejected` `suspended` `revoked` `cancelled` `discarded`                                       | Rojo  |
-| Informativo | `offered` `claimed` `fleet`                                                                    | Azul  |
-| Neutro      | `draft` `inactive` `released` `reassigned` `offline` `withdrawn`                               | Gris  |
+| Informativo | `offered` `claimed` `fleet` `in_progress`                                                      | Azul  |
+| Neutro      | `draft` `inactive` `released` `reassigned` `offline` `withdrawn` `transferred`                 | Gris  |
 
 Un estado nuevo se agrega a su familia en `redesign.css`; no se le da un color
 propio.

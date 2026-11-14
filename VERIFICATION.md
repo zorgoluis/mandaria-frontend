@@ -1,3 +1,6 @@
+## 2026-11-14 — Analítico e historial de pedidos del conductor (SUPER_ADMIN)
+
+Ejecutado en feat/admin-independent-verification-links: npm run lint, npm run build y Vitest completo PASS, 1868/1868. Nuevas en driver-activity.test.tsx (6): ventanas UTC con fin exclusivo, formatos (porcentaje, duración, importe), analítico y cambio de periodo de 30 a 7 días, historial con filtro por resultado desde la página 1, vacíos, backend sin rutas y DRIVER_NOT_FOUND. driver-portal simula las nuevas consultas de la ficha. Sin hexadecimales nuevos. APIs simuladas; sin backend real ni revisión visual a 1440/820/390.
 ## 2026-11-13 — Revisiones documentales vinculadas al independiente (SUPER_ADMIN)
 
 Ejecutado en feat/admin-independent-verification-links: npm run lint y npm run build PASS. Vitest completo 1861/1862; la falla fue driver-signup.test.tsx, intermitente por carga: el archivo pasa aislado 16/16 con y sin estos cambios. Nuevas: verification-pages (6: enlace por identidad, unidad con y sin scope.driverId, flotilla, roles DRIVER/PROVIDER_ADMIN) e independent-verification-cases (5: filas y enlaces, vacío, filas de otro perfil rechazadas, backend sin filtro, nombres en la cola). driver-portal simula la nueva consulta de la ficha. APIs simuladas; sin backend real ni revisión visual en navegador.

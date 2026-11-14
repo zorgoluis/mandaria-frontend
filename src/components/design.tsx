@@ -52,7 +52,7 @@ export function Panel({
   )
 }
 
-/** Indicador numérico con enlace a su listado. Conserva la estructura .stat-card. */
+/** Indicador con enlace opcional a su listado. Conserva la estructura .stat-card. */
 export function StatCard({
   title,
   icon: Icon,
@@ -64,10 +64,11 @@ export function StatCard({
 }: {
   title: string
   icon: LucideIcon
-  /** `undefined` mientras carga. */
-  value?: number
+  /** `undefined` mientras carga; texto ya formateado para porcentajes o montos. */
+  value?: number | string
   note: string
-  to: string
+  /** Sin `to`, la nota se muestra como texto. */
+  to?: string
   error?: unknown
   retry?: () => void
 }) {
@@ -81,13 +82,19 @@ export function StatCard({
         <ErrorState error={error} retry={retry} />
       ) : (
         <strong>
-          {typeof value === 'number' ? value.toLocaleString('es-MX') : '…'}
+          {typeof value === 'number'
+            ? value.toLocaleString('es-MX')
+            : (value ?? '…')}
         </strong>
       )}
-      <Link to={to}>
-        {note}
-        <ArrowUpRight size={15} aria-hidden="true" />
-      </Link>
+      {to ? (
+        <Link to={to}>
+          {note}
+          <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+      ) : (
+        <span className="stat-card-note">{note}</span>
+      )}
     </div>
   )
 }
