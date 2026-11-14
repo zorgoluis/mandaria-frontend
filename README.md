@@ -1,3 +1,7 @@
+## 2026-11-14 — Versión Web 1.12.0
+
+Sube de 1.11.0 (24 oct) a 1.12.0: funciones nuevas compatibles integradas en QA. Incluye el rediseño visual y el sistema de diseño (`docs/DESIGN-SYSTEM.md`), los flujos rediseñados de registro y verificación documental de conductores, la confirmación de entregas por código y, para SUPER_ADMIN, el vínculo entre independientes y sus revisiones, el analítico y el historial de pedidos por conductor, la búsqueda por nombre de independientes y los conductores conectados en el dashboard. El conductor ve su propio analítico en «Mi perfil». Requiere el backend 1.15.0 para las funciones de conductores; con un backend anterior esas secciones muestran aviso de versión. Sin despliegue.
+
 ## 2026-11-07 — Entrega Git de recuperación de cargas y cupo
 
 Commit y push autorizados por el propietario en las ramas actuales: Web feature/rediseno y backend QA. Incluye recuperación visible de operaciones pendientes en Web, cupo de imágenes VALIDATED, compatibilidad legacy, pruebas y continuidad. Revisión nueva: fuentes contrastadas con las doce huellas del manifiesto y ramas sincronizadas con origin antes de preparar los commits. Se reutilizan las pruebas de implementación ya documentadas (Web180, backend49, recorrido aislado y Chrome/WebKit); no se atribuye una nueva ejecución a esta entrega Git.
