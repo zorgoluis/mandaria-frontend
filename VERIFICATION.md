@@ -1,3 +1,6 @@
+## 2026-11-14 — Conductores conectados en el dashboard de admin
+
+npm run lint, npm run build y Vitest completo PASS, 1880/1880. En una corrida anterior falló una vez driver-signup.test.tsx; aislado pasa 16/16 (intermitente conocido, sin relación). driver-availability.test.tsx 4/4: conteos, desglose, turnos vencidos y fuera del conteo; backend sin ruta (400 y 404) con aviso; otros errores con reintento. Render en Chrome con index.css y redesign.css y API simulada: dashboard a 1440, 820 y 390 px sin desborde. Las tarjetas ocupan el ancho del panel y se apilan en celular. Contrato contrastado con el commit backend 4ecf129; sin backend real.
 ## 2026-11-14 — Analítico e historial en Mi perfil del conductor
 
 npm run lint, npm run build y Vitest completo PASS, 1876/1876. driver-activity.test.tsx 11/11: nuevas para la vista del conductor (sólo /driver/activity/*, sin enlace de admin, dispatchStatus null, «—» defensivo, $0.00 sin entregas y nota «no tu ganancia») y Mi perfil por rol (sólo DRIVER). Render en Chrome con index.css y redesign.css, como main.tsx, y API simulada: Mi perfil a 1440, 820 y 390 px sin desborde, historial completo en 6 columnas a 1440.

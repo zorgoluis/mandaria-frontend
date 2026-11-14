@@ -40,6 +40,7 @@ import { partnerApplicationKeys } from '../partner-applications/queries'
 import { verification } from '../verification/service'
 import { independentDrivers } from '../independent-drivers/service'
 import { business } from '../customer-business/service'
+import { DriverAvailabilityPanel } from './DriverAvailability'
 export function Dashboard() {
   const { user } = useAuth()
   return user?.role === 'CUSTOMER' ? (
@@ -134,6 +135,7 @@ function AdminDashboard() {
         }
       >
         <PendingQueues />
+        <DriverAvailabilityPanel />
         <DeliveryRequestCounts />
         <Panel
           title="Operación independiente"

@@ -1,3 +1,8 @@
+## 2026-11-14 — Conductores conectados en el dashboard de admin
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 4ecf129 (feat/admin-independent-driver-search, local, sin push): GET /admin/drivers/availability-summary, sólo SUPER_ADMIN, agregación global. Conectado = disponibilidad declarada AVAILABLE o BUSY; no hay heartbeat. Población: User activo, sin baja, Driver ACTIVE, flotilla con proveedor activo o independiente aprobado. Los no operativos van en `excluded` y nunca cuentan como conectados ni desconectados; un independiente con turno de ofertas vencido cuenta como desconectado (`expiredConnections`).
+
+Panel «Conductores ahora» en el dashboard, bajo «Pendientes de decisión». Muestra conectados (disponibles y en servicio), no conectados (con turnos vencidos), el desglose de flotilla e independientes y los que quedan fuera del conteo. Se refresca cada 30 s, indica la hora del dato y la fuente («según la disponibilidad que declara cada conductor»). Con un backend sin la ruta muestra aviso de versión. Estilos propios en driver-availability.css: dos columnas y una en celular.
 ## 2026-11-14 — Analítico e historial en Mi perfil del conductor
 
 Misma rama fix/admin-review-table-layout, sin commit. Consume el backend e5e7c63 (feat/admin-independent-driver-search, local, sin push): GET /driver/activity/analytics y /deliveries, sólo rol DRIVER, con el Driver de la sesión y las mismas reglas que admin. Para el conductor, `dispatchStatus` es null si el servicio siguió con otro ejecutor; `deliveryFee` nunca es null porque el portal ya muestra el importe cotizado a independientes y flotilla.
