@@ -1,3 +1,6 @@
+## 2026-11-14 — Versión Web 1.12.0
+
+Rama chore/release-1.12.0 desde QA dfcd56f, sin commit. La versión estaba en 1.11.0 desde el 24-oct (19d30bc); desde entonces QA suma 48 commits (27 feat, 8 fix), todos aditivos, por lo que corresponde una versión menor. Cambian `package.json` y `package-lock.json` (con `npm version --no-git-tag-version`, sin tag), la etiqueta del menú lateral de V1.10 a V1.12 (estaba desactualizada) y la nota de release en el README. Las funciones de conductores requieren el backend 1.15.0 (rama chore/release-1.15.0 de la sesión backend). Sin cambios de comportamiento ni despliegue.
 ## 2026-11-14 — Conductores conectados en el dashboard de admin
 
 Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 4ecf129 (feat/admin-independent-driver-search, local, sin push): GET /admin/drivers/availability-summary, sólo SUPER_ADMIN, agregación global. Conectado = disponibilidad declarada AVAILABLE o BUSY; no hay heartbeat. Población: User activo, sin baja, Driver ACTIVE, flotilla con proveedor activo o independiente aprobado. Los no operativos van en `excluded` y nunca cuentan como conectados ni desconectados; un independiente con turno de ofertas vencido cuenta como desconectado (`expiredConnections`).
