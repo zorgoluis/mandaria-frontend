@@ -47,7 +47,7 @@
 .review-header nav a,
 .review-controls button,
 .review-oldest,
-.review-table a {
+.review-table .review-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +72,7 @@
 }
 .review-header nav a,
 .review-controls button,
-.review-table a {
+.review-table .review-action {
   background: white;
   border: 1.5px solid var(--line-strong);
   min-height: 44px;
@@ -81,7 +81,7 @@
 }
 .review-header nav a:hover,
 .review-controls button:hover,
-.review-table a:hover {
+.review-table .review-action:hover {
   border-color: var(--brand);
 }
 .review-header nav svg {
@@ -218,6 +218,8 @@
   border-spacing: 0;
   table-layout: fixed;
   font-size: 14px;
+  /* Fixed columns: wrap instead of the global table nowrap. */
+  white-space: normal;
 }
 .review-table th {
   text-align: left;
@@ -230,13 +232,13 @@
 }
 .review-table th:first-child {
   border-radius: 14px 0 0 14px;
-  width: 16%;
+  width: 28%;
 }
 .review-table th:nth-child(2) {
-  width: 18%;
+  width: 19%;
 }
 .review-table th:nth-child(3) {
-  width: 23%;
+  width: 20%;
 }
 .review-table th:last-child {
   border-radius: 0 14px 14px 0;
@@ -252,6 +254,14 @@
 .review-table td small {
   display: block;
   font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.review-driver {
+  color: var(--brand);
+  font-weight: 600;
+}
+.review-driver:hover {
+  text-decoration: underline;
 }
 .review-table tr[data-status='SUBMITTED'] {
   background: #fffbf3;
@@ -294,6 +304,7 @@
   padding: 5px 9px;
   font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
 .review-badge::before,
 .review-summary li span::before {
@@ -314,16 +325,16 @@
 .review-note.empty {
   color: #74817e;
 }
-.review-table a {
+.review-table .review-action {
   min-height: 36px;
   color: var(--brand);
 }
-.review-table [data-status='SUBMITTED'] a {
+.review-table [data-status='SUBMITTED'] .review-action {
   background: var(--brand);
   color: white;
   border-color: var(--brand);
 }
-.review-table [data-status='SUBMITTED'] a:hover {
+.review-table [data-status='SUBMITTED'] .review-action:hover {
   background: var(--brand-dark);
 }
 .review-empty {
@@ -445,7 +456,7 @@
     padding: 28px 24px 40px;
   }
 }
-@container (max-width:620px) {
+@container (max-width:560px) {
   .review-controls {
     justify-content: flex-start;
   }
@@ -462,7 +473,7 @@
   }
   .review-table tr {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
     border: 1px solid var(--line);
     border-radius: 14px;
@@ -470,6 +481,7 @@
     margin-bottom: 10px;
   }
   .review-table td {
+    min-width: 0;
     padding: 0;
     border: 0;
   }
@@ -482,7 +494,7 @@
     color: var(--muted);
     font-size: 12px;
   }
-  .review-table td a {
+  .review-table td .review-action {
     width: 100%;
   }
 }

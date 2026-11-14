@@ -322,6 +322,7 @@ export function AdminVerification() {
                                   <>
                                     {' · '}
                                     <Link
+                                      className="review-driver"
                                       to={
                                         '/independent-drivers/' +
                                         encodeURIComponent(c.driverId)
@@ -359,6 +360,7 @@ export function AdminVerification() {
                           </td>
                           <td>
                             <Link
+                              className="review-action"
                               to={casePath(c.id)}
                               aria-label={
                                 (c.status === 'SUBMITTED' ? 'Revisar' : 'Ver') +

@@ -20,14 +20,15 @@ export interface DriverDelivery {
   provider: { id: string; name: string } | null
   outcome: DeliveryOutcome
   assignmentStatus: string
-  dispatchStatus: string
+  /** Null for the driver when the service continued with another executor. */
+  dispatchStatus: string | null
   assignedAt: string
   pickedUpAt: string | null
   deliveredAt: string | null
   endedAt: string | null
   serviceZone: { id: string; code: string; name: string }
-  /** Quoted shipping amount; never the driver's earnings. */
-  deliveryFee: { amount: string; currency: string }
+  /** Quoted shipping amount; never the driver's earnings. Defensive: never null in the current API. */
+  deliveryFee: { amount: string; currency: string } | null
   vehicle: {
     id: string
     identifier: string

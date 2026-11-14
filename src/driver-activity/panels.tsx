@@ -14,7 +14,7 @@ import {
 } from '../components/ui'
 import { ApiError } from '../services/errors'
 import { date } from '../utils/format'
-import { driverActivity, lastDays } from './service'
+import { driverActivity, lastDays, type ActivitySubject } from './service'
 import { dayLabel, duration, money, outcomeLabels, percent } from './format'
 import {
   deliveryOutcomes,
@@ -46,8 +46,12 @@ function ActivityError({
   return <ErrorState error={error} retry={retry} />
 }
 
-/** SUPER_ADMIN: analytics and delivery history of one Driver, same range. */
-export function DriverActivity({ driverId }: { driverId: string }) {
+/**
+ * Analytics and delivery history over one window. With `driverId`, the
+ * SUPER_ADMIN view of that Driver; without it, the signed-in driver's own.
+ */
+export function DriverActivity({ driverId }: { driverId?: string }) {
+  const subject: ActivitySubject = driverId ?? null
   const [days, setDays] = useState<(typeof periods)[number]>(30)
   // UTC days: the range only moves when the day or the period changes.
   const today = new Date().toISOString().slice(0, 10)
@@ -73,31 +77,31 @@ export function DriverActivity({ driverId }: { driverId: string }) {
   return (
     <>
       <AnalyticsPanel
-        driverId={driverId}
+        subject={subject}
         range={range}
         days={days}
         selector={selector}
       />
-      <HistoryPanel key={days} driverId={driverId} range={range} />
+      <HistoryPanel key={days} subject={subject} range={range} />
     </>
   )
 }
 
 function AnalyticsPanel({
-  driverId,
+  subject,
   range,
   days,
   selector,
 }: {
-  driverId: string
+  subject: ActivitySubject
   range: ActivityWindow
   days: number
   selector: ReactNode
 }) {
   const { user } = useAuth()
   const query = useQuery({
-    queryKey: ['driver-activity', user!.id, driverId, 'analytics', range],
-    queryFn: ({ signal }) => driverActivity.analytics(driverId, range, signal),
+    queryKey: ['driver-activity', user!.id, subject, 'analytics', range],
+    queryFn: ({ signal }) => driverActivity.analytics(subject, range, signal),
     retry: false,
   })
   return (
@@ -111,13 +115,13 @@ function AnalyticsPanel({
       ) : query.isError ? (
         <ActivityError error={query.error} retry={() => void query.refetch()} />
       ) : (
-        <Analytics data={query.data} />
+        <Analytics data={query.data} own={subject === null} />
       )}
     </Panel>
   )
 }
 
-function Analytics({ data }: { data: DriverAnalytics }) {
+function Analytics({ data, own }: { data: DriverAnalytics; own: boolean }) {
   const t = data.totals
   const amount = data.deliveredAmount.length
     ? data.deliveredAmount.map((a) => money(a.amount, a.currency)).join(' · ')
@@ -163,8 +167,9 @@ function Analytics({ data }: { data: DriverAnalytics }) {
         ]}
       />
       <p className="panel-note">
-        El importe es el precio cotizado del envío, no la ganancia del
-        conductor: no hay registro de pago al conductor.
+        {own
+          ? 'El importe es el precio cotizado del envío, no tu ganancia.'
+          : 'El importe es el precio cotizado del envío, no la ganancia del conductor: no hay registro de pago al conductor.'}
       </p>
     </div>
   )
@@ -214,10 +219,10 @@ function DailyDelivered({
 }
 
 function HistoryPanel({
-  driverId,
+  subject,
   range,
 }: {
-  driverId: string
+  subject: ActivitySubject
   range: ActivityWindow
 }) {
   const { user } = useAuth()
@@ -227,7 +232,7 @@ function HistoryPanel({
     queryKey: [
       'driver-activity',
       user!.id,
-      driverId,
+      subject,
       'deliveries',
       range,
       outcome,
@@ -235,7 +240,7 @@ function HistoryPanel({
     ],
     queryFn: ({ signal }) =>
       driverActivity.deliveries(
-        driverId,
+        subject,
         { ...range, page, outcome: outcome || undefined },
         signal,
       ),
@@ -244,7 +249,11 @@ function HistoryPanel({
   return (
     <Panel
       title="Historial de pedidos"
-      description="Servicios que tuvo asignados, el más reciente primero"
+      description={
+        subject === null
+          ? 'Servicios que has tenido asignados, el más reciente primero'
+          : 'Servicios que tuvo asignados, el más reciente primero'
+      }
       actions={
         <select
           aria-label="Resultado"
@@ -277,13 +286,17 @@ function HistoryPanel({
             columns={[
               {
                 label: 'Pedido',
-                render: (d) => (
-                  <Link
-                    to={`/delivery-requests/${encodeURIComponent(d.deliveryRequestPublicId)}`}
-                  >
-                    {d.deliveryRequestPublicId}
-                  </Link>
-                ),
+                // The request detail is a SUPER_ADMIN screen.
+                render: (d) =>
+                  subject === null ? (
+                    d.deliveryRequestPublicId
+                  ) : (
+                    <Link
+                      to={`/delivery-requests/${encodeURIComponent(d.deliveryRequestPublicId)}`}
+                    >
+                      {d.deliveryRequestPublicId}
+                    </Link>
+                  ),
               },
               {
                 label: 'Resultado',
@@ -291,33 +304,46 @@ function HistoryPanel({
                   <Badge value={d.outcome} label={outcomeLabels[d.outcome]} />
                 ),
               },
+              // Six columns fit beside the sidebar; secondary facts go below.
               {
-                label: 'Modalidad',
-                render: (d) =>
-                  d.mode === 'INDEPENDENT'
-                    ? 'Independiente'
-                    : `Flotilla · ${d.provider?.name ?? 'Proveedor'}`,
+                label: 'Modalidad y zona',
+                render: (d) => (
+                  <span className="activity-cell">
+                    {d.mode === 'INDEPENDENT'
+                      ? 'Independiente'
+                      : `Flotilla · ${d.provider?.name ?? 'Proveedor'}`}
+                    <small>{d.serviceZone.name}</small>
+                  </span>
+                ),
               },
-              { label: 'Zona', render: (d) => d.serviceZone.name },
               {
                 label: 'Importe cotizado',
                 render: (d) =>
-                  money(d.deliveryFee.amount, d.deliveryFee.currency),
+                  d.deliveryFee
+                    ? money(d.deliveryFee.amount, d.deliveryFee.currency)
+                    : '—',
               },
               {
                 label: 'Vehículo',
-                render: (d) =>
-                  [d.vehicle.identifier, d.vehicle.plate]
-                    .filter(Boolean)
-                    .join(' · '),
+                render: (d) => (
+                  <span className="activity-cell">
+                    {d.vehicle.identifier}
+                    {d.vehicle.plate && <small>{d.vehicle.plate}</small>}
+                  </span>
+                ),
               },
-              { label: 'Asignado', render: (d) => date(d.assignedAt) },
               {
-                label: 'Cierre',
-                render: (d) =>
-                  d.outcome === 'IN_PROGRESS'
-                    ? 'En curso'
-                    : date(d.deliveredAt ?? d.endedAt),
+                label: 'Fechas',
+                render: (d) => (
+                  <span className="activity-cell">
+                    {date(d.assignedAt)}
+                    <small>
+                      {d.outcome === 'IN_PROGRESS'
+                        ? 'En curso'
+                        : `Cierre: ${date(d.deliveredAt ?? d.endedAt)}`}
+                    </small>
+                  </span>
+                ),
               },
             ]}
           />

@@ -1,0 +1,13 @@
+/* Conductores ahora: two indicators share the panel, then the split. */
+.driver-availability {
+  display: grid;
+  gap: 20px;
+}
+.driver-availability .stat-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 640px) {
+  .driver-availability .stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

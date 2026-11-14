@@ -1,3 +1,25 @@
+## 2026-11-14 — Conductores conectados en el dashboard de admin
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 4ecf129 (feat/admin-independent-driver-search, local, sin push): GET /admin/drivers/availability-summary, sólo SUPER_ADMIN, agregación global. Conectado = disponibilidad declarada AVAILABLE o BUSY; no hay heartbeat. Población: User activo, sin baja, Driver ACTIVE, flotilla con proveedor activo o independiente aprobado. Los no operativos van en `excluded` y nunca cuentan como conectados ni desconectados; un independiente con turno de ofertas vencido cuenta como desconectado (`expiredConnections`).
+
+Panel «Conductores ahora» en el dashboard, bajo «Pendientes de decisión». Muestra conectados (disponibles y en servicio), no conectados (con turnos vencidos), el desglose de flotilla e independientes y los que quedan fuera del conteo. Se refresca cada 30 s, indica la hora del dato y la fuente («según la disponibilidad que declara cada conductor»). Con un backend sin la ruta muestra aviso de versión. Estilos propios en driver-availability.css: dos columnas y una en celular.
+## 2026-11-14 — Analítico e historial en Mi perfil del conductor
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend e5e7c63 (feat/admin-independent-driver-search, local, sin push): GET /driver/activity/analytics y /deliveries, sólo rol DRIVER, con el Driver de la sesión y las mismas reglas que admin. Para el conductor, `dispatchStatus` es null si el servicio siguió con otro ejecutor; `deliveryFee` nunca es null porque el portal ya muestra el importe cotizado a independientes y flotilla.
+
+- DriverActivity sirve a los dos casos: con driverId usa las rutas de admin; sin él, las del conductor. "Mi perfil" (/profile) lo muestra sólo al rol DRIVER.
+- Vista del conductor: el MDR va sin enlace (el detalle es de admin) y la nota dice «no tu ganancia». Un importe ausente se muestra como «—» sólo por precaución.
+- Historial de 8 a 6 columnas, también en la ficha de admin: zona bajo modalidad, placa bajo vehículo y cierre bajo la asignación; antes se cortaba a 1440.
+## 2026-11-14 — Búsqueda por nombre en Independientes
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 9e92a92 (feat/admin-independent-driver-search, local, sin push): `search` en GET /admin/independent-drivers, de 1 a 100 caracteres tras recortar, sin distinguir mayúsculas ni acentos, `%` y `_` literales y combinable con status.
+
+Campo «Buscar por nombre» (`.search`) junto al filtro de estado. Espera 300 ms, vuelve a la página 1 y se guarda en la URL (`q`); cambiar el estado conserva la búsqueda. Sin resultados nombra el término. Un backend sin `search` (400) muestra aviso de versión; el listado sin búsqueda no cambia.
+## 2026-11-14 — Tabla de Revisión documental: diseño corregido
+
+Rama fix/admin-review-table-layout desde QA f5542f4, sin commit. Causas: el área de la tabla mide 618 px a 1440 y el modo tarjetas empezaba bajo 620 px, por lo que el escritorio nunca veía tabla; `.review-table a` daba aspecto de botón a todo enlace, incluido el nombre del conductor; la tabla heredaba el `nowrap` global con columnas fijas y el texto se encimaba; en tarjetas, `1fr` no se encogía bajo la nota `nowrap` y desbordaba a 390 px (ya ocurría antes).
+
+Cambios sólo en admin-review: tarjetas bajo 560 px; botón sólo en `.review-action`, nombre como enlace `.review-driver`; columnas 28/19/20 %, ajuste de texto y badge sin partir; tarjeta con `minmax(0, 1fr)`. Sin cambios de datos ni de comportamiento.
 ## 2026-11-14 — Analítico e historial de pedidos del conductor (SUPER_ADMIN)
 
 Misma rama feat/admin-independent-verification-links, sin commit. Consume el backend 4f9f4bf (feat/admin-independent-verification-filters, local, sin push): GET /admin/drivers/:driverId/analytics y /deliveries, por Driver.id y días UTC.
