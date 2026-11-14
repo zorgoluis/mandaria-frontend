@@ -1,3 +1,6 @@
+## 2026-11-14 — Versión Web 1.12.0
+
+Sólo cambian la versión y la etiqueta del menú: `package.json` y `package-lock.json` en 1.12.0 y AdminLayout en V1.12. En la rama chore/release-1.12.0: npm run lint, npm run build y Vitest completo PASS, 1880/1880. Ninguna prueba depende de la etiqueta de versión.
 ## 2026-11-14 — Conductores conectados en el dashboard de admin
 
 npm run lint, npm run build y Vitest completo PASS, 1880/1880. En una corrida anterior falló una vez driver-signup.test.tsx; aislado pasa 16/16 (intermitente conocido, sin relación). driver-availability.test.tsx 4/4: conteos, desglose, turnos vencidos y fuera del conteo; backend sin ruta (400 y 404) con aviso; otros errores con reintento. Render en Chrome con index.css y redesign.css y API simulada: dashboard a 1440, 820 y 390 px sin desborde. Las tarjetas ocupan el ancho del panel y se apilan en celular. Contrato contrastado con el commit backend 4ecf129; sin backend real.
