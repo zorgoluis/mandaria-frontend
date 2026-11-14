@@ -1,3 +1,13 @@
+## 2026-11-13 — Revisiones documentales vinculadas al independiente (SUPER_ADMIN)
+
+Rama feat/admin-independent-verification-links desde QA f7ed11c, sin commit. Consume el contrato backend de feat/admin-independent-verification-filters (15db0c8, local, sin push): filtros independentProfileId/driverId en /admin/verification-cases, filas con subjectType/driverId/independentProfileId/driverName y scope.driverId sólo para SUPER_ADMIN.
+
+- Detalle de revisión: LinkRow «Perfil del independiente» en el resumen lateral, sólo SUPER_ADMIN y ámbito independiente; identidad usa resourceId, unidad usa scope.driverId (sin él no enlaza). Flotilla y representante nunca enlazan.
+- Ficha del independiente: panel «Revisiones documentales» filtrado por independentProfileId (no driverId, que también trae identidad de flotilla). Si alguna fila trae otro perfil se rechaza la página; backend sin el filtro (400) remite a la cola global.
+- Cola de admin: tipo y nombre del conductor bajo cada revisión; el nombre enlaza a la ficha sólo si es independiente.
+- Badge: submitted en familia ámbar y withdrawn en neutra (redesign.css y DESIGN-SYSTEM.md).
+
+Pendiente: publicar backend compatible y revisar las pantallas a 1440/820/390 con datos reales.
 ## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
 
 Rama feat/prequote-stop-addresses (3b489fd) actualizada con merge de QA 0af444b, sin rebase ni push forzado. Código mezclado sin conflictos; sólo BITACORA y VERIFICATION, resueltas conservando todas las entradas en orden cronológico (las de QA del 23-oct en adelante arriba de la del 22-oct). Envío de stopAddresses sigue apagado por VITE_PREQUOTE_STOP_ADDRESSES hasta que el backend lo acepte. PR hacia QA; sin despliegue.

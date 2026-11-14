@@ -6,6 +6,7 @@ import { useAuth } from '../auth/context'
 import { canApprove } from '../driver-category/contract'
 import { CategorySummary } from '../driver-category/components'
 import { IndependentOfferZones } from '../independent-zones/panel'
+import { IndependentVerificationCases } from './verification-cases'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -358,6 +359,10 @@ function ProfileContent({ profile }: { profile: IndependentDriverProfile }) {
               prefiere no cancelar en silencio una entrega en marcha.
             </p>
           </section>
+          <IndependentVerificationCases
+            key={profile.id}
+            profileId={profile.id}
+          />
           {/* V1.10-F: the independent capability has its own credit account, never the provider's. */}
           <AdminCreditsPanel
             scope="independent"

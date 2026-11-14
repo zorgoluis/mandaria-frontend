@@ -124,10 +124,18 @@ export const verification = {
     providerId: string | undefined,
     search: string,
     signal: AbortSignal,
+    independentProfileId?: string,
   ) => {
     const result = await api<ReviewPage>(
       '/admin/verification-cases?' +
-        queryString({ page, pageSize: 20, status, providerId, search }),
+        queryString({
+          page,
+          pageSize: 20,
+          status,
+          providerId,
+          search,
+          independentProfileId,
+        }),
       'GET',
       undefined,
       signal,
@@ -141,6 +149,15 @@ export const verification = {
       throw new ApiError(
         502,
         'El servidor devolvió un listado documental incompleto.',
+      )
+    // Never show another driver's cases as this independent's history.
+    if (
+      independentProfileId &&
+      result.items.some((c) => c.independentProfileId !== independentProfileId)
+    )
+      throw new ApiError(
+        502,
+        'El servidor no confirmó el filtro por repartidor independiente.',
       )
     // Earlier servers return the same authorized page without dashboard metadata.
     if (

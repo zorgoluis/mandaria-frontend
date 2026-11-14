@@ -430,7 +430,8 @@ tbody tr:hover {
 .badge.maintenance,
 .badge.expired,
 .badge.busy,
-.badge.contacted {
+.badge.contacted,
+.badge.submitted {
   background: var(--warn-soft);
   color: var(--warn);
 }
@@ -438,7 +439,8 @@ tbody tr:hover {
 .badge.maintenance .status-dot,
 .badge.expired .status-dot,
 .badge.busy .status-dot,
-.badge.contacted .status-dot {
+.badge.contacted .status-dot,
+.badge.submitted .status-dot {
   background: var(--warn-dot);
 }
 /* rojo: rechazado, suspendido, cancelado */
@@ -468,7 +470,8 @@ tbody tr:hover {
 .badge.inactive,
 .badge.released,
 .badge.reassigned,
-.badge.offline {
+.badge.offline,
+.badge.withdrawn {
   background: var(--surface-3);
   color: var(--muted);
 }
@@ -476,7 +479,8 @@ tbody tr:hover {
 .badge.inactive .status-dot,
 .badge.released .status-dot,
 .badge.reassigned .status-dot,
-.badge.offline .status-dot {
+.badge.offline .status-dot,
+.badge.withdrawn .status-dot {
   background: #b6c1be;
 }
 /* pertenencia */

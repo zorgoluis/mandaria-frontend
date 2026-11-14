@@ -141,10 +141,10 @@ celular se vuelva tarjetas), `Pagination`, `Field`, `InfoGrid`, `Modal`,
 | Familia     | Estados                                                                                        | Color |
 | ----------- | ---------------------------------------------------------------------------------------------- | ----- |
 | Positivo    | `active` `available` `approved` `accepted` `completed` `delivered` `created` `open` `received` | Verde |
-| Pendiente   | `pending` `maintenance` `expired` `busy` `contacted`                                           | Ámbar |
+| Pendiente   | `pending` `maintenance` `expired` `busy` `contacted` `submitted`                               | Ámbar |
 | Negativo    | `rejected` `suspended` `revoked` `cancelled` `discarded`                                       | Rojo  |
 | Informativo | `offered` `claimed` `fleet`                                                                    | Azul  |
-| Neutro      | `draft` `inactive` `released` `reassigned` `offline`                                           | Gris  |
+| Neutro      | `draft` `inactive` `released` `reassigned` `offline` `withdrawn`                               | Gris  |
 
 Un estado nuevo se agrega a su familia en `redesign.css`; no se le da un color
 propio.

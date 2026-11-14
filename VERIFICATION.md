@@ -1,3 +1,6 @@
+## 2026-11-13 — Revisiones documentales vinculadas al independiente (SUPER_ADMIN)
+
+Ejecutado en feat/admin-independent-verification-links: npm run lint y npm run build PASS. Vitest completo 1861/1862; la falla fue driver-signup.test.tsx, intermitente por carga: el archivo pasa aislado 16/16 con y sin estos cambios. Nuevas: verification-pages (6: enlace por identidad, unidad con y sin scope.driverId, flotilla, roles DRIVER/PROVIDER_ADMIN) e independent-verification-cases (5: filas y enlaces, vacío, filas de otro perfil rechazadas, backend sin filtro, nombres en la cola). driver-portal simula la nueva consulta de la ficha. APIs simuladas; sin backend real ni revisión visual en navegador.
 ## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
 
 Ejecutado sobre el merge de QA 0af444b en feat/prequote-stop-addresses: npm run lint, npm run build y Vitest completo PASS, 1851/1851 (sin las 20 fallas previas, ya corregidas en QA). Dependencias idénticas a QA. Sin backend real, Google real ni navegador.

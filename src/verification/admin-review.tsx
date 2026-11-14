@@ -313,7 +313,27 @@ export function AdminVerification() {
                         <tr key={c.id} data-status={c.status}>
                           <td>
                             <strong>Revisión {c.revision}</strong>
-                            <small>Expediente</small>
+                            <small>
+                              {c.subjectType
+                                ? labels[c.subjectType]
+                                : 'Expediente'}
+                              {c.driverName &&
+                                (c.independentProfileId && c.driverId ? (
+                                  <>
+                                    {' · '}
+                                    <Link
+                                      to={
+                                        '/independent-drivers/' +
+                                        encodeURIComponent(c.driverId)
+                                      }
+                                    >
+                                      {c.driverName}
+                                    </Link>
+                                  </>
+                                ) : (
+                                  ' · ' + c.driverName
+                                ))}
+                            </small>
                           </td>
                           <td>
                             <span className="review-badge">
