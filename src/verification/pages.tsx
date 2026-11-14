@@ -31,7 +31,8 @@ import { documentaryAvailability, consultationError } from './availability'
 import { useRequirements, useTermsQuery } from './use-availability'
 import type { Area, SubjectType, VerificationCase, Requirements } from './types'
 import './verification.css'
-import { SummaryList } from '../components/design'
+import { LinkRow, SummaryList } from '../components/design'
+import { independentDriverId } from './independent-link'
 import './onboarding.css'
 import './identity-case.css'
 import { Bike, Car } from 'lucide-react'
@@ -877,6 +878,9 @@ function CaseContent({
     (designed && !checklistComplete) ||
     ownershipContractBlocked
   const missingDocuments = displayedCategories.length - completeCount
+  // The independent profile route is SUPER_ADMIN only.
+  const profileDriverId =
+    user?.role === 'SUPER_ADMIN' ? independentDriverId(record) : undefined
   return (
     <div
       className={
@@ -1125,6 +1129,14 @@ function CaseContent({
                     : []),
                 ]}
               />
+              {profileDriverId && (
+                <LinkRow
+                  to={`/independent-drivers/${encodeURIComponent(profileDriverId)}`}
+                  title="Perfil del independiente"
+                  text="Habilitación, unidades y zonas"
+                  icon={Bike}
+                />
+              )}
             </section>
           )}
           {user?.role === 'SUPER_ADMIN' &&

@@ -1,0 +1,55 @@
+/* Actividad del conductor: sólo lo propio del gráfico diario. */
+.driver-activity .stat-grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+.activity-chart {
+  margin: 0 0 20px;
+}
+.activity-chart figcaption {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 10px;
+}
+.activity-chart figcaption span {
+  font-weight: 500;
+  color: var(--faint);
+}
+.activity-chart ol {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 120px;
+  margin: 0;
+  padding: 0 0 2px;
+  list-style: none;
+  border-bottom: 1px solid var(--line-soft);
+}
+.activity-chart li {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+}
+.activity-bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: var(--brand);
+}
+.activity-bar.empty {
+  background: var(--line-soft);
+}
+.activity-chart li:hover .activity-bar:not(.empty) {
+  background: var(--brand-dark);
+}
+.activity-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--faint);
+}
