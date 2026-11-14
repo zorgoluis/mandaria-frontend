@@ -1,3 +1,8 @@
+## 2026-11-14 — Analítico e historial en Mi perfil del conductor
+
+npm run lint, npm run build y Vitest completo PASS, 1876/1876. driver-activity.test.tsx 11/11: nuevas para la vista del conductor (sólo /driver/activity/*, sin enlace de admin, dispatchStatus null, «—» defensivo, $0.00 sin entregas y nota «no tu ganancia») y Mi perfil por rol (sólo DRIVER). Render en Chrome con index.css y redesign.css, como main.tsx, y API simulada: Mi perfil a 1440, 820 y 390 px sin desborde, historial completo en 6 columnas a 1440.
+
+Corrección de evidencia: los renders anteriores de esta rama (tabla de revisión y buscador) se hicieron sin redesign.css. Repetidos con los estilos reales: la tabla de revisión mide 596 px a 1440 (tabla, filas de 64–74 px) y el buscador sigue en la misma fila que el filtro a 1440 y 820; sin desborde. Contrato contrastado con el commit backend e5e7c63; sin backend real.
 ## 2026-11-14 — Búsqueda por nombre en Independientes
 
 npm run lint, npm run build y Vitest completo PASS, 1871/1871. Nuevas en driver-portal (3): búsqueda recortada desde la página 1 combinada con estado (y conservada al quitar el estado), sin resultados con el término y backend sin `search`. Render sintético en Chrome: a 1440 y 820 el buscador queda en la misma fila que el filtro; a 390 se apilan a todo el ancho; sin desborde. Contrato contrastado con el commit backend 9e92a92; sin backend real.

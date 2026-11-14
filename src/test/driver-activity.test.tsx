@@ -14,6 +14,9 @@ import { DriverActivity } from '../driver-activity/panels'
 import { lastDays } from '../driver-activity/service'
 import { duration, money, percent } from '../driver-activity/format'
 import { actor, resource } from './verification-fixtures'
+import { ProfilePage } from '../users/pages'
+import type { ReactNode } from 'react'
+import type { Role } from '../types/api'
 
 const analytics = {
   driverId: resource,
@@ -81,7 +84,10 @@ function serve(
 }
 const urls = (fetcher: ReturnType<typeof serve>, part: string) =>
   fetcher.mock.calls.map(([u]) => String(u)).filter((u) => u.includes(part))
-function mount() {
+function mount(
+  node: ReactNode = <DriverActivity driverId={resource} />,
+  role: Role = 'SUPER_ADMIN',
+) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: 0 } },
   })
@@ -89,7 +95,7 @@ function mount() {
     user: {
       id: actor,
       email: 'admin@example.test',
-      role: 'SUPER_ADMIN' as const,
+      role,
       active: true,
       emailVerifiedAt: '2026-11-01T00:00:00Z',
       createdAt: '',
@@ -106,9 +112,7 @@ function mount() {
     <QueryClientProvider client={client}>
       <AuthContext.Provider value={auth}>
         <FeedbackProvider>
-          <MemoryRouter>
-            <DriverActivity driverId={resource} />
-          </MemoryRouter>
+          <MemoryRouter>{node}</MemoryRouter>
         </FeedbackProvider>
       </AuthContext.Provider>
     </QueryClientProvider>,
@@ -163,7 +167,9 @@ it('lists the delivery history and filters it by outcome from the first page', a
   const table = screen.getByRole('table')
   expect(within(table).getByText('Entregado')).toHaveClass('badge', 'delivered')
   expect(within(table).getByText('Independiente')).toBeVisible()
-  expect(within(table).getByText('Moto roja · ABC-12')).toBeVisible()
+  expect(within(table).getByText('ABC-12')).toBeVisible()
+  expect(within(table).getByText('Ocozocoautla')).toBeVisible()
+  expect(within(table).getByText(/^Cierre: /)).toBeVisible()
   fireEvent.change(screen.getByRole('combobox', { name: 'Resultado' }), {
     target: { value: 'RETURNED' },
   })
@@ -206,3 +212,72 @@ it('older backends point to the update; a missing driver is an error', async () 
   )
   expect(screen.queryByText(/versión actualizada/)).toBeNull()
 })
+
+it('a driver sees only their own activity, without admin links', async () => {
+  const fetcher = serve((url) => ({
+    body: url.includes('/analytics')
+      ? { ...analytics, deliveredAmount: [] }
+      : page([
+          {
+            ...delivery,
+            mode: 'FLEET',
+            provider: { id: resource, name: 'Rápidos' },
+            outcome: 'RELEASED',
+            // The service continued with another executor.
+            dispatchStatus: null,
+            // Defensive only: the API always sends it.
+            deliveryFee: null,
+          },
+        ]),
+  }))
+  mount(<DriverActivity />, 'DRIVER')
+  const table = await screen.findByRole('table')
+  expect(within(table).getByText('MDR-000042')).toBeVisible()
+  expect(screen.queryByRole('link', { name: 'MDR-000042' })).toBeNull()
+  expect(within(table).getByText('Flotilla · Rápidos')).toBeVisible()
+  expect(within(table).getByText('—')).toBeVisible()
+  expect(await screen.findByText('1 h 5 min')).toBeVisible()
+  expect(within(table).getByText('Liberado')).toHaveClass('badge', 'released')
+  expect(screen.getByText('Importe cotizado entregado')).toBeVisible()
+  expect(screen.getByText(/\$0\.00/)).toBeVisible()
+  const called = fetcher.mock.calls.map(([u]) => new URL(String(u)).pathname)
+  expect(called).toEqual(
+    expect.arrayContaining([
+      '/api/v1/driver/activity/analytics',
+      '/api/v1/driver/activity/deliveries',
+    ]),
+  )
+  expect(called.some((p) => p.includes('/admin/'))).toBe(false)
+})
+it('a driver reads delivered amounts as quoted, not earnings', async () => {
+  serve()
+  mount(<DriverActivity />, 'DRIVER')
+  expect(await screen.findByText('Importe cotizado entregado')).toBeVisible()
+  expect(screen.getByText(/no tu ganancia/)).toBeVisible()
+})
+it.each([
+  ['DRIVER', true],
+  ['PROVIDER_ADMIN', false],
+  ['SUPER_ADMIN', false],
+] as const)(
+  'profile shows the activity only to a %s driver: %s',
+  async (role, shown) => {
+    serve((url) => ({
+      body: url.includes('/driver/activity/analytics')
+        ? analytics
+        : url.includes('/driver/activity/deliveries')
+          ? page([delivery])
+          : {},
+      status: url.includes('/driver/activity/') ? 200 : 404,
+    }))
+    mount(<ProfilePage />, role)
+    expect(
+      await screen.findByRole('heading', { name: 'Mi perfil' }),
+    ).toBeVisible()
+    if (shown)
+      expect(
+        await screen.findByRole('heading', { name: 'Historial de pedidos' }),
+      ).toBeVisible()
+    else expect(screen.queryByRole('heading', { name: 'Analítico' })).toBeNull()
+  },
+)

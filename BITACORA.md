@@ -1,3 +1,10 @@
+## 2026-11-14 — Analítico e historial en Mi perfil del conductor
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend e5e7c63 (feat/admin-independent-driver-search, local, sin push): GET /driver/activity/analytics y /deliveries, sólo rol DRIVER, con el Driver de la sesión y las mismas reglas que admin. Para el conductor, `dispatchStatus` es null si el servicio siguió con otro ejecutor; `deliveryFee` nunca es null porque el portal ya muestra el importe cotizado a independientes y flotilla.
+
+- DriverActivity sirve a los dos casos: con driverId usa las rutas de admin; sin él, las del conductor. "Mi perfil" (/profile) lo muestra sólo al rol DRIVER.
+- Vista del conductor: el MDR va sin enlace (el detalle es de admin) y la nota dice «no tu ganancia». Un importe ausente se muestra como «—» sólo por precaución.
+- Historial de 8 a 6 columnas, también en la ficha de admin: zona bajo modalidad, placa bajo vehículo y cierre bajo la asignación; antes se cortaba a 1440.
 ## 2026-11-14 — Búsqueda por nombre en Independientes
 
 Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 9e92a92 (feat/admin-independent-driver-search, local, sin push): `search` en GET /admin/independent-drivers, de 1 a 100 caracteres tras recortar, sin distinguir mayúsculas ni acentos, `%` y `_` literales y combinable con status.

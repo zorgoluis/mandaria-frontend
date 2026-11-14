@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AccountRegistrationProgress } from '../verification/account-progress'
+import { DriverActivity } from '../driver-activity/panels'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight } from 'lucide-react'
@@ -155,6 +156,8 @@ export function ProfilePage() {
           Contacta a tu administrador para actualizar tu cuenta.
         </p>
       </div>
+      {/* The driver's own analytics and delivery history, never another driver's. */}
+      {user?.role === 'DRIVER' && <DriverActivity key={user.id} />}
     </>
   )
 }
