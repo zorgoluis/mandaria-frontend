@@ -1,3 +1,23 @@
+## 2026-11-14 — Analítico e historial de pedidos del conductor (SUPER_ADMIN)
+
+Misma rama feat/admin-independent-verification-links, sin commit. Consume el backend 4f9f4bf (feat/admin-independent-verification-filters, local, sin push): GET /admin/drivers/:driverId/analytics y /deliveries, por Driver.id y días UTC.
+
+- Ficha del independiente: periodo de 7, 30 o 90 días compartido por dos paneles. «Analítico» muestra entregados, tasa de entrega, asignación a entrega y días con actividad (StatCard), la gráfica diaria de entregados (una serie, color de marca, tooltip por barra) y el desglose por resultado con el importe cotizado. «Historial de pedidos» muestra la tabla de participaciones con enlace al MDR, resultado, modalidad, zona, importe, vehículo y fechas, con filtro por resultado y paginación.
+- El importe se rotula como cotizado y nunca como ganancia: no hay registro de pago al conductor. Las métricas que el backend no calcula no se muestran.
+- Backend sin las rutas: aviso de versión. DRIVER_NOT_FOUND se muestra como error.
+- StatCard admite valor de texto y enlace opcional. Resultados en familias de color: in_progress azul, returned ámbar y transferred neutro (redesign.css y DESIGN-SYSTEM.md).
+
+Pendiente: publicar el backend compatible y revisar a 1440/820/390 con datos reales.
+## 2026-11-13 — Revisiones documentales vinculadas al independiente (SUPER_ADMIN)
+
+Rama feat/admin-independent-verification-links desde QA f7ed11c, sin commit. Consume el contrato backend de feat/admin-independent-verification-filters (15db0c8, local, sin push): filtros independentProfileId/driverId en /admin/verification-cases, filas con subjectType/driverId/independentProfileId/driverName y scope.driverId sólo para SUPER_ADMIN.
+
+- Detalle de revisión: LinkRow «Perfil del independiente» en el resumen lateral, sólo SUPER_ADMIN y ámbito independiente; identidad usa resourceId, unidad usa scope.driverId (sin él no enlaza). Flotilla y representante nunca enlazan.
+- Ficha del independiente: panel «Revisiones documentales» filtrado por independentProfileId (no driverId, que también trae identidad de flotilla). Si alguna fila trae otro perfil se rechaza la página; backend sin el filtro (400) remite a la cola global.
+- Cola de admin: tipo y nombre del conductor bajo cada revisión; el nombre enlaza a la ficha sólo si es independiente.
+- Badge: submitted en familia ámbar y withdrawn en neutra (redesign.css y DESIGN-SYSTEM.md).
+
+Pendiente: publicar backend compatible y revisar las pantallas a 1440/820/390 con datos reales.
 ## 2026-11-12 — Snapshot de dirección: actualización con QA y PR
 
 Rama feat/prequote-stop-addresses (3b489fd) actualizada con merge de QA 0af444b, sin rebase ni push forzado. Código mezclado sin conflictos; sólo BITACORA y VERIFICATION, resueltas conservando todas las entradas en orden cronológico (las de QA del 23-oct en adelante arriba de la del 22-oct). Envío de stopAddresses sigue apagado por VITE_PREQUOTE_STOP_ADDRESSES hasta que el backend lo acepte. PR hacia QA; sin despliegue.

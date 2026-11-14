@@ -178,9 +178,15 @@ export interface CaseSummary {
   decidedAt: string | null
   publicReason: string | null
 }
-export type ReviewPage = import('../types/api').Page<
-  CaseSummary & { updatedAt?: string }
-> &
+/** Subject fields are absent on backends older than the independent filter. */
+export type ReviewRow = CaseSummary & {
+  updatedAt?: string
+  subjectType?: SubjectType
+  driverId?: string | null
+  independentProfileId?: string | null
+  driverName?: string | null
+}
+export type ReviewPage = import('../types/api').Page<ReviewRow> &
   (
     | {
         counts: Record<CaseStatus, number>
@@ -208,7 +214,12 @@ export interface VerificationCase extends CaseSummary {
   environment: EvidenceEnvironment
   policyVersion: string
   data: Partial<IdentityData & UnitData & RepresentativeData>
-  scope: { providerId: string | null; independentProfileId: string | null }
+  scope: {
+    providerId: string | null
+    independentProfileId: string | null
+    /** SUPER_ADMIN only, and only on backends that expose it; covers unit cases. */
+    driverId?: string | null
+  }
   verificationStatus: string
   attachments: Attachment[]
   events: { id: string; kind: string; createdAt: string }[]

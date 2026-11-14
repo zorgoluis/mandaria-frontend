@@ -430,7 +430,9 @@ tbody tr:hover {
 .badge.maintenance,
 .badge.expired,
 .badge.busy,
-.badge.contacted {
+.badge.contacted,
+.badge.submitted,
+.badge.returned {
   background: var(--warn-soft);
   color: var(--warn);
 }
@@ -438,7 +440,9 @@ tbody tr:hover {
 .badge.maintenance .status-dot,
 .badge.expired .status-dot,
 .badge.busy .status-dot,
-.badge.contacted .status-dot {
+.badge.contacted .status-dot,
+.badge.submitted .status-dot,
+.badge.returned .status-dot {
   background: var(--warn-dot);
 }
 /* rojo: rechazado, suspendido, cancelado */
@@ -459,7 +463,8 @@ tbody tr:hover {
 }
 /* azul: ofrecido, tomado */
 .badge.offered,
-.badge.claimed {
+.badge.claimed,
+.badge.in_progress {
   background: var(--info-soft);
   color: var(--info);
 }
@@ -468,7 +473,9 @@ tbody tr:hover {
 .badge.inactive,
 .badge.released,
 .badge.reassigned,
-.badge.offline {
+.badge.offline,
+.badge.withdrawn,
+.badge.transferred {
   background: var(--surface-3);
   color: var(--muted);
 }
@@ -476,7 +483,9 @@ tbody tr:hover {
 .badge.inactive .status-dot,
 .badge.released .status-dot,
 .badge.reassigned .status-dot,
-.badge.offline .status-dot {
+.badge.offline .status-dot,
+.badge.withdrawn .status-dot,
+.badge.transferred .status-dot {
   background: #b6c1be;
 }
 /* pertenencia */
@@ -546,6 +555,11 @@ tbody tr:hover {
   font-size: 13px;
   font-weight: 600;
   color: var(--brand);
+}
+.stat-card > .stat-card-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 /* ───────── Dashboard ───────── */

@@ -1778,3 +1778,62 @@ vi.mock('../verification/prepare-photo', async (original) => ({
     },
   ),
 }))
+it.each([
+  ['independent identity', {}, 'PROFILE'],
+  [
+    'independent unit with backend driver',
+    {
+      subjectType: 'VEHICLE' as const,
+      resourceId: attachmentId,
+      scope: {
+        providerId: null,
+        independentProfileId: resource,
+        driverId: actor,
+      },
+    },
+    actor,
+  ],
+  [
+    'independent unit on an older backend',
+    { subjectType: 'VEHICLE' as const, resourceId: attachmentId },
+    null,
+  ],
+  [
+    'fleet identity',
+    { scope: { providerId, independentProfileId: null } },
+    null,
+  ],
+])('SUPER_ADMIN case summary links %s to its profile', async (_, patch, to) => {
+  vi.mocked(verification.get).mockResolvedValue({ ...caseFixture, ...patch })
+  mount(
+    <Routes>
+      <Route path="/verification/cases/:id" element={<CaseDetail />} />
+    </Routes>,
+    'SUPER_ADMIN',
+    '/verification/cases/' + caseId,
+  )
+  await screen.findByRole('heading', { name: 'Resumen del expediente' })
+  const link = screen.queryByRole('link', { name: /Perfil del independiente/ })
+  if (to === null) expect(link).toBeNull()
+  else
+    expect(link).toHaveAttribute(
+      'href',
+      '/independent-drivers/' + (to === 'PROFILE' ? resource : to),
+    )
+})
+it.each(['DRIVER', 'PROVIDER_ADMIN'] as const)(
+  '%s never gets the admin independent profile link',
+  async (role) => {
+    mount(
+      <Routes>
+        <Route path="/verification/cases/:id" element={<CaseDetail />} />
+      </Routes>,
+      role,
+      '/verification/cases/' + caseId,
+    )
+    await screen.findByRole('heading', { name: /Identidad/ })
+    expect(
+      screen.queryByRole('link', { name: /Perfil del independiente/ }),
+    ).toBeNull()
+  },
+)

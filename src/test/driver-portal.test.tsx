@@ -44,6 +44,31 @@ vi.mock('../driver-portal/reception-service', async (original) => ({
 vi.mock('../independent-zones/service', () => ({
   offerZones: { get: vi.fn(), put: vi.fn() },
 }))
+// The independent detail shows the driver's activity.
+vi.mock('../driver-activity/service', async (original) => ({
+  ...(await original<typeof import('../driver-activity/service')>()),
+  driverActivity: {
+    analytics: vi.fn(() => new Promise(() => {})),
+    deliveries: vi.fn(() => new Promise(() => {})),
+  },
+}))
+// The independent detail lists the profile's documentary cases.
+vi.mock('../verification/service', async (original) => {
+  const m = await original<typeof import('../verification/service')>()
+  return {
+    ...m,
+    verification: {
+      ...m.verification,
+      review: vi.fn(async () => ({
+        items: [],
+        page: 1,
+        pageSize: 20,
+        total: 0,
+        totalPages: 0,
+      })),
+    },
+  }
+})
 vi.mock('../independent-zones/intent', async (original) => ({
   ...(await original<typeof import('../independent-zones/intent')>()),
   zoneStore: { read: vi.fn() },
