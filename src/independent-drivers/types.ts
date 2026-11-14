@@ -69,4 +69,6 @@ export interface IndependentFilters {
   page?: number
   pageSize?: number
   status?: string
+  /** Substring of the driver's name; backends without it answer 400. */
+  search?: string
 }

@@ -822,6 +822,52 @@ describe('super admin administration', () => {
     expect(row).toHaveTextContent('Habilitado')
     expect(row).not.toHaveTextContent('APPROVED')
   })
+  it('searches by driver name next to the status filter, from page 1', async () => {
+    const user = userEvent.setup()
+    mount('/independent-drivers?status=APPROVED&page=3', 'SUPER_ADMIN')
+    await screen.findByRole('table')
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Buscar repartidor por nombre' }),
+      '  Carl ',
+    )
+    await waitFor(() =>
+      expect(independentDrivers.list).toHaveBeenLastCalledWith(
+        { page: 1, pageSize: 20, status: 'APPROVED', search: 'Carl' },
+        expect.anything(),
+      ),
+    )
+    await user.selectOptions(
+      screen.getByRole('combobox', {
+        name: 'Filtrar por estado de habilitación',
+      }),
+      '',
+    )
+    await waitFor(() =>
+      expect(independentDrivers.list).toHaveBeenLastCalledWith(
+        { page: 1, pageSize: 20, status: undefined, search: 'Carl' },
+        expect.anything(),
+      ),
+    )
+  })
+  it('names the search when nothing matches', async () => {
+    vi.mocked(independentDrivers.list).mockResolvedValue(page([]))
+    mount('/independent-drivers?q=Zoe', 'SUPER_ADMIN')
+    expect(
+      await screen.findByText('Ningún repartidor coincide con «Zoe».'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('searchbox', { name: 'Buscar repartidor por nombre' }),
+    ).toHaveValue('Zoe')
+  })
+  it('explains that searching needs the updated backend when it answers 400', async () => {
+    vi.mocked(independentDrivers.list).mockRejectedValue(
+      normalizeError(400, { message: ['property search should not exist'] }),
+    )
+    mount('/independent-drivers?q=Carl', 'SUPER_ADMIN')
+    expect(
+      await screen.findByText(/requiere la versión actualizada del\s+backend/),
+    ).toBeInTheDocument()
+  })
   it('consults a known profile without offering affiliated candidates or enabling implicitly', async () => {
     vi.mocked(providers.list).mockResolvedValue(
       page([

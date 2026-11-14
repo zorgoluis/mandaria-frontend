@@ -8,10 +8,10 @@ import { CategorySummary } from '../driver-category/components'
 import { IndependentOfferZones } from '../independent-zones/panel'
 import { IndependentVerificationCases } from './verification-cases'
 import { DriverActivity } from '../driver-activity/panels'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, Info, Bike } from 'lucide-react'
+import { ArrowUpRight, Info, Bike, Search } from 'lucide-react'
 import {
   ActionForm,
   Badge,
@@ -49,6 +49,7 @@ import {
 } from './types'
 
 const PAGE_SIZE = 20
+const SEARCH_MAX = 100
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const reasonOf = (raw: string) => {
   const reason = raw.trim()
@@ -80,9 +81,31 @@ export function IndependentDriversPage() {
     Math.min(100000, Math.trunc(Number(params.get('page')) || 1)),
   )
   const status = params.get('status') ?? ''
+  const search = (params.get('q') ?? '').trim().slice(0, SEARCH_MAX)
+  const [text, setText] = useState(search)
+  // Typing waits a moment and restarts from page 1; the URL keeps the search.
+  useEffect(() => {
+    const next = text.trim().slice(0, SEARCH_MAX)
+    if (next === search) return
+    const timer = window.setTimeout(() => {
+      setParams((current) => {
+        const updated = new URLSearchParams(current)
+        if (next) updated.set('q', next)
+        else updated.delete('q')
+        updated.set('page', '1')
+        return updated
+      })
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [text, search, setParams])
   const valid =
     !status || (independentStatuses as readonly string[]).includes(status)
-  const filters = { page, pageSize: PAGE_SIZE, status: status || undefined }
+  const filters = {
+    page,
+    pageSize: PAGE_SIZE,
+    status: status || undefined,
+    search: search || undefined,
+  }
   const query = useQuery({
     queryKey: independentKeys.list(filters),
     queryFn: ({ signal }) => independentDrivers.list(filters, signal),
@@ -111,12 +134,24 @@ export function IndependentDriversPage() {
           <CapabilityNote />
         </div>
         <div className="filters">
+          <label className="search">
+            <Search size={17} aria-hidden="true" />
+            <input
+              type="search"
+              aria-label="Buscar repartidor por nombre"
+              placeholder="Buscar por nombre"
+              value={text}
+              maxLength={SEARCH_MAX}
+              onChange={(event) => setText(event.target.value)}
+            />
+          </label>
           <select
             aria-label="Filtrar por estado de habilitación"
             value={status}
             onChange={(event) => {
               const next = new URLSearchParams()
               if (event.target.value) next.set('status', event.target.value)
+              if (search) next.set('q', search)
               next.set('page', '1')
               setParams(next)
             }}
@@ -137,6 +172,16 @@ export function IndependentDriversPage() {
           </div>
         ) : query.isPending ? (
           <Loading />
+        ) : query.isError &&
+          search &&
+          query.error instanceof ApiError &&
+          query.error.status === 400 ? (
+          <div className="panel-body">
+            <p role="status">
+              La búsqueda por nombre requiere la versión actualizada del
+              backend. Borra la búsqueda para ver el listado.
+            </p>
+          </div>
         ) : query.isError ? (
           <>
             <p>
@@ -223,9 +268,11 @@ export function IndependentDriversPage() {
           <Empty
             title="No hay repartidores independientes."
             description={
-              status
-                ? 'Ninguna habilitación coincide con el filtro.'
-                : 'Habilita a un repartidor existente para que pueda tomar servicios por su cuenta.'
+              search
+                ? `Ningún repartidor coincide con «${search}»${status ? ' en este estado' : ''}.`
+                : status
+                  ? 'Ninguna habilitación coincide con el filtro.'
+                  : 'Habilita a un repartidor existente para que pueda tomar servicios por su cuenta.'
             }
           />
         )}

@@ -8,12 +8,16 @@ import type {
   DriverDelivery,
 } from './types'
 
-const base = (driverId: string) =>
-  `/admin/drivers/${encodeURIComponent(driverId)}`
+/** `null` is the signed-in driver; an id is the SUPER_ADMIN view of that Driver. */
+export type ActivitySubject = string | null
+const base = (driverId: ActivitySubject) =>
+  driverId === null
+    ? '/driver/activity'
+    : `/admin/drivers/${encodeURIComponent(driverId)}`
 
 export const driverActivity = {
   deliveries: (
-    driverId: string,
+    driverId: ActivitySubject,
     filters: ActivityWindow & { page: number; outcome?: DeliveryOutcome },
     signal?: AbortSignal,
   ) =>
@@ -24,7 +28,11 @@ export const driverActivity = {
       undefined,
       signal,
     ),
-  analytics: (driverId: string, window: ActivityWindow, signal?: AbortSignal) =>
+  analytics: (
+    driverId: ActivitySubject,
+    window: ActivityWindow,
+    signal?: AbortSignal,
+  ) =>
     api<DriverAnalytics>(
       `${base(driverId)}/analytics?` + queryString({ ...window }),
       'GET',
