@@ -1,3 +1,13 @@
+## 2026-11-14 — Búsqueda por nombre en Independientes
+
+Misma rama fix/admin-review-table-layout, sin commit. Consume el backend 9e92a92 (feat/admin-independent-driver-search, local, sin push): `search` en GET /admin/independent-drivers, de 1 a 100 caracteres tras recortar, sin distinguir mayúsculas ni acentos, `%` y `_` literales y combinable con status.
+
+Campo «Buscar por nombre» (`.search`) junto al filtro de estado. Espera 300 ms, vuelve a la página 1 y se guarda en la URL (`q`); cambiar el estado conserva la búsqueda. Sin resultados nombra el término. Un backend sin `search` (400) muestra aviso de versión; el listado sin búsqueda no cambia.
+## 2026-11-14 — Tabla de Revisión documental: diseño corregido
+
+Rama fix/admin-review-table-layout desde QA f5542f4, sin commit. Causas: el área de la tabla mide 618 px a 1440 y el modo tarjetas empezaba bajo 620 px, por lo que el escritorio nunca veía tabla; `.review-table a` daba aspecto de botón a todo enlace, incluido el nombre del conductor; la tabla heredaba el `nowrap` global con columnas fijas y el texto se encimaba; en tarjetas, `1fr` no se encogía bajo la nota `nowrap` y desbordaba a 390 px (ya ocurría antes).
+
+Cambios sólo en admin-review: tarjetas bajo 560 px; botón sólo en `.review-action`, nombre como enlace `.review-driver`; columnas 28/19/20 %, ajuste de texto y badge sin partir; tarjeta con `minmax(0, 1fr)`. Sin cambios de datos ni de comportamiento.
 ## 2026-11-14 — Analítico e historial de pedidos del conductor (SUPER_ADMIN)
 
 Misma rama feat/admin-independent-verification-links, sin commit. Consume el backend 4f9f4bf (feat/admin-independent-verification-filters, local, sin push): GET /admin/drivers/:driverId/analytics y /deliveries, por Driver.id y días UTC.

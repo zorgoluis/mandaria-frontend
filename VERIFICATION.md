@@ -1,3 +1,9 @@
+## 2026-11-14 — Búsqueda por nombre en Independientes
+
+npm run lint, npm run build y Vitest completo PASS, 1871/1871. Nuevas en driver-portal (3): búsqueda recortada desde la página 1 combinada con estado (y conservada al quitar el estado), sin resultados con el término y backend sin `search`. Render sintético en Chrome: a 1440 y 820 el buscador queda en la misma fila que el filtro; a 390 se apilan a todo el ancho; sin desborde. Contrato contrastado con el commit backend 9e92a92; sin backend real.
+## 2026-11-14 — Tabla de Revisión documental: diseño corregido
+
+Render sintético con Chrome del sistema y API simulada (cinco filas: independiente, unidad, flotilla, representante y retirado; nombres largos), a 1440, 820 y 390 px. Antes: 1440 en tarjetas (filas de 189–211 px), nombre como botón y desborde horizontal a 390. Después: 1440 en tabla (filas de 64–74 px) sin encimados; 820 y 390 en tarjetas sin desborde. npm run lint, npm run build y Vitest completo PASS, 1868/1868. Sin backend real.
 ## 2026-11-14 — Analítico e historial de pedidos del conductor (SUPER_ADMIN)
 
 Ejecutado en feat/admin-independent-verification-links: npm run lint, npm run build y Vitest completo PASS, 1868/1868. Nuevas en driver-activity.test.tsx (6): ventanas UTC con fin exclusivo, formatos (porcentaje, duración, importe), analítico y cambio de periodo de 30 a 7 días, historial con filtro por resultado desde la página 1, vacíos, backend sin rutas y DRIVER_NOT_FOUND. driver-portal simula las nuevas consultas de la ficha. Sin hexadecimales nuevos. APIs simuladas; sin backend real ni revisión visual a 1440/820/390.
