@@ -1,3 +1,9 @@
+## 2026-11-17 — Independientes: cuentas sin servicios y baja lógica
+
+Nueva pestaña **Sin servicios** en Independientes: usuarios conductor registrados que nunca tomaron ni realizaron servicios, incluidos registros incompletos. Búsqueda por nombre/correo, paginación y filtro por acceso. Baja individual con motivo y confirmación del backend, conservando documentos e historial; ante respuesta perdida sólo consulta el resultado. Requiere el contrato y la migración backend de esta tarea.
+
+Web: 102 pruebas focalizadas, 18 comprobaciones visuales y tipos/lint/build PASS. Backend: 8 grupos E2E reales y migración en PostgreSQL sintético PASS, instancia cerrada. Entrega de código autorizada en las ramas actuales, con versiones conservadas; despliegue y migración del entorno compartido pendientes, sin bajas reales. [Contrato, evidencia y verificaciones del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
 ## 2026-11-16 — Web 1.12.1: registro e historial con unidades inactivas
 
 Web pide `view=DOCUMENTARY` al consultar el alta, los borradores y el progreso documental; así conserva el expediente de una unidad INACTIVE aunque el nuevo backend la excluya de CONNECTION. Caché separada por vista y continuidad por los UUID originales. Recepción y disponibilidad mantienen sus validaciones.

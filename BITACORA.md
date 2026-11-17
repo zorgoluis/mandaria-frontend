@@ -1,3 +1,13 @@
+## 2026-11-17 — Entrega Git de cuentas sin servicios
+
+El usuario autorizó commit y push en las ramas actuales, sin despliegue. Web conserva chore/release-1.12.0 y versión 1.12.1; selección explícita de 13 archivos de esta función, sin artefactos ni credenciales. Suite completa nueva 1936/1936 en 97 archivos PASS; fuentes coincidentes con lint/build/tipos y visuales ya aprobados. Sin workflows/hooks/deployments en la revisión de GitHub de Web. Backend selecciona sus cambios preservando trabajo ajeno. La revisión Git que contiene esta entrada identifica la entrega; despliegue y migración compartida siguen pendientes. [Evidencia del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-17 — Cuentas de conductor sin servicios: listado y baja lógica
+
+Solicitud: listar usuarios conductor sin actividad en Independientes y permitir baja lógica, coordinando agentes. El usuario definió sin actividad como «nunca han tomado ni realizado un servicio». Implementados listado paginado/búsqueda/filtro de acceso y confirmación individual con motivo; incluye registros incompletos, excluye historial de cualquier participación e invitados/flotilla. Backend revalida bajo bloqueo compartido con TAKE, revoca acceso y conserva recursos/historial; recibo/auditoría persistentes en migración aditiva. Web sólo confirma respuesta del servidor y consulta por GET ante incertidumbre, sin reenvío automático.
+
+Resultado: Web 102/102 pruebas focalizadas, tipos/lint/build y navegador simulado 18/18 a 1440/820/390 PASS. Backend 8/8 grupos HTTP/Nest/PostgreSQL reales, migración, tipos/lint focalizados y cierre propio PASS; ambos órdenes de carrera con TAKE comprobados. Intentos fallidos de preparación/expectativa del test preservados. Sin repetir la aceptación cX5fBG, sin versión/commit/push/despliegue ni bajas reales. Pendiente incorporación coordinada del contrato/migración en un despliegue autorizado. [Handoff](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
 ## 2026-11-16 — Web 1.12.1: entrega de unidades inactivas
 
 Nueva autorización explícita para incremento patch, commit y push normal en la rama actual chore/release-1.12.0. Package/lock y etiqueta sincronizados a 1.12.1; DOCUMENTARY, caché separada y recuperación conservan identidad/unidad/historial. Entrega compatible coordinada con backend 1.15.1. Sin despliegue, tag ni reapertura del ensayo cX5fBG cerrado.

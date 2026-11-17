@@ -1,3 +1,13 @@
+## 2026-11-17 — Verificación previa al commit de cuentas sin servicios
+
+Suite completa nueva: 1936/1936 pruebas, 97 archivos PASS, dos workers. Reporte test-results/unused-driver-accounts-precommit-tests.json y log homónimo; hash en el handoff. Se verificó que fuentes de producto/ejecutor no cambiaron desde lint, build, tipos y visuales aprobados; se reutilizan esos resultados sin declararlos una nueva ejecución. Formato y diff-check PASS. Revisión remota de Web: cero workflows/hooks/deployments y base coincidente, sin configuración modificada. Sin nueva operación backend, migración compartida ni despliegue. [Comandos y evidencia](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-17 — Cuentas sin servicios y baja lógica
+
+Verificaciones nuevas: 102/102 pruebas Web en cinco archivos, npm run typecheck:test, lint y build PASS. Incluyen registro sin perfil, permisos, búsqueda/paginación, backend anterior, elegibilidad ausente, conflicto por nueva actividad, recibo incorrecto y respuesta perdida con consulta GET sin replay. Navegador con HTTP simulado 18/18 a 1440/820/390, capturas revisadas y auxiliares cerrados. Se conserva aviso de chunks grandes.
+
+Backend por agente responsable: 8/8 grupos E2E con Nest/PostgreSQL reales en run-UQNC66, generación/build/migraciones y stop PASS; tipos/lint focalizados PASS. TAKE-first y baja-first reales serializados, historial de TAKE/RELEASE excluido y login/access/refresh revocados. Auditoría independiente de sólo lectura. Reportes de tres intentos fallidos de fixture/expectativa preservados; no cuentan como PASS. No hay FCM/dispositivo físico ni navegador Web contra backend real en este alcance. No se repitió suite global histórica. [Comandos, rutas, hashes y límites](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
 ## 2026-11-16 — Verificación nueva de Web 1.12.1
 
 Después del incremento autorizado: npm run lint, npm run build y npm run typecheck:test PASS. Suite completa con dos workers: 1902/1902, 95 archivos, sin fallos ni cambios a pruebas para hacerla pasar. Chrome con HTTP simulado: 18/18 a 1440/820/390, guardado/reentrada, presentación única, refetch e historial; capturas revisadas y procesos propios cerrados. El primer intento visual no pudo navegar por el permiso de red local; el reintento autorizado pasó. Se conserva el aviso previo de chunks grandes.
