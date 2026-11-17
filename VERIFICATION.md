@@ -1,3 +1,39 @@
+## 2026-11-17 — Verificación previa al commit de cuentas sin servicios
+
+Suite completa nueva: 1936/1936 pruebas, 97 archivos PASS, dos workers. Reporte test-results/unused-driver-accounts-precommit-tests.json y log homónimo; hash en el handoff. Se verificó que fuentes de producto/ejecutor no cambiaron desde lint, build, tipos y visuales aprobados; se reutilizan esos resultados sin declararlos una nueva ejecución. Formato y diff-check PASS. Revisión remota de Web: cero workflows/hooks/deployments y base coincidente, sin configuración modificada. Sin nueva operación backend, migración compartida ni despliegue. [Comandos y evidencia](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-17 — Cuentas sin servicios y baja lógica
+
+Verificaciones nuevas: 102/102 pruebas Web en cinco archivos, npm run typecheck:test, lint y build PASS. Incluyen registro sin perfil, permisos, búsqueda/paginación, backend anterior, elegibilidad ausente, conflicto por nueva actividad, recibo incorrecto y respuesta perdida con consulta GET sin replay. Navegador con HTTP simulado 18/18 a 1440/820/390, capturas revisadas y auxiliares cerrados. Se conserva aviso de chunks grandes.
+
+Backend por agente responsable: 8/8 grupos E2E con Nest/PostgreSQL reales en run-UQNC66, generación/build/migraciones y stop PASS; tipos/lint focalizados PASS. TAKE-first y baja-first reales serializados, historial de TAKE/RELEASE excluido y login/access/refresh revocados. Auditoría independiente de sólo lectura. Reportes de tres intentos fallidos de fixture/expectativa preservados; no cuentan como PASS. No hay FCM/dispositivo físico ni navegador Web contra backend real en este alcance. No se repitió suite global histórica. [Comandos, rutas, hashes y límites](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-16 — Verificación nueva de Web 1.12.1
+
+Después del incremento autorizado: npm run lint, npm run build y npm run typecheck:test PASS. Suite completa con dos workers: 1902/1902, 95 archivos, sin fallos ni cambios a pruebas para hacerla pasar. Chrome con HTTP simulado: 18/18 a 1440/820/390, guardado/reentrada, presentación única, refetch e historial; capturas revisadas y procesos propios cerrados. El primer intento visual no pudo navegar por el permiso de red local; el reintento autorizado pasó. Se conserva el aviso previo de chunks grandes.
+
+Sintaxis de ejecutores, formato de fuentes y diff-check PASS. Evidencia nueva separada de las 287 pruebas focalizadas iniciales y de la aceptación real cX5fBG ya cerrada; las corridas globales interrumpidas no cuentan como aprobadas. No se reabrió backend ni se repitieron operaciones reales. [Comandos, hashes y revisión previa al push](docs/ONBOARDING-INACTIVE-WEB-1.12.1.md).
+
+## 2026-11-16 — Cierre de verificación conjunta
+
+Manifiesto final PASS/CLOSED y hashes de reportes conservados. Comprobaciones adicionales de preparación Git detenidas por coordinación: build y tipos de pruebas completaron PASS; lint y suite global se interrumpieron, sin resultado aprobado. No se repitió aceptación ni hubo llamadas backend o escrituras Git. Se conserva log parcial en test-results/onboarding-precommit-tests.log. [Informe final](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — Aceptación conjunta Web: HTTP/UI reales PASS
+
+Build actual contra Nest/PostgreSQL WSL aislados, sin mocks/interceptación. Guardado/reentrada/fotos conservadas, envío único de UUID originales y confirmación SUBMITTED12/6 PASS. Cuenta mixta e historial INACTIVE PASS. Observaciones READY05:24:32Z y OFFLINE/OFF05:29:24Z PASS, acciones de conexión sólo por Driver. Capturas finales1440/820/390 protegidas; logout y cierre Web confirmados. No nueva carga fotográfica porque ya estaban completos los cinco adjuntos del fixture.
+
+FAIL inicial OFFLINE fuera de ventana preservado; control de POST de acceso a imágenes corregido sólo en harness, evidencia original auditada y confirmación real sin repetir submit. Fuentes anteriores idénticas por hash: no se repitieron suites/tipos/lint de producto. [Rutas, comandos, incidencias y límites](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — Prueba conjunta real: preparación, no aceptación
+
+Se prepara `scripts/verify-onboarding-joint-web.mjs` para build actual y HTTP Nest real de una sesión aislada nueva. Sintaxis/formato y guards de preparación comprobados sin API ni login. Falta recibir READY explícito y ejecutar la aceptación. No se atribuye a este paso nueva prueba de producto, backend o dispositivo. [Estado y requisitos](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — DOCUMENTARY: continuidad de unidades inactivas
+
+Nueva validación Web: 287/287 pruebas en nueve archivos (22 nuevas), sin suite global. Chrome 18/18 a 1440, 820 y 390 px con HTTP sintético: guardar/reentrar sin duplicados, envío único, refetch demorado e historial REJECTED/WITHDRAWN/APPROVED. Cachés CONNECTION/DOCUMENTARY independientes incluso ante respuesta tardía; HTTP 400/403/503 y vista incompatible no habilitan acciones. Tipos de producto/pruebas, lint y build PASS; aviso de chunks grandes conservado. [Comandos, evidencia y limitaciones](docs/ONBOARDING-DOCUMENTARY-WEB-20261116.md).
+
+Sin HTTP backend, APK, operación real, commit/push ni despliegue. No se reutilizan las 80 E2E/962 unitarias del handoff backend como pruebas de esta Web.
+
 ## 2026-11-14 — Versión Web 1.12.0
 
 Sólo cambian la versión y la etiqueta del menú: `package.json` y `package-lock.json` en 1.12.0 y AdminLayout en V1.12. En la rama chore/release-1.12.0: npm run lint, npm run build y Vitest completo PASS, 1880/1880. Ninguna prueba depende de la etiqueta de versión.

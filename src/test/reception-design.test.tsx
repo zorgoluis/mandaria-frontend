@@ -133,3 +133,30 @@ it('does not enable availability without an authorized selected zone', async () 
   expect(screen.getByRole('radio', { name: 'Disponible' })).toBeDisabled()
   expect(screen.getByRole('radio', { name: 'Fuera de línea' })).toBeDisabled()
 })
+it('preserves the server restriction for another ACTIVE unit with pending documents', async () => {
+  vi.mocked(reception.get).mockResolvedValue({
+    ...state,
+    state: 'PAUSED',
+    reason: 'DOCUMENTARY_REQUIREMENTS',
+    canAttemptTake: false,
+  })
+  vi.mocked(reception.availability).mockRejectedValue(
+    new ApiError(
+      409,
+      'Hay documentos pendientes de revisión.',
+      'VERIFICATION_REVIEW_REQUIRED',
+    ),
+  )
+  mount()
+  await screen.findByText(/DOCUMENTARY_REQUIREMENTS/)
+  expect(screen.getByText('Solo consulta')).toBeVisible()
+  expect(reception.availability).not.toHaveBeenCalled()
+  const radio = screen.getByRole('radio', { name: 'Disponible' })
+  await waitFor(() => expect(radio).toBeEnabled())
+  fireEvent.click(radio)
+  await screen.findByText('Hay documentos pendientes de revisión.')
+  expect(screen.getByText('Solo consulta')).toBeVisible()
+  expect(screen.getByRole('radio', { name: 'Fuera de línea' })).toBeChecked()
+  expect(reception.availability).toHaveBeenCalledTimes(1)
+  expect(replay).not.toHaveBeenCalled()
+})

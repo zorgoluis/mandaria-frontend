@@ -330,7 +330,7 @@ function JourneyData({
           const value = (key: string) => String(form.get(key) || '').trim()
           try {
             // Read current resources before every retry; never create a second vehicle or open case blindly.
-            const current = await verification.onboarding()
+            const current = await verification.onboarding('DOCUMENTARY')
             const id = latest(current)
             const identityId =
               id?.id ||
@@ -391,7 +391,7 @@ function JourneyData({
                   },
                 )
               ).id
-            const fresh = await verification.onboarding()
+            const fresh = await verification.onboarding('DOCUMENTARY')
             const unitId =
               latest(fresh, vehicleId)?.id ||
               (

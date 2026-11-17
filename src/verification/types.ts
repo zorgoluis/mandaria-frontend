@@ -256,7 +256,10 @@ export interface Requirements {
     pagesField: 'authorityPages'
   }
 }
+export type OnboardingView = 'CONNECTION' | 'DOCUMENTARY'
 export interface Onboarding {
+  // Older servers return the complete documentary projection without this field.
+  view?: OnboardingView
   guidedRegistration?: boolean
   driver: {
     id: string

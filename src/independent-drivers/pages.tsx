@@ -8,7 +8,7 @@ import { CategorySummary } from '../driver-category/components'
 import { IndependentOfferZones } from '../independent-zones/panel'
 import { IndependentVerificationCases } from './verification-cases'
 import { DriverActivity } from '../driver-activity/panels'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, Info, Bike, Search } from 'lucide-react'
@@ -34,6 +34,7 @@ import { vehicleTypes } from '../logistics/types'
 import { independentDrivers } from './service'
 import { AdminCreditsPanel } from '../credits/components'
 import { independentKeys, refreshIndependent } from './queries'
+import { UnusedDriverAccounts } from './unused-accounts'
 import {
   driverStatusLabels,
   independentStatusHints,
@@ -75,6 +76,42 @@ function CapabilityNote() {
 }
 
 export function IndependentDriversPage() {
+  const { user, loading, expired } = useAuth()
+  const [params] = useSearchParams()
+  if (loading) return <Loading />
+  if (user?.role !== 'SUPER_ADMIN' || expired || !user.active)
+    return <ErrorPage code={403} />
+  const unused = params.get('view') === 'unused'
+  const profiles = new URLSearchParams(params)
+  profiles.delete('view')
+  const accounts = new URLSearchParams(params)
+  accounts.set('view', 'unused')
+  const tabs = (
+    <nav className="tab-list" aria-label="Listados de independientes">
+      <Link
+        className={`tab${unused ? '' : ' active'}`}
+        aria-current={unused ? undefined : 'page'}
+        to={{ pathname: '/independent-drivers', search: profiles.toString() }}
+      >
+        Habilitaciones
+      </Link>
+      <Link
+        className={`tab${unused ? ' active' : ''}`}
+        aria-current={unused ? 'page' : undefined}
+        to={{ pathname: '/independent-drivers', search: accounts.toString() }}
+      >
+        Sin servicios
+      </Link>
+    </nav>
+  )
+  return unused ? (
+    <UnusedDriverAccounts key={user.id} actor={user.id} tabs={tabs} />
+  ) : (
+    <IndependentProfiles tabs={tabs} />
+  )
+}
+
+function IndependentProfiles({ tabs }: { tabs: ReactNode }) {
   const [params, setParams] = useSearchParams()
   const page = Math.max(
     1,
@@ -123,6 +160,7 @@ export function IndependentDriversPage() {
           </button>
         }
       />
+      {tabs}
       <div className="panel">
         <div className="panel-toolbar">
           <div>
@@ -211,7 +249,11 @@ export function IndependentDriversPage() {
                     >
                       {row.driver.name}
                       <small>
-                        Cuenta {driverStatusLabels[row.driver.status]}
+                        {row.driver.user
+                          ? row.driver.user.active
+                            ? 'Acceso activo'
+                            : 'Acceso inactivo'
+                          : `Perfil del conductor: ${driverStatusLabels[row.driver.status]}`}
                       </small>
                     </Link>
                   ),

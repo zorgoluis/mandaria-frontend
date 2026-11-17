@@ -494,8 +494,8 @@ export function NewDeletion() {
   const [page, setPage] = useState(1)
   const [unitPage, setUnitPage] = useState(1)
   const driver = useRead(
-    'eligibility-driver',
-    (s) => verification.onboarding(s),
+    'eligibility-driver-DOCUMENTARY',
+    (s) => verification.onboarding('DOCUMENTARY', s),
     user!.role === 'DRIVER',
   )
   const profile = useRead(

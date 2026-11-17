@@ -139,6 +139,10 @@ it('scopes depend on actual driver links; personal closure differs from unlinkin
   })
   mount(<NewDeletion />)
   await screen.findByRole('option', { name: 'Desvincularme de la flotilla' })
+  expect(verification.onboarding).toHaveBeenCalledWith(
+    'DOCUMENTARY',
+    expect.any(AbortSignal),
+  )
   expect(
     screen.queryByRole('option', { name: 'Dar de baja la flotilla' }),
   ).not.toBeInTheDocument()

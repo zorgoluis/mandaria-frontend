@@ -5,9 +5,64 @@ import {
   validateFile,
 } from '../verification/service'
 import { authService } from '../services/api'
-import { actor, caseId, resource, requirements } from './verification-fixtures'
+import {
+  actor,
+  caseId,
+  resource,
+  requirements,
+  onboarding,
+} from './verification-fixtures'
 const m = { actor, key: resource, operation: 'SUBMIT' as const, target: caseId }
 beforeEach(() => sessionStorage.clear())
+it.each(['DOCUMENTARY', 'CONNECTION'] as const)(
+  'requests explicit onboarding view %s and propagates cancellation',
+  async (view) => {
+    const controller = new AbortController()
+    const fetcher = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(Response.json({ ...onboarding, view }))
+    await expect(
+      verification.onboarding(view, controller.signal),
+    ).resolves.toMatchObject({ view })
+    expect(fetcher.mock.calls[0][0]).toBe(
+      'http://localhost:3000/api/v1/driver/onboarding?view=' + view,
+    )
+    controller.abort()
+    expect(fetcher.mock.calls[0][1]?.signal?.aborted).toBe(true)
+  },
+)
+it('accepts the legacy complete projection without view, without retrying an unqualified URL', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue(Response.json(onboarding))
+  await expect(verification.onboarding('DOCUMENTARY')).resolves.toEqual(
+    onboarding,
+  )
+  expect(fetcher).toHaveBeenCalledOnce()
+})
+it.each(['CONNECTION', 'UNKNOWN', null])(
+  'rejects a mismatched documentary response view (%s)',
+  async (view) => {
+    const fetcher = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(Response.json({ ...onboarding, view }))
+    await expect(verification.onboarding('DOCUMENTARY')).rejects.toMatchObject({
+      status: 502,
+    })
+    expect(fetcher).toHaveBeenCalledOnce()
+  },
+)
+it('keeps an unsupported view error instead of falling back to the filtered default', async () => {
+  const fetcher = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue(
+      Response.json({ message: 'Unsupported query' }, { status: 400 }),
+    )
+  await expect(verification.onboarding('DOCUMENTARY')).rejects.toMatchObject({
+    status: 400,
+  })
+  expect(fetcher).toHaveBeenCalledOnce()
+})
 it('exact DTO and original UUID, single api prefix; lost receipt is uncertain', async () => {
   const fetcher = vi
     .spyOn(globalThis, 'fetch')

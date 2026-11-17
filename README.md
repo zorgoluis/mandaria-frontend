@@ -1,3 +1,15 @@
+## 2026-11-17 — Independientes: cuentas sin servicios y baja lógica
+
+Nueva pestaña **Sin servicios** en Independientes: usuarios conductor registrados que nunca tomaron ni realizaron servicios, incluidos registros incompletos. Búsqueda por nombre/correo, paginación y filtro por acceso. Baja individual con motivo y confirmación del backend, conservando documentos e historial; ante respuesta perdida sólo consulta el resultado. Requiere el contrato y la migración backend de esta tarea.
+
+Web: 102 pruebas focalizadas, 18 comprobaciones visuales y tipos/lint/build PASS. Backend: 8 grupos E2E reales y migración en PostgreSQL sintético PASS, instancia cerrada. Entrega de código autorizada en las ramas actuales, con versiones conservadas; despliegue y migración del entorno compartido pendientes, sin bajas reales. [Contrato, evidencia y verificaciones del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-16 — Web 1.12.1: registro e historial con unidades inactivas
+
+Web pide `view=DOCUMENTARY` al consultar el alta, los borradores y el progreso documental; así conserva el expediente de una unidad INACTIVE aunque el nuevo backend la excluya de CONNECTION. Caché separada por vista y continuidad por los UUID originales. Recepción y disponibilidad mantienen sus validaciones.
+
+Corrección preparada para commit/push en la rama actual `chore/release-1.12.0`, sin despliegue. Requiere el contrato DOCUMENTARY/CONNECTION del backend, cuya entrega coordinada es 1.15.1. La aceptación real Nest/PostgreSQL de la sesión cX5fBG está cerrada; sus resultados y las 287 pruebas focalizadas/18 comprobaciones sintéticas son evidencia histórica. [Entrega 1.12.1 y verificaciones nuevas](docs/ONBOARDING-INACTIVE-WEB-1.12.1.md) · [Contrato y evidencia inicial](docs/ONBOARDING-DOCUMENTARY-WEB-20261116.md) · [Aceptación real](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
 ## 2026-11-14 — Versión Web 1.12.0
 
 Sube de 1.11.0 (24 oct) a 1.12.0: funciones nuevas compatibles integradas en QA. Incluye el rediseño visual y el sistema de diseño (`docs/DESIGN-SYSTEM.md`), los flujos rediseñados de registro y verificación documental de conductores, la confirmación de entregas por código y, para SUPER_ADMIN, el vínculo entre independientes y sus revisiones, el analítico y el historial de pedidos por conductor, la búsqueda por nombre de independientes y los conductores conectados en el dashboard. El conductor ve su propio analítico en «Mi perfil». Requiere el backend 1.15.0 para las funciones de conductores; con un backend anterior esas secciones muestran aviso de versión. Sin despliegue.
