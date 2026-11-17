@@ -12,6 +12,7 @@ import {
   caseId,
   caseFixture,
   terms,
+  onboarding,
 } from './verification-fixtures'
 vi.mock('../verification/service', () => ({
   verification: {
@@ -23,6 +24,46 @@ vi.mock('../verification/service', () => ({
   },
 }))
 const refresh = vi.fn().mockResolvedValue(undefined)
+it('recovers creation of an inactive unit using the documentary catalog without replay', async () => {
+  vi.mocked(verification.command).mockRejectedValue(new ApiError(0, 'lost'))
+  await expect(
+    runVerification(
+      actor,
+      'CREATE_VEHICLE',
+      'SELF',
+      '/driver/onboarding/vehicles',
+      {},
+      refresh,
+    ),
+  ).rejects.toThrow()
+  const marker = readMarkers()[0]
+  vi.mocked(verification.attempt).mockResolvedValue({
+    state: 'APPLIED',
+    result: { id: resource, status: 'INACTIVE' },
+  })
+  vi.mocked(verification.onboarding).mockResolvedValue({
+    ...onboarding,
+    view: 'DOCUMENTARY',
+    driver: {
+      ...onboarding.driver,
+      independentProfile: {
+        ...onboarding.driver.independentProfile!,
+        vehicles: [
+          {
+            id: resource,
+            identifier: 'Synthetic',
+            type: 'BICYCLE',
+            status: 'INACTIVE',
+          },
+        ],
+      },
+    },
+  })
+  expect(await reconcile(marker, actor, refresh)).toBe('APPLIED')
+  expect(verification.onboarding).toHaveBeenCalledExactlyOnceWith('DOCUMENTARY')
+  expect(verification.command).toHaveBeenCalledOnce()
+  expect(readMarkers()).toEqual([])
+})
 it.each(['CREATE_UPLOAD', 'COMPLETE_UPLOAD'] as const)(
   'recovers historical %s receipt without URL or another command',
   async (operation) => {

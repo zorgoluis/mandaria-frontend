@@ -8,6 +8,7 @@ import type {
   Terms,
   Requirements,
   Onboarding,
+  OnboardingView,
   VerificationCase,
   CaseSummary,
   ReviewPage,
@@ -116,8 +117,21 @@ export const verification = {
       undefined,
       signal,
     ),
-  onboarding: (signal?: AbortSignal) =>
-    api<Onboarding>('/driver/onboarding', 'GET', undefined, signal),
+  onboarding: async (view: OnboardingView, signal?: AbortSignal) => {
+    const result = await api<Onboarding>(
+      '/driver/onboarding?' + queryString({ view }),
+      'GET',
+      undefined,
+      signal,
+    )
+    // A filtered connection response must never suggest that a draft is missing.
+    if (result.view !== undefined && result.view !== view)
+      throw new ApiError(
+        502,
+        'El servidor no confirmó la vista solicitada. Vuelve a consultar tu avance.',
+      )
+    return result
+  },
   review: async (
     page: number,
     status: string,

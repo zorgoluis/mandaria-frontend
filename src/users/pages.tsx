@@ -124,8 +124,8 @@ export function UsersPage() {
         )}
         <p className="panel-note">
           Últimos 100 usuarios según la API. Una cuenta con invitación pendiente
-          todavía no tiene contraseña ni acceso. La API no permite cambiar roles
-          ni deshabilitar cuentas desde Mandaria Web.
+          todavía no tiene contraseña ni acceso. Esta pantalla no permite
+          cambiar roles ni deshabilitar cuentas.
         </p>
       </div>
       {inviting && (

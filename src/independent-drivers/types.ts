@@ -72,3 +72,39 @@ export interface IndependentFilters {
   /** Substring of the driver's name; backends without it answer 400. */
   search?: string
 }
+
+export type UnusedAccountStatus = 'ACTIVE' | 'DISABLED' | 'ALL'
+export interface UnusedDriverAccount {
+  userId: string
+  email: string
+  name: string | null
+  driverId: string | null
+  createdAt: string
+  updatedAt: string
+  active: boolean
+  driverStatus: string | null
+  independentProfileId: string | null
+  independentProfileStatus: string | null
+  category: 'NONE' | 'INDEPENDENT' | 'FLEET' | 'REVIEW_REQUIRED'
+  hasServiceActivity: boolean
+  canDeactivate: boolean
+  blockReason: string | null
+  deactivatedAt: string | null
+}
+export interface UnusedAccountFilters {
+  page: number
+  pageSize: number
+  search?: string
+  accountStatus: UnusedAccountStatus
+}
+export interface DeactivateUnusedAccount {
+  requestId: string
+  expectedUpdatedAt: string
+  reason: string
+}
+export interface UnusedAccountReceipt {
+  userId: string
+  active: false
+  deactivatedAt: string
+  requestId: string
+}

@@ -1,3 +1,39 @@
+## 2026-11-17 — Entrega Git de cuentas sin servicios
+
+El usuario autorizó commit y push en las ramas actuales, sin despliegue. Web conserva chore/release-1.12.0 y versión 1.12.1; selección explícita de 13 archivos de esta función, sin artefactos ni credenciales. Suite completa nueva 1936/1936 en 97 archivos PASS; fuentes coincidentes con lint/build/tipos y visuales ya aprobados. Sin workflows/hooks/deployments en la revisión de GitHub de Web. Backend selecciona sus cambios preservando trabajo ajeno. La revisión Git que contiene esta entrada identifica la entrega; despliegue y migración compartida siguen pendientes. [Evidencia del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-17 — Cuentas de conductor sin servicios: listado y baja lógica
+
+Solicitud: listar usuarios conductor sin actividad en Independientes y permitir baja lógica, coordinando agentes. El usuario definió sin actividad como «nunca han tomado ni realizado un servicio». Implementados listado paginado/búsqueda/filtro de acceso y confirmación individual con motivo; incluye registros incompletos, excluye historial de cualquier participación e invitados/flotilla. Backend revalida bajo bloqueo compartido con TAKE, revoca acceso y conserva recursos/historial; recibo/auditoría persistentes en migración aditiva. Web sólo confirma respuesta del servidor y consulta por GET ante incertidumbre, sin reenvío automático.
+
+Resultado: Web 102/102 pruebas focalizadas, tipos/lint/build y navegador simulado 18/18 a 1440/820/390 PASS. Backend 8/8 grupos HTTP/Nest/PostgreSQL reales, migración, tipos/lint focalizados y cierre propio PASS; ambos órdenes de carrera con TAKE comprobados. Intentos fallidos de preparación/expectativa del test preservados. Sin repetir la aceptación cX5fBG, sin versión/commit/push/despliegue ni bajas reales. Pendiente incorporación coordinada del contrato/migración en un despliegue autorizado. [Handoff](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
+
+## 2026-11-16 — Web 1.12.1: entrega de unidades inactivas
+
+Nueva autorización explícita para incremento patch, commit y push normal en la rama actual chore/release-1.12.0. Package/lock y etiqueta sincronizados a 1.12.1; DOCUMENTARY, caché separada y recuperación conservan identidad/unidad/historial. Entrega compatible coordinada con backend 1.15.1. Sin despliegue, tag ni reapertura del ensayo cX5fBG cerrado.
+
+Verificaciones nuevas: lint, build, tipos y suite completa 1902/1902 (95 archivos) PASS; Chrome simulado 18/18 a 1440/820/390 PASS. Historial previo y fallos de infraestructura conservados, sin convertir corridas interrumpidas en PASS. Revisión de GitHub sin workflows/hooks/deployments y selección explícita de archivos del alcance. [Handoff 1.12.1](docs/ONBOARDING-INACTIVE-WEB-1.12.1.md).
+
+## 2026-11-16 — Cierre de continuidad de la aceptación conjunta
+
+Manifiesto conjunto actualizado a PASS/CLOSED con huellas de evidencia. Coordinación confirmó backend apagado y ordenó detener la preparación de commit/push: no hubo escrituras Git; rama chore/release-1.12.0 y HEAD e47fb8b conservados. Build y tipos adicionales completados; lint y suite global iniciados se interrumpieron sin atribuirles PASS. Cambios locales intactos, sin despliegue. Detalles en [informe conjunto](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — Aceptación Web contra Nest/PostgreSQL reales
+
+Sesión nueva READY del coordinador, API39043/Web43591. Login, guardado y reentrada por UI conservaron UUID/fotos; un único submit dejó identidad/unidad en SUBMITTED revisiones12/6 y el conductor OFFLINE. Cuenta mixta consultada sin modificaciones:1 ACTIVE+2 INACTIVE e históricos REJECTED/WITHDRAWN/APPROVED. Web observó AVAILABLE/READY y OFFLINE/OFF después de las acciones de Driver. Logout/contextos finales y servidor Web propio cerrados; backend queda al coordinador.
+
+Se conserva el fallo inicial de observación OFFLINE fuera de ventana y el fallo del validador de POST de consulta de imágenes, corregido sólo en harness y auditado sin replay; nuevas lecturas reales confirmaron el resultado. Sin cambios de producto, backend, versión, configuración, commit/push ni despliegue. [Informe y evidencia real](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — Preparación de aceptación conjunta real
+
+Preparado harness Web sobre build real, sin interceptar API, para la sesión sintética nueva Nest/PostgreSQL WSL del coordinador. Modos de alta/continuación/presentación, consulta mixta y observación de recepción sin CONNECT desde Web. Handoff backend todavía PREPARING; se espera mensaje explícito READY antes de login. Sin credenciales leídas ni aceptación real ejecutada. Producto y configuración real conservados. [Requisitos y ejecución](docs/ONBOARDING-JOINT-WEB-20261116.md).
+
+## 2026-11-16 — Vista documental para unidades inactivas
+
+Implementado localmente sobre chore/release-1.12.0/e47fb8b: alta, continuación, avance de Mi cuenta, observador de layout, recuperación de creación y catálogo de baja piden DOCUMENTARY explícitamente. Vista tipada y clave de caché separada; una respuesta de otra vista falla sin fallback. Se conservan UUID, revisiones, historial y autorización de recepción independiente del catálogo.
+
+287/287 pruebas focalizadas y Chrome con HTTP simulado 18/18 a 1440/820/390; incluye INACTIVE/DRAFT, guardar/reentrar, presentar, resultados históricos y refetch tardío. Backend sólo leído, clúster sin arrancar, Web 1.12.0 intacta. Sin commit/push ni despliegue de esta implementación. [Contrato, archivos, pruebas y límites](docs/ONBOARDING-DOCUMENTARY-WEB-20261116.md).
+
 ## 2026-11-14 — Versión Web 1.12.0
 
 Rama chore/release-1.12.0 desde QA dfcd56f, sin commit. La versión estaba en 1.11.0 desde el 24-oct (19d30bc); desde entonces QA suma 48 commits (27 feat, 8 fix), todos aditivos, por lo que corresponde una versión menor. Cambian `package.json` y `package-lock.json` (con `npm version --no-git-tag-version`, sin tag), la etiqueta del menú lateral de V1.10 a V1.12 (estaba desactualizada) y la nota de release en el README. Las funciones de conductores requieren el backend 1.15.0 (rama chore/release-1.15.0 de la sesión backend). Sin cambios de comportamiento ni despliegue.

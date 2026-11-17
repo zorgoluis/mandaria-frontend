@@ -44,13 +44,14 @@ try {
   await page.route('**/api/v1/**', async (route) => {
     if (
       route.request().method() !== 'GET' ||
-      !route.request().url().endsWith('/driver/onboarding')
+      !route.request().url().endsWith('/driver/onboarding?view=DOCUMENTARY')
     )
       throw Error('Unexpected request')
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
+        view: 'DOCUMENTARY',
         driver: {
           id: 'driver',
           providerId: null,

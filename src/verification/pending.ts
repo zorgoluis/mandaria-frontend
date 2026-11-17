@@ -224,7 +224,7 @@ export async function reconcile(
             )
           await Promise.all(r.caseIds.map((id) => verification.get(id)))
         } else if (m.operation === 'CREATE_VEHICLE') {
-          const current = await verification.onboarding()
+          const current = await verification.onboarding('DOCUMENTARY')
           if (
             !current.driver.independentProfile?.vehicles.some(
               (v) => v.id === r.id,
