@@ -19,6 +19,7 @@ import { vehicles } from '../vehicles/service'
 import type { ProviderContext } from '../logistics/types'
 import { date } from '../utils/format'
 import { verification } from './service'
+import { onboardingQuery } from './onboarding-query'
 import { Form, Warning, Recovery } from './common'
 import { message, labels, vkey } from './format'
 import { useCommand } from './hooks'
@@ -82,8 +83,7 @@ export function DriverOnboarding() {
   const runtime = useRequirements()
   const terms = useTermsQuery()
   const q = useQuery({
-    queryKey: vkey(user!.id, 'onboarding'),
-    queryFn: ({ signal }) => verification.onboarding(signal),
+    ...onboardingQuery(user!.id, 'DOCUMENTARY'),
     retry: false,
     gcTime: 0,
   })

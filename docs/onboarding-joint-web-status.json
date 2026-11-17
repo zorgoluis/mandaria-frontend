@@ -1,0 +1,68 @@
+{
+  "status": "WEB_ACCEPTANCE_PASS_CLOSED",
+  "sessionId": "ONBOARDING-INACTIVE-JOINT-20261116",
+  "webOrigin": "http://127.0.0.1:43591",
+  "observedReception": ["READY", "OFFLINE/OFF"],
+  "documentary": "PASS_WITH_HARNESS_AUDIT_AND_REAL_READBACK",
+  "mixedHistory": "PASS",
+  "newPhotoUploads": 0,
+  "documentarySubmissions": 1,
+  "webServer": "CLOSED",
+  "browserContexts": "CLOSED_AFTER_UI_LOGOUT",
+  "keepWebServer": false,
+  "backendLifecycle": "COORDINATOR_OWNED; coordinator reports closed",
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "report": "docs/ONBOARDING-JOINT-WEB-20261116.md",
+  "buildIndexSha256": "5b42c781dc99dff5a2efcf7c45660e415a411a31b40f844c3fddc6a1320b43f8",
+  "evidence": [
+    {
+      "path": "test-results/onboarding-joint-web/1794893018971-serve/report.json",
+      "status": "CLOSED",
+      "sha256": "4aeab3b56782ae7e2fb85dba7c5d9eb718448b4c143784540f60c728a0d3e10c"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893038601-observe/report.json",
+      "status": "FAIL_OUTSIDE_INITIAL_OFFLINE_WINDOW_PRESERVED",
+      "sha256": "bf708058331cfcb00a5fea34f6c3fe0528357f00d1b6e1f36d6b64a556d77a3a"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893070652-observe/report.json",
+      "status": "PASS_READY",
+      "sha256": "ba2c5af24ce215196bceeb1b6d35da46ced5eada22370418a4aca9408c9504f9"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893093308-documentary/report.json",
+      "status": "ORIGINAL_HARNESS_GUARD_FAILURE_PRESERVED",
+      "sha256": "fbf05e32e9d4affeec4d5d24c9f0572c4c5bda6d971097d303ae0d3a8ab6dd6a"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893093308-documentary/review.json",
+      "status": "PASS_REVIEWED_WITHOUT_REPLAY",
+      "sha256": "e741a1386f10489d476d90be88fcb97c83ec0c189c80bc9127f06c0bb7ce8d12"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893364476-documentary-readback/report.json",
+      "status": "PASS",
+      "sha256": "ab4f1fe707413e29954172562a6df0831700af66cbdd30da2644f6c31436f96a"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893360688-mixed/report.json",
+      "status": "PASS",
+      "sha256": "3cb937ee394322555a1df4a58c1af259d14ee03c60187000139f16c4c3ce7c0c"
+    },
+    {
+      "path": "test-results/onboarding-joint-web/1794893362863-observe/report.json",
+      "status": "PASS_FINAL_OFFLINE",
+      "sha256": "d9e905f4014f442e6d6713b8324aa46fbd0c2647aa59749010acd189fec01548"
+    }
+  ],
+  "limitations": [
+    "Initial OFFLINE was not observed by Web before Driver CONNECT",
+    "Existing five photos retained; no new photo upload exercised by Web",
+    "Storage adapter is synthetic local HTTP/files; no Spaces or physical device acceptance",
+    "Original harness failures retained and audited without repeating submission"
+  ],
+  "next": "None for Web acceptance; preserve local changes and evidence, no more backend operations"
+}

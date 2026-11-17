@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-16",
+  "branch": "chore/release-1.12.0",
+  "baseCommit": "e47fb8b7af25fcc5267cfe5bf4c5e9be71cd3a27",
+  "webVersion": "1.12.0",
+  "backendContract": "QA bb2b58f + local onboarding view change, 1.15.0, not deployed",
+  "scope": "WEB_ONLY_LOCAL_IMPLEMENTATION",
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "backendStarted": false,
+  "tests": {
+    "status": "PASS",
+    "passed": 287,
+    "failed": 0,
+    "files": 9,
+    "globalSuite": false,
+    "report": "test-results/onboarding-documentary-tests.json",
+    "sha256": "ae097b0e2805690ca09610c3f0f9ca59fcac6c59f628f5b967f2fa021757a5bc"
+  },
+  "checks": {
+    "testTypes": "PASS",
+    "lint": "PASS",
+    "buildAndProductTypes": "PASS",
+    "diffCheck": "PASS",
+    "scriptSyntax": "PASS",
+    "buildWarnings": ["chunks larger than 500 kB: Root, heic-to"]
+  },
+  "browser": {
+    "kind": "BROWSER_SYNTHETIC_HTTP",
+    "status": "PASS",
+    "checks": [
+      "1440px: inactive-draft",
+      "1440px: account-saved",
+      "1440px: submitted-review",
+      "1440px: history-rejected",
+      "1440px: history-withdrawn",
+      "1440px: history-approved",
+      "820px: inactive-draft",
+      "820px: account-saved",
+      "820px: submitted-review",
+      "820px: history-rejected",
+      "820px: history-withdrawn",
+      "820px: history-approved",
+      "390px: inactive-draft",
+      "390px: account-saved",
+      "390px: submitted-review",
+      "390px: history-rejected",
+      "390px: history-withdrawn",
+      "390px: history-approved"
+    ],
+    "errors": [],
+    "backendHTTP": false,
+    "physicalDevice": false,
+    "report": "test-results/onboarding-documentary/1794889712069/report.json",
+    "sha256": "f0dcae4d99900911527f568a6117f83beaa793e6509f21894b72f61c846f9266"
+  },
+  "sources": [
+    {
+      "path": "src/verification/types.ts",
+      "sha256": "33b406dd54f519610e5f299cd3d1b0602596e4345a7b2f3d215df83f77a32e7f"
+    },
+    {
+      "path": "src/verification/service.ts",
+      "sha256": "c35354735a6eabb8b86adbc72d94b582d66988af05212376ec0f9bae083c60f8"
+    },
+    {
+      "path": "src/verification/onboarding-query.ts",
+      "sha256": "fb1c7b1de791e3f278b1833d350be23b632b0b244feb3e4477e58309ab026faf"
+    },
+    {
+      "path": "src/verification/pages.tsx",
+      "sha256": "4b8eb7bb3baa064051eb5886e357e9277ca4bba9f0f15bbc503d36ed35617a81"
+    },
+    {
+      "path": "src/verification/registration-journey.tsx",
+      "sha256": "4ddb909e6a1e56b537623b25c8ad6cfdbdd78952ea7b45950ea9a87d15a3b90a"
+    },
+    {
+      "path": "src/verification/account-progress.tsx",
+      "sha256": "c6af2c132eef034255c3040d60a601800df9e3846eb36a4a41a009c2e99f1b66"
+    },
+    {
+      "path": "src/verification/pending.ts",
+      "sha256": "5d16888227fa19e34f9dc1641a90a26cdecb4ddd0a1ed409e4baf1ff0d1a568b"
+    },
+    {
+      "path": "src/layouts/AdminLayout.tsx",
+      "sha256": "e1db5df6fc28d138a1b761bd6bff78e2a4672a9c92447973d572e545e6b818c7"
+    },
+    {
+      "path": "src/deletion/pages.tsx",
+      "sha256": "10ccd28def8232c6214d4499f21da6bd01a230b5b5c24705686b55c33e44f64b"
+    },
+    {
+      "path": "src/test/onboarding-view-fixtures.ts",
+      "sha256": "64dba08237c25f9ff548f137c4ea3dd278b08d9227a7124bcb14eb5c223960eb"
+    },
+    {
+      "path": "src/test/onboarding-views.test.tsx",
+      "sha256": "86bb843445082dbc3771ef92474adb57f713b5ef558be1639073b44091e93b6f"
+    },
+    {
+      "path": "src/test/verification-service.test.ts",
+      "sha256": "823b95cf86122c5ffeee538e90d6ce99d7e6215762558b458a490554d39702fa"
+    },
+    {
+      "path": "src/test/verification-recovery.test.ts",
+      "sha256": "8f3f4555c0dc33f931209fe669183cdbfb5ad515342c65db10c73ee30646ffb2"
+    },
+    {
+      "path": "src/test/reception-design.test.tsx",
+      "sha256": "104c31b270763367cefdff93ae325f5bd146ec5880037f323e1a9667d45ca49e"
+    },
+    {
+      "path": "src/test/deletion-pages.test.tsx",
+      "sha256": "907f33b468c24f6e30f5f0bb65e9ff3528adddf9420a78492b181c3e3f95379c"
+    },
+    {
+      "path": "scripts/verify-onboarding-documentary.mjs",
+      "sha256": "00a431b781463d7ff8417271d9fae258f5d25e53e2b8cf046f716838bd2489cc"
+    },
+    {
+      "path": "scripts/verify-account-registration.mjs",
+      "sha256": "b62869e754ddd7c87020966e52c4bf4ad3f080172fc8c3b015a478f8b0aa0769"
+    }
+  ]
+}

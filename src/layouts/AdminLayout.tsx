@@ -34,14 +34,12 @@ import { useAuth } from '../auth/context'
 import { labels } from '../utils/format'
 import { useFeedback } from '../components/feedback-context'
 import { errorMessage } from '../services/errors'
-import type { Onboarding } from '../verification/types'
-import { verification } from '../verification/service'
+import { onboardingQuery } from '../verification/onboarding-query'
 export function AdminLayout() {
   const { user, logout } = useAuth()
   const { pathname, search } = useLocation()
-  const onboarding = useQuery<Onboarding>({
-    queryKey: ['verification', user?.id, 'onboarding'],
-    queryFn: ({ signal }) => verification.onboarding(signal),
+  const onboarding = useQuery({
+    ...onboardingQuery(user?.id ?? '', 'DOCUMENTARY'),
     enabled: false,
   })
   // Observe the existing profile cache; do not add requests for operational users.
@@ -345,7 +343,7 @@ export function AdminLayout() {
             <strong>Una operación conectada.</strong>
             <p>La base de lo que viene.</p>
             <div className="version">
-              MANDARIA WEB <span>V1.12</span>
+              MANDARIA WEB <span>V1.12.1</span>
             </div>
           </div>
         </div>

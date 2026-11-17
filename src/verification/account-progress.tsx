@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, Check, Clock3, FileCheck2 } from 'lucide-react'
 import { useAuth } from '../auth/context'
-import { verification } from './service'
-import { vkey } from './format'
+import { onboardingQuery } from './onboarding-query'
 import { consultationError } from './availability'
 import type { CaseStatus } from './types'
 import './account-progress.css'
@@ -36,8 +35,7 @@ function Progress({
   emailConfirmed: boolean
 }) {
   const query = useQuery({
-    queryKey: vkey(actor, 'onboarding'),
-    queryFn: ({ signal }) => verification.onboarding(signal),
+    ...onboardingQuery(actor, 'DOCUMENTARY'),
     staleTime: 0,
     gcTime: 0,
     refetchOnMount: 'always',
