@@ -1,4 +1,14 @@
-## Estado actual — 2026-11-24: recargos automáticos de lluvia
+## Estado actual — 2026-11-24: recargos publicados en la rama unificada
+
+Commit funcional 3781669 publicado en origin/codex/recargos-horario-lluvia-manual. Rama local y remota coincidentes después del push; seguimiento configurado. Backend b0e424e, Web3781669 yDriver ecab99d reúnen la implementación y sus pruebas. Sin integración en QA/main ni despliegue nuevo; el entorno local previamente activado no se modificó.
+
+## 2026-11-24 — Commit y push de lluvia automática
+
+Solicitud: commitear y publicar en las ramas actuales de backend, Web y Driver. Verificaciones NUEVAS: lectura de continuidad, fetch origin, selección explícita de archivos, contraste SHA256 con evidencia probada, revisión de ausencia de credenciales en archivos seleccionados, diff-check del índice, push normal y coincidencia HEAD/ls-remote. 9 huellas de fuentes; las 1966 pruebas,27 escenarios sintéticos y5 comprobaciones de navegador local corresponden a implementación. No se repitieron suites en esta publicación al mantenerse las fuentes probadas.
+
+Resultado: publicación funcional completada sin conflictos ni force push. Claves, .env, configuración/credenciales locales, temporales y artefactos privados quedaron fuera de Git. Esta entrada registra la publicación; las menciones inferiores sin commit/push describen etapas históricas. Pendientes: integración en ramas destino y despliegue fuera de local mediante tarea posterior.
+
+## Estado histórico — 2026-11-24: recargos automáticos de lluvia
 
 Rama codex/recargos-horario-lluvia-manual; lluvia automática configurable y Web local activa en http://127.0.0.1:5173 contra backend aislado127.0.0.1:3010. Validación nueva completa. Sin push/QA/producción.
 
