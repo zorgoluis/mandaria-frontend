@@ -281,6 +281,8 @@ describe('auth and permissions UX', () => {
       'Administradores',
       'Solicitudes',
       'Cotizaciones',
+      'Recargos',
+      'Piloto de lluvia',
       'Zonas de servicio',
       'Despachos',
       'Incidencias de custodia',
@@ -388,10 +390,14 @@ describe('integrations', () => {
     expect(screen.queryByText('quotes:accept', { selector: 'code' })).toBeNull()
     const actor = userEvent.setup()
     await actor.click(screen.getByRole('button', { name: 'Crear credencial' }))
-    await actor.click(screen.getByLabelText('deliveries:confirmation-code:read'))
+    await actor.click(
+      screen.getByLabelText('deliveries:confirmation-code:read'),
+    )
     await actor.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
     const row = screen.getByRole('row', { name: /credential-existing/ })
-    expect(Array.from(row.querySelectorAll('.scopes code'), (el) => el.textContent)).toEqual([
+    expect(
+      Array.from(row.querySelectorAll('.scopes code'), (el) => el.textContent),
+    ).toEqual([
       'prequotes:create',
       'prequotes:read',
       'prequotes:convert',
