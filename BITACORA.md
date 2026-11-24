@@ -1,3 +1,67 @@
+## Estado actual — 2026-11-24: recargos publicados en la rama unificada
+
+Commit funcional 3781669 publicado en origin/codex/recargos-horario-lluvia-manual. Rama local y remota coincidentes después del push; seguimiento configurado. Backend b0e424e, Web3781669 yDriver ecab99d reúnen la implementación y sus pruebas. Sin integración en QA/main ni despliegue nuevo; el entorno local previamente activado no se modificó.
+
+## 2026-11-24 — Commit y push de lluvia automática
+
+Solicitud: commitear y publicar en las ramas actuales de backend, Web y Driver. Verificaciones NUEVAS: lectura de continuidad, fetch origin, selección explícita de archivos, contraste SHA256 con evidencia probada, revisión de ausencia de credenciales en archivos seleccionados, diff-check del índice, push normal y coincidencia HEAD/ls-remote. 9 huellas de fuentes; las 1966 pruebas,27 escenarios sintéticos y5 comprobaciones de navegador local corresponden a implementación. No se repitieron suites en esta publicación al mantenerse las fuentes probadas.
+
+Resultado: publicación funcional completada sin conflictos ni force push. Claves, .env, configuración/credenciales locales, temporales y artefactos privados quedaron fuera de Git. Esta entrada registra la publicación; las menciones inferiores sin commit/push describen etapas históricas. Pendientes: integración en ramas destino y despliegue fuera de local mediante tarea posterior.
+
+## Estado histórico — 2026-11-24: recargos automáticos de lluvia
+
+Rama codex/recargos-horario-lluvia-manual; lluvia automática configurable y Web local activa en http://127.0.0.1:5173 contra backend aislado127.0.0.1:3010. Validación nueva completa. Sin push/QA/producción.
+
+## 2026-11-24 — Lluvia automática configurable y validación local
+
+Solicitud: completar el precio con horario y lluvia, configurar desde administración y verificar el total hasta Driver. Cambios Web: nuevo tipo AUTOMATIC_RAIN con monto/zona/motivo, sin horario/vencimiento, estado condicionado a lluvia, desactivación existente; explica máximo manual/automático y ausencia de recargo cuando no hay lectura vigente. Monitoreo acepta WEATHER_MONITORING y avisa que sólo una regla explícita activa recargos.
+
+Verificaciones NUEVAS:30/30 focalizadas,1966/1966 suite completa99 archivos; build/lint/typecheck:test PASS. Chrome HTTP sintético:15 escenarios de recargos y12 de monitoreo,1440/820/390, capturas1440/390 revisadas. Navegador contra backend local real:5 comprobaciones login/reglas/horario/atribución/aviso PASS; sin capturas ni contenido meteorológico persistido. Logs y evidencia en docs/checks/automatic-rain-20261124.json. Sin suite de Android en este repo; backend y Driver registran sus resultados por separado. Sin commit/push ni QA/producción.
+
+## Estado histórico — 2026-11-24: recargos y piloto reunidos
+
+Rama de trabajo única: codex/recargos-horario-lluvia-manual. Incluye recargos por horario, lluvia manual con vencimiento y piloto informativo Google Weather por zona. Cambio local conservando todas las fuentes probadas; sin push ni despliegue. La rama del piloto queda como referencia de origen, sin cambios exclusivos.
+
+## 2026-11-24 — Consolidación de ambas etapas en la rama de recargos
+
+Solicitud: reunir el piloto Google Weather con recargos por horario y lluvia manual por ser una misma actividad. Web: ambas ramas tenían el mismo HEAD y el piloto estaba sin commit; se trasladó íntegramente el trabajo local a codex/recargos-horario-lluvia-manual, sin divergencia ni resolución de conflictos. Ambas etapas se registran juntas en esa rama local. No cambia el comportamiento: Google Weather sigue informativo y sin cobro automático.
+
+Verificaciones NUEVAS: comparación de referencias y huellas antes/después del cambio de rama, contraste con evidencia probada, revisión del conjunto de archivos y diff-check. 13 archivos locales preservados byte a byte al cambiar de rama; 9 huellas coinciden con las fuentes validadas. Se conservan build/lint y1964 pruebas de implementación, además de16 componentes y12 escenarios de navegador reejecutados en la tarea anterior. No se repitieron suites por este cambio de rama/documentación. Sin push, integración en QA/main, migración operativa, activación Google ni despliegue.
+
+## Estado histórico — 2026-11-24: piloto de lluvia Google Weather
+
+Rama local `codex/piloto-lluvia-google-weather` desde recargos publicados. Pantalla y menú SUPER_ADMIN **Piloto de lluvia** (`/weather-pilot`): configurar punto y habilitación por zona con motivo; consultar lluvia/sin lluvia/desconocido, caducidad y fallos. La selección de puntos se valida definitivamente en backend. No modifica recargos ni cotizaciones.
+
+## 2026-11-24 — Segunda etapa: piloto meteorológico sin cobro
+
+Solicitud: implementar Google Weather por zona sin cobro automático, coordinar agentes y probar. Cambios Web: cliente tipado GET/PUT, pantalla protegida y formulario de coordenadas con seis decimales; estado servidor deshabilitado y zona inactiva; renovación de listado cada 30 s sin forzar llamadas Google; caducidad basada en serverTime más reloj monotónico, incluyendo la latencia de recepción; lectura eliminada de estado al vencer, ocultar página y desmontar. No React Query cache para datos meteorológicos, localStorage, sessionStorage, exportación ni historial. Configuración incierta no reenvía; nueva configuración invalida respuestas anteriores. Atribución Google Maps y texto fuente junto al dato; se advierte que un punto no representa certeza de lluvia en toda la zona.
+
+Verificaciones NUEVAS finales: 16/16 pruebas focalizadas PASS; suite completa 1964/1964 PASS en 99 archivos (137.83 s); build, tipos, lint, formato y diff-check PASS. Chrome con API simulada: 12/12 PASS a 1440/820/390, capturas revisadas sin desborde; servidor y navegador cerrados. Evidencia: `test-results/weather-pilot-all-final.log` y `test-results/weather-pilot/1795502997848/report.json`; manifiesto de fuentes en `docs/checks/weather-pilot-20261124.json`. Pase previo completo 1963/1963 PASS antes de añadir la regresión que incluye latencia de recepción en la caducidad; piloto y permisos/menú 70/70 en pase anterior de dos suites. Incidencia inicial: un helper de prueba intentó inspeccionar dato undefined de otra query; corregido. Mejorada alineación del checkbox tras revisión visual y recorrido completo repetido.
+
+Sin Google real, datos operativos, backend real desde navegador, Android, meteorología automática facturable activada, versión, commit/push ni despliegue. Historial conservado.
+
+## Estado histórico — 2026-11-24: recargos publicados en Git
+
+Implementación Web publicada en origin/codex/recargos-horario-lluvia-manual, commit aa4646a. Push normal y coincidencia HEAD/remoto confirmados mediante ls-remote; seguimiento remoto configurado. Backend b8ca073 y Web aa4646a contienen la etapa1 coordinada. Sin integración nueva en QA/main ni despliegue.
+
+## 2026-11-24 — Commit y push autorizados de recargos
+
+Solicitud: publicar los cambios de recargos en backend y Web en la rama indicada. Cambios: commit funcional aa4646a y registro documental de publicación. Verificaciones NUEVAS: lectura de continuidad, fetch, revisión de selección/diff/índice, diff-check y comparación HEAD/ls-remote; sin force push. Backend: 24 huellas de fuentes coinciden con la evidencia de implementación. Se conservan las pruebas anteriores (backend999 unitarias y285 E2E; Web1948 y12 escenarios Chrome simulados), sin atribuir una nueva ejecución en esta publicación. Resultado: implementación publicada; esta entrada actualiza su continuidad.
+
+Pendientes operativos: migración backend antes del despliegue y entrega a ramas de destino mediante instrucción posterior. El exportador documental B2B conserva su bloqueo previo de prosa preparationMinutes. No nuevas pruebas funcionales, cambios de producto, versión, configuración, DB, Docker ni despliegue en esta tarea. Las menciones inferiores sin commit/push describen etapas históricas.
+
+## Estado histórico — 2026-11-24: recargos por horario y lluvia manual
+
+Rama local `codex/recargos-horario-lluvia-manual`, desde QA limpio. Implementada administración SUPER_ADMIN en `/pricing-surcharges`: listado paginado por zona, creación de horario (días, zona horaria IANA, inicio/fin) o lluvia manual (vencimiento obligatorio), y desactivación con motivo. API backend coordinada en la misma tarea. Sin meteorología automática, comisiones, cambios Driver, versión, commit/push ni despliegue.
+
+## 2026-11-24 — Administración de recargos: implementación y pruebas
+
+Solicitud: implementar únicamente la primera etapa y ejecutar pruebas mediante agentes. Cambios: página y enlace de menú protegidos; cliente tipado; formulario de moneda heredada de zona y entrega local; horario nocturno con días de inicio explícitos; vencimiento ingresado en hora del dispositivo y enviado ISO; estados programado/vigente/vencido/desactivado; reglas superpuestas explicadas como máximo por concepto y suma horario+lluvia. Se conservan importes ya cotizados. Crear no reenvía automáticamente ante respuesta incierta; exige consultar listado. Modificar una regla consiste en desactivar y crear otra.
+
+Verificaciones NUEVAS: 12/12 pruebas de UI, build, lint y tipos de pruebas PASS; Chrome con HTTP simulado 12/12 a 1440/820/390, capturas revisadas sin desborde, auxiliares cerrados. Ejecutor `scripts/verify-pricing-surcharges.mjs`, evidencia `test-results/pricing-surcharges/1795500690605/report.json`. Suite completa final: 1948/1948 PASS en 98 archivos, sin fallos ni omitidas (131.36 s), tras actualizar la expectativa del menú. No representa una aceptación contra API real.
+
+Incidencias resueltas: faltaba localmente `heic-to/csp`; restaurado paquete 1.6.7 fijado en lock, integridad SHA512 verificada, sin modificar manifest/lock. Instalación offline inicial falló por metadatos de Playwright; no se alteró código ajeno. Lint inicial detectó helper exportado desde componente; separado en módulo de formato. Suite global inicial: 1947 PASS / 1 FAIL por expectativa de menú sin Recargos; actualizada y corrida completa final aprobada. Los intentos iniciales no cuentan como PASS. Historial anterior preservado.
+
 ## 2026-11-17 — Entrega Git de cuentas sin servicios
 
 El usuario autorizó commit y push en las ramas actuales, sin despliegue. Web conserva chore/release-1.12.0 y versión 1.12.1; selección explícita de 13 archivos de esta función, sin artefactos ni credenciales. Suite completa nueva 1936/1936 en 97 archivos PASS; fuentes coincidentes con lint/build/tipos y visuales ya aprobados. Sin workflows/hooks/deployments en la revisión de GitHub de Web. Backend selecciona sus cambios preservando trabajo ajeno. La revisión Git que contiene esta entrada identifica la entrega; despliegue y migración compartida siguen pendientes. [Evidencia del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).

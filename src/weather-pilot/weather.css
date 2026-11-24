@@ -1,0 +1,46 @@
+.weather-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  overflow-wrap: anywhere;
+}
+.weather-cell small {
+  color: var(--muted);
+}
+.weather-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--line);
+}
+.weather-attribution span {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.weather-attribution small {
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.weather-coordinates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .weather-coordinates {
+    grid-template-columns: 1fr;
+  }
+}
+
+.weather-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.weather-toggle input {
+  width: auto;
+}

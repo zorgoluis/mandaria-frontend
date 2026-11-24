@@ -1,3 +1,43 @@
+## 2026-11-24 — Lluvia automática configurable y validación local
+
+Solicitud: completar el precio con horario y lluvia, configurar desde administración y verificar el total hasta Driver. Cambios Web: nuevo tipo AUTOMATIC_RAIN con monto/zona/motivo, sin horario/vencimiento, estado condicionado a lluvia, desactivación existente; explica máximo manual/automático y ausencia de recargo cuando no hay lectura vigente. Monitoreo acepta WEATHER_MONITORING y avisa que sólo una regla explícita activa recargos.
+
+Verificaciones NUEVAS:30/30 focalizadas,1966/1966 suite completa99 archivos; build/lint/typecheck:test PASS. Chrome HTTP sintético:15 escenarios de recargos y12 de monitoreo,1440/820/390, capturas1440/390 revisadas. Navegador contra backend local real:5 comprobaciones login/reglas/horario/atribución/aviso PASS; sin capturas ni contenido meteorológico persistido. Logs y evidencia en docs/checks/automatic-rain-20261124.json. Sin suite de Android en este repo; backend y Driver registran sus resultados por separado. Sin commit/push ni QA/producción.
+
+## 2026-11-24 — Consolidación de ambas etapas en la rama de recargos
+
+Solicitud: reunir el piloto Google Weather con recargos por horario y lluvia manual por ser una misma actividad. Web: ambas ramas tenían el mismo HEAD y el piloto estaba sin commit; se trasladó íntegramente el trabajo local a codex/recargos-horario-lluvia-manual, sin divergencia ni resolución de conflictos. Ambas etapas se registran juntas en esa rama local. No cambia el comportamiento: Google Weather sigue informativo y sin cobro automático.
+
+Verificaciones NUEVAS: comparación de referencias y huellas antes/después del cambio de rama, contraste con evidencia probada, revisión del conjunto de archivos y diff-check. 13 archivos locales preservados byte a byte al cambiar de rama; 9 huellas coinciden con las fuentes validadas. Se conservan build/lint y1964 pruebas de implementación, además de16 componentes y12 escenarios de navegador reejecutados en la tarea anterior. No se repitieron suites por este cambio de rama/documentación. Sin push, integración en QA/main, migración operativa, activación Google ni despliegue.
+
+## 2026-11-24 — Piloto de lluvia Google Weather: verificación nueva
+
+Rama `codex/piloto-lluvia-google-weather`, sin commit/push ni despliegue.
+
+- `npm run test -- src/test/weather-pilot.test.tsx --maxWorkers=2`: **16/16 PASS**, incluidos serverTime distinto del dispositivo, eliminación al vencer/ocultar, latencia de recepción, respuesta tardía tras reconfigurar, permisos, contrato, errores y no persistencia/cobro.
+- Pase anterior de piloto+flows: **70/70 PASS** (14 pruebas piloto y 56 existentes), antes de añadir la regresión de respuesta tardía. No se suma como una nueva suite independiente.
+- `node scripts/verify-weather-pilot.mjs`: **12/12 PASS** con HTTP simulado a 1440/820/390, listado/atribución/formulario/guardar/servidor deshabilitado; capturas revisadas. Evidencia final `test-results/weather-pilot/1795502997848/report.json`. Servidor temporal y Chrome cerrados. Primer pase 12/12 también aprobado, seguido de ajuste visual del checkbox y repetición final.
+- `npm run test -- --maxWorkers=2`: **1964/1964 PASS en 99 archivos**, 137.83 s, cero fallos/omitidas. Log final: `test-results/weather-pilot-all-final.log`. Pase completo previo: 1963/1963 PASS antes de la última regresión de latencia.
+- `npm run build`, `npm run typecheck:test`, `npm run lint`, Prettier y `git diff --check`: **PASS** finales; se conserva aviso previo de chunks grandes. Logs `test-results/weather-pilot-{build,types,lint}-final.log`.
+- Manifiesto de fuentes finales: `docs/checks/weather-pilot-20261124.json`.
+
+Primeras pruebas focalizadas: 13 PASS/1 FAIL por helper que leía undefined de una query ajena; corregido. El enlace de menú se añadió antes del pase 70/70. Las pruebas no consultan Google ni cobran; no acreditan precisión meteorológica o recorrido contra backend real. Sin cambios de dependencias/versiones ni Android.
+
+## 2026-11-24 — Recargos por horario y lluvia manual
+
+Verificación nueva en `codex/recargos-horario-lluvia-manual`:
+
+- `npx vitest run src/test/pricing-surcharges.test.tsx --maxWorkers=2`: **12/12 PASS**. Horario/días/IANA, lluvia ISO sin campos horario, vencimiento pasado, monto inválido, horario igual, desactivación con motivo, estado al vencer, filtro, permisos y creación incierta sin reenvío.
+- `npm run build`: PASS, conserva aviso previo de chunks grandes.
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS tras separar helper del componente.
+- `node scripts/verify-pricing-surcharges.mjs`: **12/12 PASS**, HTTP simulado, listado/formulario/creación lluvia/desactivación en Chrome a 1440/820/390. Capturas revisadas; sin desbordes ni errores de página. Servidor temporal y navegador cerrados. Evidencia `test-results/pricing-surcharges/1795500690605/report.json`.
+- `npm run test -- --maxWorkers=2`: **1948/1948 PASS en 98 archivos**, cero fallos/omitidas, 131.36 s. Corrida final posterior a la actualización de la expectativa del menú.
+
+Primer build y primer intento unitario bloqueados por `heic-to/csp` ausente de node_modules. Restaurado tarball exacto 1.6.7 y SHA512 validado contra lock, sin cambiar dependencias declaradas. Intento offline de instalación falló por metadatos de Playwright. Primer lint detectó export de helper en TSX, corregido. Primera corrida global: 1947 PASS / 1 FAIL por expectativa de menú sin Recargos; actualizada antes de la corrida final completa aprobada.
+
+No API operativa, cuenta real, meteorología externa, backend real desde navegador, Android, commit/push ni despliegue. Resultados backend corresponden al coordinador y no se suman como pruebas Web.
+
 ## 2026-11-17 — Verificación previa al commit de cuentas sin servicios
 
 Suite completa nueva: 1936/1936 pruebas, 97 archivos PASS, dos workers. Reporte test-results/unused-driver-accounts-precommit-tests.json y log homónimo; hash en el handoff. Se verificó que fuentes de producto/ejecutor no cambiaron desde lint, build, tipos y visuales aprobados; se reutilizan esos resultados sin declararlos una nueva ejecución. Formato y diff-check PASS. Revisión remota de Web: cero workflows/hooks/deployments y base coincidente, sin configuración modificada. Sin nueva operación backend, migración compartida ni despliegue. [Comandos y evidencia](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).
