@@ -2,7 +2,7 @@
 
 SUPER_ADMIN dispone de **Recargos**: configurar monto, zona, días/horario y zona horaria, o activar lluvia manual con vencimiento obligatorio. Se aplica el mayor importe por concepto y se suman horario y lluvia; las cotizaciones emitidas conservan su precio. Las reglas se modifican desactivándolas y creando una nueva, con motivo.
 
-Implementación local en `codex/recargos-horario-lluvia-manual`. Requiere backend y migración de recargos de la misma tarea. Sin proveedor meteorológico automático ni cambios en comisiones/Driver; no desplegado. Verificaciones en VERIFICATION.md.
+Implementación publicada en `origin/codex/recargos-horario-lluvia-manual` (aa4646a). Requiere backend y migración de recargos de la misma tarea. Sin proveedor meteorológico automático ni cambios en comisiones/Driver; no desplegado. Verificaciones en VERIFICATION.md.
 
 ## 2026-11-17 — Independientes: cuentas sin servicios y baja lógica
 

@@ -1,4 +1,14 @@
-## Estado actual — 2026-11-24: recargos por horario y lluvia manual
+## Estado actual — 2026-11-24: recargos publicados en Git
+
+Implementación Web publicada en origin/codex/recargos-horario-lluvia-manual, commit aa4646a. Push normal y coincidencia HEAD/remoto confirmados mediante ls-remote; seguimiento remoto configurado. Backend b8ca073 y Web aa4646a contienen la etapa1 coordinada. Sin integración nueva en QA/main ni despliegue.
+
+## 2026-11-24 — Commit y push autorizados de recargos
+
+Solicitud: publicar los cambios de recargos en backend y Web en la rama indicada. Cambios: commit funcional aa4646a y registro documental de publicación. Verificaciones NUEVAS: lectura de continuidad, fetch, revisión de selección/diff/índice, diff-check y comparación HEAD/ls-remote; sin force push. Backend: 24 huellas de fuentes coinciden con la evidencia de implementación. Se conservan las pruebas anteriores (backend999 unitarias y285 E2E; Web1948 y12 escenarios Chrome simulados), sin atribuir una nueva ejecución en esta publicación. Resultado: implementación publicada; esta entrada actualiza su continuidad.
+
+Pendientes operativos: migración backend antes del despliegue y entrega a ramas de destino mediante instrucción posterior. El exportador documental B2B conserva su bloqueo previo de prosa preparationMinutes. No nuevas pruebas funcionales, cambios de producto, versión, configuración, DB, Docker ni despliegue en esta tarea. Las menciones inferiores sin commit/push describen etapas históricas.
+
+## Estado histórico — 2026-11-24: recargos por horario y lluvia manual
 
 Rama local `codex/recargos-horario-lluvia-manual`, desde QA limpio. Implementada administración SUPER_ADMIN en `/pricing-surcharges`: listado paginado por zona, creación de horario (días, zona horaria IANA, inicio/fin) o lluvia manual (vencimiento obligatorio), y desactivación con motivo. API backend coordinada en la misma tarea. Sin meteorología automática, comisiones, cambios Driver, versión, commit/push ni despliegue.
 
