@@ -36,7 +36,11 @@ const days = [
   'Viernes',
   'Sábado',
 ]
-const labels = { SCHEDULE: 'Horario', MANUAL_RAIN: 'Lluvia manual' }
+const labels = {
+  SCHEDULE: 'Horario',
+  MANUAL_RAIN: 'Lluvia manual',
+  AUTOMATIC_RAIN: 'Lluvia automática',
+}
 const key = ['pricing-surcharges'] as const
 const clock = (minute: number | null) =>
   minute === null
@@ -87,7 +91,7 @@ export function PricingSurchargesPage() {
     <>
       <PageTitle
         title="Recargos"
-        description="Ajustes por horario y lluvia manual para nuevas cotizaciones."
+        description="Ajustes por horario y lluvia para nuevas cotizaciones."
         back="/service-zones"
         action={
           <button
@@ -101,7 +105,8 @@ export function PricingSurchargesPage() {
       />
       <Notice>
         Se suma el mayor recargo de horario aplicable y el mayor de lluvia
-        vigente. Las cotizaciones ya emitidas conservan su precio.
+        vigente, manual o automática, sin duplicarlos. Las cotizaciones ya
+        emitidas conservan su precio.
       </Notice>
       <Panel title="Recargos configurados">
         <div className="panel-body">
@@ -145,7 +150,7 @@ export function PricingSurchargesPage() {
               stacked
               rows={query.data.items}
               emptyTitle="Sin recargos"
-              empty="Crea un recargo por horario o activa lluvia manual con vencimiento."
+              empty="Configura un horario, lluvia manual con vencimiento o lluvia automática."
               columns={[
                 {
                   label: 'Zona y concepto',
@@ -181,6 +186,10 @@ export function PricingSurchargesPage() {
                         </span>
                         <small>{row.timeZone}</small>
                       </div>
+                    ) : row.kind === 'AUTOMATIC_RAIN' ? (
+                      <span>
+                        Sólo con lluvia vigente en el punto de la zona
+                      </span>
                     ) : (
                       <div className="surcharge-cell">
                         <span>Hasta {date(row.expiresAt!)}</span>
@@ -317,7 +326,7 @@ function CreateSurcharge({
                 'Escribe una zona horaria válida, como America/Mexico_City.',
               )
             }
-          } else {
+          } else if (kind === 'MANUAL_RAIN') {
             const end = new Date(String(data.get('expiresAt')))
             if (!Number.isFinite(end.getTime()) || end.getTime() <= Date.now())
               throw new ApiError(
@@ -375,6 +384,7 @@ function CreateSurcharge({
           >
             <option value="SCHEDULE">Horario</option>
             <option value="MANUAL_RAIN">Lluvia manual</option>
+            <option value="AUTOMATIC_RAIN">Lluvia automática</option>
           </select>
         </Field>
         <Field label={`Importe adicional (${currency})`}>
@@ -421,6 +431,13 @@ function CreateSurcharge({
               Los días elegidos corresponden al inicio.
             </p>
           </>
+        ) : kind === 'AUTOMATIC_RAIN' ? (
+          <Notice>
+            Se aplica sólo cuando hay una lectura vigente de lluvia en el punto
+            configurado de la zona. Si falta el dato o falla la consulta, no se
+            agrega este recargo. Configura el punto en Piloto de lluvia. Si
+            coincide con lluvia manual, se cobra sólo el mayor importe.
+          </Notice>
         ) : (
           <>
             <Field

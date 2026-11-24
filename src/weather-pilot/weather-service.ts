@@ -41,7 +41,7 @@ export interface WeatherZone {
   lastAttemptAt: string | null
 }
 export interface WeatherPage extends Page<WeatherZone> {
-  mode: 'PILOT_NO_CHARGE'
+  mode: 'WEATHER_MONITORING'
   provider: 'GOOGLE_WEATHER'
   globalEnabled: boolean
   serverTime: string

@@ -130,14 +130,19 @@ try {
         req.method() === 'POST'
       ) {
         const data = req.postDataJSON()
-        assert.equal(data.kind, 'MANUAL_RAIN')
+        assert.ok(['MANUAL_RAIN', 'AUTOMATIC_RAIN'].includes(data.kind))
         assert.equal(data.amount, '5.00')
-        assert.ok(Date.parse(data.expiresAt) > Date.now())
+        if (data.kind === 'MANUAL_RAIN')
+          assert.ok(Date.parse(data.expiresAt) > Date.now())
+        else assert.equal(data.expiresAt, undefined)
         assert.equal(data.weekdays, undefined)
         const row = {
           ...baseRow,
           ...data,
-          id: '55555555-5555-4555-8555-555555555555',
+          id:
+            data.kind === 'AUTOMATIC_RAIN'
+              ? '66666666-6666-4666-8666-666666666666'
+              : '55555555-5555-4555-8555-555555555555',
           timeZone: null,
           weekdays: [],
           startMinute: null,
@@ -227,6 +232,27 @@ try {
     await expect(page.getByRole('dialog')).toHaveCount(0)
     await expect(page.getByText('Desactivado', { exact: true })).toBeVisible()
     report.checks.push('deactivation ' + width)
+    await page.getByRole('button', { name: 'Nuevo recargo' }).click()
+    await page.getByLabel('Tipo de recargo').selectOption('AUTOMATIC_RAIN')
+    await expect(page.getByLabel('Vence el')).toHaveCount(0)
+    await page
+      .getByLabel('Motivo', { exact: true })
+      .fill('Lluvia automática de la zona')
+    await noOverflow()
+    await page.screenshot({
+      path: output + '/automatic-' + width + '.png',
+      fullPage: true,
+    })
+    await page
+      .getByRole('button', { name: 'Crear recargo', exact: true })
+      .click()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(
+      page.getByText('Condicionado a lluvia', { exact: true }),
+    ).toBeVisible()
+    assert.equal(created, 2)
+    await noOverflow()
+    report.checks.push('automatic rain configuration ' + width)
     await context.close()
   }
   assert.equal(report.errors.length, 0)

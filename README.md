@@ -1,3 +1,7 @@
+## 2026-11-24 — Lluvia automática
+
+Recargos permite AUTOMATIC_RAIN por zona/monto, condicionado a lectura vigente de Google. Horario se suma; lluvia manual/automática usa un único máximo. Piloto de lluvia explica el comportamiento actual. Entorno local validado contra backend real; las secciones inferiores documentan etapas históricas.
+
 ## 2026-11-24 — Rama unificada de recargos y piloto
 
 Ambas etapas se reúnen localmente en codex/recargos-horario-lluvia-manual: recargos por horario y lluvia manual con vencimiento, más piloto Google Weather sin cobro automático. Las referencias a la rama piloto y al estado de publicación en entradas inferiores son históricas. Sin publicación remota ni despliegue de esta consolidación.

@@ -59,7 +59,7 @@ const row: WeatherZone = {
 }
 const page = (items: WeatherZone[] = [structuredClone(row)]): WeatherPage => ({
   items,
-  mode: 'PILOT_NO_CHARGE',
+  mode: 'WEATHER_MONITORING',
   provider: 'GOOGLE_WEATHER',
   globalEnabled: true,
   serverTime: stamp,
@@ -116,7 +116,7 @@ beforeEach(() => {
     state: 'UNKNOWN',
   })
 })
-describe('piloto de lluvia sin cobro', () => {
+describe('monitoreo de lluvia', () => {
   it('incluye latencia de red para no prolongar un dato vencido durante el GET', async () => {
     vi.useFakeTimers({
       toFake: [
@@ -204,7 +204,9 @@ describe('piloto de lluvia sin cobro', () => {
     expect(
       screen.getByText(/no confirma que llueva en toda la zona/),
     ).toBeVisible()
-    expect(screen.getByText(/no aplica recargos automáticos/)).toBeVisible()
+    expect(
+      screen.getByText(/Sin esa regla, esta pantalla sólo informa/),
+    ).toBeVisible()
     expect(screen.getByText(/Válido hasta:/)).toBeVisible()
     expect(weatherPilot.configure).not.toHaveBeenCalled()
     expect(

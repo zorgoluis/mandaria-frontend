@@ -6,6 +6,11 @@ export function surchargeStatus(row: Surcharge, now: number) {
     return { value: 'EXPIRED', label: 'Vencido' }
   return {
     value: 'ACTIVE',
-    label: row.kind === 'SCHEDULE' ? 'Programado' : 'Vigente',
+    label:
+      row.kind === 'SCHEDULE'
+        ? 'Programado'
+        : row.kind === 'AUTOMATIC_RAIN'
+          ? 'Condicionado a lluvia'
+          : 'Vigente',
   }
 }

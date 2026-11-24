@@ -98,7 +98,7 @@ try {
         })
       if (path === '/api/v1/admin/weather-pilot' && req.method() === 'GET')
         return json({
-          mode: 'PILOT_NO_CHARGE',
+          mode: 'WEATHER_MONITORING',
           provider: 'GOOGLE_WEATHER',
           globalEnabled,
           serverTime: stamp,
@@ -155,7 +155,7 @@ try {
       page.getByText('Source: Includes weather data from Google.'),
     ).toBeVisible()
     await expect(
-      page.getByText(/Este piloto no aplica recargos automáticos/),
+      page.getByText(/La lluvia vigente puede aplicar un recargo/),
     ).toBeVisible()
     await noOverflow()
     await page.screenshot({

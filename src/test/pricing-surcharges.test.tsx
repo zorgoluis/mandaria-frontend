@@ -120,6 +120,64 @@ beforeEach(() => {
 })
 
 describe('administración de recargos', () => {
+  it('crea lluvia automática con monto y zona, sin vencimiento ni horario', async () => {
+    mount()
+    const form = await createForm()
+    await userEvent.selectOptions(
+      form.getByLabelText('Tipo de recargo'),
+      'AUTOMATIC_RAIN',
+    )
+    expect(form.queryByLabelText('Vence el')).not.toBeInTheDocument()
+    expect(form.queryByLabelText('Desde')).not.toBeInTheDocument()
+    expect(form.getByText(/sólo el mayor importe/)).toBeVisible()
+    await userEvent.type(
+      form.getByLabelText('Motivo'),
+      'Lluvia detectada en zona',
+    )
+    await userEvent.click(form.getByRole('button', { name: 'Crear recargo' }))
+    await waitFor(() =>
+      expect(pricingSurcharges.create).toHaveBeenCalledWith({
+        serviceZoneId: zoneId,
+        serviceType: 'LOCAL_DELIVERY',
+        kind: 'AUTOMATIC_RAIN',
+        amount: '5.00',
+        reason: 'Lluvia detectada en zona',
+      }),
+    )
+  })
+  it('presenta la regla automática como condicionada y permite desactivarla', async () => {
+    vi.mocked(pricingSurcharges.list).mockResolvedValue(
+      page([
+        {
+          ...row,
+          kind: 'AUTOMATIC_RAIN',
+          timeZone: null,
+          weekdays: [],
+          startMinute: null,
+          endMinute: null,
+        },
+      ]),
+    )
+    mount()
+    expect(await screen.findByText('Condicionado a lluvia')).toBeVisible()
+    expect(
+      screen.getByText('Sólo con lluvia vigente en el punto de la zona'),
+    ).toBeVisible()
+    await userEvent.click(screen.getByRole('button', { name: 'Desactivar' }))
+    await userEvent.type(
+      screen.getByLabelText('Motivo de desactivación'),
+      'Pausar recargo automático',
+    )
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Confirmar desactivación' }),
+    )
+    await waitFor(() =>
+      expect(pricingSurcharges.deactivate).toHaveBeenCalledWith(
+        row.id,
+        'Pausar recargo automático',
+      ),
+    )
+  })
   it('muestra horario nocturno, moneda y regla de acumulación', async () => {
     mount()
     expect(

@@ -1,3 +1,9 @@
+## 2026-11-24 — Lluvia automática configurable y validación local
+
+Solicitud: completar el precio con horario y lluvia, configurar desde administración y verificar el total hasta Driver. Cambios Web: nuevo tipo AUTOMATIC_RAIN con monto/zona/motivo, sin horario/vencimiento, estado condicionado a lluvia, desactivación existente; explica máximo manual/automático y ausencia de recargo cuando no hay lectura vigente. Monitoreo acepta WEATHER_MONITORING y avisa que sólo una regla explícita activa recargos.
+
+Verificaciones NUEVAS:30/30 focalizadas,1966/1966 suite completa99 archivos; build/lint/typecheck:test PASS. Chrome HTTP sintético:15 escenarios de recargos y12 de monitoreo,1440/820/390, capturas1440/390 revisadas. Navegador contra backend local real:5 comprobaciones login/reglas/horario/atribución/aviso PASS; sin capturas ni contenido meteorológico persistido. Logs y evidencia en docs/checks/automatic-rain-20261124.json. Sin suite de Android en este repo; backend y Driver registran sus resultados por separado. Sin commit/push ni QA/producción.
+
 ## 2026-11-24 — Consolidación de ambas etapas en la rama de recargos
 
 Solicitud: reunir el piloto Google Weather con recargos por horario y lluvia manual por ser una misma actividad. Web: ambas ramas tenían el mismo HEAD y el piloto estaba sin commit; se trasladó íntegramente el trabajo local a codex/recargos-horario-lluvia-manual, sin divergencia ni resolución de conflictos. Ambas etapas se registran juntas en esa rama local. No cambia el comportamiento: Google Weather sigue informativo y sin cobro automático.

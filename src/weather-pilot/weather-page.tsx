@@ -40,8 +40,10 @@ export function WeatherPilotPage() {
         back="/service-zones"
       />
       <Notice>
-        Este piloto no aplica recargos automáticos. Las tarifas y los recargos
-        manuales se administran por separado.
+        La lluvia vigente puede aplicar un recargo únicamente si configuraste
+        una regla de lluvia automática en Recargos. Sin esa regla, esta pantalla
+        sólo informa. Un dato vencido o desconocido no activa el recargo
+        automático.
       </Notice>
       <WeatherList
         key={`${page}-${revision}`}
@@ -124,7 +126,7 @@ function WeatherList({
         const next = await weatherPilot.list(page, controller.signal)
         if (!alive || current !== version) return
         if (
-          next.mode !== 'PILOT_NO_CHARGE' ||
+          next.mode !== 'WEATHER_MONITORING' ||
           next.provider !== 'GOOGLE_WEATHER' ||
           !Number.isFinite(Date.parse(next.serverTime))
         )

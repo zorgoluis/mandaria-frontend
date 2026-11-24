@@ -3,7 +3,7 @@ import { queryString } from '../services/query'
 import type { Page } from '../types/api'
 import type { ServiceType } from './types'
 
-export type SurchargeKind = 'SCHEDULE' | 'MANUAL_RAIN'
+export type SurchargeKind = 'SCHEDULE' | 'MANUAL_RAIN' | 'AUTOMATIC_RAIN'
 export interface SurchargeInput {
   serviceZoneId: string
   serviceType: ServiceType

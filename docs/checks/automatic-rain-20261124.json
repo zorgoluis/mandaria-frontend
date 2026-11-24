@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-24",
+  "branch": "codex/recargos-horario-lluvia-manual",
+  "unit": {
+    "passed": 1966,
+    "files": 99,
+    "log": "test-results/automatic-rain-full.log"
+  },
+  "focused": 30,
+  "syntheticBrowser": {
+    "passed": 27,
+    "reports": [
+      "test-results/pricing-surcharges/1795506634284/report.json",
+      "test-results/weather-pilot/1795506641810/report.json"
+    ]
+  },
+  "realLocalBrowser": {
+    "passed": 5,
+    "report": "../mandaria-backend/.tmp/weather-local-browser.json"
+  },
+  "build": "PASS",
+  "lint": "PASS",
+  "types": "PASS",
+  "sourceHashes": [
+    {
+      "path": "src/pricing/surcharges-service.ts",
+      "sha256": "e4f46fd9340da4409d04fcd87788ac351d883de1d03315579bafdd821b55ffde"
+    },
+    {
+      "path": "src/pricing/surcharges-format.ts",
+      "sha256": "437c11f6fb5a77c4891b4c5e2b41320f13c4d2302b6b72ab6915c98bacae0c53"
+    },
+    {
+      "path": "src/pricing/surcharges.tsx",
+      "sha256": "9cf7e0ebe316473fe272d53acd66efdba142dfc6cc672ae6efcdaf8c2bae105f"
+    },
+    {
+      "path": "src/weather-pilot/weather-service.ts",
+      "sha256": "2474774af5fa8de41ff82946ea9a708dad8a679a63d8d6b355022f0b9c1be7d1"
+    },
+    {
+      "path": "src/weather-pilot/weather-page.tsx",
+      "sha256": "c764e06e2b8bd91ffeadca8514922e3ea8a3f6794011ab350b414f46831ad1f8"
+    },
+    {
+      "path": "src/test/weather-pilot.test.tsx",
+      "sha256": "b61b444baf9bf3874f9d965f6acc80c27a81f85705e81c715c84dc8ab0c98d2e"
+    },
+    {
+      "path": "src/test/pricing-surcharges.test.tsx",
+      "sha256": "4132065f0079676297054ef8473a11889716c897021f240b0a3c7244ca75960f"
+    },
+    {
+      "path": "scripts/verify-pricing-surcharges.mjs",
+      "sha256": "4716654ed8eae5cecf71e9627baab9c757ef7d44922c1c9139607c294372c013"
+    },
+    {
+      "path": "scripts/verify-weather-pilot.mjs",
+      "sha256": "a7f290e7e5106f01e08598c08b9d0a2715a67b9eb323751623b9c815cc49f7b1"
+    }
+  ]
+}
