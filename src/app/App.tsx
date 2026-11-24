@@ -92,6 +92,7 @@ import {
 } from '../pricing/zones'
 import { RatePlanDetail } from '../pricing/rate-plans'
 import { PricingSurchargesPage } from '../pricing/surcharges'
+import { WeatherPilotPage } from '../weather-pilot/weather-page'
 import { QuotesPage, QuoteDetail } from '../quotes/pages'
 import {
   IndependentDriversPage,
@@ -385,6 +386,7 @@ export function App() {
               path="pricing-surcharges"
               element={<PricingSurchargesPage />}
             />
+            <Route path="weather-pilot" element={<WeatherPilotPage />} />
             <Route path="service-zones" element={<ServiceZonesPage />} />
             <Route path="service-zones/new" element={<ServiceZoneNew />} />
             <Route

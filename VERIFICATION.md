@@ -1,3 +1,22 @@
+## 2026-11-24 — Consolidación de ambas etapas en la rama de recargos
+
+Solicitud: reunir el piloto Google Weather con recargos por horario y lluvia manual por ser una misma actividad. Web: ambas ramas tenían el mismo HEAD y el piloto estaba sin commit; se trasladó íntegramente el trabajo local a codex/recargos-horario-lluvia-manual, sin divergencia ni resolución de conflictos. Ambas etapas se registran juntas en esa rama local. No cambia el comportamiento: Google Weather sigue informativo y sin cobro automático.
+
+Verificaciones NUEVAS: comparación de referencias y huellas antes/después del cambio de rama, contraste con evidencia probada, revisión del conjunto de archivos y diff-check. 13 archivos locales preservados byte a byte al cambiar de rama; 9 huellas coinciden con las fuentes validadas. Se conservan build/lint y1964 pruebas de implementación, además de16 componentes y12 escenarios de navegador reejecutados en la tarea anterior. No se repitieron suites por este cambio de rama/documentación. Sin push, integración en QA/main, migración operativa, activación Google ni despliegue.
+
+## 2026-11-24 — Piloto de lluvia Google Weather: verificación nueva
+
+Rama `codex/piloto-lluvia-google-weather`, sin commit/push ni despliegue.
+
+- `npm run test -- src/test/weather-pilot.test.tsx --maxWorkers=2`: **16/16 PASS**, incluidos serverTime distinto del dispositivo, eliminación al vencer/ocultar, latencia de recepción, respuesta tardía tras reconfigurar, permisos, contrato, errores y no persistencia/cobro.
+- Pase anterior de piloto+flows: **70/70 PASS** (14 pruebas piloto y 56 existentes), antes de añadir la regresión de respuesta tardía. No se suma como una nueva suite independiente.
+- `node scripts/verify-weather-pilot.mjs`: **12/12 PASS** con HTTP simulado a 1440/820/390, listado/atribución/formulario/guardar/servidor deshabilitado; capturas revisadas. Evidencia final `test-results/weather-pilot/1795502997848/report.json`. Servidor temporal y Chrome cerrados. Primer pase 12/12 también aprobado, seguido de ajuste visual del checkbox y repetición final.
+- `npm run test -- --maxWorkers=2`: **1964/1964 PASS en 99 archivos**, 137.83 s, cero fallos/omitidas. Log final: `test-results/weather-pilot-all-final.log`. Pase completo previo: 1963/1963 PASS antes de la última regresión de latencia.
+- `npm run build`, `npm run typecheck:test`, `npm run lint`, Prettier y `git diff --check`: **PASS** finales; se conserva aviso previo de chunks grandes. Logs `test-results/weather-pilot-{build,types,lint}-final.log`.
+- Manifiesto de fuentes finales: `docs/checks/weather-pilot-20261124.json`.
+
+Primeras pruebas focalizadas: 13 PASS/1 FAIL por helper que leía undefined de una query ajena; corregido. El enlace de menú se añadió antes del pase 70/70. Las pruebas no consultan Google ni cobran; no acreditan precisión meteorológica o recorrido contra backend real. Sin cambios de dependencias/versiones ni Android.
+
 ## 2026-11-24 — Recargos por horario y lluvia manual
 
 Verificación nueva en `codex/recargos-horario-lluvia-manual`:

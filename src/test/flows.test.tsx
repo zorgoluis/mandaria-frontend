@@ -282,6 +282,7 @@ describe('auth and permissions UX', () => {
       'Solicitudes',
       'Cotizaciones',
       'Recargos',
+      'Piloto de lluvia',
       'Zonas de servicio',
       'Despachos',
       'Incidencias de custodia',

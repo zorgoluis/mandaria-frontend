@@ -1,3 +1,13 @@
+## 2026-11-24 — Rama unificada de recargos y piloto
+
+Ambas etapas se reúnen localmente en codex/recargos-horario-lluvia-manual: recargos por horario y lluvia manual con vencimiento, más piloto Google Weather sin cobro automático. Las referencias a la rama piloto y al estado de publicación en entradas inferiores son históricas. Sin publicación remota ni despliegue de esta consolidación.
+
+## 2026-11-24 — Piloto de lluvia Google Weather
+
+SUPER_ADMIN dispone de **Piloto de lluvia**, `/weather-pilot`: configuración de un punto representativo dentro de cada zona y visualización de la condición vigente, fecha del dato y última consulta. El piloto no aplica recargos automáticos; la configuración de tarifas sigue separada. Se informa que la condición del punto no confirma toda la zona y se atribuyen los datos a Google.
+
+Implementación local en `codex/piloto-lluvia-google-weather`, dependiente del backend y migración de esta etapa. Lecturas sólo en memoria del componente, sin almacenamiento del navegador ni caché global; se eliminan al vencer, ocultar o salir. Sin commit/push ni despliegue. Verificación nueva en VERIFICATION.md.
+
 ## 2026-11-24 — Recargos por horario y lluvia manual
 
 SUPER_ADMIN dispone de **Recargos**: configurar monto, zona, días/horario y zona horaria, o activar lluvia manual con vencimiento obligatorio. Se aplica el mayor importe por concepto y se suman horario y lluvia; las cotizaciones emitidas conservan su precio. Las reglas se modifican desactivándolas y creando una nueva, con motivo.

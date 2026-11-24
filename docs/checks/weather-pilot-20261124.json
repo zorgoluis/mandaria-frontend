@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-24",
+  "branch": "codex/piloto-lluvia-google-weather",
+  "scope": "Frontend Google Weather pilot without automatic charges",
+  "checks": {
+    "focused": {
+      "passed": 16
+    },
+    "full": {
+      "passed": 1964,
+      "files": 99,
+      "seconds": 137.83,
+      "log": "test-results/weather-pilot-all-final.log"
+    },
+    "browser": {
+      "passed": 12,
+      "widths": [
+        1440,
+        820,
+        390
+      ],
+      "transport": "synthetic HTTP",
+      "report": "test-results/weather-pilot/1795502997848/report.json"
+    },
+    "build": "PASS",
+    "types": "PASS",
+    "lint": "PASS",
+    "prettier": "PASS",
+    "diffCheck": "PASS"
+  },
+  "limits": [
+    "No live Google API calls",
+    "No browser acceptance against real backend",
+    "No commit, push or deployment"
+  ],
+  "sha256": {
+    "src/app/App.tsx": "321a71668086435ed8f05af6e4dc2d412a17dcb6662da1319408ebe0091dadfa",
+    "src/layouts/AdminLayout.tsx": "bacfee4b4ecb5fa3bec4c7288719f676670c894669067713d4784280de21a464",
+    "src/test/flows.test.tsx": "6583aab99a9e93a50e1253e6432ab16d7c068a4abe0b72ca6df76c10fa4ffff5",
+    "src/test/weather-pilot.test.tsx": "7962d3356793ad41aa7be12b5f0e2b20cb546772df4f9286855563c1a8935b0b",
+    "src/weather-pilot/weather-service.ts": "b28679f5c8383ec358209178c858a9f4098bf06a13d95442767f80a9fe38112a",
+    "src/weather-pilot/weather-format.ts": "639cd6201a88cb8e3c1763f3d38499b8801c529f6646a9b4a32769361c2ee217",
+    "src/weather-pilot/weather-page.tsx": "6e6c3f3b6d8d109e6b903b3469c1bf3cd02a86be4af4f531f54b6d7e688c4f06",
+    "src/weather-pilot/weather.css": "30b866d9a270d17024117737c72318fa32e9489efd88cafbb8a5b720075198d0",
+    "scripts/verify-weather-pilot.mjs": "3e8d3ed4d7e9c7b95ee9df236fbb644d01ec685696dc3e11fad28516f663452d"
+  }
+}

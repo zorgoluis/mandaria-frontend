@@ -1,4 +1,26 @@
-## Estado actual — 2026-11-24: recargos publicados en Git
+## Estado actual — 2026-11-24: recargos y piloto reunidos
+
+Rama de trabajo única: codex/recargos-horario-lluvia-manual. Incluye recargos por horario, lluvia manual con vencimiento y piloto informativo Google Weather por zona. Cambio local conservando todas las fuentes probadas; sin push ni despliegue. La rama del piloto queda como referencia de origen, sin cambios exclusivos.
+
+## 2026-11-24 — Consolidación de ambas etapas en la rama de recargos
+
+Solicitud: reunir el piloto Google Weather con recargos por horario y lluvia manual por ser una misma actividad. Web: ambas ramas tenían el mismo HEAD y el piloto estaba sin commit; se trasladó íntegramente el trabajo local a codex/recargos-horario-lluvia-manual, sin divergencia ni resolución de conflictos. Ambas etapas se registran juntas en esa rama local. No cambia el comportamiento: Google Weather sigue informativo y sin cobro automático.
+
+Verificaciones NUEVAS: comparación de referencias y huellas antes/después del cambio de rama, contraste con evidencia probada, revisión del conjunto de archivos y diff-check. 13 archivos locales preservados byte a byte al cambiar de rama; 9 huellas coinciden con las fuentes validadas. Se conservan build/lint y1964 pruebas de implementación, además de16 componentes y12 escenarios de navegador reejecutados en la tarea anterior. No se repitieron suites por este cambio de rama/documentación. Sin push, integración en QA/main, migración operativa, activación Google ni despliegue.
+
+## Estado histórico — 2026-11-24: piloto de lluvia Google Weather
+
+Rama local `codex/piloto-lluvia-google-weather` desde recargos publicados. Pantalla y menú SUPER_ADMIN **Piloto de lluvia** (`/weather-pilot`): configurar punto y habilitación por zona con motivo; consultar lluvia/sin lluvia/desconocido, caducidad y fallos. La selección de puntos se valida definitivamente en backend. No modifica recargos ni cotizaciones.
+
+## 2026-11-24 — Segunda etapa: piloto meteorológico sin cobro
+
+Solicitud: implementar Google Weather por zona sin cobro automático, coordinar agentes y probar. Cambios Web: cliente tipado GET/PUT, pantalla protegida y formulario de coordenadas con seis decimales; estado servidor deshabilitado y zona inactiva; renovación de listado cada 30 s sin forzar llamadas Google; caducidad basada en serverTime más reloj monotónico, incluyendo la latencia de recepción; lectura eliminada de estado al vencer, ocultar página y desmontar. No React Query cache para datos meteorológicos, localStorage, sessionStorage, exportación ni historial. Configuración incierta no reenvía; nueva configuración invalida respuestas anteriores. Atribución Google Maps y texto fuente junto al dato; se advierte que un punto no representa certeza de lluvia en toda la zona.
+
+Verificaciones NUEVAS finales: 16/16 pruebas focalizadas PASS; suite completa 1964/1964 PASS en 99 archivos (137.83 s); build, tipos, lint, formato y diff-check PASS. Chrome con API simulada: 12/12 PASS a 1440/820/390, capturas revisadas sin desborde; servidor y navegador cerrados. Evidencia: `test-results/weather-pilot-all-final.log` y `test-results/weather-pilot/1795502997848/report.json`; manifiesto de fuentes en `docs/checks/weather-pilot-20261124.json`. Pase previo completo 1963/1963 PASS antes de añadir la regresión que incluye latencia de recepción en la caducidad; piloto y permisos/menú 70/70 en pase anterior de dos suites. Incidencia inicial: un helper de prueba intentó inspeccionar dato undefined de otra query; corregido. Mejorada alineación del checkbox tras revisión visual y recorrido completo repetido.
+
+Sin Google real, datos operativos, backend real desde navegador, Android, meteorología automática facturable activada, versión, commit/push ni despliegue. Historial conservado.
+
+## Estado histórico — 2026-11-24: recargos publicados en Git
 
 Implementación Web publicada en origin/codex/recargos-horario-lluvia-manual, commit aa4646a. Push normal y coincidencia HEAD/remoto confirmados mediante ls-remote; seguimiento remoto configurado. Backend b8ca073 y Web aa4646a contienen la etapa1 coordinada. Sin integración nueva en QA/main ni despliegue.
 
