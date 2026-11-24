@@ -1,3 +1,7 @@
+## Estado actual — 2026-11-24: incremento de versión 1.12.2
+
+Solicitud: incrementar la versión de parche y publicar en la rama actual `main`. Versión de 1.12.1 a 1.12.2. Verificaciones nuevas: Build de producción y comprobación de versión en paquete, lock y etiqueta de administración. Revisión del diff y del alcance del commit. El incremento reúne los cambios ya integrados. Pendiente la distribución o el despliegue.
+
 ## Estado actual — 2026-11-24: recargos publicados en la rama unificada
 
 Commit funcional 3781669 publicado en origin/codex/recargos-horario-lluvia-manual. Rama local y remota coincidentes después del push; seguimiento configurado. Backend b0e424e, Web3781669 yDriver ecab99d reúnen la implementación y sus pruebas. Sin integración en QA/main ni despliegue nuevo; el entorno local previamente activado no se modificó.
