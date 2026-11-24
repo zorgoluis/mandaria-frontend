@@ -91,6 +91,7 @@ import {
   ServiceZoneDetail,
 } from '../pricing/zones'
 import { RatePlanDetail } from '../pricing/rate-plans'
+import { PricingSurchargesPage } from '../pricing/surcharges'
 import { QuotesPage, QuoteDetail } from '../quotes/pages'
 import {
   IndependentDriversPage,
@@ -379,6 +380,10 @@ export function App() {
             <Route
               path="delivery-requests/:publicId"
               element={<DeliveryRequestDetail key={location.pathname} />}
+            />
+            <Route
+              path="pricing-surcharges"
+              element={<PricingSurchargesPage />}
             />
             <Route path="service-zones" element={<ServiceZonesPage />} />
             <Route path="service-zones/new" element={<ServiceZoneNew />} />

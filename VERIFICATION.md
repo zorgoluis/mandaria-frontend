@@ -1,3 +1,18 @@
+## 2026-11-24 — Recargos por horario y lluvia manual
+
+Verificación nueva en `codex/recargos-horario-lluvia-manual`:
+
+- `npx vitest run src/test/pricing-surcharges.test.tsx --maxWorkers=2`: **12/12 PASS**. Horario/días/IANA, lluvia ISO sin campos horario, vencimiento pasado, monto inválido, horario igual, desactivación con motivo, estado al vencer, filtro, permisos y creación incierta sin reenvío.
+- `npm run build`: PASS, conserva aviso previo de chunks grandes.
+- `npm run typecheck:test`: PASS.
+- `npm run lint`: PASS tras separar helper del componente.
+- `node scripts/verify-pricing-surcharges.mjs`: **12/12 PASS**, HTTP simulado, listado/formulario/creación lluvia/desactivación en Chrome a 1440/820/390. Capturas revisadas; sin desbordes ni errores de página. Servidor temporal y navegador cerrados. Evidencia `test-results/pricing-surcharges/1795500690605/report.json`.
+- `npm run test -- --maxWorkers=2`: **1948/1948 PASS en 98 archivos**, cero fallos/omitidas, 131.36 s. Corrida final posterior a la actualización de la expectativa del menú.
+
+Primer build y primer intento unitario bloqueados por `heic-to/csp` ausente de node_modules. Restaurado tarball exacto 1.6.7 y SHA512 validado contra lock, sin cambiar dependencias declaradas. Intento offline de instalación falló por metadatos de Playwright. Primer lint detectó export de helper en TSX, corregido. Primera corrida global: 1947 PASS / 1 FAIL por expectativa de menú sin Recargos; actualizada antes de la corrida final completa aprobada.
+
+No API operativa, cuenta real, meteorología externa, backend real desde navegador, Android, commit/push ni despliegue. Resultados backend corresponden al coordinador y no se suman como pruebas Web.
+
 ## 2026-11-17 — Verificación previa al commit de cuentas sin servicios
 
 Suite completa nueva: 1936/1936 pruebas, 97 archivos PASS, dos workers. Reporte test-results/unused-driver-accounts-precommit-tests.json y log homónimo; hash en el handoff. Se verificó que fuentes de producto/ejecutor no cambiaron desde lint, build, tipos y visuales aprobados; se reutilizan esos resultados sin declararlos una nueva ejecución. Formato y diff-check PASS. Revisión remota de Web: cero workflows/hooks/deployments y base coincidente, sin configuración modificada. Sin nueva operación backend, migración compartida ni despliegue. [Comandos y evidencia](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).

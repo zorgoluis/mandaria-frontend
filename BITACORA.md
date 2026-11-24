@@ -1,3 +1,15 @@
+## Estado actual — 2026-11-24: recargos por horario y lluvia manual
+
+Rama local `codex/recargos-horario-lluvia-manual`, desde QA limpio. Implementada administración SUPER_ADMIN en `/pricing-surcharges`: listado paginado por zona, creación de horario (días, zona horaria IANA, inicio/fin) o lluvia manual (vencimiento obligatorio), y desactivación con motivo. API backend coordinada en la misma tarea. Sin meteorología automática, comisiones, cambios Driver, versión, commit/push ni despliegue.
+
+## 2026-11-24 — Administración de recargos: implementación y pruebas
+
+Solicitud: implementar únicamente la primera etapa y ejecutar pruebas mediante agentes. Cambios: página y enlace de menú protegidos; cliente tipado; formulario de moneda heredada de zona y entrega local; horario nocturno con días de inicio explícitos; vencimiento ingresado en hora del dispositivo y enviado ISO; estados programado/vigente/vencido/desactivado; reglas superpuestas explicadas como máximo por concepto y suma horario+lluvia. Se conservan importes ya cotizados. Crear no reenvía automáticamente ante respuesta incierta; exige consultar listado. Modificar una regla consiste en desactivar y crear otra.
+
+Verificaciones NUEVAS: 12/12 pruebas de UI, build, lint y tipos de pruebas PASS; Chrome con HTTP simulado 12/12 a 1440/820/390, capturas revisadas sin desborde, auxiliares cerrados. Ejecutor `scripts/verify-pricing-surcharges.mjs`, evidencia `test-results/pricing-surcharges/1795500690605/report.json`. Suite completa final: 1948/1948 PASS en 98 archivos, sin fallos ni omitidas (131.36 s), tras actualizar la expectativa del menú. No representa una aceptación contra API real.
+
+Incidencias resueltas: faltaba localmente `heic-to/csp`; restaurado paquete 1.6.7 fijado en lock, integridad SHA512 verificada, sin modificar manifest/lock. Instalación offline inicial falló por metadatos de Playwright; no se alteró código ajeno. Lint inicial detectó helper exportado desde componente; separado en módulo de formato. Suite global inicial: 1947 PASS / 1 FAIL por expectativa de menú sin Recargos; actualizada y corrida completa final aprobada. Los intentos iniciales no cuentan como PASS. Historial anterior preservado.
+
 ## 2026-11-17 — Entrega Git de cuentas sin servicios
 
 El usuario autorizó commit y push en las ramas actuales, sin despliegue. Web conserva chore/release-1.12.0 y versión 1.12.1; selección explícita de 13 archivos de esta función, sin artefactos ni credenciales. Suite completa nueva 1936/1936 en 97 archivos PASS; fuentes coincidentes con lint/build/tipos y visuales ya aprobados. Sin workflows/hooks/deployments en la revisión de GitHub de Web. Backend selecciona sus cambios preservando trabajo ajeno. La revisión Git que contiene esta entrada identifica la entrega; despliegue y migración compartida siguen pendientes. [Evidencia del commit](docs/UNUSED-DRIVER-ACCOUNTS-WEB-20261117.md).

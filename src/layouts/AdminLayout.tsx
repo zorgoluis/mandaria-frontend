@@ -210,6 +210,11 @@ export function AdminLayout() {
             icon: ReceiptText,
           },
           {
+            to: '/pricing-surcharges',
+            label: 'Recargos',
+            icon: ReceiptText,
+          },
+          {
             to: '/service-zones',
             label: 'Zonas de servicio',
             icon: MapPinned,

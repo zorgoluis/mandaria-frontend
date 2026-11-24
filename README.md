@@ -1,3 +1,9 @@
+## 2026-11-24 — Recargos por horario y lluvia manual
+
+SUPER_ADMIN dispone de **Recargos**: configurar monto, zona, días/horario y zona horaria, o activar lluvia manual con vencimiento obligatorio. Se aplica el mayor importe por concepto y se suman horario y lluvia; las cotizaciones emitidas conservan su precio. Las reglas se modifican desactivándolas y creando una nueva, con motivo.
+
+Implementación local en `codex/recargos-horario-lluvia-manual`. Requiere backend y migración de recargos de la misma tarea. Sin proveedor meteorológico automático ni cambios en comisiones/Driver; no desplegado. Verificaciones en VERIFICATION.md.
+
 ## 2026-11-17 — Independientes: cuentas sin servicios y baja lógica
 
 Nueva pestaña **Sin servicios** en Independientes: usuarios conductor registrados que nunca tomaron ni realizaron servicios, incluidos registros incompletos. Búsqueda por nombre/correo, paginación y filtro por acceso. Baja individual con motivo y confirmación del backend, conservando documentos e historial; ante respuesta perdida sólo consulta el resultado. Requiere el contrato y la migración backend de esta tarea.
