@@ -1,3 +1,19 @@
+## Estado actual — 2026-11-27: publicación de reportes e integración en QA
+
+Solicitud: crear commits, publicar las ramas actuales e integrar los reportes administrativos en QA de backend y Web. Verificaciones NUEVAS de publicación: fetch origin, revisión de alcance e índice y diff-check; QA remoto continúa en la base de implementación. Se revisó el resultado guardado de la suite Web completa: 1977 aprobadas, sin fallos ni omitidas. Build, lint, tipos y 12 comprobaciones visuales son verificaciones históricas de implementación, no nuevas ejecuciones en esta publicación.
+
+Se incluyen pantalla administrativa, pruebas, capturas sintéticas y documentación. Resultado de publicación y referencias se registrarán al confirmar los remotos. Pendiente operativo: aplicar la migración backend 20261127000100_admin_reports y desplegar backend/Web; la integración en Git no constituye un despliegue.
+
+## Estado actual — 2026-11-27: reportes administrativos implementados y validados
+
+Solicitud: usuario aprobó implementar el análisis de reportes completos. Rama codex/reportes-administracion desde QA. Cambios: acceso SUPER_ADMIN Reportes, rango inclusivo de hasta un año en México, filtros de zona/flotilla/tipo/conductor, gráficas de viajes/puntos/importes, ranking y perfiles con cero actividad, conexiones e inicios de sesión con cobertura explícita, exportación CSV de todas las páginas. Importes y puntos se mantienen separados; no se presenta utilidad neta. Backend añade rutas y migración, sin cambio de Driver ni variables.
+
+Verificaciones NUEVAS: build/lint/typecheck:test PASS; suite completa FINAL 1977/1977 en 100 archivos, cero fallos/omitidas. Incluye 10 pruebas nuevas del módulo y control de ruta para PROVIDER_ADMIN. Chrome sintético:12/12 checks en1440/820/390; capturas inspeccionadas, tarjetas de conductores y etiquetas de gráfica legibles tras ajuste móvil. Evidencia en docs/checks/admin-reports-20261127/. No prueba Web contra backend real ni datos productivos; backend verificó sus rutas por separado con PostgreSQL local.
+
+Incidencias resueltas: menú esperado actualizado con Reportes; una prueba previa de registro tenía una carrera entre mostrar código y finalizar la solicitud: se espera al botón habilitado antes de enviar. No cambio de producto de autenticación; se repitió toda la suite y pasó. Selectores visuales ajustados al texto compuesto de celdas; no se cuentan intentos fallidos como aceptación. Build conserva advertencia de bundles grandes; suites muestran avisos previos de mocks con datos indefinidos sin fallos finales.
+
+Resultado: implementación local lista. README actualizado y evidencia sintética guardada. Pendientes operativos: aplicar migración backend20261127000100_admin_reports y desplegar backend/Web. Conexiones anteriores al registro no se reconstruyen. Sin commit, push, versión nueva, despliegue o configuración operativa.
+
 ## Estado actual — 2026-11-24: incremento de versión 1.12.2
 
 Solicitud: incrementar la versión de parche y publicar en la rama actual `main`. Versión de 1.12.1 a 1.12.2. Verificaciones nuevas: Build de producción y comprobación de versión en paquete, lock y etiqueta de administración. Revisión del diff y del alcance del commit. El incremento reúne los cambios ya integrados. Pendiente la distribución o el despliegue.

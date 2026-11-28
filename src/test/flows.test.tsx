@@ -193,6 +193,7 @@ describe('auth and permissions UX', () => {
     '/settings',
     '/delivery-requests',
     '/delivery-requests?status=CREATED',
+    '/reports',
     '/delivery-requests/MDR-000001',
   ])(
     'PROVIDER_ADMIN cannot open global route %s or fetch privileged data',
@@ -281,6 +282,7 @@ describe('auth and permissions UX', () => {
       'Administradores',
       'Solicitudes',
       'Cotizaciones',
+      'Reportes',
       'Recargos',
       'Piloto de lluvia',
       'Zonas de servicio',

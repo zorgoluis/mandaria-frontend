@@ -210,6 +210,11 @@ export function AdminLayout() {
             icon: ReceiptText,
           },
           {
+            to: '/reports',
+            label: 'Reportes',
+            icon: ReceiptText,
+          },
+          {
             to: '/pricing-surcharges',
             label: 'Recargos',
             icon: ReceiptText,

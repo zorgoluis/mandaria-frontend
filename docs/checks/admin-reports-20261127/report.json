@@ -1,0 +1,19 @@
+{
+  "kind": "BROWSER_SYNTHETIC_HTTP",
+  "checks": [
+    "render, coverage and responsive layout 1440",
+    "annual boundaries and filters 1440",
+    "CSV download 1440",
+    "error state 1440",
+    "render, coverage and responsive layout 820",
+    "annual boundaries and filters 820",
+    "CSV download 820",
+    "error state 820",
+    "render, coverage and responsive layout 390",
+    "annual boundaries and filters 390",
+    "CSV download 390",
+    "error state 390"
+  ],
+  "errors": [],
+  "status": "PASS"
+}
