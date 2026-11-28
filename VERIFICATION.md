@@ -1,3 +1,17 @@
+## 2026-11-27 — Versión Web 1.13.0 en QA
+
+Verificaciones NUEVAS del incremento: npm run build, npm run lint y suite completa npm run test -- --maxWorkers=2 --reporter=json --outputFile=test-results/release-1.13.0.json PASS: 1977/1977 pruebas en 100 archivos, cero fallos/omitidas. Paquete y ambas versiones raíz del lock sincronizados; dependencias sin cambios; etiqueta V1.13.0 presente en el bundle compilado; diff-check PASS. Build conserva aviso previo de bundles grandes. No se repitió navegador ni integración backend; esas evidencias de reportes son históricas.
+
+## 2026-11-27 — Reportes: comprobaciones nuevas
+
+Rama codex/reportes-administracion. Build, lint y typecheck:test PASS. Suite completa final: `npm run test -- --maxWorkers=2 --reporter=json --reporter=default --outputFile=test-results/admin-reports-unit-accepted.json`:1977/1977 en100 archivos, sin fallos ni omitidas; diez del módulo, gráfico por puntos/importes, rutas y navegación incluidas.
+
+`node scripts/verify-admin-reports.mjs`:12/12 checks en Chrome con HTTP sintético,1440/820/390, capturas inspeccionadas. Cobertura parcial, filtros/rango anual, descarga y error. Revisión visual corrigió contenido apretado en las celdas móviles y etiquetas de gráfica. Evidencia final copiada a docs/checks/admin-reports-20261127/. No contiene cuentas reales ni datos productivos.
+
+Primer pase global1974PASS/1FAIL por menú esperado sin Reportes. Segundo1976PASS/1FAIL por carrera en test previo de registro; aislado16PASS. Se agregó espera de formulario habilitado, sin cambiar autenticación, y se repitió todo:1977PASS. Primeras verificaciones de navegador fallaron por selectores exactos que no contemplaban texto compuesto/etiquetas móviles; final12PASS. Advertencias previas de bundle grande y mocks indefinidos no son errores nuevos de producto.
+
+Backend se verificó por separado:1071 unitarias y38 E2E con API/PostgreSQL locales. No se acredita una sesión integrada navegador→backend ni carga productiva. Sin nuevas variables, versión, commit/push o despliegue. Hace falta migración backend antes de habilitar este módulo en otro entorno.
+
 ## 2026-11-24 — Lluvia automática configurable y validación local
 
 Solicitud: completar el precio con horario y lluvia, configurar desde administración y verificar el total hasta Driver. Cambios Web: nuevo tipo AUTOMATIC_RAIN con monto/zona/motivo, sin horario/vencimiento, estado condicionado a lluvia, desactivación existente; explica máximo manual/automático y ausencia de recargo cuando no hay lectura vigente. Monitoreo acepta WEATHER_MONITORING y avisa que sólo una regla explícita activa recargos.

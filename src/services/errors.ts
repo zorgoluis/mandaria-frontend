@@ -36,6 +36,12 @@ export function normalizeError(status: number, body: unknown): ApiError {
   }
   // V1.6: DomainException codes are stable machine values; they translate exactly.
   const codes: Record<string, string> = {
+    ADMIN_REPORT_RANGE_INVALID:
+      'Elige fechas válidas y un periodo máximo de un año calendario.',
+    ADMIN_REPORT_EXPORT_LIMIT:
+      'La exportación supera 10 000 conductores o cuentas. Acota los filtros para descargarla completa.',
+    ADMIN_REPORT_MIGRATION_REQUIRED:
+      'Los reportes todavía no están habilitados en este entorno.',
     INDEPENDENT_ATTEMPT_CLOSED:
       'La clave se cerró sin efectos. Consulta el recibo original antes de preparar otra intención.',
     INDEPENDENT_RELEASE_LEGACY_UNSUPPORTED:

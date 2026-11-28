@@ -1,3 +1,17 @@
+## 2026-11-27 — Versión 1.13.0 en QA
+
+Incremento menor desde 1.12.2 por los reportes administrativos integrados en QA: consultas de hasta un año, viajes y liberaciones/cancelaciones, puntos e importes, actividad/conexiones de conductores y exportación CSV. Entrega coordinada: backend 1.16.0 y Web 1.13.0. Requiere aplicar la migración backend 20261127000100_admin_reports y desplegar ambos servicios; el número de versión no acredita activación operativa. Las notas inferiores conservan el estado histórico de cada etapa.
+
+## 2026-11-27 — Reportes administrativos
+
+Nueva pantalla `/reports`, sólo SUPER_ADMIN, con acceso **Reportes** en el menú. Filtros de fechas inclusivas en horario de México, máximo un año calendario, zona, flotilla, tipo y foco por conductor. Búsqueda por nombre y filtros de inactividad/conexión afectan la tabla de conductores; el periodo consultado permanece visible separado del formulario sin aplicar.
+
+Resumen de viajes únicos, participaciones, entregas, liberaciones, cancelaciones y devoluciones; puntos consumidos, devueltos, netos, recargas y ajustes; importes de envíos entregados por moneda y cobros declarados separados. Ranking por entregas, perfiles sin servicios, conexiones/inicios de sesión y tiempo observado, con cobertura parcial explícita. Gráficas por día/mes de viajes, puntos e importes, tabla de valores y descarga CSV de todas las páginas (máximo 10 000 conductores/cuentas; error explícito al superar).
+
+Importes incluyen recargos congelados y excluyen mercancía; no se rotulan como utilidad neta. Puntos no equivalen a pesos. Los datos de conexión anteriores al registro no se inventan. Categoría, disponibilidad y pendientes son actuales; últimas fechas abarcan todo el historial. La tabla por zona incluye perfiles vinculados por selección actual o actividad registrada; no representa un censo histórico de habilitación. Las dos tablas paginan juntas; la descarga no se limita a la página visible.
+
+Depende del backend de la misma rama `codex/reportes-administracion` y su migración `20261127000100_admin_reports`. Sin variables nuevas, cambio de Driver, commit, push ni despliegue. Ver VERIFICATION.md para comprobaciones nuevas y límites de las pruebas.
+
 ## 2026-11-24 — Lluvia automática
 
 Recargos permite AUTOMATIC_RAIN por zona/monto, condicionado a lectura vigente de Google. Horario se suma; lluvia manual/automática usa un único máximo. Piloto de lluvia explica el comportamiento actual. Entorno local validado contra backend real; las secciones inferiores documentan etapas históricas.
