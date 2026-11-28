@@ -1,3 +1,7 @@
+## 2026-11-27 — Versión 1.13.0 en QA
+
+Incremento menor desde 1.12.2 por los reportes administrativos integrados en QA: consultas de hasta un año, viajes y liberaciones/cancelaciones, puntos e importes, actividad/conexiones de conductores y exportación CSV. Entrega coordinada: backend 1.16.0 y Web 1.13.0. Requiere aplicar la migración backend 20261127000100_admin_reports y desplegar ambos servicios; el número de versión no acredita activación operativa. Las notas inferiores conservan el estado histórico de cada etapa.
+
 ## 2026-11-27 — Reportes administrativos
 
 Nueva pantalla `/reports`, sólo SUPER_ADMIN, con acceso **Reportes** en el menú. Filtros de fechas inclusivas en horario de México, máximo un año calendario, zona, flotilla, tipo y foco por conductor. Búsqueda por nombre y filtros de inactividad/conexión afectan la tabla de conductores; el periodo consultado permanece visible separado del formulario sin aplicar.

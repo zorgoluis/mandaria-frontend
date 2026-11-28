@@ -1,3 +1,7 @@
+## 2026-11-27 — Versión Web 1.13.0 en QA
+
+Verificaciones NUEVAS del incremento: npm run build, npm run lint y suite completa npm run test -- --maxWorkers=2 --reporter=json --outputFile=test-results/release-1.13.0.json PASS: 1977/1977 pruebas en 100 archivos, cero fallos/omitidas. Paquete y ambas versiones raíz del lock sincronizados; dependencias sin cambios; etiqueta V1.13.0 presente en el bundle compilado; diff-check PASS. Build conserva aviso previo de bundles grandes. No se repitió navegador ni integración backend; esas evidencias de reportes son históricas.
+
 ## 2026-11-27 — Reportes: comprobaciones nuevas
 
 Rama codex/reportes-administracion. Build, lint y typecheck:test PASS. Suite completa final: `npm run test -- --maxWorkers=2 --reporter=json --reporter=default --outputFile=test-results/admin-reports-unit-accepted.json`:1977/1977 en100 archivos, sin fallos ni omitidas; diez del módulo, gráfico por puntos/importes, rutas y navegación incluidas.

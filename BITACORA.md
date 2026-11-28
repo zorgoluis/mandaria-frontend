@@ -1,3 +1,9 @@
+## Estado actual — 2026-11-27: Web 1.13.0 en QA
+
+Solicitud: incrementar la versión por los cambios integrados en QA. Cambios: incremento menor 1.12.2 → 1.13.0 por el panel de reportes administrativos, paquete y ambas versiones raíz del lock sincronizados, etiqueta de administración y notas de entrega actualizadas. Entrega coordinada con backend 1.16.0; sin cambios en dependencias o comportamiento.
+
+Verificaciones NUEVAS: build, lint y suite completa 1977/1977 en 100 archivos PASS sin fallos/omitidas; versiones y etiqueta en bundle consistentes, dependencias del lock sin cambios y diff-check PASS. Fetch confirmó QA local/remoto coincidentes antes del incremento. Las pruebas visuales e integración de reportes anteriores son históricas y no se repitieron. Resultado: incremento validado para publicación en QA. Pendientes operativos: migración backend 20261127000100_admin_reports y despliegue backend/Web; la versión no acredita activación del entorno.
+
 ## Estado actual — 2026-11-27: reportes publicados e integrados en QA
 
 Resultado: rama codex/reportes-administracion publicada en origin; commit funcional b37d0f1. Merge explícito a QA 8c42ad3, publicado sin conflictos ni force push. Backend funcional f15da47 / merge 72c0746; Web funcional b37d0f1 / merge 8c42ad3. El árbol del merge coincide exactamente con su rama funcional; ambos repositorios quedaron limpios tras publicarlos.
