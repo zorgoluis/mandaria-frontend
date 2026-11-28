@@ -53,6 +53,11 @@ async function begin() {
   })
   fireEvent.click(screen.getByRole('button', { name: 'Recibir código' }))
   await screen.findByLabelText('Código de 6 dígitos')
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', { name: 'Crear cuenta y continuar' }),
+    ).toBeEnabled(),
+  )
 }
 function fill(password = 'password-example') {
   fireEvent.change(screen.getByLabelText('Código de 6 dígitos'), {

@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-27",
+  "branch": "codex/reportes-administracion",
+  "status": "PASS",
+  "scope": "LOCAL_SYNTHETIC",
+  "backend": {
+    "unit": {
+      "passed": 1071,
+      "failed": 0,
+      "files": 71
+    },
+    "integration": [
+      {
+        "name": "admin-driver-activity",
+        "pool": "forks",
+        "passed": 38,
+        "failed": 0,
+        "skipped": 0,
+        "complete": true
+      }
+    ],
+    "clusterStopped": true,
+    "build": true,
+    "lint": true,
+    "apiDocumentationCheck": true
+  },
+  "web": {
+    "unit": {
+      "passed": 1977,
+      "failed": 0,
+      "files": 100
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": 12,
+      "viewports": [
+        1440,
+        820,
+        390
+      ]
+    },
+    "build": true,
+    "lint": true,
+    "testTypes": true
+  },
+  "hashes": {
+    "prisma/schema.prisma": "8ad3fe2574a0218d3bb9ec38872583776a3f76af67b16b452020e1be48550f52",
+    "prisma/migrations/20261127000100_admin_reports/migration.sql": "4789c613f231b9fd718ce643c0f5db903a9fafeec1a69eb02ad926375f09f113",
+    "src/app.module.ts": "6d4c4f5b75d8edf508f9dec3d4dee199f741f130bbeb317995ee78ad69c5eb74",
+    "src/admin-reports/reports.controller.ts": "ed28a6dc3e8efe99181fcec4036e9ad75546ddab85fa884c204a0d6853a1a5e3",
+    "src/admin-reports/reports.dto.ts": "fdcf8a480c3700b552c5510445fb9d148828d0daa11b19340fc422bd55e20c79",
+    "src/admin-reports/reports.module.ts": "7f8830849b85071a5cd60ebd4c712d2aaee626afa5355ef6e8e4b3b71ce8475d",
+    "src/admin-reports/reports.service.ts": "eb259009ab2b1ca1e46a0dc5fee2e0a1e0102d266501862e32ec09d6c1dd3f4e",
+    "src/admin-reports/reports.sql.ts": "cdc02177cf70bdbd62c2919e01a2eb4dba7f662d7e096d108bb82483995a5bc3",
+    "test/admin-reports.spec.ts": "b96d2089671ca2209c2c21a51e511fd76d9a4fc13d3bcdf6c25a66009afc82ab",
+    "test/admin-driver-activity.e2e-spec.ts": "94b15ae87c6c03a3c3d7531db132cf50dae588f03605368ed88c094c9d1727af"
+  },
+  "limits": [
+    "No operational database, deployment, physical Driver or live Web-to-backend validation",
+    "No representative annual production load",
+    "Historical connections before migration are unknown",
+    "Delivery amounts are not net earnings",
+    "Full backend unit suite ran before the final SQL optimization; final 38 E2E validate that query"
+  ]
+}

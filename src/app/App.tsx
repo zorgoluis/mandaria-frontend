@@ -1,3 +1,4 @@
+import { ReportsPage } from '../admin-reports/page'
 import { IndependentRecovery } from '../driver-portal/recovery'
 import { ReceptionPage } from '../driver-portal/reception'
 import { AssistancePage } from '../assistance/pages'
@@ -386,6 +387,7 @@ export function App() {
               path="pricing-surcharges"
               element={<PricingSurchargesPage />}
             />
+            <Route path="reports" element={<ReportsPage />} />
             <Route path="weather-pilot" element={<WeatherPilotPage />} />
             <Route path="service-zones" element={<ServiceZonesPage />} />
             <Route path="service-zones/new" element={<ServiceZoneNew />} />
