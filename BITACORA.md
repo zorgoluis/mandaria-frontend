@@ -1,3 +1,9 @@
+## Estado actual — 2026-11-27: reportes publicados e integrados en QA
+
+Resultado: rama codex/reportes-administracion publicada en origin; commit funcional b37d0f1. Merge explícito a QA 8c42ad3, publicado sin conflictos ni force push. Backend funcional f15da47 / merge 72c0746; Web funcional b37d0f1 / merge 8c42ad3. El árbol del merge coincide exactamente con su rama funcional; ambos repositorios quedaron limpios tras publicarlos.
+
+Verificaciones NUEVAS: publicación normal aceptada por origin, comprobación del árbol integrado y estado de trabajo. Las pruebas registradas en la implementación anterior siguen siendo históricas; no hubo cambios funcionales posteriores ni repetición de suites durante esta publicación. Esta entrada cierra la solicitud de commit, push y merge a QA y conserva debajo las etapas previas. Pendiente operativo: aplicar 20261127000100_admin_reports y desplegar backend/Web. No se modificó main ni se ejecutó un despliegue o migración operativa.
+
 ## Estado actual — 2026-11-27: publicación de reportes e integración en QA
 
 Solicitud: crear commits, publicar las ramas actuales e integrar los reportes administrativos en QA de backend y Web. Verificaciones NUEVAS de publicación: fetch origin, revisión de alcance e índice y diff-check; QA remoto continúa en la base de implementación. Se revisó el resultado guardado de la suite Web completa: 1977 aprobadas, sin fallos ni omitidas. Build, lint, tipos y 12 comprobaciones visuales son verificaciones históricas de implementación, no nuevas ejecuciones en esta publicación.
